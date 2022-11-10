@@ -5,11 +5,11 @@
 :layout: post
 :authors: Antoine Sabot-Durand
 :tags: [CDI,SPI,Extension]
-:page-root: ../../../
 :docinfo: shared-footer
+:page-liquid:
 
 
-image::/images/fishbowl.png[width="285",float="right"]
+image::{{'/images/fishbowl.png' | relative_url}}[width="285",float="right"]
 The king components in CDI are the Beans (check this http://www.next-presso.com/2015/12/how-to-recognize-different-types-of-cdi-beans/[older post^] to all exisitng kind of beans).
 In CDI a bean is managed from A to Z by the container, which controls lifecycle of its instance and add all CDI magic on it (injection, interception, etc..).
 

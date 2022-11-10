@@ -1,6 +1,6 @@
 title: Sciam Tech Blog
 description: Ce blog contient des articles techniques issus de la communeauté des salariés de SCIAM
-baseurl: "/"
+baseurl: "/blog-tech"
 exclude:
   - LICENSE.adoc
   - README.adoc

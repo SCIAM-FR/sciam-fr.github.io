@@ -6757,7 +6757,7 @@ p {
   border: 0;
   color: white;
   display: block;
-  background: url(/images/bandeau.png) center top no-repeat;
+  background: url(../images/bandeau.png) center top no-repeat;
   background-size: cover;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px; }
