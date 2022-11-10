@@ -5,5 +5,4 @@ gem 'rake-jekyll'
 
 group :jekyll_plugins do
   gem 'jekyll-asciidoc'
-  gem 'pygments.rb', '~> 2.1.0'
 end

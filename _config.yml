@@ -1,6 +1,7 @@
 title: Sciam Tech Blog
 description: Ce blog contient des articles techniques issus de la communeauté des salariés de SCIAM
 baseurl: "/"
+highlighter: rouge
 exclude:
   - LICENSE.adoc
   - README.adoc
@@ -16,9 +17,7 @@ asciidoctor:
   excerpt_separator: "\n//more\n"
   attributes:
     - idseparator=_
-    - source-highlighter=pygments
-    - pygments-css=class
-    - stylesdir=css
-    - pygments-stylesheet=pygments.css
-    - asciidoctor-stylesheet=asciidoctor.css
+    - source-highlighter=rouge
+    - rouge-css=style
+    - rouge-style=github
     - icons=font

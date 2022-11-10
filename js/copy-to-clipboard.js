@@ -9,7 +9,7 @@
 
   var config = (document.getElementById('site-script') || { dataset: {} }).dataset
   //var uiRootPath = config.uiRootPath == null ? '.' : config.uiRootPath
-  var uiRootPath = {{'/' | relative_url}}
+  var uiRootPath = "{{'/' | relative_url}}"
   var svgAs = config.svgAs
   var supportsCopy = window.navigator.clipboard
 
@@ -42,12 +42,12 @@
         var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
         svg.setAttribute('class', 'copy-icon')
         var use = document.createElementNS('http://www.w3.org/2000/svg', 'use')
-        use.setAttribute('href', uiRootPath + '/images/octicons-16.svg#icon-clippy')
+        use.setAttribute('href', uiRootPath + 'images/octicons-16.svg#icon-clippy')
         svg.appendChild(use)
         copy.appendChild(svg)
       } else {
         var img = document.createElement('img')
-        img.src = uiRootPath + '/images/octicons-16.svg#view-clippy'
+        img.src = uiRootPath + 'images/octicons-16.svg#view-clippy'
         img.alt = 'copy icon'
         img.className = 'copy-icon'
         copy.appendChild(img)
