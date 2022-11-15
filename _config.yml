@@ -2,6 +2,15 @@ title: Sciam Tech Blog
 description: Ce blog contient des articles techniques issus de la communeauté des salariés de SCIAM
 baseurl: "/"
 highlighter: rouge
+
+social-network-links:
+  github: 'SCIAM-FR'
+  twitter: 'SCIAM_FR'
+  medium: 'sciam-fr'
+  linkedin: 'sciamfr'
+  www: 'sciam.fr'
+  gitlab: 'sciam'
+
 exclude:
   - LICENSE.adoc
   - README.adoc
@@ -10,7 +19,9 @@ exclude:
   - Rakefile
   - .idea
   - .jekyll-cache
+
 asciidoc: {}
+
 asciidoctor:
   base_dir: :docdir
   safe: unsafe
