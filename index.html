@@ -1,27 +1,53 @@
 ---
 layout: default
+pagination: 
+  enabled: true
 ---
 <div class="row">
   <div class="col-lg-12">
     <div class="row">
       <div class="col-lg-9">
         <div class="posts">
-          {% for post in site.posts %}
-          <article class="post">
-            <div class="panel panel-primary">
-              <div class="panel-body">
-            <h1><a href="{{ post.url | relative_url}}">{{ post.title }}</a></h1>
-                <div class="meta"><strong>Ecrit par <span
-                    class="authors">{{ post.author }}</span> le <span
-                    class="date">{{ post.date | date: "%d/%m/%Y"}}</span>
-                </strong></div>
-                <div class="content">
-                  {{ post.excerpt }}
+        
+          <ul class="post-list">
+            <!-- 
+                Affichage de la pagne courante 
+            -->
+            {% for post in paginator.posts %}
+            <article class="post">
+              <div class="panel panel-primary">
+                <div class="panel-body">
+              <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
+                  <div class="meta"><strong>Ecrit par <span
+                      class="authors">{{ post.author }}</span> le <span
+                      class="date">{{ post.date | date: "%d/%m/%Y"}}</span>
+                  </strong></div>
+                  <div class="content">
+                    {{ post.excerpt }}
+                  </div>
                 </div>
               </div>
-            </div>
-          </article>
-          {% endfor %}
+            </article>
+            {% endfor %}
+          </ul>
+
+          <!-- 
+            Boutons de pagination
+          -->
+          {% if paginator.total_pages > 1 %}
+          <ul class="pager">
+              {% if paginator.previous_page %}
+              <li class="previous">
+                  <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; Articles pr&eacute;c&eacute;dents</a>
+              </li>
+              {% endif %}
+              {% if paginator.next_page %}
+              <li class="next">
+                  <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Articles suivants &rarr;</a>
+              </li>
+              {% endif %}
+          </ul>
+          {% endif %}
         </div>
 
       </div>
