@@ -1,0 +1,113 @@
+= Article de test
+:showtitle:
+:page-navtitle: Article de test 
+:page-excerpt: Article de test sur le blog
+:layout: post
+:author: jmdoudoux
+:page-tags: [test,Java,blog]
+:docinfo: shared-footer
+
+
+Erat voluptua duo ipsum voluptua kasd placerat commodo imperdiet aliquam minim stet ut ipsum. Velit consetetur et et dolores illum nonumy nonumy ipsum ipsum luptatum diam. Ea lorem sed et sadipscing sed soluta sit sea laoreet vero est clita labore est et assum eu duis. Takimata erat consetetur iriure sadipscing elitr voluptua qui zzril dolor at magna sanctus ut labore et vulputate vel diam. Iriure no consectetuer lorem kasd.
+
+Dolor vero aliquyam eu accusam et amet clita invidunt. Lorem diam amet lorem et ut gubergren no erat lorem nonumy sit erat quod sanctus aliquip ex magna dolor. Laoreet dolore diam diam erat doming velit consectetuer sanctus tempor sanctus. Ipsum amet tempor sadipscing imperdiet ad clita exerci odio sit te. Amet sit amet tempor nonummy.
+
+== Titre niveau 2
+
+
+[source,java]
+----
+public void doSomethingWithContextualMyClass() {
+        BeanManager bm = CDI.current().getBeanManager();
+        InjectionTargetFactory<MyClass> itf = bm.getInjectionTargetFactory(bm.createAnnotatedType(MyClass.class));
+        itf.configure()
+                .filterFields(f -> "MyField".equals(f.getJavaMember().getName()))
+                .findFirst()
+                .ifPresent(f -> f.add(InjectLiteral.INSTANCE));
+        InjectionTarget<MyClass> it = itf.createInjectionTarget(null);
+        CreationalContext<MyClass> cctx = bm.createCreationalContext(null);
+        MyClass myInstance = new MyClass(); //<1>
+        it.postConstruct(myInstance);
+        it.inject(myInstance,cctx);
+
+        //Do what you need with myInstance
+
+        it.preDestroy(myInstance);
+        cctx.release();
+}
+----
+<1> instance is not created by the container
+
+.Titre de la note
+NOTE: Exemple de notes
+      Description de la note.
+
+
+TIP: Tip.
+
+IMPORTANT: Important.
+
+WARNING: Warning.
+
+CAUTION: Caution.
+
+.An example table
+[options="header,footer"]
+|=======================
+|Col 1|Col 2      |Col 3
+|1    |Item 1     |a
+|2    |Item 2     |b
+|3    |Item 3     |c
+|6    |Three items|d
+|=======================
+
+
+In that case the instance won't have interceptor applied on it since the container didn't create it.
+
+PlantUML 
+
+[plantuml, target=Article_de_test_diagram-classes, format=png]   
+....
+class BlockProcessor
+class DiagramBlock
+class DitaaBlock
+class PlantUmlBlock
+
+BlockProcessor <|-- DiagramBlock
+DiagramBlock <|-- DitaaBlock
+DiagramBlock <|-- PlantUmlBlock
+....
+
+Ditaa
+
+[ditaa,Article_de_test_memory,png]
+....
+
+      +--------+
+   0  |        |  <- start
+      +--------+
+   1  |        |  <- q  scans from start to end
+      +--------+
+      :  ..... |
+      +--------+
+      |        |  <- end
+      +--------+  <-+
+      |        |    |
+      +--------+    | rest of the
+      :  ..... |    | allocated memory
+      +--------+    |
+  n   |        |    |
+      +--------+  <-+
+....
+
+Graphviz
+
+[graphviz,Article_de_test_cyclic,svg]
+....
+digraph g {
+    a -> b
+    b -> c
+    c -> d
+    d -> a
+}
+....

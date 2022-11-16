@@ -31,10 +31,12 @@ asciidoctor:
     - source-highlighter=rouge
     - rouge-css=style
     - rouge-style=github
+#    - asciidoctor-stylesheet=asciidoctor.css
     - icons=font
 
 plugins:
   - jekyll-paginate-v2
+  - jekyll-auto-authors
 
 pagination:
   enabled: true
@@ -43,3 +45,35 @@ pagination:
   title: ':title - page :num'
   sort_field: 'date'
   sort_reverse: true
+
+autopages:
+  enabled: true
+
+  # Other autopage configs stay the same
+
+  tags:
+    layouts:
+      - "autopage_tags.html"
+    title: "Articles taggué avec #:tag"
+    permalink: "/tag/:tag"
+    silent: false
+    slugify:
+      mode: "default"
+      case: true
+
+  authors:
+    enabled: true
+    data: '_data/authors.yml' # Data file with the author details
+    layouts: 
+      - 'autopage_author.html' # We'll define this layout later
+    title: 'Article par :author'
+    permalink: '/author/:author/'
+    slugify:
+      mode: 'default' # choose from [raw, default, pretty, ascii or latin]
+      cased: true # if true, the uppercase letters in slug will be converted to lowercase ones.
+
+  categories:
+    enabled: false
+
+  collections:
+    enabled: false

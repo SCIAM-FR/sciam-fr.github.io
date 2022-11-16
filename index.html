@@ -18,9 +18,10 @@ pagination:
               <div class="panel panel-primary">
                 <div class="panel-body">
               <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
+                  {% assign author = site.data.authors[post.author] %}
                   <div class="meta"><strong>Ecrit par <span
-                      class="authors">{{ post.author }}</span> le <span
-                      class="date">{{ post.date | date: "%d/%m/%Y"}}</span>
+                    class="authors"><a href="{{ '/author/' | append: post.author | append: '/index.html' | relative_url }}">{{ author.name }}</a></span>, le <span
+                    class="date">{{ post.date | date: "%d/%m/%Y"}}</span>
                   </strong></div>
                   <div class="content">
                     {{ post.excerpt }}

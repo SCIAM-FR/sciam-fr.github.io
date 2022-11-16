@@ -1,0 +1,27 @@
+---
+layout: default
+title: 'Auteurs'
+---
+
+<h1>Tous les auteurs</h1>
+<p>&nbsp;</p>
+<div class="all-tags">
+
+  {% assign authors = site.data.authors | sort %}
+  {% for author_data in authors %}
+    {% assign author = author_data[1] %}
+    {% if author.picture %}
+  <img class="rounded-full w-10 h-10" width="80px" height="80px" src="{{ 'images/authors/' | append: author.picture | prepend: site.baseurl }}" style="float:left;margin-right:15px;" />
+    {% endif %}
+  <h1><a href="{{ '/author/' | append: author_data[0] | append: '/index.html' | relative_url }}">{{ author.name }}</a></span></h1>
+  <p><b>{{ author.job }}</b></p>
+  <p>{{ author.bio }}</p>
+  <p>&nbsp;</p>
+  <hr>
+  {% endfor %}
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+
