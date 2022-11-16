@@ -6,6 +6,36 @@ pagination:
 <div class="row">
   <div class="col-lg-12">
     <div class="row">
+      <div class="col-lg-3">
+        <p>&nbsp;</p>
+        <hr>
+        <p>Auteur : </p>
+        {% assign author = site.data.authors[page.author] %}
+        {% if author.bio %}
+            <a href="{{ '/author/' | append: page.author | append: '/index.html' | relative_url }}">
+            {% include author_bio.html %}
+            </a>
+        {% endif %}
+
+        <hr>
+
+        <p class="date">Publi&eacute; le {{ page.date | date: "%d/%m/%Y"}} </p>    
+
+        <hr>
+
+        {% if page.tags.size > 0 %}
+        <div class="blog-tags">
+          <span>Tags:</span>
+          {% for tag in page.tags %}
+
+            <a href="{{ '/tag/' | relative_url }}{{ tag | slugify }}">{{ tag }}</a>{% unless forloop.last %}, {% endunless %}
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <hr>
+
+      </div>
       <div class="col-lg-9">
         <div class="doc">
           {{ content }}
@@ -28,20 +58,6 @@ pagination:
           {% endif %}
           </ul>
         </div>
-  
-      </div>
-      <div class="col-lg-3">
-        <aside class="hidden-xs">
-          <a class="twitter-timeline" data-height="1200" href="https://twitter.com/SCIAM_FR?ref_src=twsrc%5Etfw">
-            Tweets by SCIAM_FR
-          </a>
-          <script async charset="utf-8" src="https://platform.twitter.com/widgets.js"></script>
-        </aside>
-        <aside class="visible-xs">
-          <div class="panel panel-default">
-            <div class="panel-footer" style="text-align:justify;"></div>
-          </div>
-        </aside>
       </div>
     </div>
   </div>

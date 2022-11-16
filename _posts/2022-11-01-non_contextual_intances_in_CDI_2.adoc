@@ -3,8 +3,8 @@
 :page-navtitle: Non-Contextual Instances in CDI 2.0
 :page-excerpt: In CDI 2.0, you can now create non-contextual instances of beans. This is useful for creating instances of beans that are not managed by the container, such as in a standalone application. In this article, we'll look at how to create non-contextual instances of beans in CDI 2.0.
 :layout: post
-:authors: Antoine Sabot-Durand
-:tags: [CDI,SPI,Extension]
+:author: antoinesd
+:page-tags: [CDI,SPI,Extension,Java]
 :docinfo: shared-footer
 :page-liquid:
 

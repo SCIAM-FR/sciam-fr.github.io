@@ -1,0 +1,51 @@
+---
+layout: default
+---
+<!-- Style des boutons de pagination -->
+<style>
+  ul.pager { text-align: center; list-style: none; }
+  ul.pager li {display: inline;border: 1px solid black; padding: 10px; margin: 5px;}
+</style>
+
+<div class="home">
+
+  <h1 class="page-heading">Articles associés au tag {% if page.autopages %}{{page.autopages.display_name}}{% endif %}</h1>
+  <p>Page {{page.pagination_info.curr_page}} of {{page.pagination_info.total_pages}}</p>
+  
+  <ul class="post-list">
+    {% for post in paginator.posts %}
+      <li>
+        <h2>
+          <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+        </h2>
+        {% assign author = site.data.authors[post.author] %}
+        <div class="meta"><strong>Ecrit par <span
+            class="authors"><a href="{{ '/author/' | append: post.author | append: '/index.html' | relative_url }}">{{ author.name }}</a></span>, le <span
+            class="date">{{ post.date | date: "%d/%m/%Y"}}</span>
+        </strong></div>
+        <div class="content">
+          {{ post.excerpt }}
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+  
+  <!-- 
+    Boutons de pagination
+  -->
+  {% if paginator.total_pages > 1 %}
+  <ul class="pager">
+      {% if paginator.previous_page %}
+      <li class="previous">
+          <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; Articles pr&eacute;&eacute;dents</a>
+      </li>
+      {% endif %}
+      {% if paginator.next_page %}
+      <li class="next">
+          <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Articles suivants &rarr;</a>
+      </li>
+      {% endif %}
+  </ul>
+  {% endif %}
+
+</div>

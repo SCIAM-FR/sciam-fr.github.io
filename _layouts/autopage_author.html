@@ -1,0 +1,98 @@
+---
+layout: default
+pagination: 
+  enabled: true
+---
+
+<!-- This has the username of author. The one that you set with "author: name" in front-matter-->
+{% assign author_username = page.pagination.author %}
+
+<!-- Use page.pagination.author_data only if you have data file setup correctly -->
+{% assign author = page.pagination.author_data %}
+<!--
+  Now you can use the author variable anyhow.
+  It has all the data as defined inside _data/authors.yml for the current username.
+-->
+
+{% if author.picture %}
+<img class="rounded-full w-10 h-10" width="80px" height="80px" src="{{ 'images/authors/' | append: author.picture | prepend: site.baseurl }}" style="float:left;margin-right:15px;" />
+{% endif %}
+    <h1>{{ author.name }}</h1>
+    <p><b>{{ author.job }}</b></p>
+    <p>{{ author.bio }}</p>
+    
+    {% assign links = author.socials %}
+    
+    <p>
+    {% if links.twitter %}
+    <a href="https://twitter.com/{{ links.twitter }}" title="Twitter" target="_blank">
+      <span class="fa-stack fa-lg" aria-hidden="true">
+        <i class="fas fa-circle fa-stack-2x"></i>
+        <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+      <span class="sr-only">Twitter</span>
+    </a>
+    {% endif %}
+
+    {% if links.linkedin %}
+    <a href="https://www.linkedin.com/in/{{ links.linkedin }}" title="LinkedIn" target="_blank">
+      <span class="fa-stack fa-lg" aria-hidden="true">
+        <i class="fas fa-circle fa-stack-2x"></i>
+        <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+      </span>
+      <span class="sr-only">LinkedIn</span>
+   </a>
+   {% endif %}
+
+   {% if links.mastodon %}
+   <a href="https://{{ links.mastodon }}" title="Mastodon" target="_blank">
+    <span class="fa-stack fa-lg" aria-hidden="true">
+      <i class="fas fa-circle fa-stack-2x"></i>
+      <i class="fab fa-mastodon fa-stack-1x fa-inverse"></i>
+    </span>
+    <span class="sr-only">Mastodon</span>
+   </a>
+   {% endif %}
+
+   {% if author.website %}
+   <a href="{{ author.website }}" title="Site web" target="_blank">
+    <span class="fa-stack fa-lg" aria-hidden="true">
+      <i class="fas fa-circle fa-stack-2x"></i>
+      <i class="fas fa-link fa-stack-1x fa-inverse"></i>
+    </span>
+    <span class="sr-only">Site web</span>
+   </a>
+   {% endif %}
+
+
+   {% if links.github %}
+      <a href="https://github.com/{{ links.github }}" title="GitHub" target="_blank">
+        <span class="fa-stack fa-lg" aria-hidden="true">
+          <i class="fas fa-circle fa-stack-2x"></i>
+          <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+        </span>
+        <span class="sr-only">GitHub</span>
+     </a>
+     {% endif %}
+
+   {% if links.gitlab %}
+    <a href="https://gitlab.com/{{ links.gitlab }}" title="GitLab" target="_blank">
+      <span class="fa-stack fa-lg" aria-hidden="true">
+        <i class="fas fa-circle fa-stack-2x"></i>
+        <i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+      </span>
+      <span class="sr-only">Gitlab</span>
+   </a>
+   {% endif %}
+
+  </p>
+
+  <p>&nbsp;</p>
+  <hr>
+  <h2>Articles publi&eacute;s</h2>
+  {% for post in paginator.posts %}
+    {% if author_username == post.author %}
+      {% include postbox.html %}
+      <br>
+    {% endif %}
+  {% endfor %}

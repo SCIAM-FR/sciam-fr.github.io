@@ -1,0 +1,27 @@
+jmdoudoux:
+  name: 'Jean-Michel Doudoux'
+  bio: 'Erat voluptua duo ipsum voluptua kasd placerat commodo imperdiet aliquam minim stet ut ipsum. Velit consetetur et et dolores illum nonumy nonumy ipsum ipsum luptatum diam. Ea lorem sed et sadipscing sed soluta sit sea laoreet vero est clita labore est et assum eu duis. Takimata erat consetetur iriure sadipscing elitr voluptua qui zzril dolor at magna sanctus ut labore et vulputate vel diam. Iriure no consectetuer lorem kasd.
+
+Dolor vero aliquyam eu accusam et amet clita invidunt. Lorem diam amet lorem et ut gubergren no erat lorem nonumy sit erat quod sanctus aliquip ex magna dolor. Laoreet dolore diam diam erat doming velit consectetuer sanctus tempor sanctus. Ipsum amet tempor sadipscing imperdiet ad clita exerci odio sit te. Amet sit amet tempor nonummy.'
+  job: 'Senior Tech Lead'
+  website: 'https://www.jmdoudoux.fr'
+  picture: jmdoudoux.png
+  socials:
+    twitter: 'jmdoudoux'
+    github: 'jmdoudoux'
+    linkedin: 'jmdoudoux'
+    gitlab: 'jmdoudoux'
+
+antoinesd:
+  name: 'Antoine Sabot-Durand'
+  bio: 'Bio d''Antoine Sabot-Durand'
+  socials:
+    twitter: 'antoine_sd'
+
+someone:
+  name: 'Mr Hyde'
+  bio: 'Bio of user Mr Hyde'
+  website: 'http://user2.com'
+  socials:
+    twitter: '@user2'
+    github: 'user2'
