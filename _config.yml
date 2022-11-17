@@ -37,7 +37,9 @@ asciidoctor:
 plugins:
   - jekyll-paginate-v2
   - jekyll-auto-authors
-
+  - liquid_reading_time
+  - liquid_pluralize
+  
 pagination:
   enabled: true
   per_page: 9
