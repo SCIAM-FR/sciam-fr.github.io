@@ -3,6 +3,7 @@ cache:
   paths:
     - .bundle
 before_script:
+  - gem install bundler
   - bundle --path .bundle/gems
 pages:
   script:
