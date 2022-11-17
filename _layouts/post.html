@@ -21,6 +21,8 @@ pagination:
 
         <p class="date">Publi&eacute; le {{ page.date | date: "%d/%m/%Y"}} </p>    
 
+        <p>Temps de lecture : {{ content | reading_time | pluralize: "minute" }} </p>
+        
         <hr>
 
         {% if page.tags.size > 0 %}
