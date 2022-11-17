@@ -1,4 +1,4 @@
-image: ruby:2.5
+image: docker-asciidoctor:1.35
 cache:
   paths:
     - .bundle
