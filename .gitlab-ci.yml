@@ -1,4 +1,4 @@
-image: docker-asciidoctor:1.35
+image: asciidoctor/docker-asciidoctor:1.35
 cache:
   paths:
     - .bundle
