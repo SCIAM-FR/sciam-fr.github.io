@@ -39,7 +39,8 @@ plugins:
   - jekyll-auto-authors
   - liquid_reading_time
   - liquid_pluralize
-  
+  - jekyll-feed
+
 pagination:
   enabled: true
   per_page: 9
@@ -79,3 +80,6 @@ autopages:
 
   collections:
     enabled: false
+
+feed:
+  excerpt_only: true

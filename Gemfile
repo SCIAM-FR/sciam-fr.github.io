@@ -9,4 +9,5 @@ group :jekyll_plugins do
   gem 'jekyll-auto-authors'
   gem 'liquid_reading_time'
   gem 'liquid_pluralize'
+  gem 'jekyll-feed'
 end
