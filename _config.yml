@@ -20,6 +20,9 @@ exclude:
   - .idea
   - .jekyll-cache
 
+keep_files:
+  - images
+
 asciidoc: {}
 
 asciidoctor:
@@ -27,16 +30,19 @@ asciidoctor:
   safe: unsafe
   excerpt_separator: "\n//more\n"
   attributes:
-    - idseparator=_
-    - source-highlighter=rouge
-    - rouge-css=style
-    - rouge-style=github
-#    - asciidoctor-stylesheet=asciidoctor.css
-    - icons=font
+    idseparator: _
+    source-highlighter: rouge
+    rouge-css: style
+    rouge-style: github
+    asciidoctor-stylesheet: asciidoctor.css
+    icons: font
+    imagesdir: "/images/generated"
 
 plugins:
   - jekyll-paginate-v2
   - jekyll-auto-authors
+  - jekyll-asciidoc
+  - asciidoctor-diagram
   - liquid_reading_time
   - liquid_pluralize
   - jekyll-feed

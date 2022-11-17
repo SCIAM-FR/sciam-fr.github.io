@@ -4,6 +4,7 @@ gem 'jekyll'
 gem 'rake-jekyll'
 
 group :jekyll_plugins do
+  gem 'asciidoctor-diagram'
   gem 'jekyll-asciidoc'
   gem 'jekyll-paginate-v2'
   gem 'jekyll-auto-authors'
