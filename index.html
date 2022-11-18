@@ -72,7 +72,7 @@ pagination:
 
             <div class="pagination">
               {% if paginator.previous_page %}
-                <a style="width:180px;" href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; Articles précédents</a>
+                <a style="width:180px;" href="{{ paginator.previous_page_path | relative_url | replace: '//', '/' }}">&larr; Articles précédents</a>
             {% endif %}
 
             {% assign first_page_path = paginator.first_page_path | default: site.paginate_path | replace: 'page:num', '' | replace: '//', '/' | relative_url %}
@@ -124,7 +124,7 @@ pagination:
           
 
               {% if paginator.next_page %}
-                  <a style="width:180px;" href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Articles suivants &rarr;</a>
+                  <a style="width:180px;" href="{{ paginator.next_page_path | relative_url | replace: '//', '/' }}">Articles suivants &rarr;</a>
               {% endif %}
             </div>
           </div>

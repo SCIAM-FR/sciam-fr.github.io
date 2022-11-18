@@ -1,6 +1,6 @@
    <div>
       {% if author.picture %}
-      <img class="rounded-full w-10 h-10" width="80px" height="80px" src="{{ '/images/authors/' | append: author.picture | prepend: site.baseurl }}" style="float:left;margin-right:15px;" />
+      <img class="rounded-full w-10 h-10" width="80px" height="80px" src="{{ '/images/authors/' | append: author.picture | relative_url }}" style="float:left;margin-right:15px;" />
       {% endif %}
       <h4>{{ author.name }}</h4>
       {% if author.job %}
