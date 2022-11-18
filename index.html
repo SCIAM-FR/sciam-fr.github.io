@@ -3,6 +3,38 @@ layout: default
 pagination: 
   enabled: true
 ---
+<style>
+  .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 3rem;
+  }
+  .pagination a,
+  .pagination span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid #efefef;
+      border-left: 0;
+      border-radius: 12px;
+      margin: 5px;
+  }
+  .pagination .active {
+      background: #f3f3f3;
+      pointer-events: none;
+  }
+  .pagination .active svg {
+      opacity: .3;
+  }
+  .pagination a:hover {
+      background: #f3f3f3;
+      cursor: pointer;
+  }
+</style>
+  
 <div class="row">
   <div class="col-lg-12">
     <div class="row">
@@ -17,7 +49,7 @@ pagination:
             <article class="post">
               <div class="panel panel-primary">
                 <div class="panel-body">
-              <h1><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h1>
+                  <h1><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h1>
                   {% assign author = site.data.authors[post.author] %}
                   <div class="meta"><strong>Ecrit par <span
                     class="authors"><a href="{{ '/author/' | append: post.author | append: '/index.html' | relative_url }}">{{ author.name }}</a></span>, le <span
@@ -36,21 +68,68 @@ pagination:
             Boutons de pagination
           -->
           {% if paginator.total_pages > 1 %}
-          <ul class="pager">
+          <div class="pager">
+
+            <div class="pagination">
               {% if paginator.previous_page %}
-              <li class="previous">
-                  <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; Articles pr&eacute;c&eacute;dents</a>
-              </li>
+                <a style="width:180px;" href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; Articles précédents</a>
+            {% endif %}
+
+            {% assign first_page_path = paginator.first_page_path | default: site.paginate_path | replace: 'page:num', '' | replace: '//', '/' | relative_url %}
+              
+              {% comment %} First page {% endcomment %}
+              {% if paginator.page == 1 %}
+                <a href="#" class="disabled current">1</a>
+              {% else %}
+                <a href="{{ first_page_path }}">1</a>
               {% endif %}
+              
+              {% assign page_start = 2 %}
+              {% if paginator.page > 4 %}
+                {% assign page_start = paginator.page | minus: 2 %}
+                {% comment %} Ellipsis for truncated links {% endcomment %}
+                <a href="#" class="disabled">&hellip;</a>
+              {% endif %}
+              
+              {% assign page_end = paginator.total_pages | minus: 1 %}
+              {% assign pages_to_end = paginator.total_pages | minus: paginator.page %}
+              {% if pages_to_end > 4 %}
+                {% assign page_end = paginator.page | plus: 2 %}
+              {% endif %}
+          
+              {% for index in (page_start..page_end) %}
+                {% if index == paginator.page %}
+                <a href="{{ site.paginate_path | replace: ':num', index | replace: '//', '/' | relative_url }}" class="disabled active">{{ index }}</a>
+                {% else %}
+                  {% comment %} Distance from current page and this link {% endcomment %}
+                  {% assign dist = paginator.page | minus: index %}
+                  {% if dist < 0 %}
+                    {% comment %} Distance must be a positive value {% endcomment %}
+                    {% assign dist = 0 | minus: dist %}
+                  {% endif %}
+                  <a href="{{ site.paginate_path | replace: ':num', index | relative_url }}">{{ index }}</a>
+                {% endif %}
+              {% endfor %}
+          
+              {% comment %} Ellipsis for truncated links {% endcomment %}
+              {% if pages_to_end > 3 %}
+                <span>&hellip;</span>
+              {% endif %}
+          
+              {% if paginator.page == paginator.total_pages %}
+                <a href="#" class="disabled current">{{ paginator.page }}</a>
+              {% else %}
+                <a href="{{ site.paginate_path | replace: ':num', paginator.total_pages | replace: '//', '/' | relative_url }}">{{ paginator.total_pages }}</a>
+              {% endif %}
+          
+
               {% if paginator.next_page %}
-              <li class="next">
-                  <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Articles suivants &rarr;</a>
-              </li>
+                  <a style="width:180px;" href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Articles suivants &rarr;</a>
               {% endif %}
-          </ul>
+            </div>
+          </div>
           {% endif %}
         </div>
-
       </div>
       <div class="col-lg-3">
         <div class="follow-scroll hidden-xs">
@@ -59,4 +138,3 @@ pagination:
       </div>
     </div>
   </div>
-</div>
