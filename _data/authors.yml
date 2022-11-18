@@ -1,16 +1,13 @@
 jmdoudoux:
   name: 'Jean-Michel Doudoux'
-  bio: 'Erat voluptua duo ipsum voluptua kasd placerat commodo imperdiet aliquam minim stet ut ipsum. Velit consetetur et et dolores illum nonumy nonumy ipsum ipsum luptatum diam. Ea lorem sed et sadipscing sed soluta sit sea laoreet vero est clita labore est et assum eu duis. Takimata erat consetetur iriure sadipscing elitr voluptua qui zzril dolor at magna sanctus ut labore et vulputate vel diam. Iriure no consectetuer lorem kasd.
-
-Dolor vero aliquyam eu accusam et amet clita invidunt. Lorem diam amet lorem et ut gubergren no erat lorem nonumy sit erat quod sanctus aliquip ex magna dolor. Laoreet dolore diam diam erat doming velit consectetuer sanctus tempor sanctus. Ipsum amet tempor sadipscing imperdiet ad clita exerci odio sit te. Amet sit amet tempor nonummy.'
+  bio: 'Passionné par le développement de logiciels depuis ses débuts, adolescent avec un Commodore 64, et par la veille technologique, Jean-Michel possède une longue expérience, en SSII/ESN et personnelle, dans l’écriture d’applications avec différents langages.
+Il utilise Java depuis sa version 1.0 et aime partager sa passion pour cette plateforme et son écosystème notamment en se consacrant, depuis plus d’une vingtaine d’années, à la rédaction d’un tutoriel intitulé &quot;Développons en Java&quot;, diffusé sous licence GNU FDL. Ce travail et son implication dans la communauté lui a permis d’être nommé Java Champion.'
   job: 'Senior Tech Lead'
   website: 'https://www.jmdoudoux.fr'
   picture: jmdoudoux.png
   socials:
     twitter: 'jmdoudoux'
-    github: 'jmdoudoux'
     linkedin: 'jmdoudoux'
-    gitlab: 'jmdoudoux'
 
 antoinesd:
   name: 'Antoine Sabot-Durand'
@@ -25,3 +22,4 @@ someone:
   socials:
     twitter: '@user2'
     github: 'user2'
+    gitlab: 'user2'
