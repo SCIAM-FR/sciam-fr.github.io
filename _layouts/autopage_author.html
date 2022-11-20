@@ -21,19 +21,19 @@ pagination:
     <p><b>{{ author.job }}</b></p>
     <p>{{ author.bio }}</p>
     
+    <p>
+      {% if author.twitter %}
+      <a href="https://twitter.com/{{ links.twitter }}" title="Twitter" target="_blank">
+        <span class="fa-stack fa-lg" aria-hidden="true">
+          <i class="fas fa-circle fa-stack-2x"></i>
+          <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+        <span class="sr-only">Twitter</span>
+      </a>
+      {% endif %}
+  
     {% assign links = author.socials %}
     
-    <p>
-    {% if links.twitter %}
-    <a href="https://twitter.com/{{ links.twitter }}" title="Twitter" target="_blank">
-      <span class="fa-stack fa-lg" aria-hidden="true">
-        <i class="fas fa-circle fa-stack-2x"></i>
-        <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-      </span>
-      <span class="sr-only">Twitter</span>
-    </a>
-    {% endif %}
-
     {% if links.linkedin %}
     <a href="https://www.linkedin.com/in/{{ links.linkedin }}" title="LinkedIn" target="_blank">
       <span class="fa-stack fa-lg" aria-hidden="true">
