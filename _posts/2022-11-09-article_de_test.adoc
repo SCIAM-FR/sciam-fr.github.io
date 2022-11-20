@@ -6,7 +6,7 @@
 :author: jmdoudoux
 :page-tags: [test,Java,blog]
 :docinfo: shared-footer
-
+:page-toc: false
 
 Erat voluptua duo ipsum voluptua kasd placerat commodo imperdiet aliquam minim stet ut ipsum. Velit consetetur et et dolores illum nonumy nonumy ipsum ipsum luptatum diam. Ea lorem sed et sadipscing sed soluta sit sea laoreet vero est clita labore est et assum eu duis. Takimata erat consetetur iriure sadipscing elitr voluptua qui zzril dolor at magna sanctus ut labore et vulputate vel diam. Iriure no consectetuer lorem kasd.
 

@@ -1,8 +1,19 @@
-title: Sciam Tech Blog
+title: Blog Tech Sciam
 description: Ce blog contient des articles techniques issus de la communeauté des salariés de SCIAM
+url: "http://localhost:4000"
+locale: fr_FR
 baseurl: "/blog-tech"
+twitter:
+  username: SCIAM_FR
+  card: summary
 highlighter: rouge
 
+defaults:
+  - scope:
+      path: ""
+    values:
+      toc: true
+      
 social-network-links:
   github: 'SCIAM-FR'
   twitter: 'SCIAM_FR'
@@ -46,6 +57,9 @@ plugins:
   - liquid_reading_time
   - liquid_pluralize
   - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-toc
 
 pagination:
   enabled: true
@@ -89,3 +103,7 @@ autopages:
 
 feed:
   excerpt_only: true
+
+toc:
+  min_level: 2
+  max_level: 4

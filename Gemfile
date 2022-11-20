@@ -11,4 +11,7 @@ group :jekyll_plugins do
   gem 'liquid_reading_time'
   gem 'liquid_pluralize'
   gem 'jekyll-feed'
+  gem 'jekyll-sitemap'
+  gem 'jekyll-seo-tag'
+  gem 'jekyll-toc'
 end

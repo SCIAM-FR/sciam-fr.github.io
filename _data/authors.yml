@@ -5,21 +5,20 @@ Il utilise Java depuis sa version 1.0 et aime partager sa passion pour cette pla
   job: 'Senior Tech Lead'
   website: 'https://www.jmdoudoux.fr'
   picture: jmdoudoux.png
+  twitter: 'jmdoudoux'
   socials:
-    twitter: 'jmdoudoux'
     linkedin: 'jmdoudoux'
 
 antoinesd:
   name: 'Antoine Sabot-Durand'
   bio: 'Bio d''Antoine Sabot-Durand'
-  socials:
-    twitter: 'antoine_sd'
+  twitter: 'antoine_sd'
 
 someone:
   name: 'Mr Hyde'
   bio: 'Bio of user Mr Hyde'
   website: 'http://user2.com'
+  twitter: '@user2'
   socials:
-    twitter: '@user2'
     github: 'user2'
     gitlab: 'user2'
