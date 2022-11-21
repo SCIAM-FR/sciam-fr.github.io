@@ -22,3 +22,9 @@ someone:
   socials:
     github: 'user2'
     gitlab: 'user2'
+
+loichermann:
+  name: 'Loic Hermann'
+  job: CTO
+  picture: 'loic_hermann.jpg'
+  

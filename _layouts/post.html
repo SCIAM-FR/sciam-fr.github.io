@@ -16,7 +16,7 @@ ul#toc {
       <div class="col-lg-3">
         <p style="margin-top:1em;">Auteur : </p>
         {% assign author = site.data.authors[page.author] %}
-        {% if author.bio %}
+        {% if author.name %}
             <a href="{{ '/author/' | append: page.author | append: '/index.html' | relative_url }}">
             {% include author_bio.html %}
             </a>
@@ -48,11 +48,19 @@ ul#toc {
         </div>
         {% endif %}
 
+        {% if page.vignette %}
+        <hr>
+
+        <img src="{{ '/images/vignettes/' | append: page.vignette | relative_url }}" style="max-width: 100%;" />
+
+        {% endif %}
+
         <hr>
       </div>
       <div class="col-lg-9">
         <div class="doc">
           {{ content }}
+          <p>&nbsp;</p>
         </div>
 
         <!--

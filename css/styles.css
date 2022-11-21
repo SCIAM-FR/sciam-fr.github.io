@@ -1449,7 +1449,7 @@ h1 small, h1 .small, h2 small, h2 .small, h3 small, h3 .small, h4 small, h4 .sma
 
 /* line 24, /Users/antoine/.rvm/gems/ruby-2.3.4/gems/bootstrap-sass-3.3.7/assets/stylesheets/bootstrap/_type.scss */
 h1, .h1, h2, .h2, h3, .h3 {
-  margin-top: 20px;
+  margin-top: 1.5em;
   margin-bottom: 10px; }
 /* line 30, /Users/antoine/.rvm/gems/ruby-2.3.4/gems/bootstrap-sass-3.3.7/assets/stylesheets/bootstrap/_type.scss */
 h1 small, h1 .small, .h1 small, .h1 .small, h2 small, h2 .small, .h2 small, .h2 .small, h3 small, h3 .small, .h3 small, .h3 .small {
