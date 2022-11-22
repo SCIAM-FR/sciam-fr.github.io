@@ -5424,9 +5424,9 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
   margin-bottom: 20px;
   background-color: #fff;
   border: 1px solid transparent;
-  border-radius: 4px;
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); }
+  border-radius: 12px;
+  -webkit-box-shadow: 0 3px 3px rgb(0 0 0 / 5%);
+  box-shadow: 0 3px 3px rgb(0 0 0 / 5%); }
 
 /* line 16, /Users/antoine/.rvm/gems/ruby-2.3.4/gems/bootstrap-sass-3.3.7/assets/stylesheets/bootstrap/_panels.scss */
 .panel-body {
@@ -5602,7 +5602,7 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 
 /* line 257, /Users/antoine/.rvm/gems/ruby-2.3.4/gems/bootstrap-sass-3.3.7/assets/stylesheets/bootstrap/_panels.scss */
 .panel-primary {
-  border-color: #337ab7; }
+  border-color: rgb(207, 217, 222); }
 /* line 6, /Users/antoine/.rvm/gems/ruby-2.3.4/gems/bootstrap-sass-3.3.7/assets/stylesheets/bootstrap/mixins/_panels.scss */
 .panel-primary > .panel-heading {
   color: #fff;
