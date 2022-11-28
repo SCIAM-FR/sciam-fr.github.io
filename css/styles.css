@@ -1451,7 +1451,18 @@ h1 small, h1 .small, h2 small, h2 .small, h3 small, h3 .small, h4 small, h4 .sma
 h1, .h1, h2, .h2, h3, .h3 {
   margin-top: 1.5em;
   margin-bottom: 10px; }
-/* line 30, /Users/antoine/.rvm/gems/ruby-2.3.4/gems/bootstrap-sass-3.3.7/assets/stylesheets/bootstrap/_type.scss */
+
+h1.liste_article {
+  margin-top: 10px;
+  margin-bottom: 10px; }
+
+h1.titre_header {
+    font-size: 36px;
+    margin-top: 1.5em;
+    margin-bottom: 10px;
+}
+
+  /* line 30, /Users/antoine/.rvm/gems/ruby-2.3.4/gems/bootstrap-sass-3.3.7/assets/stylesheets/bootstrap/_type.scss */
 h1 small, h1 .small, .h1 small, .h1 .small, h2 small, h2 .small, .h2 small, .h2 .small, h3 small, h3 .small, .h3 small, .h3 .small {
   font-size: 65%; }
 
