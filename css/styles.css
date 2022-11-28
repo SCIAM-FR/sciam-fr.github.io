@@ -6922,7 +6922,8 @@ ul.twitter-list li.nav-header {
 /* line 271, /Users/antoine/dev/awestruct-sites/antoinesd.github.io/stylesheets/styles.scss */
 .post h1, .post .content, .post .footer {
   border-bottom: 1px solid #DDDDDD;
-  margin-bottom: 10px; }
+  margin-bottom: 10px; 
+  padding-bottom: 10px; }
 /* line 276, /Users/antoine/dev/awestruct-sites/antoinesd.github.io/stylesheets/styles.scss */
 .post .footer {
   padding-bottom: 10px; }
