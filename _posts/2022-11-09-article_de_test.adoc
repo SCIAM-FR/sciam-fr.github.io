@@ -4,7 +4,7 @@
 :page-excerpt: Article de test sur le blog
 :layout: post
 :author: jmdoudoux
-:page-tags: [test,Java,blog]
+:page-tags: [Test,Java,Blog]
 :docinfo: shared-footer
 :page-toc: false
 :page-vignette: 1_wP4DCPy7MxRbZGkCQ1y7tw.jpeg

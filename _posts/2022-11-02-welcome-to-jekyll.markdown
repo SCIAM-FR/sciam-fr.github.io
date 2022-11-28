@@ -3,7 +3,7 @@ layout: post
 title:  "Welcome to Jekyll!"
 author: someone
 date:   2022-11-02 15:40:19 +0100
-tags: welcome
+tags: Welcome
 excerpt: You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes.
 toc: false
 ---
