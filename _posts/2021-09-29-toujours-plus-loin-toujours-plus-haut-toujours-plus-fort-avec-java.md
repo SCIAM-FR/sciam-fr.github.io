@@ -17,7 +17,7 @@ Je vous propose donc d'entrevoir à travers cet article les nouveautés du langa
 
 ## JEP 361: Switch Expressions
 
-Cette JEP introduit une nouvelle syntaxe pour les switch case depuis la version 14 de java.
+Cette JEP introduit une nouvelle syntaxe pour les switch case depuis la version 14 de Java.
 
 Cette syntaxe n'utilise plus le mot clé break, et il est possible de lister plusieurs labels au sein d'un seule case.
 
@@ -62,7 +62,7 @@ System.out.println(
         }
     );
 ```
-si la partie de droite d'un case devait contenir un bloc avec plusieurs expression, le resultat peut être retourner avec le nouveau mot clé "yield" :
+Si la partie de droite d'un case devait contenir un bloc avec plusieurs expression, le resultat peut être retourner avec le nouveau mot clé "yield" :
 ```java
 System.out.println(
         switch (k) {
@@ -78,7 +78,7 @@ System.out.println(
 ```
 ## JEP 395 : Records
 
-Disponible en preview depuis java 14 et officiellement intégrés à la version 16 du langage, les records ont pour ambition de faciliter l'écriture de classes servant uniquement à transporter de la donnée immuable (DTO par exemple).
+Disponible en preview depuis Java 14 et officiellement intégrés à la version 16 du langage, les records ont pour ambition de faciliter l'écriture de classes servant uniquement à transporter de la donnée immuable (DTO par exemple).
 
 Pour le compilateur, il s'agit simplement d'un nouveau type de classe composée :
 
@@ -124,7 +124,7 @@ class Point {
 
 record Point(int x, int y) { }
 ```
-Il sera bien-sûr possible d'ajouter au record d'autre méthodes ou constructeurs.
+Il sera bien-sûr possible d'ajouter au record d'autres méthodes ou constructeurs.
 
 ## JEP 394 : Pattern Matching for instanceof
 
@@ -135,7 +135,7 @@ if (obj instanceof String) {
     s.split(",")
 }
 ```
-En effet dans le bloc ci-dessus, le cast est redondant, mais nécessaire dans les précédentes versions de java.
+En effet dans le bloc ci-dessus, le cast est redondant, mais nécessaire dans les précédentes versions de Java.
 
 Ainsi dans l'exemple suivant, à l'intérieur du bloc "if" on pourra utiliser la nouvelle variable "s" ayant comme type String en s'abstrayant du cast.
 ```java
@@ -145,13 +145,13 @@ if (obj instanceof String s) {
 ```
 Même si le gain ne saute pas aux yeux directement avec cet exemple, il reste néanmoins conséquent pour les gros projets, d'autant plus que la lisibilité se trouve grandement améliorée par cet artefact.
 
-Cette JEP sera completée par une autre JEP permettant le pattern matching au seins d'un switch case. Cette fonctionnalité est d'ores et déjà présente en preview dans le jdk 17 à travers la JEP 406 : Pattern Matching for switch (Preview).
+Cette JEP sera completée par une autre JEP permettant le pattern matching au seins d'un switch case. Cette fonctionnalité est d'ores et déjà présente en preview dans le JDK 17 à travers la JEP 406 : Pattern Matching for switch (Preview).
 
 ## JEP 378 : Text Blocks
 
-Disponible depuis java 15, cette fonctionnalité facilite grandement l'écriture de bloc de text multi-ligne.
+Disponible depuis Java 15, cette fonctionnalité facilite grandement l'écriture de bloc de texte multi-ligne.
 
-Avant cette JEP, pour introduire un bloc de text dans le code on pouvait faire quelque chose comme ça :
+Avant cette JEP, pour introduire un bloc de texte dans le code on pouvait faire quelque chose comme ça :
 ```java
 String s = "It was the best of times, it was the worst of times,\n"
          + "it was the age of wisdom, it was the age of foolishness,\n"
@@ -171,9 +171,9 @@ it was the season of Light, it was the season of Darkness,
 it was the spring of hope, it was the winter of despair,
 we had everything before us, we had nothing before us""";
 ```
-Cette nouvelle syntaxe gère automatiquement les retours àla ligne (plus de "/n"), ainsi que l'indentation.
+Cette nouvelle syntaxe gère automatiquement les retours à la ligne (plus de "/n"), ainsi que l'indentation.
 
-Ainsi le texte retourné par la méthode suivante sera indenté correctement. les espaces en trop en début et en fin de ligne sont supprimés. le bloc html de notre exemple sera donc décalé de 12 caractères par le compilateur.
+Ainsi le texte retourné par la méthode suivante sera indenté correctement. Les espaces en trop en début et en fin de ligne sont supprimés. Le bloc html de notre exemple sera donc décalé de 12 caractères par le compilateur.
 ```java
 public String getBlockOfHtml() {
     return """
@@ -185,5 +185,5 @@ public String getBlockOfHtml() {
             </html>""";
 }
 ```
-Cette liste n'a pas la prétention d'être pas exhaustive, j'espère qu'elle vous aura au tout de même permise d'entrevoir l'ampleur des évolutions ayant eu lieu sur le langage, et a quel point ces évolutions permettent d'améliorer l'expérience du développeur.
+Cette liste n'a pas la prétention d'être exhaustive, j'espère qu'elle vous aura tout de même permise d'entrevoir l'ampleur des évolutions ayant eu lieu sur le langage, et a quel point ces évolutions permettent d'améliorer l'expérience du développeur.
 
