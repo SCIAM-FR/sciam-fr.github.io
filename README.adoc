@@ -1,4 +1,4 @@
 = Mode d'emploi SCIAM Blog
 :toc:
 
-TODO
+Consultez le https://gitlab.com/sciam/tech-review/quarkus-getting-started/-/wikis/Guide-de-contribution[guide de contribution dans le wiki]
