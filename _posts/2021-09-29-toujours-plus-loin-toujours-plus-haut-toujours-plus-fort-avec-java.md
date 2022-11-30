@@ -4,7 +4,7 @@ title: 'Toujours plus loin, toujours plus haut, toujours plus fort avec Java : C
 author: loichermann
 date: 2021-09-29 
 tags: ['Java', 'Pattern matching', 'Switch expressions', 'Java 14']
-excerpt: 'Cet article vous dresse un panorama des évolutions majeures autour de Java au cours de ces dernières années. Parmi les nombreuses évolutions qui pourraient vous pousser à vouloir découvrir les version récentes du langage, celles que je trouve particulièrement intéressantes sont celles permettant d''améliorer la vitesse de développement et la lisibilité du code.'
+excerpt: 'Cet article vous dresse un panorama des évolutions majeures autour de Java au cours de ces dernières années. Parmi les nombreuses évolutions qui pourraient vous pousser à vouloir découvrir les versions récentes du langage, celles que je trouve particulièrement intéressantes sont celles permettant d''améliorer la vitesse de développement et la lisibilité du code.'
 vignette: 1_wP4DCPy7MxRbZGkCQ1y7tw.jpeg 
 ---
 

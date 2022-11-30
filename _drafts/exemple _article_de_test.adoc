@@ -1,7 +1,7 @@
-= Article de test
+= Article de test en AsciiDoc
 :showtitle:
-:page-navtitle: Article de test 
-:page-excerpt: Article de test sur le blog
+:page-navtitle: Article de test en AsciiDoc 
+:page-excerpt: Article de test en AsciiDoc sur le blog
 :layout: post
 :author: jmdoudoux
 :page-tags: [Test,Java,Blog]
@@ -9,48 +9,95 @@
 :page-toc: false
 :page-vignette: 1_wP4DCPy7MxRbZGkCQ1y7tw.jpeg
 
+
+== Paragraphes
+
 Erat voluptua duo ipsum voluptua kasd placerat commodo imperdiet aliquam minim stet ut ipsum. Velit consetetur et et dolores illum nonumy nonumy ipsum ipsum luptatum diam. Ea lorem sed et sadipscing sed soluta sit sea laoreet vero est clita labore est et assum eu duis. Takimata erat consetetur iriure sadipscing elitr voluptua qui zzril dolor at magna sanctus ut labore et vulputate vel diam. Iriure no consectetuer lorem kasd.
 
 Dolor vero aliquyam eu accusam et amet clita invidunt. Lorem diam amet lorem et ut gubergren no erat lorem nonumy sit erat quod sanctus aliquip ex magna dolor. Laoreet dolore diam diam erat doming velit consectetuer sanctus tempor sanctus. Ipsum amet tempor sadipscing imperdiet ad clita exerci odio sit te. Amet sit amet tempor nonummy.
 
-== Titre niveau 2
+ ligne 3
 
+ligne1 en **gras** et en *italique* avec du texte ***important*** a mettre en evidence  
 
-[source,java]
-----
-public void doSomethingWithContextualMyClass() {
-        BeanManager bm = CDI.current().getBeanManager();
-        InjectionTargetFactory<MyClass> itf = bm.getInjectionTargetFactory(bm.createAnnotatedType(MyClass.class));
-        itf.configure()
-                .filterFields(f -> "MyField".equals(f.getJavaMember().getName()))
-                .findFirst()
-                .ifPresent(f -> f.add(InjectLiteral.INSTANCE));
-        InjectionTarget<MyClass> it = itf.createInjectionTarget(null);
-        CreationalContext<MyClass> cctx = bm.createCreationalContext(null);
-        MyClass myInstance = new MyClass(); //<1>
-        it.postConstruct(myInstance);
-        it.inject(myInstance,cctx);
+ligne2
+ligne3 +
+ligne4
 
-        //Do what you need with myInstance
+== Formattage du texte
 
-        it.preDestroy(myInstance);
-        cctx.release();
-}
-----
-<1> instance is not created by the container
+texte en _italique_, texte en *gras*.
+
++mono *bold*+, `mono pass thru`
+
+normal, ^exposant^, ~indice~.
+
+Dans un terminal DOS, tapez la commande `dir`.
+
+== Listes
+
+.Liste à puce
+* puce 1
+* puce 2
+  - puce 2.1
+  - puce 2.2
+* puce 3
+** puce 3.1
+** puce 3.2
+*** puce 3.2.1
+*** puce 3.2.2
+**** puce 3.2.2.1
+**** puce 3.2.2.2
+***** puce 3.2.2.2.1
+***** puce 3.2.2.2.2
+**** puce 3.2.2.3
+*** puce 3.2.3
+** puce 3.3
+* puce 4
+
+''''
+
+== Mises en garde (Admonitions)
+
+TIP: une astuce.
+
+IMPORTANT: un point important.
+
+WARNING: un avertissement.
+
+CAUTION: attention.
 
 .Titre de la note
 NOTE: Exemple de notes
       Description de la note.
 
 
-TIP: Tip.
+== Code source
 
-IMPORTANT: Important.
+[source,java]
+----
+public void doSomethingWithContextualMyClass() {
+        BeanManager bm = CDI.current().getBeanManager();
+        CreationalContext<MyClass> cctx = bm.createCreationalContext(null);
+        MyClass myInstance = new MyClass(); //<1>
+        it.postConstruct(myInstance); //<2>
+        cctx.release();
+}
+----
+<1> instance is not created by the container
+<2> register the instance
 
-WARNING: Warning.
 
-CAUTION: Caution.
+[source,json]
+----
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "age": 25
+}
+----
+
+== Tableaux
 
 .An example table
 [options="header,footer"]
@@ -62,8 +109,22 @@ CAUTION: Caution.
 |6    |Three items|d
 |=======================
 
+== Caractères spéciaux
 
-In that case the instance won't have interceptor applied on it since the container didn't create it.
+(C) (R) (TM) -- ... -> <- => <= &#182;
+
+Copyright (©) — &copy;
+Registered trademark (®) — &reg;
+Trademark (™) — &trade;
+Euro (€) — &euro;
+Left arrow (←) — &larr;
+Up arrow (↑) — &uarr;
+Right arrow (→) — &rarr;
+Down arrow (↓) — &darr;
+Degree (°) — &#176;
+Pi (π) — &#960;
+
+== Schémas
 
 PlantUML 
 
