@@ -1,0 +1,127 @@
+= Quarkus : comment créer un Bean virtuel en 3 étapes
+:showtitle:
+:page-navtitle: Quarkus : comment créer un Bean virtuel en 3 étapes
+:page-excerpt: 
+:layout: post
+:author: loichermann
+:page-tags:  ['Java', 'Quarkus', 'CDI']
+:page-liquid:
+
+image::{{'/images/quarkus-bean-virtuel.jpeg' | relative_url}}[image,width=604,height=362, center]
+
+[.text-center]
+Image par https://pixabay.com/fr/users/TheDigitalArtist-202249/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=4246668[[.underline]#Pete Linforth#] de [.underline]#Pixabay#
+
+&nbsp;
+
+J’ai eu l’occasion de m’intéresser récemment au framework Quarkus qui est une implémentation *JEE Microprofile* pour *faciliter le développement de* https://fr.wikipedia.org/wiki/Microservices[*[.underline]#micro-services#*].
+
+Ce framework, dont la vocation est d’être extrêmement rapide (subatomic supersonic java …), permet la création d’*extensions* en déplaçant au maximum la logique dans le build, ce qui permet un boot ultra rapide. Pour commencer à écrire des extensions, la documentation d’origine est très claire : https://quarkus.io/guides/writing-extensions[[.underline]#https://quarkus.io/guides/writing-extensions#]
+
+La partie peu documentée qui m’a intéressée est la suivante : comment créer un **_Bean_ **virtuel (**interface__ __**injectable sans implémentation explicite) à l’aide d’une extension. Ce type de **_Bean _**est plus connu sous le nom de *_Synthetic Bean._*
+
+== Etape 1 : injecter les interfaces annotées
+
+Premièrement, notons que Quarkus n’utilise pas Weld (l’implémentation de référence de la spécification CDI) mais Arc, sa propre implémentation orientée build time.
+
+Je vous propose de commencer par étudier un simple plugin permettant de faire du RPC au dessus de Map Hazelcast : [.underline]#Rcast#.
+
+Il s’agit de pouvoir injecter les interfaces annotées @RegisterRcast *sans fournir d’implémentation réelle*. Sous le capot, nous fournissons simplement un proxy sur l’interface pour faire l’appel RPC.
+
+Soit l’interface suivante :
+
+[source,java]
+----
+@RegisterRcast(appName = "the-app")
+public interface MyService {
+    String method1(String arg1);
+}
+----
+
+Pouvant être utilisée de la sorte :
+
+[source,java]
+----
+@ApplicationScopped
+public class RcastExtTest {
+    @Inject
+    @Rcast
+    MyService service;    
+    
+    public void useThatService() {
+        service.method1("the arg");
+    }
+}
+----
+
+Dans ce cas de figure, il faudra qu’une implémentation existe sur l’application cible (“the app” ). Mais dans notre application, nous n’aurons besoin que de l’interface.
+
+Pour indiquer clairement notre intention d’exploiter le service proxy, nous utiliserons le *_qualifier _*@Rcast. Sur le service cible, par exemple, cela évitera d’injecter le proxy dès lors que nous souhaitons obtenir directement l’implémentation.
+
+Je vous invite ensuite à lire la documentation de Quarkus relative à la création de la coquille du projet. Suite à quoi vous devriez avoir deux modules dans votre projet : “runtime” et “deployment”. Le module “deployment” contiendra l’ensemble de la logique qui sera exécutée lors du build.
+
+== Etape 2 : le BeanCreator
+
+Nous allons d’abord définir la classe servant de modèle pour nos *_synthetic beans_*. Celle ci doit se trouver dans le module “deployment” de votre projet et implémenter l’interface BeanCreator :
+
+[source,java]
+----
+public class RcastBeanCreator implements BeanCreator<Object> {
+    private static final Logger log = Logger.getLogger(RcastBeanCreator.class);
+    
+    @Override
+    public Object create(CreationalContext<Object> creationalContext, Map<String, Object> param) {
+        Class<?> clazz = null;
+        try {
+            clazz = Class.forName((String) param.get("clazz"));
+        } catch (ClassNotFoundException e) {
+            log.error("cannot find class " + param.get("clazz"));
+        }
+        String appName = (String) param.get("appName");
+        BeanManager manager = Arc.container().beanManager();
+        Bean<?> bean = manager.resolve(manager.getBeans(RcastProvider.class));
+        if(bean == null){
+            log.error("Cannot find any remote provider implementation");
+            return null;
+        }
+        RcastProvider provider = (RcastProvider) manager.getReference(bean, bean.getBeanClass(), manager.createCreationalContext(bean));
+        return provider.getInstance(clazz, appName);
+    }
+}
+----
+
+Notons que je récupère ici un bean CDI (RcastProvider) en appelant le beanManager. Si nous n’injectons pas quelque part RcastProvider dans l’application, il faudra qu’il soit annoté par @Unremovable afin qu’Arc ne le supprime pas lors de la création du contexte.
+
+== Etape 3 : le BeanProcessor
+
+Nous avons maintenant besoin d’une classe **_Processor _** dans le module “deployment”. Cette classe contiendra les étapes (@BuildStep) nécessaires à la construction de nos Beans virtuels.
+
+D’abord, nous allons nous servir de l’index jandex afin de lister les interfaces annotées par @RegisterRcast.
+
+Nous allons donc créer la méthode suivante dans notre class Processor :
+
+Nous pouvons maintenant utiliser notre méthode et notre modèle au sein d’une BuildStep (méthode annotée au sein de la classe Processor, servant d’étape de construction, ces méthodes sont exécutées automatiquement par Quarkus).
+
+[source,java]
+----
+    private Map<DotName, ClassInfo> getInterfaces(IndexView index) {
+        Map<DotName, ClassInfo> interfaces = new HashMap<>();
+        for (AnnotationInstance annotation : index.getAnnotations(RcastExtProcessor.REGISTER_RCAST)) {
+            AnnotationTarget target = annotation.target();
+            ClassInfo theInfo;
+            if (target.kind() == AnnotationTarget.Kind.CLASS) {
+                theInfo = target.asClass();
+            } else if (target.kind() == AnnotationTarget.Kind.METHOD) {
+                theInfo = target.asMethod().declaringClass();
+            } else {
+                continue;
+            }
+            interfaces.put(theInfo.name(), theInfo);
+        }
+        return interfaces;
+    }
+----
+
+Vous pouvez dès à présent injecter l’interface que nous avons créée au début de ce projet en ajoutant l’extension en dépendance de votre projet.
+
+Thanks to Alexandre Lewandowski
