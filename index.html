@@ -50,6 +50,9 @@ pagination:
               <div class="panel panel-primary">
                 <div class="panel-body">
                   <h1 class="liste_article"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h1>
+                  {% if post.vignette %}
+                  <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}" style="max-width: 200px; float:left; margin-right: 10px;" />
+                  {% endif %}    
                   {% assign author = site.data.authors[post.author] %}
                   <div class="meta"><strong>Ecrit par <span
                     class="authors"><a href="{{ '/author/' | append: post.author | append: '/index.html' | relative_url }}">{{ author.name }}</a></span>, le <span
