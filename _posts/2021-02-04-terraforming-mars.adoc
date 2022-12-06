@@ -1,0 +1,124 @@
+= Modéliser un jeu de plateau sous Excel VBA : Terraforming Mars
+:showtitle:
+:page-navtitle: Modéliser un jeu de plateau sous Excel VBA : Terraforming Mars
+:page-excerpt: TODO.
+:layout: post
+:author: cblondeau
+:page-tags: ['Terraformring Mars', 'Excel', 'VBA']
+:docinfo: shared-footer
+:page-vignette: terraforming-mars-001.jpeg
+:post-vignette: terraforming-mars-001.jpeg
+:page-vignette-licence: 'Image par <a href="https://pixabay.com/fr/users/jannikr64-11653526/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=4489346">JannikR64</a> de Pixabay'
+:page-liquid:
+
+https://en.wikipedia.org/wiki/Terraforming_Mars_(board_game)[*Terraforming Mars*] est un jeu de plateau inclassable où vous jouez une corporation (humaniste, écologique, scientifique…) dont l’objectif est de rendre Mars habitable. Jeu semi-coopératif, il offre une multitude de stratégies. Les règles, d’un abord complexe, restent simples. A chaque génération, vous achetez des cartes-brevets. Vous les concrétisez en puisant dans vos ressources. Ces projets ont des effets uniques ou permanents, augmentent vos prochaines ressources, causent votre succès actuel ou futur. Vous financez aussi des villes, des océans et des forêts pour augmenter 3 facteurs et déclencher la fin du jeu. Une partie Solo dure 2 heures tandis qu’une partie à 4 joueurs dure 5 heures.
+
+Découvert à Noël alors que je lisais la trilogie Mars de K.S Robinson, j’ai réalisé n’avoir encore jamais programmé de jeu de plateau sous …. *Excel* ! En m’appuyant sur l’excellente modélisation HTML des cartes par Simon Viximo et les superbes refontes graphiques de Micah Burke, je me suis donc lancé dans une démarche de programmation sous Excel VBA.
+
+== Etape 1 : faire rentrer un jeu de plateau dans un tableur
+
+image::{{'/images/terraforming-mars-002.png' | relative_url}}[image,width=100%]
+
+On commence tout d’abord par faire de la place lors de l’ouverture d’Excel.
+
+image::{{'/images/terraforming-mars-003.png' | relative_url}}[image,width=100%]
+
+On positionne une macro à l’activation du classeur (dans thisWorkbook) qui supprime la barre d’entêtes, les grillages, la règle, les menus et met le tout en plein écran. On zoome aussi à 140%.
+
+image::{{'/images/terraforming-mars-004.png' | relative_url}}[image, width=100%]
+
+Pour les éléments fixes du jeu (plateaux, cadres des mains, etc…), l’approche est assez simple : on insère les images redimensionnées du jeu (plateau, cartes,…) dans la feuille Excel et on crée des formes rectangulaires pour symboliser les mains (deck de recherche, deck d’actions, , …). On les rapatrie ensuite dans des objets Shape ou Picture. L’attribut .visible agit sur ces éléments et le .zorder les met au 1er plan.
+
+Les objets comme les cubes des ressources sont déplacés vers des endroits précis. A cet effet, tous les éléments fixes sont préalablement dessinés durant la phase de création, puis on fait passer une routine qui en affiche les dimensions. Cela permet de stocker une base de données contenant le positionnement des objets. Ils peuvent ensuite être supprimés pour ne conserver qu’un seul objet (pour les productions, le cube placé pour la valeur 0) qui est repositionné lorsque c’est nécessaire au gré des macros.
+
+image::{{'/images/terraforming-mars-005.png' | relative_url}}[image, width=100%]
+
+== Etape 2 : Excel joue à Photoshop, mais les variables, ça reste du calcul
+
+[.text-center]
+image::{{'/images/terraforming-mars-006.png' | relative_url}}[image,width=285,height=60]
+
+Aucune complexité dans la gestion des variables. Comme indiqué dans le code, *chaque joueur à un onglet dédié*, activé ou non en fonction du tour de jeu. Il y a dans Terraforming Mars 2 *types de variables* : les variables *globales* sont définies par « GL_xxxxxxx » et les variables *de chaque joueur* (ou player) s’appellent « P1_xxx_PLAYER », Pn_xxx_PLAYER ». Selon le principe utilisé pour positionner des images fixes, on peut définir les variables dans un onglet, puis les faire stocker par le gestionnaire de noms (rattaché au workbook) en leur attribuant Nom et référence. Ce qui est plus rapide que de tout saisir à la main pour 5 joueurs ! Les variables globales sont répliquées sur chaque feuille par formule sur les valeurs de l’onglet « Player1 ».
+
+image::{{'/images/terraforming-mars-007.png' | relative_url}}[image, width=100%]
+
+Pour modifier des valeurs, une petite difficulté demeure : en sus du calcul, il faut ajouter ou déplacer sur le plateau l’image qui matérialise ces valeurs.
+
+Ainsi, tout calcul appelle soit Refresh_Player_Board soit Refresh_Global_board dont le rôle consiste surtout à gérer l’aspect graphique du calcul.
+
+== Etape 3 : mise en pratique de tous ces principes
+
+Le schéma ci-dessous récapitule de façon explicite la dynamique du jeu en plusieurs *phases* :
+
+* La phase d’initialisation,
+* La phase itérative des générations décomposée en une phase de changement de joueur, une phase de R&D où des brevets peuvent être achetés,
+* La phase actions où chaque joueur choisit parmi 9 actions selon un processus assez dynamique qui se termine lorsqu’aucun joueur ne peut/croit plus engager d’actions,
+* La phase de production puis, lorsque les 3 objectifs globaux sont atteints,
+* La phase finale de comptabilisation des points.
+
+image::{{'/images/terraforming-mars-008.png' | relative_url}}[image,width=100%]
+
+== La gestion des cartes, pas si difficile que ça sous Excel
+
+L’excellent travail de décomposition des cartes de Simon Viximo a été d’une grande aide pour constituer la base de données modélisant toutes les cartes. Si la modélisation comporte parfois des erreurs (ici le prix du projet « Giant Ice Asteroïd »), elles ne sont pas de nature à déstabiliser le jeu. La modélisation a permis de lister l’ensemble des règles qui peuvent s’appliquer (en dehors de règles exceptionnelles qui ne sont pas encore codées) et de gérer 80% des cas de figure.
+
+Il a fallu aussi distinguer les effets immédiats (dont les bénéfices portent dès investissement dans le projet), les actions des cartes bleues (qui peuvent être actionnées une fois par génération) et les effets permanents (propres aux cartes du joueur ou déclenchées par les actions de tout joueur). Une bien lourde fonction Card_Analysis (ou son équivalent Corp_Analysis) se charge du *routage des possibilités* selon chaque carte. On retrouve toutefois très souvent l’appel à la mise à jour des ressources (Refresh_Player_Board ou Refresh_Global_board) ou le placement de tuiles (voir ci-dessous).
+
+image::{{'/images/terraforming-mars-009.png' | relative_url}}[image, width=100%]
+
+Les projets standards sont des investissements ne nécessitant pas de cartes. Ils sont jouables constamment et ne requièrent comme ressources que des mégacrédits. En fait, ce sont des cas simples de comportement de cartes. Ils ont été donc ajoutés et traités selon le même principe.
+
+image::{{'/images/terraforming-mars-010.png' | relative_url}}[image, width=100%]
+
+== Comment simuler l’interaction avec les éléments (tuiles, cartes) du jeu ?
+
+image::{{'/images/terraforming-mars-011.png' | relative_url}}[image, width=100%]
+
+Pour disposer les tuiles sur les cases du plateau de jeu, nous avons tout d’abord *modélisé chaque cellule de la grille par une forme hexagonale*. Là encore, les positions des hexagones sont pré-dessinées puis rapatriées et stockées dans une table de paramètres ainsi que les données initiales sur chaque case (Type…)
+
+_Worksheets(« Player1 »).Shapes.AddShape(msoShapeHexagon, left, top, width, height))_
+
+[.text-center]
+image::{{'/images/terraforming-mars-012.jpeg' | relative_url}}[image,width=249,height=258]
+
+Ces hexagones sont initialisés avec un contour fin et un remplissage presque transparent. Cela permet à la zone de cliquage d’une case d’inclure l’intérieur de la forme (et non uniquement les bords). Lorsque qu’une carte engendre le placement d’une tuile (idem donc pour les projets standards plaçant un océan, une forêt ou une cité), on commence par identifier les tuiles qui répondent aux conditions de placement (un océan va sur une case de type Océan).
+
+image::{{'/images/terraforming-mars-013.png' | relative_url}}[image, width=100%]
+
+Sur Excel, on peut *affecter une macro à une image*, ce qui lui permet de réagir comme s’il s’agissait d’un bouton (On sélectionne l’image, Bouton Droit, Affecter une Macro. J’ai fait un usage intensif de l’équivalent VBA de cette fonctionnalité.).
+
+_Picture.Onclick = <Macro à appeler>._
+
+Cela permet de laisser l’utilisateur « choisir » une carte, grille … en *cliquant simplement dessus*. C’est donc au travers de ce principe que sont sélectionnées les cartes à acheter, les cartes à activer, les projets standards, la grille où placer une tuile, le financement des récompenses et la réalisation des objectifs.
+
+Lorsqu’une carte engendre le placement d’une tuile, le clic sur cette carte appelle une fonction qui va mettre en valeur les cases de la grille éligible.
+
+On change la mise en forme des cases éligibles qui acquièrent un halo. Cela permet au joueur de visualiser où il peut placer sa tuile (ce qui est un plus par rapport au jeu réel).
+
+image::{{'/images/terraforming-mars-014.png' | relative_url}}[image, width=100%]
+
+image::{{'/images/terraforming-mars-015.png' | relative_url}}[image, width=100%]
+
+On attend ensuite que le joueur clique sur la case de son choix. Ce clic déclenche la macro adossée à la case.
+
+Petite subtilité, nous stockons dans le nom de la forme hexagonale l’Id permettant de retrouver les caractéristiques de la case.
+
+Pour retrouver l’objet appelé (Excel n’a pas de notion de pointeur *this), nous faisons appel à la fonction équivalente Application.Caller, qui renvoie l’Id sous Excel de la forme cliquée, et nous l’instancions dans un Objet Shape. Il est ensuite facile de modifier le remplissage de cette case par une image représentant un océan, de retrouver la position de la case dans la table de paramètres, et ainsi d’allouer les ressources qu’elle contient au joueur. On revient à la mise en forme initiale et une action est comptée.
+
+Notons que le code ici n’est pas terminé, puisque la gestion des bonus de placement (une tuile adossée à un océan rapporte 2 mégacrédits) n’est pas encore implémentée.
+
+Après une semaine intensive de code, la majorité des fonctionnalités de “Terraforming Mars” est disponible sous Excel. A noter que je me suis surtout penché sur la version solo. Quelques add-ons pourraient venir ultérieurement car il est maintenant facile d’intégrer des extensions du jeu, d’ajouter de nouveaux plateaux ou de nouvelles cartes. Il reste néanmoins un point à investiguer : le partage collaboratif de fichier Excel différents (ou du même en mode partagé) afin de permettre une partie multi-joueurs.
+
+&nbsp;
+
+_[Ressources]_
+
+https://ssimeonoff.github.io/cards-list[_[.underline]#Terraforming Mars Card-Lists#_]
+
+http://www.fryxgames.se/TerraformingMars/TMRULESFINAL.pdf[_[.underline]#Terraforming Mars Rules#_]
+
+https://youtu.be/j0_f5YKDsgk[_[.underline]#Electronic terraforming Mars Video#_]
+
+https://www.etsy.com/fr/listing/906589283/terraforming-mars-20-expanded-hellas-mat?ref=shop_home_feat_3[_[.underline]#Revamped Terraforming Mars Game Board#_]
+
+_Kim Stanley Robinson : https://fr.wikipedia.org/wiki/Mars_la_rouge[[.underline]#Mars la Rouge#], https://fr.wikipedia.org/wiki/Mars_la_verte[[.underline]#Mars la Verte#], https://fr.wikipedia.org/wiki/Mars_la_bleue[[.underline]#Mars la Bleue#]._
