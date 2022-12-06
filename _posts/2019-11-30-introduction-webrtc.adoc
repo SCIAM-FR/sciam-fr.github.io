@@ -1,0 +1,228 @@
+= Introduction au WebRTC
+:showtitle:
+:page-navtitle: Introduction au WebRTC
+:page-excerpt: Le WebRTC est un outil dédié à la communication en temps réel. Alors que les solutions précédentes exploitaient des plugins propriétaires (exemple : flash) et n’étaient pas standardisées, le WebRTC est implémenté dans presque tous les navigateurs, et permet d’établir une conversation entre plusieurs clients en quelques lignes de code JavaScript.
+:layout: post
+:author: loichermann
+:page-tags: ['WebRTC']
+:docinfo: shared-footer
+:page-vignette: introduction-webrtc-001.jpeg
+:post-vignette: introduction-webrtc-001.jpeg
+:page-vignette-licence: 'Image par Joshua Sortino'
+:page-liquid:
+
+{% comment %}
+image::{{'/images/introduction-webrtc-001.jpeg' | relative_url}}[Image par Joshua Sortino,width=604,height=404]
+
+Image par Joshua Sortino
+{% endcomment %}
+
+Le WebRTC est un outil dédié à la communication en temps réel. Alors que les solutions précédentes exploitaient des plugins propriétaires (exemple : flash) et n’étaient pas standardisées, le WebRTC est implémenté dans presque tous les navigateurs, et permet d’établir une conversation entre plusieurs clients en quelques lignes de code JavaScript.
+
+== 1. Un outil standard
+
+Le WebRTC ( *Web Real-Time Communication*) est une http://lists.w3.org/Archives/Public/public-webrtc/2012Oct/att-0076/realtime-media.html[[.underline]#API#] Javascript de communication en temps réel, permettant des échanges directs entre plusieurs navigateurs (voix vidéo et data). Ce standard de la W3C (*World Wide Web Consortium*) et de l’IETF (*Internet Engineering Task Force*) dont les premières ébauches sont apparues courant 2011, est soutenu par Google, Mozilla et Opera. Il est déjà implémenté (à des stades différents) dans plusieurs navigateurs, ainsi que dans Android et iOS. A noter qu’il existe également une solution concurrente développée par Windows : http://html5labs.interoperabilitybridges.com/cu-rtc-web/cu-rtc-web.htm[[.underline]#CU-RTC-WEB#].
+
+Le WebRTC s’appuie sur d’autres normes telles que STUN, ICE, TURN, DTLS, SRTP et issues du projet [.underline]#libjingle#. Le canal de communication repose sur de l’UDP.
+
+image::{{'/images/introduction-webrtc-002.png' | relative_url}}[image,width=100%]
+
+Protocoles du Web à gauche et WebRTC à droite. Source: https://hpbn.co/assets/diagrams/f91164cbbb944d8986c90a1e93afcd82.svg[[.underline]#https://hpbn.co/assets/diagrams/f91164cbbb944d8986c90a1e93afcd82.svg#]
+
+== 2. Focus sur 3 APIs
+
+Les APIs mises en oeuvre par WebRTC ont 3 fonctions :
+
+* acquérir les flux audio et vidéo
+* transmettre les flux audio et vidéo
+* transmettre des données arbitraires
+
+=== 2.1 PeerConnection
+
+Elle représente la connexion entre les 2 terminaux. Cette dernière est établie à l’aide d’un canal de signalement laissé au choix de l’utilisateur (websocket ..) sur lequel sont transmises des données issues du Protocol SDP, permettant d’obtenir les informations local sur la connexion (/ ! \ SDP est en cours de remplacement au sein de la norme WebRTC par le protocole JSEP).
+
+Pour assurer la connexion à travers les NAT, l’API PeerConnection utilise les protocoles STUN, ICE et TURN.
+
+Ces flux partagent les mêmes paquets de niveaux transport et donc partagent le même numéro de port pour que les flux de données et médias puissent être multiplexés sur cette connexion. Ainsi l’octet de l’entête UDP, indiquant la nature du contenu de la trame, permet d’identifier s’il s’agit d’une trame STUN (0 ou 1), SRTP (20 à 63) ou DTLS (128 à 191).
+
+=== 2.2 DataChannel
+
+Elle permet de transmettre des données génériques entre les terminaux (texte, image …). Ces dernières sont transmises à l’aide du protocole SCTP, lui-même reposant sur le protocole DTLS, afin d’assurer la confidentialité et l’authenticité des paquets.
+
+L’API permet aussi d’assurer la gestion bidirectionnelle et de priorités entre plusieurs flux de données.
+
+=== 2.3 MediaStream
+
+Elle représente un flux de données audio ou vidéo (local ou distant). L’accès à un flux local (WebCam, Micro) se fait grâce à l’API *getusermedia*.
+
+Les flux sont transportés à l’aide du protocole SRTP implémentant une version sécurisé du protocole RTP. Il est à noter qu’un flux média exploite également DTLS pour la gestion des clés SRTP.
+
+== 3. Codec audio et vidéo
+
+image::{{'/images/introduction-webrtc-003.jpeg' | relative_url}}[Une image contenant nature, nuit, objet d’extérieur, ciel nocturne,width=604,height=403]
+Johnson Wang
+
+La norme requière (au minimum) les codecs audio suivants : PCMA/PCMU correspondant au G711 respectivement alaw et ulaw, Telephone Event (RCF4733), Opus (RCF 6716).
+
+Les critères auxquels le codec doit répondre sont :
+
+* Support de fps compris entre 10 et 30
+* Support d’une résolution min 320 x 240 pixels
+
+On peut facilement contrôler les codecs implémentés dans différents navigateurs en analysant le SDP généré (à l’aide de testSdp.htm présent dans src/webrtc/sdp-exemple par exemple).
+
+== 4. Protocoles exploités par le WebRTC
+
+=== 4.1 SDP : signalement
+
+Pour créer une connexion, l’API PeerConnection exploite le protocole SDP (Session Description Protocol). Il permet de décrire la session multimédia en cours d’établissement.
+
+Voici la signification des champs :
+
+*Session description*
+
+* v= (protocol version number, currently only 0)
+* o= (originator and session identifier : username, id, version number, network address)
+* s= (session name : mandatory with at least one UTF-8-encoded character)
+* i=* (session title or short information)
+* u=* (URL of description)
+* e=* (zero or more email address with optional name of contacts)
+* p=* (zero or more phone number with optional name of contacts)
+* c=* (connection information — not required if included in all media)
+* b=* (zero or more bandwidth information lines) _One or more *Time descriptions* (« t= » and « r= » lines; see below)_
+* z=* (time zone adjustments)
+* k=* (encryption key)
+* a=* (zero or more session attribute lines) _Zero or more *Media descriptions* (each one starting by an « m= » line; see below)_*Time description* (mandatory)
+* t= (time the session is active) r=* (zero or more repeat times)*Media description* (if present) m= (media name and transport address)
+* i=* (media title or information field)
+* c=* (connection information — optional if included at session level)
+* b=* (zero or more bandwidth information lines)
+* k=* (encryption key)
+* a=* (zero or more media attribute lines — overriding the Session attribute lines)
+
+Cette trame est généralement encapsulée dans du JSON. Le SDP est amené à disparaitre au profit du JSEP.
+
+=== 4.2 Transport des données
+
+image::{{'/images/introduction-webrtc-004.jpeg' | relative_url}}[image,width=604,height=403]
+
+https://unsplash.com/@andersjilden[[.underline]#Anders Jildén#]
+
+*_RTP_*
+
+RTP est un protocole destiné à transmettre sur de l’IP tout type de donnée ayant une contrainte de temps réel. Le principal service fourni par RTP est la numérotation des paquets ainsi que l’ajout de timestamp pour permettre de reconstituer correctement l’information.
+
+*_SRTP_*
+
+Le SRTP correspond à une version sécurisée du RTP.
+
+Voici la signification des champs :
+
+* *V* version du protocole (V=2) sur 2 bits
+* *P* Padding, sur 1 bit, vaut 1 si le dernier paquet contient un champ de bourrage
+* *X* extension sur 1 bit, vaut 1 si l’en-tête est suivie d’un paquet d’extension
+* *CC* sur 4 bits, nombre de CSRC qui suivent l’entête (CSRC count)
+* *M* Marker sur 1 bit, son interprétation est définie par un profil d’application (profile)
+* *PT* sur 7 bits, identifie le type du payload (audio, vidéo, image, texte, html…)
+* *Séquence number* sur 16 bits, sa valeur initiale est aléatoire et il s’incrémente de 1 à chaque paquet envoyé ;il peut servir à détecter des paquets perdus
+* *Timestamp* sur 32 bits, reflète l’instant où le premier octet du paquet RTP a été échantillonné
+* *SSRC* sur 32 bits, valeur choisie de manière aléatoire par l’application qui identifie de manière unique la source
+* *Champ CSRC* : 32 bits, identifie les sources contribuant
+
+*_SCTP_*
+
+Le protocole SCTP est employé par l’API dataStream. Il est utilisé pour échanger des données n’étant pas de la vidéo ou du son.
+
+=== 4.3 Sécurité
+
+Le protocole DTLS (Datagram Transport Layer Security) est basé sur le protocole TLS et fournit des garanties de sécurité similaires.
+
+=== 4.4 Network Adress Translation
+
+*_STUN_*
+
+Littéralement Simple Traversal of UDP through NATs. Ce protocole permet d’obtenir son adresse IP publique. Il s’agit d’un serveur léger consommant peu de ressources. Les données ne passent pas par le serveur.
+
+Entête STUN :
+
+Le champ Type codé sur 16 bits se découpe en plusieurs sous champ :
+
+* Les deux premiers bits sont à 0 pour se différencier des autres protocoles
+* La classe sur 2 bits (00 Requête, 01 Indication, 10 Réponse avec succès, 11 Réponse avec erreur)
+* La méthode sur 12 bits
+* Magic Cookie est un champ à valeur fixe
+* Transaction ID est choisie de manière aléatoire par le client (le serveur répète la valeur dans sa réponse)
+
+*_ICE_*
+
+Littéralement Interactive Connectivity Establishment, il s’agit d’un framework dont l’objectif est de trouver le meilleur chemin pour chaque communication.
+
+*_TURN_*
+
+Litteralement Traversal Using Relays around NAT, ce protocole fourni une alternative cloud si la communication directe entre les terminaux n’est pas possible. Les données sont ainsi transmises au serveur qui relaye l’information.
+
+== 5. Sources
+
+Ce qui est implémenté : http://iswebrtcreadyyet.com/[[.underline]#http://iswebrtcreadyyet.com/#]
+
+Wiki : https://fr.wikipedia.org/wiki/WebRTC[[.underline]#https://fr.wikipedia.org/wiki/WebRTC#]
+
+Site du projet : http://www.webrtc.org/[[.underline]#http://www.webrtc.org/#]
+
+Slides sur le WebRTC: http://io13webrtc.appspot.com/[[.underline]#http://io13webrtc.appspot.com#]
+
+Draft IETF WebRTC: https://tools.ietf.org/wg/rtcweb/[[.underline]#https://tools.ietf.org/wg/rtcweb/#]
+
+Draft W3C WebRTC : http://w3c.github.io/webrtc-pc/[[.underline]#http://w3c.github.io/webrtc-pc/#]
+
+Doc SRTP : https://tools.ietf.org/html/rfc3711[[.underline]#https://tools.ietf.org/html/rfc3711#]
+
+Doc SCTP : https://tools.ietf.org/html/rfc4960[[.underline]#https://tools.ietf.org/html/rfc4960#]
+
+Doc SDP : https://tools.ietf.org/html/rfc4566[[.underline]#https://tools.ietf.org/html/rfc4566#]
+
+Wiki SDP : https://en.wikipedia.org/wiki/Session_Description_Protocol[[.underline]#https://en.wikipedia.org/wiki/Session_Description_Protocol#]
+
+== 6. Bibliothèques (C/C++)
+
+Opus, libopus : +
+Pour encoder et décoder des trames OPUS, utile pour réaliser une Gateway. +
+http://www.opus-codec.org/docs/opus_api-1.1.0.pdf[[.underline]#http://www.opus-codec.org/docs/opus_api-1.1.0.pdf#]
+
+Jingle, Libjingle : +
+https://developers.google.com/talk/libjingle/developer_guide[[.underline]#https://developers.google.com/talk/libjingle/developer_guide#]
+
+SCTP: +
+http://simplestcodings.blogspot.fr/2010/08/sctp-server-client-implementation-in-c.html[[.underline]#http://simplestcodings.blogspot.fr/2010/08/sctp-server-client-implementation-in-c.html#]
+
+SDP: +
+http://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-base-libs/html/gst-plugins-base-libs-gstsdpmessage.html[[.underline]#http://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-base-libs/html/gst-plugins-base-libs-gstsdpmessage.html#]
+
+RTP/SRTP: +
+http://gstreamer.freedesktop.org/[[.underline]#http://gstreamer.freedesktop.org/#] +
+ou libsrtp +
+https://github.com/cisco/libsrtp[[.underline]#https://github.com/cisco/libsrtp#] +
+ou ffmpeg +
+https://www.ffmpeg.org/[[.underline]#https://www.ffmpeg.org/#]
+
+TLS/DTLS: +
+http://tinydtls.sourceforge.net/[[.underline]#http://tinydtls.sourceforge.net/#] +
+http://wolfssl.com/[[.underline]#http://wolfssl.com#] +
+http://www.gnutls.org/[[.underline]#http://www.gnutls.org/#] +
+https://www.openssl.org/[[.underline]#https://www.openssl.org/#]
+
+UDP: +
+[tuto from Scratch] http://broux.developpez.com/articles/c/sockets/[[.underline]#http://broux.developpez.com/articles/c/sockets/#] +
+Cependant la SDL et Qt permettent de créer très facilement des connexions UDP
+
+== 7. Projets divers
+
+http://www.openwebrtc.io/[[.underline]#http://www.openwebrtc.io/#] +
+[MCU] https://janus.conf.meetecho.com/[[.underline]#https://janus.conf.meetecho.com/#] +
+[MCU] http://www.kurento.org/[[.underline]#http://www.kurento.org/#] +
+[TUTO] http://www.html5rocks.com/fr/tutorials/webrtc/basics/[[.underline]#http://www.html5rocks.com/fr/tutorials/webrtc/basics/#] +
+[MCU] http://sourceforge.net/projects/mcumediaserver/[[.underline]#http://sourceforge.net/projects/mcumediaserver/#] (support H.264 ?) +
+https://wiki.asterisk.org/wiki/display/AST/Asterisk+WebRTC+Support[[.underline]#https://wiki.asterisk.org/wiki/display/AST/Asterisk+WebRTC+Support#] +
+http://phono.com/[[.underline]#http://phono.com/#] +
+https://github.com/EricssonResearch/openwebrtc/[[.underline]#https://github.com/EricssonResearch/openwebrtc/#] +
+[H.264] http://webrtcbook.com/sdp-h264.html[[.underline]#http://webrtcbook.com/sdp-h264.html#]
