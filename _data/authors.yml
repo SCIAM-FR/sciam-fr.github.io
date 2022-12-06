@@ -14,6 +14,23 @@ antoinesd:
   bio: 'Bio d''Antoine Sabot-Durand'
   twitter: 'antoine_sd'
 
+loichermann:
+  name: 'Loic Hermann'
+  job: CTO
+  picture: 'loic_hermann.jpg'
+  
+cblondeau: 
+  name: 'Christophe Blondeau'
+
+kkechadi:
+  name: 'Kaci Kechadi'
+
+sberrien:
+  name: 'Samuel Berrien'
+  job: 'Data science engineer'
+  bio: 'Developping in my spare time'
+
+
 someone:
   name: 'Mr Hyde'
   bio: 'Bio of user Mr Hyde'
@@ -23,8 +40,3 @@ someone:
     github: 'user2'
     gitlab: 'user2'
 
-loichermann:
-  name: 'Loic Hermann'
-  job: CTO
-  picture: 'loic_hermann.jpg'
-  
