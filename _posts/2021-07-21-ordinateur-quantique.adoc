@@ -4,7 +4,7 @@
 :page-excerpt: TODO.
 :layout: post
 :author: kkechadi
-:page-tags: ['Ordianteur quantique']
+:page-tags: ['Ordinateur quantique']
 :docinfo: shared-footer
 :page-vignette: ordinateur-quantique-001.jpeg
 :post-vignette: ordinateur-quantique-001.jpeg
