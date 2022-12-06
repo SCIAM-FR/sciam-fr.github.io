@@ -64,6 +64,10 @@ h2, h3, h4, h5, h6 {
 
         <img src="{{ '/images/vignettes/' | append: page.vignette | relative_url }}" style="max-width: 100%;" />
 
+          {% if page.vignette-licence %}
+          <span style="font-size: small;">{{ page.vignette-licence | replace: "&lt;", "<" | replace: "&gt;", ">" }}</span>
+          {% endif %}
+
         {% endif %}
 
         <hr>
