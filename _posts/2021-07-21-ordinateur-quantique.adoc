@@ -1,0 +1,169 @@
+= L’ordinateur quantique : comprendre l’origine de la puissance quantique et ses défis
+:showtitle:
+:page-navtitle: L’ordinateur quantique : comprendre l’origine de la puissance quantique et ses défis
+:page-excerpt: TODO.
+:layout: post
+:author: kkechadi
+:page-tags: ['Ordianteur quantique']
+:docinfo: shared-footer
+:page-vignette: ordinateur-quantique-001.jpeg
+:post-vignette: ordinateur-quantique-001.jpeg
+:page-vignette-licence: 'Zoom sur le processeur Sycamore (Crédit : <a href="https://www.nature.com/articles/s41586-019-1666-5">F. Arute, et al</a>)'
+:page-liquid:
+
+Le 23 octobre 2019, des chercheurs de Google annoncent dans un article de la prestigieuse revue scientifique britannique Nature, la réalisation d’un véritable saut technologique : la construction d’un processeur quantique capable d’effectuer certaines tâches beaucoup plus rapidement que n’importe quel superordinateur existant (https://www.nature.com/articles/s41586-019-1666-5[F. Arute&#44; et al].) **La suprématie quantique** serait atteinte !
+
+{% comment %}
+
+image:extracted-media/media/image1.jpeg[image,width=604,height=416]
+
+Zoom sur le processeur Sycamore (Crédit : _https://www.nature.com/articles/s41586-019-1666-5[[.underline]#F. Arute&#44; et al#]._)
+
+{% endcomment %}
+
+== Mais que sait faire exactement l’ordinateur quantique de Google ?
+
+La tâche en question consiste à simuler un problème d’*_échantillonnage aléatoire de circuits quantiques_*. Par exemple, s’il s’agissait de simuler le lancer d’une pièce de monnaie, un algorithme devrait produire les deux possibilités, pile ou face, une fois sur deux en moyenne.
+
+Dans l’expérience de Google, il s’agit de simuler le nombre de fois qu’un circuit quantique produit à sa sortie un 0 ou un 1. Il se trouve que les ordinateurs classiques ont beaucoup de mal à exécuter cet exercice. Les chercheurs de Google estiment qu’il faudrait environ 10 000 ans à un ordinateur classique, alors qu’il aurait suffi de 200 ms au Sycamore, le processeur quantique de Google !
+
+== Est-il encore prématuré de parler de suprématie quantique?
+
+C’est du moins l’avis d’IBM, le principal concurrent de Google. En effet, les chercheurs d’IBM estiment qu’un ordinateur classique pourra réaliser la même tâche soumise au Sycamore en seulement 2,5 jours :
+
+« Google’s experiment is an excellent demonstration of the progress in superconducting-based quantum computing … but it should not be viewed as proof that quantum computers are “supreme” over classical computers. » (On https://www.ibm.com/blogs/research/2019/10/on-quantum-supremacy/[“Quantum Supremacy” : article publié sur le site d’IBM])
+
+Ce qui est certains, c’est qu’en l’état, l’ordinateur quantique est encore loin de pouvoir cracker le code de votre carte bancaire. En attendant, pour les curieux, IBM propose déjà un environnement de développement (Qiskit) permettant de réaliser des calculs quantiques en utilisant Python !
+
+.Exemple de code avec Qiskit (Crédit : http://www.qiskit.org)
+image::{{'/images/ordinateur-quantique-002.png' | relative_url}}[image,width=572,hight=576]
+
+== Dans la suite de cette article …
+
+Je vous propose de faire le tour des idées issues du domaine de la physique à l’origine de la promesse de puissance liée aux calculs quantiques. Par la suite, je vais présenter une version simplifiée de l’*_algorithme de Grover_* qui pourrait trouver des applications dans le domaine du *_Big Data_*. L’algorithme de Grover permettrait de faire des *_recherches ultrarapides_* dans une grande base de données. En conclusion, nous allons voir que le chemin vers *_un ordinateur quantique vraiment utile_* est encore long, et que *_la simulation quantique_* est sans doute l’approche la plus prometteuse.
+
+== Qu’est-ce que la mécanique quantique ?
+
+La mécanique quantique est sans doute l’une des plus belles théories forgées par des cerveaux humains. Elle intrigue par son interprétation qui défie notre intuition. Sa raison d’être ? Nous aider à entrevoir le monde microscopique (comprendre nanoscopique) invisible à nos yeux : celui de la matière qui nous entoure.
+
+Dans ce monde microscopique, un objet quantique comme l’électron, cette petite brique électrique qui compose l’atome, semble se comporter étrangement.
+
+Par exemple, au lieu de suivre sagement son orbite autour du noyau atomique, un peu comme le fait la Terre autour du soleil, l’électron semble, au contraire, occuper tout un espace autour du noyau : il est partout dans une sorte de *_nuage diffus aux bords indécis_* ! Cependant, lorsqu’on le prend en photo, l’électron se matérialise soudainement en une particule qui occupe un endroit bien précis de l’espace ! L’électron peut aussi avoir deux énergies en même temps ! On dit que l’atome est simultanément dans un *_état excité_* et *_non excité_*…
+
+La structure de l’atome, à elle seule, regroupe presque toutes les énigmes quantiques. Le physicien vous parlera de *_superposition d’états_*, de réduction de fonction d’onde, de décohérence, etc. Pour vous faire une idée de l’étrangeté de ces phénomènes, je vous invite à regarder cette excellente vidéo avant de poursuivre la lecture :
+
+video::YPlAWN3k6So[youtube, width=640, height=480, theme=light, title="Superposition d’états et décohérence (Crédit : http://www.toutestquantique.fr)"]
+
+== Feynman : utiliser la quantique pour simuler la quantique!
+
+L’idée d’un ordinateur quantique est née de l’imagination du physicien *_Richard Feynman_* au cours des années 1980. Feynman s’interrogeait sur la possibilité de *_simuler la nature_* (les phénomènes physiques) de manière *_exacte_* à l’aide d’*_un simulateur_*. Par *_exacte_*, Feynman exclut d’emblée l’approche classique qui consiste à *_résoudre numériquement des équations_* à l’aide d’un algorithme exécuté par un ordinateur, et qui aboutit à une *_vision approximative de la nature_*. Pour Feynman, l’ordinateur doit *_imiter la nature_*, et une telle machine devrait forcément être de nature quantique :
+
+[quote,(Feynman)]
+« I’m not happy with all the analyses that go with just the classical theory, because nature isn’t classical, dammit, and if you want to make a simulation of nature, you’d better make it quantum mechanical, and by golly it’s a wonderful problem, because it doesn’t look so easy. » 
+
+En d’autres termes, l’idée géniale de Feynman est *_d’utiliser la quantique pour simuler la quantique!_* Je reviendrai sur les applications de la simulation quantique dans la dernière partie de cet article.
+
+== La brique élémentaire, le qubit!
+
+Dans les processeurs de nos ordinateurs modernes, l’information circule sous forme de suite de 0 et de 1. Cette brique élémentaire d’information est appelée *_bit_*. Le bit peut être considéré essentiellement comme une réponse par un *_Oui_* ou par un *_Non_* à une question. Physiquement, les 0 et 1 correspondent à un échange de signaux électriques de 0 ou de 5 volts.
+
+Dans les circuits éléctroniques d’un ordinateur, ces bits d’informations sont manipulés par des *_portes logiques_*. Par exemple, la porte *_NOT_* transforme le 0 en 1. La porte *_AND_* agit sur deux bits en même temps, et renvoie la valeur 1 si et seulement si les deux bits valent 1. Voilà tous! Tous les calculs, aussi complexe soient-ils, se réduisent à des manipulation de ce type.
+
+== Qu’en est-il de l’information quantique ?
+
+Le bit quantique, appelé *_qubit_* (_quantum bit_), peut être vu comme une réponse *_floue_* à une question. Au lieu de répondre clairement par un Oui ou par un Non lorsqu’on l’interroge, le qubit cherche à nous embrouiller et répond par Oui et Non dans le même temps ! Autrement dit, le qubit peut prendre les valeurs 0 ou 1, mais il peut aussi être *_un mélange_* de 0 et de 1.
+
+De la même manière que pour les bits, on peut également concevoir des *_portes logiques quantiques_* pour manipuler les qubits.
+
+À l’aide d’une notation empruntée à la mécanique quantique, l’état d’un qubit s’écrit comme suit :
+
+.Le qubit en notation quantique. De point de vue mathématique, c’est un vecteur dans l’espace des états quantiques.
+image::{{'/images/ordinateur-quantique-003.png' | relative_url}}[image,width=188,height=25]
+
+Les quantités α et β sont des nombres complexes. Le carré de leurs modules |α|² et |β|² vous indiquent avec quelles probabilités le qubit |q⟩ peut être trouvé dans l’état |0⟩ ou dans l’état |1⟩. Les nombre α et β vérifie la relation suivante:
+
+.Condition de normalisation.
+image::{{'/images/ordinateur-quantique-004.png' | relative_url}}[image,width=154,height=29]
+
+
+== À quoi correspond un qubit physiquement ?
+
+Physiquement, un qubit peut être un atome dans *_deux états d’énergies superposés_* : excité et non excité (voir la vidéo précédente). Alternativement, on peut aussi utiliser *_le spin_* des atomes. Le spin est une sorte de *_petit aimant quantique_* (Vidéo ci-dessous). D’ailleurs, c’est grâce au spin que l’on explique pourquoi les aimants présentent l’étonnante propriété de s’attirer ou de se repousser.
+
+Dans certains cas, le spin peut prendre uniquement deux valeurs que les physiciens représentent par deux flèches de directions opposées ↑ (*_spin-up_*) et ↓ (*_spin-down_*). Le plus souvent, le spin *_refuse_* de choisir une direction plutôt que l’autre. On dit alors que l’atome se trouve dans *_un état superposé de spin_*.
+
+video::8wS4IOzAhFA[youtube, width=640, height=480, theme=light, title="Comprendre le spin (Crédit : http://www.toutestquantique.fr)"]
+
+Le qubit peut aussi être un objet « plus gros ». Par exemple, un composant électronique à base de *_supraconducteur_*. Dans ce cas, c’est le circuit électronique qui peut être dans deux états ! C’est cette dernière technologie qui est à l’origine des ordinateurs quantiques de Google et IBM.
+
+== Le Big Data quantique
+
+Si vous êtes toujours là, c’est que vous vous demandez sans doute en quoi ces étranges qubits sont révolutionnaires ! Une assemblée de qubits indépendants présente peu d’intérêt.
+
+[quote]
+La force des qubits vient du fait qu’ils peuvent d’une certaine manière lier leurs destins, de sorte qu’agir sur un seul qubit va affecter instantanément toute l’assemblée !
+
+C’est cette propriété, que les physiciens appellent l’*_intrication_*, qui permet de *_mener des calculs massivement parallèles_*.
+
+== Stocker l’information quantique
+
+Avant de donner un exemple de calculs quantiques, examinons d’abord la quantité d’information renfermée dans une assemblée de qubits. Pour cela, imaginons que vous souhaitiez stocker un message encodé en qubits dans votre disque dur. Si votre message ne contient qu’un seul qubit, vous devez stocker la valeur de α ou de β (car |α|² +|β|² = 1). Si votre message contient 2 qubits, l’état quantique correspondant est un mélange (superposition) des états des 2 qubits, soit 2² = 4 états au total :
+
+.Superposition de 2 qubits.
+image::{{'/images/ordinateur-quantique-005.png' | relative_url}}[image,width=281,height=25]
+
+
+Dans ce cas, vous devez stocker 3 valeurs de votre choix parmi les valeurs des nombres α, β, γ et δ.
+
+Maintenant, imaginons que votre message contienne 100 qubits. L’état quantique de votre message sera formé par 2¹⁰⁰ états superposés! Par conséquent, pour le stocker, vous devez conserver quelque part 2¹⁰⁰-1 informations … Soit plus de données que ce que l’humanité a produit jusqu’à ce jour ! Si n bits contiennent au plus n informations, n qubits en contiennent une infinité!
+
+C’est pour cette raison notamment qu’il n’est pas possible d’utiliser des ordinateurs classique pour simuler des systèmes quantiques qui ne contiennent quleques centaines d’atomes.
+
+== Recherche dans un annuaire : l’algorithme de Grover
+
+Supposons que vous deviez chercher le propriétaire d’un numéro de téléphone dans un annulaire téléphonique mal organisé. Vous n’aurez pas d’autres choix que de parcourir l’annuaire en commençant par le premier numéro, en espérant que le numéro que vous cherchez ne se trouve pas à la toute fin !
+
+Si cet annuaire comprend 1 024 contacts téléphoniques, cette tâche vous nécessitera en moyenne 512 opérations. Même avec un ordinateur et un algorithme de recherche performant, il sera difficile de faire mieux. Ces algorithmes sont souvent optimisés pour des données bien structurées ou ordonnées.
+
+En 1996, l’informaticien Lov Kumar Grover proposa un algorithme qui permet d’aller beaucoup plus vite : en seulement 32 opérations. La seule condition c’est d’avoir à sa portée un ordinateur quantique ! Oublions cette petite difficulté et regardons comment cela fonctionne.
+
+Pour simplifier, on associe à chaque contact un index allant de 0 à 1 023 qui correspond simplement à son numéro de ligne dans l’annuaire. Pour utiliser la puissance d’un ordinateur quantique, nous avons besoin de stocker ces index dans des états quantiques. On a 1 024 états, on aura donc besoin de 10 qubits (2¹⁰=1 024).
+
+Maintenant, si je note |x ⟩ l’état quantique du numéro de la ligne qui contient le nom du contact que nous recherchons, l’état de notre « *_annuaire quantique_* » formé par la superposition de 10 qubits intriqués s’écrit :
+
+.« Annuaire quantique » formé par la superposition de tout les contacts.
+image::{{'/images/ordinateur-quantique-006.png' | relative_url}}[image,width=592,height=25]
+
+Avec :
+
+.Cela traduit le fait que tout les états quantiques sont équiprobables.
+image::{{'/images/ordinateur-quantique-007.png' | relative_url}}[image,width=434,height=32]
+
+La particularité de cette annuaire quantique, c’est qu’a chaque fois que vous le consultez il se *_réduit instantanément à un seul contact_*! Toutes les autres lignes seront perdues! Au départ, toutes les lignes possèdent la même probabilité 1/1024 d’apparaître.
+
+L’objectif de l’algorithme de de Grover est de faire en sorte que la probabilité de l’état |x ⟩ (le nom de contact qui nous intéresse) soit proche de 1, et celles des autres états proche de 0, de sorte que lorsque vous consulter l’annuaire vous aller tomber sur le bon contact. Grover a montré que cet objectif peut être atteint en appliquant seulement 32 fois la même opération de transformation sur l’état quantique |A ⟩. Cette opération, qui est équivalente à une rotation de vecteur, est appliquée de manière parallèle à tous les états quantiques |0 ⟩, |1 ⟩ …
+
+De manière générale, pour un annuaire de taille n, le nombre d’opérations nécessaires est de l’ordre de racine de n (∼ √n). Autrement dit, le gain en termes de temps de calculs est colossal. Ce type d’algorythmes pourrait trouver des applications dans le domaine où la demande de puisssance de calcul est croissante, comme c’est le cas du *_Big Data_*.
+
+Cependant, il y a un hic. À cause de la nature probabiliste des qubits (et d’autres perturbations extérieures), le résultat peut être erroné sans que vous n’ayez (facilement) la possibilité de le savoir !
+
+== Passer du qubit à l’ordinateur quantique « utile » : des défis technologiques restent à franchir
+
+Un qubit n’est pas qu’un simple transistor, c’est un objet quantique fragile et très délicat à manipuler. Pour tirer profit de la puissance d’un ordinateur quantique, les qubits doivent être dans un état où, d’une certaine manière, ils parlent tous la même langue. Or, des problèmes de *_décohérence_* font qu’il est très difficile d’obtenir un très grand nombre de qubits intriqués. De plus, les qubits ne restent intriqués que durant un temps très limité.
+
+Ainsi, le Sycamore de Google, l’IBM-Q ou le Jiuzhang développé par l’université chinoise USTC ne regroupent que quelques dizaines de qubits pendant, au mieux, quelques dizaines de microsecondes! Cela limite fortement le temps de calcul disponible.
+
+*Mais le problème qui fait perdre l’avantage aux ordinateurs quantiques face aux ordinateurs classique est le taux d’erreur.* Au début des années 2000, ce taux était de l’ordre 30 %. Grâce aux progrès de ces deux dernières décennies, le taux d’erreur a été fortement réduit. Actuellement, il est de 0,5 %. Cela signifie qu’au bout de 200 opérations, vous êtes quasiment sûre d’avoir une erreur de calcul ! En comparaison, les ordinateurs classiques font une erreur au bout d’environ 10¹⁷opérations !
+
+Dans la publication de Google, on peut ainsi lire que la fracturation ultrarapide en nombres premiers par un ordinateur quantique nécessite encore des sauts techniques, notamment, pour pouvoir réduire les taux d’erreurs. C’est plutôt rassurant, car c’est l’impossibilité de factoriser un grand nombre en nombres premiers dans un temps raisonnable, qui protège la plupart de nos codes secrets!
+
+== Retour a Feynman : la simulation quantique, une promesse plus réaliste
+
+En juillet 2021, le centre de recherche en atomes froids du MIT (CUA) a annoncé avoir développé https://news.harvard.edu/gazette/story/2021/07/harvard-led-physicists-create-256-qubit-programmable-quantum-simulator/[un simulateur quantique comportant 256 qubits]. Un simulateur quantique n’est pas tout à fait la même chose qu’un ordinateur quantique à base de porte logiques. Un simulateur est moins universel en terme d’applications.
+
+[quote]
+Un simulateur quantique peut être utilisé pour modéliser un système de quantique plus grand que lui, car les deux systèmes parlent le même langage : celui de la mécanique quantique.
+
+Par exemple, un simulateur est naturellement adapté lorsqu’on cherche à étudier les propriétés magnétiques de la matière à l’échelle des atomes. Ces études pourront permettre de concevoir de nouveaux matériaux avec des propriétés exotiques, et qui pourraient un jour déboucher sur des applications industrielles.
+
+Plus de 50 ans après l’idée initiale de Feynman, force est de constater que la beauté de cette entreprise quantique est toujours pleine de défis!
