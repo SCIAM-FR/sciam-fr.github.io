@@ -1,7 +1,7 @@
-= First Entry
+= First Entry test
 :showtitle:
-:page-navtitle: First Entry
-:author: someone
+:page-navtitle: First Entry test
+:author: jmdoudoux
 :page-excerpt: Premier article.
 
 
