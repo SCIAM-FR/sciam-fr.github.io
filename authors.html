@@ -13,7 +13,7 @@ title: 'Auteurs'
     {% if author.picture %}
   <img class="rounded-full w-10 h-10" width="80px" height="80px" src="{{ '/images/authors/' | append: author.picture | relative_url }}" style="float:left;margin-right:15px;" />
     {% endif %}
-  <h1><a href="{{ '/author/' | append: author_data[0] | append: '/index.html' | relative_url }}">{{ author.name }}</a></span></h1>
+  <h1><a href="{{ '/author/' | append: author_data[0] | append: '/index.html' | relative_url }}">{{ author.name }}</a></h1>
   <p><b>{{ author.job }}</b></p>
   <p>{{ author.bio }}</p>
   <p>&nbsp;</p>
