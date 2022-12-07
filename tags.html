@@ -9,7 +9,7 @@ title: 'Tags'
     {% assign tags = site.posts | all_tags %}
     {% for tag in tags %}
       {% assign tag_slug = tag['name'] | slugify: "raw" %}
-        <a class="btn btn-primary tag-btn"
+        <a class="btn btn-primary tag-btn" style="margin-bottom: 10px;"
           href="{{ '/tag/' | relative_url }}{{ tag_slug }}/"
           rel="category tag"><i class="fas fa-tag" aria-hidden="true"></i>&nbsp;{{ tag['name'] }} ({{ tag['count'] }})</a>&nbsp;
     {% endfor %}
