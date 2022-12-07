@@ -32,13 +32,3 @@ sberrien:
 
 osans:
   name: 'Olivier Sans'
-
-someone:
-  name: 'Mr Hyde'
-  bio: 'Bio of user Mr Hyde'
-  website: 'http://user2.com'
-  twitter: '@user2'
-  socials:
-    github: 'user2'
-    gitlab: 'user2'
-
