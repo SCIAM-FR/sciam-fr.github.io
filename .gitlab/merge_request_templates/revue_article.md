@@ -1,14 +1,16 @@
-Test de template pour la revue d'article
+## Suivi revue article
 
-
-| Relecteur | Current Statut | Validation | 
+| Relecteur | Statut | Validation | 
 |-------------------------------|---------------|----------------|
-| @antoinesd  | A faire | <ul><li><li>- [ ] OK</li></ul>
-| @jmdoudoux_sciam | A faire |  <ul><li><li>- [ ] OK</li></ul>
-| Ajouter la personne de votre choix  | A faire |  <ul><li><li>- [ ] OK</li></ul>
+| @antoinesd |<ul><li>- [x] A faire</li><li>- [ ] En cours</li><li>- [ ] Terminée</li></ul>|<ul><li>- [ ] OK</li></ul>
+| @jmdoudoux_sciam |<ul><li>- [x] A faire</li><li>- [ ] En cours</li><li>- [ ] Terminée</li></ul>|<ul><li>- [ ] OK</li></ul>
+| Ajouter la personne de votre choix |<ul><li>- [x] A faire</li><li>- [ ] En cours</li><li>- [ ] Terminée</li></ul>|<ul><li>- [ ] OK</li></ul>
 
-Points à prendre en compte durant la relecture
+## Points à prendre en compte durant la relecture
 - Forme
+  - tournures, oublis, passages trop lourds/indigestes, orthographe, grammaire
+  - méta-données : auteur, résumé
 - Fond
 - Légal
+  - Originalité de l'article, source des images 
 - SEO
