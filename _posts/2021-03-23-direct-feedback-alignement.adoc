@@ -1,0 +1,118 @@
+= Direct Feedback Alignement : une alternative prometteuse à la Back-Propagation ?
+:showtitle:
+:page-navtitle: Direct Feedback Alignement : une alternative prometteuse à la Back-Propagation ?
+:page-excerpt: TODO.
+:layout: post
+:author: osans
+:page-tags: ['Direct Feedback Alignement','Back-Propagation']
+:docinfo: shared-footer
+:page-vignette: direct-feedback-alignement-001.png
+:post-vignette: direct-feedback-alignement-001.png
+:page-vignette-licence: 'Image par <a href="https://pixabay.com/fr/users/gdj-1086657/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=3816319">Gordon Johnson</a> de Pixabay'
+:page-liquid:
+
+Lorsqu’on a besoin d’entraîner un https://medium.com/sciam-fr/alphafold2-le-repliement-des-prot%C3%A9ines-selon-deepmind-5689ceb70fef[réseau de neurones], nous pensons tous à l’algorithme de **https://www.nature.com/articles/323533a0[back-propagation]** (BP). Pour chaque passe arrière, cet algorithme se base sur le théorème de dérivation en chaîne d’une fonction composée afin d’ajuster séquentiellement les poids du modèle, en fonction de leur contribution à la fonction de coût (en suivant la descente du gradient de cette fonction). Or, cet aspect **séquentiel** du calcul *limite les possibilités de paralléliser la phase d’entraînement*, ce qui devient un réel problème lorsqu’on considère la profondeur des réseaux à l’état-de-l’art. C’est pourquoi nous devons penser différemment, ce que propose une nouvelle approche : le Direct Feedback Alignement (DFA). L’intérêt majeur de la DFA réside dans le fait qu‘elle permet de paralléliser la passe arrière. De plus, il est à noter que la DFA définit une approche biologiquement plausible contrairement à la BP (cf.weight transport problem).
+
+== La naissance d’une approche parallélisable !
+
+Introduisons la DFA en illustrant d’abord ses différences avec les approches de type https://fr.wikipedia.org/wiki/R%C3%A9tropropagation_du_gradient[Back-Propagation] (BP) et Feedback Alignement (FA) sur un https://fr.wikipedia.org/wiki/R%C3%A9seau_neuronal_convolutif[réseau neuronal convolutif](Nøkland, 2016).
+
+.Image issue de Nøkland, 2016
+image::{{'/images/direct-feedback-alignement-002.png' | relative_url }}[image,width=379,height=254]
+
+Soit W_i la matrice de poids de la couche i, b_i son vecteur de biais, f_i sa fonction d’activation et h_i, son vecteur d’activation. La passe avant peut alors s’écrire :
+
+image::{{'/images/direct-feedback-alignement-003.png' | relative_url }}[image,width=339,height=46]
+
+Les vecteurs d’activations sont calculés séquentiellement (avec BP) à partir des données d’entrée h_0 = X jusqu’à la *prédiction* ŷ = f_y(a_y). Puis la fonction de coût L(ŷ, y) est calculée afin d’évaluer la *qualité* de la prédiction. La passe arrière consiste alors à mettre à jour les poids en fonction du vecteur d’erreur mesuré e :
+
+image::{{'/images/direct-feedback-alignement-004.png' | relative_url }}[image,width=192,height=76]
+
+La mise à jour de la dernière couche peut alors s’écrire :
+
+image::{{'/images/direct-feedback-alignement-005.png' | relative_url }}[image,width=216,height=82]
+
+Et la mise à jour des couches précédentes :
+
+image::{{'/images/direct-feedback-alignement-006.png' | relative_url }}[image,width=208,height=43]
+
+Avec l&#39;link:https://medium.com/sciam-fr/a-la-d%C3%A9couverte-dun-algorithme-de-machine-learning-peu-conventionnel-b5e54d5a1c14[algorithme] de back-propagation (BP), les mises à jour des poids sont calculées *séquentiellement* en propageant le vecteur d’erreurs couche par couche :
+
+image::{{'/images/direct-feedback-alignement-007.png' | relative_url }}[image,width=429,height=59]
+
+En 2014, https://arxiv.org/abs/1411.0247[Lillicrap et al] ont proposé une autre approche nommée Feedback Alignment. FA consiste à remplacer la transposée de la matrice de poids utilisée dans BP par une*matrice de poids aléatoires fixes*(en supprimant la symétrie entre la passe avant et arrière, ce qui rend l’approche biologiquement plus plausible).
+
+image::{{'/images/direct-feedback-alignement-008.png' | relative_url }}[image,width=292,height=44]
+
+En 2016, https://arxiv.org/abs/1609.01596[Nøkland] a proposé une nouvelle approche nommée *Direct Feedback Alignment*. La différence entre DFA et FA réside dans le fait que l’erreur est directement transmise de la couche de sortie aux couches cachées, permettant ainsi la *parallélisation de l’entraînement* du réseau :
+
+image::{{'/images/direct-feedback-alignement-009.png' | relative_url }}[image,width=267,height=48]
+
+Cela peut être finalement vu comme une *projection* de l’erreur globale sur une matrice aléatoire, ce qui est parfaitement adapté à l’utilisation d&#39;link:https://arxiv.org/abs/2012.06373[optical processing unit]. Les auteurs ont montré que la FA et la DFA fonctionnent même si, intuitivement, c’est un peu surprenant. Plus précisément,Lillicrap et alont prouvé que la FA réduit asymptotiquement l’erreur à 0 dans le cas d’un réseau de neurones linéaire à deux couches (sous certaines conditions). Ils ont montré que la matrice de poids tend à s’aligner avec la matrice de poids aléatoires, ce qui conduit le faux gradient de FA à s’aligner avec le gradient de BP. https://arxiv.org/abs/1609.01596[Nøkland] a lui introduit un critère d’alignement par couche permettant de décrire la DFA dans le cas de réseaux de neurones profonds non-linéaires (sous l’hypothèse de directions de mise à jour constantes).
+
+Même s’il n’y a pas de garanties théoriques du bon fonctionnement de la DFA dans un cas général, les *premiers résultats expérimentaux* obtenus sur des datasets tels que MNIST et CIFAR-10 se sont révélés *prometteurs* (cf. https://arxiv.org/abs/1609.01596[Nøkland], 2016).
+
+== Une désillusion temporaire qui ouvre …
+
+.Image par https://pixabay.com/fr/users/geralt-9301/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=3859539[Gerd Altmann] de Pixabay
+image::{{'/images/direct-feedback-alignement-010.jpeg' | relative_url }}[image,width=604,height=403]
+
+Puis, en 2018, https://arxiv.org/abs/1807.04587[Bartunov et al] ont montré que la FA (et donc la DFA) obtenait de *très mauvais résultats sur des tâches de computer vision* comme http://www.image-net.org/[ImageNet] comparativement à l’approche BP. En 2019, https://arxiv.org/abs/1906.04554[Launay et al] ont donc commencé à creuser la question.
+
+En prenant comme point de départ le fait qu’il ait fallu des années de recherche avant d’obtenir les résultats actuels obtenus via la BP, les chercheurs ont commencé par définir des bonnes pratiques pour la DFA afin de pouvoir *estimer plus clairement ses limites*. Ils ont notamment défini, durant cette étude, une méthode visant à *réduire le coût en mémoire* requis par la DFA et ainsi lui permettre d’être plus facilement utilisée sur des datasets de grandes tailles.
+
+Leur idée consiste à fixer une *unique matrice aléatoire*(à la place d’une par couche) et de se baser sur celle-ci afin de construire une matrice de bonnes dimensions pour chacune des couches. Ils ont ainsi proposé une adaptation de la normalisation à cette méthode en se basant sur leurs résultats expérimentaux. Dans cette étude, ils ont aussi découvert que la fonction absolue permettait d’obtenir de meilleurs résultats que les fonctions d’activations communément utilisées par la BP. L’ensemble de leurs résultats souligne le fait qu’il existe une *marge importante de progression pour la DFA.*
+
+_Tous leurs résultats sont disponibles dans leur https://arxiv.org/abs/1906.04554[article] ainsi que leurs implémentations sur leur https://github.com/lightonai/principled-dfa-training[GitHub]._
+
+En s’appuyant sur leur méthode de partage de matrice, ils sont parvenus à entraîner le fameux réseau VGG-16 sur CIFAR-100 et ImageNet. Les résultats ont montré que la DFA n’arrivait absolument pas à entraîner ce réseau, comme nous pouvons le constater sur cette table (https://arxiv.org/abs/1906.04554[Launay et al]) qui montre la précision (top-1) obtenue durant leurs expériences.
+
+.Table issue de https://arxiv.org/abs/1906.04554[Launay et al]
+image::{{'/images/direct-feedback-alignement-011.png' | relative_url }}[image,width=308,height=93]
+
+De plus, en affichant une visualisation des filtres de la deuxième couche de VGG-16 entraîné avec BP (à gauche) et DFA (à droite), ils ont souligné le fait que les filtres appris par la DFA étaient aléatoires (n’indiquant aucun apprentissage).
+
+.Image issue de https://arxiv.org/abs/1906.04554[Launay et al]
+image::{{'/images/direct-feedback-alignement-012.png' | relative_url }}[image,width=563,height=248]
+
+En approfondissant ces résultats, ils ont remarqué que le faux gradient de DFA n’arrivait pas à s’aligner avec le gradient de BP. Les mises à jour de la DFA semblent même aléatoires. En se fondant sur le fait que les couches convolutionnelles bénéficiaient de moins de degrés de liberté que les couches FC, ils ont émis l’hypothèse que les couches convolutionnelles manquaient d’un degré de liberté suffisant pour permettre aux matrices de poids d’apprendre la tâche et de s’aligner avec les matrices aléatoires, ce qui semble être corroboré par leurs expérimentations.
+
+== … de nouvelles perspectives !
+
+Il y a quelques mois (fin 2020), deux articles très intéressants ont été publiés à https://nips.cc/[NeurIPS’20] (https://arxiv.org/abs/2006.12878[Launay et al] et https://arxiv.org/abs/2011.12428[Refinetti et al]).
+
+https://arxiv.org/abs/2006.12878[Launay et al] ont proposé des adaptations de la DFA (*approches directes ou hybrides*) sur huit différentes tâches provenant de quatre domaines centraux (Neural View Synthesis, Recommender Systems, Geometric Learning et Natural Language Processing) et ce, sur onze architectures à l’état de l’art (Neural Radiance Fields, Adaptative Factorization Network, Transformers, etc).
+
+_Leurs implémentations sont disponibles sur leur https://github.com/lightonai/dfa-scales-to-modern-deep-learning[GitHub]. L’ensemble de leurs résultats expérimentaux est disponible dans leur https://arxiv.org/abs/2006.12878[article]._
+
+A titre indicatif, le tableau ci-dessous résume les résultats de leurs comparaisons en Geometric Learning (la métrique utilisée est la précision).
+
+.Table issue de https://arxiv.org/abs/2006.12878[Launay et al]
+image::{{'/images/direct-feedback-alignement-013.png' | relative_url }}[image,width=604,height=129]
+
+L’ensemble des résultats expérimentaux obtenus montrent que la DFA peut être utilisée sur des architectures complexes à l’état de l’art en obtenant des performances proches de la BP et ce, malgré le précédent échec sur les 2D-CNN.
+
+A la lumière de ces résultats diamétralement opposés, https://arxiv.org/abs/2011.12428[Refinetti et al] ont proposé une étude théorique afin de mieux comprendre comment la DFA fonctionne. Ils ont tout d’abord montré que l’apprentissage s’effectue en deux phases :
+
+* la phase d’Alignement où les poids du réseau cherchent à s’aligner avec ceux des matrices aléatoires permettant ainsi d’aligner le faux gradient de DFA avec le gradient de la fonction de coût,
+* la phase de Mémorisation où le réseau minimise la fonction de coût en convergeant vers la solution maximisant l’alignement du gradient.
+
+.Image issue de Refinetti et al
+image::{{'/images/direct-feedback-alignement-014.png' | relative_url }}[image,width=604,height=281]
+
+En outre, ils ont identifié les conditions permettant d’obtenir un alignement des poids (WA) et un alignement global (GA) sur les réseaux linéaires profonds. Ces conditions suggèrent que la structure sous-jacente des CNN rend impossible l’obtention d’un alignement global avec un choix général de matrices aléatoires. Cela pourrait conduire à un choix de matrices spécifiques à l’architecture dans de futurs travaux.
+
+Nous avons vu dans cet article, une nouvelle approche surprenante permettant de paralléliser le processus d’apprentissage d’un réseau de neurones. Malgré de premiers résultats négatifs sur les architectures CNN, *elle performe à ce jour sur de nombreuses autres architectures de l’état de l’art*. La recherche continue, restons donc à l’affût des prochains développements.
+
+== Bibliographie
+
+* Rumelhart, D. E., Hinton, G. E. & Williams, R. J. : Learning representations by back-propagating errors. Nature 323, 533–536 (1986).
+* Grossberg, S. : Competitive learning: From interactive activation to adaptive resonance. Cognitive Science, 11(1):23–63, 1987.
+* Nøkland, A. : Direct Feedback Alignment Provides Learning in Deep Neural Networks. Neural Information Processing Systems 29 (2016).
+* Lillicrap, T., Cownden, D., Tweed, D. & Akerman, C. : Random feedback weights support learning in deep neural networks. CoRR, abs/1411.0247, 2014.
+* Launay, J., Poli, I., Müller, K., Pariente, G., Carron, I., Daudet, L., Krzakala, F. & Gigan, S. : Hardware Beyond Backpropagation: a Photonic Co-Processor for Direct Feedback Alignment. CoRR abs/2012.06373 (2020)
+* Bartunov, S. et al. : Assessing the scalability of biologically-motivated deep learning algorithms and architectures. Neural Information Processing Systems (2018)
+* Launay, J., Poli, I. & Krzakala, F. : Principled Training of Neural Networks with Direct Feedback Alignment. CoRR abs/1906.04554 (2019)
+* Launay, J., Poli, I., Boniface, F. & Krzakala, F. : Direct Feedback Alignment Scales to Modern Deep Learning Tasks and Architectures. Neural Information Processing Systems (2020).
+* Refinetti, M., d’Ascoli, S., Ohana, R. & Goldt, S. : +
+The dynamics of learning with feedback alignment. CoRR abs/2011.12428 (2020)
