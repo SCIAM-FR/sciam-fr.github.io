@@ -2,7 +2,7 @@ title: Blog Tech Sciam
 description: Ce blog contient des articles techniques issus de la communeauté des salariés de SCIAM
 url: "http://localhost:4000"
 locale: fr_FR
-baseurl: "/blog-tech"
+baseurl: "/"
 twitter:
   username: SCIAM_FR
   card: summary
