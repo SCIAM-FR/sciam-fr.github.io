@@ -11,7 +11,10 @@ Il utilise Java depuis sa version 1.0 et aime partager sa passion pour cette pla
 
 antoinesd:
   name: 'Antoine Sabot-Durand'
-  bio: 'Bio d''Antoine Sabot-Durand'
+  bio: 'Passionné par Java et le développement, Antoine est un Java Champion expert sur Jakarta EE et CDI. Il a été Specification Leader sur CDI 2.0 et a participé à CDI 4.0. Membre du Working Group Microprofile, il a  aussi dirigé les specification MicroProfile Fault Tolerance et MicroProfile Health. Chez Sciam, il a le rôle de Tech Lead et participe a la capitalisation des savoirs faire de l''entreprise'
+  job: 'Senior Tech Lead'
+  website: 'https://next-presso.com'
+  picture: antoine_sd.png
   twitter: 'antoine_sd'
 
 loichermann:
