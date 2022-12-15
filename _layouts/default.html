@@ -30,6 +30,9 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js" type="text/javascript"></script>
   {% feed_meta %}
   {% seo %}
+  {% if jekyll.environment == 'production' %}
+  {% include analytics.html %}
+  {% endif %}
 </head>
 
 <body>
