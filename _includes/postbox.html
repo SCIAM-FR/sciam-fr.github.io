@@ -1,10 +1,22 @@
 
   <div class="mt-6 mb-16">
-    <h3><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h3>
-    <p class="date">Publi&eacute; le {{ post.date | date: "%d/%m/%Y"}}</p>    
-    <div class="content">
-        {{ post.excerpt }}
+    <div style="display: flex;">
+
+      <div style="width:220px;">
+        {% if post.vignette %}
+        <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}" style="max-width: 200px; margin-right: 20px;" />
+      {% endif %}    
+    </div>
+
+      <div>
+        <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+        <p class="date">Publi&eacute; le {{ post.date | date: "%d/%m/%Y"}}</p>    
+
+        <div class="content">
+          {{ post.excerpt }}
+        </div>
       </div>
+    </div>
   </div>
 
 
