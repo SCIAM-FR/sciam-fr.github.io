@@ -1,7 +1,7 @@
 = A la découverte d’un algorithme de machine learning peu conventionnel
 :showtitle:
 :page-navtitle: A la découverte d’un algorithme de machine learning peu conventionnel
-:page-excerpt: TODO.
+:page-excerpt: 'La classification d’image est un sujet vieux comme le monde du machine learning. Dans cet article nous allons découvrir un algorithme disruptif qui mêle apprentissage par renforcement et système multi-agents pour de la classification d’images'
 :layout: post
 :author: sberrien
 :page-tags: ['Algorithme','Machine learning']

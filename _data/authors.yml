@@ -30,8 +30,12 @@ kkechadi:
 
 sberrien:
   name: 'Samuel Berrien'
-  job: 'Data science engineer'
-  bio: 'Developping in my spare time'
+  job: 'Data Scientist / Software engineer'
+  bio: 'Fervent adepte de machine learning et Deep Learning, j’aime chercher de nouvelles techniques et les implémenter. Je suis convaincu qu’il sera toujours possible d’apprendre si la curiosité est présente'
+  picture: sberrien.png
+  socials:
+    linkedin: samuel-berrien-4b94b5172
+    github: Ipsedo
 
 osans:
   name: 'Olivier Sans'

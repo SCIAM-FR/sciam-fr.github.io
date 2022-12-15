@@ -1,7 +1,7 @@
 = How to : un réseau neuronal artificiel peut-il rivaliser avec Bach ?
 :showtitle:
 :page-navtitle: How to : un réseau neuronal artificiel peut-il rivaliser avec Bach ?
-:page-excerpt: TODO.
+:page-excerpt: 'Les auto-encodeurs font-ils leurs preuves sur de l’audio ? Nous allons essayer d’y répondre en présentant différentes architectures de réseau de neurones se basant sur des transformées de Fourier.'
 :layout: post
 :author: sberrien
 :page-tags: ['Réseau neuronal artificiel']
