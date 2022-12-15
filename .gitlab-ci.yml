@@ -2,6 +2,9 @@ image: ruby:2.5
 cache:
   paths:
     - .bundle
+variables:
+  JEKYLL_ENV: production
+
 before_script:
   - bundle --path .bundle/gems
 pages:
