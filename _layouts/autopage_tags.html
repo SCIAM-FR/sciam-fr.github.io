@@ -10,7 +10,7 @@ layout: default
 <div class="home">
 
   <h1 class="page-heading">Articles associés au tag {% if page.autopages %}{{page.autopages.display_name}}{% endif %}</h1>
-  <p>Page {{page.pagination_info.curr_page}} of {{page.pagination_info.total_pages}}</p>
+  <p>Page {{page.pagination_info.curr_page}} de {{page.pagination_info.total_pages}}</p>
   
   <ul class="post-list">
     {% for post in paginator.posts %}
