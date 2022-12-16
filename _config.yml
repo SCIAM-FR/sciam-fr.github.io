@@ -43,6 +43,7 @@ asciidoctor:
   attributes:
     idseparator: _
     source-highlighter: rouge
+    source-language: java
     rouge-css: style
     rouge-style: github
     asciidoctor-stylesheet: asciidoctor.css
