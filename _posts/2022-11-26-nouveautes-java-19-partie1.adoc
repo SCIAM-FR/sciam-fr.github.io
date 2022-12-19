@@ -1,0 +1,401 @@
+:showtitle:
+:page-navtitle: Les nouveautés de Java 19 : partie 1
+:page-excerpt: Ce premier article de la série sur les nouveautés de Java 19 détaille les fonctionnalités proposées par les JEP des projets Amber et Panama.
+:layout: post
+:author: jmdoudoux
+:page-tags: [Java, Java 19, Projet Amber, Projet Panama]
+:docinfo: shared-footer
+:page-vignette: java-19.png
+:page-liquid:
+
+= Les nouveautés de Java 19 : partie 1
+
+Ce premier article d'une série dédiée aux nouveautés de Java 19 détaille les fonctionnalités proposées par les projets Amber et Panama.
+
+En respect du rythme de releases tous les 6 mois instauré depuis 5 ans, la 10^ème^ release GA de Java, Java 19, a été publiée le 20 septembre 2022.
+
+OpenJDK 19 est l’implémentation de référence de cette version 19 de la plateforme Java, telle que spécifiée dans la https://jcp.org/en/jsr/detail?id=394[JSR 394^].
+
+Cette version non LTS (Long-Term Support) inclut sept JEPs (JDK Enhancement Proposals) :
+
+* JEP 405 : https://openjdk.org/jeps/405[Record Patterns (Preview)^]
+* JEP 422 : https://openjdk.org/jeps/422[Linux/RISC-V Port^]
+* JEP 424 : https://openjdk.org/jeps/424[Foreign Function & Memory API (Preview)^]
+* JEP 425 : https://openjdk.org/jeps/425[Virtual Threads (Preview)^]
+* JEP 426 : https://openjdk.org/jeps/426[Vector API (Fourth Incubator)^]
+* JEP 427 : https://openjdk.org/jeps/427[Pattern Matching for switch (Third Preview)^]
+* JEP 428 : https://openjdk.org/jeps/428[Structured Concurrency (Incubator)^]
+
+Aucune de ces JEPs ne concerne une fonctionnalité majeure standard. Six de ces JEPs sont soit des fonctionnalités en preview ou des modules en incubation. La septième JEP est un nouveau portage d'OpenJDK pour Linux sur architecture RISC-V.
+
+Hormis la JEP 422, les six autres JEPs (qui sont des contributions des projets https://openjdk.java.net/projects/amber/[Amber^], https://openjdk.java.net/projects/panama/[Panama^] et https://wiki.openjdk.java.net/display/loom[Loom^]) sont en incubation ou en preview. Ces fonctionnalités sont donc ni stables ni standard et pourront évoluer dans les futures versions du JDK.
+
+Une fonctionnalité en preview est une nouvelle fonctionnalité du langage Java, de la machine virtuelle Java ou de l'API Java SE qui est entièrement spécifiée, entièrement mise en œuvre mais pas encore standard. Elle est proposée dans une version du JDK afin de permettre aux développeurs de l’utiliser et de fournir du feedback. Elle peut alors évoluer après plusieurs versions pour devenir standard ou être retirée. Il n’y a pas de garantie sur la compatibilité des fonctionnalités proposées en preview avec la version précédente.
+
+L’utilisation de fonctionnalités en preview impose plusieurs points :
+
+* Il faut explicitement les activer à la compilation et à l’exécution en utilisant l’option `--enable-preview` avec les outils `javac`, `java`, `jshell` et `javadoc`
+* Avec le compilateur `javac`, il faut en plus préciser le niveau de compatibilité du code source avec les options `--release` ou `-source`
+
+[source,shell]
+----
+javac --enable-preview --release 19 MonApp.java
+
+java --enable-preview MonApp
+----
+
+Un module en incubation permet au JDK de proposer des APIs non finales et des outils non finaux aux développeurs afin de leur permettre de les utiliser et de fournir du feedback. Ils peuvent alors évoluer après plusieurs versions pour devenir standards ou être retirés.
+
+L’utilisation d’un module en incubation impose plusieurs points :
+
+* Le nom du module est préfixé par `jdk.incubator`
+* Le nom des packages exposés est préfixé par `jdk.incubator`
+* Il faut ajouter explicitement le module au graphe de module en utilisant l’option `--add-modules`
+* Les APIs dans le module peuvent évoluer et le nom du module et des packages seront modifiés s’ils sont promus comme standard
+
+Bien que ces fonctionnalités ne soient pas standard, il ne faut pas les ignorer car elles permettent d’entrevoir le futur. C’est aussi un moyen pour la communauté de fournir du feedback et donc de les faire évoluer.
+
+== Les fonctionnalités du projet Amber
+
+L'objectif du projet https://openjdk.java.net/projects/amber/[Amber^] est d'explorer des fonctionnalités visant à améliorer la productivité des développeurs.
+
+Plusieurs éléments du projet Amber ont déjà été intégrés au standard depuis Java 10 :
+
+* L’inférence de type lors de la déclaration de variable locale avec var (Java 10)
+* L’inférence de type lors de la déclaration des paramètres d’une expression Lambda (Java 11)
+* Les évolutions dans l’instruction switch (Java 14)
+* Les blocs de texte (Java 15)
+* Le pattern matching avec l’instruction instanceof (Java 16)
+* Les records (Java 16)
+* Les classes scellées (Java 17)
+
+En Java 19, deux fonctionnalités sont proposées en preview :
+
+* Les record patterns (1^ère^ Preview)
+* Le pattern matching pour l’instruction switch (3^ème^ Preview)
+
+=== JEP 405 : Record Patterns (Preview)
+
+La https://openjdk.org/jeps/405[JEP 405^], en preview, propose d’ajouter un nouveau pattern utilisable dans le pattern matching : le record pattern pour déconstruire les valeurs d’un record.
+
+Un record pattern est utilisable dans le pattern matching avec une instruction `instanceof` ou `switch`.
+
+[source,java]
+----
+    record Employe(String nom, String prenom) {}
+    Object o = new Employe("Nom1", "Prenom1");
+----
+
+Il est possible d’utiliser le type pattern pour vérifier le type d’un record et l’assigner à une variable s’il correspond. On peut, alors, invoquer les accesseurs sur les composants du record.
+
+[source,java]
+----
+    if (o instanceof Employe emp) {
+      System.out.println("Employe : "+emp.nom()+" "+emp.prenom());
+    }
+----
+
+Avec cette JEP, ce code peut être simplifié en utilisant un record pattern dont la syntaxe est le type du record suivi de la définition de ses composants.
+
+[source,java]
+----
+    if (o instanceof Employe(String nom, String prenom)) {
+      System.out.println("Employe : "+nom+" "+prenom);
+    }
+----
+
+Dans l’exemple ci-dessus, `Employe(String nom, String prenom)` est un record pattern. Le pattern fait la correspondance avec un type qui est un record et si elle réussit alors les variables définies dans le pattern sont initialisées avec celles résultant de l’invocation des accesseurs correspondants sur l’instance du record. Ces traitements correspondent à une forme de déconstruction du record.
+
+Il est alors possible d’accéder directement à l'état des composants du record via des variables définies dans le pattern. Cela réduit et simplifie le code nécessaire sans nuire à la lisibilité.
+
+Le nom des composants n’a pas l’obligation d’être identique à celui utilisé dans la définition du record : seuls l’ordre et le type des composants doivent être respectés.
+
+[source,java]
+----
+    if (o instanceof Employe(String n, String p)) {
+      System.out.println("Employe : " + n + " " + p);
+    }
+----
+
+Il est possible d’utiliser l’inférence du type dans le pattern
+
+[source,java]
+----
+    if (o instanceof Employe(var nom, var prenom)) {
+      System.out.println("Employe : " + nom + " " + prenom);
+    }
+----
+
+Il est possible de définir une variable qui permet d’accéder à l’instance. Dans ce cas, le pattern est désigné par le terme record pattern nommé (`named record pattern`).
+
+[source,java]
+----
+    if (o instanceof Employe(var nom, var prenom) emp) {
+      System.out.println("Employe : " + nom + " " + prenom + " {" + emp + "}" );
+    }
+----
+
+Les record patterns peuvent être imbriqués pour permettre de facilement exploiter les valeurs de records encapsulés dans d’autres records.
+
+[source,java]
+----
+    record Grade(String code, String designation) {
+    }
+
+    record Employe(String nom, String prenom, Grade grade) {
+    }
+
+    Object o = new Employe("Nom1", "Prenom1", new Grade("DEV", "Développeur"));
+
+    if (o instanceof Employe(var nom, var prenom, Grade(var code, var designation))) {
+      System.out.println("Employe : " + nom + " " + prenom + ", "+ designation);
+    }
+----
+
+Type pattern et record pattern peuvent être combinés dans un même switch selon les besoins.
+
+[source,java]
+----
+    switch (o) {
+      case Employe emp -> System.out.println(emp);
+      case Grade(String code,String designation) -> System.out.println("Grade " + designation + "(" + code + ")");
+      default -> System.out.println("Type non supporté");
+    }
+----
+
+La valeur `null` ne correspond à aucun record pattern.
+
+Si un record est générique, alors tout record pattern qui s’applique sur ce record doit utiliser un type générique.
+
+=== JEP 427 : Pattern Matching for switch (Third Preview)
+
+Historiquement proposée en preview en Java 17 (https://openjdk.java.net/jeps/406[JEP 406^]) et 18 (https://openjdk.java.net/jeps/420[JEP 420^]), elle est proposée pour une troisième preview en Java 19 via la https://openjdk.java.net/jeps/427[JEP 427^].
+
+Elle permet d’utiliser le pattern matching dans une instruction switch avec un support de la valeur null au lieu de lever une `NullPointerException`.
+
+Exemple en Java 18 :
+
+[source,java]
+----
+  static String getDesignation(Object obj) {
+    String designation = switch (obj) {
+      case Terrain t
+           && (t.getSurface() > 1000) -> "Grand terrain";
+      case Terrain t -> "Petit terrain";
+      case null -> "Instance null";
+      default -> "Pas un terrain";
+    };
+    return designation;
+  }
+----
+
+Cette troisième preview apporte deux évolutions :
+
+* Le guarded pattern utilise la clause `when` à la place de l’opérateur `&&` dans les précédentes preview
+* La sémantique d'exécution de l’instruction `switch` avec le pattern matching lorsque la valeur est `null` et que le cas `null` n’est pas explicitement géré est plus étroitement alignée sur la sémantique historique
+
+L’utilisation d’une clause `when` dans un guarded pattern en remplacement de l’opérateur `&&` permet d’avoir moins de confusion lorsque la condition dans le pattern utilise aussi cet opérateur.
+
+[source,java]
+----
+  static String getDesignation(Object obj) {
+    String designation = switch (obj) {
+      case Terrain t
+           when (t.getSurface() > 1000) -> "Grand terrain";
+      case Terrain t -> "Petit terrain";
+      case null -> "Instance null";
+      default -> "Pas un terrain";
+    };
+    return designation;
+  }
+----
+
+Historiquement, l’instruction `switch` levait une exception de type `NullPointerException` si la valeur testée était `null`. Depuis l’introduction du pattern matching dans l’instruction `switch`, elle propose un support de la valeur `null`.
+
+[source,java]
+----
+public class TestSwitchPattern {
+
+  public static void main(String[] args) {
+    String chaine = null;
+    switch (chaine) {
+      case String s -> {
+        System.out.println("traitement chaine");
+        System.out.println("taille : " + s.length());
+      }
+    }
+  }
+}
+
+----
+
+En Java 18, si aucun `case null` n’est utilisé alors le `case` avec un type pattern qui correspond au type de la variable est exécuté. Si la variable est utilisée alors une exception de type `NullPointerException` est levée.
+
+[source,shell]
+----
+C:\java>jdk18
+Definition de JAVA_HOME
+Definition de PATH
+Version de Java
+openjdk version "18" 2022-03-22
+OpenJDK Runtime Environment (build 18+36-2087)
+OpenJDK 64-Bit Server VM (build 18+36-2087, mixed mode, sharing)
+
+C:\java>javac --enable-preview --release 18 -g TestSwitchPattern.java
+Note: TestSwitchPattern.java uses preview features of Java SE 18.
+Note: Recompile with -Xlint:preview for details.
+
+C:\java>java --enable-preview TestSwitchPattern
+traitement chaine
+Exception in thread "main" java.lang.NullPointerException: Cannot invoke "String.length()" because "s" is null
+        at TestSwitchPattern.main(TestSwitchPattern.java:8)
+----
+
+En Java 19, avec le même code et donc les mêmes conditions, le comportement à l’exécution est différent : comme il n’y a pas de `case null` et que la valeur testée est `null` alors une exception de type `NullPointerException` est directement levée lors de l’évaluation de la valeur. Ce comportement est plus proche du comportement historique de l’instruction `switch`.
+
+[source,shell]
+----
+C:\java>java -version
+openjdk version "19" 2022-09-20
+OpenJDK Runtime Environment (build 19+36-2238)
+OpenJDK 64-Bit Server VM (build 19+36-2238, mixed mode, sharing)
+
+C:\java>javac --enable-preview --release 19 TestSwitchPattern.java
+Note: TestSwitchPattern.java uses preview features of Java SE 19.
+Note: Recompile with -Xlint:preview for details.
+
+C:\java>java --enable-preview TestSwitchPattern
+Exception in thread "main" java.lang.NullPointerException
+        at java.base/java.util.Objects.requireNonNull(Objects.java:233)
+        at TestSwitchPattern.main(TestSwitchPattern.java:5)
+----
+
+== Les fonctionnalités du projet Panama
+
+Le projet https://openjdk.org/projects/panama/[Panama^] a pour but d'explorer, d'incuber et de fournir des fonctionnalités concernant des interactions entre la JVM et des fonctionnalités étrangères (en dehors de la JVM).
+
+Deux fonctionnalités sont proposées :
+
+* L’API Foreign Function and Memory (preview) pour interagir avec du code non-Java
+* L’API Vector (4eme incubation) pour exploiter les instructions vectorielles de l’architecture CPU
+
+=== JEP 424 : Foreign Function & Memory API (Preview)
+
+Cette API permet aux applications Java d'interagir plus facilement, efficacement et de manière plus fiable avec du code et des données en dehors de la JVM.
+
+En invoquant efficacement des fonctions étrangères (du code natif extérieur à la JVM) et en accédant en toute sécurité à la mémoire étrangère (de la mémoire off-heap non gérée par la JVM), cette API permet aux applications Java d'appeler des bibliothèques natives et de traiter des données natives via un modèle de développement purement Java. Il en résulte une facilité d'utilisation, des performances et une sécurité accrues.
+
+Historiquement, cette JEP est la fusion de 2 JEPs introduites en incubation : Foreign-Memory Access API en Java 14 (JEP https://openjdk.java.net/jeps/370[370^], https://openjdk.java.net/jeps/383[383^], et https://openjdk.java.net/jeps/393[393^]) et Foreign Linker API en Java 16 (JEP https://openjdk.java.net/jeps/389[389^]).
+
+Elle a été proposée en incubation en Java 17 (JEP https://openjdk.java.net/jeps/412[412^]) et Java 18 (JEP https://openjdk.java.net/jeps/419[419^])
+
+Elle est proposée en preview en Java 19 (JEP https://openjdk.org/jeps/424[424^]).
+
+Attention : cette API évolue beaucoup dans chacune des versions de Java où elle est proposée.
+
+C’est une API de bas niveau pour de manière simple, sûre et efficace :
+
+* Accéder à des données en mémoire hors du tas (off heap memory)
+* Invoquer des fonctions natives
+
+Depuis qu’elle est en preview, elle est maintenant est dans le module `java.base`.
+
+L’API de bas niveau pour accéder à des données en mémoire hors du tas (off heap memory) de manière sûre et performante propose plusieurs classes et interfaces dans le package `java.base.foreign` :
+
+* Pour encapsuler une adresse mémoire : l’interface scellée `Adressable` avec les interfaces filles `MemoryAddress` et `MemorySegment`
+* Pour allouer de la mémoire native : les interfaces `MemorySegment` et `SegmentAllocator`
+* Pour manipuler et accéder à une portion de mémoire native structurée : l’interface scellée `MemoryLayout` avec classes d’implémentation `SequenceLayout`, `GroupLayout` et `ValueLayout` et la classe `java.lang.invoke.VarHandle`
+* Pour contrôler l'allocation et la désallocation de la mémoire native : l’interface scellée `MemorySession` qui hérite d’`AutoCloseable` et `SegmentAllocator`
+
+Cette API pourra être une alternative à certaines fonctionnalités de `java.nio.ByteBuffer` (pas performante mais sûre) et `sun.misc.Unsafe` (non standard).
+
+Elle propose aussi une API de bas niveau pour invoquer du code natif qui représente une future alternative à l’API JNI présente depuis Java 1.1.
+
+Elle propose plusieurs classes et interfaces, notamment :
+
+* La classe `SymbolLookup` pour rechercher des fonctions dans une bibliothèque native
+* La classe `FunctionDescriptor` pour définir la signature de la fonction native
+* L’interface `Linker` offre des fonctionnalités de liaison entre une fonction native et une instance de `MethodHandle` et interagir avec du code natif
+
+Exemple avec l’affichage d’une boîte de dialogue standard sous Windows
+
+[source,java]
+----
+import static java.lang.foreign.MemoryAddress.NULL;
+import static java.lang.foreign.ValueLayout.ADDRESS;
+import static java.lang.foreign.ValueLayout.JAVA_INT;
+
+import java.lang.foreign.FunctionDescriptor;
+import java.lang.foreign.Linker;
+import java.lang.foreign.MemorySegment;
+import java.lang.foreign.SegmentAllocator;
+import java.lang.foreign.SymbolLookup;
+import java.lang.invoke.MethodHandle;
+import java.util.Optional;
+
+public class MsgBoxForeignFunction {
+
+  public static void main(String[] args) {
+    try {
+      System.loadLibrary("user32");
+      Optional<MemorySegment> msgBoxFunction = SymbolLookup.loaderLookup().lookup("MessageBoxA");
+      FunctionDescriptor msgBoxFunctionDesc = FunctionDescriptor.of(JAVA_INT, ADDRESS, ADDRESS, ADDRESS, JAVA_INT);
+      MethodHandle methodHandle = Linker.nativeLinker().downcallHandle(msgBoxFunction.get(),
+          msgBoxFunctionDesc);
+
+      MemorySegment cStringMessage = SegmentAllocator.implicitAllocator()
+          .allocateUtf8String("Voulez-vous utiliser Java 19 ?");
+      MemorySegment cStringTitre = SegmentAllocator.implicitAllocator()
+          .allocateUtf8String("Confirmation");
+      int bouton = (int) methodHandle.invoke(NULL, cStringMessage.address(),
+          cStringTitre.address(), 36);
+      System.out.println("Bouton selectionne : " + bouton);
+    } catch (Throwable t) {
+      t.printStackTrace();
+    }
+  }
+}
+----
+
+Des warnings sont affichés pour les modules qui ne sont pas explicitement autorisés à utiliser l’API.
+
+[source,shell]
+----
+WARNING: A restricted method in java.lang.foreign.Linker has been called
+WARNING: java.lang.foreign.Linker::nativeLinker has been called by the unnamed module
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for this module
+----
+
+Pour autoriser chaque module à utiliser cette API, il faut utiliser l’option `--enable-native-access=<module>` de la JVM. Par exemple, pour un unnamed module :
+
+[source,shell]
+----
+--enable-native-access=ALL-UNNAMED
+----
+
+.La boîte de dialogue affichée
+image::{{'/images/article-Java-19-001.png' | relative_url}}[width=241,height=166]
+
+=== JEP 426 : Vector API (Fourth Incubator)
+
+L'API Vector permet d'exprimer des https://fr.wikipedia.org/wiki/Processeur_vectoriel[calculs vectoriels^] qui, au moment de l'exécution, sont systématiquement compilés avec les meilleures instructions vectorielles possibles sur l’architectures CPU, ce qui permet d'obtenir des performances supérieures à celles des calculs scalaires équivalents.
+
+Historiquement proposée en incubation en Java 16 (https://openjdk.java.net/jeps/338[JEP 338^]), 17 (link:414[JEP 414^]) et 18 (https://openjdk.java.net/jeps/417[JEP 417^]), elle est proposée pour une quatrième incubation en Java 19 via la https://openjdk.java.net/jeps/426[JEP 426^].
+
+C’est une API pour exécuter des calculs vectoriels qui utilise de manière optimale les instructions matérielles vectorielles (SIMD) sur les architectures CPU supportées : x64 (SSE et AVX) et AArch64 (Neon). Elle permet généralement si de telles instructions sont présentes d’obtenir des perfs supérieures à celles des calculs scalaires équivalents.
+
+Elle est dans le module `jdk.incubator.vector`.
+
+Les améliorations de l'API proposées pour cette quatrième incubation comprennent :
+
+* La possibilité de charger et stocker des vecteurs vers et depuis des `MemorySegments` définis par l'API Foreign Function and Memory.
+* L’ajout de deux opérations vectorielles cross-lanes, compress et expand, ainsi qu'une opération complémentaire de compression de masque vectoriel.
+* L’ajout d’opérations intégrales de type bit à bit (bitwise integral lanewise) notamment des opérations telles que le comptage du nombre de bits à un, comptage du nombre de bits à zéro de tête, comptage du nombre de bits à zéro de fin, l'inversion de l'ordre des bits, l’inversion de l’ordre des octets et la compression et l'expansion des bits.
+
+== Conclusion
+
+Comme la version 19 de Java n’est pas une version LTS, elle n’est pas une cible pour un déploiement en production par les entreprises. Cependant elle introduit plusieurs fonctionnalités importantes en preview ou en incubation : même si elles vont surement évoluées avant de devenir standard, il est intéressant de les regarder.
+
+N’hésitez donc pas à télécharger et tester une distribution du JDK 19 auprès d’un fournisseur pour anticiper la release de la prochaine version LTS de Java, Java 21 dans un an, en septembre 2023.
+
+Le second article de cette série sera consacré aux fonctionnalités de Java 19 proposées par le projet Loom.
