@@ -1,0 +1,526 @@
+= Cinquante nuances de Beans CDI
+:showtitle:
+:page-navtitle: Cinquantes nuances de Beans CDI
+:page-excerpt: 'Dans CDI, les Beans sont un concept central. Pourtant, pour beaucoup de développeurs, cette notion reste floue et suscite souvent beaucoup d''interrogations. Cet article tente de clarifier le fonctionnement des beans et détaille les mécanismes mis en œuvre derrière leur définition et leur injection.Les concepts abordés ici sont les mêmes pour toutes les versions de CDI de 1.x à 4.x.'
+:layout: post
+:author: antoinesd
+:page-tags: [CDI,Beans,EJB]
+:docinfo: shared-footer
+:page-vignette: Coffee-Beans-Black-and-White.jpg
+:post-vignette: Coffee-Beans-Black-and-White.jpg
+:page-vignette-licence: 'Source racebaitr'
+:page-liquid:
+
+
+Dans CDI, les Beans sont un concept central.
+Pourtant, pour beaucoup de développeurs, cette notion reste floue et suscite souvent beaucoup d'interrogations.
+
+Cet article tente de clarifier le fonctionnement des beans et détaille les mécanismes mis en œuvre derrière leur définition et leur injection.
+
+Les concepts abordés ici sont les mêmes pour toutes les versions de CDI de 1.x à 4.x.
+
+
+== Bean, contextual instance et typesafe resolution
+
+Lorsque la plupart des développeurs CDI écrivent :
+
+[source]
+----
+@Inject
+@MyQualifier
+MyBean bean;
+----
+
+ils pensent avoir injecté le bean `MyBean` avec le qualifier `@MyQualifier`.
+
+C'est inexact et montre une mauvaise compréhension du mécanisme qui se cache derrière la définition d'un point d'injection.
+
+=== Bean vs instances contextuelles (contextual instances)
+
+Une des particularités de CDI est le fait que le conteneur découvre tous les composants (qualifiers, beans, producers, etc.) au moment du déploiement.
+
+Cela permet de générer des erreurs très tôt (avant l'exécution) et de vous assurer que tous les points d'injection que vous avez définis seront satisfaits et non ambigus.
+
+Bien que ce processus de découverte ne soit pas le sujet de cet article, vous devez savoir que toutes les classes fournies dans votre application seront analysées lors du déploiement pour découvrir les beans (et d'autres composants).
+
+À la fin de cette tâche de découverte, le conteneur a créé des collections de métadonnées pour la plupart des éléments inclus dans le SPI CDI.
+Parmi ces métadonnées créées, il y a la collection de `Bean<T>` découverts lors du déploiement.
+Il s'agit, en fait, des descriptions internes des _beans_ de l'application et dans une utilisation basique de CDI, vous n'aurez jamais à les utiliser puisque la plupart du temps vous demanderez au conteneur d'injecter des instances de ces beans avec `@Inject`.
+
+Ne pas confondre les _beans_ et les _instances contextuelles_ (instances du bean pour un contexte donné) est un point important pour bien comprendre le fonctionnement de CDI.
+
+=== Contenu de l'interface `Bean<T>`
+
+L'interface `Bean` a deux fonctions principales :
+
+* Fournir une "recette" pour créer et détruire des instances contextuelles (méthodes de `Contextual<T>`)
+* Stocker les métadonnées du bean obtenues à partir de sa définition (méthodes de `BeanAttributes<T>`)
+
+
+.Hiérarchie de l'interface Bean, et oui, Interceptor et Decorator sont également des Beans
+image::{{'/images/bean-hierarchy.svg' | relative_url}}[image,width=100%]
+////
+[plantuml, bean-hierarchy, svg]
+....
+@startuml
+
+Contextual <|-- Bean
+BeanAttributes <|-- Bean
+Bean <|-- Interceptor
+Bean <|-- Decorator
+
+
+interface Contextual<T> {
+    +T create(CreationalContext<T>)
+    +destroy(T, CreationalContext<T>)
+}
+
+interface BeanAttributes<T> {
+    +Set<Type> getTypes()
+    +Set<Annotation> getQualifiers()
+    +Class<? extends Annotation> getScope()
+    +String getName()
+    +Set<Class<? extends Annotation>> getStereotypes()
+    +boolean isAlternative()
+}
+
+
+interface Bean<T> {
+    +Class<?> getBeanClass()
+    +Set<InjectionPoint> getInjectionPoints()
+    +boolean isNullable()
+}
+
+
+interface Interceptor<T> {
+    +Set<Annotation> getInterceptorBindings()
+    +boolean intercepts(InterceptionType type)
+    +Object intercept(InterceptionType, T, InvocationContext)
+}
+
+interface Decorator<T> {
+    +Type getDelegateType()
+    +Set<Annotation> getDelegateQualifiers()
+    +Set<Type> getDecoratedTypes()
+}
+
+
+@enduml
+....
+////
+
+Les métadonnées stockées dans `Bean<T>` proviennent du code utilisateur définissant le bean (type et annotations).
+Si vous jetez un coup d'œil à `BeanAttributes` dans le schéma ci-dessus, vous verrez que ses métadonnées incluent un ensemble de types (un bean a plusieurs types) et un ensemble de qualifiers (chaque bean a au moins 2 qualifiers : `@Default` et `@Any`) via les méthodes `getTypes()` et `getQualifiers()` retournant respectivement un `Set<Type>` et un `Set<Annotation>`.
+Ces 2 ensembles sont utilisés dans le mécanisme de résolution fortement typé (typesafe resolution) de CDI.
+
+=== Typesafe Resolution pour les nuls
+
+Lorsque vous utilisez `@Inject` dans votre code, vous demandez au conteneur de rechercher un certain `Bean`.
+La recherche est effectuée en utilisant les informations dans les métadonnées des beans connus par le conteneur.
+
+Cette recherche est effectuée au moment du déploiement pour vérifier si chaque point d'injection est satisfait et non ambigu, la seule exception étant le mécanisme de "programmatic lookup" (utilisation d'`Instance<T>`) qui permet de faire cette résolution à l'exécution.
+
+Lorsque le `Bean` correspondant est trouvé, le conteneur utilise sa méthode `create` pour vous fournir une instance.
+
+Ce processus, appelé https://jakarta.ee/specifications/cdi/3.0/jakarta-cdi-spec-3.0.html#typesafe_resolution[_Typesafe resolution_^] peut être simplifié comme ceci :
+
+.Une version simplifiée du processus de typesafe resolution
+image::{{'/images/typesafe-resolution.svg' | relative_url}}[image,width=100%]
+////
+[plantuml, typesafe-resolution, svg]
+....
+@startuml
+start
+:container retrieve injection point type and qualifiers;
+:container browse all its beans and retains only those
+having the type of the injection point in their types set;
+if (eligible Beans set empty?) then (yes)
+  #Red:unsatisfied dependency;
+else (no)
+  :container only retains beans having all
+  the injection point qualifiers in their qualifiers set;
+  if (eligible Beans set empty?) then (yes)
+    #Red:unsatisfied dependency;
+  else (no)
+    if (there's only one eligible bean?) then (no)
+      #Red:ambiguous dependency;
+    else (yes)
+      #Green:injection point is resolved with the last Bean;
+    endif
+  endif
+endif
+stop
+@enduml
+....
+////
+
+Le processus réel est un peu plus complexe avec l'intégration des Alternatives, mais l'idée générale reste la même.
+
+Si le conteneur parvient à résoudre le point d'injection en trouvant un et un seul bean éligible, la méthode `create()` de ce bean est utilisée pour fournir l'instance à injecter.
+
+=== Alors, quand fait-on référence au `Bean<T>`?
+
+En CDI de base, la réponse est "jamais" (ou presque).
+
+`Bean<T>` sera utilisé 90% du temps dans une portable extension pour créer un bean personnalisé ou analyser les métadonnées du bean.
+
+Depuis CDI 1.1, on peut également utiliser `Bean<T>` à l'extérieur des extensions à des fins d'introspection. On peut, en effet, injecter les métadonnées contenues de `Bean<T>`  dans un managed bean, un intercepteur ou un décorateur.
+
+Par exemple, cet intercepteur utilise les métadonnées du bean intercepté pour renseigner un logger :
+
+[source]
+----
+@Loggable
+@Interceptor
+public class LoggingInterceptor {
+
+    @Inject
+    private Logger logger;
+
+    @Inject @Intercepted //<1>
+    private Bean<?> intercepted;
+
+    @AroundInvoke
+    private Object intercept(InvocationContext ic) throws Exception {
+        logger.info(">> " + intercepted.getBeanClass().getName() + " - " + ic.getMethod().getName()); //<2>
+        try {
+            return ic.proceed();
+        } finally {
+            logger.info("<< " + intercepted.getBeanClass().getName() + " - " + ic.getMethod().getName());
+        }
+    }
+}
+----
+<1> `@Intercepted` est un  qualifier réservé pour injecter le bean intercepté dans un interceptor
+<2> ici, il est utilisé pour récupérer la classe réelle de l'instance contextuelle.
+
+== Les différents types de beans CDI
+
+Maintenant que nous avons clarifié la différence entre `Bean<T>` et les instances de bean, il est temps de lister tous les types de bean que nous avons dans CDI et leur comportement spécifique.
+
+=== Managed Beans
+
+Les managed beans sont les beans les plus courants.
+Ils sont définis via une déclaration de classe.
+
+Selon la spécification (section https://jakarta.ee/specifications/cdi/3.0/jakarta-cdi-spec-3.0.html#what_classes_are_beans[3.1.1 Which Java classes are managed beans?^]) :
+
+
+[quote, CDI specification]
+____
+Une classe Java est un managed bean si elle remplit toutes les conditions suivantes :
+
+* Ce n'est pas une classe interne non statique.
+* C'est une classe concrète ou elle est annotée `@Decorator`.
+* Elle n'implémente pas `jakarta.enterprise.inject.spi.Extension`.
+* Elle n'est pas annotée `@Vetoed` ou dans un package annoté `@Vetoed`.
+* elle a un constructeur approprié - soit :
+** un constructeur sans paramètres, ou
+** un constructeur annoté `@Inject`.
+
+Toutes les classes Java qui remplissent ces conditions sont des managed beans et aucune déclaration explicite n'est requise pour définir un managed bean.
+____
+
+Cette définition s'applique telle qu'elle si le mode de découverte des beans (bean discovery mode) est _all_.
+
+Si vous êtes dans le bean discovery mode par défaut (_annoted_), votre classe doit respecter les conditions ci-dessus et avoir au moins l'une des annotations suivantes pour devenir un managed bean CDI:
+
+* Annotations `@ApplicationScoped`, `@SessionScoped`, `@ConversationScoped` et `@RequestScoped`,
+* tous les autres types de "normal scopes",
+* les annotations `@Interceptor` et `@Decorator`,
+* toutes les annotations "stereotype" (c'est-à-dire les annotations annotées avec `@Stereotype`),
+* et l'annotation de scope `@Dependent`.
+
+Une autre limitation est liée à la notion de https://jakarta.ee/specifications/cdi/3.0/jakarta-cdi-spec-3.0.html#client_proxies[_client proxies_^].
+Dans de nombreuses occasions (utilisation d'intercepteur ou de décorateur, passivation, utilisation d'un normal scope, potentielle référence circulaire), le conteneur peut avoir besoin de fournir une instance contextuelle enveloppée dans un proxy.
+Pour cette raison, les classes de managed beans doivent être "proxyfiables" ou le conteneur lèvera une exception.
+
+Ainsi, en plus des règles ci-dessus, la spécification restreint également les classes de managed beans si les beans doivent prendre en charge certains services ou être dans des "normal scopes".
+
+Vous devez, donc, vous assurez que votre classe répond aux limitations suivantes lui permettant d'être enveloppée dans un proxy :
+
+* elle doit avoir un constructeur non privé avec des paramètres,
+* elle ne doit pas être finale,
+* elle ne doit pas avoir de méthodes finales non statiques.
+
+==== Les types d'un managed bean
+
+L'ensemble des types (utilisé lors du processus de "typesafe resolution") d'un managed bean  contient :
+
+* la classe du bean,
+* chaque superclasse (y compris `Object`),
+* toutes les interfaces que la classe implémente directement ou indirectement.
+
+Gardez à l'esprit que l'annotation `@Typed` peut restreindre cet ensemble.
+Lorsqu'elle est utilisée, seuls les types dont les classes sont explicitement listées, avec `Object`, sont des types du bean.
+
+=== Les Session Beans
+
+Les sessions beans CDI sont des EJB à la mode CDI.
+Si vous définissez un session bean avec une vue client EJB 3.x dans une archive de bean sans l'annotation `@Vetoed` dessus (ou sur son paquet), vous aurez un session bean CDI au moment de l'exécution.
+
+Les EJB locaux stateless, singleton ou stateful sont automatiquement traités comme des session beans CDI : ils prennent en charge l'injection, les scopes CDI, l'interception, la décoration et tous les autres services CDI.
+Les EJB et MDB distants ne peuvent pas être utilisés comme beans CDI.
+
+Notez la restriction suivante concernant les scopes EJB et CDI:
+
+* Les session beans stateless doivent avoir le scope `@Dependent`,
+* Les session beans singleton peuvent avoir les scopes `@Dependent` ou `@ApplicationScoped`,
+* Les session beans stateful peuvent avoir n'importe quelle scope.
+
+Lorsque vous utilisez des EJB dans CDI, vous disposez des fonctionnalités des deux spécifications.
+Vous pouvez par exemple avoir un comportement asynchrone et des fonctionnalités d'événements CDI dans un bean.
+
+Mais gardez à l'esprit que l'implémentation CDI ne "pirate" pas le conteneur EJB, elle l'utilise uniquement comme le ferait n'importe quel client EJB.
+
+Ainsi, si vous n'utilisez pas `@Inject` mais `@EJB` pour injecter un session bean, vous obtiendrez un EJB simple dans votre point d'injection et non un session bean CDI.
+
+==== Les types d'un session bean CDI
+
+L'ensemble des types (utilisé lors du processus de "typesafe resolution") d'un session bean CDI dépend de sa définition :
+
+Si le session bean a des interfaces locales, il contient :
+
+* toutes les interfaces locales du bean,
+* toutes les super interfaces de ces interfaces locales, et
+* La classe `Objet`.
+
+
+Si le session bean a une vue sans interface, il contient :
+
+* la classe de bean, et
+* chaque superclasse (y compris `Object`).
+
+L'ensemble peut également être restreint avec `@Typed`.
+
+==== Exemples
+
+[source]
+----
+@ConversationScoped
+@Stateful
+public class ShoppingCart { ... } //<1>
+
+@Stateless
+@Named("loginAction")
+public class LoginActionImpl implements LoginAction { ... } //<2>
+
+
+@ApplicationScoped
+@Singleton //<3>
+@Startup //<4>
+public class bootBean {
+ @Inject
+ MyBean bean;
+}
+
+----
+<1> Un bean stateful (sans interface view) avec le scope `@ConversationScoped`. Il a `ShoppingCart` et `Object` comme types de bean.
+<2> Un bean stateless avec le scope `@Dependent` et une vue. Il peut être utilisé en EL avec le nom `loginAction`. Il a `LoginAction` comme type de bean.
+<3> C'est un `jakarta.ejb.Singleton` définissant un session bean singleton.
+<4> L'EJB sera instancié au démarrage déclenchant l'instanciation du bean CDI `MyBean`.
+
+=== Les Producers
+
+Les producers permettent de transformer un pojo standard en bean CDI.
+
+Un producer ne peut être déclaré que dans un bean existant par le biais d'un champ ou d'une méthode.
+
+En ajoutant l'annotation `@Produces` à un champ ou à une méthode non vide, vous déclarez un nouveau producteur et donc, un nouveau Bean.
+
+Le champ ou la méthode définissant un producer peut avoir n'importe quel modificateur ou même être statique.
+
+Les producers se comportent comme un managed bean standard :
+
+* ils ont des qualifiers,
+* ils ont un scope,
+* ils peuvent injecter d'autres beans : les paramètres de la méthode du producer sont des points d'injection que le conteneur satisfera lorsqu'il appellera la méthode pour produire une instance contextuelle. Ces points d'injection sont toujours vérifiés au moment du déploiement.
+
+Avant CDI 2.0, les producers étaient limités par rapport aux managed beans, car ils ne pouvaient pas être interceptés.
+Dans CDI 2.0, nous avons introduit l'https://jakarta.ee/specifications/cdi/3.0/jakarta-cdi-spec-3.0.html#interception_factory[interface `InterceptionFactory`^] pour permettre l'interception des instances des producers.
+
+Si votre producer (champ ou méthode) peut prendre la valeur nulle, vous devez lui donner le scope `@Dependent`.
+
+Vous vous souvenez de l'interface `Bean<T>` que nous avons évoqué plus haut ?
+Vous pouvez voir une méthode producer comme un moyen pratique de définir la méthode `Bean.create()`, même si c'est un peu plus compliqué.
+
+Donc, si nous pouvons définir l'équivalent de `Bean.create()`, qu'en est-il de `Bean.destroy()` ?
+Nous pouvons également la définir avec les disposers.
+
+==== Les disposers
+
+Une caractéristique moins connue des producers est la possibilité de définir une méthode d'élimination des instances produites.
+
+Ces méthodes "disposer" permettent à l'application d'effectuer un nettoyage personnalisé d'objets renvoyé par une méthode ou un champ producer.
+
+Comme les producers, les méthodes disposers doivent être définies dans un bean CDI, peuvent avoir n'importe quel modificateur et même être statiques.
+
+Contrairement aux producers, elles doivent avoir un et un seul paramètre, appelé le paramètre disposer et annoté avec `@Disposes`.
+Lorsque le conteneur trouve la méthode ou le champ producer, il recherche la méthode disposer correspondante.
+
+Plus d'un producer peut correspondre à une méthode disposer.
+
+==== Types de bean d'un producer
+
+Cela dépend du type du producer (type du champ ou type retourné par la méthode) :
+
+* S'il s'agit d'une interface, l'ensemble des types de bean contiendra l'interface, toutes les interfaces qu'il étend (directement ou indirectement) et `Object`.
+* S'il s'agit d'un type primitif ou tableau, l'ensemble contiendra le type et `Object`.
+* S'il s'agit d'une classe, l'ensemble contiendra la classe, chaque superclasse et toutes les interfaces qu'elle implémente (directement ou indirectement).
+
+Une fois encore, `@Typed` peut restreindre les types de bean du producteur.
+
+==== Exemples
+
+[source]
+----
+
+public class ProducerBean {
+
+  @Produces
+  @ApplicationScoped
+  private List<Integer> mapInt = new ArrayList<>(); //<1>
+
+  @Produces @RequestScoped @UserDatabase
+  public EntityManager create(EntityManagerFactory emf) { // <2>
+    return emf.createEntityManager();
+  }
+
+  public void close(@Disposes @Any EntityManager em) {  // <3>
+    em.close();
+  }
+
+}
+----
+<1> Ce champ producer définit un bean avec les types de bean `List<Integer>`, `Collection<Integer>`, `Iterable<Integer>` et `Object`
+<2> Cette méthode producer définit un `EntityManager` avec le qualifier `@UserDatabase` dans `@RequestScoped` à partir d'un bean `EntityManagerFactory` produit ailleurs.
+<3> Ce disposer supprime tous les `EntityManager` produits (grâce au qualifier `@Any`)
+
+=== Les Resources
+
+Grâce aux producers, CDI permet d'exposer les ressources Jakarta EE sous forme de bean CDI.
+
+Ces ressources sont :
+
+* peristence context (`@PersistenceContext`),
+* peristence unit (`@PersistenceUnit`),
+* remote EJB (`@EJB`),
+* Web services (`@WebServiceRef`), et
+* ressource Java EE générique (`@Resource`).
+
+Pour déclarer un bean ressource, il suffit de déclarer un champ producer dans un bean CDI existant.
+
+.Déclarer des beans ressources
+[source]
+----
+@Produces
+@WebServiceRef(lookup="java:app/service/PaymentService") //<1>
+PaymentService paymentService;
+
+@Produces
+@EJB(beanname="../their.jar#PaymentService") //<2>
+PaymentService paymentService;
+
+@Produces
+@CustomerDatabase
+@PersistenceContext(unitName="CustomerDatabase") //<3>
+EntityManager customerDatabasePersistenceContext;
+
+@Produces
+@CustomerDatabase
+@PersistenceUnit(unitName="CustomerDatabase") //<4>
+EntityManagerFactory customerDatabasePersistenceUnit;
+
+@Produces
+@CustomerDatabase
+@Resource(lookup="java:global/env/jdbc/CustomerDatasource") //<5>
+Datasource customerDatabase;
+----
+<1> produire un webservice à partir de son nom JNDI
+<2> produire un remote EJB à partir de son nom de bean
+<3> produire un persistence context à partir d'une persistence unit spécifique avec le qualifier `@CustomerDatabase`
+<4> produire une persistence unit spécifique avec le qualifier `@CustomerDatabase`
+<5> produire une ressource Java EE à partir de son nom JNDI
+
+
+Bien sûr, vous pouvez exposer la ressource de manière plus complexe :
+
+.produire un `EntityManager` avec le flush mode `COMMIT`
+[source]
+----
+
+public class EntityManagerBeanProducer {
+
+  @PersistenceContext
+  private EntityManager em;
+
+  @Produces
+  EntityManager produceCommitEm() {
+    em.setFlushMode(COMMIT);
+    return em;
+  }
+}
+----
+
+Après déclaration, le bean resource peut être injecté comme n'importe quel autre bean.
+
+==== Type de bean d'une ressource
+
+Les ressources exposées en tant que bean via un producer suivent les mêmes règles de type que les producers classiques.
+
+=== Built-in beans
+
+Au-delà des beans que vous pouvez créer ou exposer, CDI fournit de nombreux beans intégrés (built-in beans) pour vous aider dans vos développements.
+
+Tout d'abord, le conteneur doit toujours fournir des beans avec le qualifier `@Default pour les interfaces suivantes :
+
+* `BeanManager` avec le scope `@Dependent` pour permettre l'injection de BeanManager dans un bean,
+* `Conversation` en `@RequestScoped` pour permettre la gestion du scope conversation.
+
+
+Pour permettre le fonctionnement des événements le conteneur doit également fournir un bean aux propriétés suivantes :
+
+* Son ensemble de types contient tous les types `Event<X>` pour chaque type Java `X` ne contenant  pas de type variable,
+* son ensemble de types de qualifier contient chaque qualifier d'événements,
+* son scope est `@Dependent`,
+* sans bean name.
+
+
+Pour le fonctionnement du programmatic lookup, le conteneur doit fournir un bean aux propriétés suivantes :
+
+* Son ensemble de type contient `Instance<X>` et `Provider<X>` pour chaque type de bean légal `X`,
+* son ensemble de types de qualifier contient chaque qualifier,
+* son scope est `@Dependent`,
+* sans bean name.
+
+Un conteneur Java EE ou EJB doit fournir les beans suivants, qui ont tous le qualifier `@Default` :
+
+* un bean de type `jakarta.transaction.UserTransaction`, permettant l'injection d'une référence de la `UserTransaction` JTA, et
+* un bean de type `java.security.Principal`, permettant l'injection d'un `Principal` représentant l'identité de l'appelant actuel.
+
+
+Un conteneur de servlet doit fournir les built-ins beans suivants, qui ont tous le qualificatif "@Default" :
+
+* un bean de type `jakarta.servlet.http.HttpServletRequest`, permettant l'injection d'une référence à la `HttpServletRequest`
+* un bean de type `jakarta.servlet.http.HttpSession`, permettant l'injection d'une référence à la `HttpSession`,
+* un bean de type `jakarta.servlet.ServletContext`, permettant l'injection d'une référence au `ServletContext`
+
+Enfin, pour permettre l'introspection de l'injection de dépendances et de l'AOP, le conteneur doit également fournir le built-in bean en scope `@Dependent` pour les interfaces suivantes lorsqu'un bean existant les injecte :
+
+* `InjectionPoint` avec le qualificateur `@Default` pour obtenir des informations sur le point d'injection d'un bean `@Dependent`,
+* `Bean<T>` avec le qualificateur `@Default` à injecter dans un Bean ayant `T` dans son ensemble de types et,
+* `Bean<T>` avec le qualificatif `@Intercepted` ou `@Decorated` à injecter dans un intercepteur ou un décorateur appliqué un bean ayant T dans son ensemble de types.
+
+Pour plus de détail sur les restrictions concernant l'injection de `Bean`, n'hésitez pas à lire la spécification sur https://jakarta.ee/specifications/cdi/3.0/jakarta-cdi-spec-3.0.html#bean_metadata[bean metadata^].
+
+=== Custom Beans
+
+CDI vous offre encore plus avec les custom beans.
+Grâce au mécanisme de portable extension, vous pouvez créer votre propre bean pour gérer plus spécifiquement l'instanciation, l'injection et à la destruction de vos instances.
+
+On peut par exemple utiliser un custom bean pour rechercher un objet dans un registre géré par un framework tiers, au lieu d'instancier l'objet.
+
+=== Conclusion
+
+Comme on vient de le voir, les coulisses de `@Inject` sont assez vastes.
+Comprendre ce qui se passe réellement derrière le mécanisme d'injection vous aidera à mieux utiliser CDI et vous donnera un point d'entrée plus clair vers les portable extensions.
