@@ -1,0 +1,629 @@
+= Hissez les voiles avec la SPI CDI
+:showtitle:
+:page-navtitle: Hissez les voiles avec la SPI CDI
+:page-excerpt: 'La spécification CDI n''est pas un document facile d''accès et la façon dont elle est rédigée ne permet pas aux développeurs de comprendre facilement les fonctionnalités en question. Cet article a pour but de mettre en lumière l''une des pépites de CDI : sa SPI. Nous aborderons l''autre trésor de la spec dans un prochain article sur les portable extensions.'
+:layout: post
+:author: antoinesd
+:page-tags: [CDI,SPI,Extension]
+:docinfo: shared-footer
+:page-vignette: legobricks.jpg
+:post-vignette: legobricks.jpg
+:page-vignette-licence: 'Source Legomania'
+:page-liquid:
+
+
+Certains développeurs se demandent pourquoi ils devraient adopter CDI et arrêter d'utiliser leur framework ou pratiques actuelles.
+La réponse à cette question est en grande partie dans les fonctionnalités CDI avancés : le mécanisme d'extension et la SPI CDI.
+
+La spécification CDI n'est pas un document facile d'accès et la façon dont elle est rédigée ne permet pas aux développeurs de comprendre facilement les fonctionnalités en question.
+Cet article a pour but de mettre en lumière l'une des pépites de CDI : sa SPI. Nous aborderons l'autre trésor de la spec dans un prochain article sur les portable extensions.
+
+
+== Qu'est-ce qu'une SPI ?
+
+La SPI CDI fournit les outils d'introspection de la spec permettant aux développeurs d'accéder à des méta-données et informations sur tous les concepts CDI (Bean, event, point d'injection, intercepteurs, etc...)
+
+La plupart des développeurs sont familiers avec le terme API (Application Programming Interface), cependant, la spécification CDI est principalement basée sur une SPI (Service Provider Interface).
+Quelle est la différence ?
+
+* Une API est la description des classes/interfaces/méthodes/... que vous appelez et utilisez pour atteindre un objectif
+* Une SPI est la description des classes/interfaces/méthodes/... que vous étendez et implémentez pour atteindre un objectif
+
+Pour faire court, CDI fournit des interfaces que vous devez implémenter (ou que l'implémentation de la spec vous fournit) pour effectuer une tâche spécifique.
+L'accès à ces implémentations se fait généralement par injection ou observation d'événements, mais il peut vous arriver d'avoir besoin de créer votre propre implémentation.
+
+Pour faciliter la compréhension de la SPI, divisons-la en 4 parties :
+
+* Points d'entrée CDI
+* Méta-modèle des types
+* Méta-modèle de CDI
+* SPI dédiée aux extensions
+
+Cette division est une approche subjective, elle ne reflète pas l'organisation des packages ou de la documentation CDI.
+
+Explorons ces différentes parties.
+
+== SPI fournissant des points d'entrée à CDI
+
+Habituellement, lorsque vous développez une application Jakarta EE ou un service MicroProfile, vous n'avez pas à vous soucier d'"entrer" dans le graphe de beans CDI.
+Le modèle de programmation CDI étant présent dans ces deux stacks, vous êtes en permanence au contact de beans.
+
+Mais parfois, vous devrez peut-être accéder à CDI à partir d'un code non CDI ou connecter du code non CDI à des beans CDI au runtime.
+Cette partie de la SPI fournit les outils pour le faire.
+
+image::{{'/images/entry-points.svg' | relative_url}}[image,width=100%]
+////
+[plantuml, "entry-points", "svg", width="100%"]
+----
+@startuml
+
+Instance <|-- CDI
+Unmanaged --> UnmanagedInstance : returns
+CDI --> BeanManager : returns
+BeanManager -() JNDI : "java:comp/BeanManager"
+
+
+interface BeanManager {
+    +Object getReference(Bean<?>, Type, CreationalContext<?> )
+    +Object getInjectableReference(InjectionPoint, CreationalContext<?> )
+    +Set<Bean<?>> getBeans(Type, Annotation[])
+    +Bean<? extends X> resolve(Set<Bean<? extends X>>)
+    +void validate(InjectionPoint)
+    +void fireEvent(Object, Annotation[])
+    .. some methods skipped ..
+    +boolean isQualifier(Class<? extends Annotation>)
+    +boolean isStereotype(Class<? extends Annotation>)
+    +boolean areQualifiersEquivalent(Annotation, Annotation)
+    +boolean areInterceptorBindingsEquivalent(Annotation, Annotation)
+    +Context getContext(Class<? extends Annotation>)
+    +ELResolver getELResolver()
+    +ExpressionFactory wrapExpressionFactory(ExpressionFactory)
+    +AnnotatedType<T> createAnnotatedType(Class<T>)
+    +InjectionTarget<T> createInjectionTarget(AnnotatedType<T>)
+    +InjectionTargetFactory<T> getInjectionTargetFactory(AnnotatedType<T>)
+    +BeanAttributes<T> createBeanAttributes(AnnotatedType<T>)
+    +Bean<T> createBean(BeanAttributes<T>, Class<X>, ProducerFactory<X>)
+    +InjectionPoint createInjectionPoint(AnnotatedField<?>)
+}
+
+
+class Unmanaged<T> {
+    +Unmanaged(BeanManager, Class<T>)
+    +Unmanaged(Class<T>)
+    +UnmanagedInstance<T> newInstance()
+}
+
+
+class UnmanagedInstance<T> {
+    +T get()
+    +UnmanagedInstance<T> produce()
+    +UnmanagedInstance<T> inject()
+    +UnmanagedInstance<T> postConstruct()
+    +UnmanagedInstance<T> preDestroy()
+    +UnmanagedInstance<T> dispose()
+}
+
+
+
+
+interface Instance<T> {
+    +Instance<T> select(Annotation[])
+    +Instance<V extends T> select(Class<V>, Annotation[])
+    +Instance<V extends T> select(TypeLiteral<V>, Annotation[])
+    +boolean isUnsatisfied()
+    +boolean isAmbiguous()
+    +void destroy(T)
+}
+
+class CDI<T> {
+    {static} +CDI<Object> current()
+    {abstract} +BeanManager getBeanManager()
+}
+
+@enduml
+----
+////
+
+=== Les interfaces `CDI` et `BeanManager`
+
+Le `BeanManager` est une interface centrale dans le SPI CDI. Il donne accès à toutes les métadonnées et composants instanciés de votre application et permet d'en créer de nouveaux.
+
+N'hésitez pas à jeter un œil à sa https://jakarta.ee/specifications/cdi/3.0/jakarta-cdi-spec-3.0.html#beanmanager[section dans spec^] pour avoir un aperçu complet de toutes les fonctionnalités qu'il contient.
+
+Le principal besoin des développeurs accédant à CDI à partir de code non CDI est d'obtenir une instance contextuelle de bean et ainsi entrer dans le graphe de beans CDI.
+
+Dans CDI 1.0, la seule solution disponible pour entrer dans ce graphe, était de récupérer le `BeanManager` via JNDI, puis de l'utiliser pour obtenir une instance de bean via un code un peu verbeux.
+
+Depuis CDI 1.1, on dispose de la classe abstraite `CDI` qui utilise le mécanisme Service Loader de Java pour récupérer une classe `CDI` concrète à partir de l'implémentation.
+
+[source]
+----
+CDI<Object> cdi = CDI.current();
+----
+
+La classe `CDI` donne un accès direct au BeanManager avec la méthode `CDI.getBeanManager()`, mais plus intéressant, elle fournit un moyen d'obtenir une instance contextuelle très simplement.
+
+Comme `CDI` étend `Instance<Object>`, il fournit naturellement une résolution d'instance contextuelle via le mécanisme de https://jakarta.ee/specifications/cdi/3.0/jakarta-cdi-spec-3.0.html#programmatic_lookup[programmatic lookup^].
+
+En résumé, La classe `CDI` dans votre code non CDI fournit un service identique à avoir l'injection suivante dans du code CDI.
+
+[source]
+----
+@Inject @Any Instance<Object> cdi;
+----
+
+Récupérer une instance devient simple comme bonjour :
+
+[source]
+----
+CDI<Object> cdi = CDI.current();
+MyService service = cdi.select(MyService.class).get();
+----
+
+=== La classe `Unmanaged`
+
+CDI 1.1 a introduit une autre fonctionnalité intéressante pour vous aider à intégrer CDI dans du code non CDI.
+La classe `Unmanaged` vous permet d'appliquer une opération CDI à une classe non CDI.
+
+Avec lui, vous pouvez appeler des callbacks de cycle de vie (`@Postconstruct` et `@Predestroy`) et effectuer une injection dans l'instance de votre classe non managée.
+Les développeurs de framework tiers peuvent ensuite fournir leur classe non CDI incluant éventuellement des points d'injection (rappelez-vous que `@Inject` ne fait pas partie de la spécification CDI, mais de la spécification Dependency Injection for Java (JSR 330)) et `Unmanaged` peut être utilisé pour obtenir des instances de cette classe.
+
+Par exemple, considérez cette classe incluse dans une archive non CDI.
+
+[source]
+----
+public class NonCDI {
+
+  @Inject
+  SomeClass someInstance;
+
+  @PostConstruct
+  public void init()  {
+  ...
+  }
+
+  @Predestroy
+  public void cleanUp() {
+  ...
+  }
+}
+----
+
+Vous pouvez obtenir une instance de cette classe avec un point d'injection satisfait avec ce code :
+
+[source]
+----
+Unmanaged<NonCDI> unmanaged = new Unmanaged(NonCDI.class);
+UnmanagedInstance<NonCDI> inst = unmanaged.newInstance();
+NonCDI nonCdi = inst.produce().inject().postConstruct().get();
+----
+
+Un futur article sur les instances non contextuelles reviendra sur ces aspects.
+
+== La SPI du méta-modèle de type
+
+Comme toute la configuration dans CDI est basée sur des annotations, la spec fournit un méta-modèle mutable pour créer ou modifier une configuration existante.
+
+Dans un autre monde, nous aurions pu compter sur le JDK pour la représentation et la réflexion des types, mais comme les APIs du JDK concernant la réflexion sont en lecture seule, CDI a dû créer son propre modèle "mutable" de types.
+
+image::{{'/images/type-meta.svg' | relative_url}}[image,width=100%]
+////
+[plantuml, "type-meta", "svg", width="100%"]
+----
+@startuml
+
+Annotated <|-- AnnotatedParameter
+Annotated <|-- AnnotatedMember
+Annotated <|-right- AnnotatedType
+AnnotatedMember <|-- AnnotatedCallable
+AnnotatedMember <|-- AnnotatedField
+AnnotatedCallable <|-- AnnotatedConstructor
+AnnotatedCallable <|-- AnnotatedMethod
+
+interface Annotated {
+    +Type getBaseType()
+    +Set<Type> getTypeClosure()
+    +<T extends Annotation> getAnnotation(Class<T>)
+    +Set<Annotation> getAnnotations()
+    +boolean isAnnotationPresent(Class<? extends Annotation>)
+}
+
+
+interface AnnotatedMember<X> {
+    +Member getJavaMember()
+    +boolean isStatic()
+    +AnnotatedType<X> getDeclaringType()
+}
+
+
+interface AnnotatedParameter<X> {
+    +int getPosition()
+    +AnnotatedCallable<X> getDeclaringCallable()
+}
+
+
+interface AnnotatedType<X> {
+    +Class<X> getJavaClass()
+    +Set<AnnotatedConstructor<X>> getConstructors()
+    +Set<AnnotatedMethod<? super X>> getMethods()
+    +Set<AnnotatedField<? super X>> getFields()
+}
+
+
+interface AnnotatedCallable<X> {
+    +List<AnnotatedParameter<X>> getParameters()
+}
+
+
+interface AnnotatedField<X> {
+    +Field getJavaMember()
+}
+
+
+interface AnnotatedConstructor<X> {
+    +Constructor<X> getJavaMember()
+}
+
+
+interface AnnotatedMethod<X> {
+    +Method getJavaMember()
+}
+
+@enduml
+----
+////
+
+L'interface `AnnotatedType` est l'élément principal de ce méta-modèle.
+Les autres interfaces sont contenues par elle. Tout ce petit monde hérite de l'interface `Annotated` qui fournit les méthodes de base pour accéder aux annotations.
+
+Définir un `AnnotatedType` vous permet de mettre toutes les annotations dont vous avez besoin sur le type, les champs, les méthodes ou les paramètres de méthode.
+
+On implémente `AnnotatedType` principalement dans les portables extensions.
+Le conteneur CDI créé aussi des objets du méta-modèle à partir des types existants dans le déploiement.
+
+Depuis la version 2.0 de la spec, on dispose d'une hiérarchie de classes pour aider à modifier plus facilement le méta-modèle découvert par le conteneur ou à créer de nouveaux éléments.
+Comme ces builders ne sont accessibles que dans les portables extensions, nous n'allons pas les détailler ici, mais dans le futur article sur les extensions.
+
+== La SPI dédiée au méta-modèle de Bean
+
+Nous avons déjà donné un bon aperçu des interfaces liées au méta-modèle Bean dans link:{% post_url 2021-01-14-cinquante-nuances-de-beans-CDI %}[l'article précédent^], donc nous n'y reviendrons pas en détail ici.
+
+image::{{'/images/bean-hierarchy.svg' | relative_url}}[image,width=100%]
+////
+[plantuml, bean-meta, svg]
+----
+@startuml
+
+Contextual <|-- Bean
+BeanAttributes <|-- Bean
+Bean <|-- Interceptor
+Bean <|-- Decorator
+
+
+interface Contextual<T> {
+    +T create(CreationalContext<T>)
+    +destroy(T, CreationalContext<T>)
+}
+
+interface BeanAttributes<T> {
+    +Set<Type> getTypes()
+    +Set<Annotation> getQualifiers()
+    +Class<? extends Annotation> getScope()
+    +String getName()
+    +Set<Class<? extends Annotation>> getStereotypes()
+    +boolean isAlternative()
+}
+
+
+interface Bean<T> {
+    +Class<?> getBeanClass()
+    +Set<InjectionPoint> getInjectionPoints()
+    +boolean isNullable()
+}
+
+
+interface Interceptor<T> {
+    +Set<Annotation> getInterceptorBindings()
+    +boolean intercepts(InterceptionType type)
+    +Object intercept(InterceptionType, T, InvocationContext)
+}
+
+interface Decorator<T> {
+    +Type getDelegateType()
+    +Set<Annotation> getDelegateQualifiers()
+    +Set<Type> getDecoratedTypes()
+}
+
+
+@enduml
+----
+////
+
+N'oubliez pas que si ce méta-modèle est principalement utilisé dans les portable extensions pour déclarer des custom beans, il peut également être utilisé pour obtenir une fonction d'introspection sur le bean, l'intercepteur, le décorateur ou le bean actuellement intercepté ou décoré.
+
+Le reste des interfaces SPI du méta-modèle CDI est ci-dessous :
+
+image::{{'/images/cdi-meta.svg' | relative_url}}[image,width=100%]
+
+////
+[plantuml, "cdi-meta", "svg", width="100%"]
+----
+@startuml
+
+Producer <|-- InjectionTarget
+ProducerFactory ..> Producer : provides
+InjectionTargetFactory ..> InjectionTarget : provides
+
+
+interface Producer<T> {
+    +T produce(CreationalContext<T>)
+    +void dispose(T)
+    +Set<InjectionPoint> getInjectionPoints()
+}
+
+interface ProducerFactory<X> {
+   +<T> Producer<T> createProducer(Bean<T>)
+}
+
+
+interface InjectionTarget<T> {
+    +void inject(T, CreationalContext<T>)
+    +void postConstruct(T)
+    +void preDestroy(T)
+}
+
+interface InjectionTargetFactory<T> {
+    +InjectionTarget<T> createInjectionTarget(Bean<T>)
+}
+
+interface ObserverMethod<T> {
+    +Class<?> getBeanClass()
+    +Type getObservedType()
+    +Set<Annotation> getObservedQualifiers()
+    +Reception getReception()
+    +TransactionPhase getTransactionPhase()
+    +void notify(T)
+}
+
+
+interface EventMetadata {
+    +Set<Annotation> getQualifiers()
+    +InjectionPoint getInjectionPoint()
+    +Type getType()
+}
+
+interface InjectionPoint {
+    +Type getType()
+    +Set<Annotation> getQualifiers()
+    +Bean<?> getBean()
+    +Member getMember()
+    +Annotated getAnnotated()
+    +boolean isDelegate()
+    +boolean isTransient()
+}
+
+@enduml
+----
+////
+
+=== `ObserverMethod` et `EventMetaData`
+
+L'interface `ObserverMethod` représente les métadonnées d'une méthode d'observation donnée et n'a aucune utilisation en dehors d'une portable extension.
+Nous l'aborderons donc également dans ce futur article sur les extensions.
+
+`EventMetadata` est aussi lié aux événements, mais à l'inverse de `ObserverMethod`, il n'est utilisé que dans le code applicatif et jamais dans une extension.
+Vous pouvez l'injecter dans votre observer pour obtenir des informations sur l'événement qui l'a déclenché.
+
+Par exemple, vous pouvez l'utiliser pour avoir une approche plus stricte de la résolution des observers.
+
+Pour rappel, la résolution des observers pour un type et un ensemble de qualifiers donnés, inclut également des observers pour toute sous-classe du type d'événement et sans aucun qualifier.
+Vous pouvez utiliser `EventMetadata` pour restreindre cette règle en vérifiant le type d'événement effectif et le qualifier comme ceci :
+
+[source]
+----
+public class MyService {
+  private void strictListen(@Observes @Qualified Payload evt, EventMetadata meta) {
+    if(meta.getQualifiers().contains(new QualifiedLiteral())
+       && meta.getType().equals(Payload.class))
+         System.out.println("Do something") <1>
+       else
+         System.out.println("ignore")
+  }
+}
+----
+<1> ce code ne sera exécuté que si le type d'événement est strictement `Payload` et ses qualifiers contiennent `@Qualified`
+
+=== `Producer`, `InjectionTarget` et leurs fabriques
+
+`Producer` et `InjectionTarget` sont aussi principalement utilisés dans les extensions.
+Mais si vous avez jeté un coup d'œil à `Unmanaged` présenté ci-dessus, vous avez peut-être vu que `InjectionTarget` peut aussi être utilisé dans du code applicatif pour effectuer certaines opérations de cycle de vie ou d'injection sur une classe non CDI.
+
+Comme `Unmanaged` ne vous permet pas d'effectuer une injection sur un objet existant, vous pouvez utiliser ce code pour le faire vous-même.
+Cela peut être utile si vous souhaitez qu'un objet fournit par un framework tiers bénéficie des services CDI.
+
+[source]
+----
+AnnotatedType<MyClass> type = beanManager.createAnnotatedType(MyClass.class);
+InjectionTarget<MyClass> injectionTarget = beanManager.getInjectionTargetFactory(MyClass.class).createInjectionTarget(null);
+CreationalContext<MyClass> ctx = beanManager.createCreationalContext(null);
+
+MyClass instance = new Myclass;
+injectionTarget.inject(instance, ctx);
+injectionTarget.postConstruct(instance);
+----
+
+=== `InjectionPoint` : les méta-données du point d'injection
+
+La cerise sur le gâteau de ce SPI est probablement `InjectionPoint`.
+Ce couteau suisse est autant utilisé en extension qu'en code applicatif.
+Mais dans ce dernier cas, vous ne pouvez l'utiliser que pour obtenir des informations sur un point d'injection requérant un bean de scope `@Dependent`.
+
+Voyons les différents usages de `InjectionPoint`.
+
+==== L'utilisation d'un qualifier pour passer un paramètre à un producer
+
+Comme `InjectionPoint` est utilisé pour obtenir des informations sur ce qui est injecté, les informations incluses dans un qualifier peuvent être utilisées pour décider quoi renvoyer dans un producer
+
+Commençons par créer un qualifier avec un membre non-binding :
+
+[source]
+----
+@Qualifier
+@Retention(RetentionPolicy.RUNTIME)
+public @interface HttpParam {
+    @Nonbinding public String value(); <1>
+}
+----
+<1> Ce qualifier intègre un membre non binding, qui nous permet de transmettre de l'information à notre producer
+
+Puis un producer pour un bean `@Dependent` qui va analyser les informations de son point d'injection.
+
+[source]
+----
+@Produces
+@HttpParam("") <1>
+@Dependent <2>
+String getParamValue(InjectionPoint ip, HttpServletRequest req) { <3>
+  return req.getParameter(ip.getAnnotated().getAnnotation(HttpParam.class).value());
+}
+----
+<1> Ce producer définit un bean ayant `String` dans son jeu de types et qualifié avec notre qualifier `@HttpParam`
+<2> N'oubliez que pour utiliser `InjectionPoint` dans votre bean, celui-ci doit avoir un scope `@Dependent`.
+<3> Ce producer injecte les méta-données `InjectionPoint` et le built-in bean `HttpServletRequest`
+
+Enfin, nous pouvons utiliser ce producer en injectant le type de bean et le qualifier correspondants, avec le paramètre dans le qualifier :
+
+[source]
+----
+@Inject
+@HttpParam("productId")
+String productId;
+----
+
+
+==== L'analyse des types demandés au point d'injection
+
+CDI fait un excellent travail pour éviter le type erasure et garantir une utilisation efficace des types paramétrés.
+
+Dans l'exemple ci-dessous, nous avons un producer pour une `Map` générique qui utilise différentes implémentations en fonction du type des paramètres de `Map` demandés au point d'injection.
+
+[source]
+----
+class MyMapProducer() {
+
+    @Produces
+    <K, V> Map<K, V> produceMap(InjectionPoint ip) {
+        if (valueIsNumber(((ParameterizedType) ip.getType()))) <1>
+            return new TreeMap<K, V>(); 
+        return new HashMap<K, V>();
+    }
+
+    boolean valueIsNumber(ParameterizedType type) { <2>
+        Class<?> valueClass = (Class<?>) type.getActualTypeArguments()[1];
+        return Number.class.isAssignableFrom(valueClass)
+    }
+}
+----
+<1> Ce code récupère le type paramétré défini au point d'injection et l'envoie à la fonction de test
+<2> Cette fonction de test vérifie le type effectif du deuxième paramètre de la `Map` et retourne vrai si ce type hérite de `Number`
+
+Avec le code ci-dessus, `@Inject Map<String,String> map` utilisera un `HashMap` sous le capot tandis que `@Inject Map<String,Integer> map` utilisera un `TreeMap`.
+Une manière élégante d'optimiser ou de modifier le comportement sans fuite dans le code métier.
+
+== Conclusion
+
+Il y a beaucoup de fonctionnalités à construire avec `InjectionPoint`, nous n'avons fait qu'effleurer le sujet via du code applicatif.
+Imaginez ce que vous pourriez faire dans une extension...
+
+
+
+== SPI dédiée aux extensions
+
+Terminons cette tournée de la SPI CDI par un cliffhanger.
+
+Les classes SPI suivantes sont entièrement dédiées au développement d'extensions.
+
+En fait, la spec définit un type d'événement pour chaque étape du cycle de vie du conteneur (principalement au démarrage) dans lequel la magie des portable extensions se produit.
+
+image::{{'/images/spi-extensions.svg' | relative_url}}[image,width=100%]
+////
+[plantuml, "spi-extensions", "svg", height="100%", width="100%"]
+----
+@startuml
+
+interface BeforeBeanDiscovery {
+    +addQualifier(Class<? extends Annotation>)
+    +addScope(Class<? extends Annotation>, boolean, boolean)
+    +addStereotype(Class<? extends Annotation>, Annotation[])
+    +addInterceptorBinding(Class<? extends Annotation>, Annotation[])
+    +addAnnotatedType(AnnotatedType<?>)
+}
+
+interface AfterTypeDiscovery {
+    +List<Class<?>> getAlternatives()
+    +List<Class<?>> getInterceptors()
+    +List<Class<?>> getDecorators()
+    +addAnnotatedType(AnnotatedType<?>, String)
+}
+
+
+interface AfterDeploymentValidation {
+}
+
+interface BeforeShutdown {
+}
+
+interface AfterBeanDiscovery {
+    +addBean(Bean<?>)
+    +addObserverMethod(ObserverMethod<?>)
+    +addContext(Context)
+    +AnnotatedType<T> getAnnotatedType(Class<T>, String)
+    +Iterable<AnnotatedType<T>> getAnnotatedTypes(Class<T>)
+}
+
+interface ProcessAnnotatedType<X> {
+    +AnnotatedType<X> getAnnotatedType()
+    +void setAnnotatedType(AnnotatedType<X>)
+    +veto()
+}
+
+interface ProcessBean<X> {
+    +Annotated getAnnotated()
+    +Bean<X> getBean()
+}
+
+interface ProcessBeanAttributes<T> {
+    +Annotated getAnnotated()
+    +BeanAttributes<T> getBeanAttributes()
+    +setBeanAttributes(BeanAttributes<T>)
+    +veto()
+}
+
+interface ProcessInjectionPoint<T, X> {
+    +InjectionPoint getInjectionPoint()
+    +setInjectionPoint(InjectionPoint)
+}
+
+interface ProcessInjectionTarget<X> {
+    +AnnotatedType<X> getAnnotatedType()
+    +InjectionTarget<X> getInjectionTarget()
+    +setInjectionTarget(InjectionTarget<X>)
+}
+
+interface ProcessObserverMethod<T, X> {
+    +AnnotatedMethod<X> getAnnotatedMethod()
+    +ObserverMethod<T> getObserverMethod()
+}
+
+
+interface ProcessProducer<T, X> {
+    +AnnotatedMember<T> getAnnotatedMember()
+    +Producer<X> getProducer()
+    +setProducer(Producer<X>)
+}
+
+@enduml
+----
+////
+
+Découvrons cette magie dans un prochain article sur les extensions.
