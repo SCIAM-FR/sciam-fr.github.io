@@ -22,12 +22,6 @@ loichermann:
   job: CTO
   picture: 'loic_hermann.jpg'
   
-cblondeau: 
-  name: 'Christophe Blondeau'
-
-kkechadi:
-  name: 'Kaci Kechadi'
-
 sberrien:
   name: 'Samuel Berrien'
   job: 'Data Scientist / Software engineer'
@@ -37,5 +31,11 @@ sberrien:
     linkedin: samuel-berrien-4b94b5172
     github: Ipsedo
 
-osans:
-  name: 'Olivier Sans'
+#osans:
+#  name: 'Olivier Sans'
+
+#cblondeau: 
+#  name: 'Christophe Blondeau'
+
+#kkechadi:
+#  name: 'Kaci Kechadi'
