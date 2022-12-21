@@ -91,7 +91,7 @@ pagination:
   <hr>
   <h2>Articles publi&eacute;s</h2>
   {% for post in paginator.posts %}
-    {% if author_username == post.author %}
+    {% if author_username == post.author or post.auteurs contains author_username  %}
       {% include postbox.html %}
       <br>
     {% endif %}

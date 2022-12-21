@@ -25,12 +25,25 @@ h2, h3, h4, h5, h6 {
   <div class="col-lg-12">
     <div class="row">
       <div class="col-lg-3">
-        <p style="margin-top:1em;">Auteur : </p>
-        {% assign author = site.data.authors[page.author] %}
-        {% if author.name %}
+
+        {% if page.auteurs.size > 1 %}
+        <p style="margin-top:1em;">Auteurs : </p>
+          {% for auteur in page.auteurs %}
+          {% assign author = site.data.authors[auteur] %}
+            {% if author.name %}
+              <a href="{{ '/author/' | append: auteur | append: '/index.html' | relative_url }}">
+              {% include author_bio.html %}
+              </a>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <p style="margin-top:1em;">Auteur : </p>
+          {% assign author = site.data.authors[page.author] %}
+          {% if author.name %}
             <a href="{{ '/author/' | append: page.author | append: '/index.html' | relative_url }}">
             {% include author_bio.html %}
             </a>
+          {% endif %}
         {% endif %}
 
         <hr>
