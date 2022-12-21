@@ -43,7 +43,7 @@ pagination:
         
           <ul class="post-list">
             <!-- 
-                Affichage de la pagne courante 
+                Affichage de la page courante 
             -->
             {% for post in paginator.posts %}
             <article class="post">
@@ -56,12 +56,34 @@ pagination:
                       <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}" style="max-width: 200px; margin-right: 20px;" />
                     </div>
                     {% endif %}    
-                    {% assign author = site.data.authors[post.author] %}
-                    <div>
-                      <div class="meta"><strong>Ecrit par <span
-                        class="authors"><a href="{{ '/author/' | append: post.author | append: '/index.html' | relative_url }}">{{ author.name }}</a></span>, le <span
-                        class="date">{{ post.date | date: "%d/%m/%Y"}}</span>
-                      </strong></div>
+
+                    <div style="display: flex;flex-direction: column;">
+                      {% if post.auteurs.size > 1 %}
+                      <div class="meta"><strong>Ecrit par 
+                        {% for auteur in post.auteurs %}
+                          {% assign author = site.data.authors[auteur] %}
+                          {% if author.name %}
+                            {% if forloop.first %}
+                            {% elsif forloop.last %}
+                            et
+                            {% else %}
+                            , 
+                            {% endif %}
+                            <span class="authors"><a href="{{ '/author/' | append: auteur | append: '/index.html' | relative_url }}">{{ author.name }}</a></span>
+                          {% endif %}
+                        {% endfor %}
+                        </strong></div>
+
+                      {% else %}
+                        {% assign author = site.data.authors[post.author] %}
+                        {% if author.name %}
+                        <div class="meta"><strong>Ecrit par 
+                          <span class="authors"><a href="{{ '/author/' | append: post.author | append: '/index.html' | relative_url }}">{{ author.name }}</a></span>
+                        </strong></div>
+                        {% endif %}
+                      {% endif %}
+
+                      <div class="meta">le <span class="date">{{ post.date | date: "%d/%m/%Y"}}</span></div>
                       <div class="content">
                         {{ post.excerpt }}
                       </div>
