@@ -1,0 +1,715 @@
+:showtitle:
+:page-navtitle: Les nouveautés de Java 19 : partie 2 
+:page-excerpt: Ce second article de la série sur les nouveautés de Java 19 détaille les fonctionnalités proposées par les JEPs du projet Loom et un nouveau portage d'OpenJDK.
+:layout: post
+:author: jmdoudoux
+:page-tags: [Java, Java 19, Projet Loom, Threads virtuels, Concurrence structurée]
+:docinfo: shared-footer
+:page-vignette: java-19.png
+:page-liquid:
+
+= Les nouveautés de Java 19 : partie 2
+
+Après le link:{% post_url 2022-12-19-nouveautes-java-19-partie1 %}[premier article^] consacré aux fonctionnalités proposées par les projets Amber et Panama, ce second article de la série sur les nouveautés de Java 19 détaille les fonctionnalités proposées par les JEPs du projet Loom et un nouveau portage d'OpenJDK.
+
+== Les fonctionnalités du projet Loom
+
+Le projet https://openjdk.org/projects/loom/[Loom] a pour but d'explorer, d'incuber et de fournir des fonctionnalités dans la JVM et des API reposant sur elles afin de prendre en charge une concurrence légère, facile à utiliser et à haut débit, ainsi que de nouveaux modèles de programmation sur la plate-forme Java.
+
+Après une longue attente et plusieurs fonctionnalités livrées en prérequis à partir de Java 13, les deux premières fonctionnalités du projet Loom sont fournies en preview et incubation :
+
+* Les threads virtuels (preview)
+* La concurrence structure (incubation)
+
+Elles devraient à terme permettre de réduire les efforts nécessaires pour écrire et maintenir des applications concurrentes à haut débit en Java.
+
+=== JEP 425 : Virtual Threads (Preview)
+
+Historiquement, chaque thread d'une application Java est directement mappé à un thread du système d'exploitation (thread de l'OS). Cela décharge la JVM de se préoccuper de tâches réalisées par le système d’exploitation telles que l'ordonnancement et le changement de contexte des threads.
+
+Ce modèle n’est pas optimal car un thread de la plateforme est coûteux en ressources, notamment, à cause de la taille fixe de sa pile. Cela limite le nombre de threads qui peuvent être utilisés dans une même JVM. Or, pour exploiter la puissance, de plus en plus de threads sont utilisés, généralement pour passer une large partie de leur temps à attendre la fin de l’exécution d’une opération bloquante.
+
+La https://openjdk.org/jeps/425[JEP 425] propose d’introduire un nouveau type de threads : des threads virtuels qui sont des threads « légers » gérés par la JVM, non lié à un thread de l'OS, mais auquel il peut avoir recours ponctuellement, lorsque ses traitements requièrent de la CPU.
+
+Elle a plusieurs objectifs :
+
+* Conserver le style "thread par requête" avec une meilleure utilisation des ressources requises
+* Assurer une adoption par le code existant qui utilise l'API `java.lang.Thread` avec un impact minimum
+* Permettre le débogage, le profilage et le dépannage des threads virtuels avec les outils existants du JDK
+
+Les threads virtuels permettent d’exécuter du code qui ne bloque pas les threads du système d'exploitation en attendant des verrous, des structures de données bloquantes ou des réponses du système de fichiers ou de services externes.
+
+Les threads virtuels se comportent comme des threads conventionnels dans le code Java, mais ils ne sont pas mappés 1:1 aux threads de la plateforme : le mapping est m:n. Lorsqu'un thread virtuel exécute une action bloquante dans les API du JDK, la JVM enregistre la pile dans le heap et exécute l’action en non bloquant. Le thread porteur peut alors être utilisé pour exécuter un autre thread virtuel. Une fois l’action non bloquante terminée, l’exécution des traitements du thread virtuel est reprise sur un thread porteur potentiellement différent. Ainsi, les actions bloquantes ne bloquent pas le thread porteur ce qui permet de traiter un grand nombre de tâches en parallèle avec un petit pool de threads porteurs. Ce mécanisme est géré en interne par les API du JDK en utilisant des objets de type `jdk.internal.vm.Continuation` et `ContinuationScope` et est transparent pour le développeur.
+
+Pour faciliter la mise en œuvre et l’utilisation, un thread virtuel est encapsulé dans la classe package-private `final java.lang.VirtualThread` qui hérite de `java.lang.Thread`. Les threads virtuels sont donc des threads avec quelques petites restrictions.
+
+Comme il n’y a pas de constructeur `public`, plusieurs fonctionnalités permettent d’obtenir une instance d’un thread virtuel.
+
+Le plus simple est d’utiliser `Thread.startVirtualThread()` pour démarrer un nouveau thread virtuel qui exécute le code du `Runnable` passé en paramètre.
+
+[source,java]
+----
+public class TestVirtualThread {
+
+  public static void main(String[] args) throws InterruptedException {
+    Thread t  = Thread.startVirtualThread(() -> {
+                  System.out.println("Thread : " + Thread.currentThread());
+              });
+    Thread.sleep(10000);
+  }
+}
+----
+
+Le résultat de l’exécution affiche :
+
+[source, console]
+----
+Thread : VirtualThread[#28]/runnable@ForkJoinPool-1-worker-1
+----
+
+L’interface scellée `Thread.Buidler` propose deux interfaces filles `Thread.Builder.OfVirtual` et `Thread.Builder.OfPlatform` pour configurer et obtenir une instance respectivement pour un thread virtuel et un thread de la plateforme.
+
+La fabrique `Thread::ofVirtual` permet d’obtenir une instance de type `Thread.Builder.OfVirtual`.
+
+La fabrique `Thread::ofPlatform` permet d’obtenir une instance de type `Thread.Builder.OfPlatform`.
+
+Plusieurs méthodes permettent de configurer le thread.
+
+La méthode `start()` de `Thread.Builder` permet de démarrer le thread configuré qui va exécuter le Runnable passé en paramètre.
+
+La méthode `unstart()` retourne simplement l’instance de `Thread` configurée qui devra être démarrée ultérieurement.
+
+[source,java]
+----
+    var threadVirtuel = Thread.ofVirtual().name("app-thread-virtuel-", 0).start(() -> {
+      System.out.println(Thread.currentThread());
+    });
+    threadVirtuel.join();
+----
+
+Le résultat de l’exécution affiche :
+
+[source, console]
+----
+VirtualThread[#21,app-thread-virtuel-0]/runnable@ForkJoinPool-1-worker-1
+----
+
+Il est aussi possible d’utiliser un `ExecutorService` qui maintenant implémente l’interface `AutoCloseable`. L’invocation de la fabrique `Executors.newVirtualThreadPerTaskExecutor()` permet d’obtenir une instance qui va utiliser des threads virtuels. Cette instance va créer un nouveau thread virtuel dédié pour chaque tâche soumise via la méthode `submit()`.
+
+[source,java]
+----
+    try (ExecutorService es = Executors.newVirtualThreadPerTaskExecutor()) {
+        es.submit(() -> System.out.println(Thread.currentThread()));
+        es.submit(() -> System.out.println(Thread.currentThread()));
+        es.submit(() -> System.out.println(Thread.currentThread()));
+    }
+----
+
+Le résultat de l’exécution affiche :
+
+[source, console]
+----
+VirtualThread[#21]/runnable@ForkJoinPool-1-worker-1
+VirtualThread[#23]/runnable@ForkJoinPool-1-worker-1
+VirtualThread[#24]/runnable@ForkJoinPool-1-worker-1
+----
+
+La JVM utilise un `ForkJoinPool` dédié qui fournit les threads porteurs (carrier threads). Ainsi un thread virtuel peut être exécuté sur différents threads du pool au cours de sa durée de vie. L'ordonnanceur ne maintient pas d'affinité entre un thread virtuel et un thread de la plate-forme sauf dans des cas particuliers.
+
+Dans la JVM HotSpot, deux propriétés systèmes permettent de configurer le scheduler des threads virtuels :
+
+* `jdk.virtualThreadScheduler.parallelism` : le nombre de threads de la plateforme disponibles pour le scheduler des threads virtuels. Par défaut, c’est le nombre de processeurs disponibles.
+
+* `jdk.virtualThreadScheduler.maxPoolSize` : le nombre maximum de threads de la plateforme utilisable par le scheduler. La valeur par défaut est 256.
+
+[source,java]
+----
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class TestVirtualThread {
+
+  public static void main(String[] args) throws InterruptedException {
+    var ai = new AtomicInteger();
+    
+    for (int j = 0; j < 6; j++) {
+      
+      Thread t  = Thread.startVirtualThread(() -> {
+                for (int i = 0; i < 10; i++) {
+                  System.out.println("Thread : " + Thread.currentThread());
+                  ai.incrementAndGet();
+                  try {
+                    Thread.sleep(1000);
+                  } catch (InterruptedException e) {
+                    e.printStackTrace();
+                  }
+                }
+              });
+    }
+    Thread.sleep(10000);
+  }
+}
+----
+
+Le résultat de l’exécution affiche :
+
+[source, console]
+----
+Thread : VirtualThread[#23]/runnable@ForkJoinPool-1-worker-2
+Thread : VirtualThread[#21]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#24]/runnable@ForkJoinPool-1-worker-3
+Thread : VirtualThread[#25]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#26]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#27]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#23]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#24]/runnable@ForkJoinPool-1-worker-3
+Thread : VirtualThread[#21]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#25]/runnable@ForkJoinPool-1-worker-3
+Thread : VirtualThread[#26]/runnable@ForkJoinPool-1-worker-2
+Thread : VirtualThread[#27]/runnable@ForkJoinPool-1-worker-3
+Thread : VirtualThread[#23]/runnable@ForkJoinPool-1-worker-3
+Thread : VirtualThread[#24]/runnable@ForkJoinPool-1-worker-2
+Thread : VirtualThread[#25]/runnable@ForkJoinPool-1-worker-3
+Thread : VirtualThread[#21]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#26]/runnable@ForkJoinPool-1-worker-4
+Thread : VirtualThread[#27]/runnable@ForkJoinPool-1-worker-2
+Thread : VirtualThread[#23]/runnable@ForkJoinPool-1-worker-2
+Thread : VirtualThread[#25]/runnable@ForkJoinPool-1-worker-4
+Thread : VirtualThread[#24]/runnable@ForkJoinPool-1-worker-3
+Thread : VirtualThread[#21]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#27]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#26]/runnable@ForkJoinPool-1-worker-2
+Thread : VirtualThread[#23]/runnable@ForkJoinPool-1-worker-4
+Thread : VirtualThread[#24]/runnable@ForkJoinPool-1-worker-2
+Thread : VirtualThread[#21]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#25]/runnable@ForkJoinPool-1-worker-3
+Thread : VirtualThread[#27]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#26]/runnable@ForkJoinPool-1-worker-3
+Thread : VirtualThread[#24]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#21]/runnable@ForkJoinPool-1-worker-2
+Thread : VirtualThread[#23]/runnable@ForkJoinPool-1-worker-3
+Thread : VirtualThread[#25]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#27]/runnable@ForkJoinPool-1-worker-4
+Thread : VirtualThread[#26]/runnable@ForkJoinPool-1-worker-4
+Thread : VirtualThread[#24]/runnable@ForkJoinPool-1-worker-4
+Thread : VirtualThread[#21]/runnable@ForkJoinPool-1-worker-3
+Thread : VirtualThread[#23]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#25]/runnable@ForkJoinPool-1-worker-4
+Thread : VirtualThread[#27]/runnable@ForkJoinPool-1-worker-4
+Thread : VirtualThread[#26]/runnable@ForkJoinPool-1-worker-4
+Thread : VirtualThread[#24]/runnable@ForkJoinPool-1-worker-4
+Thread : VirtualThread[#21]/runnable@ForkJoinPool-1-worker-3
+Thread : VirtualThread[#25]/runnable@ForkJoinPool-1-worker-4
+Thread : VirtualThread[#23]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#27]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#26]/runnable@ForkJoinPool-1-worker-3
+Thread : VirtualThread[#24]/runnable@ForkJoinPool-1-worker-3
+Thread : VirtualThread[#21]/runnable@ForkJoinPool-1-worker-2
+Thread : VirtualThread[#25]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#23]/runnable@ForkJoinPool-1-worker-4
+Thread : VirtualThread[#27]/runnable@ForkJoinPool-1-worker-4
+Thread : VirtualThread[#26]/runnable@ForkJoinPool-1-worker-4
+Thread : VirtualThread[#24]/runnable@ForkJoinPool-1-worker-4
+Thread : VirtualThread[#25]/runnable@ForkJoinPool-1-worker-3
+Thread : VirtualThread[#21]/runnable@ForkJoinPool-1-worker-2
+Thread : VirtualThread[#23]/runnable@ForkJoinPool-1-worker-1
+Thread : VirtualThread[#27]/runnable@ForkJoinPool-1-worker-2
+Thread : VirtualThread[#26]/runnable@ForkJoinPool-1-worker-3
+----
+
+Il ne faut pas mettre les threads virtuels dans un pool : vu leur faible coût de création, cela n’est pas utile.
+
+Plusieurs restrictions s’appliquent sur les threads virtuels :
+
+* Ils sont obligatoirement des threads démons.
+* La priorité est obligatoirement `Thread.NORM_PRIORITY`.
+* Les méthodes `stop()`, `resume()`, `suspend()` lèvent une `UnsupportedOperationException`.
+* Ils ne peuvent pas être associés à un `ThreadGroup`.
+* La méthode `getThreadGroup()` renvoie un groupe "VirtualThreads" fictif qui est vide.
+* La méthode `getAllStackTraces()` renvoie désormais une Map qui ne contient que les threads de la plate-forme plutôt que tous les threads.
+
+[source,java]
+----
+public class TestVirtualThread {
+
+  public static void main(String[] args) throws InterruptedException {
+
+    var threadVirtuel = Thread.ofVirtual().name("app-thread-virtuel-", 0).start(() -> {
+      try {
+        Thread.sleep(10000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    });
+    
+    System.out.println("isVirtual   : "+threadVirtuel.isVirtual());
+    System.out.println("priority    : "+threadVirtuel.getPriority());
+    System.out.println("isDeamon    : "+threadVirtuel.isDaemon());
+    System.out.println("threadgroup : "+threadVirtuel.getThreadGroup());
+    
+    try {
+      threadVirtuel.stop();
+    } catch (UnsupportedOperationException uoe) {
+      uoe.printStackTrace();
+    }
+    
+    threadVirtuel.join();
+  }
+}
+----
+
+Le résultat de l’exécution affiche :
+
+[source, console]
+----
+isVirtual   : true
+priority    : 5
+isDeamon    : true
+threadgroup : java.lang.ThreadGroup[name=VirtualThreads,maxpri=10]
+java.lang.UnsupportedOperationException
+	at java.base/java.lang.Thread.stop(Thread.java:1708)
+	at TestVirtualThread.main(TestVirtualThread.java:20)
+----
+
+Les threads virtuels peuvent améliorer le débit des applications lorsque le nombre de tâches simultanées est important et que les tâches ne requièrent pas de manière intensive la CPU.
+
+Plusieurs scénarios bloquants laissent le thread virtuel associé à son thread porteur :
+
+* L’exécution d’un bloc de code `synchronized` : il est préférable d’utiliser si possible un `java.util.concurrent.locks.ReentrantLock`
+* Lors de l’exécution d’une méthode native
+
+Plusieurs outils peuvent être utilisés pour détecter ces cas à l’exécution.
+
+Exemple :
+
+[source,java]
+----
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class TestVirtualThread {
+
+  public static void main(String[] args) throws InterruptedException {
+
+    Runnable traitements = () -> {
+      Object moniteur = new Object();
+      try {
+          System.out.println("debut " + Thread.currentThread());
+          Thread.sleep(1000);
+          System.out.println("fin " + Thread.currentThread());
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    };
+
+    try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+      Future[] future = new Future[10];
+      for (int i = 0; i < future.length; i++) {
+        future[i] = executor.submit(traitements);
+      }
+      for (int i = 0; i < future.length; i++) {
+        future[i].get();
+      }
+    } catch (ExecutionException | InterruptedException e) {
+      e.printStackTrace();
+    }
+
+  }
+}
+----
+
+Le résultat de l’exécution affiche :
+
+[source, console]
+----
+debut VirtualThread[#21]/runnable@ForkJoinPool-1-worker-1
+debut VirtualThread[#23]/runnable@ForkJoinPool-1-worker-2
+debut VirtualThread[#24]/runnable@ForkJoinPool-1-worker-2
+debut VirtualThread[#26]/runnable@ForkJoinPool-1-worker-1
+debut VirtualThread[#27]/runnable@ForkJoinPool-1-worker-1
+debut VirtualThread[#28]/runnable@ForkJoinPool-1-worker-1
+debut VirtualThread[#29]/runnable@ForkJoinPool-1-worker-1
+debut VirtualThread[#25]/runnable@ForkJoinPool-1-worker-2
+debut VirtualThread[#30]/runnable@ForkJoinPool-1-worker-2
+debut VirtualThread[#31]/runnable@ForkJoinPool-1-worker-1
+fin VirtualThread[#21]/runnable@ForkJoinPool-1-worker-3
+fin VirtualThread[#23]/runnable@ForkJoinPool-1-worker-4
+fin VirtualThread[#24]/runnable@ForkJoinPool-1-worker-3
+fin VirtualThread[#26]/runnable@ForkJoinPool-1-worker-1
+fin VirtualThread[#27]/runnable@ForkJoinPool-1-worker-3
+fin VirtualThread[#28]/runnable@ForkJoinPool-1-worker-1
+fin VirtualThread[#29]/runnable@ForkJoinPool-1-worker-3
+fin VirtualThread[#25]/runnable@ForkJoinPool-1-worker-1
+fin VirtualThread[#30]/runnable@ForkJoinPool-1-worker-3
+fin VirtualThread[#31]/runnable@ForkJoinPool-1-worker-1
+----
+
+Le même exemple avec des traitements exécutés dans un bloc de code `synchronized`.
+
+[source,java]
+----
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class TestVirtualThread {
+
+  public static void main(String[] args) throws InterruptedException {
+
+    Runnable traitements = () -> {
+      Object moniteur = new Object();
+      try {
+        synchronized (moniteur) {
+          System.out.println("debut " + Thread.currentThread());
+          Thread.sleep(1000);
+          System.out.println("fin " + Thread.currentThread());
+        }
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    };
+
+    try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+      Future[] future = new Future[10];
+      for (int i = 0; i < future.length; i++) {
+        future[i] = executor.submit(traitements);
+      }
+      for (int i = 0; i < future.length; i++) {
+        future[i].get();
+      }
+    } catch (ExecutionException | InterruptedException e) {
+      e.printStackTrace();
+    }
+
+  }
+}
+----
+
+Le résultat de l’exécution affiche :
+
+[source, console]
+----
+debut VirtualThread[#23]/runnable@ForkJoinPool-1-worker-2
+debut VirtualThread[#21]/runnable@ForkJoinPool-1-worker-1
+debut VirtualThread[#24]/runnable@ForkJoinPool-1-worker-3
+debut VirtualThread[#25]/runnable@ForkJoinPool-1-worker-4
+fin VirtualThread[#24]/runnable@ForkJoinPool-1-worker-3
+fin VirtualThread[#23]/runnable@ForkJoinPool-1-worker-2
+fin VirtualThread[#21]/runnable@ForkJoinPool-1-worker-1
+debut VirtualThread[#26]/runnable@ForkJoinPool-1-worker-2
+debut VirtualThread[#27]/runnable@ForkJoinPool-1-worker-3
+debut VirtualThread[#28]/runnable@ForkJoinPool-1-worker-1
+fin VirtualThread[#25]/runnable@ForkJoinPool-1-worker-4
+debut VirtualThread[#29]/runnable@ForkJoinPool-1-worker-4
+fin VirtualThread[#28]/runnable@ForkJoinPool-1-worker-1
+fin VirtualThread[#27]/runnable@ForkJoinPool-1-worker-3
+debut VirtualThread[#30]/runnable@ForkJoinPool-1-worker-1
+fin VirtualThread[#26]/runnable@ForkJoinPool-1-worker-2
+debut VirtualThread[#31]/runnable@ForkJoinPool-1-worker-3
+fin VirtualThread[#29]/runnable@ForkJoinPool-1-worker-4
+fin VirtualThread[#31]/runnable@ForkJoinPool-1-worker-3
+fin VirtualThread[#30]/runnable@ForkJoinPool-1-worker-1
+----
+
+Du fait de l’utilisation de la synchronisation, les threads virtuels restent associés à leur thread porteur et les bloquent lorsque les traitements exécutés sont bloquants. Cela fait perdre l’intérêt des threads virtuels.
+
+La JVM offre des fonctionnalités pour identifier les threads bloqués et épinglés sur leur thread porteur en utilisant la propriété système `jdk.tracePinnedThreads`.
+
+[source,java]
+----
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+
+public class TestVirtualThread {
+
+  public static void main(String[] args) throws InterruptedException {
+
+    Runnable traitements = () -> {
+      Object moniteur = new Object();
+      try {
+        synchronized (moniteur) {
+          System.out.println("debut " + Thread.currentThread());
+          Thread.sleep(1000);
+          System.out.println("fin " + Thread.currentThread());
+        }
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    };
+
+    try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+      var future = executor.submit(traitements);
+      future.get();
+    } catch (ExecutionException | InterruptedException e) {
+      e.printStackTrace();
+    }
+  }
+}
+----
+
+Le résultat de l’exécution affiche :
+
+[source, console]
+----
+debut VirtualThread[#21]/runnable@ForkJoinPool-1-worker-1
+fin VirtualThread[#21]/runnable@ForkJoinPool-1-worker-1
+----
+
+L’exécution avec l’option `-Djdk.tracePinnedThreads=full` affiche dans la console une trace complète de la pile lorsqu'un thread se bloque alors qu'il est épinglé à son thread porteur, avec les trames natives et les trames retenant les moniteurs mises en évidence.
+
+[source, console]
+----
+debut VirtualThread[#21]/runnable@ForkJoinPool-1-worker-1
+Thread[#22,ForkJoinPool-1-worker-1,5,CarrierThreads]
+    java.base/java.lang.VirtualThread$VThreadContinuation.onPinned(VirtualThread.java:180)
+    java.base/jdk.internal.vm.Continuation.onPinned0(Continuation.java:398)
+    java.base/jdk.internal.vm.Continuation.yield0(Continuation.java:390)
+    java.base/jdk.internal.vm.Continuation.yield(Continuation.java:357)
+    java.base/java.lang.VirtualThread.yieldContinuation(VirtualThread.java:370)
+    java.base/java.lang.VirtualThread.parkNanos(VirtualThread.java:532)
+    java.base/java.lang.VirtualThread.doSleepNanos(VirtualThread.java:713)
+    java.base/java.lang.VirtualThread.sleepNanos(VirtualThread.java:686)
+    java.base/java.lang.Thread.sleep(Thread.java:451)
+    TestVirtualThread.lambda$0(TestVirtualThread.java:14) <== monitors:1
+    java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:577)
+    java.base/java.util.concurrent.ThreadPerTaskExecutor$ThreadBoundFuture.run(ThreadPerTaskExecutor.java:352)
+    java.base/java.lang.VirtualThread.run(VirtualThread.java:287)
+    java.base/java.lang.VirtualThread$VThreadContinuation.lambda$new$0(VirtualThread.java:174)
+    java.base/jdk.internal.vm.Continuation.enter0(Continuation.java:327)
+    java.base/jdk.internal.vm.Continuation.enter(Continuation.java:320)
+fin VirtualThread[#21]/runnable@ForkJoinPool-1-worker-1
+----
+
+L’exécution avec l’option `-Djdk.tracePinnedThreads=short` limite la sortie aux trames problématiques.
+
+[source, console]
+----
+debut VirtualThread[#21]/runnable@ForkJoinPool-1-worker-1
+Thread[#22,ForkJoinPool-1-worker-1,5,CarrierThreads]
+    TestVirtualThread.lambda$0(TestVirtualThread.java:15) <== monitors:1
+fin VirtualThread[#21]/runnable@ForkJoinPool-1-worker-1
+----
+
+Plusieurs événements relatifs aux threads virtuels sont ajoutés dans JFR :
+
+* `jdk.VirtualThreadStart` et `jdk.VirtualThreadEnd` indiquent le début et la fin d’un thread virtuel. Ces événements sont désactivés par défaut.
+* `jdk.VirtualThreadPinned` indique qu'un thread virtuel ne libère pas son thread porteur alors qu’il exécute une opération bloquante. Cet événement est activé par défaut, avec un seuil de 20 ms.
+* `jdk.VirtualThreadSubmitFailed` indique que le démarrage ou le dé-parking d'un thread virtuel a échoué, probablement à cause d'un problème de ressources. Cet événement est activé par défaut.
+
+Exemple :
+
+[source, console]
+----
+C:\java>jfr print --events jdk.VirtualThreadPinned --stack-depth 64 vthread.jfr
+jdk.VirtualThreadPinned {
+  startTime = 10:18:22.045 (2022-09-24)
+  duration = 937 ms
+  eventThread = "" (javaThreadId = 28, virtual)
+  stackTrace = [
+    java.lang.VirtualThread.parkOnCarrierThread(boolean, long) line: 578
+    java.lang.VirtualThread.parkNanos(long) line: 544
+    java.lang.VirtualThread.doSleepNanos(long) line: 713
+    java.lang.VirtualThread.sleepNanos(long) line: 681
+    java.lang.Thread.sleep(long) line: 451
+    TestVirtualThread.lambda$0() line: 15
+    java.util.concurrent.Executors$RunnableAdapter.call() line: 577
+    java.util.concurrent.ThreadPerTaskExecutor$ThreadBoundFuture.run() line: 352
+    java.lang.VirtualThread.run(Runnable) line: 287
+    java.lang.VirtualThread$VThreadContinuation.lambda$new$0(VirtualThread, Runnable) line: 174
+    jdk.internal.vm.Continuation.enter0() line: 327
+    jdk.internal.vm.Continuation.enter(Continuation, boolean) line: 320
+    jdk.internal.vm.Continuation.enterSpecial(Continuation, boolean, boolean)
+  ]
+}
+----
+
+Un nouveau format de thread dump en JSON est proposé. Il facilite l’exploitation d’un thread dump par des outils lorsqu’il contient de très nombreux threads. La syntaxe de jcmd pour obtenir un tel thread dump est de la forme :
+
+[source, console]
+----
+jcmd <pid> Thread.dump_to_file -format=json <file>
+----
+
+=== JEP 428 : Structured Concurrency (Incubator)
+
+La https://openjdk.java.net/jeps/418[JEP 418] propose de simplifier la programmation multithread en rationalisant la gestion et l'annulation des erreurs, en améliorant la fiabilité et en renforçant l'observabilité grâce au traitement de plusieurs tâches exécutées dans différents threads comme une seule unité de travail.
+
+Cette JEP a plusieurs objectifs :
+
+* Améliorer la maintenabilité, la fiabilité et l'observabilité du code multithread.
+* Proposer un nouveau style de programmation concurrente capable d'éliminer les risques courants liés à l'annulation et à l'arrêt, tels que les fuites de threads et les délais d'annulation.
+
+La concurrence structurée propose un nouveau modèle de programmation visant à simplifier le code concurrent en traitant plusieurs tâches exécutées dans différents threads (forké du même thread parent) comme une seule unité de travail. Cela simplifie la gestion des erreurs et l'annulation tout en améliorant la fiabilité et l'observabilité.
+
+Java 7 avait déjà introduit le framework Fork/Join pour permettre d’exécuter des sous-tâches concurrentes. Ces deux solutions ne sont pas concurrentes mais plutôt complémentaires :
+
+[cols="^.^1,^.^1",options="header",width="100%",halign="center",valign="middle"]
+|===
+^|Fork/Join 
+^|Concurrence structurée
+
+^.^|Conçu pour traiter des tâches à forte intensité de calcul sur une courte durée 
+^.^|Conçue pour traiter des tâches à forte intensité d'E/S
+
+^.^|Utilise des threads de l’OS 
+^.^|Utilise des threads virtuels
+|===
+
+Une API est proposée pour mettre en œuvre la concurrence structurée afin de simplifier la programmation multithread. Comme c’est une API en incubation, il faut donc ajouter son module au graphe à la compilation et à l’exécution :
+
+[source, console]
+----
+--add-modules jdk.incubator.concurrent
+----
+
+Cette API propose un modèle de programmation multithread qui traite des sous-tâches exécutées dans différents threads comme une seule unité. Chaque sous-tâche est exécutée dans un nouveau thead virtuel.
+
+L’API fournit un mécanisme permettant de diviser une tâche en sous-tâches concurrentes, qui reviennent toutes au même endroit : le bloc de code de la tâche. Ce modèle permet une écriture du code dans un style synchrone avec une exécution en asynchrone. Le code est ainsi facile à écrire, à lire et à tester.
+
+La classe principale est `jdk.incubator.concurrent.StructuredTaskScope` qui implémente l’interface `AutoCloseable`.
+
+La mise en œuvre de `StructuredTaskScope` requiert plusieurs étapes :
+
+* Créer une instance dans un try-with-resource
+* Invoquer la méthode `fork()` pour chaque sous-tâches à exécuter
+* Attendre la fin de l’exécution des sous-tâches
+** Soit sans timeout en utilisant la méthode `join()`
+** Soit avec timout en utilisant la méthode `joinUntil()`
+* Exploiter les résultats obtenus dans des instances de type Future
+
+[source,java]
+----
+  Facture getFacture(String codeClient, long idCommande) throws ExecutionException, InterruptedException, TimeoutException {
+    Facture resultat = null;
+    try (var scope = new StructuredTaskScope()) {
+      Future<Client> clientFuture = scope.fork(() -> this.getClient(codeClient));
+      Future<Commande> commandeFuture = scope.fork(() -> this.getCommande(idCommande));
+      scope.joinUntil(Instant.now().plusSeconds(15));
+      resultat = this.genererFacture(clientFuture.get(), commandeFuture.get());
+    }
+    return resultat;
+  }
+----
+
+La classe `StructuredTaskScope.ShutdownOnFailure` propose un modèle invoke all qui exécute toutes les sous-tâches et termine toutes les sous-tâches en cours si une sous-tâche lève une exception.
+
+La méthode `throwIfFailed()` lève une exception si une sous-tâche ne se termine pas normalement :
+
+* De type `ExecutionException` si une des sous-tâches lève une exception avec comme cause l’exception de la première tâche qui a échouée
+* De type `CancellationException` si aucune sous-tâche n’est terminée et qu’elles sont annulées
+
+Son invocation doit être précédée par l’invocation de la méthode `join()`.
+
+Une surcharge qui attend en paramètre une `Function<Throwable,? extends X>` permet de fournir une instance de l’exception qui sera levée si une des sous-tâches lève une exception.
+
+[source,java]
+----
+  Facture getFacture(String codeClient, long idCommande) throws ExecutionException, InterruptedException, TimeoutException {
+    Facture resultat = null;
+    try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+      Future<Client> clientFuture = scope.fork(() -> this.getClient(codeClient));
+      Future<Commande> commandeFuture = scope.fork(() -> this.getCommande(idCommande));
+      scope.joinUntil(Instant.now().plusSeconds(15));
+      scope.throwIfFailed();
+      resultat = this.genererFacture(clientFuture.get(), commandeFuture.get());
+    }
+    return resultat;
+  }
+----
+
+La classe `StructuredTaskScope.ShutdownOnSuccess` propose un modèle invoke any qui renvoie le résultat de la première sous-tâche terminée et termine les autres sous-tâches restantes.
+
+[source,java]
+----
+  Temperature getTemperature(String ville) throws InterruptedException, ExecutionException {
+    Temperature resultat = null;
+
+    try (var scope = new StructuredTaskScope.ShutdownOnSuccess<Temperature>()) {
+      serviceMeteos.forEach(f -> {
+            scope.fork(() -> f.getTemperature(ville));
+          }
+      );
+      scope.join();
+      resultat = scope.result();
+    }
+    return resultat;
+  }
+----
+
+Il est possible de créer son propre scope en héritant de la classe `StructuredTaskScope` et en y implémentant ses propres règles métiers.
+
+Basiquement, il faut :
+
+* Redéfinir la méthode `handleComplete()` qui est invoquée à la terminaison de chaque sous-tâche et de stocker de manière thread-safe les informations obtenues du Future passé en paramètre.
+* Définir une méthode pour fournir le résultat en appliquant les règles métiers adéquates et pour obtenir les éventuelles exceptions.
+
+[source,java]
+----
+record Composant(String code, String libelle, int poids) {}
+
+class ComposantLePlusLegerScope extends StructuredTaskScope<Composant> {
+
+  private final Collection<Composant> composants = new ConcurrentLinkedQueue<>();
+  private final Collection<Throwable> exceptions = new ConcurrentLinkedQueue<>();
+
+  @Override
+  protected void handleComplete(Future<Composant> future) {
+    switch (future.state()) {
+      case RUNNING -> {}
+      case SUCCESS -> this.composants.add(future.resultNow());
+      case FAILED -> this.exceptions.add(future.exceptionNow());
+      case CANCELLED -> {}
+    }
+  }
+
+  public Exception exceptions() {
+    RuntimeException exception = new RuntimeException("Impossible d'obtenir le composant le plus leger");
+    exceptions.forEach(exception::addSuppressed);
+    return exception;
+  }
+
+  public Composant getComposant() throws Exception {
+    return composants.stream().min(Comparator.comparing(Composant::poids))
+        .orElseThrow(this::exceptions);
+  }
+}
+----
+
+Ce scope peut alors être utilisé comme n’importe quel `StructuredTaskScope`
+
+[source,java]
+----
+  Composant getComposantLePlusLeger() throws Exception {
+    Composant resultat = null;
+
+    try (var scope = new ComposantLePlusLegerScope()) {
+      composants.forEach(c -> {
+            scope.fork(() -> this.getComposant(c.code()));
+          }
+      );
+      scope.join();
+      resultat = scope.getComposant();
+    }
+    return resultat;
+  }
+----
+
+== Le portage
+
+OpenJDK poursuit son portage sur de nouvelles plateformes OS/CPU. Java 19 ajoute le portage sur Linux/RISC-V.
+
+=== JEP 422 : Linux/RISC-V Port
+
+RISC-V est une architecture de jeu d'instructions (ISA) RISC libre et gratuite. Il a été conçu à l'origine à l'Université Berkeley de Californie, et est maintenant développé collaborativement sous le parrainage de RISC-V International.
+
+Il y a peu d’appareil utilisant RISC-V actuellement mais cela risque de changer dans un futur proche à la faveur de nombreux acteurs qui envisagent son utilisation : Apple, la NASA, de nombreux industriels asiatiques notamment chinois et indiens, ...
+
+La https://openjdk.java.net/jeps/422[JEP 422] anticipe cela avec le portage d’OpenJDK sur Linux/RISC-V qui est intégré au repository principal. Ainsi chaque fournisseur qui le souhaitera pourra facilement supporter cette architecture.
+
+== Conclusion
+
+Comme la version 19 de Java n’est pas une version LTS, elle n’est pas une cible pour un déploiement en production par les entreprises. Cependant elle introduit plusieurs fonctionnalités importantes en preview ou en incubation : même si elles vont sûrement évoluer avant de devenir standard, il est intéressant de les regarder.
+
+N’hésitez donc pas à télécharger et tester une distribution du JDK 19 auprès d’un fournisseur pour anticiper la release de la prochaine version LTS de Java, Java 21 dans un an, en septembre 2023.
+
+Le troisième article de cette série sera consacré aux autres fonctionnalités non définies dans une JEP.
