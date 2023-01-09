@@ -1,0 +1,358 @@
+:showtitle:
+:page-navtitle: Les nouveautés de Java 19 : partie 3
+:page-excerpt: Ce troisième article de la série sur les nouveautés de Java 19 détaille les autres fonctionnalités non définies dans une JEP.
+:layout: post
+:author: jmdoudoux
+:page-tags: [Java, Java 19]
+:docinfo: shared-footer
+:page-vignette: java-19.png
+:page-liquid:
+
+= Les nouveautés de Java 19 : partie 3
+
+Les deux premiers articles de cette série ont détaillé les différentes JEPs de Java 19. Comme pour les précédentes versions de Java, cette version 19 inclut quelques JEPs, mais aussi, et surtout, des évolutions et des améliorations sur la fiabilité (corrections de nombreux bugs) et la sécurité.
+
+Cette troisième partie est consacrée aux autres améliorations, que ce soit les évolutions dans les outils, les API et dans la sécurité, ou l'ensemble des fonctionnalités dépréciées et retirées.
+
+== Les autres évolutions
+
+En plus des JEPs, il y a aussi de nombreuses évolutions dans les API existantes.
+
+=== Le comportement des méthodes de la classe ThreadGroup
+
+Le comportement des méthodes de la classe ThreadGroup a été modifié :
+
+* `destroy()` : les invocations sont ignorées
+* `isDaemon()` : renvoie la valeur du flag qui n’a plus d’utilité
+* `isDestroyed()` : renvoie toujours false
+* `setDaemon()` : positionne le flag mais n’a plus aucun effet
+* `suspend()`, `resume()` et `stop()` lève une `UnsupportedOperationException`
+
+=== Le support d’Unicode 14.0
+
+La classe `java.lang.Character` propose un support d’Unicode 14.0 qui ajoute 838 caractères, pour un total de 144 697 caractères. Ces ajouts incluent 5 nouveaux scripts, pour un total de 159 scripts, ainsi que 37 nouveaux caractères emojis.
+
+=== Evolution de `Double.toString()` et `Float.toString()`
+
+Double.toString(double) et Float.toString(float) peuvent retourner des résultats légèrement différents (https://bugs.openjdk.org/browse/JDK-4511638[[.underline]#JDK-4511638#])
+
+La spécification de ces méthodes est désormais plus stricte que dans les versions précédentes et la nouvelle implémentation la respecte.
+
+Certaines chaînes de caractères renvoyées peuvent maintenant être plus courtes que lors de l'utilisation des versions précédentes, et pour les valeurs situées aux extrêmes des plages proches de zéro, elles peuvent avoir une apparence différente. Cependant, le nombre de cas où il y a une différence dans la sortie est assez faible par rapport au nombre de valeurs de type double et float possibles.
+
+[cols="2a,2a", width="100%", options="header"]
+|===
+^|JDK18 ^|JDK 19 
+|
+[source,console]
+----
+C:\java>jshell
+\|  Welcome to JShell -- Version 18
+\|  For an introduction type: /help intro
+
+jshell> Double.toString(2e23)
+$1 ==> "1.9999999999999998E23"
+
+jshell> Double.toString(1e-323)
+$2 ==> "1.0E-323"
+
+jshell> Double.toString(8.41E21)
+$4 ==> "8.409999999999999E21"
+----
+|
+[source,console]
+----
+C:\java>jshell
+\|  Welcome to JShell -- Version 19
+\|  For an introduction type: /help intro
+
+jshell> Double.toString(2e23)
+$1 ==> "2.0E23"
+
+jshell> Double.toString(1e-323)
+$2 ==> "9.9E-324"
+
+jshell> Double.toString(8.41E21)
+$4 ==> "8.41E21"
+----
+|===
+
+=== Des possibilités de formatage de date/heure supplémentaires (https://bugs.openjdk.org/browse/JDK-8176706[JDK-8176706])
+
+Des possibilités de formatage de date/heure supplémentaires sont ajoutées dans les classes `java.time.format.DateTimeFormatter` et `DateTimeFormatterBuilder`.
+
+Dans les versions précédentes, seuls 4 styles prédéfinis sont utilisables : `FormatStyle.FULL`, `LONG`, `MEDIUM` et `SHORT`.
+
+En Java 19, il est possible de spécifier son propre style qui va tenir compte de la `Locale` par défaut en utilisant la méthode `ofLocalizedPattern(String)` de la classe `DateTimeFormatter`.
+
+La méthode `appendLocalized(String)` de la classe `DateTimeFormatterBuilder` est aussi ajoutée.
+
+[source,java]
+----
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
+public class TestLocalizedPattern {
+
+  public static void main(String[] args) {
+    DateTimeFormatter dtf = DateTimeFormatter.ofLocalizedPattern("yMMMMM");
+    LocalDate date = LocalDate.of(2022, 9, 20);
+    System.out.println(date.format(dtf));
+    Locale.setDefault(Locale.US);
+    dtf = DateTimeFormatter.ofLocalizedPattern("yMMMMM");
+    System.out.println(date.format(dtf));
+  }
+}
+----
+
+Le résultat de l’exécution affiche :
+
+[source]
+----
+septembre 2022
+September 2022
+----
+
+=== Des fabriques pour instancier des HashMaps et HashSets avec une taille préallouée (https://bugs.openjdk.org/browse/JDK-8186958[JDK-8186958], https://bugs.openjdk.org/browse/JDK-8284780[JDK-8284780])
+
+De nouvelles méthodes pour créer des HashMaps et des HashSets et classes dérivées dont la taille est préallouée permettent de créer des Maps ou des Sets pouvant accueillir le nombre d’éléments passés en paramètre sans déclencher un nombre potentiellement important de resize :
+
+* `HashMap.newHashMap(int)`
+* `HashSet.newHashSet(int)`
+* `LinkedHashMap.newLinkedHashMap(int)`
+* `LinkedHashSet.newLinkedHashSet(int)`
+* `WeakHashMap.newWeakHashMap(int)`
+
+Les constructeurs acceptant en paramètre un `int` de ces classes définissent la "capacité" (taille interne de la table), qui n'est pas la même chose que le nombre d'éléments qu'elle peut contenir. La capacité est liée au nombre d'éléments par un calcul simple mais source d'erreurs. Il est donc préférable utiliser ces nouvelles fabriques de préférence à la surcharge des constructeurs qui attend un paramètre de type `int` surtout pour des collections de grandes tailles.
+
+=== Des ajouts dans différentes classes
+
+Plusieurs méthodes sont ajoutées dans différentes classes, notamment :
+
+* `compress()` et `expand()` dans `Integer` et `Long` pour compresser et étendre les bits selon le masque fourni
+* `parallelMultiply()` dans `BigInteger` pour réaliser une multiplication utilisant plusieurs threads pour de grandes valeurs
+* `close()` dans l’interface `ExecutorService`
+* `resultNow()`, `exceptionNow()` et `state()` dans la classe `Future`
+* `exceptionNow()`, `resultNow()` et `state()` dans la classe `CompletableFuture`
+* les surcharges de de la méthode `of()` dans la classe `Locale`
+* `join(Duration)`, `sleep(Duration)` et `threadId()` dans la classe `Thread`
+* `toIdentityString(Object)` de la classe Objects
+
+Plusieurs constantes sont ajoutées dans différentes classes :
+
+* `TAU` dans les classes `Math` et `StrictMath`
+* `TWO` dans la classe `BigDecimal`
+
+== Les fonctionnalités dépréciées ou retirées
+
+Plusieurs fonctionnalités sont dépréciées, notamment :
+
+* La méthode `getId()` de la classe `Thread` : il faut utiliser la nouvelle méthode `threadId()` en remplacement
+* Les trois surcharges des constructeurs de la classe `Locale` : il faut utiliser les surcharges de la fabrique `of()` en remplacement
+
+Les méthodes `getBounds2D()` des classes `CubicCurve2D.Double`, `CubicCurve2D.Float`, et `QuadCurve2D.Double` et `QuadCurve2D.Float` du package `java.awt.geom` sont retirées.
+
+=== Les évolutions dans les outils
+
+Java 19 propose aussi quelques évolutions dans les outils du JDK.
+
+==== JShell (https://bugs.openjdk.org/browse/JDK-8274148[JDK-8274148])
+
+JShell affiche désormais les éléments dépréciés de manière singulière et met en évidence les variables et les mots-clés dans la console.
+
+image::{{'/images/article-Java-19-002.png' | relative_url}}[JShell,width=496,height=224]
+
+==== JavaDoc (https://bugs.openjdk.org/browse/JDK-8248863[JDK-8248863])
+
+La documentation propose une page de recherche autonome
+
+image::{{'/images/article-Java-19-003.png' | relative_url}}[Recherche Javadoc,width=604,height=360]
+
+La syntaxe de recherche a été améliorée pour permettre la recherche de plusieurs termes.
+
+image::{{'/images/article-Java-19-004.png' | relative_url}}[Recherche multi-critères Javadoc,width=604,height=357]
+
+
+==== La génération automatique de l’archive CDS (https://bugs.openjdk.org/browse/JDK-8261455[JDK-8261455])
+
+AppCDS (Application Class Data Sharing), introduit en Java 10, permet à la JVM Hotspot de générer une archive partagée des classes chargées. Son utilisation peut réduire le temps de démarrage de l’application et même l’empreinte mémoire peut être aussi réduite si plusieurs JVM sur une même machine utilisent la même archive.
+
+L’Autogenerate Shared Archive ajouté à Java 19 permet à une archive d’être générée et utilisée avec la même commande en une seule étape par rapport au deux ou trois dans les précédentes versions de Java grâce à l’utilisation des options `+XX:AutoCreateSharedArchive` et `+XX:SharedArchiveFile`
+
+Exemple :
+
+[source]
+----
++XX:AutoCreateSharedArchive et +XX:SharedArchiveFile=mon-app.jsa
+----
+
+La JVM vérifie si l’archive existe :
+
+* Si c’est le cas alors elle charge et utilise l’archive
+* Si ce n’est pas le cas alors elle est créée à la fin de l’exécution de la JVM
+
+La JVM vérifie aussi si l’archive a été créée avec une version précédente du JDK : si c’est le cas, la JVM va recréer l’archive à son arrêt.
+
+== La sécurité
+
+Java 19 propose des améliorations relatives à la sécurité, notamment :
+
+* Un renforcement de la sécurité par défaut de la plate-forme Java
+* Des performances de TLS améliorées
+* L'ajout au KeyStore de la prise en charge pour accéder aux certificats de la machine locale sous Windows
+* Le support des CBT pour l'authentification Negotiate/Kerberos sur HTTPS
+
+=== La cryptographie
+
+Les performances de l'algorithme SHA3 du fournisseur "SUN" du JDK ont été multipliées par deux (https://bugs.openjdk.org/browse/JDK-8275914[JDK-8275914]).
+
+==== L'utilisation de tailles de clé par défaut plus fortes si cela n'est pas explicitement spécifié (https://bugs.openjdk.org/browse/JDK-8267319[JDK-8267319])
+
+Les fournisseurs utilisent des valeurs par défaut spécifiques au fournisseur si l'appelant ne spécifie pas de taille de clé lorsqu'il utilise un objet de type `KeyPairGenerator` ou `KeyGenerator` pour générer une paire de clés ou une clé secrète. Avec cette amélioration, les tailles de clé par défaut pour divers algorithmes cryptographiques ont été augmentées :
+
+* RSA, RSASSA-PSS, DH : de 2048 à 3072 bits
+* EC : de 256 à 384 bits
+* AES : de 128 à 256 bits (si la policy le permet)
+
+=== Public Key Infrastructure (PKI)
+
+Une amélioration concerne l’accès aux certificats des machines locales du KeyStore sous Windows.
+
+==== Le KeyStore sous Windows peut accéder aux certificats de la machine locale (https://bugs.openjdk.org/browse/JDK-6782021[JDK-6782021])
+
+Le KeyStore sous Windows du fournisseur SunMSCAPI a été étendue pour accéder aux certificats des machines locales.
+
+Les types de KeyStore `Windows-MY-LOCALMACHINE` et `Windows-ROOT-LOCALMACHINE` permettent d'accéder aux clés et certificats stockés sur le système d'exploitation Windows qui sont disponibles pour tous les comptes.
+
+Les types de KeyStore `Windows-MY` et `Windows-ROOT` donnent accès aux clés et certificats associés au compte de l'utilisateur courant uniquement. Pour éviter toute confusion, de nouveaux noms pour ces types ont également été introduits, `Windows-MY-CURRENTUSER` et `Windows-ROOT-CURRENTUSER`, qui correspondent respectivement à `Windows-MY` et `Windows-ROOT`.
+
+=== TLS
+
+Plusieurs améliorations et évolutions concernent la mise en œuvre de TLS.
+
+==== Les améliorations des performances de TLS
+
+Plusieurs améliorations liées aux performances ont été apportées pour accélérer et réduire la quantité de mémoire utilisée lors d'un handshake TLS :
+
+* Cache certificates decoded from TLS session tickets (https://bugs.openjdk.org/browse/JDK-8286433[JDK-8286433])
+* Avoid evaluating SSLAlgorithmConstraints twice (https://bugs.openjdk.org/browse/JDK-8284694[JDK-8284694])
+* Cache the results of constraint checks (https://bugs.openjdk.org/browse/JDK-8285398[JDK-8285398])
+
+==== Les algorithmes de chiffrement TLS utilisant 3DES sont supprimés (https://bugs.openjdk.org/browse/JDK-8163327[JDK-8163327])
+
+Pour suivre les recommandations de la RFC 7525 de ne plus utiliser des algorithmes inférieurs à 128 bits, les algorithmes de chiffrement TLS utilisant 3DES (112 bits), préalablement désactivés, sont maintenant retirés de la liste par défaut utilisables lors du handshake :
+
+* `TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA`
+* `TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA`
+* `SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA`
+* `SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA`
+* `TLS_ECDH_ECDSA_WITH_3DES_EDE_CBC_SHA`
+* `TLS_ECDH_RSA_WITH_3DES_EDE_CBC_SHA`
+* `SSL_RSA_WITH_3DES_EDE_CBC_SHA`
+
+==== De nouvelles API pour la personnalisation des schémas de signature TLS et DTLS (https://bugs.openjdk.org/browse/JDK-8280494[JDK-8280494])
+
+Deux nouvelles méthodes ont été ajoutées dans la classe `javax.net.ssl.SSLParameters` pour permettre aux applications de personnaliser et de récupérer la liste ordonnée des schémas de signature utilisés lors de la négociation d'une connexion TLS ou DTLS : `getSignatureSchemes()` et `setSignatureSchemes()`.
+
+Le fournisseur sous-jacent peut définir les schémas de signature par défaut pour chaque connexion TLS ou DTLS. Les applications peuvent également utiliser les propriétés système existantes `jdk.tls.client.SignatureSchemes` et/ou `jdk.tls.server.SignatureSchemes` pour personnaliser les schémas de signature par défaut spécifiques au fournisseur. S'ils ne sont pas nuls, les schémas de signature transmis à la méthode `setSignatureSchemes()` remplaceront les schémas de signature par défaut pour les connexions TLS ou DTLS spécifiées.
+
+Un fournisseur peut ne pas avoir été mis à jour pour prendre en charge les nouvelles méthodes et dans ce cas, il peut ignorer les schémas de signature définis. Le fournisseur JDK SunJSSE prend en charge cette méthode.
+
+==== La prise en charge complète de l'algorithme d'identification des endpoints de la RFC 6125 (JDK-7192189)
+
+L'implémentation du fournisseur SunJSSE du JDK a été améliorée pour être entièrement conforme à la RFC 6125 qui définit les procédures de vérification des identités dans les certificats TLS. Avant cette version, l'implémentation était conforme à l'exception d'un cas, qui a maintenant été résolu : l'implémentation ne tentera pas de faire correspondre les jokers dans les domaines dans les certificats TLS où le caractère joker comprend un label autre que le label le plus à gauche.
+
+Exemple de domaine avec joker pour lequel la correspondance ne sera pas faite : `prod.*.exemple.net`
+
+Si nécessaire, les applications peuvent contourner cette restriction en utilisant leur propre implémentation de `HostnameVerifier` ou `TrustManager`.
+
+=== Les évolutions dans les outils
+
+Plusieurs évolutions sont proposées par les outils relatifs à la sécurité.
+
+==== Les algorithmes d’empreinte et de signature par défaut de jarsigner sont renforcés (https://bugs.openjdk.org/browse/JDK-8267319[JDK-8267319])
+
+Les algorithmes d’empreinte et de signature par défaut utilisés par `jarsigner` lors de la signature de fichiers JAR ont été renforcés.
+
+L'algorithme d’empreinte par défaut a été modifié de SHA-256 à SHA-384.
+
+L'algorithme de signature par défaut pour les clés RSA et RSASSA-PSS supérieures ou égales à 624 bits a été modifié de `SHA256withRSA` à `SHA384withRSA`, sauf pour les clés supérieures à 7680 bits où `SHA512withRSA` est utilisé. De même, l'algorithme de signature par défaut pour les clés EC a été modifié de `SHA256withECDSA` à `SHA384withECDSA`, sauf pour les clés supérieures ou égales à 512 bits où `SHA512withECDSA` est utilisé.
+
+Les spécifications de l’outil `jarsigner` fournissent une https://docs.oracle.com/en/java/javase/19/docs/specs/man/jarsigner.html#supported-algorithms[liste complète des algorithmes par défaut].
+
+==== Les algorithmes RC2 et RC4 ajoutés à la propriété de sécurité `jdk.security.legacyAlgorithms` (https://bugs.openjdk.org/browse/JDK-8286090[JDK-8286090])
+
+Les algorithmes RC2 et ARCFOUR (RC4) ont été ajoutés à la propriété de sécurité `jdk.security.legacyAlgorithms` dans le fichier de configuration `java.security`.
+
+Les clés secrètes utilisant ces algorithmes ne sont plus recommandées.
+
+L’outil `keytool` émet un avertissement de l’utilisation d’un de ces algorithmes :
+
+[source]
+----
+C:\java>keytool -genseckey -keyalg RC2 -keysize 128 -keystore monkeystore.jks
+Enter keystore password:
+Re-enter new password:
+Generated 128-bit RC2 secret key
+
+Warning:
+The generated secret key uses the RC2 algorithm which is considered a security risk.
+----
+
+==== Les algorithmes DES, DESede et MD5 ajoutés à la propriété de sécurité `jdk.security.legacyAlgorithms` (https://bugs.openjdk.org/browse/JDK-8255552[JDK-8255552])
+
+Les algorithmes DES, DESede (3DES) et MD5 ont été ajoutés à la propriété de sécurité `jdk.security.legacyAlgorithms` dans le fichier de configuration `java.security`.
+
+Les clés secrètes utilisant ces algorithmes ne sont plus recommandées.
+
+L’outil `keytool` émet un avertissement de l’utilisation d’un de ces algorithmes :
+
+[source]
+----
+C:\java>keytool -genseckey -keyalg DESede -keystore monkeystore.jks
+Enter keystore password:
+Re-enter new password:
+Generated 168-bit DESede secret key
+
+Warning:
+The generated secret key uses the DESede algorithm which is considered a security risk.
+----
+
+==== L’option `-providerPath` de l’outil jarsigner (https://bugs.openjdk.org/browse/JDK-8281175[JDK-8281175])
+
+Une nouvelle option `-providerPath` a été ajoutée à l’outil `jarsigner`.
+
+Elle permet de définir le classpath d’un fournisseur d’une implémentation alternative de keystore. Le nom pleinement qualifié de la classe d’implémentation est définie avec l’option `-providerClass`.
+
+==== De nouvelles options pour ktab pour remplacer la valeur de salage par défaut (https://bugs.openjdk.org/browse/JDK-8279064[JDK-8279064])
+
+Deux nouvelles options ont été ajoutées à l'outil `ktab` sous Windows pour permettre de fournir d'autres valeurs de salage lors de l’utilisation de l'option `-a` pour générer des clés. Ces valeurs de salage sont utilisées au lieu d'utiliser le sel par défaut qui est une concaténation du realm et du username.
+
+L'option `-s <salt>` permet de fournir sa propre valeur de salage, et l'option `-f` récupérera la valeur de salage du KDC. Ces options sont utiles si le KDC utilise une valeur de salage différente, ou si l'utilisateur souhaite simplement utiliser une valeur de salage différente.
+
+=== Les échanges réseaux
+
+Deux améliorations relatives à la sécurité lors d’échanges réseaux sont proposés dans Java 19.
+
+==== Le support des CBT pour l'authentification Negotiate/Kerberos sur HTTPS (https://bugs.openjdk.org/browse/JDK-8279842[JDK-8279842])
+
+Le support des channel binding tokens (CBT) pour l'authentification Negotiate/Kerberos sur HTTPS a été ajoutée avec `javax.net.HttpsURLConnection`.
+
+Cette fonctionnalité est contrôlée par une nouvelle propriété système `jdk.https.negotiate.cbt` qui peut valoir :
+
+* par défaut `never` : les CBT ne sont jamais envoyés
+* `always` : ils sont toujours envoyés
+* `domain:<domaines>` : liste des domaines, séparés par une virgule, pour lesquels ils sont envoyés
+
+==== MD5 et SHA-1 sont désactivés par défaut pour l'authentification HTTP Digest (https://bugs.openjdk.org/browse/JDK-8281561[JDK-8281561])
+
+Les algorithmes utilisant MD5 et SHA-1 ont été désactivés par défaut pour l'authentification HTTP Digest. MD5 et SHA-1 sont considérés comme peu sûrs et sont généralement dépréciés. Par conséquent, ils ont tous deux été désactivés par défaut pour certaines utilisations dans l'authentification HTTP avec `java.net.HttpURLConnection`.
+
+Ils peuvent être réactivés, avec les risques associés, en définissant une nouvelle propriété système `https://docs.oracle.com/en/java/javase/19/docs/api/java.base/java/net/doc-files/net-properties.html#http.auth.digest.reEnabledAlgorithms[http.auth.digest.reEnabledAlgorithms]` 
+
+== Conclusion
+
+Toutes les évolutions proposées dans Java 19 sont détaillées dans les https://jdk.java.net/19/release-notes[releases notes].
+
+N’hésitez pas à télécharger et tester une distribution du JDK 19 auprès d’un fournisseur pour anticiper la release de la prochaine version LTS de Java, Java 21 en septembre 2023.
