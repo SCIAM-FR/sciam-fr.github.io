@@ -4,20 +4,20 @@ pagination:
   enabled: true
 ---
 <style>
-ul#toc {
-  list-style: none;
-  margin-left: 0px;
-}
+  ul#toc {
+    list-style: none;
+    margin-left: 0px;
+  }
 
-h1 {
+  h1 {
     margin-top: 0.5em;
     margin-bottom: 0.75em;
-}
+  }
 
-h2, h3, h4, h5, h6 {
+  h2, h3, h4, h5, h6 {
     margin-top: 2em;
     margin-bottom: 0.75em;
-}
+  }
 
 </style>
 
@@ -28,27 +28,27 @@ h2, h3, h4, h5, h6 {
 
         {% if page.auteurs.size > 1 %}
         <p style="margin-top:1em;">Auteurs : </p>
-          {% for auteur in page.auteurs %}
-          {% assign author = site.data.authors[auteur] %}
-            {% if author.name %}
-              <a href="{{ '/author/' | append: auteur | append: '/index.html' | relative_url }}">
-              {% include author_bio.html %}
-              </a>
-            {% endif %}
-          {% endfor %}
+        {% for auteur in page.auteurs %}
+        {% assign author = site.data.authors[auteur] %}
+        {% if author.name %}
+        <a href="{{ '/author/' | append: auteur | append: '/index.html' | relative_url }}">
+          {% include author_bio.html %}
+        </a>
+        {% endif %}
+        {% endfor %}
         {% else %}
-          <p style="margin-top:1em;">Auteur : </p>
-          {% assign author = site.data.authors[page.author] %}
-          {% if author.name %}
-            <a href="{{ '/author/' | append: page.author | append: '/index.html' | relative_url }}">
-            {% include author_bio.html %}
-            </a>
-          {% endif %}
+        <p style="margin-top:1em;">Auteur : </p>
+        {% assign author = site.data.authors[page.author] %}
+        {% if author.name %}
+        <a href="{{ '/author/' | append: page.author | append: '/index.html' | relative_url }}">
+          {% include author_bio.html %}
+        </a>
+        {% endif %}
         {% endif %}
 
         <hr>
 
-        <p class="date">Publi&eacute; le {{ page.date | date: "%d/%m/%Y"}} </p>    
+        <p class="date">Publi&eacute; le {{ page.date | date: "%d/%m/%Y"}} </p>
 
         <p>Temps de lecture : {{ content | reading_time | pluralize: "minute" }} </p>
 
@@ -56,9 +56,9 @@ h2, h3, h4, h5, h6 {
         <hr>
 
         <p>Sommaire :</p>
-        
+
         {% toc %}
-        
+
         {% endif %}
         <hr>
 
@@ -67,7 +67,8 @@ h2, h3, h4, h5, h6 {
           <span>Tags:</span>
           {% for tag in page.tags %}
 
-            <a href="{{ '/tag/' | relative_url }}{{ tag | slugify }}">{{ tag }}</a>{% unless forloop.last %}, {% endunless %}
+          <a href="{{ '/tag/' | relative_url }}{{ tag | slugify }}">{{ tag }}</a>{% unless
+          forloop.last %}, {% endunless %}
           {% endfor %}
         </div>
         {% endif %}
@@ -75,11 +76,12 @@ h2, h3, h4, h5, h6 {
         {% if page.vignette %}
         <hr>
 
-        <img src="{{ '/images/vignettes/' | append: page.vignette | relative_url }}" style="max-width: 100%;" />
+        <img src="{{ '/images/vignettes/' | append: page.vignette | relative_url }}"
+             style="max-width: 100%;"/>
 
-          {% if page.vignette-licence %}
-          <span style="font-size: small;">{{ page.vignette-licence | replace: "&lt;", "<" | replace: "&gt;", ">" }}</span>
-          {% endif %}
+        {% if page.vignette-licence %}
+        <span style="font-size: small;">{{ page.vignette-licence | replace: "&lt;", "<" | replace: "&gt;", ">" }}</span>
+        {% endif %}
 
         {% endif %}
 
@@ -96,16 +98,22 @@ h2, h3, h4, h5, h6 {
         -->
         <div>
           <ul class="pager">
-          {% if page.previous.url %}
+            {% if page.previous.url %}
             <li class="previous">
-              <a class="page-link" href="{{ page.previous.url | relative_url }}" data-toggle="tooltip" data-placement="top" title="{{page.previous.title | strip_html | xml_escape}}">&larr; Article précédent</a>
+              <a class="page-link" data-placement="top"
+                 data-toggle="tooltip" href="{{ page.previous.url | relative_url }}"
+                 title="{{page.previous.title | strip_html | xml_escape}}">&larr; Article
+                précédent</a>
             </li>
-          {% endif %}
-          {% if page.next.url %}
+            {% endif %}
+            {% if page.next.url %}
             <li class="next">
-              <a class="page-link" href="{{ page.next.url | relative_url }}" data-toggle="tooltip" data-placement="top" title="{{page.next.title | strip_html | xml_escape}}">Article suivant &rarr;</a>
+              <a class="page-link" data-placement="top" data-toggle="tooltip"
+                 href="{{ page.next.url | relative_url }}"
+                 title="{{page.next.title | strip_html | xml_escape}}">Article
+                suivant &rarr;</a>
             </li>
-          {% endif %}
+            {% endif %}
           </ul>
         </div>
       </div>

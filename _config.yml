@@ -90,7 +90,7 @@ autopages:
     data: '_data/authors.yml' # Data file with the author details
     layouts: 
       - 'autopage_author.html' # We'll define this layout later
-    title: 'Article par :author'
+    title: 'Articles par :author'
     permalink: '/author/:author/'
     slugify:
       mode: 'default' # choose from [raw, default, pretty, ascii or latin]
