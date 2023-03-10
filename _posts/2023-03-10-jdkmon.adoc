@@ -1,0 +1,118 @@
+:showtitle:
+:page-navtitle: Faciliter la mise à jour de JDKs avec JDKMon
+:page-excerpt: Cet article présente l'outil JDKMon qui facilite la mise à jour des JDKs installés dans des répertoires du système.
+:layout: post
+:author: jmdoudoux
+:page-tags: [JDK, Java, JDKMon, Outillage]
+:docinfo: shared-footer
+:page-vignette: jdkmon.png
+:page-liquid:
+
+= Faciliter la mise à jour de JDKs avec JDKMon
+
+Il existe des outils sur certains systèmes (par exemple, Chocolatey, SDKman, Homebrew, … ) pour faciliter l’installation de JDKs.
+
+Sous Windows, je préfère installer des JDK en utilisant une distribution sous la forme d’une simple archive zip. Cela permet de choisir le répertoire où ils seront décompressés et de faciliter le basculement vers une certaine version en utilisant un simple script bat qui modifient des variables d’environnement.
+
+Avec le nouveau rythme de releases de Java introduit après Java 9, une nouvelle version majeure d’OpenJDK est publiée tous les 6 mois.
+
+Ces versions peuvent être :
+
+* LTS (Long Term Support) : avec des mises à jour publiées régulièrement jusqu’à la publication de la prochaine version LTS
+* Non-LTS : avec seulement deux mises à jour publiées respectivement un mois et quatre mois après la release
+
+Il y a aussi un certain nombre de fournisseurs qui proposent des distributions pour ces différentes versions publiées de manière différentes, dans des formats de packaging différents.
+
+Cela peut faire un nombre important de JDK installés à mettre à jour périodiquement et de manière différente.
+
+Pour faciliter la recherche des distributions d’OpenJDK et de leurs versions disponibles, l’API DiscoAPI a été développée par https://foojay.io[`foojay.io`]. Cette API est utilisée par un outil graphique écrit avec JavaFX nommé JDKMon.
+
+== Présentation de JDKMon
+
+https://harmoniccode.blogspot.com/p/jdkmon.html[JDKMon] est un outil qui détecte les principales distributions d’OpenJDK, de GraalVM et du SDK JavaFX installées sur le système, recherche des mises à jour pour ces distributions et permet de les télécharger dans un des formats de packaging proposés.
+
+Le but de JDKMon n'est pas de remplacer des installateurs comme SDKMan, Chocolatey, Homebrew, … car il ne permet pas d’installer quelque chose mais seulement de fournir des informations sur les mises à jour disponibles pour les JDK, installés et détectés, et de permettre de les télécharger.
+
+JDKMon utilise l’API https://github.com/foojay2020/discoapi[DiscoAPI] pour rechercher les différentes versions des distributions d’OpenJDK disponibles. DiscoAPI en supporte de nombreuses dont AdoptOpenJDK, Bi Sheng, Corretto, Dragonwell, GrallVM, Liberica, Mandrel, Microsoft, Oracle JDK, Oracle OpenJDK, RedHat, SAP Machine, Semeru, Temurin, Trava, Zulu, …
+
+Des distributions binaires de JDKMon sont proposées à l’url https://github.com/HanSolo/JDKMon/releases[https://github.com/HanSolo/JDKMon/releases] pour différentes plateformes : Windows x64, macOS x64, macOS aarch64, Linux x64 et Linux aarch64.
+
+Différents formats d’installeurs sont proposés : MSI sous Windows, PKG sous macOs, DEB et RPM sous Linux x64 et DEB sous Linux aarch64. Ainsi qu’un fichier jar utilisable pour chacune de ces plateformes.
+
+== Les principales fonctionnalités de JDKMon
+
+JDKMon propose plusieurs fonctionnalités facilitant la gestion et la mise à jour des JDK :
+
+* La recherche de mises à jour des JDK installés
+* Le téléchargement d’une mise à jour d’un JDK
+* La recherche des SDK OpenJFX et téléchargement d’une mise à jour
+* Le téléchargement d’un JDK
+* La recherche de vulnérabilités dans les JDK installés
+
+A son démarrage, JDKMon recherche des distributions installées du JDK et pour celles trouvées recherche si une version plus récente est disponible. Ces recherches peuvent être longues surtout si plusieurs distributions sont installées et détectées.
+
+JDKMon recherche dans des répertoires qui lui sont précisés. Selon le système d’exploitation, JDKMon recherche des JDK dans un répertoire par défaut :
+
+* Windows : C:\Program Files\Java\
+* macOS : /System/Volumes/Data/Library/Java/JavaVirtualMachines/
+* Linux : /usr/lib/jvm
+
+Il est possible d’ajouter à sa configuration un répertoire supplémentaire à scanner pour la recherche de JDKs en utilisation d’option « Add JDK search path » du menu contextuel.
+
+L’application affiche une fenêtre principale qui contient :
+
+* La liste des distributions trouvées
+* Leurs mises à jour disponibles le cas échant ainsi que les types de packaging disponibles
+* Les éventuelles vulnérabilités connues de la version du JDK obtenues de la base https://nvd.nist.gov/[NVD]
+
+=== La fenêtre principale
+
+La fenêtre principale affiche les distributions trouvées et leur version sur le côté gauche.
+
+image::{{'/images/article-jdkmon_001.png' | relative_url}}[Recherche Javadoc,width=598,height=313]
+
+Si JDKMon a trouvé une mise à jour disponible pour une distribution alors il indique la mise à jour par une flèche, suivie de la dernière version disponible de la distribution et des étiquettes pour chaque type d'archive disponible (msi, zip, tar.gz, …).
+
+Il est possible de télécharger la version mise à jour en cliquant sur l'étiquette correspondante au type d'archive que vous souhaitez télécharger. Une fois le téléchargement terminé, il faut installer manuellement le fichier téléchargé.
+
+Remarque : JDKMon n'installe pas de distribution sur le système : il permet uniquement de les télécharger dans le répertoire de son choix. L’installation doit être faite manuellement à partir du fichier téléchargé.
+
+JDKMon ne propose pas de télécharger certaines distributions à cause de leur licence.
+
+Une petite icône d’information « i » est affichée si aucune nouvelle version n’est trouvée mais qu’une distribution alternative est proposée.
+
+En cours d’exécution, JDKMon effectue un rescan toutes les 3 heures pour rechercher des mises à jour des JDK détectés. Il est possible de forcer ce rescan en utilisant l’option du menu contextuel.
+
+Si des mises à jour sont trouvées alors une petite popup de notifications est affichée pour indiquer les mises à jour disponibles.
+
+image::{{'/images/article-jdkmon_002.png' | relative_url}}[Recherche Javadoc,width=332,height=91]
+
+=== La recherche des SDK OpenJFX
+
+JDKMon peut aussi rechercher les distributions du SDK OpenJFX et vérifier la disponibilité de versions plus récentes. Le mode de fonctionnement est similaire à celui pour les distributions d’OpenJDK.
+
+Le chemin de recherche par défaut pour les SDK OpenJFX est le répertoire home de l’utilisateur. Il est aussi possible d’ajouter un répertoire supplémentaire des dossiers dans lesquels JDKMon recherche des SDK OpenJFX en utilisant l’option « Add JavaFX search path » du menu contextuel.
+
+=== Le téléchargement d’un JDK
+
+L’option « Download a build of OpenJDK » du menu contextuel de l’icône dans la barre système permet de rechercher et télécharger une distribution du JDK selon les différentes informations sélectionnées dans une boîte de dialogue.
+
+image::{{'/images/article-jdkmon_003.png' | relative_url}}[Recherche Javadoc,width=300,height=474]
+
+Pour télécharger la distribution concernée, il suffit de cliquer sur le bouton « Download ». Une fois le répertoire de stockage sélectionné, l’archive est téléchargée.
+
+=== La recherche de vulnérabilités dans les JDK installés
+
+Depuis sa version 17.0.18, JDKMon propose une fonctionnalité qui vérifie la NVD (National Vulnerability Database) pour afficher les éventuelles vulnérabilités connues dans les JDK installés selon leur version. Il ne recherche pas les vulnérabilités dans les distributions installées, mais il vérifie dans la base de données NVD les versions d'OpenJDK qui ont le même numéro de version que les distributions OpenJDK installées et les affichent si une ou plusieurs sont connues.
+
+image::{{'/images/article-jdkmon_004.png' | relative_url}}[Recherche Javadoc,width=604,height=257]
+
+En cliquant sur la petite icône en forme de point d’exclamation sur fond rouge, une petite fenêtre affiche les CVE (Common Vulnerability and Exposure) avec leur score et leur gravité. JDKMon colore les CVE trouvées en fonction de leur score : vert pour faible, jaune pour moyen et orange pour élevé.
+
+image::{{'/images/article-jdkmon_005.png' | relative_url}}[Recherche Javadoc,width=294,height=608]
+
+En cliquant sur une CVE, le navigateur par défaut affiche une page sur les détails la concernant.
+
+== Conclusion
+
+JDKMon est un outil très utile et pratique pour détecter les JDK installés, rechercher les mises à jour disponibles et les télécharger. Il facilite ainsi la mise à jour des JDK installés sur son système.
