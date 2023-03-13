@@ -58,7 +58,7 @@ L'interface `Bean` a deux fonctions principales :
 
 
 .Hiérarchie de l'interface Bean, et oui, Interceptor et Decorator sont également des Beans
-[plantuml, bean-hierarchy2, svg]
+[plantuml, bean-hierarchy, svg]
 ....
 @startuml
 
@@ -122,7 +122,7 @@ Lorsque le `Bean` correspondant est trouvé, le conteneur utilise sa méthode `c
 Ce processus, appelé https://jakarta.ee/specifications/cdi/3.0/jakarta-cdi-spec-3.0.html#typesafe_resolution[_Typesafe resolution_^] peut être simplifié comme ceci :
 
 .Une version simplifiée du processus de typesafe resolution
-[plantuml, typesafe-resolution2, svg]
+[plantuml, typesafe-resolution, svg]
 ....
 @startuml
 start

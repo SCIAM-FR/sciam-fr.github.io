@@ -51,8 +51,6 @@ Le modèle de programmation CDI étant présent dans ces deux stacks, vous êtes
 Mais parfois, vous devrez peut-être accéder à CDI à partir d'un code non CDI ou connecter du code non CDI à des beans CDI au runtime.
 Cette partie de la SPI fournit les outils pour le faire.
 
-image::{{'/images/entry-points.svg' | relative_url}}[image,width=100%]
-////
 [plantuml, "entry-points", "svg", width="100%"]
 ----
 @startuml
@@ -122,7 +120,6 @@ class CDI<T> {
 
 @enduml
 ----
-////
 
 === Les interfaces `CDI` et `BeanManager`
 
@@ -206,8 +203,6 @@ Comme toute la configuration dans CDI est basée sur des annotations, la spec fo
 
 Dans un autre monde, nous aurions pu compter sur le JDK pour la représentation et la réflexion des types, mais comme les APIs du JDK concernant la réflexion sont en lecture seule, CDI a dû créer son propre modèle "mutable" de types.
 
-image::{{'/images/type-meta.svg' | relative_url}}[image,width=100%]
-////
 [plantuml, "type-meta", "svg", width="100%"]
 ----
 @startuml
@@ -271,7 +266,6 @@ interface AnnotatedMethod<X> {
 
 @enduml
 ----
-////
 
 L'interface `AnnotatedType` est l'élément principal de ce méta-modèle.
 Les autres interfaces sont contenues par elle. Tout ce petit monde hérite de l'interface `Annotated` qui fournit les méthodes de base pour accéder aux annotations.
@@ -288,8 +282,6 @@ Comme ces builders ne sont accessibles que dans les portables extensions, nous n
 
 Nous avons déjà donné un bon aperçu des interfaces liées au méta-modèle Bean dans link:{% post_url 2021-01-14-cinquante-nuances-de-beans-CDI %}[l'article précédent^], donc nous n'y reviendrons pas en détail ici.
 
-image::{{'/images/bean-hierarchy.svg' | relative_url}}[image,width=100%]
-////
 [plantuml, bean-meta, svg]
 ----
 @startuml
@@ -337,15 +329,11 @@ interface Decorator<T> {
 
 @enduml
 ----
-////
 
 N'oubliez pas que si ce méta-modèle est principalement utilisé dans les portable extensions pour déclarer des custom beans, il peut également être utilisé pour obtenir une fonction d'introspection sur le bean, l'intercepteur, le décorateur ou le bean actuellement intercepté ou décoré.
 
 Le reste des interfaces SPI du méta-modèle CDI est ci-dessous :
 
-image::{{'/images/cdi-meta.svg' | relative_url}}[image,width=100%]
-
-////
 [plantuml, "cdi-meta", "svg", width="100%"]
 ----
 @startuml
@@ -404,7 +392,6 @@ interface InjectionPoint {
 
 @enduml
 ----
-////
 
 === `ObserverMethod` et `EventMetaData`
 
@@ -545,8 +532,6 @@ Les classes SPI suivantes sont entièrement dédiées au développement d'extens
 
 En fait, la spec définit un type d'événement pour chaque étape du cycle de vie du conteneur (principalement au démarrage) dans lequel la magie des portable extensions se produit.
 
-image::{{'/images/spi-extensions.svg' | relative_url}}[image,width=100%]
-////
 [plantuml, "spi-extensions", "svg", height="100%", width="100%"]
 ----
 @startuml
@@ -624,6 +609,5 @@ interface ProcessProducer<T, X> {
 
 @enduml
 ----
-////
 
 Découvrons cette magie dans un prochain article sur les extensions.
