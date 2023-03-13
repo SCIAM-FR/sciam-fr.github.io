@@ -58,9 +58,7 @@ L'interface `Bean` a deux fonctions principales :
 
 
 .Hiérarchie de l'interface Bean, et oui, Interceptor et Decorator sont également des Beans
-image::{{'/images/bean-hierarchy.svg' | relative_url}}[image,width=100%]
-////
-[plantuml, bean-hierarchy, svg]
+[plantuml, bean-hierarchy2, svg]
 ....
 @startuml
 
@@ -107,7 +105,6 @@ interface Decorator<T> {
 
 @enduml
 ....
-////
 
 Les métadonnées stockées dans `Bean<T>` proviennent du code utilisateur définissant le bean (type et annotations).
 Si vous jetez un coup d'œil à `BeanAttributes` dans le schéma ci-dessus, vous verrez que ses métadonnées incluent un ensemble de types (un bean a plusieurs types) et un ensemble de qualifiers (chaque bean a au moins 2 qualifiers : `@Default` et `@Any`) via les méthodes `getTypes()` et `getQualifiers()` retournant respectivement un `Set<Type>` et un `Set<Annotation>`.
@@ -125,9 +122,7 @@ Lorsque le `Bean` correspondant est trouvé, le conteneur utilise sa méthode `c
 Ce processus, appelé https://jakarta.ee/specifications/cdi/3.0/jakarta-cdi-spec-3.0.html#typesafe_resolution[_Typesafe resolution_^] peut être simplifié comme ceci :
 
 .Une version simplifiée du processus de typesafe resolution
-image::{{'/images/typesafe-resolution.svg' | relative_url}}[image,width=100%]
-////
-[plantuml, typesafe-resolution, svg]
+[plantuml, typesafe-resolution2, svg]
 ....
 @startuml
 start
@@ -152,7 +147,7 @@ endif
 stop
 @enduml
 ....
-////
+
 
 Le processus réel est un peu plus complexe avec l'intégration des Alternatives, mais l'idée générale reste la même.
 
