@@ -30,6 +30,12 @@ sberrien:
   socials:
     linkedin: samuel-berrien-4b94b5172
     github: Ipsedo
+    
+cdetastes:
+  name: 'Clément de Tastes'
+  job: 'Tech Lead'
+  bio: 'Passionné par le développement logiciel depuis l’obtention de sa première calculatrice programmable, Clément se forge une solide expérience de tech lead et d’architecte dans la conception de systèmes de combats embarqués. Adepte du clean code, de "developer joy" et d’architectures bien pensées, il aime intervenir aussi bien sur les sujets de conception que de dev front ou back.'
+  picture: 'cdetastes.png'
 
 #osans:
 #  name: 'Olivier Sans'
