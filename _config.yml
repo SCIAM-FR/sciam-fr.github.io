@@ -41,6 +41,7 @@ asciidoctor:
   safe: unsafe
   excerpt_separator: "\n//more\n"
   attributes:
+    stem: latexmath
     idseparator: _
     source-highlighter: rouge
     source-language: java
@@ -48,7 +49,7 @@ asciidoctor:
     rouge-style: github
     asciidoctor-stylesheet: asciidoctor.css
     icons: font
-    imagesdir: "/images/generated"
+    imagesdir: "/images"
 
 plugins:
   - jekyll-paginate-v2
