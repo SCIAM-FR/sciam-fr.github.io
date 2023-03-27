@@ -11,6 +11,7 @@
 :page-vignette-licence: 'Image par <a href="https://pixabay.com/fr/users/GDJ-1086657/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=3244110">Gordon Johnson</a> de Pixabay'
 :page-liquid:
 
+
 Pendant que https://www.lefigaro.fr/secteur/high-tech/des-chercheurs-en-intelligence-artificielle-organisent-leur-eurovision-2-0-20200504[des chercheurs en intelligence artificielle organisaient leur Eurovision 2.0 pour faire s’affronter treize équipes issues de huit pays autour de l’AI Song Contest] (concours musical similaire à l’Eurovision mais dans lequel chaque morceau a été élaboré à l’aide de systèmes d’intelligence artificielle), j’ai voulu générer des musiques reprenant le style de mes artistes préférés et ainsi *créer de nouvelles œuvres musicales artificielles*.
 
 Je me suis donc intéressé aux *auto-encodeurs*__ __implémentés par des** réseaux de neurones profonds**.
@@ -25,21 +26,24 @@ Pour y parvenir, *l’algorithme optimise ses paramètres* “θ” en évaluant
 
 *L’algorithme se règle pour minimiser son erreur si vous préférez.*
 
-image::{{'/images/reseau-neuronal-artificiel-rivaliser-avec-bach-002.png' | relative_url }}[image,width=604,height=453]
+[latexmath]
+++++
+\forall(x,y) \in D, \underset {\theta}{min} \left [ \frac {1}{|D|} \sum_{i=0}^{|D|}loss(y_i,f(x_i,\theta)) \right]
+++++
 
 Par nature, les **réseaux de neurones profonds **sont tout à fait adaptés à l’apprentissage de représentations latentes : *lorsqu’ils optimisent leur décision* face à des données**, ils apprennent par la même occasion une représentation interne **(selon les réglages de l’utilisateur) censée *faciliter la tâche de décision*.
 
 Prenons un exemple concret : la séparation du ou-exclusif (XOR) par une droite est impossible en deux dimensions. Elle le devient en passant en trois dimensions moyennant une projection entre les deux espaces. C’est cette projection que le réseau de neurones profond apprend en plus de sa décision (illustration ci-dessous).
 
 .Linear neural network — représentations latentes
-image::{{'/images/reseau-neuronal-artificiel-rivaliser-avec-bach-003.png' | relative_url }}[image,width=604,height=161]
+image::reseau-neuronal-artificiel-rivaliser-avec-bach-003.png[image,width=604,height=161]
 
 Passons maintenant à l’auto-encodeur.
 
 *Un auto-encodeur sert à encoder la donnée sous une forme différente de l’originale* (un espace latent) *pour ensuite la décoder et ainsi retrouver l’entrée initiale*.
 
 .Auto-encodeur
-image::{{'/images/reseau-neuronal-artificiel-rivaliser-avec-bach-004.png' | relative_url }}[image,width=256,height=232]
+image::reseau-neuronal-artificiel-rivaliser-avec-bach-004.png[image,width=256,height=232]
 
 Il n’y a donc mathématiquement aucune différence avec les problèmes supervisés évoqués plus haut. Le seul changement étant que *la caractéristique à prédire,* la vérité ou le “y” si vous préférez, est *la donnée elle-même*.
 
@@ -82,7 +86,7 @@ def open_wav(wav_path: str, nb_sec: int) -> Tuple[int, np.ndarray]:
 
 Je vous propose ensuite de *passer dans le domaine fréquentiel grâce à la https://fr.wikipedia.org/wiki/Transformation_de_Fourier_discr%C3%A8te[transformée de Fourier]* (ou _FFT_, ici discrète).
 
-image::{{'/images/reseau-neuronal-artificiel-rivaliser-avec-bach-005.png' | relative_url }}[image,width=540,height=378]
+image::reseau-neuronal-artificiel-rivaliser-avec-bach-005.png[image,width=540,height=378]
 
 Transformée de Fourier
 
@@ -161,13 +165,22 @@ Chaque pas de temps de la donnée temporelle est représenté par un vecteur de 
 La dimension temporelle de l’audio est diminuée en ajoutant du pas aux fenêtres de https://en.wikipedia.org/wiki/Convolution[convolution] (paramètre “stride” dans PyTorch). L’opération inverse est effectuée avec des http://d2l.ai/chapter_computer-vision/transposed-conv.html[convolutions transposées] pour la partie décodeur (Il existe de nombreuses vidéos sur le sujet des convolutions transposées, aussi j’invite les personnes qui souhaiteraient comprendre plus en détail le sujet à en visionner quelques-unes).
 
 .Pipeline de traitement
-image::{{'/images/reseau-neuronal-artificiel-rivaliser-avec-bach-006.png' | relative_url }}[image,width=524,height=933]
+image::reseau-neuronal-artificiel-rivaliser-avec-bach-006.png[image,width=524,height=933]
 
 J’attire particulièrement votre attention sur la *réduction temporelle* pour la représentation latente. *Attention, les signaux audio d’entrée et de sortie ne sont pas à la même échelle de temps que les matrices intermédiaires*.
 
 Ensuite, pour *définir le taux de réduction temporel* (“d” dans la formule plus bas) du réseau à convolutions, il faut impérativement que le nombre de pas de temps obtenu à la sortie de l’encodeur soit un entier, nous ne pouvons représenter un demi-vecteur. L’équation est la suivante sachant un échantillonnage de 44 100Hz et une longueur minimale de signal fixée à une seconde :
 
-image::{{'/images/reseau-neuronal-artificiel-rivaliser-avec-bach-007.png' | relative_url }}[image,width=604,height=164]
+[latexmath]
+++++
+ f_s = 44100 \text{ Hz} , \Delta_t=1s
+++++
+
+[latexmath]
+++++
+ \exists? \text{ }d \in \mathbb{N} \text{ et } N_{fft} \in \mathbb{N}, \frac{\frac{\Delta_t*f_s}{N_{fft}}}{d} \in \mathbb{N}
+++++
+
 
 En cherchant le *nombre de fréquences* autorisant le plus de choix pour le facteur de divisons de notre transformée de Fourrier, *49 semble être le meilleur compromis entre richesse de la discrétisation des fréquences et diminution de l’échelle temporelle*. Ainsi notre signal audio brut, une fois passé dans le domaine fréquentiel, sera représenté par 900 vecteurs de dimension 98 pour une seconde d’audio à 44 100Hz.
 
@@ -306,13 +319,13 @@ optim = th.optim.Adam(list(enc.parameters()) + list(dec.parameters()), lr=1e-5)
 J’ai mis en place et testé plusieurs architectures de CNN avec des scores variant selon leurs spécificités.
 
 .Résultats obtenus via les différentes architectures testées
-image::{{'/images/reseau-neuronal-artificiel-rivaliser-avec-bach-008.png' | relative_url }}[image,width=604,height=340]
+image::reseau-neuronal-artificiel-rivaliser-avec-bach-008.png[image,width=604,height=340]
 
 *Trouver le bon compromis entre qualité de la sortie de décodeur et facteur de compression de la donnée constitue un des problèmes majeurs.*
 
 Les architectures 1 et 2 réduisent très nettement la dimension temporelle et n’augmentent pas proportionnellement la dimension d’un pas de temps. Les résultats sont médiocres ; que ce soit pour la fonction objectif ou pour la qualité sonore jugée par un humain.
 
-image::{{'/images/reseau-neuronal-artificiel-rivaliser-avec-bach-009.png' | relative_url }}[image,width=604,height=453]
+image::reseau-neuronal-artificiel-rivaliser-avec-bach-009.png[image,width=604,height=453]
 
 À l’inverse, la troisième architecture (resp. la “Small”) qui ne diminuait que de 12 (resp. 6) l’échelle temporelle tout en n’augmentant pas significativement la taille du vecteur de features, donne des résultats convenables (fonction objectif et écoute humaine) sur des audios non issus de l’ensemble d’apprentissage.
 
@@ -320,7 +333,7 @@ image::{{'/images/reseau-neuronal-artificiel-rivaliser-avec-bach-009.png' | rela
 
 Les architectures 3 et 4bis illustrent bien ce compromis. L’architecture 3 ne compresse pas beaucoup temporellement l’audio et n’augmente pas significativement la dimension des vecteurs. Les résultats sont corrects. Tandis que l’architecture 4bis, qui elle a un fort taux de compression temporel, augmente en conséquence la dimension de vecteurs en opposition à l’architecture 3 et permet ainsi des résultats plus corrects que sa version allégée (l’architecture 4).
 
-image::{{'/images/reseau-neuronal-artificiel-rivaliser-avec-bach-010.png' | relative_url }}[image,width=100%]
+image::reseau-neuronal-artificiel-rivaliser-avec-bach-010.png[image,width=100%]
 
 *Des modèle pré-entraînés sont disponible sur le http://ipsedo/MusicAutoEncoder[GitHub du projet] et permettent de produire une inférence sur un fichier audio WAV*. Je vous laisse admirer le résultat !
 
@@ -336,12 +349,19 @@ Les GAN (Generative Adversarial Networks, https://arxiv.org/pdf/1406.2661.pdf[pa
 
 Dit autrement *les deux modèles se “combattent”* : le discriminateur essaie d’apprendre à reconnaître les fausses données issues du générateur alors que ce dernier apprend à tromper le discriminateur en générant des fausses données ressemblant aux vraies. Ainsi les fausses données issues du générateur doivent en théorie, lorsque le GAN a convergé, ressembler aux données réelles à partir desquelles il a été entraîné.
 
-image::{{'/images/reseau-neuronal-artificiel-rivaliser-avec-bach-011.png' | relative_url }}[image,width=604,height=340]
+image::reseau-neuronal-artificiel-rivaliser-avec-bach-011.png[image,width=604,height=340]
 
 Voici les deux fonctions objectif qu’il faut optimiser, à savoir celle du discriminateur et celle du générateur :
 
-image::{{'/images/reseau-neuronal-artificiel-rivaliser-avec-bach-012.png' | relative_url }}[image,width=604,height=145]
+[latexmath]
+++++
+l_{disc}= -(\log_2(Disc(x_{real}))+ \log_2(1-Disc(x_{fake})))
+++++
 
+[latexmath]
+++++
+l_{gen}= -\log_2(Disc(x_{fake})))
+++++
 Ces deux fonctions objectifs s’implémentent de la manière suivante :
 
 [source,python]
@@ -513,14 +533,14 @@ Ce mode d’échec se matérialise de la manière suivante : le discriminateur c
 * le générateur (un des décodeurs que nous avons implémenté pour les auto-encodeurs) n’est peut être pas adapté à cette tâche et ne peut pas converger convenablement.
 
 .learning rates : disc = 2e-5, gen = 3e-4
-image::{{'/images/reseau-neuronal-artificiel-rivaliser-avec-bach-013.png' | relative_url }}[image,width=604,height=453]
+image::reseau-neuronal-artificiel-rivaliser-avec-bach-013.png[image,width=604,height=453]
 
 
 Il y a un *réel compromis à trouver entre les “rapidités” de convergence des deux modèles.*
 
 En simplifiant le modèle du discriminateur pour que celui soit en théorie plus faible et/ou en diminuant son taux d’apprentissage, il est possible de retarder le mode d’échec sur quelques époques comme le montrent les graphes ci-dessous :
 
-image::{{'/images/reseau-neuronal-artificiel-rivaliser-avec-bach-014.png' | relative_url }}[image,width=100%]
+image::reseau-neuronal-artificiel-rivaliser-avec-bach-014.png[image,width=100%]
 
 Le deuxième graphe permet d’observer que le générateur arrive à prendre le dessus sur le discriminateur entre les époques de 2 à 6. Notons que dans les deux cas où seul le taux d’apprentissage du générateur diffère (4e-4 pour le premier et 1e-4 pour le deuxième) le discriminateur finit par reprendre le dessus.
 
@@ -531,7 +551,7 @@ Les résultats le confirment car *la qualité des audio générés laisse à dé
 *L’auto-encodeur n’est pas optimisé pour générer de l’audio aléatoirement et le GAN rentre en échec pour tout les tests effectués jusqu’à présent*.
 
 .Image par MikesPhotos de Pixabay
-image::{{'/images/reseau-neuronal-artificiel-rivaliser-avec-bach-015.jpeg' | relative_url }}[image,width=604,height=340]
+image::reseau-neuronal-artificiel-rivaliser-avec-bach-015.jpeg[image,width=604,height=340]
 
 Cependant, les *modèles expérimentés* (encodeurs, décodeurs / générateurs et discriminateurs)* fonctionnent bien de manière indépendante* : l’enchaînement encodeur puis décodeur montre des résultats prometteurs et le discriminateur peut converger seul de manière notoire. C’est lorsque le décodeur, utilisé en temps que générateur, marche de paire avec le discriminateur que l’optimisation multi-objectifs coince.
 
