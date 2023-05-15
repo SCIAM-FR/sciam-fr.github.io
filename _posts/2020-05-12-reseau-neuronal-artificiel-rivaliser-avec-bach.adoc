@@ -10,9 +10,6 @@
 :post-vignette: reseau-neuronal-artificiel-rivaliser-avec-bach-001.png
 :page-vignette-licence: 'Image par <a href="https://pixabay.com/fr/users/GDJ-1086657/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=3244110">Gordon Johnson</a> de Pixabay'
 :page-liquid:
-ifdef::env-gitlab[]
-:imagesdir: /images
-endif::[]
 
 
 Pendant que https://www.lefigaro.fr/secteur/high-tech/des-chercheurs-en-intelligence-artificielle-organisent-leur-eurovision-2-0-20200504[des chercheurs en intelligence artificielle organisaient leur Eurovision 2.0 pour faire s’affronter treize équipes issues de huit pays autour de l’AI Song Contest] (concours musical similaire à l’Eurovision mais dans lequel chaque morceau a été élaboré à l’aide de systèmes d’intelligence artificielle), j’ai voulu générer des musiques reprenant le style de mes artistes préférés et ainsi *créer de nouvelles œuvres musicales artificielles*.
