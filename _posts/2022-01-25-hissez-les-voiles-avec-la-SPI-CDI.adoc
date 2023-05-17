@@ -3,7 +3,7 @@
 :page-navtitle: Hissez les voiles avec la SPI CDI
 :page-excerpt: 'La spécification CDI n''est pas un document facile d''accès et la façon dont elle est rédigée ne permet pas aux développeurs de comprendre facilement les fonctionnalités en question. Cet article a pour but de mettre en lumière l''une des pépites de CDI : sa SPI. Nous aborderons l''autre trésor de la spec dans un prochain article sur les portable extensions.'
 :layout: post
-:author: antoinesd
+:author: antoinesabotdurand
 :page-tags: [CDI,SPI,Extension]
 :docinfo: shared-footer
 :page-vignette: legobricks.jpg

@@ -3,7 +3,7 @@
 :page-navtitle: Modéliser un jeu de plateau sous Excel VBA : Terraforming Mars
 :page-excerpt: TODO.
 :layout: post
-:author: cblondeau
+:author: christopheblondeau
 :page-tags: ['Terraformring Mars', 'Excel', 'VBA']
 :docinfo: shared-footer
 :page-vignette: terraforming-mars-001.jpeg

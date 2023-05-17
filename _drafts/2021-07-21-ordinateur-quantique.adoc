@@ -3,7 +3,7 @@
 :page-navtitle: L’ordinateur quantique : comprendre l’origine de la puissance quantique et ses défis
 :page-excerpt: TODO.
 :layout: post
-:author: kkechadi
+:author: kacikechadi
 :page-tags: ['Ordinateur quantique']
 :docinfo: shared-footer
 :page-vignette: ordinateur-quantique-001.jpeg

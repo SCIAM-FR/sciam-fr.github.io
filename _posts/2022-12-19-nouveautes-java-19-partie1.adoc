@@ -2,7 +2,7 @@
 :page-navtitle: Les nouveautés de Java 19 : partie 1
 :page-excerpt: Ce premier article de la série sur les nouveautés de Java 19 détaille les fonctionnalités proposées par les JEP des projets Amber et Panama.
 :layout: post
-:author: jmdoudoux
+:author: jeanmicheldoudoux
 :page-tags: [Java, Java 19, Projet Amber, Projet Panama]
 :docinfo: shared-footer
 :page-vignette: java-19.png
