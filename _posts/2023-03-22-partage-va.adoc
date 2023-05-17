@@ -1,0 +1,112 @@
+= Partage de la valeur ajoutée
+:showtitle:
+:page-navtitle: Partage de la valeur ajoutée
+:page-excerpt: "Nos lecteurs sont en principe convaincus de la nécessité de disposer de données et de métadonnées d’excellente qualité pour développer leurs affaires. Reste que, même quand c’est le cas, l’interprétation (erronée) de ces données peut amener l’utilisateur à commettre des erreur de jugement dramatiques : démonstration par la comptabilité nationale."
+:layout: post
+:author: guillaumenicoulaud
+:page-tags: ['misc']
+:docinfo: shared-footer
+:page-vignette: buildings.png
+:post-vignette: buildings.png
+:page-vignette-licence: Photo de <a href="https://unsplash.com/@matosem?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Kevin Matos</a> sur <a href="https://unsplash.com/fr/photos/Nl_FMFpXo2g?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+:page-liquid:
+
+Nos lecteurs sont en principe convaincus de la nécessité de disposer de données et de métadonnées d’excellente qualité pour développer leurs affaires. Reste que, même quand c’est le cas, l’interprétation (erronée) de ces données peut amener l’utilisateur à commettre des erreur de jugement dramatiques : démonstration par la comptabilité nationale et, plus précisément, la notion de _partage de la valeur ajoutée_.
+
+== Les données
+
+Je reproduis ci-dessous une version légèrement simplifiée du https://www.insee.fr/fr/statistiques/6438735?sommaire=6438793[tableau 1.107^], «_Partage de la valeur ajoutée brute à prix courants (en milliards d'euros)_», tel que publié par le comptable national (l'Insée) en rajoutant simplement quelques indications sur la nature des postes et les opérations effectuées. Ces chiffres concernent l'année 2021 et sont donnés en milliards d'euros courants, base 2014 :
+
+[cols="5,>2", width="80%"]
+|===
+|= Valeur ajoutée brute *au prix de base* (B1g) | 2'216.8
+|- Autres impôts sur la production (D29) | 113.0
+|+ Autres subventions sur la production (D39) | 67.9
+|- Rémunération des salariés (D1) | 1'283.8
+|= Excédent brut d'exploitation et Revenu mixte brut (B2g + B3g) | 887.9
+|_dont_ : Excédent brut d'exploitation (B2g) | 755.7
+|_dont_ : Revenu mixte brut (B3g) | 132.2
+|===
+
+Pour autant que je sache ces données sont aussi justes qu'elles peuvent l'être mais l'interprétation qui en est faite bien souvent est parfaitement erronée. Plus précisément : de nombreux commentateurs peu aguerris et désireux de mesurer comment la richesse créée par l'économie est répartie entre le travail et le capital utilisent ces chiffres sans les comprendre et en arrivent à des conclusions parfaitement fausses. Erreur typique : rapporter les rémunération des salariés (D1) footnote:[La rémunération des salariés inclue le coûts total employeur tel qu'il apparait sur vos bulletins de paie (salaire brut + charges dites « patronales ») ainsi que l'intéressement, la participation et les éventuels abondements au titre de l'épargne salariale (il me semble que les avantages en nature sont aussi évalués mais je préfère ne pas m'avancer sur ce point).] à la valeur ajoutée brute (B1g) et en déduire que la part du travail dans la richesse créée n'est que de 57.9% puis, faire le même calcul avec la somme de l'excédent brut d'exploitation (B2g) et du revenu mixte (B3g) et en conclure que la part du capital s'élève à 40.1%.
+
+Ce qui est parfaitement faux. Dès lors que nous souhaitons mesurer la part des facteurs de production (_le travail et le capital_) dans la production de richesse nationale, ces données doivent être retraitées.
+
+== Le coût des facteurs
+
+Le premier retraitement n'entraine pas de modifications majeures mais, quitte à faire les choses autant les faire bien : jusque à preuve du contraire, les https://www.insee.fr/fr/metadonnees/definition/c1541[autres impôts sur la production^] ne rémunèrent ni le travail ni le capital (il faut donc les retrancher de la valeur ajoutée brute au prix de base) tandis que les https://www.insee.fr/fr/metadonnees/definition/c2263[autres subventions sur la production^] sont susceptibles de rémunérer l'un comme l'autre (il faut donc les rajouter). C'est ce que le comptable national appelle la valeur ajoutée brute _au coût des facteurs_ :
+
+[cols="5,>2", width="80%"]
+|===
+|= Valeur ajoutée brute *au prix de base* (B1g) | 2'216.8
+|- Autres impôts sur la production (D29) | 113.0
+|+ Autres subventions sur la production (D39) | 67.9
+|= Valeur ajoutée brute *au coût des facteurs* | 2'171.7
+|===
+
+La rémunération des salariés (D1) représente désormais 59.1% de la valeur ajoutée brute (au coût des facteurs) et la rémunération du capital, évidemment, c'est simplement le complément pour faire 100%.
+
+== Du brut au net
+
+Le second retraitement est beaucoup plus important : lorsqu'on cherche à mesurer de la richesse (par opposition à de l'activité), on ne raisonne jamais en valeur ajoutée brute mais en valeur ajoutée _nette_. La différence entre les deux, c'est ce que le comptable national appelle la https://www.insee.fr/fr/metadonnees/definition/c1115[consommation de capital fixe^] (P51c, voir le https://www.insee.fr/fr/statistiques/6438735?sommaire=6438793[tableau 1.112^]), c'est-à-dire la dépréciation (ou amortissement) du capital physique. Le fait est qu'une part substantielle de l'activité économique (telle que mesurée par le PIB) ne créé pas de richesse nette : lorsque, par exemple, les rails ou le matériel roulant de la SNCF s'usent, ça n'est en aucune façon une rémunération du capital (pas plus qu'une rémunération du travail). Si la SNCF ne fait rien, son matériel perd de la valeur ; si elle procède à l'entretient nécessaire, c'est un coût.
+
+Le retraitement consiste donc à retrancher cette consommation de capital fixe à la valeur ajoutée brute pour obtenir une valeur ajoutée nette et, parallèlement, à la retrancher à l'excédent brut d'exploitation (et au revenu mixte brut) pour calculer un excédent net d'exploitation (et un revenu mixte net) :
+
+[cols="5,>2", width="80%"]
+|===
+|= Valeur ajoutée brute *au coût des facteurs* | 2'171.7
+|- Consommation de capital fixe (P51c) | 486.3
+|= Valeur ajoutée *nette* au coût des facteurs | 1'685.3
+|- Rémunération des salariés (D1) | 1'283.8
+|= Excédent *net* d'exploitation et Revenu mixte *net* (B2n + B3n) | 401.6
+|_dont_ : Excédent *net* d'exploitation (B2n) | 281.4
+|_dont_ : Revenu mixte *net* (B3n) | 120.2
+|===
+
+La rémunération des salariés (D1) représente alors 76.2% de la valeur ajoutée nette au coût des facteurs et la rémunération du capital, les 23.8% restants.
+
+== Que voulez-vous mesurer ?
+
+Notez que, jusqu'ici, nous n'avons fait qu'appliquer à la lettre les recommandations de tout bon manuel de comptabilité nationale. Ces deux retraitements n'ont absolument rien de nouveau ni d'original :ils ne font pas débat. Ce qui suit, en revanche, relève plus de l'interprétation (de votre serviteur et d'un bon nombre d'économistes) et peut donc être débatu.
+
+Pour bien comprendre le point, il nous faut découper l'économie nationale (S10) en ses cinq secteurs institutionnels, tels que définis par L'insée — _Sociétés non financières_ (S11), _Sociétés financières_ (S12), _Administrations publiques_ (S13), _Ménages y compris entrepreneurs individuels_ (S14) et _Institutions sans but lucratif au service des ménages_ (S15) — et comparer la rémunération des salariés (ci-dessous, « Salariés », c'est-à-dire le poste D1 de la compatbilité nationale) à la valeur ajoutée _nette au prix des facteurs_ (ci-dessous « VAN ») telle que nous venons de la calculer.
+
+[cols="5,>2,2,2", width="80%"]
+|===
+|Secteur | VAN | Salariés | %
+|Sociétés non financières (S11) | 999,6 | 836,1 | 83,6%
+|Sociétés financières (S12) | 63,6 |  60,2 | 94,7%
+|Administrations publiques (S13) | 312,7 | 312,4 | 99,9%
+|Ménages y-c entrepreneurs individuels (S14) | 275,2 | 40,9 | 14,9%
+|Institutions sans but lucratif (S15) | 34,2 | 34,2 | 100,0%
+|Économie nationale (S10) | 1'685,3 | 1'283,8 | 76,2%
+|===
+
+Comme vous pouvez le constater, la part de la rémunération des salariés dans les administrations publiques (S13) et dans les institutions sans but lucratif au service des ménages (S15) est proche de 100%. En théorie, elle devrait même être de 100% exactement. C'est tautologique : la production de ces deux secteurs étant essentiellement non-marchande (i.e. nous n'avons pas de prix de marché pour l'évaluer), elle est donc mesurée, par convention, à son coût de production ; c'est-à-dire le coût des consommations intermédiaires, la rémunération des salariés, la consommation de capital fixe (qui est donc bien traitée comme un coût) et le solde des impôts et subventions sur la production. Bref, au-delà de ces petits écarts footnote:[C'est une petite bizarrerie que je ne parviens pas à expliquer : l'excédent net d'exploitation des administrations publiques et ISBLSM est très proche de zéro mais pas exactement et cette bizarrerie se répercute d'année en année jusqu'à l'évaluation de la production. Cette dernière devrait, en principe, être égale à la somme des postes consommation intermédiaire (P2), consommation de capital fixe (P51c), rémunération des salariés (D1) et impôts sur la production (D29) moins les autres subventions sur la production (D39) mais, sans que je parvienne à identifier pourquoi, on observe systématiquement de petits écarts.], la part de la rémunération des salariés dans la valeur ajoutée nette au coût des facteurs de ces deux secteurs devrait logiquement être de 100%.
+
+Vous serez sans doute moins surpris par les résultats obtenus pour les sociétés financières et non-financières (banques, compagnies d'assurance etc…). Dans ces deux cas, il est évident que le capital doit être rémunéré et il ne devrait surprendre personne qu'il le soit plus dans les sociétés non-financières (pensez aux rails et au matériel roulant de la SNCF footnote:[Les sociétés financières (S12) et non-financières (S11) incluent également les entreprises détenues, en tout ou partie, par L'État.]) que dans les sociétés financières.
+
+Il nous reste donc le secteur des ménages y-compris entrepreneurs individuels (S14) dans lequel la part des salariés dans la valeur ajoutée nette au coût des facteurs n'est que de 14.9% ; ce qui nous amène naturellement à évaluer la part du capital, pour ce secteur, à 85.1%. De quoi s'agit-il ? Eh bien de deux choses : d'une part, de l'activité locative des ménages qui, de fait, génère une rémunération du capital (le leur) sans nécessiter d'embaucher grand monde et, d'autre part, des nombreuses activités des entrepreneurs individuels (les indépendants et, éventuellement, les membres de leur famille) dont une partie des revenus (les fameux https://www.insee.fr/fr/metadonnees/definition/c1885[revenus mixtes^]) peut effectivement être considéré comme une rémunération du capital — la moissonneuse-batteuse d'un céréalier indépendant, par exemple, c'est du capital (le sien).
+
+De là, tout dépend de ce que vous cherchez à mesurer. Si votre objectif est de mesurer la part de la rémunération du travail et celle du capital dans la richesse nette créée par l'économie nationale, il est sans doute temps de prendre en compte les milliards d'heures de travail effectuées en dehors de tout contrat de travail, c'est-à-dire le https://www.insee.fr/fr/metadonnees/definition/c1748[travail non-salarié^]. On parle ici de 3'254.8 emplois (en équivalent temps plein) sur les 27'329.5 emplois recensés par le comptable national en 2021, près de 12% du total, qui sont massivement le fait de ce secteur — sachant que les salariés, ici, sont des membres de la famille et que le capital que rémunèrent les indépendants, c'est le leur et ils le rémunèrent grâce à leur propre travail.
+
+D'où le dernier retraitement que je propose ici, ayant parfaitement conscience qu'il n'est pas conforme à la pratique du comptable national :
+
+[cols="5,>2,2,2", width="80%"]
+|===
+| Secteur | VAN | Travail | %
+|Sociétés non financières (S11) | 999,6 | 836,1 | 83,6%
+|Sociétés financières (S12) | 63,6 |  60,2 | 94,7%
+|Administrations publiques (S13) | 312,7 | 312,7 | 100,0%
+|Ménages y-c entrepreneurs individuels (S14) | 275,2 | 275.2 | 100.0%
+|Institutions sans but lucratif (S15) | 34,2 | 34,2 | 100.0%
+|Économie nationale (S10) | 1'685,3 | 1'518,4 | 90,1%
+|===
+
+C'est-à-dire que la part de la valeur ajoutée nette au coût des facteurs (i.e. ce qui peut légitimement être considéré comme partageable par les facteurs de production) qui a été allouée au travail (salarié ou non) en 2021 était de 90.1% et, par différence, la part allouée au capital (étant entendu comme le capital d'une personne autre que celle qui travaille) n'était que de 9.9%.
+
+== Conclusion
+
+Il va de soit que ce dernier retraitement est sujet à caution. Sa principale faiblesse repose sur les activités locatives des ménages : on peut tout à fait légitimement supposer que ces quelques 115.8 milliards d'excédent net d'exploitation constituent bien une rémunération du capital (auquel cas la part du travail retombe à 83.2%) ou, sans doute plus justement, que ce poste n'a rien à faire dans un compte d'exploitation et devrait être traité dans le compte d'affectation des revenus primaires au même titre que les investissements en actions, obligations (etc…). A contrario, il est légitime de s'interroger sur la réelle valeur ajoutée des secteurs principalement non marchands (administrations et institutions sans but lucratif footnote:[Et je précise ici que cette réévaluation peut avoir lieu dans un sens comme dans l'autre : je pense notamment au travail fourni à titre gracieux par les bénévoles qui, de toute évidence, créé de la valeur ajoutée nette mais pas au coût des facteurs (puisque bénévole).]) tout comme on peut se demander si les salaires des actionnaires dirigeants des sociétés (financières ou non) ne comporte pas une part de rémunération de leur travail effectif. Nous remettrons, si vous le voulez bien, ces débats à plus tard.
+
+Reste que le résultat est là : avec les mêmes données, nous sommes passés d’une « _part des salariés dans la valeur ajoutée_ » d’une peu moins de 58% à plus à un peu plus de 90%.
