@@ -3,7 +3,7 @@
 :page-navtitle: Direct Feedback Alignement : une alternative prometteuse à la Back-Propagation ?
 :page-excerpt: TODO.
 :layout: post
-:author: osans
+:author: oliviersans
 :page-tags: ['Direct Feedback Alignement','Back-Propagation']
 :docinfo: shared-footer
 :page-vignette: direct-feedback-alignement-001.png

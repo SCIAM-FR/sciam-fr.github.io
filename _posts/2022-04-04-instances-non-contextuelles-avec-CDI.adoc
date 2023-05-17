@@ -3,7 +3,7 @@
 :page-navtitle: Les instances non contextuelles de CDI
 :page-excerpt: Depuis CDI 2.0, vous pouvez créer des instances de beans non contextuelles. Ceci est utile pour créer des instances de beans qui ne sont pas gérées par le conteneur, comme dans une application autonome. Dans cet article, nous allons voir comment créer des instances non contextuelles de beans avec CDI.
 :layout: post
-:author: antoinesd
+:author: antoinesabotdurand
 :page-tags: [CDI,SPI,Extension,Java]
 :docinfo: shared-footer
 :page-vignette: fishbowl.png

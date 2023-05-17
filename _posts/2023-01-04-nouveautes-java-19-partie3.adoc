@@ -2,7 +2,7 @@
 :page-navtitle: Les nouveautés de Java 19 : partie 3
 :page-excerpt: Ce troisième article de la série sur les nouveautés de Java 19 détaille les autres fonctionnalités non définies dans une JEP.
 :layout: post
-:author: jmdoudoux
+:author: jeanmicheldoudoux
 :page-tags: [Java, Java 19]
 :docinfo: shared-footer
 :page-vignette: java-19.png

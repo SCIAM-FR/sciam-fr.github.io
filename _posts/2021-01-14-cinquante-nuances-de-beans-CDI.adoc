@@ -3,7 +3,7 @@
 :page-navtitle: Cinquantes nuances de Beans CDI
 :page-excerpt: 'Dans CDI, les Beans sont un concept central. Pourtant, pour beaucoup de développeurs, cette notion reste floue et suscite souvent beaucoup d''interrogations. Cet article tente de clarifier le fonctionnement des beans et détaille les mécanismes mis en œuvre derrière leur définition et leur injection.Les concepts abordés ici sont les mêmes pour toutes les versions de CDI de 1.x à 4.x.'
 :layout: post
-:author: antoinesd
+:author: antoinesabotdurand
 :page-tags: [CDI,Beans,EJB]
 :docinfo: shared-footer
 :page-vignette: Coffee-Beans-Black-and-White.jpg

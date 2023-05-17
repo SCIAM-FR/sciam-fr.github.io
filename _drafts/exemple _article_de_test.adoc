@@ -3,7 +3,7 @@
 :page-navtitle: Article de test en AsciiDoc 
 :page-excerpt: Article de test en AsciiDoc sur le blog
 :layout: post
-:page-auteurs: [antoinesd,jmdoudoux]
+:page-auteurs: [antoinesabotdurand,jeanmicheldoudoux]
 :page-tags: [Test,Java,Blog]
 :docinfo: shared-footer
 :page-toc: false

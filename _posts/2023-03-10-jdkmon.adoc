@@ -2,7 +2,7 @@
 :page-navtitle: Faciliter la mise à jour de JDKs avec JDKMon
 :page-excerpt: Cet article présente l'outil JDKMon qui facilite la mise à jour des JDKs installés dans des répertoires du système.
 :layout: post
-:author: jmdoudoux
+:author: jeanmicheldoudoux
 :page-tags: [JDK, Java, JDKMon, Outillage]
 :docinfo: shared-footer
 :page-vignette: jdkmon.png

@@ -2,7 +2,7 @@
 :page-navtitle: Les nouveautés de Java 19 : partie 2 
 :page-excerpt: Ce second article de la série sur les nouveautés de Java 19 détaille les fonctionnalités proposées par les JEPs du projet Loom et un nouveau portage d'OpenJDK.
 :layout: post
-:author: jmdoudoux
+:author: jeanmicheldoudoux
 :page-tags: [Java, Java 19, Projet Loom, Threads virtuels, Concurrence structurée]
 :docinfo: shared-footer
 :page-vignette: java-19.png

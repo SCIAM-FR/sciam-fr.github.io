@@ -1,47 +1,130 @@
-jmdoudoux:
-  name: 'Jean-Michel Doudoux'
-  bio: 'Passionné par le développement de logiciels depuis ses débuts, adolescent avec un Commodore 64, et par la veille technologique, Jean-Michel possède une longue expérience, en SSII/ESN et personnelle, dans l’écriture d’applications avec différents langages.
-Il utilise Java depuis sa version 1.0 et aime partager sa passion pour cette plateforme et son écosystème notamment en se consacrant, depuis plus d’une vingtaine d’années, à la rédaction d’un tutoriel intitulé &quot;Développons en Java&quot;, diffusé sous licence GNU FDL. Ce travail et son implication dans la communauté lui a permis d’être nommé Java Champion.'
-  job: 'Senior Tech Lead'
-  website: 'https://www.jmdoudoux.fr'
-  picture: jmdoudoux.png
-  twitter: 'jmdoudoux'
+kacikechadi:
+  name: 'Kaci Kechadi'
+  bio: "Docteur en physique et spécialisé dans la modélisation des systèmes complexes, Kaci a développé durant son expérience de chercheur une approche pragmatique de la modélisation des données. Fasciné par le potentiel de l’intelligence artificielle à transformer, à la fois, le quotidien des individus et des entreprises, Kaci a rejoint SCIAM pour accompagner ses clients sur des thématiques liées à la valorisation de la donnée. Curieux et amateur de vulgarisation scientifique, il a participé à plusieurs ateliers à l’occasion de la Fête de la science. Kaci est également passionné de littérature francophone qu’il découvre en Kabylie où il a grandi !"
+  job: "Data Scientist"
+  website: "https://sciam.fr/fr/equipe/26"
+  picture: kacikechadi.png
   socials:
-    linkedin: 'jmdoudoux'
+  linkedin: "kaci-kechadi"
 
-antoinesd:
-  name: 'Antoine Sabot-Durand'
-  bio: 'Passionné par Java et le développement, Antoine est un Java Champion expert sur Jakarta EE et CDI. Il a été Specification Leader sur CDI 2.0 et a participé à CDI 4.0. Membre du Working Group Microprofile, il a  aussi dirigé les specification MicroProfile Fault Tolerance et MicroProfile Health. Chez Sciam, il a le rôle de Tech Lead et participe a la capitalisation des savoirs faire de l''entreprise'
-  job: 'Senior Tech Lead'
-  website: 'https://next-presso.com'
-  picture: antoine_sd.png
-  twitter: 'antoine_sd'
+christopheblondeau:
+  name: "Christophe Blondeau"
+  bio: "Explorateur du monde et des organisations, le parcours de Christophe s'inscrit dans la diversité : Un cursus ESSEC couplé à un Master de R&D sur les réseaux de Neurones, un peu d'enseignement, 20 ans de carrière dans la Finance, une start-up innovante appliquant les principes du web sémantique dans la formation, puis le conseil chez SCIAM. Curieux et ouvert, il aime la découverte de nouveaux horizons, l'équilibre, la convivialité, les langues et la linguistique, les sciences."
+  job: "Senior Consultant"
+  website: "https://sciam.fr/fr/equipe/7"
+  picture: christopheblondeau.png
+  socials:
+  linkedin: "christopheblondeau"
+
+antoinesabotdurand:
+  name: "Antoine Sabot-Durand"
+  bio: "Antoine est un expert en ingénierie logicielle et architecture. En tant que Java Champion, il reste très impliqué dans la communauté Java et Jakarta EE, notamment en tant que leader de la spécification CDI. Son expérience, sa connaissance du monde Open Source et du monde du projet font de lui quelqu’un de polyvalent avec les capacités de recul pour appréhender les enjeux métiers de nos clients. Coté loisirs, Antoine est passionné par les jeux de stratégie et de rôles et ne perd pas une occasion de réunir sa famille ou amis autour d’une table. Il est également amateur de cuisine, de cinéma et de littérature."
+  job: "Senior Tech Lead"
+  website: "https://sciam.fr/fr/equipe/24"
+  picture: antoinesabotdurand.png
+  socials:
+  linkedin: "antoinesabotdurand"
+
+clementdetastes:
+  name: "Clément De Tastes"
+  bio: "Tombé dans les joies de la programmation dès sa première calculatrice programmable, Clément a suivi un parcours scientifique jusqu'à l'obtention du diplôme de l'Ecole Centrale de Marseille. Il a travaillé sur divers projets liés au Naval de Défense et plus particulièrement dans la conception des Systèmes de Combat, ce qui l’a parfois emmené aussi loin qu’en Argentine ou en Malaisie. Adepte du clean code et soucieux des enjeux tels que la maintenabilité, la performance et l’évolutivité technologique, il a pu mettre en pratique ces principes en occupant successivement des postes de développeur fullstack, tech lead et architecte. Curieux et autodidacte, il aime explorer de nouveaux domaines et s’y perfectionner, comme le brassage amateur, l’impression 3D, la cuisine ou le piano. Le tout entrecoupé d’une bonne dose de sport (football, randonnée) et de quêtes épiques de jeu de rôle partagées entre amis."
+  job: "Tech Lead"
+  website: "https://sciam.fr/fr/equipe/66"
+  picture: clementdetastes.png
+  socials:
+  linkedin: "cl%C3%A9ment-de-tastes-a19734120"
+
+jeanmicheldoudoux:
+  name: "Jean-Michel Doudoux"
+  bio: "Passionné par le développement de logiciels depuis ses débuts, adolescent avec un Commodore 64, et par la veille technologique, Jean-Michel possède une longue expérience, en SSII/ESN et personnelle, dans l'écriture d'applications avec différents langages. Il utilise Java depuis sa version 1.0 et aime partager sa passion pour cette plateforme et son écosystème notamment en se consacrant, depuis plus d’une vingtaine d’années, à la rédaction d’un tutoriel intitulé 'Développons en Java', diffusé sous licence GNU FDL. Ce travail et son implication dans la communauté lui a permis d'être nommé Java Champion. C'est donc tout naturellement qu'il a rejoint SCIAM, pour se retrouver avec des passionnés qui associent à la technique un grand sens de l'humilité. Passionné par les arts martiaux, il est ceinture noire 2eme Dan de Ju Jitsu et de Judo et il a aussi pratiqué l'Aikido et le Ju Jitsu Brésilien. A ses heures perdues, il est maquettiste et figuriniste essentiellement dans la thématique militaire contemporaine."
+  job: "Senior Tech Lead"
+  website: "https://sciam.fr/fr/equipe/61"
+  picture: jeanmicheldoudoux.png
+  socials:
+  linkedin: "jmdoudoux"
 
 loichermann:
-  name: 'Loic Hermann'
-  job: CTO
-  picture: 'loic_hermann.jpg'
+  name: "Loic Hermann"
+  job: "CTO"
+  picture: loichermann.png
   
-sberrien:
-  name: 'Samuel Berrien'
-  job: 'Data Scientist / Software engineer'
-  bio: 'Fervent adepte de machine learning et Deep Learning, j’aime chercher de nouvelles techniques et les implémenter. Je suis convaincu qu’il sera toujours possible d’apprendre si la curiosité est présente'
-  picture: sberrien.png
+samuelberrien:
+  name: "Samuel Berrien"
+  bio: "Samuel porte un intérêt particulier aux enjeux liés à la science des données et à l'ingénierie logiciel. Diplômé d'un Master 2 à l'Université Paris-Saclay, il mène à bien des projets de traitement du langage naturel et de vision par ordinateur. Très tôt passionné et intrigué par la technologie, il tente aujourd'hui avec enthousiasme d’apporter des réponses aux problématiques de ses clients. Les balades en nature et la batterie rythment sa vie, lui permettant de réfléchir au prochain algorithme à développer."
+  job: "Full Stack Engineer"
+  website: "https://sciam.fr/fr/equipe/18"
+  picture: samuelberrien.png
   socials:
-    linkedin: samuel-berrien-4b94b5172
-    github: Ipsedo
-    
-cdetastes:
-  name: 'Clément de Tastes'
-  job: 'Tech Lead'
-  bio: 'Passionné par le développement logiciel depuis l’obtention de sa première calculatrice programmable, Clément se forge une solide expérience de tech lead et d’architecte dans la conception de systèmes de combats embarqués. Adepte du clean code, de "developer joy" et d’architectures bien pensées, il aime intervenir aussi bien sur les sujets de conception que de dev front ou back.'
-  picture: 'cdetastes.png'
+  linkedin: "samuel-berrien-4b94b5172"
 
-#osans:
-#  name: 'Olivier Sans'
+guillaumenicoulaud:
+  name: "Guillaume Nicoulaud"
+  bio: "Technophile et curieux, Guillaume explore depuis plus de 20 ans la meilleure façon de faire collaborer l'intelligence humaine avec celle des machines. Économiste de formation avec une vaste expérience des marchés financiers, des transports, de l'urbanisme et des réseaux sociaux, Guillaume s'avère être passionné par la recherche opérationnelle et l'art de faire parler les chiffres. C'est ainsi qu'il construit sa vie professionnelle autour de la science des données et en programmation, cumulées à plusieurs expériences dans le management et l'enseignement. Après de nombreuses années de pratique de la voile, il s'aère aujourd'hui l'esprit en jouant au beach volley et en marchant en montagne."
+  job: 'Senior Consultant'
+  website: "https://sciam.fr/fr/equipe/51"
+  picture: guillaumenicoulaud.png
+  socials:
+  linkedin: "guillaumenicoulaud"
 
-#cblondeau: 
-#  name: 'Christophe Blondeau'
+alexismevellec:
+  name: "Alexis Mévellec"
+  bio: "Alexis a rejoint SCIAM en 2021, après un début de carrière rythmé par l'entrepreneuriat et le pilotage de projets. A la fin de ses études en école de commerce, Alexis s’est associé en 2016 dans la startup Utocat, offrant un parcours digital aux investisseurs en entreprises non côtées grâce à la blockchain. Après une certification en innovation par l'Université de Stanford, Alexis a mené de multiples projets dans l'industrie financière. Curieux, passionné d'échanges et de co-construction, il consacre son temps libre au théâtre et à la restauration d'automobiles anciennes en association."
+  job: "Senior Consultant"
+  website: "https://sciam.fr/fr/equipe/25"
+  picture: alexismevellec.png
+  socials:
+  linkedin: "alexismevellec"
 
-#kkechadi:
-#  name: 'Kaci Kechadi'
+matthieupedurthe:
+  name: "Matthieu Pédurthe"
+  bio: "Un parcours atypique pour un RH : un début de vie dans le développement web et le graphisme, pour revenir à un chemin plus classique en business school puis en master RH, pour finir, à nouveau en marge, avec un Mastère Spécialisé sur SAP. Ce dernier titre lui a révélé son attrait pour les sujets techniques de l'IT, qu'il concrétise dans les meetup (JUG, Django Girls..) et en rejoignant SCIAM après être passé par de l'ESN et de l'éditeur. Matthieu est curieux, attentif et a toujours été animé par la volonté de voir réussir l'entreprise pour laquelle il s'engage. Ce sont sûrement ses quatorze ans en tant que consultant qui lui ont ancré cette posture de business partner. Et c'était sans compter sa sensibilité à l'humain, à l'autre qu'il a développé dans de nombreuses activités professionnelles et associatives. Aujourd'hui, Matthieu est là pour grandir avec SCIAM, à la fois dans les appétences technologiques, la vision business, et l'ADN humain."
+  job: "HR Leader"
+  website: "https://sciam.fr/fr/equipe/32"
+  picture: matthieupedurthe.png
+  socials:
+  linkedin: "matthieu-pedurthe"
+
+mohamednajib:
+  name: "Mohamed Najib"
+  bio: "Mohamed est un philosophe (docteur en épistémologie, ancien étudiant de philosophie à l'Ecole Normale Supérieure de Paris) et scientifique de formation (ancien élève de l'école Centrale Paris). Il a rejoint le monde du conseil en 2013 (Mazars, PwC) et SCIAM en 2019 en tant que responsable scientifique. Passionné par les nouvelles connaissances, il ne se lasse jamais d'apprendre. Son rêve caché : permettre à ses clients de développer des approches qui fassent cohabiter en intelligence collective le personnage de Spok de la Star Trek et celui d'Homer Simpson."
+  job: "Senior Science Lead"
+  website: "https://sciam.fr/fr/equipe/14"
+  picture: mohamednajib.png
+  socials:
+  linkedin: "mnajib"
+
+oliviersavrimoutoo:
+  name: "Olivier Savrimoutoo"
+  bio: "Olivier Savrimoutoo a rejoint SCIAM en 2020, après quatre années passées à mener des projets de recherche et de transformation au sein de grands groupes. Olivier est né et a grandi à l'île Maurice et est à présent doctorant-chercheur à l'Université Paris 1 Panthéon-Sorbonne. Ses travaux de recherche concernent l'application des approches et méthodes de l'économie comportementale et expérimentale à l'étude des comportements inter-groupes et à la réduction des discriminations."
+  job: "Science Lead"
+  website: "https://sciam.fr/fr/equipe/22"
+  picture: oliviersavrimoutoo.png
+  socials:
+  linkedin: "olivier-savrimoutoo"
+
+hugotrad:
+  name: "Hugo Trad"
+  bio: "Hugo est consultant chez SCIAM et doctorant en sciences comportementales à l'Ecole normale supérieure. Phobique administratif notoire, il cherche le salut en développant dans le cadre de sa thèse une méthodologie d'évaluation et de réduction de la complexité administrative. Entre deux expériences, Hugo poursuit vainement ses vocations manquées de dompteur de chats, musicien raté et sommelier en thé."
+  job: "Science Lead"
+  website: "https://sciam.fr/fr/equipe/15"
+  picture: hugotrad.png
+  socials:
+  linkedin: "hugo-trad-90697897"
+
+loiclemay:
+  name: "Loïc Lemay"
+  bio: "Son diplôme en poche, il a appris les ficelles de la communication dans des grands groupes et le monde des start-ups. Loïc a ensuite dirigé une agence de communication en vidéo pendant 15 ans. Il a ainsi pu mêler la créativité et l'innovation sur des sujets très variés, allant de la petite structure aux grands comptes. Il a également développé des réseaux d'entrepreneurs numériques dans le sud de la France à travers de nombreux events. Constamment poussé par la curiosité et l'innovation, Loïc a hâte de mettre ses compétences au service de SCIAM. L'échange et le partage font partis de ses mantras qu'il exprime notamment a travers ses passions : le ballon rond, la musique de 4 garçons dans le vent, la zitologie et le cinéma sous toutes ces formes."
+  job: "Communication Lead"
+  website: "https://sciam.fr/fr/equipe/68"
+  picture: loiclemay.png
+  socials:
+  linkedin: "loiclemay"
+
+oliviersans:
+  name: "Olivier Sans"
+  bio: "Après un parcours dans la recherche, se soldant par l’obtention d’un doctorat dans le domaine de l’optimisation sous contraintes non convexes, Olivier se spécialise en Data Science par le biais de l’institut Telecom Paristech. Fort de son background aussi bien théorique que pratique, il décide de mettre à contribution ses connaissances dans le secteur bancaire en travaillant notamment pour CACIB et BNP Paribas. Passionné par la science, l’industrie pharmaceutique et la finance, Olivier poursuit son parcours chez SCIAM depuis Janvier 2020. Ancien nageur compétiteur, sapeur-pompier volontaire et surveillant de baignade, Olivier a, depuis son plus jeune âge, toujours mené avec excellence l’ensemble de ses projets tant au niveau professionnel que personnel."
+  job: "Data Scientist"
+  website: "https://sciam.fr/fr/equipe/19"
+  picture: oliviersans.png
+  socials:
+  linkedin: "olivier-sans"
