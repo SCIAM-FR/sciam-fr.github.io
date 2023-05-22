@@ -1,0 +1,58 @@
+= Newsletter #13 : Sciences comportementales et interfaces Homme-Machine
+:showtitle:
+:page-navtitle: Newsletter #13 : Sciences comportementales et interfaces Homme-Machine
+:page-excerpt: L’équipe sciences comportementales de SCIAM vous propose des réponses dans ces 4 synthèses d’articles universitaires ayant trait aux sciences comportementales et aux interfaces Homme-Machine..
+:layout: post
+:author: alexismevellec
+:page-tags: ['SCC','NewletterSCC', 'SciencesComportementales', 'Interfaces', 'IHM']
+:docinfo: shared-footer
+:page-vignette: SoCo.png
+//:post-vignette: SoCo.png
+:page-vignette-licence: Illustration par <a href="https://www.istockphoto.com/fr/portfolio/CrailsheimStudio" target="_blank">CrailsheimStudio</a>.
+:page-liquid:
+
+== Le meilleur des sciences comportementales & cognitives sélectionné par vos experts SCIAM
+
+Au travers de la sélection de 4 articles universitaires, l’équipe sciences comportementales de SCIAM invite à la réflexion sur les liens entre sciences comportementales et communication.
+
+image::{{'/images/alexismevellec/nudge_800x400.png' | relative_url}}[image,width=80%,align="center"]
+
+== Dark Patterns & e-marketing
+
+Les Dark Patterns sont des aspects de la conception d’interfaces-utilisateurs qui profitent à un service en ligne en forçant, incitant ou en trompant les utilisateurs à prendre des décisions involontaires et potentiellement préjudiciables pour eux. Les auteurs présentent des techniques d’analyses automatisées qui permettent d’identifier ces Dark Patterns à grande échelle sur un grand nombre de sites internet.
+
+En analysant environ 53 000 pages de produits sur près de 11{nbsp}000 sites d’achat, les auteurs ont repéré 1{nbsp}818 Dark Patterns et développé une taxonomie de 15 types et 7 catégories plus larges. A partir de ces travaux, ils formulent des recommandations à destination de toutes les parties prenantes — chercheurs et régulateurs, afin d’étudier et atténuer l’impact de ces mauvaises pratiques.
+
+https://arxiv.org/pdf/1907.07032.pdf[*LIRE*^]
+
+== Comment gérer les biais d’interférence au sein de plateformes à deux facettes (ex. Uber, Linkedin, Airbnb, Booking.com, Udemy etc.) lors d’expérimentations en ligne de type A/B testing{nbsp}?
+
+Les A/B testing ou expérimentation en ligne sont devenues des procédures extrêmement répondues pour comparer un nouveau produit avec un ancien dans différents domaines. Ils permettent d’observer l’effet d’un changement de produit sur une catégorie d’agents (ex. clients, prospect, fournisseur etc.). Mais lorsque les expérimentations en ligne touchent en même temps deux catégories d’agents de type fournisseurs et consommateurs (comme dans le cas d’Uber), il en résulte un phénomène d’interférence et le résultat de l’expérimentation devient extrêmement difficile à interpréter. Ces interférences violent l’hypothèse de valeur de traitement unitaire stable (SUTVA) (Imbens et Rubin (2015)) qui garantit des estimations impartiales de l’effet du traitement. Dans cet article, une équipe d’universitaire de Stanford et d’Uber propose une méthode de design innovant pour traiter ces cas d’interférence basée sur une approche TSR (Two-Sided Randomization).
+
+https://arxiv.org/pdf/2002.05670.pdf[*LIRE*^]
+
+== Les “Model Cards” comme outil de transparence des algorithmes pour combattre la discrimination dans les nouvelles technologies.
+
+L’attention des chercheu.se.r.s et pouvoirs publics s’est tournée ces dernières années vers les discriminations pouvant se cacher derrière l’utilisation de plus en plus fréquente des nouvelles technologies dans des situations sensibles (e.g : judiciaire, transports, accès aux services…). En effet, plusieurs études ont conclu que ces technologies, telles que l’intelligence artificielle (IA), les interfaces utilisateurs digitales et les bases de données sur lesquelles elles s’appuient ne sont pas neutres vis-à-vis de l’origine raciale, sociale ou socio-économique.
+
+Cette équipe de chercheu.se.r.s réunissant des équipes de Google et de laboratoires universitaires a ainsi tenté d’élaborer une méthode sous forme de cahier des charges afin de rendre transparente l’utilisation (y compris les catégories de personnes touchées), les risques et plan d’action associés au déploiement de modèles d’IA et de leurs interfaces. Prenant la forme de “cartes d’identité” pour des algorithmes, les auteur.ice.s présentent deux études de cas testant un tel “reporting” sur un algorithme de détection de sourire et un autre permettant de prédire si des commentaires sur des forums en ligne seraient perçus comme néfastes/toxiques.
+
+Pensée comme une première étape de réflexion générale sur la transparence des algorithmes, leur méthode est assez générale pour être adaptée à différents algorithmes, parties prenantes, bases de données et industries. Bien que les efforts concernant les discriminations causées par les nouvelles technologies se doivent impérativement d’impliquer les citoyen.ne.s (e.g{nbsp}: personnes racisées, précaires, personnes de sexes/genres minorisés…) cette méthode présente une première réponse prometteuse abordant ces questions du point de vue du développement même de ces technologies.
+
+https://arxiv.org/pdf/1907.07032.pdf[*LIRE*^]
+
+== Evaluation des interfaces Homme-Machine lors du développement des systèmes interactifs
+
+Cet article propose une synthèse visant les éléments à évaluer lors de la conception et le développement des interface Homme-Machine notamment des systèmes interactifs. Il met en exergue l’importance de l’évaluation des différentes étapes du cycle de développement d’applications interactives et présente les nombreuses méthodes et techniques susceptibles d’améliorer la qualité des interfaces Homme-Machine.
+
+https://hal.archives-ouvertes.fr/hal-03333711/[*LIRE*^]
+
+'''
+
+https://sciam.fr/[SCIAM^] est aussi présent sur https://www.linkedin.com/company/sciamfr/[LinkedIn^] et https://twitter.com/SciamVox[Twitter^]. Rejoignez la conversation et interagissez directement en ligne avec nos experts.
+
+Contribuons collectivement à la diffusion de contenus scientifiques.
+
+*Notre écosystème*
+
+image::{{'/images/alexismevellec/ecosys.png' | relative_url}}[image,width=50%,align="center"]
