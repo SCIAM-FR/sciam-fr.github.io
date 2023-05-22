@@ -1,7 +1,7 @@
 = Partage de la valeur ajoutée
 :showtitle:
 :page-navtitle: Partage de la valeur ajoutée
-:page-excerpt: "Nos lecteurs sont en principe convaincus de la nécessité de disposer de données et de métadonnées d’excellente qualité pour développer leurs affaires. Reste que, même quand c’est le cas, l’interprétation (erronée) de ces données peut amener l’utilisateur à commettre des erreur de jugement dramatiques : démonstration par la comptabilité nationale."
+:page-excerpt: "Nos lecteurs sont en principe convaincus de la nécessité de disposer de données et de métadonnées d’excellente qualité pour développer leurs affaires. Reste que, même quand c’est le cas, l’interprétation (erronée) de ces données peut amener l’utilisateur à commettre des erreurs de jugement dramatiques : démonstration par la comptabilité nationale."
 :layout: post
 :author: guillaumenicoulaud
 :page-tags: ['misc']
@@ -11,11 +11,11 @@
 :page-vignette-licence: Photo de <a href="https://unsplash.com/@matosem?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Kevin Matos</a> sur <a href="https://unsplash.com/fr/photos/Nl_FMFpXo2g?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 :page-liquid:
 
-Nos lecteurs sont en principe convaincus de la nécessité de disposer de données et de métadonnées d’excellente qualité pour développer leurs affaires. Reste que, même quand c’est le cas, l’interprétation (erronée) de ces données peut amener l’utilisateur à commettre des erreur de jugement dramatiques : démonstration par la comptabilité nationale et, plus précisément, la notion de _partage de la valeur ajoutée_.
+Nos lecteurs sont en principe convaincus de la nécessité de disposer de données et de métadonnées d’excellente qualité pour développer leurs affaires. Reste que, même quand c’est le cas, l’interprétation (erronée) de ces données peut amener l’utilisateur à commettre des erreurs de jugement dramatiques : démonstration par la comptabilité nationale et, plus précisément, la notion de _partage de la valeur ajoutée_.
 
 == Les données
 
-Je reproduis ci-dessous une version légèrement simplifiée du https://www.insee.fr/fr/statistiques/6438735?sommaire=6438793[tableau 1.107^], «_Partage de la valeur ajoutée brute à prix courants (en milliards d'euros)_», tel que publié par le comptable national (l'Insée) en rajoutant simplement quelques indications sur la nature des postes et les opérations effectuées. Ces chiffres concernent l'année 2021 et sont donnés en milliards d'euros courants, base 2014 :
+Je reproduis ci-dessous une version légèrement simplifiée du https://www.insee.fr/fr/statistiques/6438735?sommaire=6438793[tableau 1.107^], «_Partage de la valeur ajoutée brute à prix courants (en milliards d'euros)_», tel que publié par le comptable national (l'INSEE) en rajoutant simplement quelques indications sur la nature des postes et les opérations effectuées. Ces chiffres concernent l'année 2021 et sont donnés en milliards d'euros courants, base 2014 :
 
 [cols="5,>2", width="80%"]
 |===
@@ -67,9 +67,9 @@ La rémunération des salariés (D1) représente alors 76.2% de la valeur ajout�
 
 == Que voulez-vous mesurer ?
 
-Notez que, jusqu'ici, nous n'avons fait qu'appliquer à la lettre les recommandations de tout bon manuel de comptabilité nationale. Ces deux retraitements n'ont absolument rien de nouveau ni d'original :ils ne font pas débat. Ce qui suit, en revanche, relève plus de l'interprétation (de votre serviteur et d'un bon nombre d'économistes) et peut donc être débatu.
+Notez que, jusqu'ici, nous n'avons fait qu'appliquer à la lettre les recommandations de tout bon manuel de comptabilité nationale. Ces deux retraitements n'ont absolument rien de nouveau ni d'original{nbsp}: ils ne font pas débat. Ce qui suit, en revanche, relève plus de l'interprétation (de votre serviteur et d'un bon nombre d'économistes) et peut donc être débattu.
 
-Pour bien comprendre le point, il nous faut découper l'économie nationale (S10) en ses cinq secteurs institutionnels, tels que définis par L'insée — _Sociétés non financières_ (S11), _Sociétés financières_ (S12), _Administrations publiques_ (S13), _Ménages y compris entrepreneurs individuels_ (S14) et _Institutions sans but lucratif au service des ménages_ (S15) — et comparer la rémunération des salariés (ci-dessous, « Salariés », c'est-à-dire le poste D1 de la compatbilité nationale) à la valeur ajoutée _nette au prix des facteurs_ (ci-dessous « VAN ») telle que nous venons de la calculer.
+Pour bien comprendre le point, il nous faut découper l'économie nationale (S10) en ses cinq secteurs institutionnels, tels que définis par L'insée — _Sociétés non financières_ (S11), _Sociétés financières_ (S12), _Administrations publiques_ (S13), _Ménages y compris entrepreneurs individuels_ (S14) et _Institutions sans but lucratif au service des ménages_ (S15) — et comparer la rémunération des salariés (ci-dessous, « Salariés », c'est-à-dire le poste D1 de la comptabilité nationale) à la valeur ajoutée _nette au prix des facteurs_ (ci-dessous « VAN ») telle que nous venons de la calculer.
 
 [cols="5,>2,2,2", width="80%"]
 |===
@@ -107,6 +107,6 @@ C'est-à-dire que la part de la valeur ajoutée nette au coût des facteurs (i.e
 
 == Conclusion
 
-Il va de soit que ce dernier retraitement est sujet à caution. Sa principale faiblesse repose sur les activités locatives des ménages : on peut tout à fait légitimement supposer que ces quelques 115.8 milliards d'excédent net d'exploitation constituent bien une rémunération du capital (auquel cas la part du travail retombe à 83.2%) ou, sans doute plus justement, que ce poste n'a rien à faire dans un compte d'exploitation et devrait être traité dans le compte d'affectation des revenus primaires au même titre que les investissements en actions, obligations (etc…). A contrario, il est légitime de s'interroger sur la réelle valeur ajoutée des secteurs principalement non marchands (administrations et institutions sans but lucratif footnote:[Et je précise ici que cette réévaluation peut avoir lieu dans un sens comme dans l'autre : je pense notamment au travail fourni à titre gracieux par les bénévoles qui, de toute évidence, créé de la valeur ajoutée nette mais pas au coût des facteurs (puisque bénévole).]) tout comme on peut se demander si les salaires des actionnaires dirigeants des sociétés (financières ou non) ne comporte pas une part de rémunération de leur travail effectif. Nous remettrons, si vous le voulez bien, ces débats à plus tard.
+Il va de soi que ce dernier retraitement est sujet à caution. Sa principale faiblesse repose sur les activités locatives des ménages : on peut tout à fait légitimement supposer que ces quelques 115.8 milliards d'excédent net d'exploitation constituent bien une rémunération du capital (auquel cas la part du travail retombe à 83.2%) ou, sans doute plus justement, que ce poste n'a rien à faire dans un compte d'exploitation et devrait être traité dans le compte d'affectation des revenus primaires au même titre que les investissements en actions, obligations (etc…). A contrario, il est légitime de s'interroger sur la réelle valeur ajoutée des secteurs principalement non marchands (administrations et institutions sans but lucratif footnote:[Et je précise ici que cette réévaluation peut avoir lieu dans un sens comme dans l'autre : je pense notamment au travail fourni à titre gracieux par les bénévoles qui, de toute évidence, créé de la valeur ajoutée nette mais pas au coût des facteurs (puisque bénévole).]) tout comme on peut se demander si les salaires des actionnaires dirigeants des sociétés (financières ou non) ne comporte pas une part de rémunération de leur travail effectif. Nous remettrons, si vous le voulez bien, ces débats à plus tard.
 
 Reste que le résultat est là : avec les mêmes données, nous sommes passés d’une « _part des salariés dans la valeur ajoutée_ » d’une peu moins de 58% à plus à un peu plus de 90%.
