@@ -1,0 +1,72 @@
+
+
+= Newsletter #16 : Intelligence collective
+:showtitle:
+:page-navtitle: Newsletter #16 : Intelligence collective
+:page-excerpt: Elément clé du succès des organisations, l’intelligence collective est aussi un objet de recherche pour les sciences comportementales.
+:layout: post
+:author: alexismevellec
+:page-tags: ['SCC','NewletterSCC', 'IntelligenceCollective']
+:docinfo: shared-footer
+:page-vignette: SoCo.png
+//:post-vignette: SoCo.png
+:page-vignette-licence: Illustration par <a href="https://www.istockphoto.com/fr/portfolio/CrailsheimStudio" target="_blank">CrailsheimStudio</a>.
+:page-liquid:
+
+== Le meilleur des sciences comportementales & cognitives sélectionné par vos experts SCIAM
+
+Elément clé du succès des organisations, l’intelligence collective est aussi un objet de recherche pour les sciences comportementales.
+
+Les chercheurs de SCIAM vous en proposent un état des lieux : après une définition de la notion, les synthèses ci-dessous traitent du sujet sous l’angle de la morale et des comportements discriminatoires, et proposent une illustration avec le cas du développement open-source.
+
+image::{{'/images/alexismevellec/nudge_800x400.png' | relative_url}}[image,width=80%,align="center"]
+
+== « Une équipe experte ne peut se réduire à une équipe d’experts ». Comment unir les intelligences individuelles pour générer une intelligence collective ?
+
+L’intelligence collective est lorsqu’un ensemble d’individus se comportent comme une entité unique, autonome et intelligente, en s’appuyant sur une compétence collective et non sur une juxtaposition de compétences individuelles. L’adoption de cette stratégie de collaboration permet aux groupes de faire face aux exigences de certaines situations notamment dans le domaine sportif ou/et professionnel.
+
+Cet article porte sur les facteurs impliqués dans l’intelligence collective et les démarches à suivre pour l’atteindre, en articulant l’approche de la psychologie de travail et le domaine de la « _team cognition_ ». Dans un premier temps les chercheurs mettent en exergue (i) l’importance du partage cognitif et ses exigences, telles que la compréhension partagée qui s’appuie sur un référentiel commun dynamique, (ii) les processus du partage cognitif et les facteurs qui le régissent (e.g., la taille du collectif, les biais psychosociaux, le degré d’interdépendance entre les membres du groupe), (iii) les types d’environnements et les processus du partage cognitif qui en découlent. En d’autres termes, la nature de la situation et la tâche à accomplir (e.g., décision ou action) orientent la forme du partage cognitif et la stratégie pour atteindre les objectifs.
+
+Dans un second temps, les chercheurs détaillent les leviers et les freins permettant à un individu à la fois de porter un jugement de typicalité sur les situations rencontrées pour trouver une solution efficace rapidement et de s’adapter à des situations complexes et dynamiques.
+
+En conclusion les auteurs expliquent l’importance des objets matériels faisant partie de l’environnement de travail et d’interaction qui participent à l’efficacité du collectif. Ils contribuent à l’orientation et faciliter les activités collectives.
+
+https://www.researchgate.net/publication/310463122_L'intelligence_collective[*LIRE*^]
+
+== Une approche mutualiste de la moralité : l’évolution de l’équité par la sélection de partenaire
+
+Les auteurs proposent une compréhension de la morale comme une adaptation évolutionnaire à un environnement dans lequel les individus étaient en concurrence pour être choisis et recrutés dans des interactions coopératives mutuellement avantageuses. Dans un tel environnement, la meilleure stratégie consiste à traiter les autres avec impartialité et à partager les coûts et les avantages de la coopération de manière égale. Ceux qui offrent moins que les autres seront exclus de la coopération ; inversement, ceux qui offrent plus seront exploités par leurs partenaires.
+
+Conformément à cette approche mutualiste, de nombreuses études de jeux économiques comprenant de la propriété, de l’action collective, de l’aide mutuelle et/ou de la punition montrent que les participants partagent les coûts et les avantages des interactions de manière impartiale. En particulier, la distribution des ressources est influencée par l’effort et le talent, et par la perception des droits qu’ont chaque participant sur les ressources à distribuer.
+
+https://repository.upenn.edu/cgi/viewcontent.cgi?article=1006&context=goldstone[*LIRE*^]
+
+== Discrimination et identité sociale ; décisions conjointes vs individuelles
+
+Cette expérience étudie les discriminations liées à l’identité des individus lorsque ces derniers font partie de groupes différents. Vessela Daskalova, chercheuse à la Toulouse School of Economics, compare ici le comportement discriminatoire dans les décisions prises de manière conjointe à celles prises de manière individuelle. De manière générale, l’identité du partenaire de la décision compte dans la décision finale ; la discrimination n’apparaît que lorsque tous les décideurs appartiennent au même groupe social. Les résultats suggèrent ainsi que la diversité dans les comités pourrait atténuer le favoritisme.
+
+https://www.sciencedirect.com/science/article/pii/S0899825617301793[*LIRE*^]
+
+== Will you come back to contribute? Investigating the inactivity of OSS core developers in GitHub
+
+Plusieurs projets de logiciels libres (OSS) reposent sur l’engagement durable et continu d’une communauté de développeurs. La réussite de ces projets s’appuie sur un travail collaboratif porté aujourd’hui par des plateforme comme GitHub (90% du marché).
+
+Aujourd’hui, de nombreux outils existants s’appuient directement ou indirectement (à travers les librairies utilisées) sur le développement de projets open source. Il est donc essentiel de comprendre comment cette communauté de développeurs fonctionne et tout particulièrement, comment les membres de ces communautés passent du statut d’actif à un statut d’inactif.
+
+L’étude de la dynamique de la communauté peut permettre d’avoir des projections sur l’évolution future du projet open source et fournir les outils pour agir en amont afin d’assurer son maintien.
+
+Dans cet article, les chercheurs ont mis en place une méthode d’analyse de la dynamique des membres de communautés projets sur GitHub. Ils ont ainsi analysé la probabilité de transitions vers/depuis l’inactivité et constaté que les développeurs qui suspendent leur activité ont entre 35 et 55% de chances de revenir à un état actif. En revanche, ils montrent que si la pause dure un an ou plus, la probabilité de reprendre les activités tombe à environ 21 à 26%, avec une probabilité d’environ 54% de désengagement complet. Voir le schéma ci-dessous. Une telle analyse peut par exemple constituer un préalable avant de s’engager dans le choix d’une solution open source.
+
+image::{{'/images/alexismevellec/nl16_01.png' | relative_url}}[image,width=50%,align="center"]
+
+https://www.researchgate.net/publication/359343063_Will_you_come_back_to_contribute_Investigating_the_inactivity_of_OSS_core_developers_in_GitHub[*LIRE*^]
+
+'''
+
+https://sciam.fr/[SCIAM^] est aussi présent sur https://www.linkedin.com/company/sciamfr/[LinkedIn^] et https://twitter.com/SciamVox[Twitter^]. Rejoignez la conversation et interagissez directement en ligne avec nos experts.
+
+Contribuons collectivement à la diffusion de contenus scientifiques.
+
+*Notre écosystème*
+
+image::{{'/images/alexismevellec/ecosys.png' | relative_url}}[image,width=50%,align="center"]
