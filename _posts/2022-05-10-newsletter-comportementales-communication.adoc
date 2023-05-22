@@ -1,0 +1,62 @@
+= Newsletter #11 : Sciences comportementales et communication
+:showtitle:
+:page-navtitle: Newsletter #11 : Sciences comportementales et communication
+:page-excerpt: Comment rendre la communication efficace et engageante{nbsp}? Quels sont les facteurs favorisant la bonne communication et les freins la limitant{nbsp}? Voici une synthèse de 4 articles universitaires par l'équipe Sciences comportementales de SCIAM.
+:layout: post
+:author: alexismevellec
+:page-tags: ['SCC','NewletterSCC','BehavioralScience','Communication','ResearchReports']
+:docinfo: shared-footer
+:page-vignette: SoCo.png
+//:post-vignette: SoCo.png
+:page-vignette-licence: Illustration par <a href="https://www.istockphoto.com/fr/portfolio/CrailsheimStudio" target="_blank">CrailsheimStudio</a>.
+:page-liquid:
+
+== Le meilleur des sciences comportementales & cognitives sélectionné par vos experts SCIAM
+
+Comment rendre la communication efficace et engageante{nbsp}? Quels sont les facteurs favorisant la bonne communication et les freins la limitant{nbsp}? Voici une synthèse de 4 articles universitaires par l'équipe Sciences comportementales de SCIAM.
+
+image::{{'/images/alexismevellec/nudge_800x400.png' | relative_url}}[image,width=80%,align="center"]
+
+== Communication persuasive et communication engageante pour la santé{nbsp}: favoriser les comportements sains avec les médias, internet et les serious games
+
+La communication engageante (CE) est un paradigme de la psychologie sociale qui répond aux limites de la communication classique. Elle vise à la fois l’information et la promotion des comportements ciblés par le message, en impliquant l’individu dans l’objet de la communication. Dans cet article, les chercheurs exposent d’abord les limites de la communication classique puis les mécanismes sous-jacents à la communication engageante qui combinent à la fois les stratégies de la persuasion et de l’engagement.
+
+Dans sa partie persuasion, la communication engageante vise les traitements cognitifs et affectifs permettant d’amorcer les cognitions favorables à la persuasion{nbsp}: celles-ci augmentent la mémorisation et déclenchent les réactions affectives positives en générant des métacognitions favorables au message persuasif.
+
+Quant à la dimension de l’engagement, elle s’appuie sur la rationalisation et le besoin de consistance en incitant les individus à ajuster leurs cognitions et représentations aux "mini actes" réalisés préalablement en faveur du message. La communication engageante a montré son efficacité dans plusieurs domaines (e.g., le travail, la santé, l’environnement, le marketing, la cybersécurité, etc...) Dans la deuxième partie de cet article, les chercheures mettent en exergue l’apport de la CE dans le domaine de la santé et les serious games via les canaux numériques.
+
+https://hal-amu.archives-ouvertes.fr/sic_01015237v1[*LIRE*^]
+
+== Les facteurs cognitifs influençant la réception d’informations sur le changement climatique
+
+Les communications sur le changement climatique ne trouvent pas toujours l’écho qu’elles méritent, alors que les experts s’accordent à dire que nous approchons dangereusement d’un point de bascule pouvant mettre en péril la survie de millions de personnes dans un futur proche, et à terme la survie de l’espèce humaine. Plusieurs raisons sont généralement avancées à cet état de fait, tels qu’une défiance envers l’expertise et les institutions, le poids des lobbies pétroliers ou encore une incapacité des individus à tenir compte des enjeux distants dans le temps.
+
+Cette étude se penche en particulier sur la sensibilité métacognitive, qui est définie comme la capacité à moduler sa propre confiance selon sa performance. Ainsi, une bonne sensibilité métacognitive suggérerait par exemple qu’un individu affiche une confiance plus élevée (faible) en moyenne pour ses bonnes (mauvaises) réponses.
+
+Les résultats suggèrent que les attitudes climato-sceptiques sont corrélées avec la sensibilité métacognitive. Ce climato-scepticisme prédit à son tour la réception d’informations négatives sur le changement climatique et la susceptibilité aux informations à ce sujet. Autrement dit, la prise en compte des communications sur l’état d’urgence climatique dans lequel nous nous trouvons est liée à une meilleure aptitude à porter un regard sur ses capacités cognitives{nbsp}: les personnes ayant une meilleure métacognition sont moins susceptibles d’avoir des croyances climato-sceptiques. Finalement, cette étude démontre que le mode de communication (écrit ou écrit + graphique) n’influence pas la réception d’informations sur le changement climatique.
+
+https://psyarxiv.com/9325y[*LIRE*^]
+
+== Est-ce qu’un état d’esprit de développement aide à développer ses compétences en communication{nbsp}?
+
+Une étude réalisée par des chercheurs américains (Madison University) examine le lien entre la théorie de l’état d’esprit (de développement ou fixe) et la prise de parole en public. Un état d’esprit de développement consiste à croire que ses caractéristiques personnelles (telles que les capacités intellectuelles ou toute autre compétence) peuvent être développées, tandis qu’un état d’esprit fixe consiste à penser que ses caractéristiques sont fixes et immuables (Dweck, 1999 ; Dweck & Leggett, 1988 ; Yeager & Dweck, 2012).
+
+Les résultats de cette étude montrent que l’état d’esprit de développement est corrélé avec des notes de communication plus élevées, une compétence de communication interpersonnelle plus haute et une plus faible anxiété à parler en public. Induire un tel état d’esprit pourrait donc permettre le développement de meilleures compétences en communication.
+
+https://www.tandfonline.com/doi/abs/10.1080/03634523.2018.1538522[*LIRE*^]
+
+== Contrer les fake news avec un parasite
+
+Robert Cialdini — l’auteur d’Influence et Manipulation — et ses collègues suggèrent une nouvelle stratégie de lutte contre la diffusion de fake news en ligne{nbsp}: le "Poison Parasite Counter". En insérant un contre-argument au sein d’une réplique similaire d’un message trompeur, ce dernier sera comme contaminé par le contre-argument{nbsp}: une fois la fake news rencontrée à nouveau par un lecteur, celle-ci va agir comme un rappel un rappel du contre-argument par un mécanisme de mémoire associative. Ainsi, grâce à sept expérience auprès de plus de 3000 participants, les auteurs montrent que cette stratégie sapent grandement l’impact des fake news.
+
+https://app.box.com/s/k82jf28vzcqmvbc2trqfdu2xsxzhmerd[*LIRE*^]
+
+'''
+
+https://sciam.fr/[SCIAM^] est aussi présent sur https://www.linkedin.com/company/sciamfr/[LinkedIn^] et https://twitter.com/SciamVox[Twitter^]. Rejoignez la conversation et interagissez directement en ligne avec nos experts.
+
+Contribuons collectivement à la diffusion de contenus scientifiques.
+
+*Notre écosystème*
+
+image::{{'/images/alexismevellec/ecosys.png' | relative_url}}[image,width=50%,align="center"]
