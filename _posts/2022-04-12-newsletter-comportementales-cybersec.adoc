@@ -1,0 +1,72 @@
+= Newsletter #10 : Sciences comportementales et cybersécurité
+:showtitle:
+:page-navtitle: Newsletter #10 : Sciences comportementales et cybersécurité
+:page-excerpt: Les sciences comportementales sont l’un des premiers leviers pour prévenir les risques en matière de cybersécurité. Revue de littérature de 4 articles universitaires sur les moyens humains de lutter contre les risques dans cette période sanitaire et politique instable.
+:layout: post
+:author: alexismevellec
+:page-tags: ['SCC','NewletterSCC','Cybersecurity','Cybercrime','BehavioralScience','RiskManagement','HumanFactor']
+:docinfo: shared-footer
+:page-vignette: SoCo.png
+//:post-vignette: SoCo.png
+:page-vignette-licence: Illustration par <a href="https://www.istockphoto.com/fr/portfolio/CrailsheimStudio" target="_blank">CrailsheimStudio</a>.
+:page-liquid:
+
+== Le meilleur des sciences comportementales & cognitives sélectionné par vos experts SCIAM
+
+Les sciences comportementales sont l’un des premiers leviers pour prévenir les risques en matière de cybersécurité. Revue de littérature de 4 articles universitaires sur les moyens humains de lutter contre les risques dans cette période sanitaire et politique instable.
+
+image::{{'/images/alexismevellec/nudge_800x400.png' | relative_url}}[image,width=80%,align="center"]
+
+== Psyber sécurité{nbsp}: L’apport de la psychologie dans le management de la cybersécurité
+
+Cet article porte sur les recherches conduites en psychologie dans le domaine de la cybersécurité. Il met en exergue les facteurs psychologiques à l’origine des cyber comportements, spécifiquement les comportements à risque réalisés par les salariés dans le contexte professionnel. Dans un premier temps, l’auteure retrace les mécanismes psychosociaux sous-jacents aux stratégies d’influence utilisées par les cybercriminels tels que : la réciprocité, la preuve sociale, la persuasion par les pairs, l’autorité, la rareté des ressources, le cadeau.
+
+Ensuite, elle détaille les facteurs psychologiques comme{nbsp}:
+
+* les traits de la personnalité (e.g., l’extraversion, le névrosisme, le caractère consciencieux, l’agréabilité) et leur rôle dans la réceptivité de l’influence des cybercriminels{nbsp};
+* les facteurs neurophysiologiques, notamment le détournement du système amygdalien pour générer une vulnérabilité conduisant l’individu à prendre une décision impulsive{nbsp};
+* et les facteurs émotionnels et situationnels (i.e., le stress, la peur, la convivialité) en lien avec certains processus cognitifs comme la vigilance.
+
+Enfin, l’auteure propose plusieurs démarches de prévention permettant de cibler chaque type de comportement problématique (i.e., non intentionnel avec gravité, intentionnel sans gravité, intentionnel avec gravité).
+
+https://www.researchgate.net/publication/356528458_Psyber_Securite_L%27apport_de_la_psychologie_dans_le_management_de_la_cybersecurite[*LIRE*^]
+
+== L’efficacité des nudges en Cybersécurité
+
+Les chercheurs ont évalué l’efficacité des nudges{nbsp}footnote:[Intervention qui modifie de façon prévisible le comportement des gens sans interdire aucune option ou modifier de façon significative les incitations financières.] dans le domaine de la cybersécurité. Ils ont étudié les effets de trois types d’intervention en fonction de leur impact sur quatre types de décision. Les exemples de décisions considérées sont: la création de mot de passe, le choix d’un Wifi public, le cryptage du smartphone, et le choix d’un fournisseur de services cloud.
+
+Les trois types d’interventions sont{nbsp}: nudge uniquement, mise à disposition d’information uniquement et une combinaison des deux qualifiée de "nudge hybride".
+
+Les chercheurs ont constaté que dans tous les contextes de décision analysés, la combinaison du nudge et de l’information était aussi efficace voire plus efficace pour encourager les utilisateurs à faire les meilleurs choix qu’un simple nudge ou la simple mise à disposition d’informations.
+
+https://dl.acm.org/doi/10.1145/3429888[*LIRE*^]
+
+== L’impact des connaissances en cybersécurité sur la détection de menaces
+
+Assurer la cybersécurité est une tâche complexe qui repose sur la connaissance du domaine et nécessite des capacités cognitives pour déterminer les menaces possibles à partir de grandes quantités de données. Lors d’une expérimentation, les chercheurs ont investigué la manière dont les individus avec ou sans connaissances en cybersécurité détectaient une attaque malveillante à partir de séquences d’événements sur un réseau.
+
+De fait, davantage de connaissances en cybersécurité facilite la détection correcte d’événements malveillants et diminue les faux-positifs. A partir de leurs résultats, les chercheurs font des suggestions sur la manière de former les analystes à mieux détecter ces menaces.
+
+https://www.sciencedirect.com/science/article/abs/pii/S0747563215000539[*LIRE*^]
+
+== Les facteurs prédictifs de la susceptibilité aux fausses informations (fake news) et quelques pistes d’intervention
+
+Dans un contexte global où les campagnes de désinformation sur internet font partie intégrante des guerres et des campagnes électorales, il semble particulièrement important d’étudier les facteurs de susceptibilité aux fausses informations. Dans cette étude conduite dans 16 pays (6 continents), cette équipe de chercheur.se.s démontrent que les facteurs rendant les personnes susceptibles de croire aux fausses informations semblent être communs à travers les pays, cultures et langues. Leur approche pluridisciplinaire, s’appuyant à la fois sur les sciences cognitives et la psychologie sociale, permet de mettre en lumière plusieurs résultats importants.
+
+Premièrement, les personnes ayant une plus grande tendance à la pensée analytique (mesuré par la tâche de réflexion cognitive CRT) et celles accordant une plus grande importance à l’exactitude des informations (vs e.g{nbsp}: les informations surprenantes ou humoristiques) discernent mieux les vraies informations des fausses.
+
+Ensuite, des "nudges" conduisant les personnes à tenir compte de l’exactitude des informations présentées et la sensibilisation aux techniques basiques de la communication digitale semblent augmenter la proportion des vraies informations partagées sur les réseaux sociaux.
+
+Finalement, l’utilisation du crowdsourcing{nbsp}footnote:[Littéralement externaliser (_to outsource_) une activité vers la foule (_crowd_).] comme outil d’identification des fake news en ligne semble particulièrement prometteuse. Par exemple, une méthode s’appuyant sur les notations de 15 personnes uniquement afficherait une capacité de discernement de plus de 90%, et ce dans tous les pays étudiés.
+
+https://psyarxiv.com/a9frz/[*LIRE*^]
+
+'''
+
+https://sciam.fr/[SCIAM^] est aussi présent sur https://www.linkedin.com/company/sciamfr/[LinkedIn^] et https://twitter.com/SciamVox[Twitter^]. Rejoignez la conversation et interagissez directement en ligne avec nos experts.
+
+Contribuons collectivement à la diffusion de contenus scientifiques.
+
+*Notre écosystème*
+
+image::{{'/images/alexismevellec/ecosys.png' | relative_url}}[image,width=50%,align="center"]
