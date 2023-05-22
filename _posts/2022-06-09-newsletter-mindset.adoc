@@ -1,0 +1,67 @@
+= Newsletter #12 : Sciences comportementales et théorie du Mindset
+:showtitle:
+:page-navtitle: Newsletter #12 : Sciences comportementales et théorie du Mindset
+:page-excerpt: Voici quelques articles choisis par l’équipe sciences comportementales SCIAM dans les domaines professionnel et scolaire, mettant en exergue l’effet du Mindset (i.e., fixe vs.de développement) sur l’innovation et la créativité dans le milieu professionnel, l’auto-sabotage, l’amélioration des performances et la réussite dans le milieu scolaire.
+:layout: post
+:author: alexismevellec
+:page-tags: ['SCC','NewletterSCC','SciencesComportementales','Education','RessourcesHumaines','Psychologie']
+:docinfo: shared-footer
+:page-vignette: SoCo.png
+//:post-vignette: SoCo.png
+:page-vignette-licence: Illustration par <a href="https://www.istockphoto.com/fr/portfolio/CrailsheimStudio" target="_blank">CrailsheimStudio</a>.
+:page-liquid:
+
+== Le meilleur des sciences comportementales & cognitives sélectionné par vos experts SCIAM
+
+Les perceptions que nous formons de nos propres capacités et de notre image influencent-elles nos échecs et nos performances{nbsp}?
+
+Carol Dweck, professeure en psychologie sociale, s’est intéressée à cette question et a avancé le concept de Mindset, "l’état d’éprit", qui renvoie aux croyances qu’un individu peut avoir à propos de ses aptitudes et de ses capacités à réussir une tâche.
+
+Voici quelques articles choisis par l’équipe sciences comportementales SCIAM dans les domaines professionnel et scolaire, mettant en exergue l’effet du Mindset (i.e., fixe vs. de développement) sur l’innovation et la créativité dans le milieu professionnel, l’auto-sabotage, l’amélioration des performances et la réussite dans le milieu scolaire.
+
+image::{{'/images/alexismevellec/nudge_800x400.png' | relative_url}}[image,width=80%,align="center"]
+
+== Gestion des ressources humaines et ouverture à l’innovation : Le rôle du mindset d’innovation ouverte. Human resources management and open innovation: the role of open innovation mindset
+
+Cet article appuie l’approche des capacités dynamiques notamment le mindset et son apport dans le domaine des performances au travail. Il porte particulièrement sur le rôle de l’ouverture à l’innovation comme une stratégie des ressources humaines dans l’augmentation de la créativité chez les salariés.
+
+Pour tester la médiation de l’ouverture à l’innovation (Mindset de développement) dans l’effet de la stratégie de gestion des ressources humaines (SGRH) sur l’augmentation des performances au travail, les chercheurs ont réalisé en enquête auprès de 249 salarié.e.s appartenant à quatre entreprises multinationales ayant leur siège social aux États-Unis. L’ouverture à l’innovation a été mesurée via cinq dimensions : l’ouverture, la créativité, l’attitude positive envers le partage des connaissances, la tolérance à l’échec et la complexité intégrative.
+
+Selon les résultats, l’ouverture à l’innovation médiatise l’effet de la gestion des ressources humaines sur l’augmentation des performances. En d’autres termes, l’encouragement à l’ouverture à l’innovation via une gestion des ressources humaines qui s’appuie sur un mindset de développement conduit les salariés à une augmentation de performance.
+
+https://onlinelibrary.wiley.com/doi/10.1111/1744-7941.12281[*LIRE*^]
+
+== Promouvoir un “Growth Mindset” permet de réduire les comportements d’auto-sabotage chez des étudiants ayant un mindset fixe
+
+La théorie de l’estime de soi suggère que les sentiments de compétence, de respect et d’acceptation de soi sont des besoins humains fondamentaux. Ainsi, Covington et Omelich ont montré que parmi les étudiants, la réputation d’être intelligent était le facteur le plus important influençant leur bien-être personnel, bien plus encore que leurs performances académiques. Ainsi, dans un tel contexte scolaire, l’auto-sabotage peut être un outil approprié afin de préserver l’estime de soi. En l’occurrence, certains élèves ne fournissent pas d’effort, repoussent leurs travaux jusqu’au dernier moment ou accomplissent des activités annexes au détriment de leur performance (par exemple, sortir la veille d’un examen), de sorte que l’échec ultérieur puisse être attribué à une incapacité temporaire plutôt qu’à leur compétence intrinsèque.
+
+Dans cette étude, les auteurs ont proposé une intervention afin d’induire un “growth mindset” auprès d’étudiants, leur montrant que l’intelligence pouvait relever d’une caractéristique améliorable plutôt que fixe. Ainsi, les participants ayant un mindset initial fixe ont grandement bénéficié de cette intervention, et ont par la suite montré de moindres niveaux de comportements d’auto-sabotage.
+
+https://www.nature.com/articles/s41598-022-11547-4[*LIRE*^]
+
+== Donner le goût du défi pour les élèves
+
+Une étude réalisée par des équipes de chercheurs américains de Stanford (2021) montre comment une simple intervention sur l’état d’esprit change le rapport des élèves du secondaire face aux défis d’apprentissage qu’ils peuvent rencontrer durant leur scolarité. D. Yeager, Carol Deweck et leur équipe ont étudié l’effet d’une séance de 45 minutes de développement de l’état d’esprit sur un échantillon représentatif de plus de 20{nbsp}000 élèves du secondaire (14{nbsp}472 aux Etats-Unis et 6{nbsp}541 en Norvège).
+
+Un état d’esprit en développement consiste à croire que les caractéristiques personnelles, telles que les capacités intellectuelles ou toute autre compétence peuvent être développées, et un état d’esprit fixe consiste à croire que ces caractéristiques sont fixes et immuables (Yeager & Dweck, 2012). L’intervention consiste en outre à partager avec les élèves les résultats des recherches scientifiques autour de la plasticité neuronale. Ces recherches montrent que le cerveau développe de fortes connexions neuronales lorsqu’il apprend ou fait face à des défis intellectuels.
+
+Résultat, les élèves qui ont suivi l’intervention se sont davantage inscrits et ont davantage réussi dans des classes de niveau avancé en mathématiques. Ces résultats soulignent l’importance de la recherche motivationnelle qui va au-delà des seules notes ou performances et se concentre sur la recherche de défis.
+
+https://psycnet.apa.org/record/2020-84549-001[*LIRE*^]
+
+== Promouvoir un état d’esprit de développement permet d’améliorer la réussite scolaire chez les élèves issus de milieux défavorisés
+
+S’appuyant sur un protocole expérimental, cette étude suggère que sensibiliser les élèves de collèges situés en zones prioritaires (cibles de l’association Energie Jeune, partenaire de l’étude) permettrait d’améliorer la réussite scolaire et de réduire les écarts de notes avec les collèges plus favorisés. En particulier, cette étude est la première à démontrer que ce type d’intervention améliorerait les notes en agissant sur l’assiduité et la perception de soi des élèves. Ces résultats encourageants sur la réduction des inégalités entre collèges défavorisés et moins défavorisés (réduction de l’écart évaluée à 6%) sont cependant nuancés par le fait que l’intervention eut un effet moins important pour les élèves en très grande difficulté. Ainsi, les écarts de notes se sont accrus au sein des collèges. Bien que ce type d’interventions semble donner des résultats au bout d’un temps relativement long (4 ans pour cette étude), les auteur.ice.s évaluent qu’elles seraient au moins dix fois plus économique que les interventions en milieux scolaires les plus répandues.
+
+https://www.dropbox.com/s/kbglmiu8rnrqvnh/Huillery_Bouguen_etal_2021.pdf?dl=0[*LIRE*^]
+
+
+'''
+
+https://sciam.fr/[SCIAM^] est aussi présent sur https://www.linkedin.com/company/sciamfr/[LinkedIn^] et https://twitter.com/SciamVox[Twitter^]. Rejoignez la conversation et interagissez directement en ligne avec nos experts.
+
+Contribuons collectivement à la diffusion de contenus scientifiques.
+
+*Notre écosystème*
+
+image::{{'/images/alexismevellec/ecosys.png' | relative_url}}[image,width=50%,align="center"]
