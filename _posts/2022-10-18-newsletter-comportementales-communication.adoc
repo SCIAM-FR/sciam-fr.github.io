@@ -1,0 +1,58 @@
+= Newsletter #14 : Sciences comportementales et communication
+:showtitle:
+:page-navtitle: Newsletter #14 : Sciences comportementales et communication
+:page-excerpt: Au travers de la sélection de 4 articles universitaires, l’équipe sciences comportementales de SCIAM invite à la réflexion sur les liens entre sciences comportementales et communication.
+:layout: post
+:author: alexismevellec
+:page-tags: ['SCC','NewletterSCC', 'SciencesComportementales', 'Communication']
+:docinfo: shared-footer
+:page-vignette: SoCo.png
+//:post-vignette: SoCo.png
+:page-vignette-licence: Illustration par <a href="https://www.istockphoto.com/fr/portfolio/CrailsheimStudio" target="_blank">CrailsheimStudio</a>.
+:page-liquid:
+
+== Le meilleur des sciences comportementales & cognitives sélectionné par vos experts SCIAM
+
+Au travers de la sélection de 4 articles universitaires, l’équipe sciences comportementales de SCIAM invite à la réflexion sur les liens entre sciences comportementales et communication.
+
+image::{{'/images/alexismevellec/nudge_800x400.png' | relative_url}}[image,width=80%,align="center"]
+
+== L’usage de l’engagement pour encourager l’honnêteté chez les futurs managers
+
+Un élément crucial de la communication engageante est l’acte préparatoire, qui conduit les individus à réaliser librement une action liée dans, un sens ou dans un autre, au message persuasif auquel iels seront exposé.e.s dans un second temps. L’hypothèse sous-jacente de cette technique est ainsi que, par souci de cohérence et d’image, les comportements ultérieurs de ces mêmes personnes seront alignés à la première action ou attitude exprimée.
+
+Or, cette technique semble aussi être efficace lorsque l’acte préparatoire est réalisé en privé. Une équipe de chercheur.se.s en économie comportementale s’est attaché à évaluer les conséquences de ce type de technique sur le mensonge dans une expérience de terrain (méthode dite de “lab-in-the-field”). Un échantillon d’étudiant.e.s d’une école de commerce française réputée, furent conduit.e.s à prêter serment avant de se transmettre des informations lors d’un protocole expérimental. En particulier, le protocole a permis d’étudier cette démarche sur un échantillon de futurs managers d’entreprise tout en procurant l’environnement contrôlé permettant de tirer des conclusions sur les mécanismes à la base de cette approche.
+
+Les résultats démontrent que la technique permet de réduire le mensonge dans 70% des cas lorsque celui-ci sert l’intérêt du messager mais pas celui de la cible. A contrario, prêter serment ne semble avoir aucun effet lorsque les intérêts des protagonistes sont alignés. L’effet de l’engagement ne semble pas non plus être influencé par l’identité des personnes impliquées{nbsp}: l’engagement exerce une influence comparable selon que le messager et la cible sont de la même école de commerce, ou pas. Autre résultat intéressant : le serment semble agir en faisant porter aux personnes un coût psychologique important en cas de mensonge.
+
+https://www.frontiersin.org/articles/10.3389/fpsyg.2021.701627/full[*LIRE*^]
+
+== Communication, connaissances et comportement
+
+De nombreux pays consacrent des efforts substantiels et des sommes importantes à la communication sur les retraites ou plus généralement sur les questions de santé publique visant à informer les individus et à les aider à prendre de meilleures décisions. Les études sur l’efficacité de ces stratégies de communication sont rares. Cet article de l’université de Cambridge fait exception et fournit une étude longitudinale détaillée pour mesurer l’impact des communications autour des retraites aux Pays-Bas. La conclusion est simple, « les connaissances seules ne suffisent pas à en faire des décideurs actifs en matière de retraite ». L’étude préconise plutôt de s’appuyer sur les leviers comportementaux en changeant simplement l’option par défaut.
+
+https://www.cambridge.org/core/journals/journal-of-pension-economics-and-finance/article/pension-communication-knowledge-and-behaviour/5B104E1720447452631F2BAEE04444EF[*LIRE*^]
+
+== La Communication persuasive, une méthode efficace pour changer les idées
+
+L’article suivant illustre l’efficacité de la communication persuasive en termes de changement de connaissances. Dans le cadre d’un partenariat entre le centre d’éthique CISSS de Laval et les chercheurs de l’université de Laval, un projet d’accompagnement a été mis en place visant le renforcement de la culture éthique organisationnelle. En suivant la démarche classique d’intervention issues des travaux en psychologie sociale, les chercheurs ont identifié d’abord un échantillon cible. Ensuite, ils ont procédé à une analyse détaillée de la communication appliquée par le CISSS. Leur choix d’intervention a porté sur la communication persuasive comme alternative à la communication classique utilisée, en s’appuyant sur un critère important permettant la persuasion (i.e., la crédibilité de la source).
+
+Selon les résultats qualitatifs et quantitatifs, l’application de la communication persuasive a eu un effet sur le volet cognitif et l’acquisition de nouvelles connaissances mais pas sur les comportements. Néanmoins, l’application d’un nouveau code d’éthique organisationnelle nécessite d’aller plus loin que le changement d’idées et d’inciter le personnel à agir. En conclusion les chercheurs suggèrent l’utilisation d’une méthode de changement de comportements qui sera adéquate au contexte.
+
+https://archipel.uqam.ca/12128/1/YF_rapportDeRecherche-PRINT.pdf[*LIRE*^]
+
+== Combiner les approches pour lutter contre la désinformation en ligne
+
+De nombreuses méthodes existent afin de lutter contre la désinformation en ligne, qu’il s’agisse d’incitations douces à évaluer la fiabilité de l’information à disposition à la modération pure et simple du contenu en ligne. Par des travaux de modélisations, des chercheurs montrent toutefois que chaque méthode prise isolément a peu de chance d’être efficace ; cela ne serait qu’en combinant ces différentes approches que l’on pourrait espérer obtenir un impact significatif.
+
+https://www.nature.com/articles/s41562-022-01389-5[*LIRE*^]
+
+'''
+
+https://sciam.fr/[SCIAM^] est aussi présent sur https://www.linkedin.com/company/sciamfr/[LinkedIn^] et https://twitter.com/SciamVox[Twitter^]. Rejoignez la conversation et interagissez directement en ligne avec nos experts.
+
+Contribuons collectivement à la diffusion de contenus scientifiques.
+
+*Notre écosystème*
+
+image::{{'/images/alexismevellec/ecosys.png' | relative_url}}[image,width=50%,align="center"]
