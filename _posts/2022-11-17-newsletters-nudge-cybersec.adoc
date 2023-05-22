@@ -1,0 +1,73 @@
+= Newsletter #15 : Nudges et cybersécurité
+:showtitle:
+:page-navtitle: Newsletter #15 : Nudges et cybersécurité
+:page-excerpt: Souvent résumé à une incitation douce, le nudge est un aspect de l’architecture des choix qui modifie de manière prévisible le comportement des individus sans interdire aucune des options et sans changer significativement leurs incitations économiques.
+:layout: post
+:author: alexismevellec
+:page-tags: ['SCC','NewletterSCC', 'Nudge', 'Cybersecurite']
+:docinfo: shared-footer
+:page-vignette: SoCo.png
+//:post-vignette: SoCo.png
+:page-vignette-licence: Illustration par <a href="https://www.istockphoto.com/fr/portfolio/CrailsheimStudio" target="_blank">CrailsheimStudio</a>.
+:page-liquid:
+
+== Le meilleur des sciences comportementales & cognitives sélectionné par vos experts SCIAM
+
+Souvent résumé à une incitation douce, le nudge est un aspect de l’architecture des choix qui modifie de manière prévisible le comportement des individus sans interdire aucune des options et sans changer significativement leurs incitations économiques.
+
+Les nudges sont-ils efficaces pour guider les comportements dans tous les domaines? En particulier, quel est leur impact pour réduire le risque cyber{nbsp}? Nos chercheurs en sciences comportementales vous livrent des éléments de réponse via la synthèse de ces 4 articles universitaires.
+
+image::{{'/images/alexismevellec/nudge_800x400.png' | relative_url}}[image,width=80%,align="center"]
+
+== Peut-on utiliser le nudge pour changer les comportements dans tous les domaines? Une méta-analyse autour de l’efficacité de l’architecture de choix
+
+Le nudge est un outil d’incitation qui suscite un débat actuellement en sciences comportementales et qui fait couler beaucoup d’encre. En effet, durant ces quatre dernières années, de nombreux articles nous ont éclairé sur l’efficacité du nudge à long terme dans les différents domaines de la vie quotidienne, et ont tracé une sorte de va-et-vient entre son utilité sociale et sociétale et le respect de l’éthique — notamment le consentement des personnes “nudgées”.
+
+L’article suivant s’inscrit dans cette perspective globale et montre via une méta-analyse de 200 études dans les différents domaines comportementaux que l’efficacité du nudge dépend de plusieurs facteurs tels que{nbsp}:
+
+[lowerroman,start=1]
+. l’objet d’intervention (e.g., le nudge est plus efficace dans le domaine de l’alimentation lorsqu’il s’agit de diminuer les mauvaises pratiques que dans le domaine financier ou environnemental ou prosocial) ;
+. la stratégie du nudge (i.e., une intervention est plus efficace lorsqu’elle cible la structure de la décision comparé à la mobilisation des informations qui s’organisent autour de cette décision).
+
+En conclusion, les chercheurs présentent une discussion sur l’efficacité des nudges et l’implication des résultats issus de cette méta-analyse dans le choix des démarches et des méthodes d’intervention visant la promotion des comportements cibles.
+
+https://pubmed.ncbi.nlm.nih.gov/34983836/[*LIRE*^]
+
+== Les nudges sont-ils efficaces pour guider les comportements ?
+
+En janvier 2022, une méta-analyse évaluant l’efficacité des nudges comme interventions dans différents domaines a été publiée dans la revue PNAS, concluant que ceux-ci amenaient en moyenne à un changement significatif. Toutefois, une réponse publiée peu après suggérait qu’en corrigeant la méta-analyse des biais de publications, l’efficacité réelle des “nudges” serait faible, voire nulle, donnant ainsi lieu à une remise en question de leur utilisation.
+
+Michael Hallsworth, directeur du Behavioural Insights Team aux Etats-Unis, en plus d’apporter des preuves d’efficacité de l’approche comportementale via méta-analyses réalisées sur les milliers d’interventions du BIT US, appelle également dans cet article à remettre ce débat en perspective en faisant reconnaitre toute la diversité que recouvrent les interventions comportementales, en termes de cibles, de méthodes et de domaines, et cela au-delà du nudge.
+
+https://behavioralscientist.org/making-sense-of-the-do-nudges-work-debate/[*LIRE*^]
+
+== Utiliser des interventions de type “nudge” pour améliorer la sécurité informatique
+
+Cherchant à tester l’efficacité à long terme et à court terme d’interventions comportementales, ces deux chercheuses en sécurité informatique ont conduit une expérience en ligne tout en plaçant leurs participants dans un contexte correspondant au mieux à la vie réelle.
+
+Leur approche fut ainsi de tester trois types d’interventions — la présentation d’informations seules, le nudge seul, une méthode hybride alliant présentation d’informations et nudge — sur un éventail de pratiques pouvant amener à des failles de sécurité informatique. Les pratiques furent sélectionnées sur la base de la fréquence et de leur complexité, allant ainsi du plus ou moins fréquent et du plus ou moins complexe (e.g : choisir un réseau WiFi, créer un mot de passe).
+
+Leurs résultats démontrent qu’une approche hybride, fournissant une information pour plus de transparence et simplifiant à la fois le contexte de décision s’avère au moins aussi efficace que les nudges classiques dans tous les cas de figures, voire même plus efficace dans certains contextes (e.g : choix de réseau WiFi). Bien que des tests subséquents démontrent que les effets de ces interventions aient disparus deux semaines plus tard, leur méthode ne permet pas de conclure sur leur efficacité lorsque les individus y sont exposés à plusieurs reprises, car les chercheuses ont présenté leurs interventions uniquement lors de l’étude initiale.
+
+Au-delà de leur intérêt pour les praticiens de la sécurité informatique, ces résultats indiquent que la transparence des nudges ne nuit pas à leur efficacité ; ce serait même le contraire. Ainsi, des approches tournées à la fois vers les comportements habituels ou automatiques et la réflexion des utilisateurs seraient au moins tout aussi efficace, tout en évitant les critiques de manipulation souvent opposés à l’utilisation des nudges.
+
+https://dl.acm.org/doi/abs/10.1145/3429888?casa_token=-KceVKI10WcAAAAA:-FdgQK62tM8OFc-AfBgxTLiB41wfc1zrFoHVxMxjuXOrSKnqVmdACsGBSnfcJjIrvtVUazVaAj0eWw[*LIRE*^]
+
+== “Nudger” pour aider les utilisateurs à générer des mots de passe plus sécurisés
+
+L’utilisation de mot de passe constitue la méthode d’authentification la plus populaire en raison de sa simplicité et de son adoption généralisée. Une seule personne peut avoir plusieurs dizaines de mots de passe (38.4 en moyenne selon SC Magazine). Cela conduit naturellement à une réutilisation de mots de passe (71% des comptes sont protégés par des mots de passe utilisés sur plusieurs sites selon Dataprot). Lorsque l’un de ces sites web est piraté, les autres comptes utilisant le même mot de passe ne sont plus protégés. Pour savoir si votre email ou numéro de téléphone fait partie de l’une des multiples fuites de données de ces derniers années, jetez un œil ici{nbsp}: https://haveibeenpwned.com/[haveibeenpwned.com^].
+
+L’un des remèdes à la réutilisation des mots de passe, c’est de faire appel à un outil spécialisé, un manager de mot de passe à installer ou déjà présent sur les explorateurs internet. L’article que nous vous proposons aujourd’hui compare les “nudges” utilisés par trois navigateurs internet{nbsp}: Chrome, Firefox et Safari. Ces navigateurs proposent des mots de passes générés automatiquement de façon aléatoire. L’objectif est d’évaluer le niveau d’adhésion des utilisateurs et ce qui explique du point de vue comportemental ce niveau d’adhésion. La principale raison, comme souvent dans le nudge, consiste à proposer un choix par défaut qui soit orienté sécurité utilisateur.
+
+https://www.usenix.org/system/files/soups2022-zibaei.pdf[*LIRE*^]
+
+
+'''
+
+https://sciam.fr/[SCIAM^] est aussi présent sur https://www.linkedin.com/company/sciamfr/[LinkedIn^] et https://twitter.com/SciamVox[Twitter^]. Rejoignez la conversation et interagissez directement en ligne avec nos experts.
+
+Contribuons collectivement à la diffusion de contenus scientifiques.
+
+*Notre écosystème*
+
+image::{{'/images/alexismevellec/ecosys.png' | relative_url}}[image,width=50%,align="center"]
