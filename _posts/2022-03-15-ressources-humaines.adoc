@@ -1,0 +1,64 @@
+= Newsletter #9 : Ressources humaines
+:showtitle:
+:page-navtitle: Newsletter #9 : Ressources humaines
+:page-excerpt: L’apport des sciences comportementales dans le domaine professionnel est un sujet d’intérêt majeur pour l’équipe recherche de SCIAM. Voici ci-dessous quelques travaux scientifiques récents sur les aspects sociocognitifs en lien avec la gestion des ressources humaines.
+:layout: post
+:author: alexismevellec
+:page-tags: ['SCC','NewletterSCC','SciencesComportementales','RessourcesHumaines']
+:docinfo: shared-footer
+:page-vignette: SoCo.png
+//:post-vignette: SoCo.png
+:page-vignette-licence: Illustration par <a href="https://www.istockphoto.com/fr/portfolio/CrailsheimStudio" target="_blank">CrailsheimStudio</a>.
+:page-liquid:
+
+== Le meilleur des sciences comportementales & cognitives sélectionné par vos experts SCIAM
+
+L’apport des sciences comportementales dans le domaine professionnel est un sujet d’intérêt majeur pour l’équipe recherche de SCIAM. Voici ci-dessous quelques travaux scientifiques récents sur les aspects sociocognitifs en lien avec la gestion des ressources humaines.
+
+image::{{'/images/alexismevellec/nudge_800x400.png' | relative_url}}[image,width=80%,align="center"]
+
+== Croyances des salariés peu rémunérés sur les salaires atteignables lors de transitions professionnelles
+
+Les travaux théoriques et empiriques de Jager et alii. (2022) montrent que les travailleurs occupant des emplois faiblement rémunérés ont davantage tendance à ancrer leurs attentes en termes de salaires sur leurs salaires actuels, un phénomène connu sous le nom de "biais d’ancrage". Les attentes produites sont ainsi plus faibles que ce à quoi ils pourraient prétendre en changeant d’emploi.
+
+L’hypothèse avancée par ces auteurs est que les travailleurs faiblement rémunérés ont des coûts plus élevés associés à la recherche d’emploi (temps, transports etc.). Le travail empirique des chercheurs exploitant des données administratives ainsi qu’une enquête allemande tendent à confirmer cette hypothèse.
+
+In fine, la combinaison de coûts de recherche d’emploi élevés et de biais d’ancrage importants chez ces travailleurs conduit certains employeurs à exploiter la situation en proposant des salaires plus faibles. Cela mène à une fragmentation du marché de l’emploi avec des emplois mieux rémunérés que d’autres. Les travailleurs plus qualifiés se dirigent donc vers les emplois mieux rémunérés.
+
+https://www.nber.org/papers/w29623[*LIRE*^]
+
+== L’impact de la transparence salariale sur les inégalités et la performance
+
+Deux types d’inégalités peuvent émerger au sein des institutions{nbsp}: l’inéquité salariale (par exemple entre les sexes), souvent mesurée comme la cohérence ou la manière non-discriminatoire par laquelle le salaire est adapté à la performance ou à l’effort, et les inégalités de salaire correspondant simplement à la variance salariale au sein de l’organisation. Pour pallier ces problèmes, la transparence des rémunérations est largement avancée comme un remède, mais il existe peu de connaissance concernant l’impact de cette politique sur les rémunérations. En rassemblant des données détaillées sur les performances, la démographie et les salaires d’environ 100{nbsp}000 universitaires américains entre 1997 et 2017, les auteurs explorent comment cette pratique remodèle les pratiques de rémunération. Ainsi, les données suggèrent que la transparence des rémunérations entraîne des augmentations significatives à la fois de l’équité et de l’égalité des rémunérations, mais aussi une réduction significative et importante du lien entre la rémunération et la performance individuelle.
+
+https://www.nature.com/articles/s41562-022-01288-9[*LIRE*^]
+
+== Le capital psychologique{nbsp}: une ressource personnelle clé dans le contexte professionnel
+
+Cet article est une revue de littérature, très riche, portant sur le capital psychologique (PsyCap), notamment son importante implication dans le développement de l’individu et de l’organisation dans le contexte professionnel. Les auteurs décrivent le PsyCap comme un construit sociocognitif qui se caractérise par plusieurs dimensions{nbsp}:
+
+[lowerroman,start=1]
+. Le sentiment d’auto-efficacité et de confiance en soi permettant de consacrer les efforts nécessaires pour réussir des tâches{nbsp};
+. L’optimisme qui renvoie à la capacité de faire des attributions positives sur sa réussite{nbsp};
+. La persévérance nécessitant la capacité à modifier les stratégies en fonction de ses objectifs{nbsp};
+. La résilience permettant la résistance et le rebondissement pour réussir en cas d’adversité ou de problème.
+
+Ils retracent les travaux montrant les effets bénéfiques du PsyCap sur des comportements professionnels contre-productifs (tels que l’absentéisme et l’incivilité) ou productifs (tels que le niveau d’implication des salariés, leurs performances, leur capacité d’innovation) et sur la diminution du niveau de stress lié à l’insécurité au travail. Enfin, les auteurs présentent les outils psychométriques permettant aux ressources humaines une mesure efficace du PsyCap au niveau individuel et/ou du groupe de travail afin d’atteindre un niveau de fonctionnement optimal pour les organisations et un épanouissement psychologique pour les individus.
+
+https://www.sciencedirect.com/science/article/pii/S1269176320300158[*LIRE*^]
+
+== Elaboration d’une échelle d’épanouissement psychologique en milieu de travail (EEPMT) et examen de ses qualités psychométriques
+
+Selon la littérature scientifique, le bien-être au travail est fortement lié à l’épanouissement psychologique de l’individu dans le contexte professionnel. Plusieurs auteurs considèrent que l’épanouissement psychologique général est un concept distinct de l’épanouissement psychologique contextualisé à l’environnement professionnel. Ce dernier est une facette dynamique et complexe qui s’appuie, d’une part, sur les huit notions majeures de l’épanouissement général et d’autre part sur les facteurs permettant l’accomplissement de soi au travail, par exemplenbsp}: les relations jugées positives avec les collègues et sa hiérarchie ou l’exercice d’une activité perçue comme intéressante. Cette nouvelle conceptualisation de l’épanouissement au travail a amené les auteurs à développer un outil de mesure adapté au milieu professionnel (EEPMT) afin d’évaluer ce concept auprès de salariés francophones. Selon les résultats des trois études réalisées auprès de 405 participants, l’échelle présente une bonne validité des qualités psychométriques, permettant ainsi aux psychologues du travail et aux ressources humaines un outil contextualisé à l’environnement professionnel et à visée diagnostique dans les transitions d’emploi, le recrutement, la formation, mais aussi dans la prévention contre les risques professionnels.
+
+https://psycnet.apa.org/doiLanding?doi=10.1037%2Fcbs0000194[*LIRE*^]
+
+'''
+
+https://sciam.fr/[SCIAM^] est aussi présent sur https://www.linkedin.com/company/sciamfr/[LinkedIn^] et https://twitter.com/SciamVox[Twitter^]. Rejoignez la conversation et interagissez directement en ligne avec nos experts.
+
+Contribuons collectivement à la diffusion de contenus scientifiques.
+
+*Notre écosystème*
+
+image::{{'/images/alexismevellec/ecosys.png' | relative_url}}[image,width=50%,align="center"]
