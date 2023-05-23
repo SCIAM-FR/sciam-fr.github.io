@@ -1,0 +1,105 @@
+= Sludge audits : comment auditer autrement la complexité administrative{nbsp}?
+:showtitle:
+:page-navtitle: Sludge audits : comment auditer autrement la complexité administrative{nbsp}?
+:page-excerpt: Les travailleurs, citoyens et décideurs publics sont souvent confrontés à l’absurdité ou à la lourdeur de certaines démarches administratives. Celles-ci comportent fréquemment du sludge, c’est-à-dire des frictions excessives.
+:layout: post
+:author: hugotrad
+:page-tags: ['SCC','SciencesComportementales','Sludge','Administration']
+:docinfo: shared-footer
+:page-vignette: youarehere_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/gdj-1086657' target='_blank'>Gordon Johnson</a>.
+:page-liquid:
+
+.Illustration par https://pixabay.com/fr/users/qimono-1962238[Arek Socha^]
+image::{{'/images/hugotrad/labyrinth.png' | relative_url}}[image,width=80%,align="center"]
+
+Les travailleurs, citoyens et décideurs publics sont souvent confrontés à l’*absurdité* ou à la *lourdeur* de certaines démarches administratives.
+Celles-ci comportent fréquemment du *sludge*, c’est-à-dire des frictions excessives{nbsp}footnote:[Sunstein, C. R. (2019). Sludge and ordeals. Duke Law Journal, 68(8), 1844–1883. https://doi.org/10.2139/ssrn.3288192].
+Ainsi, plus de la moitié des Français ont éprouvé des difficultés à interagir avec une administration et le problème serait récurrent pour certains{nbsp}footnote:[Enquête sur l’accès aux droits Volume 2 — Relations des usagers avec les services publics, Défenseur des Droits, 2017.].
+Dans les entreprises, le bien-être et la productivité de nombreux travailleurs peuvent se trouver dégradés par des tâches chronophages qui, souvent, ne constituent pas leur cœur de métier{nbsp}footnote:[Ida EH Madsen, Manisha Tripathi, Marianne Borritz and Reiner Rugulies, Scandinavian Journal of Work, Environment & Health, Vol. 40, №6 (November 2014), pp. 631–638.].
+Pour autant, si de telles procédures sont mises en place, c’est qu’on pense en tirer des bénéfices{nbsp}: réduction de la fraude, sécurisation d’un processus…
+L’enfer est pavé de bonnes intentions{nbsp}; en la matière l’administration ne fait pas exception.
+
+== Il est beaucoup plus simple d’appréhender les bénéfices des procédures que leurs coûts
+
+Lors de la mise en place d’une procédure, ses bénéfices supposés sont spontanément envisagés par les décideurs, alors que les nombreux coûts induits par la complexité administrative le sont beaucoup moins{nbsp}: temps requis pour compléter une démarche — que ce soit du côté de l’usager ou de l’administration —{nbsp}, abandon de procédure et non-recours, perte de productivité, frustration…
+
+*La mise en place d’une procédure équilibrée constitue un compromis entre différents indicateurs de performance.*
+
+Décider qu’une procédure relève ou non du sludge revient à questionner sa proportionnalité{nbsp}: ses bénéfices justifient-ils ses coûts{nbsp}?
+Pour le savoir, il importe de pouvoir non seulement évaluer les bénéfices d'une procédure, mais aussi de déterminer précisément les coûts qu’elle génère.
+*C’est tout l’objet des «{nbsp}sludge audits{nbsp}»*.
+
+Récemment, des travaux universitaires américains ont tenté d’estimer les coûts associés à l’une des procédures administratives les plus emblématiques{nbsp}: la déclaration d’impôts{nbsp}footnote:[Benzarti, Y. (2020). Estimating the Costs of Filing Tax Returns and the Potential Savings from Policies Aimed at Reducing these Costs ∗.]footnote:[Benzarti, Y. (2017). How Taxing Is Tax Filing? Using Revealed Preferences to Estimate Compliance Costs. 23903. https://doi.org/10.3386/w23903].
+Outre les estimations proposées, ces études révèlent en creux les difficultés auxquelles peuvent faire face les organisations pour réaliser un audit du sludge.
+
+.Illustration par https://pixabay.com/fr/users/eluj-1927408[Eluj^]
+image::{{'/images/hugotrad/wayout.png' | relative_url}}[image,width=80%,align="center"]
+
+Premièrement, un tel audit nécessite des données, parfois beaucoup.
+Dans le meilleur des cas elles existent, mais elles doivent aussi être exploitables et par la suite analysées — ce qui constitue un processus technique et laborieux.
+La plupart du temps, ces données n’existent malheureusement pas.
+Les collecter auprès des agents et usagers nécessite donc des moyens logistiques, techniques et financiers conséquents pour une organisation.
+
+Une seconde difficulté tient au fait que les bénéfices d’une procédure sont souvent supposés, sans pour autant avoir fait l’objet d’une évaluation prouvant leur réalité.
+
+*L’efficacité d’une procédure ne va jamais de soi, et nos intuitions peuvent parfois s’avérer trompeuses.*
+
+Pour l’illustrer, des économistes ont étudié l’impact du conditionnement de l’attribution d’une aide financière visant à favoriser la scolarisation de jeunes garçons au Maroc à la présence stricte de l’élève{nbsp}footnote:[Benhassine, N., Devoto, F., Duflo, E., Dupas, P., Pouliquen, V., Bulman, G., … Zhang, H. (2013). NBER WORKING PAPER SERIES TURNING A SHOVE INTO A NUDGE? ; LABELED CASH TRANSFER FOR EDUCATION : Turning a Shove into a Nudge? Labeled Cash Transfern for Education. Retrieved from http://www.nber.org/papers/w19227].
+En effet contrôler cette présence pour ne verser l’aide qu’aux familles des élèves assidus engendrent des coûts administratifs importants.
+Or, contrairement à l’intuition commune, verser cette aide de manière inconditionnelle, mais en accompagnant la démarche d’une incitation douce (_nudge_), a diminué l’absentéisme.
+Cet exemple illustre parfaitement le besoin d’un *«{nbsp}contrefactuel{nbsp}», c’est-à-dire une évaluation de ce qui se passerait en l’absence de la procédure* (ici, ce contrefactuel permet de révéler l’inutilité de la procédure considérée).
+
+== Il est possible de surmonter ces difficultés grâce à des méthodes innovantes
+
+Pour réussir à mesurer le rapport coût-bénéfice, nous concevons et expérimentons chez SCIAM des outils fondés sur la recherche scientifique permettant d’auditer les procédures administratives au sein des organisations.
+Pour ce faire, *nous nous appuyons sur des techniques issues des sciences comportementales et de l’intelligence collective afin de faire estimer les coûts et bénéfices de procédures existantes* (ou envisagées).
+
+Par exemple, nous utilisons une *plateforme* pour recueillir des *estimations prédictives* réalisées par des personnes concernant une procédure à évaluer.
+Cet outil repose sur deux principes{nbsp}:
+
+* Améliorer la précision individuelle d’une estimation en ayant recours aux sciences comportementales
+* Maximiser l’estimation en faisant appel à des principes de l’intelligence collective.
+
+== Concrètement comment cela fonctionne{nbsp}?
+
+.Illustration par https://pixabay.com/fr/users/gdj-1086657[Gordon Johnson^]
+image::{{'/images/hugotrad/youarehere.png' | relative_url}}[image,width=80%,align="center"]
+
+Nous sommes tous en capacité, avec plus ou moins de précision, d’évaluer la performance d’une procédure (par exemple, la durée que l’on a consacrée ou que nous allons consacrer à une tâche, exercice auquel nous sommes régulièrement confrontés).
+Dans ce contexte, nous ne sommes jamais d’une précision absolue et avons tendance à sous-estimer ou surestimer cette durée.
+Toutefois, ces erreurs sont souvent systématiques et prévisibles.
+Nous avons par exemple tendance à surestimer la durée de tâches courtes et inversement à sous-estimer celle de tâches longues{nbsp}footnote:[Roy, M. M., Burns, T., & Radzevick, J. R. (2019). Unpacking, summing and anchoring in retrospective time estimation. Acta Psychologica, 192(December 2018), 153–162. https://doi.org/10.1016/j.actpsy.2018.11.012].
+Les sciences cognitives étudient de près cette capacité à percevoir et estimer le temps{nbsp}footnote:[(Eds.). (2018). Timing and Time Perception: Procedures, Measures, & Applications. Boston, USA: Brill. doi: https://doi.org/10.1163/9789004280205].
+En décrivant les biais systématiques qui affectent nos estimations, elles offrent des leviers permettant d’en limiter les effets.
+Par exemple, si une tâche est constamment sous-estimée, la technique de l’*unpacking* (qui consiste à demander aux participants à préalablement découper la tâche en sous-étapes) permet de mieux estimer sa durée.
+Ainsi, lorsque l’estimation de tâches administratives par les individus se révèle être biaisée, il est possible d’intégrer différents leviers dans la procédure d’estimation pour en maximiser la précision.
+L’intelligence collective permet d’améliorer davantage encore l’estimation des données.
+
+De fait, *de nombreux travaux montrent que sous certaines conditions, l’agrégation d’un grand nombre d’estimations permet d’obtenir une prédiction globale plus précise que la meilleure des réponses individuelles*.
+Ce phénomène, nommé la «{nbsp}https://fr.wikipedia.org/wiki/La_Sagesse_des_foules[sagesse des foules^]{nbsp}» a été mis en évidence pour la première fois au XIXe siècle par https://en.wikipedia.org/wiki/Francis_Galton[Francis Galton^].
+Lors d’une foire agricole, un concours consistait à essayer de déterminer le plus précisément possible le poids d’un bœuf (l’estimateur le plus proche de la réalité se voyait alors récompensé d’un prix).
+En voulant montrer la médiocrité de la foule, Galton se rendit compte que la moyenne de l’ensemble des estimations était en réalité plus proche de la réalité que la meilleure des réponses individuelles.
+La sagesse des foules a depuis lors été maintes fois répliquée{nbsp}footnote:[Bang, D., & Frith, C. D. (2017). Making better decisions in groups. Royal Society Open Science, 4(8). https://doi.org/10.1098/rsos.170193].
+Son efficacité peut toutefois être limitée la présence d’un biais systématique dans les réponses individuelles{nbsp}; en combinant la sagesse des foules avec les sciences comportementales pour prendre en compte ces biais, il est possible de proposer une mesure d’agrégation permettant d’obtenir une estimation au plus proche de la réalité{nbsp}footnote:[Kao, A. B., Berdahl, A. M., Hartnett, A. T., Lutz, M. J., Bak-Coleman, J. B., Ioannou, C. C., … Couzin, I. D. (2018). Counteracting estimation bias and social influence to improve the wisdom of crowds. Journal of the Royal Society Interface, 15(141). https://doi.org/10.1098/rsif.2018.0130].
+
+== Comment aller encore un cran plus loin{nbsp}?
+
+En disposant d’un *contrefactuel*, ou du moins en simulant cette absence de procédure.
+Pour le faire de manière la plus rigoureuse possible il est possible de s’appuyer sur des évaluations d’impact, et particulièrement sur les essais contrôlés randomisés{nbsp}footnote:[https://www.strategie.gouv.fr/sites/strategie.gouv.fr/files/atoms/files/guide_methodologique_20160906web.pdf].
+Bien connu en médecine, il s’agit de comparer deux échantillons quasiment identiques à l’exception d’un facteur que l’on introduit, comme une procédure par exemple.
+Dans la mesure où il s’agit de la seule différence entre les deux échantillons, toute différence constatée est causalement imputable à ce facteur.
+Cette technique est également utilisée dans les politiques publiques{nbsp}; il est ainsi possible par exemple d’évaluer l’impact d’une procédure sur le taux de fraude d’une prestation sociale.
+Ou bien sur la diminution de la consommation électrique des ménages suite à la mise en place d’une incitation douce (_nudge_){nbsp}footnote:[Mont, O., Lehner, M., & Heiskanen, E. (2014). Nudging, a promising tool for sustainable consumption behaviour?] (15).
+Toutefois, ces évaluations peuvent être logistiquement et financièrement coûteuses à mettre en place.
+
+Une nouvelle fois, l’*intelligence collective pourrait potentiellement être utilisée afin de surmonter cette barrière*.
+Des travaux ont ainsi montré que les *marchés prédictifs* pouvaient être capables de *simuler des contrefactuels*{nbsp}footnote:[Hearst, M. A., Hunson, R. D., & Stork, D. G. (1999). Building intelligent systems one e-citizen at a time. IEEE Intelligent Systems and their Applications, 14(3), 16–20.].
+Les marchés prédictifs, comme leur nom l’indique, sont des marchés virtuels où des individus parient sur l’issue de différents événements{nbsp}; par exemple sur le gagnant de l’élection présidentielle de 2022.
+En pariant sur une issue, les participants détiennent une action valorisée sur le marché et grâce à laquelle ils seront rémunérés si leur prédiction se réalise. En récompensant la précision des prédictions, ces marchés favorisent le repérage d’information pertinente et leur juste évaluation de manière non-biaisée{nbsp}footnote:[https://predict.hypermind.com/hypermind/ResearchPage.html].
+Ainsi, nous envisageons d’utiliser également l’intelligence collective pour produire des contrefactuels et donc évaluer l’efficacité d’une procédure existante ou envisagée, par exemple en prédisant quel serait le taux de fraude en l’absence d’une procédure de contrôle.
+
+_In fine_, le développement et l’expérimentation de cette méthodologie en partenariat avec des institutions publiques devraient nous fournir des estimations robustes permettant non seulement d’estimer la performance d’une procédure existante ou d’une simplification envisagée, mais aussi de choisir l’alternative la plus avantageuse, et enfin de fournir une mesure afin d’estimer l’efficacité du changement.
+
+

@@ -1,0 +1,107 @@
+= Sludge, red tape, ordeal, fardeau administratif{nbsp}: se repérer dans l’étude des frictions organisationnelles
+:showtitle:
+:page-navtitle: Sludge, red tape, ordeal, fardeau administratif{nbsp}: se repérer dans l’étude des frictions organisationnelles
+:page-excerpt: A la croisée de différents domaines de recherche (économie, administration publique, sciences comportementales, management des organisations), les frictions au sein des organisations sont plus que jamais sous le feu des projecteurs.
+:layout: post
+:author: hugotrad
+:page-tags: ['SCC','SciencesComportementales','Sludge','Administration']
+:docinfo: shared-footer
+:page-vignette: laby_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/peggy_marco-1553824' target='_blank'>Peggy_Marco</a>.
+:page-liquid:
+
+.Illustration par https://pixabay.com/fr/users/qimono-1962238[Arek Socha^]
+image::{{'/images/hugotrad/labyrinth.png' | relative_url}}[image,width=80%,align="center"]
+
+A la croisée de *différents domaines de recherche* (économie, administration publique, sciences comportementales, management des organisations), les frictions au sein des organisations sont plus que jamais sous le feu des projecteurs.
+Qu’il s’agisse du _red tape_, des mécanismes d’_ordeal_ (supplice en français), ou plus récemment du fardeau administratif ou du _sludge_, de nombreux concepts ont émergé ces dernières décennies pour étudier ces frictions ainsi que leur impact sur les individus et les organisations.
+
+Comme le notent Madsen et al., si quelques chercheurs et praticiens semblent les utiliser de manières interchangeables, ces quatre concepts ne sont pourtant pas équivalents.
+Leurs définitions et hypothèses diffèrent, affectant ainsi la manière dont sont étudiées les frictions au sein des organisations et donc les conclusions qui peuvent en être tirées.
+
+Comment s’y retrouver entre ces différents concepts{nbsp}?
+Pour ce faire, nous vous proposons une note de synthèse de l’article suivant{nbsp}:
+Madsen, J. K., Mikkelsen, K. S., & Moynihan, D. P. (2020). _Burdens, Sludge, Ordeals, Red tape, Oh My!: A User’s Guide to the Study of Frictions_. Public Administration, 1–40. https://doi.org/10.1111/padm.12717
+
+== Ce que l’on conçoit bien s’énonce clairement
+
+.Adapté de Madsen et al., 2021
+image::{{'/images/hugotrad/madsen1.png' | relative_url}}[image,width=80%,align="center"]
+
+== Comment distinguer ces quatre concepts ?
+
+Afin d’éclairer la distinction entre ces quatre concepts et les différentes approches de recherche correspondantes, Madsen et al. proposent une classification visant à clarifier les points communs et les différences selon les *quatre critères* ci-dessous.
+
+=== Objectivité
+
+*Est-ce que les concepts décrivent un phénomène objectif (par exemple le temps consacré à une procédure) ou bien une expérience subjective{nbsp}?*
+
+Les différentes approches de recherche se proposent de *quantifier des frictions objectives* via plusieurs mesures tels que{nbsp}: le temps consacré à une procédure ou dans des files d’attentes, le nombre de documents requis, le coût financier…
+Mais elles tentent également de «{nbsp}capturer{nbsp}», de différentes façons, les expériences *subjectives* qui peuvent varier d’un individu à un autre.
+
+Or, la complexité d’une procédure n’est pas vécue de la même manière selon la *vulnérabilité* et les *caractéristiques* des individus et des groupes sociaux.
+Les recherches sur les _ordeals_ et le _sludge_ intègrent cette dimension en documentant la manière dont différents groupes sont plus ou moins affectés par les frictions objectives.
+
+Si les recherches sur le fardeau administratif et le red tape se focalisent surtout sur les individus pour évaluer la négativité des frictions, celles sur le sludge et les ordeals considèrent également le *collectif* comme deuxième groupe d’évaluation complémentaire.
+Ces approches prennent ainsi en compte les dommages individuels provoqués par les frictions mais *également les bénéfices sociétaux ou organisationnels*.
+
+=== Distributivité
+
+*Les frictions permettent-elles un meilleur ciblage des services publics ou bien au contraire une aggravation des inégalités{nbsp}?*
+
+Contrairement aux autres concepts, les mécanismes d’_ordeal_ sont mis en place en miroir de l’hypothèse suivante{nbsp}}: la présence de frictions, dans le cadre d’allocations de prestations sociales avec un budget limité, constitue un filtre permettant d’assurer que seules les personnes en ayant réellement besoin investiront les ressources nécessaires pour aller au bout de la procédure.
+
+A l’inverse, les recherches sur le _sludge_ et le fardeau administratif s’accordent pour montrer que *cette hypothèse est erronée*.
+De fait, les groupes sociaux *les plus vulnérables* sont souvent ceux *les plus confrontés aux frictions*.
+Les prestations sociales sont généralement conditionnées au renseignement d’une procédure vérifiant l’éligibilité des demandeurs, alors qu’ils peuvent être discriminés par des administrations (Nisar, 2018).
+Pire encore, de par leur vulnérabilité il leur est d’autant plus difficile de surmonter ces frictions.
+
+=== Objet et domaine
+
+*Qui est analysé comme objet des frictions (individu ou organisation) et dans quel contexte (privé ou public){nbsp}?*
+
+Quel que soit le concept étudié, la recherche s’est *principalement intéressée à la sphère publique* à quelques exceptions près.
+Si les travaux sur le fardeau administratif et l’_ordeal_ se concentrent sur l’expérience du citoyen, ceux portant sur le _red tape_ concernent majoritairement les procédures et les régulations qui affectent le travail de l’administration.
+
+Seule la recherche sur le _sludge_ reconnaît explicitement la sphère privée comme domaine d’étude.
+
+=== Intentionnalité
+
+*Les frictions étudiées sont-elles imposées de manière délibérée ou accidentelle{nbsp}?*
+
+Les frictions peuvent être mises en place pour plusieurs raisons{nbsp}; intentionnelles ou non.
+
+Elles *peuvent être non délibérées* et constituer un produit collatéral issu de systèmes complexes, de changements organisationnels, de règles obsolètes (Peeters, 2020).
+Elles peuvent également s’accumuler en raison de la rationalité limitée des designers institutionnels (Shahab & Lades, 2020) *ou pour éviter le blâme* (e.g. Kaufman, 1977{nbsp}; Bozeman, 1993; 2000).
+
+Mais elles peuvent également être mises en place *de manière intentionnelle*.
+En particulier, la recherche sur le fardeau administratif s’efforce de montrer que les frictions peuvent résulter d’un réel processus politique et constituer une politique publique détournée qui ne dit pas son nom.
+
+.Adapté de Madsen et al., 2021
+image::{{'/images/hugotrad/madsen2.png' | relative_url}}[image,width=80%,align="center"]
+
+== Quatre concepts différents mais un objectif commun
+
+*Qu’il s’agisse du _sludge_, du _red tape_ ou du fardeau administratif, ces courants de recherche s’accordent sur le fait que les organisations doivent renforcer leurs efforts pour identifier et réduire les frictions{nbsp}; cela présuppose également de reconnaître que les frictions peuvent avoir des bénéfices qu’il faut mesurer et confronter à leurs coûts.*
+
+Si une telle entreprise de quantification du coût des frictions présente plusieurs intérêts, elle procure surtout un *outil de diagnostic*.
+En conceptualisant les coûts, il devient possible d’identifier qui et quand les individus y sont confrontés, et ainsi de *mieux comprendre la nature de leurs effets*.
+
+Convaincus chez SCIAM de l’importance de réduire les frictions organisationnelles, nous travaillons à élaborer une méthodologie de quantification des coûts et bénéfices des frictions à déployer au sein des organisations.
+
+'''
+
+*Références*
+
+Article original : Madsen, J. K., Mikkelsen, K. S., & Moynihan, D. P. (2020). Burdens, Sludge, Ordeals, Red tape, Oh My!: A User’s Guide to the Study of Frictions. Public Administration, 1–40. https://doi.org/10.1111/padm.12717
+
+Bozeman, B. (1993). A Theory of Government Red Tape. Journal of Public Administration Research and Theory 3(3), 273–303.
+
+Bozeman, B. (2000). Bureaucracy and red tape. Upper Saddle River, NJ: Prentice Hall.
+
+Kaufman, H. (1977). Red Tape, Its Origins, Uses, and Abuses. Washington, DC: Brookings Institution Press.
+
+Nisar, M. (2018). Children of a lesser god: Administrative burden and social equity in citizen–state interactions. Journal of Public Administration Research and Theory, 28(1), 104–119.
+
+Peeters, R. (2020). The political economy of administrative burdens: A theoretical framework for analyzing the organizational origins of administrative burdens. Administration & Society, 52(4), 566–592.

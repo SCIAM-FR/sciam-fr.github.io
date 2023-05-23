@@ -1,0 +1,104 @@
+= Améliorer la communication scientifique auprès de la population par l’utilisation de chatbots
+:showtitle:
+:page-navtitle: Améliorer la communication scientifique auprès de la population par l’utilisation de chatbots
+:page-excerpt: Récemment illustré par la campagne de vaccination contre le Covid-19, il existe sur de nombreux sujets un fossé entre des consensus scientifiques et l’opinion publique, et ce malgré la mise en place de campagnes d’informations destinées à communiquer les résultats scientifiques auprès de la population générale.
+:layout: post
+:author: hugotrad
+:page-tags: ['SCC','SciencesComportementales','Communication','Chatbot']
+:docinfo: shared-footer
+:page-vignette: chatbot_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/mohamed_hassan-5229782' target='_blank'>Mohamed Hassan</a>.
+:page-liquid:
+
+Récemment illustré par la campagne de vaccination contre le Covid-19, il existe sur de nombreux sujets un fossé entre des consensus scientifiques et l’opinion publique — en témoignent les débats sur l’utilisation des organismes génétiquement modifiés (OGMs) ou la réalité du changement climatique –, et ce malgré la mise en place de campagnes d’informations destinées à communiquer les résultats scientifiques auprès de la population générale.
+
+== Comment expliquer ce phénomène et améliorer la diffusion des connaissances scientifiques au sein de la société{nbsp}?
+
+Des chercheurs se sont emparés de ces problèmes dans de récents travaux, dont nous vous proposons une note de synthèse{nbsp}:
+
+Altay, S., Schwartz, M., Hacquin, A.-S., Allard, A., Blancke, S., & Mercier, H. (2022) +
+Scaling up interactive argumentation by providing counterarguments with a chatbot +
+_Nature Human Behaviour_ +
+https://doi.org/10.1038/s41562-021-01271-w
+
+Altay, S., Hacquin, A. S., Chevallier, C., & Mercier, H. (2021) +
+Information Delivered by a Chatbot Has a Positive Impact on COVID-19 Vaccines Attitudes and Intentions. +
+_Journal of Experimental Psychology: Applied_. +
+https://doi.org/10.1037/xap0000400
+
+Typiquement, les campagnes de communication se font par des arguments unilatéraux, parfois minimaux assertant simplement l’existence d’un consensus scientifique.
+Ce faisant, de tels arguments génèrent spontanément chez les receveurs des contre-arguments — qui eux demeurent sans réponse.
+Ainsi, les effets observés d’une campagne basée sur de courts arguments destinés à un public large sont généralement faibles.
+
+A l’inverse, nous révisons davantage nos croyances lorsque nous pouvons dialoguer et échanger des arguments.
+Dans leur livre l’Enigme de la Raison, Hugo Mercier et Dan Sperber suggèrent que le pouvoir des dialogues argumentatifs à informer les croyances provient de l’opportunité que ceux-ci offrent de répondre aux contre-arguments des débatteurs respectifs.
+De fait, de nombreuses études montrent que lorsque des participants interagissent en face à face dans des discussions à taille humaine (typiquement moins de 5 personnes), ils sont davantage susceptibles de changer d’avis quand ils sont confrontés à de bons arguments.
+Par exemple, lors d’une tâche de résolution d’un problème logique réalisée en groupe, on observe que même lorsqu’une seule personne dispose de la bonne réponse, celle-ci se diffuse très majoritairement dans le groupe.
+De la même manière, après un échange avec des scientifiques lors de festivals scientifiques, les participants ont déclaré avoir une attitude bien plus favorable envers des sujets sensibles tels que la vaccination et les OGMs.
+
+Malheureusement, ces conditions idéales d’argumentation se prêtent peu à une campagne de communication massive telles que pratiquées par des institutions gouvernementales ou scientifiques.
+Pour surmonter ces limites, des chercheurs ont expérimenté l’utilisation d’un chatbot comme medium de communication sur la sûreté et l’efficacité des OGMs ou de la vaccination contre le Covid-19.
+En listant dans un premier temps les contre-arguments les plus répandus et pertinents à des sujets controversés, celui-ci réfute ensuite chacun de ces contre-arguments grâce à des données scientifiques.
+
+Les auteurs ont mené deux études — une sur les OGMs, l’autre sur la vaccination contre le Covid-19 — afin de tester l’impact de l’utilisation d’un chatbot comme outil de communication sur l’attitude des participants concernant ces sujets.
+
+.Un aperçu du chatbot interactif utilisé dans l’expérience sur la vaccination{nbsp}; les participants pouvaient sélectionner une réponse parmi une liste pré-établie
+image::{{'/images/hugotrad/chatbot1.png' | relative_url}}[image,width=80%,align="center"]
+
+== Quels étaient les résultats de ces études{nbsp}?
+
+=== Etude 1{nbsp}: OGMs
+
+Dans la première étude sur les OGMs, ils ont comparé plusieurs conditions.
+La première (condition contrôle) consistait à simplement présenter le principe des OGMs.
+Dans la deuxième condition, il était également indiqué l’existence d’un consensus scientifique sur la sûreté et/ou l’efficacité de celle-ci (condition consensus).
+Enfin, dans les dernières conditions, les participants étaient confrontés à plusieurs contre-arguments et leurs réfutations.
+Ainsi, ils avaient affaire soit à l’ensemble des contre-arguments et leurs réfutations (condition contre-arguments), soit à un chatbot interactif{nbsp}: les participants pouvaient cliquer sur les contre-arguments qu’ils jugeaient pertinents pour voir leur réfutation apparaitre.
+Dans la deuxième étude sur la vaccination, seul le chatbot était utilisé.
+
+L’ensemble des conditions permettaient d’améliorer l’attitude des participants.
+Ainsi, ne serait-ce qu’expliquer le principe de cette technologie permettait d’en améliorer la perception, et indiquer l’existence d’un consensus scientifique était d’autant plus efficace.
+Comme prédit par les auteurs, le plus efficace restait néanmoins de présenter l’ensemble des contre-arguments ainsi que leur réfutation respective.
+En particulier, les gens dont l’attitude était la plus négative au départ ont montré le plus grand changement.
+Ainsi, ces résultats montrent que les gens peuvent être convaincus par de bons arguments bien étayés, et ce malgré une attitude initiale parfois négative.
+
+Toutefois, l’étude révèle que la condition contre-arguments, où les contre-arguments et réfutations étaient listés dans leur ensemble, était plus efficace qu’un chatbot interactif où les participants peuvent sélectionner les contre-arguments dont ils veulent voir la réfutation.
+Les auteurs attribuent cela en partie au fait que les participants consacraient plus de temps à lire lorsque l’ensemble des arguments leurs étaient présentés plutôt que lorsqu’ils pouvaient en sélectionner quelques-uns.
+Ainsi, il se peut que cela soit parce que l’ensemble des arguments étaient pertinents et convaincants, ou bien parce que la simple présence d’un grand nombre d’arguments constitue un signal de fiabilité.
+
+image::{{'/images/hugotrad/chatbot2.png' | relative_url}}[image,width=80%,align="center"]
+
+=== Etude 2{nbsp}: vaccination Covid-19
+
+Dans cette deuxième étude, seules deux conditions étaient comparées.
+L’une où seul le principe de la vaccination à ARN message était expliqué (condition contrôle), la seconde étant une condition chatbot similaire à celle de l’étude précédente.
+
+Similairement aux OGMs, la condition chatbot était efficace pour changer l’attitude des participants.
+Toutefois, celui-ci s’est avéré être moins efficace que dans la précédente étude, et ceci pour plusieurs raisons potentielles.
+Premièrement, en particulier au moment de l’étude, il existait moins de preuves et arguments sur la vaccination que sur les OGMs.
+Mais surtout, ce type d’intervention est d’autant plus efficace que les gens n’ont pas de connaissances préalables sur le sujet.
+Or, dans le cas du vaccin, le sujet était d’ores et déjà au centre du débat public.
+Qui plus est, l’opposition est peut-être davantage susceptible d’être politiquement motivée plutôt qu’ancrée dans une absence de connaissances scientifiques.
+
+Les effets du chatbot restent néanmoins conséquents{nbsp}: une augmentation de 37% de participants ayant une opinion positive et une diminution de 20% de participants déclarant ne souhaitant jamais se faire vacciner.
+Par ailleurs, similairement à l’étude précédente, les auteurs n’ont pas noté d’effets pervers.
+Au contraire, les personnes ayant l’opinion la plus négative au départ sont à nouveau ceux qui ont le plus changé leur opinion.
+Par ailleurs, une seconde expérience — bien qu’imparfaite (à découvrir dans l’article original) suggère que ces effets persistent dans le temps.
+
+Ainsi, pour donner un ordre de grandeur, si ce chatbot avait été déployé sur «{nbsp}TousAntiCovid{nbsp}» et utilisé par 20 millions d’utilisateurs, il aurait potentiellement pu convaincre 1.4 million d’indécis de se faire vacciner.
+Qui plus est, 72% des participants de l’étude ont déclaré avoir utilisé les informations provenant du chatbot afin de convaincre d’autres personnes, ce qui renforcerait encore son impact bien que cela soit difficile à mesurer.
+
+image::{{'/images/hugotrad/chatbot3.png' | relative_url}}[image,width=80%,align="center"]
+
+Ces études se heurtent toutefois à quelques limites.
+Tout d’abord, les personnes étaient rémunérés pour y participer et ne constituaient pas un échantillon représentatif de la population{nbsp}; il n’est donc pas clair dans quelle mesure les gens seraient spontanément enclins à s’informer pendant plusieurs minutes sur l’un de ces sujets sans être rémunérés.
+A cet égard, l’interactivité du chatbot qui semblait réduire l’efficacité de l’intervention dans la première étude (comparée à la condition contre-arguments non-interactive) pourrait au contraire devenir un levier d’engagement auprès du public général.
+Enfin, ces études reposent sur des intentions et attitudes déclarées qui ne sont que des mesures indirectes du comportement réel des citoyens.
+Ainsi, des études supplémentaires en conditions réelles pourraient éclaircir ces points d’ombres.
+
+Néanmoins, ces études suggèrent que l’utilisation de chatbots — et plus généralement de stratégies argumentatives de communications — peut constituer de précieux outils de communication scientifiques auprès de la population générale.
+
+
+
+
