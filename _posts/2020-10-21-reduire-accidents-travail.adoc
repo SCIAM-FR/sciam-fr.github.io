@@ -1,0 +1,79 @@
+= Comment les sciences comportementales permettent de réduire les accidents du travail
+:showtitle:
+:page-navtitle: Comment les sciences comportementales permettent de réduire les accidents du travail
+:page-excerpt: Malgré des efforts constants en matière de prévention des accidents et de formation aux procédures de sécurité, malgré les progrès techniques qui ont considérablement réduit le risque de dysfonctionnement des équipements, 656.000 accidents du travail ont encore été recensés en 2019.
+:layout: post
+:author: oliviersavrimoutoo
+:page-tags: ['SCC','SciencesComportementales','Securite']
+:docinfo: shared-footer
+:page-vignette: falling_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par https://pixabay.com/fr/users/pexels-2286921[Pexels^].
+:page-liquid:
+
+.Illustration par https://pixabay.com/fr/users/pexels-2286921[Pexels^]
+image::{{'/images/oliviersavrimoutoo/falling.png' | relative_url}}[image,width=80%,align="center"]
+
+Malgré des efforts constants en matière de prévention des accidents et de formation aux procédures de sécurité, malgré les progrès techniques qui ont considérablement réduit le risque de dysfonctionnement des équipements, *656.000 accidents du travail* ont encore été recensés en 2019{nbsp}footnote:[https://www.lemonde.fr/politique/article/2020/10/07/les-accidents-du-travail-en-legere-hausse-en-2019-notamment-dans-les-services_6055121_823448.html].
+Si le nombre moyen d’accidents pour 1000 salariés reste constant, leur coût moyen forfaitaire est en augmentation (+3,7%){nbsp}footnote:[https://www.bdo.fr/fr-fr/blog/l-entreprise-a-360%C2%B0/2019/les-couts-moyens-des-accidents-du-travail-et-des-maladies-professionnelles-en-forte-hausse-en-2019].
+Par ailleurs, les coûts indirects qu’ils entraînent restent probablement sous-estimés (journées de travail perdues, couts administratifs, perte de production etc.), et ce sans même évoquer le drame humain pour les victimes et leurs proches, et pour les collègues durablement choqués.
+
+*L’approche classique* en matière de *prévention des accidents du travail* se base principalement sur *l’établissement de normes*, *de réglementations*, et sur des *actions de formation* et de *sensibilisation des salariés*.
+Or, cette approche repose implicitement sur au moins deux hypothèses.
+
+D’une part, elle suppose que les règles de prévention et de sécurité sont bien élaborées, et que le principal objectif est de les faire respecter.
+D’autre part, elle considère que les salariés disposent toujours des ressources cognitives et de l’environnement adéquat pour prendre en compte et appliquer ces règles de sécurité.
+
+Toutefois, comme le *démontrent* les résultats empiriques et théoriques récents en *sciences comportementales*, ces deux hypothèses *résistent mal à l’analyse*.
+
+== Les sciences comportementales permettent d’améliorer de façon significative la prévention des accidents du travail en créant les conditions pour que les consignes de sécurité soient mieux élaborées, comprises, et respectées
+
+Premièrement, nos capacités cognitives (mémoire, attention, perception) sont *limitées et variables dans le temps*, ce qui nous conduit à nous appuyer sur des https://fr.wikipedia.org/wiki/Heuristique[heuristiques^] dans notre prise de décision.
+Ces *raccourcis mentaux* ont pour vocation de simplifier la perception que nous avons de notre environnement pour nous permette de *prendre des décisions de manière rapide et efficace*.
+Or, comme toute approximation, aussi raisonnable soit-elle, nos _heuristiques_ peuvent nous conduire à prendre des décisions sous-optimales, phénomène que l’on désigne souvent par le terme de *_biais cognitifs_*{nbsp}footnote:[Gilovich, T., Griffin, D., & Kahneman, D. (Eds.). (2002). Heuristics and biases: The psychology of intuitive judgment. Cambridge University Press. https://doi.org/10.1017/CBO9780511808098].
+
+.Illustration par https://pixabay.com/fr/users/elisariva-1348268[ElisaRiva^]
+image::{{'/images/oliviersavrimoutoo/brain.png' | relative_url}}[image,width=80%,align="center"]
+
+Deuxièmement, les https://blog.sciam.fr/2020/07/21/sludge-transformation-organisations.html[conflits entre plusieurs enjeux et/ou priorités et les pressions temporelles^], peuvent aussi constituer un frein à la bonne maitrise des risques.
+C’est notamment le cas pour les interventions de *maintenance*, au cours desquelles la volonté de résoudre le problème «{nbsp}le plus vite possible{nbsp}» pour permettre le redémarrage de l’activité peut entraîner un non-respect des règles de sécurité.
+
+*L’approche comportementale de la sécurité au travail s’attache donc, d’une part à identifier comment la prévention (ses processus, son organisation, ses outils) peut s’adapter à la cognition, à la motivation et aux émotions des individus{nbsp}; et d’autre part à optimiser l’organisation même du travail pour réduire les accidents, en mettant les salariés dans les meilleures conditions pour appliquer les mesures de sécurité.*
+
+== Mieux identifier et comprendre les risques grâce à des méthodes scientifiques rigoureuses
+
+La bonne compréhension par les décisionnaires des risques encourus par les équipes sur le terrain constitue un *prérequis* important à tout effort de prévention.
+Ainsi, une étude de la https://dares.travail-emploi.gouv.fr/dares-etudes-et-statistiques/[Direction de l’animation de la recherche, des études et des statistiques^] (Dares) datant de 2019 et basée sur les données de l’enquête _Conditions de Travail 2013_ fait état de *divergences importantes entre les perceptions des employeurs et des salariés*.
+
+Les employeurs interrogés déclarent que 24% des salariés seraient exposés à au moins un risque physique (hypothèse moyenne), alors que 74% des salariés interrogés déclarent être exposés à au moins un facteur de risque{nbsp}footnote:[Desjonquères, A. (2019). L’exposition aux risques du travail{nbsp}: quels écarts de perception entre les salariés et leurs employeurs (Document d’études Dares, Vol. 230). Direction de l’animation de la recherche, des études et des statistiques.].
+Si, comme le suggère cette étude, les dispositifs renforçant le dialogue entre salariés et dirigeants restent importants pour identifier les risques et se prémunir contre les incidents, les méthodes d’analyse et d’expérimentations (enquêtes de terrain, analyse de bases de données…) issues des sciences comportementales permettent de *dépasser le seul cadre du déclaratif* pour identifier les facteurs de risques pouvant échapper à l’attention des équipes et des dirigeants.
+
+== Optimiser la présentation des risques et des consignes en minimisant l’effort demandé pour leur bonne compréhension
+
+Comme l’ont démontré plusieurs années de recherche sur la communication dans le domaine médical, présenter les *statistiques sous forme de fréquences plutôt qu’à partir de probabilités* améliorerait leur lisibilité auprès des patients et diminuerait les comportements à risques{nbsp}footnote:[5Gigerenzer, G., Gaissmaier, W., Kurz-Milcke, E., Schwartz, L. M., & Woloshin, S. (2007). Helping Doctors and Patients Make Sense of Health Statistics. Psychological science in the public interest: a journal of the American Psychological Society, 8(2), 53–96. https://doi.org/10.1111/j.1539-6053.2008.00033.x].
+L’utilisation d’*analogies* pour la présentation des risques de certaines maladies et de certains traitements favoriserait aussi leur bonne compréhension indépendamment du niveau de mathématiques des patients, rendant ainsi l’action des médecins *plus inclusive*{nbsp}footnote:[Galesic, M., & Garcia-Retamero, R. (2012). Using Analogies to Communicate Information about Health Risks. Applied Cognitive Psychology, 27(1), 33–42. https://doi.org/10.1002/acp.2866].
+
+.Illustration par https://pixabay.com/fr/users/geralt-9301/[Gerd Altmann^]
+image::{{'/images/oliviersavrimoutoo/ideas.png' | relative_url}}[image,width=80%,align="center"]
+
+Plus récemment, les travaux de la https://www.bi.team/[Behavioural Insights Team^] ont démontré comment une https://blog.sciam.fr/2020/05/06/protocole-deconfinement-nudge.html[présentation visuelle^] se focalisant sur les _étapes clés_ d’un bon lavage des mains pouvait améliorer la compréhension des consignes et l’hygiène des mains durant la pandémie de Covid-19{nbsp}footnote:[Behavioural Insights Team (2020) : https://www.bi.team/blogs/bright-infographics-and-minimal-text-make-handwashing-posters-most-effective/].
+
+== Mettre en avant les comportements vertueux pour améliorer le respect des consignes de sécurité
+
+Finalement, *nos décisions sont influencées par nombre de facteurs environnementaux*, tels que le comportement de nos pairs.
+Ces https://blog.sciam.fr/2020/03/23/covid-19-convaincre.html[*_normes sociales_*^] définissent un ensemble de comportements communément reproduits et/ou approuvés, et guident les décisions en raison des pressions sociales auxquelles elles nous soumettent.
+Lorsque les règles de sécurité sont établies et respectées par tous, la probabilité de se voir sanctionné en cas de transgression et récompensé pour son comportement vertueux, s’en voit accentuée.
+Ces *sanctions*, pouvant être de nature monétaire ou sociale, font partie intégrante des organisations, et constituent un levier d’action supplémentaire à la disposition des directeurs de la sécurité.
+
+Ainsi, les résultats d’une étude récente conduite au Chili démontrent qu’informer les encadrants de PMEs du taux d’accidents moyen dans leurs industries respectives (nombre d’accidents pour 100 salariés) peut conduire à une baisse significative du nombre d’accidents pour les entreprises ayant un taux supérieur à la médiane{nbsp}footnote:[Brahm, F., Lafortune, J., & Tessada, J. (2016). The barriers to worker’s safety in SMEs: Lessons learned from a set of RCTs. Retrieved from: http://programme.exordo.com/lacea-lames2017/delegates/presentation/411/].
+Autrement dit, les encadrants semblent accorder une *attention toute particulière à la sécurité* lorsqu’ils sont *informés* de leur *mauvaise performance*.
+
+== Des résultats prometteurs et une réflexion en constante évolution
+
+Ce bref tour d’horizon illustre l’apport des sciences comportementales dans l’élaboration des politiques de sécurité et le respect des règles de prévention en replaçant les comportements individuels dans leur contexte.
+
+*La prise en compte des facteurs humains dans la prévention des accidents n’a rien de nouveau, mais les développements théoriques et empiriques récents en sciences comportementales nous fournissent aujourd’hui un cadre analytique fiable pour envisager des actions concrètes sur le terrain.*
+
+Ainsi, *la contribution de cette discipline réside autant dans sa méthode que dans ses résultats*. Pris dans leur ensemble, les recommandations issues des sciences comportementales semblent prometteuses pour compléter l’approche par les normes et la réglementation par des interventions proches du terrain.
+
+C’est pourquoi nous développons chez SCIAM une https://www.linkedin.com/posts/sciamfr_accidentsdutravail-sciam-sciencescomportementales-activity-6719202746446213120-0NKF[méthodologie «{nbsp}Zéro accident évitable{nbsp}»^] combinant notre expertise en sciences comportementales avec l’état de l’art de la datascience et de l’intelligence collective pour construire des *actions de prévention plus efficaces, concrètes et parfaitement adaptées à votre organisation*.

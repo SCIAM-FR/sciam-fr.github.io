@@ -1,0 +1,199 @@
+= Quelles préconisations des sciences comportementales pour réduire la discrimination sur le marché du travail{nbsp}?
+:showtitle:
+:page-navtitle: Quelles préconisations des sciences comportementales pour réduire la discrimination sur le marché du travail{nbsp}?
+:page-excerpt: La discrimination à l’encontre des groupes minorisés (e.g{nbsp}: personnes issues des quartiers prioritaires de la politique de la ville, immigrés, femmes, minorités ethniques, LGBTQIA+) est une des causes avancées aux difficultés persistantes auxquelles font face ces personnes, notamment en termes d’accès à l’emploi et de revenus.
+:layout: post
+:author: oliviersavrimoutoo
+:page-tags: ['SCC','SciencesComportementales','Discriminations','RessourcesHumaines']
+:docinfo: shared-footer
+:page-vignette: diversity_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href="https://unsplash.com/@wocintechchat" target="_blank">Christina</a>.
+:page-liquid:
+
+.Illustration par https://unsplash.com/@wocintechchat[Christina^]
+image::{{'/images/oliviersavrimoutoo/diversity.png' | relative_url}}[image,width=80%,align="center"]
+
+La discrimination à l’encontre des groupes minorisés (e.g{nbsp}: personnes issues des quartiers prioritaires de la politique de la ville, immigrés, femmes, minorités ethniques, LGBTQIA+) est une des causes avancées aux difficultés persistantes auxquelles font face ces personnes, notamment en termes d’accès à l’emploi et de revenus.
+En France par exemple, à qualité comparable, les candidats affichant un nom identifié comme maghrébin ont 31,5% de chances en moins d’être contactés pour un entretien (Arnoult et al., 2021).
+Cependant, les interventions — et plus généralement les efforts récents pour mesurer la discrimination — ont fait abstraction des mécanismes spécifiques qui sous-tendent ces comportements (Hamoudi, 2014 ; Bertrand & Duflo, 2016).
+Alors que l’économie explique les discriminations par des préférences pour certains groupes (_taste-based discrimination_) ou par un manque d’information conduisant les employeurs à se reposer sur des statistiques de groupe pour juger des individus (_statistical discrimination_), plusieurs explications provenant d’autres champs disciplinaires semblent de premier ordre.
+En particulier, la psychologie s’est longtemps penchée sur les attitudes et stéréotypes comme causes de comportements discriminatoires.
+La recherche en psychologie a aussi connu un développement de la recherche vers des formes plus automatiques, voire inconscientes, de biais implicites.
+La sociologie, pour sa part, tente d’expliquer les discriminations par des phénomènes sociaux, organisationnels ou institutionnels qui régissent la vie sociale et professionnelle.
+
+La question prend toute son ampleur lorsque l’on tient compte des résultats mitigés des formations à la diversité et à la réduction des stéréotypes, telles que proposées généralement par les entreprises et institutions publiques (par exemple par les universités).
+Au travers d’une revue de 985 études sur des interventions pour réduire les attitudes discriminatoires, Paluck et Green (2009) suggèrent que les formations à la non-discrimination n’ont qu’un effet limité.
+C’est la conclusion qu’apportent aussi plus récemment Chang et al. (2019) au travers d’une étude de terrain menée dans une multinationale testant l’efficacité de courtes formations dispensées via une plateforme web.
+Dans le même temps, Devine et al. (2012) démontrent que des formations approfondies d’une durée de 12 semaines et fondées sur des résultats probants en laboratoire ont un effet positif sur les préjugés raciaux (_implicit bias_) des employés et ce sur le long terme.
+
+Quelles sont donc les préconisations prometteuses issues des sciences comportementales pour combattre toutes les formes de discriminations sur le marché du travail et quels sont les arguments empiriques en faveur de leur application{nbsp}?
+L’objectif de cette courte revue sera donc de porter un regard global sur les approches ayant fait l’objet d’analyses en laboratoire ou sur le terrain en sciences comportementales, afin de dresser un panorama (bien qu’incomplet) à l’attention des praticiens et employeurs.
+
+== Changer le contexte de décision
+
+Ces dernières années, la conception des politiques publiques et des interventions sur les lieux de travail s’est de plus en plus appuyée sur la modification du contexte de décision pour changer les comportements et obtenir des résultats souhaitables sur le plan social, sociétal et économique.
+Sur le marché du travail, un grand nombre de candidatures est généralement reçu pour les postes ouverts, ce qui permet aux recruteurs d’être plus sélectifs.
+Ces derniers ont donc tendance à investir plus d’effort et d’attention pour identifier les «{nbsp}bons{nbsp}» candidats, plutôt que pour écarter les «{nbsp}mauvais{nbsp}» candidats, car cette stratégie optimise en théorie le temps investi.
+Cependant, elle tend à désavantager les candidats issus de groupes perçus comme ayant une productivité moins élevée en moyenne.
+Examinant le nombre de clics sur les pages personnelles de candidats, Bartos et al. (2017) démontrent que les personnes d’origine étrangère (par rapport aux nationaux) sont désavantagées d’environ 6 points de pourcentage en Allemagne et de 24 points de moins en République Tchèque.
+Cette différence se retrouve aussi au niveau des rappels et des invitations en entretiens, qui sont inférieurs d’environ 20 points pour les candidats d’origine étrangère.
+Cette étude illustre une des manières dont l’utilisation des informations sur un groupe pour juger des individus (_discrimination statistique_) influence le comportement des recruteurs.
+
+Les résultats précédents suggèreraient que l’utilisation de CV anonymes pourrait constituer une solution prometteuse en neutralisant la possibilité d’utiliser les informations relatives aux origines comme indicateur des compétences.
+En Suède, Aslund et Skans (2012) suggèrent par exemple que les CV anonymes peuvent réduire les différences de traitement entre hommes et femmes, mais que l’intervention montre un impact nul pour les candidats issus de pays étrangers.
+Cette mesure peut même avoir des effets néfastes en réduisant la possibilité qu’ont les employeurs d’utiliser certaines informations contextuelles dans leurs décisions.
+En France, une étude par correspondance conduite auprès des entreprises partenaires de Pôle Emploi fait état d’une _augmentation_ de la discrimination suite à l’anonymisation des CV (Béhaghel et al., 2015).
+Les entreprises ayant participé volontairement, les auteurs suggèrent que, par un effet d’auto-sélection, des entreprises effectuant une forme de «{nbsp}discrimination positive{nbsp}» dans leur recrutement (e.g{nbsp}: en utilisant les informations contextuelles, comme le statut d’immigré) avaient choisi de participer à l’étude.
+La suppression de ces informations pour les entreprises du groupe expérimental les aurait ainsi empêché de prendre en compte ces informations contextuelles dans leurs décisions, ce qui aurait eu pour effet d’accroître les disparités entre Français et étrangers dans cette étude (voir Agan & Starr, 2018 pour des résultats similaires concernant une politique empêchant les employeurs de demander des informations sur les casiers judiciaires aux États-Unis).
+Cette étude démontre que le contexte de départ joue un rôle majeur dans les résultats obtenus par ce type de solutions, car leurs effets dépendent de l’approche initiale des employeurs à l’égard des inégalités.
+
+Les travaux en sociologie (et plus récemment en économie) se sont penchés sur le rôle des pratiques organisationnelles et sociales dans la production d’inégalités.
+Par exemple, des études récentes ont montré que les rémunérations liées à la performance peuvent être préjudiciables aux femmes et aux personnes issues de minorités dans certaines professions, à moins qu’elles ne s’accompagnent de transparence dans les décisions et de la responsabilisation des managers (ex{nbsp}: Castilla, 2012).
+D’autre part, certaines mesures organisationnelles et managériales consistant à rendre les processus de recrutement et de gestion des carrières plus objectifs et plus transparents semblent prometteurs pour réduire les inégalités dans la rémunération, le recrutement et l’avancement des carrières.
+Par exemple, la présence de critères prédéfinis et structurés pour l’évaluation de candidats lors d’entretiens de recrutement réduirait considérablement l’effet de variables démographiques dans les décisions, les rendant même pratiquement inopérantes (Levashina et al., 2013).
+Castilla (2015) démontre aussi qu’*accroître la transparence et la responsabilité des managers lors du processus d’évaluation de la performance des salariés les conduit à prendre des décisions plus objectives*.
+Encourager les négociations salariales semble aussi être un bon moyen de réduire les inégalités, compte tenu du fait que certains groupes montrent des propensions plus faibles à négocier à la hausse leur salaire.
+Cela semble être le cas des femmes, qui ont tendance à demander des salaires beaucoup plus proches de leurs salaires de réserve que les hommes (voir, par exemple, Kiessling et al., 2019).
+
+Pour les sociologues, les inégalités peuvent surgir sans même que les individus n’aient de préjugés.
+Dans le contexte de la discrimination à l’embauche, les réseaux professionnels peuvent constituer une source majeure d’inégalité et de ségrégation professionnelle, car les liens sociaux et professionnels sont plus susceptibles de se former entre des individus ayant des origines socio-économiques similaires (homophilie).
+Les employeurs peuvent donc réduire la ségrégation professionnelle en encourageant la cooptation pour les groupes sous-représentés et en embauchant hors de leurs réseaux habituels (e.g{nbsp}: Rubineau et Fernandez, 2013).
+Ces mesures affichent même de meilleures résultats lorsqu’elles sont accompagnées de mesures visant à renforcer les liens au sein de l’entreprise et à des incitations financières.
+
+.Illustration par https://unsplash.com/@lunarts[Volodymyr Hryshchenko^]
+image::{{'/images/oliviersavrimoutoo/rubikcube.png' | relative_url}}[image,width=80%,align="center"]
+
+== Agir sur les préjugés et stéréotypes
+
+Au cours de ces dernières décennies, les évolutions juridiques et culturelles ont conduit les comportements discriminatoires à s’exprimer de manière de plus en plus dissimulée, ce qui a poussé les chercheurs à étudier les manifestations plus subtiles des préjugés et stéréotypes.
+La notion de biais implicites (sujet abordé dans notre précédent article sur https://blog.sciam.fr/2021/07/06/determinants-psychosociaux-emploi.html[le poids de l’origine sociale dans la recherche d’emploi^]) est mise en avant comme une explication à la persistance de comportements discriminatoires.
+Selon cette littérature, les personnes réagiraient ainsi à un certain conditionnement social présentant certains groupes comme moins compétents, moins aimables ou plus violents.
+Bien que controversé, l’IAT (_implicit associations test_) reste l’instrument privilégié pour mesurer ces attitudes implicites (voir https://www.vox.com/identities/2017/3/7/14637626/implicit-association-test-racism[cet article^] de vulgarisation pour un regard critique).
+Ce test repose sur l’hypothèse que la classification de personnes en des attributs plus ou moins négatifs est facilitée lorsque ces personnes (e.g{nbsp}: personnes blanches, noires, arabes) sont initialement associées aux catégories proposées (e.g{nbsp}: performant/non-performant, aimable/désagréable) dans la mémoire des participants.
+La différence de temps de réaction qui résulte du classement de ces photos dans la catégorie négative par rapport à la catégorie positive sert ainsi d’indicateur pour l’association implicite entre personnes d’un groupe et l’attribut négatif, indiquant ainsi un biais.
+
+Si ces préjugés implicites existent bel et bien dans la tête des gens, leur traduction en comportement ne va pas de soi.
+Malgré une corrélation systématiquement positive entre attitudes et stéréotypes implicites et comportements discriminatoires, les méta-analyses récentes tendent cependant à nuancer ces conclusions, car cette corrélation semble être de faible magnitude et sensible à des facteurs contextuels (e.g{nbsp}: Kurdi et al., 2019{nbsp}; Forscher et al., 2019).
+Du point de vue de cette littérature, les préjugés pourraient être modifiés en agissant directement sur les associations stockées dans la mémoire. Les résultats issus d’expériences en laboratoire ont en effet permis de réentraîner des personnes à associer des groupes stigmatisés (e.g{nbsp}: Noir, Vieux) et des attributs positifs (e.g{nbsp}: Bon, Intelligent).
+Par exemple, Olson et Fazio (2006) et French et al., (2013) montrent qu’associer de manière répétée des photographies de personnes issues de ces groupes à des images (e.g{nbsp}: un jeune couple qui s’embrasse) ou à des attributs (e.g{nbsp}: formidable) perçus positivement permet d’améliorer de manière significative les attitudes implicites dans un échantillon d’étudiants universitaires blancs.
+Si ces études présentent un intérêt pratique limité, elles démontrent que les associations mémorielles ont en effet un impact sur les préjugés et qu’il est possible de les changer.
+Le domaine de prise de décision et le caractère plus ou moins automatique des décisions semblent facteurs importants pour que les préjugés implicites se traduisent en comportements (voir Gawronski (2019) pour une revue critique du concept).
+
+D’autres chercheurs se sont au contraire penchés sur la régulation de l’activation des associations stockées dans la mémoire pouvant mener à des préjugés et stéréotypes.
+Au niveau cognitif, ces stratégies impliquent plusieurs étapes{nbsp}: l’identification de l’attitude et/ou de la croyance biaisée{nbsp}; la suppression des réponses apprises (automatiques ou délibérées){nbsp}; le remplacement par des réponses non biaisées.
+Ainsi des interventions ont tenté d’influer sur chacune de ces étapes.
+Par exemple, Alesina et al. (2018) ont réduit l’écart de notes et de taux d’échec entre les enfants immigrés et les élèves natifs des pays étudiés simplement en informant leurs enseignants de leurs propres stéréotypes (scores IAT) à l’encontre des immigrés (Alesina et al., 2018).
+En outre, Legault et al. (2011) démontrent que l’utilisation d’un court paragraphe pour augmenter la motivation intrinsèque de personnes Blanches à réduire leurs préjugés à l’égard des Noirs, diminuait significativement l’expression de préjugés implicites par rapport à une condition contrôle neutre, tandis que mettre en avant les pressions sociétales à les réduire a produit l’effet inverse et augmente l’expression des préjugés implicites.
+Combiner plusieurs de ces stratégies permet de réduire l’expression de préjugés exprimés de manière plus ou moins automatique.
+A travers un programme de 12 semaines, l’utilisation d’une combinaison de stratégies cognitives visant à changer les comportements habituels semble réduire l’expression des préjugés implicites.
+En particulier, augmenter les préoccupations à l’égard de la discrimination et faire prendre conscience aux gens de leurs propres préjugés permet de diminuer les comportements discriminatoires (Devine et al., 2012).
+Concernant les changements de comportement à long terme, les interventions promouvant la reconnaissance et la prise en compte des préjugés sont les plus performantes lorsqu’il s’agit des préjugés raciaux (Forscher et al., 2017).
+
+== Corriger les erreurs de raisonnement
+
+L’utilisation d’heuristiques peut rendre les recruteurs vulnérables à des erreurs de raisonnement pouvant donner lieu à des différences de traitements.
+De manière générale, les heuristiques sont des raccourcis mentaux simplifiant le jugement et la prise de décision lorsque l’environnement ou les capacités cognitives posent des limites au traitement, à l’acquisition ou au rappel d’informations (voir Kahneman, 2017).
+Ces heuristiques ont leur utilité car elles permettent en général d’arriver à des décisions satisfaisantes dans la vie de tous les jours (voir Gigerenzer, 1999).
+Cependant, les erreurs de jugement qu’elles occasionnent peuvent avoir des conséquences néfastes, par exemple lors de l’évaluation de CV ou de sessions de recrutement, exercices qui voudraient que les origines des candidats ne soient pas prises en compte dans les décisions.
+Dans ce contexte, on parlera de biais lorsque ces erreurs de jugements (e.g{nbsp}: accepter des candidats moins qualifiés ou rejeter des candidats qualifiés) surviennent plus fréquemment pour certains groupes, que ce soit uniquement dans certains domaines ou de manière générale.
+Comme le démontrent Bordalo et al. (2016{nbsp}; 2018), les individus ont tendance à exagérer les différences réelles qui pourraient exister entre hommes et femmes, en particulier lorsqu’il s’agit d’évaluer leur propre performance ou celle des autres dans des domaines typiquement associés au sexe opposé.
+Les individus commettent aussi plus d’erreurs de jugement lorsque des informations démographiques sont présentes dans les évaluations, même si celles-ci sont inutiles (Albrecht et al., 2013{nbsp}; Axt et Lai, 2019).
+De plus ces erreurs semblent être biaisées en défaveur des minorités.
+Augmenter la motivation et le temps disponible pour traiter les informations pertinentes (compétences, expérience etc.) semble ainsi réduire les erreurs, alors que conduire les individus à porter une attention particulière à l’influence des informations démographiques dans leurs décisions permettrait de réduire les biais.
+
+.Illustration par https://unsplash.com/@brett_jordan[Brett Jordan^]
+image::{{'/images/oliviersavrimoutoo/ifnotnowwhen.png' | relative_url}}[image,width=80%,align="center"]
+
+== Que conclure de cette revue{nbsp}?
+
+Toute attitude et comportement discriminatoire mérite d’être combattu et il est certain que les efforts fournis en ce sens restent pour le moins insuffisants au vu de leur caractère systématique et persistent.
+Les résultats discutés dans cette revue soulignent le caractère protéiforme que peuvent prendre les comportements discriminatoires ainsi que leurs causes.
+Comme le soulignait le Défenseur des Droits dans son https://www.defenseurdesdroits.fr/fr/dossier-de-presse/2021/12/14e-barometre-sur-la-perception-des-discriminations-dans-lemploi[baromètre 2021^] sur les perceptions des discriminations dans l’emploi{nbsp}: «{nbsp}Les discriminations ne surviennent pas isolément{nbsp}; elles résultent d’un ensemble de processus complexes, impliquant des représentations sociales, des rapports de dominations […] et des inégalités collectives, durables et cumulatives […]{nbsp}».
+En particulier, ces études mettent en avant les compromis à prendre en compte pour agir sur leurs sous-jacents cognitifs et sociaux pour les entreprises et pouvoirs publics.
+Par exemple, dans le cadre de CV anonymes, les mêmes informations utilisées pour discriminer peuvent l’être également pour promouvoir l’action positive des employeurs, mais ce type d’action positive dépend des motivations et des moyens mis à disposition (e.g{nbsp}: temps, budget etc.) des recruteurs.
+
+Si les recherches sur les stratégies d’attitudes et de comportements ont été testées en laboratoire et dans le cadre d’études à petite échelle, elles bénéficieraient d’expériences de terrain à grande échelle afin d’évaluer la validité externe et le caractère généralisable de leurs résultats.
+D’autre part, de nouvelles expériences en laboratoire pourraient examiner de plus près les relations entre les stratégies individuelles et les pratiques et interventions organisationnelles, ainsi que le rôle joué par les organisations dans l’internalisation et le maintien des stéréotypes et préjugés.
+Néanmoins, il existe un certains nombre de résultats pouvant permettre aux employeurs d’envisager des solutions à leur niveau.
+
+''''
+
+*Références*
+
+Agan, A., & Starr, S. (2017). Ban the Box, Criminal Records, and Racial Discrimination: A Field Experiment*. _The Quarterly Journal of Economics, 133_(1), 191–235. https://doi.org/10.1093/qje/qjx028
+
+Albrecht, K., Von Essen, E., Parys, J., & Szech, N. (2013). Updating, self-confidence, and discrimination. _European Economic Review_, 60, 144–169.
+
+Alesina, A. F., Carlana, M., La Ferrara, E., & Pinotti, P. (2018). Revealing Stereotypes: Evidence from Immigrants in Schools. _SSRN Electronic Journal_, 2–47. https://doi.org/10.2139/ssrn.3295948
+
+Amodio, D. M., & Swencionis, J. K. (2018). Proactive control of implicit bias: A theoretical model and implications for behavior change. _Journal of Personality and Social Psychology, 115_(2), 255–275. https://doi.org/10.1037/pspi0000128
+
+Arnoult, E., Ruault, M. O., Valat, E., Villedieu, P., Breda, T., Jacquemet, N., … & Tekle, E. (2021). Discrimination à l’embauche des personnes d’origine supposée maghrébine: quels enseignements d’une grande étude par testing?
+
+Åslund, O., & Skans, O. N. (2012). Do Anonymous Job Application Procedures Level the Playing Field? _ILR Review_, 65(1), 82–107. https://doi.org/10.1177/001979391206500105
+
+Axt, J. R., & Lai, C. K. (2019). Reducing discrimination: A bias versus noise perspective. _Journal of Personality and Social Psychology, 117_(1), 26.
+
+Bartoš, V., Bauer, M., Chytilová, J. ; Matějka, F. (2016). Attention Discrimination: Theory and Field Experiments with Monitoring Information Acquisition. _American Economic Review, 106_(6), 1437–1475. doi:10.1257/aer.20140571
+
+Behaghel, L., Crépon, B., & Le Barbanchon, T. (2015). Unintended Effects of Anonymous Résumés. _American Economic Journal: Applied Economics, 7_(3), 1–27. https://doi.org/10.1257/app.20140185
+
+Bertrand, M., & Duflo, E. (2016, February). Field experiments on discrimination (№22014). National Bureau of Economic Research. https://doi.org/10.3386/w22014
+
+Bohnet, I., Van Geen, A., & Bazerman, M. (2016). When performance trumps gender bias: Joint vs. separate evaluation. _Management Science, 62_(5), 1225–1234.
+
+Bordalo, P., Coffman, K., Gennaioli, N., & Shleifer, A. (2019). Beliefs about gender. _American Economic Review, 109_(3), 739–73.
+
+Bordalo, P., Coffman, K., Gennaioli, N., & Shleifer, A. (2016). Stereotypes. _The Quarterly Journal of Economics, 131_(4), 1753–1794.
+
+Burks, S. V., Cowgill, B., Hoffman, M., & Housman, M. (2015). The Value of Hiring through Employee Referrals. _The Quarterly Journal of Economics, 130_(2), 805–839. https://doi.org/10.1093/qje/qjv010</div>
+
+Castilla, E. J. (2012). Gender, Race, and the New (Merit-Based) Employment Relationship. _Industrial Relations: A Journal of Economy and Society_, 51, 528–562. https://doi.org/10.1111/j.1468-232x.2012.00689.x
+
+Castilla, Emilio J., (2015), Accounting for the Gap: A Firm Study Manipulating Organizational Accountability and Transparency in Pay Decisions, _Organization Science_, 26, issue 2, p. 311–333
+
+Conseil économique, social et environnemental, & Hamoudi, S. (2014, May). L’apport économique des politiques de diversité à la performance de l’entreprise : le cas des jeunes diplômés d’origine étrangère. Journal Officiel de la République. https://www.lecese.fr/travaux-publies/l-apport-economique-des-politiques-de-diversite-la-performance-de-l-entreprise-le-cas-des-jeunes-diplomes-d-orig
+
+Devine, P. G., Forscher, P. S., Austin, A. J., & Cox, W. T. (2012). Long-term reduction in implicit race bias: A prejudice habit-breaking intervention. Journal of experimental social psychology, 48(6), 1267–1278. https://doi.org/10.1016/j.jesp.2012.06.003
+
+Forscher, P. S., Mitamura, C., Dix, E. L., Cox, W., & Devine, P. G. (2017). Breaking the prejudice habit: Mechanisms, timecourse, and longevity. Journal of experimental social psychology, 72, 133–146. https://doi.org/10.1016/j.jesp.2017.04.009
+
+Forscher, P. S., Lai, C. K., Axt, J. R., Ebersole, C. R., Herman, M., Devine, P. G., & Nosek, B. A. (2019). A meta-analysis of procedures to change implicit measures. Journal of Personality and Social Psychology, 117(3), 522–559. https://doi.org/10.1037/pspa0000160
+
+French, A. R., Franz, T. M., Phelan, L. L., & Blaine, B. E. (2013). Reducing Muslim/Arab Stereotypes Through Evaluative Conditioning. The Journal of Social Psychology, 153(1), 6–9. https://doi.org/10.1080/00224545.2012.706242
+
+Gawronski, B. (2019). Six lessons for a cogent science of implicit bias and its criticism. Perspectives on Psychological Science, 14(4), 574–595.
+
+Hamoudi, S. (2014). L’apport économique des politiques de diversité à la performance de l’entreprise : le cas des jeunes diplômés d’origine étrangère (NOR : CESL1400020X). Conseil économique, social et environnemental. https://www.lecese.fr/travaux-publies/l-apport-economique-des-politiques-de-diversite-la-performance-de-l-entreprise-le-cas-des-jeunes-diplomes-d-orig
+
+Gigerenzer, G., & Todd, P. M. (1999). Fast and frugal heuristics: The adaptive toolbox. In Simple heuristics that make us smart (pp. 3–34). Oxford University Press.
+
+Daniel, K. (2017). Thinking, fast and slow.
+
+Kiessling, L., Pinger, P., Seegers, P., & Bergerhoff, J. (2019). Gender Differences in Wage Expectations: Sorting, Children, and Negotiation Styles. IZA Discussion Paper Series
+
+Kurdi, B., Seitchik, A. E., Axt, J. R., Carroll, T. J., Karapetyan, A., Kaushik, N., Tomezsko, D., Greenwald, A. G., & Banaji, M. R. (2019). Relationship between the Implicit Association Test and intergroup behavior: A meta-analysis. American Psychologist, 74(5), 569–586. http://doi.org/10.1037/amp0000364
+
+Legault, L., Gutsell, J. N., & Inzlicht, M. (2011). Ironic Effects of Antiprejudice Messages. Psychological Science, 22(12), 1472–1477. https://doi.org/10.1177/0956797611427918
+
+Levashina, J., Hartwell, C. J., Morgeson, F. P., & Campion, M. A. (2014). The structured employment interview: Narrative and quantitative review of the research literature. Personnel Psychology, 67(1), 241–293.
+
+Neumark, D. (2018). Experimental Research on Labor Market Discrimination. Journal of Economic Literature, 56(3), 799–866. https://doi.org/10.1257/jel.20161309
+
+Olson, M. A., & Fazio, R. H. (2006). Reducing Automatically Activated Racial Prejudice Through Implicit Evaluative Conditioning. Personality and Social Psychology Bulletin, 32(4), 421–433. https://doi.org/10.1177/0146167205284004
+
+Pallais, A., & Sands, E. G. (2016). Why the Referential Treatment? Evidence from Field Experiments on Referrals. Journal of Political Economy, 124(6), 1793–1828. https://doi.org/10.1086/688850
+
+Paluck, E. L., & Green, D. P. (2009). Prejudice reduction: What works? A review and assessment of research and practice. Annual review of psychology, 60, 339–367.
+
+Rooth, D.-O. (2010). Automatic associations and discrimination in hiring: Real world evidence. Labour Economics, 17(3), 523–534. https://doi.org/10.1016/j.labeco.2009.04.005
+
+Rubineau, B., & Fernandez, R. M. (2013). Missing Links: Referrer Behavior and Job Segregation. Management Science, 59(11), 2470–2489. https://doi.org/10.1287/mnsc.2013.1717
+
+Daniel, K. (2017). Thinking, fast and slow.
+
+Gigerenzer, G., & Todd, P. M. (1999). Simple heuristics that make us smart. Oxford University Press, USA.
+
+
+
