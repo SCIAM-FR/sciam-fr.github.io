@@ -1,0 +1,485 @@
+:showtitle:
+:page-navtitle: Les nouveautés de Java 20
+:page-excerpt: Cet article présente les nouveautés de Java 20 proposées par les JEP des projets Amber, Panama et Loom.
+:layout: post
+:author: jeanmicheldoudoux
+:page-tags: [Java, Java 20, Projet Amber, Projet Panama, Projet Loom]
+:docinfo: shared-footer
+:page-vignette: java-20.png
+:page-liquid:
+
+= Les nouveautés de Java 20
+
+https://openjdk.org/projects/jdk/20/[JDK 20^] est la troisième release publiée depuis le JDK 17. La version GA 20 du JDK a été publiée le 21 mars 2023.
+
+Elle contient sept JEPs que l'on peut regrouper en deux catégories :
+
+* Des évolutions dans le langage
+* Des évolutions dans les API
+
+Toutes ces JEPs sont en preview ou en incubation. Elles sont issues des travaux de plusieurs projets : https://openjdk.org/projects/amber/[Amber^], https://openjdk.org/projects/loom/[Loom^] et https://openjdk.org/projects/panama/[Panama^].
+
+Cinq JEPS concernent des évolutions dans les API (projet Panama et Loom) :
+
+* JEP 429 : https://openjdk.org/jeps/429[Scoped Values (Incubator)^]
+* JEP 434 : https://openjdk.org/jeps/434[Foreign Function & Memory API (Second Preview)^]
+* JEP 436 : https://openjdk.org/jeps/436[Virtual Threads (Second Preview)^]
+* JEP 437 : https://openjdk.org/jeps/437[Structured Concurrency (Second Incubator)^]
+* JEP 438 : https://openjdk.org/jeps/438[Vector API (Fifth Incubator)^]
+
+Deux JEPs concernent des évolutions dans la syntaxe du langage Java (projet Amber) :
+
+* JEP 432 : https://openjdk.org/jeps/432[Record Patterns (Second Preview)^]
+* JEP 433 : https://openjdk.org/jeps/433[Pattern Matching for switch (Fourth Preview)^]
+
+Ces 7 JEPS sont toutes en preview ou en incubator, dont 6 sont des itérations de mises à jour de fonctionnalités déjà proposées précédemment. Une seule est une nouvelle fonctionnalité (JEP 429 : Scoped Values).
+
+Les spécifications de la version 20 de la plateforme Java SE sont définies dans la https://openjdk.org/projects/jdk/20/spec[JSR 395^].
+
+== Les fonctionnalités du projet Amber
+
+Le projet Amber propose deux fonctionnalités dans le JDK 20 :
+
+* Les records patterns
+* Le pattern matching dans l'instruction switch
+
+=== Les record patterns
+
+La https://openjdk.org/jeps/432[JEP 432^] propose une seconde preview de la fonctionnalité concernant les record patterns.
+
+Les changements suivants ont été apportés à cette fonctionnalité par rapport à Java 19 :
+
+* Ajout de la prise en charge de l'inférence des types d’arguments génériques dans les record patterns
++
+[source,java]
+----
+   record Mono<T>(T val) implements Container<T> {}  
+   Mono<Mono<String>> monoDeMono = new Mono<>(new Mono<>("valeur"));
+
+   //    if (monoDeMono instanceof Mono<Mono<String>>(Mono<String>(var s))) {
+   if (monoDeMono instanceof Mono(Mono(var s))) {JDK
+     System.out.println("mono contient " + s);
+   }
+----
+
+* Ajout de la prise en charge des record patterns dans les boucles `for` améliorées
++
+[source,java]
+----
+   List<Employe> employes = List.of(new Employe("Nom1", "Prenom1"));
+   for(Employe(var nom, var prenom) : employes) {
+     System.out.println(nom + " " + prenom);
+   }
+----
++
+Si un élément du parcours est `null` alors une exception de type `java.lang.MatchException` est levée.
+
+* La suppression de la prise en charge des record patterns nommés (named record patterns).
+
+=== Le pattern matching pour l’instruction switch
+
+La https://openjdk.org/jeps/433[JEP 433^] propose une quatrième preview de la fonctionnalité concernant le pattern matching pour l’instruction `switch`.
+
+Les changements suivants ont été apportés à cette fonctionnalité par rapport au JDK 19 :
+
+* Lorsque l’exhaustivité des cas d’un `switch` n’est pas satisfaite (sur un type scellé ou une énumération par exemple), une exception de type `java.lang.MatchException` est maintenant levée. Précédemment, c’était une exception de type `java.lang.IncompatibleClassChangeError` qui était levée
+* Le support de l'inférence pour les arguments de type pour les records pattern est désormais prise en charge dans les instructions `switch`
+
+== Les fonctionnalités du projet Panama
+
+Le projet Panama propose deux fonctionnalités dans le JDK 20 :
+
+* Foreign Function & Memory API (Preview)
+* Vector API (Incubator)
+
+=== L’API Foreign Function and Memory
+
+L'API Foreign Function & Memory (FFM) combine deux API introduites en incubation : l'API Foreign-Memory Access (JEP https://openjdk.org/jeps/370[370^], https://openjdk.org/jeps/383[383^] et https://openjdk.org/jeps/393[393^]) et l'API Foreign Linker (JEP 389). L'API FFM a été introduite en incubation dans le JDK 17 via la https://openjdk.org/jeps/412[JEP 412^] et dans le JDK 18 via la https://openjdk.org/jeps/419[JEP 419^] et pour la première fois en preview dans le JDK 19 via la https://openjdk.org/jeps/424[JEP 424^].
+
+La https://openjdk.org/jeps/434[JEP 434^] propose une seconde preview de L’API FFM dans le JDK 20. Celle-ci propose quelques évolutions dans l’API qui tiennent compte des retours fournis par la communauté vis-à-vis de la précédente preview. Dans cette version, plusieurs évolutions sont apportées à l’API :
+
+* Les abstractions `MemorySegment` et `MemoryAddress` sont unifiées (les adresses mémoire sont désormais modélisées par des segments de mémoire de longueur zéro)
+* La hiérarchie scellée `MemoryLayout` est améliorée pour faciliter l'utilisation avec le pattern matching dans les instructions `switch`
+* L’interface `MemorySession` est remplacée par les interfaces `Arena` et `SegmentScope` pour faciliter le partage des segments à travers les portées
+
+Exemple :
+
+[source,java]
+----
+public class HelloFFM {
+
+  public static void main(String[] args) {
+    try {
+      System.loadLibrary("user32");
+      Optional<MemorySegment> msgBoxFunction = SymbolLookup.loaderLookup().find("MessageBoxA");
+      FunctionDescriptor msgBoxFunctionDesc = FunctionDescriptor.of(JAVA_INT, ADDRESS, ADDRESS, ADDRESS, JAVA_INT);
+      Linker linker = Linker.nativeLinker();
+      MethodHandle methodHandle = linker.downcallHandle(msgBoxFunction.get(), msgBoxFunctionDesc
+
+      try (Arena offHeap = Arena.openConfined()) {
+        MemorySegment cStringMessage = offHeap.allocateUtf8String("Voulez-vous utiliser Java 20 ?");
+        MemorySegment cStringTitre = offHeap.allocateUtf8String("Confirmation");
+        int bouton = (int) methodHandle.invoke(NULL, cStringMessage, cStringTitre, 36);
+        System.out.println("Bouton selectionne : " + bouton);
+      }
+    } catch (Throwable t) {
+      t.printStackTrace();
+    }
+  }
+}
+----
+
+.La boîte de dialogue affichée
+image::{{'/images/article-Java-20-001.png' | relative_url}}[width=544,height=344]
+
+=== L’API Vector
+
+L’API Vector a été proposée pour la première fois en incubation via la https://openjdk.org/jeps/338[JEP 338^] et intégrée au JDK 16. Une seconde incubation a été proposée par la https://openjdk.org/jeps/414[JEP 414^] et intégré au JDK 17. Une troisième incubation a été proposée par la https://openjdk.org/jeps/417[JEP 417^] et intégrée au JDK 18. Une quatrième incubation a été proposée par la https://openjdk.org/jeps/426[JEP 426^] et intégrée au JDK 19.
+
+La https://openjdk.org/jeps/438[JEP 438^] repropose l'API pour une cinquième incubation dans le JDK 20, sans changement dans l'API par rapport au JDK 19. Seules quelques corrections de bugs et d'améliorations des performances sont appliquées.
+
+Exemple :
+
+[source,java]
+----
+import jdk.incubator.vector.FloatVector;
+import jdk.incubator.vector.VectorSpecies;
+
+public class TestVector {
+
+  static final VectorSpecies<Float> SPECIES = FloatVector.SPECIES_PREFERRED;
+
+  public static float[] calculerVectoriel(float[] a, float[] b) {
+    float[] resultat = new float[a.length];
+    int i = 0;
+    for (; i < SPECIES.loopBound(a.length) ; i += SPECIES.length()) {
+      var va = FloatVector.fromArray(SPECIES, a, i);
+      var vb = FloatVector.fromArray(SPECIES, b, i);
+      var vr = va.mul(va).sub(vb.mul(vb));
+      vr.intoArray(resultat, i);
+    }
+    for (; i < a.length; i++) {
+      resultat[i] = a[i] * a[i] - b[i] * b[i];
+    }
+    return resultat;
+  } 
+}
+----
+
+== Les fonctionnalités du projet Loom
+
+Le projet Loom propose trois fonctionnalités dans le JDK 20 :
+
+* Virtual Threads (Preview)
+* Structured Concurrency (Incubator)
+* Scoped Values (Incubator)
+
+=== Les threads virtuels
+
+Les threads virtuels ont été introduits pour la première fois en preview via la https://openjdk.org/jeps/425[JEP 425^] dans le JDK 19.
+
+La https://openjdk.org/jeps/436[JEP 436^] repropose les threads virtuels pour une seconde preview.
+
+Quelques changements dans des API décrits dans la première JEP qui concernent des fonctionnalités qui ne sont pas spécifiques aux threads virtuels et qui ont été finalisés dans le JDK 19 ne sont plus explicitement listés dans la JEP actuelle :
+
+* Dans la classe `java.lang.Thread` : les méthodes `join(Duration)`, `sleep(Duration)` et `threadId()`
+* Dans l’interface `java.util.concurrent.Future` : les méthodes `resultNow()`, `exceptionNow()` et `state()`
+* L’interface `java.util.concurrent.ExecutorService` qui hérite de l’interface `java.lang.AutoCloseable`
+* Dans la classe `java.lang.ThreadGroup` : https://openjdk.org/jeps/425#java-lang-ThreadGroup[les modifications dans l’implémentation de certaines méthodes^] pour préparer leur décommissionnement
+
+=== Structured concurrency
+
+L’API Structured concurrency a été introduite en incubation dans le JDK 19 via la https://openjdk.org/jeps/428[JEP 428^].
+
+La https://openjdk.org/jeps/437[JEP 437^] repropose l’API Structured concurrency pour une seconde incubation.
+
+Le seul changement est une évolution de la classe `StructuredTaskScope` pour prendre en charge l’héritage des scoped values par les threads virtuels créés et utilisés par l’instance.
+
+=== Scoped Value
+
+La https://openjdk.org/jeps/429[JEP 429^] propose une nouvelle API qui ajoute une fonctionnalité plus sûre et efficace de partage de valeurs immuables au sein d’un thread. Elle permet de stocker une valeur immuable pour une durée limitée afin que seul le thread qui a écrit la valeur puisse la lire. C’est la seule JEP qui concerne une nouvelle fonctionnalité introduite dans le JDK 20.
+
+Historiquement depuis Java 1.2, on utilise une variable de type `java.lang.ThreadLocal` pour partager des objets dans le code exécuté par un thread sans avoir à les passer en paramètres des méthodes invoquées.
+
+Mais leurs mises en œuvre présentent plusieurs risques :
+
+* Les données sont mutables : les données peuvent être lues, mais aussi modifiées par n’importe quelle méthode exécutée par le thread
+* Une source de potentiel fuite de mémoire si des valeurs sont ajoutées dans un thread partagé dans un pool sans être retirées
+* La consommation de ressources : les valeurs d’un `ThreadLocal` sont copiées automatiquement à la création d’un thread fils en utilisant le constructeur par défaut
+
+L’API ScopedValue tente de remédier à ces inconvénients en proposant une alternative aux variables de type `ThreadLocal` qui propose :
+
+* De stocker et de partager des données immuables
+* Pour une durée de vie limitée et clairement délimitée à des traitements du thread qui les a écrits
+
+Comme avec les variables `ThreadLocal`, on crée et utilise une instance généralement statique et publique pour en faciliter l’accès par les traitements.
+
+[source,java]
+----
+public final static ScopedValue<String> VALEUR = ScopedValue.newInstance();
+----
+
+Plusieurs méthodes permettent de définir et de lire les valeurs associées au thread courant :
+
+* `where()` pour définir une valeur, chainable pour plusieurs valeurs
+* `run()` et `call()` pour exécuter une tâche dans le thread courant
+** `run()` : sous la forme d’une implémentation de `Runnable`
++
+[source,java]
+----
+ScopedValue.where(VALEUR, "test").run(() -> { afficherValeur(); });
+----
+
+** `call()` : sous la forme d’une implémentation de `Callable`
++
+[source,java]
+----
+String valeur = ScopedValue.where(VALEUR, "test")
+    .<String>call(monService::traiter);
+----
+
+* `get()` pour obtenir la valeur ou lève une `NoSuchElementException`
+* `isBound()` pour savoir si une valeur est associée au thread : conditionner de préférence l’invocation de `get()` par une invocation de `isBound()`
++
+[source,java]
+----
+System.out.println((VALEUR.isBound() ? VALEUR.get() : "non definie"));
+----
+
+Les scoped values proposent de limiter la durée de vie d’une variable par thread à la stricte exécution des traitements exécutés dans la portée. Une fois l’exécution de ces traitements terminée, toutes les données partagées initialement via cette variable par thread ne sont plus accessibles.
+
+Les valeurs encapsulées sont immutables mais il est possible de réassocier une autre valeur pour la portée d’un traitement sous-jacent.
+
+[source,java]
+----
+    ScopedValue.where(VALEUR, "valeur").run(() -> {
+      afficherValeur();
+      ScopedValue.where(VALEUR, "autre-valeur").run(monService::traiter);
+      afficherValeur();
+    });
+----
+
+Une autre fonctionnalité intéressante concerne le partage des valeurs avec les threads virtuels d’une `StucturedTaskScope`.
+
+[source,java]
+----
+    ScopedValue.where(VALEUR, "valeur", () -> {
+      try (var scope = new StructuredTaskScope<String>()) {
+        afficherValeur();
+        scope.fork(monServiceA::traiter);
+        scope.fork(monServiceB::traiter);
+        scope.joinUntil(Instant.now().plusSeconds(10));
+      } catch (InterruptedException | TimeoutException e) {
+        e.printStackTrace();
+      }
+    });
+----
+
+== Les autres fonctionnalités
+
+Les principales nouveautés d’un JDK sont définies dans des JEPs, mais une nouvelle version du JDK contient de nombreuses autres évolutions et corrections de bugs.
+
+=== Concernant la sécurité
+
+==== Le protocole DTLS 1.0 est désactivé par défaut (*https://bugs.openjdk.org/browse/JDK-8256660[JDK-8256660^]*)
+
+Le protocole DTLS 1.0 est désactivé par défaut pour améliorer la sécurité. Ce protocole présente plusieurs faiblesses et n’est plus recommandé comme indiqué dans la https://www.rfc-editor.org/rfc/rfc8996[RFC 8996^].
+
+Il est préférable d’utiliser la version 1.2 du protocole DTLS supportée par le JDK.
+
+Il est cependant possible de réactiver DTLS 1.0, en ayant pesé les risques encourus, en supprimant "DTLSv1.0" de la propriété de sécurité `jdk.tls.disabledAlgorithms` dans le fichier de configuration `java.security`.
+
+==== Les algorithmes TLS_ECDH_* sont désactivés par défaut (https://bugs.openjdk.org/browse/JDK-8279164[JDK-8279164^])
+
+Les algorithmes ECDH utilisés avec TLS qui ne l’étaient pas encore, sont maintenant tous désactivés par défaut, car ils ne préservent pas le secret de transmission. Aucun de ces algorithmes ne devrait être utilisé en pratique, mais si vous en avez absolument besoin, vous pouvez les activer à vos risques et périls avec la propriété de sécurité `jdk.tls.disabledAlgorithms`.
+
+=== Concernant la performance
+
+Plusieurs améliorations ont été apportées au ramasse-miettes G1 et de nouveaux intrinsics pour certains algorithmes sur architecture x86_64 et aarch64.
+
+==== G1: Disable Preventive GCs by Default (https://bugs.openjdk.org/browse/JDK-8293861[JDK-8293861^])
+
+Dans le JDK 17, des garbage collections « préventives » ont été ajoutées. Il s’agit de garbage collections spéculatives, dont l’objectif est d’éviter les échecs d’évacuation coûteux dus à de nombreuses allocations lorsque le tas est presque plein.
+
+Toutefois, ces collections spéculatives ont pour conséquence une charge de travail supplémentaire pour le ramasse-miettes. En effet, le vieillissement des objets est basé sur le nombre de survies à des collections mineures : les GC supplémentaires entraînant une promotion prématurée dans la old génération. Ceci conduit à plus de données dans la old génération et à plus de travail de garbage collection pour supprimer ces objets. Cette situation est aggravée par le fait que la prédiction actuelle de déclenchement des garbage collections est souvent activée inutilement.
+
+Dans la majorité des cas, cette fonctionnalité est inefficace et parfois dégrade les performances et comme les échecs d’évacuation sont désormais traités plus rapidement, elle a été désactivée par défaut. Elle peut être réactivée par en utilisant les options `-XX:+UnlockDiagnosticVMOptions -XX:+G1UsePreventiveGC`.
+
+==== L’amélioration du contrôle des threads de raffinement concurrents de G1 (https://bugs.openjdk.org/browse/JDK-8137022[JDK-8137022^])
+
+Le contrôle des threads de raffinement concurrents de G1 a été complètement réécrit. Le nouveau contrôleur requiert généralement moins de threads. Il tend à réduire les pics d’activité des threads de raffinement. Il a également tendance à retarder l’affinage, ce qui permet un filtrage plus important par les barrières d’écriture lorsqu’il y a plusieurs écritures au même endroit ou à des endroits proches, améliorant ainsi l’efficacité de la barrière.
+
+Une refonte majeure de la gestion des threads concurrents de raffinement de G1 devrait réduire les pics d’activité de ces threads et gérer les barrières d’écriture plus efficacement.
+
+Plusieurs options en ligne de commande pouvaient être utilisées pour fournir des valeurs de paramètres. Ces options ne sont plus utiles. Leur utilisation n’a plus d’effet et génère des avertissements et elles seront supprimées dans une version future :
+
+* `-XX:-G1UseAdaptiveConcRefinement`
+* `-XX:G1ConcRefinementGreenZone=buffer-count`
+* `-XX:G1ConcRefinementYellowZone=buffer-count`
+* `-XX:G1ConcRefinementRedZone=buffer-count`
+* `-XX:G1ConcRefinementThresholdStep=buffer-count`
+* `-XX:G1ConcRefinementServiceIntervalMillis=msec`
+
+==== Nouveaux intrinsics pour x86_64 et aarch64 (https://bugs.openjdk.org/browse/JDK-8247645[JDK-8247645^])( https://bugs.openjdk.org/browse/JDK-8297379[JDK-8297379^])( https://bugs.openjdk.org/browse/JDK-8296548[JDK-8296548^])
+
+Plusieurs nouveaux intrinsics pour les processeurs x86/64 et aarch64 ont été ajoutés pour différents algorithmes : Chacha20, Poly1305, MD5, …
+
+=== Concernant les outils
+
+==== L’arrêt du support de Java 7 par javac (https://bugs.openjdk.org/browse/JDK-8173605[JDK-8173605^])
+
+Dans le JDK 19, `javac` supporte les versions 7 à 19 incluses.
+
+[source, console]
+----
+C:\java>javac -version
+javac 19
+C:\java>javac --release=7 Hello.java
+warning: [options] source value 7 is obsolete and will be removed in a future release
+warning: [options] target value 7 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+----
+
+Dans le JDK 20, en application de la politique décrite dans la https://openjdk.org/jeps/182[JEP 182^], la prise en charge de la valeur `7` ou `1.7` pour les options `-source`, `-target` et `--release` de `javac` a été supprimée.
+
+[source, console]
+----
+C:\java>javac -version
+javac 20
+C:\java>javac --release=7 Hello.java
+*error: release version 7 not supported*
+Usage: javac <options> <source files>
+use --help for a list of possible options
+----
+
+==== Avertissement de javac lors de l’utilisation d’assignations composées avec pertes possibles lors de conversions (https://bugs.openjdk.org/browse/JDK-8244681[JDK-8244681^])
+
+Un nouveau lint "lossy-conversions" a été ajouté au compilateur `javac` pour avertir des casts de type dans les affectations composées avec pertes possibles lors des conversions. Si le type de l’opérande de droite d’une affectation composée n’est pas compatible avec le type de la variable, une conversion de type est implicitement effectuée avec une perte potentielle pouvant survenir.
+
+Fréquemment, les instructions `a += b` et `a = a + b` sont considérées comme identiques. Ce n’est cependant pas toujours le cas.
+
+Exemple
+
+[source,java]
+----
+public class Addition1 {
+
+  public static void main(String[] args) {
+    short a = 1;
+    int b = 2;
+    a = a + b;
+    // a = (short) (a + b);
+  }
+}
+----
+
+Le code ci-dessus ne compile pas.
+
+[source, console]
+----
+C:\java>javac Addition1.java
+Addition1.java:6: error: incompatible types: possible lossy conversion from int to short
+    a = a + b;
+          ^
+1 error
+----
+
+Le compilateur émet une erreur, car le résultat de l’addition donne une valeur de type `int` (4 octets) qui est affectée avec une variable de type `short` (2 octets). Il y a donc un risque potentiel de perte de données.
+
+Exemple
+
+[source,java]
+----
+public class Addition2 {
+
+  public static void main(String[] args) {
+    short a = 30_000;
+    int b = 50_000;
+    a += b;
+    System.out.println(a);    
+  }
+}
+----
+
+Le code ci-dessus se compile correctement
+
+[source, console]
+----
+C:\java>javac Addition2.java
+
+C:\java>
+----
+
+Il s’exécute sans erreur mais le résultat affiché est faux.
+
+[source, console]
+----
+C:\java>java Addition2
+14464
+
+C:\java>
+----
+
+Le souci, c’est qu’avec l’utilisation d’un opérateur d’affectation composé, le compilateur ajoute dans le bytecode un cast implicite vers le type `int`.
+
+[source, console]
+----
+C:\java>javap -c Addition2
+Compiled from "Addition2.java"
+public class Addition2 {
+  public Addition2();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+
+  public static void main(java.lang.String[]);
+    Code:
+       0: sipush        30000
+       3: istore_1
+       4: ldc           #7                  // int 50000
+       6: istore_2
+       7: iload_1
+       8: iload_2
+       9: iadd
+      10: i2s
+      11: istore_1
+      12: getstatic     #8                  // Field java/lang/System.out:Ljava/io/PrintStream;
+      15: iload_1
+      16: invokevirtual #14                 // Method java/io/PrintStream.println:(I)V
+      19: return
+}
+----
+
+Cela peut engendrer des bugs silencieux comme dans le cas ci-dessus.
+
+Le compilateur du JDK 20 peut émettre un avertissement de type `lossy-conversions` si ceux-ci sont activés.
+
+[source, console]
+----
+C:\java>javac -Xlint Addition2.java
+Addition2.java:6: warning: [lossy-conversions] implicit cast from int to short in compound assignment is possibly lossy
+    a += b;
+         ^
+1 warning
+
+C:\java>
+----
+
+Les avertissements peuvent être supprimés en utilisant `@SuppressWarnings("lossy-conversions")`.
+
+==== La compression des images jmod
+
+L’outil en ligne de commande `jmod` pour créer des archives JMOD permet maintenant de préciser le niveau de compression des images créées (https://bugs.openjdk.org/browse/JDK-8293499[JDK-8293499]).
+
+Une nouvelle option en ligne de commande `--compress` a été ajoutée à l’outil `jmod` pour permettre de définir le niveau de compression lors de la création de l’archive JMOD.
+
+Les valeurs possibles sont `zip-[0-9]`, où `zip-0` n’applique aucune compression et `zip-9` applique la compression la plus forte. La valeur par défaut est `zip-6`.
+
+== Conclusion
+
+Java 20 est la dernière version non-LTS avant la publication de la prochaine version LTS, Java 21, le 19 septembre prochain.
+
+N’hésitez donc pas à télécharger et tester une distribution du JDK 20 auprès d’un fournisseur pour anticiper la release de la prochaine version LTS de Java.
+
