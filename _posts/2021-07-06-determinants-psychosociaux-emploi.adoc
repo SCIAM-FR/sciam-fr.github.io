@@ -1,0 +1,122 @@
+= Appréhender les déterminants psychologiques et sociaux de l’accès à l’emploi
+:showtitle:
+:page-navtitle: Appréhender les déterminants psychologiques et sociaux de l’accès à l’emploi
+:page-excerpt: L’identification, le recrutement et la rétention des profils compétents sont devenus un enjeu stratégique majeur pour les entreprises. Il s’agit en particulier de bien définir les critères de sélection et de mettre en place une gestion de carrières visant à cibler et conserver un vivier de talents en adéquation avec les besoins en compétences.
+:layout: post
+:author: oliviersavrimoutoo
+:page-tags: ['SCC','SciencesComportementales','RessourcesHumaines']
+:docinfo: shared-footer
+:page-vignette: recruit_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href="https://pixabay.com/fr/users/tumisu-148124" target="_blank">Tumisu</a>.
+:page-liquid:
+
+.Illustration par https://pixabay.com/fr/users/tumisu-148124[Tumisu^]
+image::{{'/images/oliviersavrimoutoo/recruit.png' | relative_url}}[image,width=80%,align="center"]
+
+L’identification, le recrutement et la rétention des profils compétents sont devenus un *enjeu stratégique majeur pour les entreprises*.
+Il s’agit en particulier de bien définir les critères de sélection et de mettre en place une gestion de carrières visant à cibler et conserver un vivier de talents en adéquation avec les besoins en compétences.
+Pour les demandeu.r.se.s d’emploi, l’enjeu est d’identifier les entreprises qui recherchent leurs compétences tout en sachant valoriser leurs atouts pour réussir à décrocher un emploi correspondant à leurs critères de recherche.
+
+Derrière ces questions dont la complexité est importante, d’autres se dessinent en creux des enjeux que sont l’*accès à l’emploi* et une *rémunération équitable*.
+En effet, 22% des jeunes issus des Zones Urbaines Sensibles ont un niveau d’éducation égal ou inférieur au CAP{nbsp}/ BEP contre 19% chez les jeunes des zones englobantes, et 42% sont enfants d’ouvriers, contre 22% chez les zones englobantes (Dahan, 2021).
+Ces chiffres illustrent les *barrières à la mobilité sociale en France*.
+Pour les habitants de départements et quartiers socialement défavorisés, les inégalités structurelles — distance aux emplois et les réseaux sociaux moins pourvoyeurs opportunités — *s’ajoutent* aux contraintes matérielles et aux discriminations.
+Les résultats d’études par correspondance indiquent en effet qu’à compétences égales, habiter un quartier ou département réputé défavorisé (e.g{nbsp}: Seine-Saint-Denis) réduirait les chances d’accéder à un entretien d’embauche (Petit et al.,2016).
+
+Dans ce contexte, comment résoudre l’équation complexe d’un accès équitable à l’emploi{nbsp}?
+
+== Le milieu social joue-t-il un rôle dans la recherche d’emploi{nbsp}?
+
+Si les différences de niveaux d’éducation restent une déterminante importante des inégalités d’accès à l’emploi, *l’environnement social induit des effets psychologiques et comportementaux qui influencent les conditions de vie et l’accès aux opportunités professionnelles*.
+Avoir une bonne connaissance de ses propres compétences permet aux demandeu.r.se.s d’emploi de bien cibler les offres d’emploi et d’accroître leurs chances d’être recrutés.
+Or, ces perceptions semblent particulièrement sensibles à l’influence du milieu social.
+Des inégalités sur le marché de l’emploi pourraient ainsi se perpétuer si les demandeu.r.se.s d’emploi issu.e.s de milieux défavorisés étaient plus pessimistes vis-à-vis de leurs niveaux de compétences ou s’il.elle.s s’attendaient à une rémunération/des chances d’accéder à un emploi plus faibles à compétences égales (e.g{nbsp}: en anticipation de discriminations de la part des recruteurs).
+
+A compétences égales, les élèves des collèges français s’orientent plus souvent vers des filières moins sélectives (lycée technologique, voie professionnelle ou CAP après le lycée) que les élèves de milieux plus aisés (Guyon et Huillery (2021), phénomène touchant uniquement les élèves ayant une réussite scolaire moyenne ou faible.
+En particulier, cette étude indique que *les élèves de lycées et collèges surestiment en moyenne le poids de l’origine sociale dans la réussite scolaire*, ce qui rend les élèves de milieux modestes plus pessimistes sur leur réussite et les conduit à une forme d’autocensure dans les choix d’orientation scolaire.
+Si la bonne perception des facteurs amenant à la réussite scolaire est un élément important dans l’orientation des élèves, une étude allemande montre aussi que les enfants issu.e.s de milieux modestes ont plus de mal à évaluer leurs compétences comparativement à leurs camarades issu.e.s de milieux plus aisés, et ce en raison d’interactions sociales moins riches (Falk et al., 2020).
+En effet, les parents issu.e.s de milieux modestes disposent de moins de ressources financières, de moins de temps et de niveaux d’éducation plus faibles, ce qui désavantage les enfants dans leur développement et perpétue encore une fois les inégalités sociales.
+
+.Illustration par https://pixabay.com/fr/users/geralt-9301[Gerd Altmann^]
+image::{{'/images/oliviersavrimoutoo/altmann.png' | relative_url}}[image,width=80%,align="center"]
+
+Ces résultats font écho à ceux recueillis aux Etats Unis, où Hoxby et Avery (2012) démontrent que les étudiants les plus performants issus de milieux modestes *candidatent plus rarement* aux universités les plus sélectives, comparativement avec leurs camarades issu.e.s de milieux plus aisés.
+Ces comportements reflètent en partie le manque d’informations vis-à-vis de ces universités et filières sélectives et sur les aides financières disponibles.
+
+Ainsi, *les inégalités structurelles s’auto-entretiennent*{nbsp}: les personnes issu.e.s de milieux modestes sont moins représenté.e.s dans les milieux professionnels et académiques privilégiés{nbsp}; par conséquent, ces personnes accèdent moins aux réseaux sociaux et professionnels permettant d’accéder aux informations nécessaires pour s’orienter vers ces filières{nbsp}; ce manque d’informations réduit à son tour les chances d’accéder aux opportunités les plus porteuses (e.g{nbsp}: filières d’excellence, emploi hautement rémunérés etc.) (Hoxby et Avery, 2012{nbsp}; Hoxby et Turner, 2015).
+
+Plusieurs études semblent indiquer que certains demandeu.r.se.s d’emploi pourraient être *désavantagés* par une mauvaise perception de leurs propres compétences en raison de leur *catégorie démographique ou sociale*.
+Les résultats d’expérimentation en laboratoire démontrent par exemple qu’à compétences égales, les femmes se sous-estiment dans des tâches où les hommes ont de meilleures performances en moyenne (sans doute en raison de facteurs historiques et de normes sociales établies), et surestiment leurs compétences dans des tâches où les femmes affichent de meilleures performances que les hommes (Bordalo et al., 2019).
+De plus, les expériences conduites par Katherine Coffman, de l’université d’Harvard, démontrent en effet que la tendance qu’affichent les femmes à se sous-estimer dans des tâches où leur performance moyenne est plus faible que celle des hommes engendre une certaine réticence à se positionner pour des promotions, alors même que leurs compétences réelles le justifieraient (Coffman et al., 2020).
+
+== Les préjugés et stéréotypes des recruteurs pèsent lourd dans les trajectoires de carrière
+
+L’accès à l’emploi, la rémunération et les conditions de travail dépendent en grande partie des jugements et décisions des employeurs.
+Si les recruteurs semblent manquer d’informations sur les compétences de certains candidats, une situation qui pourrait être rectifiée en fournissant des informations détaillées sur les compétences (e.g{nbsp}: Carrranza et al., 2021), *certains recruteurs conservent leurs biais à l’encontre de certain.e.s demandeu.r.se.s d’emploi en raison de leur origine*.
+
+En particulier, les *_biais implicites_* correspondant aux associations plus ou moins automatiques entre une catégorie démographique ou sociale (e.g : personnes noires) et un attribut (e.g{nbsp}: compétent{nbsp}/ incompétent) ou une attitude plus générale (e.g{nbsp}: bon{nbsp}/ mauvais), semblent jouer un rôle dans les décisions de recrutement.
+
+.Illustration par https://pixabay.com/fr/users/25520-25520[25520^]
+image::{{'/images/oliviersavrimoutoo/25520.png' | relative_url}}[image,width=80%,align="center"]
+
+La mesure la plus répandue de ce concept est issue des travaux de l’équipe d’Anthony Greenwald et Mahzarin Banaji, connue sous le nom d’_Implicit Association Test_ (IAT).
+
+Son principal atout est de mesurer les biais en évitant les influences sociales pouvant conduire les personnes soucieuses de leur image à fausser leurs réponses à des mesures déclaratives (i.e{nbsp}: biais de désirabilité sociale).
+L’interprétation de cette mesure reste cependant sujette à controverse.
+Certains critiques soulignent, par exemple, que le score obtenu dans ce test pourrait refléter plusieurs facteurs, comme la familiarité avec certains groupes ou encore les représentations socialement perpétuées, plus que les préjugés ou stéréotypes individuels.
+Malgré ces critiques, *le score d’IAT des recruteurs semble expliquer une partie des discriminations sur le marché du travail*.
+A travers une étude terrain menée auprès de plus de 300 employeurs en Suède, Rooth (2010) démontre, par exemple, que les stéréotypes implicites négatifs des recruteurs envers les personnes d’origine arabe{nbsp}footnote:[Élément indiqué par le nom sur le CV dans cette étude, il pourrait en principe être aussi interprété par certains recruteurs comme une information sur la religion, mais cette distinction n’était pas un point central de cette étude.] seraient liés à une réduction significative des taux de rappels suite au dépôt de candidatures.
+Il reste tout de même important de souligner la nature corrélationnelle de ce type d’études, car il est *difficile d’établir des liens de causalité directs entre le score d’IAT et les comportements discriminatoires*.
+
+Les résultats issus d’interventions visant à changer les biais implicites ne sont pour l’heure *pas très encourageants*.
+Une méta analyse couvrant 492 études guidées par cet objectif démontre des effets négligeables (Forscher et al., 2019).
+En particulier, les effets à long terme des formations à la non-discrimination restent *faibles*.
+Une étude conduite auprès de 3 134 étudiants en médecine montre, par exemple, que les effets de formations à la non-discrimination sont très limités dans le temps et restent marginaux (Onyeador et al., 2019).
+Selon cette étude, la *fréquence des interactions perçues comme positives* avec des personnes issues de minorités ethniques est le seul facteur lié à la réduction des préjugés sur le long terme.
+Ces résultats soulignent d’une part, le besoin de mieux comprendre comment les caractéristiques des interventions et formations à la non-discrimination (contenu, durée etc.) influencent l’expression des biais, et d’autre part, comment ces interventions pourraient s’inscrire dans des programmes plus larges s’attaquant aux facteurs d’ordre structurel.
+
+Concernant l’accès à l’emploi, mieux comprendre la manière dont les caractéristiques démographiques, physiques ou sociales biaisent l’évaluation des compétences lors d’un recrutement, permettrait d’envisager des interventions à ce niveau.
+Les travaux de l’équipe de Jordan Axt (Project Implicit et Université McGill) ont récemment apporté des éléments de réponses concernant les processus cognitifs à l’œuvre dans ce type de tâches.
+En utilisant un protocole expérimental précisément calibré (https://www.sciencedirect.com/science/article/pii/S002210311730567X[_Judgment Bias Task_^]), une de leurs études suggère que les préjugés produiraient non seulement un effet d’*ancrage*, qui nous rendrait à priori plus favorables ou défavorables aux personnes issues de certains groupes, mais qu’ils biaiseraient aussi notre interprétation de toute nouvelle information (Axt et al., 2021).
+En se penchant sur les interventions agissant sur ces deux phénomènes, leurs résultats suggèrent que la *sensibilisation peut réduire l’effet des préjugés sur l’interprétation des nouvelles informations*, alors qu’imposer un temps de réflexion avant la décision finale (“_cooling off period_”) semble atténuer l’effet d’ancrage _à priori_.
+
+== Un projet de recherche pour mieux comprendre et agir
+
+Ainsi, le projet de recherche que nous conduisons actuellement examine précisément les *déterminants cognitifs à l’œuvre dans la recherche d’emploi et les décisions de recrutement*.
+
+Premièrement, il s’agit d’analyser si, au-delà de leurs compétences objectives, les demandeu.r.se.s d’emploi issu.e.s de milieux socialement défavorisés affichent une certaine forme d’autocensure qui les désavantagerait sur le marché de l’emploi.
+Le projet examinera ensuite la manière dont les biais implicites des recruteurs sont susceptibles d’influencer l’évaluation des compétences.
+Enfin, la troisième phase du projet visera à élaborer et tester des interventions permettant aux organisations de réduire l’impact de ces facteurs à différentes étapes du processus de recrutement.
+
+''''
+
+*Références*
+
+Axt, J. R., & Johnson, D. J. (2021). Understanding mechanisms behind discrimination using diffusion decision modeling. Journal of Experimental Social Psychology, 95, 104134.
+
+Bordalo, P., Coffman, K., Gennaioli, N., & Shleifer, A. (2019). Beliefs about gender. American Economic Review, 109(3), 739–73.
+
+Carranza, E., R. Garlick, K. Orkin, and N. Rankin. (2020) Job Search and Hiring with Two-sided Limited Information about Workseekers’ Skills, World Bank Policy Research,Working Paper 9345
+
+Coffman, K. B., Collis, M., & Kulkarni, L. (2020). When to Apply?. Harvard Business School.
+
+Dahan, C. (2021). Qui sont les jeunes des quartiers de la politique de la ville (QPV) ? Institut national de la jeunesse et de l’éducation populaire (INJEP). Fiches repères, 54
+
+Falk, A., Kosse, F., Schildberg-Hörisch, H., & Zimmermann, F. (2020). Self-assessment: The role of the social environment.
+
+Forscher, P. S., Lai, C. K., Axt, J. R., Ebersole, C. R., Herman, M., Devine, P. G., & Nosek, B. A. (2019). A meta-analysis of procedures to change implicit measures. Journal of Personality and Social Psychology, 117(3), 522–559. https://doi.org/10.1037/pspa0000160
+
+Guyon, N., & Huillery, E. (2021). Biased aspirations and social inequality at school: Evidence from french teenagers. The Economic Journal, 131(634), 745–796.
+
+Hoxby, C. M., & Avery, C. (2012). The missing” one-offs”: The hidden supply of high-achieving, low income students (No. w18586). National Bureau of Economic Research.
+
+Hoxby, C. M., & Turner, S. (2015). What high-achieving low-income students know about college. American Economic Review, 105(5), 514–17.
+
+Onyeador, I. N., Wittlin, N. M., Burke, S. E., Dovidio, J. F., Perry, S. P., Hardeman, R. R., Dyrbye, L. N., Herrin, J., Phelan, S. M., & van Ryn, M. (2019). The value of interracial contact for reducing anti-Black bias among non-Black physicians: A Cognitive Habits and Growth Evaluation (CHANGE) study report. Psychological Science, 31(1), 18–30. https://doi.org/10.1177/0956797619879139
+
+Petit, P., Bunel, M., Ene, E. & L’Horty, Y. (2016). Effets de quartier, effet de département : discrimination liée au lieu de résidence et accès à l’emploi. Revue économique, 3(3), 525–550.
+
+Rooth, D. O. (2010). Automatic associations and discrimination in hiring: Real world evidence. Labour Economics, 17(3), 523–534. https://doi.org/10.1016/j.labeco.2009.04.005
+
+
