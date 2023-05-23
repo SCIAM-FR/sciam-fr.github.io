@@ -1,0 +1,61 @@
+= Newsletter #7 : sciences comportementales & cognitives
+:showtitle:
+:page-navtitle: Newsletter #7 : sciences comportementales & cognitives
+:page-excerpt: Le meilleur des sciences comportementales & cognitives sélectionné par vos experts SCIAM{nbsp}: Java, Ordinateur quantique, la Data & l’Etat français, Revalorisation du SMIC.
+:layout: post
+:author: matthieupedurthe
+:page-tags: ['SCC','NewletterSCC','SciencesComportementales']
+:docinfo: shared-footer
+:page-vignette: scc_300x300.png
+//:post-vignette:
+//:page-vignette-licence:
+:page-liquid:
+
+Le meilleur des sciences comportementales & cognitives sélectionné par vos experts SCIAM
+
+image::{{'/images/matthieupedurthe/newsletter.png' | relative_url}}[image,width=100%,align="center"]
+
+== Toujours plus loin, toujours plus haut, toujours plus fort avec Java : Coder à la vitesse de l’éclair
+
+Loïc Hermann nous présente les évolutions majeures autour de Java au cours de ces dernières années, comme l’amélioration du code, l’optimisation technique et visuel du code, etc.
+
+https://blog.sciam.fr/2021/09/29/toujours-plus-loin-toujours-plus-haut-toujours-plus-fort-avec-java.html[*LIRE*^]
+
+== Ordinateur Quantique{nbsp}: une chimère commerciale{nbsp}?
+
+Depuis quelques années, une guerre internationale de l’ombre se livre autour de l’ordinateur quantique.
+Après les présentations des résultats de Google qui ont mis des étoiles dans les yeux à des millions de personnes, Amazon, la Chine et tant d’autres se sont lancés dans une course à la performance, mais surtout à qui produira le premier ordinateur quantique commercialisable.
+Malgré des chiffres dépassant nos capacités intellectuelles, certains évoquent déjà un échec cuisant pour cette technologie.
+
+https://korii.slate.fr/tech/technologie-ordinateur-quantique-est-il-voue-echec-qubit-decoherence-correction-erreurs-google-ibm[*LIRE*^]
+
+== La suprématie quantique. Un bon technologique mais encore un monde avant une commercialisation possible
+
+Malgré une vision pessimiste de la première commercialisation d’un ordinateur quantique, la Chine vient de faire un bon technologique qui pourrait remettre en cause les détracteurs à ce produit.
+En effet, la suprématie quantique (ou avantage quantique) a été atteinte avec un ordinateur quantique plus complexe que lors des essais précédents{nbsp}!
+
+https://trustmyscience.com/suprematie-quantique-atteinte-avec-ordinateur-quantique-plus-complexe/[*LIRE*^]
+
+== Comment la data transforme l’Etat français{nbsp}?
+
+Le 10 Septembre dernier se tenait un live talk sur LinkedIn, animé par Christina Poirson — CDO Groupe Société Générale et Laure Lucchesi — Directrice https://www.etalab.gouv.fr/[d'Etalab^] / https://www.numerique.gouv.fr/dinum/[DINUM^], pour partager la mobilisation de l’Etat français dans l’intégration et l’exploitation de la data.
+Nous pouvons ainsi comprendre la démarche et mieux saisir l’impact sur toute la fonction publique et le lien avec les entreprises privées.
+
+== Nouvelle revalorisation annuelle du SMIC, quels changements{nbsp}?
+
+Au 1er Octobre 2021, le Salaire Minimum Interprofessionnel de Croissance (SMIC) sera revalorisé par une augmentation de 2,2%.
+Pourquoi{nbsp}?
+C’est tout simplement une hause mécanique liée à la forte augmentation de l’inflation.
+Ces 2,2% restent pourtant loin des augmentations annoncées par https://www.cre.fr/Actualites/la-cre-constate-une-nouvelle-hausse-du-cout-du-gaz-naturel-importe-entrainant-une-hausse-des-tarifs-reglementes-de-vente-de-gaz-naturel-pour-le-moi[Engie de 12,6%^] au 1er octobre aussi, ou https://www.fournisseurs-electricite.com/guides/prix/kwh-electricite/augmentation[d'EDF en 2022 de 10%^].
+
+https://www.editions-tissot.fr/actualite/droit-du-travail/smic-au-1er-octobre-2021-une-hausse-mecanique?utm_campaign=Articles-E-News&utm_content=titre-article&utm_medium=e-news-actu&utm_source=pme&utm_term=titre-article&M_BT=421670045762[*LIRE*^]
+
+'''
+
+https://sciam.fr/[SCIAM^] est aussi présent sur https://www.linkedin.com/company/sciamfr/[LinkedIn^] et https://twitter.com/SciamVox[Twitter^]. Rejoignez la conversation et interagissez directement en ligne avec nos experts.
+
+Contribuons collectivement à la diffusion de contenus scientifiques.
+
+*Notre écosystème*
+
+image::{{'/images/alexismevellec/ecosys.png' | relative_url}}[image,width=50%,align="center"]
