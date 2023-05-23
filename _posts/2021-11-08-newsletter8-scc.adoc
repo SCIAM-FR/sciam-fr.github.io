@@ -1,0 +1,55 @@
+= Newsletter #8 : sciences comportementales & cognitives
+:showtitle:
+:page-navtitle: Newsletter #8 : sciences comportementales & cognitives
+:page-excerpt: Le meilleur des sciences comportementales & cognitives sélectionné par vos experts SCIAM{nbsp}: le pouvoir des normes sociales, nudge et boosting, Apprentissage dépendant du contexte dans l’interaction sociale.
+:layout: post
+:author: matthieupedurthe
+:page-tags: ['SCC','NewletterSCC','SciencesComportementales']
+:docinfo: shared-footer
+:page-vignette: scc_300x300.png
+//:post-vignette:
+//:page-vignette-licence:
+:page-liquid:
+
+Le meilleur des sciences comportementales & cognitives sélectionné par vos experts SCIAM
+
+image::{{'/images/matthieupedurthe/newsletter.png' | relative_url}}[image,width=100%,align="center"]
+
+== Le pouvoir constructif, destructif et reconstructif des normes sociales
+
+Les sociétés s’organisent à partir de différents codes et règles tels que les décrets, les lois, les constitutions mais aussi selon leur héritage social de valeurs, de résidus de certaines pratiques et de croyances anciennes.
+Le système de valeurs, incarné par le concept de norme sociale, émane du consensus d’un groupe donné et transmis de génération en génération et d’un individu à un autre, via les voies classiques d’apprentissage (ex., famille, amis, école, cercle social etc.).
+Ce système de valeurs impacte les comportements, les opinions et les jugements des individus. Dans cet article, les chercheurs se centrent sur l’effet modérateur de chaque type de normes (descriptives vs. injonctives) sur le changement de comportement.
+En effet selon les travaux de Robert Cialdini datés de 2007 (cités dans l’article) dans le domaine du changement de comportements et particulièrement dans la promotion des économies d’énergie, la mobilisation d’un type de norme, en particulier, permet de moduler le comportement en faveur de la pratique ciblée ou à l’inverse en sa défaveur.
+Les auteurs préconisent la bonne démarche à suivre afin d’éviter les résultats contre-intuitifs lors de l’utilisation des messages persuasifs normatifs.
+Ils soulignent également quelques leviers comme l’identification au groupe d’appartenance, qui permet d’optimiser l’efficacité de l’intervention et ouvre un champ de travaux fondés sur l’articulation entre la théorie de l’identité sociale et des normes dans le domaine des sciences comportementales.
+
+https://journals.sagepub.com/doi/10.1177/1745691617693325[*LIRE*^] (en)
+
+== Concevoir & tester le nudge et le boosting
+
+Le changement comportemental est rarement aisé et requiert un large éventail d’outils.
+Le _nudge_ — des changements subtils apportés à l’architecture du choix sans toutefois supprimer des options ou prodiguer d’incitations financières — est probablement le plus utilisé.
+Mais il ne s’agit pas du seul{nbsp}; de fait, des chercheurs préconisent un autre type d’intervention comportementale{nbsp}: le _boosting_. Contrairement au nudge, qui vise à changer les comportements en modifiant l’environnement, les boosts visent à donner aux individus les moyens de mieux exercer leur propre agentivité.
+
+https://behavioralscientist.org/building-the-behavior-change-toolkit-designing-and-testing-a-nudge-and-a-boost/[*LIRE*^] (en)
+
+== Apprentissage dépendant du contexte dans l’interaction sociale{nbsp}: Les impressions de traits soutiennent des choix sociaux flexibles
+
+Apprendre à identifier les personnes fiables et compétentes dans un domaine donné est une faculté humaine indispensable aux interactions sociales.
+Au travers d’un protocole expérimental en laboratoire, cet article à paraitre dans le Journal of Personality and Social Psychology, suggère que les individus infèrent les traits de caractère (ex. l’assiduité ou la générosité) des personnes de leur entourage à partir de leurs actions.
+En particulier, et indépendamment de la valeur instrumentale immédiate attendue des interactions sociales (ex. la productivité d’un.e candidat.e reçu en entretien), c’est l’adéquation entre ces traits de caractère et le contexte d’interaction qui influence notre comportement envers les personnes.
+Ces résultats ont premièrement un intérêt théorique, car ils suggèrent que l’apprentissage des traits de caractère ou des compétences d’un individu opère par un processus similaire à celui de l’apprentissage purement guidé par les conséquences des actions de ce dernier.
+Bien qu’établis dans des conditions contrôlées et relativement abstraites en laboratoire, ils suggèrent que, sur le plan pratique, les conclusions tirées lors d’une interaction dans un contexte donné seraient ensuite généralisées et guideraient nos interactions à d’autres situations.
+
+https://psyarxiv.com/symrj/[*LIRE*^] (en)
+
+'''
+
+https://sciam.fr/[SCIAM^] est aussi présent sur https://www.linkedin.com/company/sciamfr/[LinkedIn^] et https://twitter.com/SciamVox[Twitter^]. Rejoignez la conversation et interagissez directement en ligne avec nos experts.
+
+Contribuons collectivement à la diffusion de contenus scientifiques.
+
+*Notre écosystème*
+
+image::{{'/images/matthieupedurthe/ecosys.png' | relative_url}}[image,width=50%,align="center"]
