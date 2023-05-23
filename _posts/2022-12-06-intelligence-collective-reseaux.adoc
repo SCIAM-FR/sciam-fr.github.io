@@ -1,0 +1,121 @@
+= Intelligence collective et science des réseaux{nbsp}: améliorer la performance d’un groupe en repensant sa structure
+:showtitle:
+:page-navtitle: Intelligence collective et science des réseaux{nbsp}: améliorer la performance d’un groupe en repensant sa structure
+:page-excerpt: Les interactions sociales catalysent-elles l’intelligence, les capacités et la créativité des individus, ou au contraire limitent-elles notre potentiel, voire constituent le terreau des pires excès{nbsp}?
+:layout: post
+:author: hugotrad
+:page-tags: ['SCC','IntelligenceCollective','SagesseDesFoules','Reseaux']
+:docinfo: shared-footer
+:page-vignette: crossing_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href='https://unsplash.com/@cbarbalis' target='_blank'>Chris Barbalis</a>.
+:page-liquid:
+
+Nous vous proposons une note de synthèse de l’article suivant{nbsp}:
+
+Centola, D. (2022). +
+The network science of collective intelligence. +
+Trends in Cognitive Sciences. +
+https://doi.org/10.1016/j.tics.2022.08.009
+
+Les interactions sociales catalysent-elles l’intelligence, les capacités et la créativité des individus, ou au contraire limitent-elles notre potentiel, voire constituent le terreau des pires excès{nbsp}?
+
+Cette question, l’une des plus centrales dans l’étude des sociétés et comportements humains, oppose deux visions toutes deux légitimées par de nombreux exemples de grandeur et de dévoiements des groupes sociaux.
+
+Ainsi, dès l’Antiquité, Aristote comparait les groupes humains aux colonies d’insectes pour mieux en faire remarquer par analogie les vertus de l’intelligence collective humaine — en témoignent aujourd’hui les progrès techniques rendus possibles par la transmission des connaissances au cours des générations, ou encore la capacité de processus collectifs à améliorer les diagnostics médicaux ou encore produire des prédictions fiables (par ex. dans les paris sportifs).
+
+A l’inverse, Thomas Hobbes mettait l’emphase sur les excès produits par les comportements de foule — la _mob mentality_ et ses comportements destructeurs — pour mieux légitimer la nécessité d’un régime monarchique.
+Cette vision pessimiste des groupes sociaux peut trouver un écho contemporain dans certains comportements collectifs déviants (e.g cyberharcèlement) ou bien dans des échecs organisationnels notoires (par exemple l’accident de la navette Columbia Shuttle, causé en partie par la minoration de risques techniques par l’équipe de management).
+
+== Au regard de ces précédents exemples, comment expliquer cette extrême variabilité d’intelligence ou de performance des groupes{nbsp}?
+
+Désormais, la question de l’intelligence collective revient à savoir si un groupe peut être plus performant que la somme des individus qui le composent (ou bien de ses meilleurs éléments).
+
+Récemment, des recherches provenant de nombreuses disciplines aussi variées que la finance, la théorie politique, l’ingénierie et la data science, la théorie des jeux, les paris sportifs ou bien le comportement animal ont convergé pour étudier les conditions de possibilité de l’intelligence collective.
+
+L’argument de l’auteur est que la science des réseaux, en étudiant la structure des groupes et de la transmission d’information entre ses membres, peut offrir un cadre unificateur de compréhension de la performance des groupes dans deux types de tâches{nbsp}: (i) la résolution collective de problème et (ii) ce que l’on appelle la sagesse des foules.
+
+== Résolution collective de problème
+
+La résolution collective de problème s’intéresse aux situations où des réseaux de communication entre les différents membres d’un groupe sont nécessaires pour découvrir une solution innovante.
+
+Le consensus du groupe dans ce type de tâche émerge de manière endogène grâce à ces réseaux de communication entre membres qui révèlent entre eux la performance des solutions utilisées par chacun.
+Une hypothèse centrale dans ces études est qu’il existe une réponse optimale parmi un ensemble de solutions, et que les individus adoptent les bonnes solutions des uns et des autres si celles-ci sont meilleures que leur propre solution.
+
+En investiguant la manière dont la structure de ces réseaux de communication affecte la découverte de solutions, les chercheurs tentent de déterminer la structure idéale pour améliorer ou optimiser la qualité des solutions proposées.
+Les applications possibles sont nombreuses, par exemple pour améliorer la créativité ou tout simplement accélérer l’innovation technologique, artistique et les découvertes scientifiques.
+
+== La sagesse des foules
+
+Le sagesse des foules correspond au constat, découvert dès Galton au 19e siècle, que l’estimation moyenne d’un groupe composé d’un grand nombre d’individus indépendants est généralement plus précise que les estimations de n’importe lequel des membres individuels du groupe.
+Ainsi, les études sur la sagesse des foules se concentrent sur des tâches d’estimation, telles que la prévision des cours des actions, des paris sportifs ou encore la réalisation de diagnostic médicaux.
+
+Contrairement à la résolution collective de problèmes, l’estimation de groupe dans la sagesse de la foule n’émerge pas par consensus entre les membres du groupe mais est plutôt obtenue à l’aide d’une méthode d’agrégation pour caractériser la tendance centrale du groupe (par exemple, calculer la moyenne des estimations individuelles).
+Elle ne nécessite donc pas de communication entre les membres.
+
+La sagesse des foules repose donc sur deux hypothèses, à savoir qu’il existe une «{nbsp}bonne réponse{nbsp}» à découvrir, et que même si les individus ne connaissent pas cette réponse, il est néanmoins possible de la trouver (plus ou moins précisément) au niveau du groupe en agrégeant les estimations individuelles.
+Cette estimation peut concerner une variable continue (par exemple deviner la taille de la Tour Eiffel), ou bien des discrets (c’est-à-dire choisir entre plusieurs options).
+Par soucis de simplicité, nous nous focaliserons ici sur les estimations de variables continues.
+
+== Quelles caractéristiques d’un groupe permettent d’optimiser la performance dans ces deux types de tâches{nbsp}?
+
+Ces deux domaines de recherche font des hypothèses distinctes sur les effets des réseaux de communication sur la performance du groupe.
+
+== Facteurs de performance pour la résolution de problèmes collectifs
+
+Pour ce type de tâche, la principale propriété du réseau de communication qui détermine la performance est l’efficacité informationnelle.
+Souvent mesurée par le trajet moyen entre deux membres du réseau, autrement dit le nombre d’étapes que doit traverser en moyenne une information pour traverser le réseau.
+Ainsi, dans un réseau parfaitement efficient, tous les membres du groupe sont directement connectés à tous les autres.
+A l’inverse, dans un réseau inefficient, de nombreuses étapes sont nécessaires pour que l’information traverse l’ensemble du réseau.
+
+image::{{'/images/hugotrad/intcollres1.png' | relative_url}}[image,width=80%,align="center"]
+
+Toutefois, l’effet de la structure du réseau sur la performance est médiée par la complexité de la tâche.
+Cette complexité correspond à l’interdépendance des paramètres et au nombre d’optima locaux dans l’espace de l’ensemble des solutions à la tâche.
+Ainsi, pour une tâche simple, il existe une unique solution optimale qu’il est possible de trouver en appliquant une même stratégie jusqu’à obtention de la solution idéale.
+A l’inverse, dans une tâche complexe, les paramètres peuvent interagir entre eux, et l’ensemble des solutions présente de nombreux optima locaux, c’est-à-dire des solutions sous-optimales.
+
+Des études montrent que si les réseaux efficients permettent de converger rapidement vers une solution optimale dans le cadre de tâches simples, à l’inverse ils convergent vers des solutions sous-optimales dans la cadre de tâches complexes et ne parviennent généralement pas à atteindre un optimum global.
+
+image::{{'/images/hugotrad/intcollres2.png' | relative_url}}[image,width=80%,align="center"]
+
+Ainsi, pour des tâches complexes, ce sont les réseaux inefficients qui facilitent la recherche de solutions optimales{nbsp}; en réduisant le flux d’informations entre les membres d’une équipe, cette structure favorise l’exploration de solution peu communes mais prometteuses car elle les protège d‘être passées sous silence avant qu’elles ne puissent être développées.
+A titre d’exemple, une étude a cherché à comparer la performance de différentes équipes de chercheurs et professionnels dans le cadre d’une compétition en ligne de data science.
+Les auteurs ont assigné les participants dans des équipes avec une structure de communication efficiente ou inefficiente, puis ont demandé aux participants de résoudre des problèmes complexes de data science.
+A la fin d’un ensemble de 8 compétitions, les équipes dont le réseau de communication était inefficient s’avérèrent significativement plus performantes{nbsp}; si aucune équipe avec une structure efficiente trouvait la solution optimale aux problèmes, la moitié des équipes avec une structure inefficiente y parvint.
+Par ailleurs, ces dernières étaient également plus performantes que de nombreuses stratégies communes de _machine learning_.
+
+== Facteur de performance pour la sagesse des foules
+
+Pour ce qui est de la sagesse des foules, la principale propriété qui prédit la performance n’est non pas l’efficience du réseau mais sa centralisation, définie par le degré de distribution des liens de communication entre les différents membres du groupe.
+Ainsi, un groupe très centralisé comporte une grande inégalité de degré de distributions{nbsp}: peu de personnes voire une seule possède un nombre disproportionné de contacts et contrôle donc l’ensemble de l’information sur le réseau (cf figure ci-dessous).
+A l’inverse, dans un réseau décentralisé, les degrés de distribution sont uniformes et tous les membres ont donc un degré égal de connectivité.
+L’une des conséquences de cette architecture est qu’un réseau totalement décentralisé est inefficient dans la mesure où l’information doit franchir plusieurs étapes pour traverser l’ensemble du réseau.
+
+Les résultats dans ce domaine de recherche sont plus variables{nbsp}: de fait, les différentes configurations du réseau amènent à des performances plus ou moins bonnes comparées à des estimateurs totalement indépendants en fonction de la relation entre la personne centrale d’un réseau centralisé, la vraie réponse et l’estimation du reste du groupe.
+Par exemple, si la personne au centre d’un réseau centralisé est bien plus performante que la moyenne du reste du groupe, le partage d’informations entre les membres peut améliorer l’intelligence du groupe.
+
+Néanmoins, l’intelligence collective reste généralement améliorée quand la centralisation est réduite dans les réseaux de communication{nbsp}: dans ces réseaux, si les personnes les moins précises ajustent leurs réponses davantage que les personnes performantes après partage d’informations, les individus les plus performants vont progressivement peser davantage dans l’estimation collective (à noter, pour des groupes d’une taille minimale de 30 personnes).
+
+image::{{'/images/hugotrad/intcollres3.png' | relative_url}}[image,width=80%,align="center"]
+
+Ainsi, de nombreuses études ont montré l’intérêt des réseaux décentralisés pour réduire les biais d’estimations dans des domaines politiquement polarisés, à savoir l’immigration et le changement climatique.
+Qu’ils s’agissent de réseaux politiquement hétérogènes ou de chambres d’échos politiquement homogènes, les réseaux décentralisés ont permis de réduire leur polarisation et d’améliorer leur précision collective.
+D’autres études ont examiné l’intérêt des réseaux décentralisés pour réduire les biais dans d’autres domaines, par exemple les biais implicites (et inconscients) de prescriptions par des cliniciens selon le genre du patient, ou bien la perception biaisée du risque lié au tabagisme par des fumeurs.
+
+Une dernière piste pour améliorer davantage encore la sagesse des foules en utilisant les avantages des réseaux centralisés est de donner la possibilité aux membres d’un groupe (i) de voir la précision respective de chacun, mais (ii) aussi de leur permettre de sélectionner leurs liens d’informations avec les personnes qu’ils souhaitent.
+Sous ces conditions, l’intelligence d’un groupe décentralisé s’améliore à mesure que le réseau se centralise autour des individus les plus performants.
+
+== Tableau récapitulatif
+
+image::{{'/images/hugotrad/intcollres4.png' | relative_url}}[image,width=100%,align="center"]
+
+De manière générale, la propriété commune qui permet de faciliter l’intelligence collective pour la résolution collective de problèmes complexes ou la sagesse des foule est la décentralisation d’un réseau car elle protège les idées prometteuses mais impopulaires — car allant à l’encontre de biais ou croyances collectives — d’être mises de côté précocement dans le processus de décision collective.
+
+== Quelles implications{nbsp}?
+
+Au-delà des enjeux de performances organisationnelles, en particulier à l’ère du télétravail, l’une des conséquences immédiates de ces travaux concerne également les réseaux sociaux en ligne.
+De fait, ceux-ci tendent à disposer d’une structure très centralisée et informationnellement efficiente optimisée pour la coordination autour de solutions populaires et la diffusion d’idées communes qui correspondent aux biais collectifs — même si elle sont incorrectes.
+Ainsi, ceux-ci peuvent réduire la sagesse des foules et empêcher la résolution de problèmes complexes en amplifiant des croyances populaires mais fausses.
+
+L’une des pistes suggérée par l’auteur est donc d’explorer la possibilité de designer la structure de réseaux sociaux de sorte à réduire la diffusion d’informations erronées ou bien éviter l’instrumentalisation de fausses informations dans des campagnes ciblées (par exemple sur la sûreté des vaccins).

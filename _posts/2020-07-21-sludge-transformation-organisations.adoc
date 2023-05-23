@@ -1,0 +1,65 @@
+= Sludge : les sciences comportementales au service de la transformation des organisations
+:showtitle:
+:page-navtitle: Sludge : les sciences comportementales au service de la transformation des organisations
+:page-excerpt: Annoncé par le gouvernement en octobre 2017, le programme Action Publique 2022 témoigne de la volonté de l’État de moderniser son fonctionnement administratif et plus particulièrement de simplifier ses interactions avec les citoyens. De nombreuses initiatives ont effectivement vu le jour ces dernières années.
+:layout: post
+:author: hugotrad
+:page-tags: ['SCC','SciencesComportementales','Sludge','Administration']
+:docinfo: shared-footer
+:page-vignette: infinity_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href='https://pixabay.com/users/8385-8385' target='_blank'>Reimund Bertrams</a>.
+:page-liquid:
+
+.Illustration par https://pixabay.com/users/8385-8385[Reimund Bertrams^]
+image::{{'/images/hugotrad/infinity.png' | relative_url}}[image,width=80%,align="center"]
+
+Annoncé par le gouvernement en octobre 2017, le programme https://www.modernisation.gouv.fr/action-publique-2022[Action Publique 2022^] témoigne de la volonté de l’État de moderniser son fonctionnement administratif et plus particulièrement de simplifier ses interactions avec les citoyens.
+De nombreuses initiatives ont effectivement vu le jour ces dernières années. En automne dernier, la https://www.modernisation.gouv.fr/qui-sommes-nous[Direction Interministérielle de la Transformation Publique^] s’est par exemple dotée d’un «{nbsp}FormLab{nbsp}» («{nbsp}Form{nbsp}» pour «{nbsp}formulaire{nbsp}»).
+Ce dispositif déployé en collaboration avec des agents publics et des usagers a pour but de simplifier les formulaires administratifs perçus comme complexes par les citoyens.
+Plus récemment, la https://www.numerique.gouv.fr/dinum/[Direction Interministérielle du Numérique^] a lancé en juin un dispositif intitulé «{nbsp}Commando UX{nbsp}» dont l’objectif est, selon les mots de l’administration, «{nbsp}*d'intégrer au cœur de la machine administrative des spécialistes de l’UX Design afin de rendre les services publics numériques plus simples, plus désirables et plus accessibles*{nbsp}»{nbsp}footnote:[https://www.horizonspublics.fr/numerique/le-commando-ux-fait-son-entree-dans-ladministration].
+
+L’impact de ces initiatives reste toutefois limité au regard des conséquences engendrées par la *complexité administrative*.
+
+== Les procédures administratives comportent très souvent ce que l’on appelle du sludge
+
+*Comme souvent, ce sont les situations de crise qui, par le stress auquel elles soumettent les systèmes, permettent d’en révéler tous les dysfonctionnements*.
+Ainsi, la *récente crise sanitaire* a permis de mettre en lumière le *poids des procédures administratives sur le personnel soignant*, alors qu’il s’agissait d’une doléance de longue date des acteurs de la santé.
+De fait, à l’hôpital, l’administration représenterait près d’un tiers de leur temps de travail{nbsp}footnote:[https://www.usine-digitale.fr/article/pour-reduire-les-taches-administratives-l-hopital-de-nancy-mise-sur-la-reconnaissance-vocale-de-nuance.N919454] — soit autant de temps qui n’est pas consacré au soin des patients dans un système déjà sous haute tension.
+Par ailleurs, il semblerait que l’inefficacité administrative ait impacté la lutte contre la Covid-19 de bien d’autres manières{nbsp}footnote:[https://www.lepoint.fr/sante/exclusif-comment-la-france-se-prive-de-150-000-a-300-000-tests-par-semaine-03-04-2020-2369955_40.php]footnote:[https://www.francetvinfo.fr/sante/maladie/coronavirus/discovery-ou-fiascovery-les-resultats-de-l-essai-clinique-pour-trouver-un-traitement-contre-le-coronavirus-se-font-attendre_3962331.html].
+
+Ces exemples illustrent une réalité à laquelle les citoyens sont confrontés au *quotidien*{nbsp}: la *complexité de nombreuses démarches administratives* (services publics, assurances, banques, services clients etc.).
+En cause, des freins tels que des demandes répétées de pièces justificatives, des attentes interminables, la difficulté de trouver un interlocuteur ou de l’information, qui peuvent amener des usagers à abandonner une procédure.
+_In fine_, ces freins sont susceptibles d’empêcher les gens de réaliser ce qu’ils désirent, d’accéder à des biens, des services ou des opportunités{nbsp}footnote:[Sunstein, 2019.].
+
+.Illustration par https://pixabay.com/users/geralt-9301[Gerd Altmann^]
+image::{{'/images/hugotrad/circuit.png' | relative_url}}[image,width=80%,align="center"]
+
+Ainsi les procédures administratives comportent très souvent ce que l’on appelle du _sludge_, c’est-à-dire des *frictions excessives et/ou injustifiées engendrant des coûts temporels, monétaires ou psychologiques pour les individus*.
+
+Temporels, car ils représentent une *perte massive de temps*{nbsp}: les Américains ont consacré en 2015 près de 10 milliards d’heures à la paperasse administrative{nbsp}footnote:[Off. of MGMT. & Budget, Information collection budget of the United States Government, 2016.].
+En France, le temps dévolu chaque année aux tâches administratives (RH, fiscalité, comptabilité…) dans les PMEs est estimé à environ 140 jours soit environ *7% du temps de travail*{nbsp}footnote:[https://www.iterop.com/wp-content/uploads/2017/10/resultats_de_l__etude_a_la_recherche_du_temps_perdu_sage_plum_consulting-1.pdf].
+
+Les coûts du sludge sont également *financiers*.
+Pour les citoyens, il peut s’agir d’une perte de revenu (prestations dues mais non réclamées), ou de pénalités de retard par exemple.
+A l’échelle des organisations, le sludge induit un *surcoût* non-négligeable.
+Ainsi, en monétisant le temps consacré à l’administration dans les PME, cela représenterait au bas mot 43 milliards d’euros, sans même considérer que le temps consacré à ces tâches administratives aurait pu être alloué à des activités de production.
+
+== Comment favoriser une prise de conscience et une réduction du sludge{nbsp}?
+
+La prise de conscience et la réduction du sludge constituent un enjeu central dans de nombreux domaines à la fois *publics et privés*{nbsp}: la garantie des droits des citoyens, la réduction de la pauvreté, la santé publique, mais aussi la protection des consommateurs, le bien-être au travail ou la productivité des collaborateurs.
+
+Au-delà d’un service public qui pourrait ne pas être pensé pour les usagers (dont les démarches administratives ne seraient pas conçues afin d’en optimiser la simplicité pour les citoyens), la principale difficulté vient du fait que la *complexité des procédures part souvent d’une bonne intention*{nbsp}: volonté de sécuriser un processus ou d’acquérir des données{nbsp}; respect de la vie privée{nbsp}; limiter les risques de fraude etc…
+
+.Illustration par https://pixabay.com/users/geralt-9301[Gerd Altmann^]
+image::{{'/images/hugotrad/sphere.png' | relative_url}}[image,width=80%,align="center"]
+
+Ainsi, l’élaboration de procédures se fait le plus souvent en fonction de leurs bénéfices supposés, sans s’interroger sur les coûts entraînés pour les usagers et agents.
+Pour espérer réduire le sludge là où il est le plus dommageable pour tous, il nous faudrait donc être capables *d’identifier et quantifier tous les coûts et bénéfices associés* à celui-ci, afin de permettre une déflation administrative fondée sur les preuves et la logique plutôt que sur des intuitions trompeuses{nbsp}footnote:[Herd, P., & Moynihan, D. (2018). Administrative Burden: Policymaking by Other Means. NEW YORK: Russell Sage Foundation. Retrieved July 17, 2020, from www.jstor.org/stable/10.7758/9781610448789].
+C’est à cette condition qu’il sera possible d’élaborer des procédures répondant de façon optimale à la fois au besoin de maîtrise du fournisseur de service et au besoin de simplicité de l’usager.
+
+C’est pourquoi nous développons chez SCIAM une méthodologie d’*audit du sludge* en partenariat avec le Département d’Etudes Cognitives de l’Ecole normale supérieure.
+En mêlant les sciences comportementales, des techniques d’intelligence collective et de management des organisations, nous élaborons des outils d’analyse permettant d’identifier et estimer les coûts et bénéfices associés au sludge, ainsi que des dispositifs complets permettant de le réduire efficacement au sein des organisations.
+
+
+
