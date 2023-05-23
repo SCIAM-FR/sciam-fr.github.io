@@ -1,0 +1,63 @@
+= Blockchain : Stratégie produit d’une start-up face à l’engouement du secteur financier (1/3)
+:showtitle:
+:page-navtitle: Stratégie produit d’une start-up face à l’engouement du secteur financier (1/3)
+:page-excerpt: Par son titre “_The trust machine_” en Octobre 2015, The Economist marque le démarrage de la hype de la blockchain pour les institutions financières. Quelle place dans ce contexte pour les start-ups expertes de la technologie{nbsp}? En 3 articles, le retour d’expérience d’Alexis Mévellec, business lead chez SCIAM et associé de 2016 à 2018 dans l’entreprise Utocat. Première partie (2015-2016).
+:layout: post
+:author: alexismevellec
+:page-tags: ['Misc','Blockchain','Startup','Banking']
+:docinfo: shared-footer
+:page-vignette: ttm_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par Jon Berkeley pour <a href="https://www.economist.com/" target="_blank">The Economist</a>.
+:page-liquid:
+
+*Par son titre “_The trust machine_” en Octobre 2015, The Economist marque le démarrage de la hype de la blockchain pour les institutions financières. Quelle place dans ce contexte pour les start-ups expertes de la technologie{nbsp}? En 3 articles, le retour d’expérience d’Alexis Mévellec, business lead chez SCIAM et associé de 2016 à 2018 dans l’entreprise Utocat.*
+
+.The Economist, "_The trust machine_"
+image::{{'/images/alexismevellec/the-trust-machine.png' | relative_url}}[image,width=50%,align="center"]
+
+Nous nous intéresserons dans ce premier article à la finance, secteur constitué de flux et d’intermédiaires et à ses premières expérimentations de la blockchain dans les années 2015–2016. Dans un deuxième article à paraître, nous examinerons les tâtonnements stratégiques d’une équipe restreinte face à ce marché et à de gigantesques clients. Enfin, nous tirerons de cette expérience quelques axes de réflexion sur la pérennité d’une start-up, au-delà de la technologie blockchain.
+
+Rappelons à titre introductif que la blockchain a été conçue comme un registre infalsifiable, dont l’usage le plus connu est d’échanger des bitcoins grâce au traçage des transactions. La blockchain est entièrement virtuelle et s’appuie sur internet. Dans sa forme originelle (blockchain publique), la certification n’est garantie que par la contribution pseudonyme de certains membres du réseau, et leur rémunération pour ce-faire. Comme nous allons le voir, la blockchain est donc intrinsèquement open source et décentralisée.
+
+'''
+
+== La blockchain publique, innovation d’exploration dont la valeur est dans la décentralisation
+
+C’est bien connu, le créateur de la blockchain est inconnu. Conçue vraisemblablement par plusieurs personnes sous le pseudonyme de Satoshi Nakamoto lors de la création du bitcoin, la technologie blockchain est open source. En installant un nœud du réseau, on télécharge le logiciel blockchain et l’historique de l’ensemble des opérations passées jusqu’alors. On peut dès lors lire et initier de nouvelles opérations (tel qu’un paiement en bitcoins). On peut aussi décider de contribuer à la sécurisation du réseau en consacrant à la certification la force de calcul de sa machine{nbsp}: celle-ci entre en compétition avec d’autres pour résoudre des équations, leur résolution accordant au gagnant un certain nombre de bitcoins (ou autres crypto-actifs). Ce processus (“_mining_”) certifie les dernières transactions en les incluant dans un nouveau bloc, l’historique étant garanti par tous les nœuds du réseau.
+
+.Fonctionnement de la blockchain{nbsp}footnote:[Crédits{nbsp}: Blockchain France]
+image::{{'/images/alexismevellec/blockchain01-01.png' | relative_url}}[image,width=50%,align="center"]
+
+Cette contribution est l’un des fondements de la technologie, et permet d’en faire la trust machine que The Economist décrit en octobre 2015. Elle fait de la blockchain une innovation d’exploration, une innovation qui change les règles{nbsp}footnote:[Millier, P. (2011). _Stratégie et marketing de l’innovation technologique — 3ème édition_. Dunod.] dans le rapport aux tiers de confiance.
+
+Elle revêt ce faisant un caractère en parfaite opposition avec le fonctionnement du système financier classique. La notion d’_institution_ bancaire disparaît ici, car le système blockchain, pour garantir la certification, nécessite un éclatement des certificateurs. S’ils se connaissaient et s’alliaient, ils pourraient modifier l’historique et léser les autres participants. *La blockchain est donc décentralisée*.
+
+Cette décentralisation (les certificateurs ne sont pas une institution mais des milliers de contributeurs anonymes) est une révolution.
+
+== Les institutions financières face à cette technologie
+
+Pendant longtemps, le seul usage grand public de la blockchain a été monétaire. Si les banques ont été parmi les premières institutions à s’intéresser à la blockchain, c’est probablement parce que le bitcoin permettait le paiement, l’une de leurs activités historiques. Des slogans populaires parmi les aficionados du bitcoin comme “_Be your own bank_” les ont sans nul doute conduit à vouloir maîtriser la blockchain.
+
+.“Be your own bank”
+image::{{'/images/alexismevellec/blockchain01-02.png' | relative_url}}[image,width=50%,align="center"]
+
+Au sein des banques et des établissements de paiement, certains informaticiens auto-formés sur leur temps libre vont devenir, à mesure que la notoriété du bitcoin croit, des interlocuteurs de référence et des passeurs de savoir.
+
+Pour ces institutions, l’enjeu est alors davantage de *comprendre techniquement la blockchain que d’en éprouver le potentiel métier*. Malgré l’engouement et la maîtrise technique progressive, les acteurs financiers ont des difficultés à se projeter dans un réseau ouvert et non centralisé.
+
+== Projets isolés ou consortiums autour d’une technologie fermée{nbsp}: la perte de sens des expérimentations “blockchain”
+
+Il faut attendre que des profils de chefs de projets ou managers comprennent le potentiel de la blockchain au-delà du paiement pour que les acteurs financiers commencent à en expérimenter l’usage.
+
+Les premières expérimentations sont lancées aux alentours de la une de The Economist (fin octobre 2015). En chambre au sein de chaque établissement bancaire, elles associent parfois une ou deux autres institutions. Les projets sont initiés de manière discrète par des directeurs innovation ou des chefs de projet en avance de phase. Pour ce-faire, ces pilotes ont besoin d’experts{nbsp}: Utocat est sollicité par BNP Paribas Securities Services et AXA pour contribuer à l’architecture et au développement de Proofs of Concept (PoC). Si la sollicitation concerne dans un premier temps l’aide à la décision au sujet de cas d’usages, des projets comme Planet Funds (solution de gestion de parts de fonds par BNP Paribas Securities Services) ou Fizzy (assurance contre le retard d’avion d’AXA basée sur la blockchain Ethereum) voient progressivement le jour. Quand des partenaires industriels sont associés, il s’agit de partenaires de la chaîne de valeur et non d’homologues (par exemple la société de gestion AXA Investment Management teste _Planet Funds_ de BNP Paribas).
+
+Dans ce cadre, le principal atout de la blockchain que d’être une force de certification n’est pas "_leveragé_" car le réseau est utilisé par une poignée d’acteurs.
+
+Bien sûr, des consortiums technologiques se créent bien et regroupent des banques, des assureurs ou des sociétés de gestion (le plus connu étant sûrement R3, basé aux Etats-Unis). Ces consortiums ne s’appuient cependant pas à proprement parler sur les réseaux blockchain existants, mais leur empruntent leur code pour le déployer de manière fermée entre membres. Ces “blockchains” permissionnées abandonnent donc la confiance décentralisée, principe essentiel de la blockchain publique. La raison invoquée est souvent la protection des données personnelles. Cet argument peut être retourné. D’une part, rien n’empêche d’enregistrer des preuves numériques d’informations (inexploitables car irréversibles) et non les informations elles-mêmes dans la blockchain publique. D’autre part, le fait d’enregistrer des données privées dans les nœuds hébergés sur les serveurs des autres membres de la blockchain empêche de répondre facilement au droit à l’effacement des données personnelles prévu par le RGPD.
+
+*La vraie raison de la constitution de réseaux privés est surtout la difficulté des acteurs à trouver leur place dans une technologie remaniant le rôle habituel des tiers de confiance.*
+
+'''
+
+Si ces projets ne tirent pas totalement profit des atouts de la blockchain, une équipe de passionnés comme celle d’Utocat doit pourtant tirer parti de sa collaboration avec des acteurs de taille mondiale. Dans un deuxième article, je reviendrai sur les *tentatives d’Utocat de créer des axes de développement pérenne avec ses clients*.

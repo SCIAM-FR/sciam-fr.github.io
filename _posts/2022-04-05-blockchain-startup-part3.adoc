@@ -1,0 +1,61 @@
+= Blockchain : Stratégie produit d’une start-up face à l’engouement du secteur financier (3/3)
+:showtitle:
+:page-navtitle: Stratégie produit d’une start-up face à l’engouement du secteur financier (3/3)
+:page-excerpt: Par son titre “_The trust machine_” en Octobre 2015, The Economist marque le démarrage de la hype de la blockchain pour les institutions financières. Quelle place dans ce contexte pour les start-ups expertes de la technologie{nbsp}? En 3 articles, le retour d’expérience d’Alexis Mévellec, business lead chez SCIAM et associé de 2016 à 2018 dans l’entreprise Utocat. Troisième partie (2017-2018).
+:layout: post
+:author: alexismevellec
+:page-tags: ['Misc','Blockchain','Startup','Banking']
+:docinfo: shared-footer
+:page-vignette: ttm300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par Jon Berkeley pour <a href="https://www.economist.com/" target="_blank">The Economist</a>.
+:page-liquid:
+
+*Par son titre “_The trust machine_” en Octobre 2015, The Economist marque le démarrage de la hype de la blockchain pour les institutions financières. Quelle place dans ce contexte pour les start-ups expertes de la technologie{nbsp}? En 3 articles, le retour d’expérience d’Alexis Mévellec, business lead chez SCIAM et associé de 2016 à 2018 dans l’entreprise Utocat.*
+
+.The Economist, "_The trust machine_"
+image::{{'/images/alexismevellec/the-trust-machine.png' | relative_url}}[image,width=50%,align="center"]
+
+Clôturant cette série (https://blog.sciam.fr/2022/03/22/blockchain-startup-part1.html[2015-2016^], https://blog.sciam.fr/2022/03/29/blockchain-startup-part2.html[2016-2017]) consacrée au positionnement d’une équipe blockchain face à l’engouement des acteurs financiers pour cette technologie, nous nous penchons dans ce dernier article sur l’usage, condition de pérennité de n’importe quelle start-up.
+
+'''
+
+== Stratégie produit{nbsp}: s’immiscer par l’usage, combler un manque quelle que soit la technologie
+
+Face aux difficultés constatées de louer une plateforme d’accès à la blockchain au secteur bancaire, Utocat va réorienter ses efforts vers le développement d’un second produit, destiné à répondre aux difficultés plus concrètes des banques et de leurs clients.
+
+A partir de 2011 et avant la folie de la spéculation dans les cryptomonnaies, l’investissement des particuliers dans les entreprises non cotées https://financeparticipative.org/barometres-crowdfunding/annee-2013/[explose^] grâce à l’intermédiation des plateformes de _crowdfunding equity_.
+
+.Baromètre du crowdfunding, 2013{nbsp}footnote:[Financement Participatif France & Compinnov. (s. d.). https://financeparticipative.org/barometres-crowdfunding/annee-2013/[Baromètre du crowdfunding 2013^]. Financement Participatif France.]
+image::{{'/images/alexismevellec/barometre-crowdfunding.png' | relative_url}}[image,width=100%,align="center"]
+
+L’une des clés de ce succès est la fluidité du parcours digital proposé par les plateformes. Cependant, si les investisseurs veulent bénéficier des exonérations fiscales du Plan Epargne Actions (PEA) en y enregistrant leurs actions, eux-mêmes et les salariés de la plateforme doivent se lancer dans des démarches complexes et manuelles avec les banques. Utocat décide alors de concevoir un connecteur entre banques et plateformes de crowdfunding.
+
+Alors que l’enregistrement des actions cotées en bourse dans les comptes titres (dont notamment le PEA) est lié au compensateur Euroclear, la difficulté des titres non cotés est qu’ils sont enregistrés dans un registre tenu directement par les entreprises concernées. En face, les établissements bancaires gestionnaires de PEA doivent respecter les contraintes légales liées à ce produit fiscal{nbsp}: notamment vérifier que les titres enregistrés existent bel et bien et que leur valorisation correspond à la réalité. Là où Euroclear agit comme un tiers de confiance pour les titres cotés en fournissant ces informations de manière électronique et quotidienne, les banques doivent les vérifier elles-mêmes auprès des entreprises non cotées au moment de la souscription, puis tous les ans jusqu’à la vente des actions. S’ajoutent d’autres tâches manuelles lors d’opérations sur titres ponctuelles comme les fusions ou nantissements.
+
+L’opportunité identifiée ici est de se positionner entre ces acteurs pour faciliter les échanges, tel un Euroclear du non coté.
+
+== Démarche commerciale{nbsp}: s’appuyer sur sa réputation et un contexte politique porteur
+
+Dans la plupart des grands groupes bancaires, le traitement des titres non cotés est opéré en partie par les services titres des banques de détail et en partie par leurs filiales de conservation de titres. Dans quelques autres cas les services titres des banques de détail concentrent tout le traitement des actions non cotées. Conservateurs et services titres sont souvent localisés en régions, mais leurs dirigeants se regroupent en association promouvant des programmes d’innovation (Association Française des Professionnels des Titres notamment, AFTI).
+
+Un premier levier permettant d’attiser l‘intérêt des banques est la perspective réglementaire de pouvoir inscrire les actions non cotées en blockchain. En effet, fin 2016, un article de la loi Sapin II a prévu d’autoriser le Gouvernement à prendre par voie d’ordonnance les mesures nécessaires pour adapter le droit applicable aux titres financiers et aux valeurs mobilières “afin de permettre la représentation et la transmission, au moyen d’un *dispositif d’enregistrement électronique partagé*, des titres financiers qui ne sont pas admis aux opérations d’un dépositaire central, ni livrés dans un système de règlement et de livraison d’instruments financiers”. Relativement vague dans ses définitions, et suivie de l’ordonnance quelques deux années plus tard, cette perspective réglementaire légitime malgré tout la démarche d’une entreprise reconnue sur le marché comme experte de la blockchain.
+
+== Déclencheurs et inhibiteurs des relations commerciales
+
+Par surcroît, le début du quinquennat d’Emmanuel Macron est marqué par un mouvement en faveur de l’investissement productif. Ainsi, plusieurs événements organisés sur ce thème à l’Assemblée Nationale ou à Bercy contribuent à sensibiliser les dirigeants de grands groupes bancaires au fléchage de l’épargne vers l’économie réelle. Ils représentent un moyen pour la start-up de leur faire valoir l’intérêt d’un connecteur en matière d’investissement non coté et mènent à de premiers contrats, auprès de filiales titres pourtant déjà prospectées. Preuve qu’une volonté politique était nécessaire.
+
+// Pas de crédits
+// image::{{'/images/alexismevellec/assemblee-nationale.png' | relative_url}}[image,width=100%,align="center"]
+// 
+
+Cet enjeu politique se confirmera par l’intérêt des banques mutualistes pour la solution. L’ancrage dans le tissu économique local des caisses composant ces établissements a sûrement compté pour beaucoup dans leur choix de l’adopter. En effet, offrir aux clients particuliers un moyen plus facile d’investir dans le non coté revient indirectement à faciliter le financement en fonds propres des PME et ETI locales, souvent également clientes de ce type de caisses.
+
+Le flux limité des investissements non cotés via les PEA et compte titres est cependant un frein à l’adoption du produit par les autres établissements. A partir de 2015, le développement du “crowdfunding equity” a été porté majoritairement par l’immobilier{nbsp}footnote:[Cuzon, V. (2017, août 9). Achat immobilier{nbsp}:{nbsp}le «{nbsp}boom{nbsp}» du crowdfunding. https://edito.seloger.com/actualites/france/achat-immobilier-le-boom-du-crowdfunding-article-20460.html[seloger.com^].], alors pas éligible au PEA. Le PEA-PME entré en vigueur en mars 2014 n’a pas connu une collecte majeure — notamment du fait de l’absence de promotion des banques. Enfin, les plafonds d’abondement assez bas de ces dispositifs (225 000€ au maximum) sont rédhibitoires pour les business angels{nbsp}: ceux-ci se tournent vers le droit luxembourgeois pour y constituer des holdings. Il en résulte un nombre d’opérations limité.
+
+'''
+
+== Epilogue
+
+Par le passé, des acteurs comme Alternativa ont pâti du manque de mouvements des particuliers. Si la perspective d’une convergence entre blockchain publique et établissements bancaires est plus utopique que jamais, la connexion entre épargne et économie réelle va sans nul doute s’accentuer, en témoigne le succès des plateformes d’investissement à impact auprès des épargnants. Le temps est simplement parfois un peu long pour les start-ups du domaine.
+

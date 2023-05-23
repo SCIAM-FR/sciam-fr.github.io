@@ -1,0 +1,59 @@
+= Blockchain : Stratégie produit d’une start-up face à l’engouement du secteur financier (2/3)
+:showtitle:
+:page-navtitle: Stratégie produit d’une start-up face à l’engouement du secteur financier (2/3)
+:page-excerpt: Par son titre “_The trust machine_” en Octobre 2015, The Economist marque le démarrage de la hype de la blockchain pour les institutions financières. Quelle place dans ce contexte pour les start-ups expertes de la technologie{nbsp}? En 3 articles, le retour d’expérience d’Alexis Mévellec, business lead chez SCIAM et associé de 2016 à 2018 dans l’entreprise Utocat. Deuxième partie (2016-2017).
+:layout: post
+:author: alexismevellec
+:page-tags: ['Misc','Blockchain','Startup','Banking']
+:docinfo: shared-footer
+:page-vignette: ttm300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par Jon Berkeley pour <a href="https://www.economist.com/" target="_blank">The Economist</a>.
+:page-liquid:
+
+*Par son titre “_The trust machine_” en Octobre 2015, The Economist marque le démarrage de la hype de la blockchain pour les institutions financières. Quelle place dans ce contexte pour les start-ups expertes de la technologie{nbsp}? En 3 articles, le retour d’expérience d’Alexis Mévellec, business lead chez SCIAM et associé de 2016 à 2018 dans l’entreprise Utocat.*
+
+.The Economist, "_The trust machine_"
+image::{{'/images/alexismevellec/the-trust-machine.png' | relative_url}}[image,width=50%,align="center"]
+
+Après avoir analysé dans https://blog.sciam.fr/2022/03/22/blockchain-startup-part1.html[un premier article^] l’accueil de la technologie blockchain par le monde financier en 2015 et 2016, nous nous intéresserons ici à la stratégie des entreprises naissantes du secteur pour surfer à long terme sur l’engouement pour la blockchain.
+
+'''
+
+== «{nbsp}L’avis de l’expert{nbsp}»{nbsp}: consulting et architecture
+
+D’un point de vue commercial, la priorisation ou validation de cas d’usages va devenir, avec la hype pour la blockchain, une demande à part entière de nombreux acteurs financiers. La proposition de cas d’usages est même parfois demandée directement en réponse aux RFP (Requests for Proposals) sans aucun engagement de contractualisation, ni rémunération évidemment. *Attention _brain drain_ et perte de temps{nbsp}!*
+
+.The Ramones, "_Brain Drain_"
+image::{{'/images/alexismevellec/braindrain.png' | relative_url}}[image,width=50%,align="center"]
+
+En effet, ces études de cas d’usage éloignent la start-up de la construction de sa propre trajectoire produit. Pire encore, elles se révèlent frustrantes pour les profils techniques de l’équipe, atouts cruciaux à fidéliser.
+
+== L’impossible réplicabilité des ventes au temps des expérimentations foisonnantes
+
+En matière de blockchain à cette époque, la sélection d’un cas d’usage n’est qu’une première étape d’un long parcours avant le développement d’un produit. Doivent ensuite être comparées les blockchains pertinentes, budgétés et planifiés les développements, mesurés les risques…
+
+*L’effort d’avant-vente pour un prototype blockchain est donc important pour une petite structure*, d’autant qu’il doit être répliqué à chaque RFI (Request for Information), chaque RFP et chaque demande informelle des acteurs. Malgré l’intérêt intellectuel de l’exercice, la lassitude des profils commerciaux peut succéder à celle des profils techniques, d’autant que tout peut s’arrêter d’un coup{nbsp}: à l’image de la technologie elle-même, les projets blockchain rebattent les cartes et les budgets ne sont pas garantis.
+
+Par ailleurs, du fait de leur non réplicabilité, les revenus issus de la prestation de service ne permettent traditionnellement pas aux start-ups de lever des fonds.
+
+== Développement d’une plateforme d’accès à la blockchain : le produit technique, incohérent avec l’ambition des chefs de projets
+
+Lorsque commencent les expérimentations avec ses clients banques et assurances, l’équipe constate la difficulté de ces entreprises à envisager d’assurer elles-mêmes leur connexion à la blockchain sur le long terme. Les projets doivent a minima être connectés à un nœud du réseau qu’il est indispensable de mettre à jour, au rythme de la technologie open source. Par ailleurs, envoyer des opérations sur la blockchain publique requiert des crypto-monnaies (bitcoin ou éther notamment) que les grands groupes se refusent à posséder. Enfin, les clients s’inquiètent de défaillances du réseau et souhaitent avoir une connexion à d’autres blockchain que la principale utilisée en cas de problème.
+
+Utocat décide de concevoir une *plateforme permettant aux entreprises d’accéder aux différentes blockchains*, à la demande, sans contrainte technique. L’ambition est de devenir un “fournisseur d’accès à la blockchain”, comme Free ou Orange pour internet.
+
+Cependant, l’adoption du produit bute sur deux réalités.
+
+D’une part, la volonté de maîtriser techniquement la blockchain préside à la quasi-totalité des projets{nbsp}: *apprendre en mettant les mains dans le cambouis* est ce que recherchent les acteurs financiers{nbsp}; au mieux une telle solution est perçue comme superflue, au pire comme une entrave.
+
+D’autre part, l’*adoption de la blockchain par les entreprises ne décolle pas*. Nous avions espéré une appropriation exponentielle de la technologie avec des usages quasiment aussi variés que ceux d’internet (à l’époque florissaient des études de marché et des mappings comme celui-ci listant de très nombreux cas d’usage)
+
+.Un exemple de mapping des applications possibles de la blockchain datant de début 2018{nbsp}footnote:[Doubleday, K. (2018, 29 janvier). https://medium.com/fluree/blockchain-for-2018-and-beyond-a-growing-list-of-blockchain-use-cases-37db7c19fb99[_Blockchain for 2018 and Beyond : A (growing) list of blockchain use cases_^].].
+image::{{'/images/alexismevellec/appblockchain.png' | relative_url}}[image,width=100%,align="center"]
+
+C’était sans envisager une contradiction intrinsèque à la blockchain{nbsp}: la plupart des entreprises sont elles-mêmes des tiers de confiance. Pour être adoptée, la blockchain doit leur apporter de la valeur sans les disrupter, ce qui est loin d’être évident. Au final la plateforme est louée, mais toujours en support des projets réalisés pour les clients — jamais indépendamment de ces fameuses démarches chronophages et non réplicables.
+
+'''
+
+Le chemin vers un revenu récurrent passe par l’usage, au-delà de la technologie sous-jacente. C’est ce que nous verrons dans un 3ème article.
