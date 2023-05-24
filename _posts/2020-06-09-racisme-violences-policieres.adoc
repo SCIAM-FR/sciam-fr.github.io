@@ -1,0 +1,55 @@
+= Racisme et violences policières{nbsp}: une responsabilité institutionnelle{nbsp}?
+:showtitle:
+:page-navtitle: Racisme et violences policières: une responsabilité institutionnelle{nbsp}?
+:page-excerpt: La mort de George Floyd causée par un policier révèle que les minorités visibles sont plus à même de subir deux formes de fléaux que sont le racisme et les violences policières. Ce sont deux fléaux distincts qui convergent dans le cas des minorités. La question débattue n’est pas de savoir si ces fléaux sont présents au sein de l’institution policière de manière générale. 
+:layout: post
+:author: mohamednajib
+:page-tags: ['Racisme','Violence','Police']
+:docinfo: shared-footer
+:page-vignette: violence_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/openclipart-vectors-30363/' target='_blank'>OpenClipart-Vectors</a>.
+:page-liquid:
+
+La mort de George Floyd causée par un policier révèle que les minorités visibles sont plus à même de subir deux formes de fléaux que sont le racisme et les violences policières. Ce sont deux fléaux distincts qui convergent dans le cas des minorités. La question débattue n’est pas de savoir si ces fléaux sont présents au sein de l’institution policière de manière générale (police et gendarmerie). Très peu de personnes nient encore l’existence de ces fléaux au sein des forces de l’ordre. #La question est de savoir s’il existe une responsabilité institutionnelle dans la présence de ces fléaux au sein de la Police#. La réponse du gouvernement par le biais du ministre de l’intérieur consiste à dire qu’il s’agit là de problèmes graves mais d’ordre individuels et non de problèmes institutionnels. Je propose de montrer qu’il s’agit bien d’un problème institutionnel d’une certaine manière.
+
+'''
+
+D’abord, il y a quelque chose d’incohérent à soutenir que les fautes sont individuelles et les réussites collectives. C’est un peu trop facile de célébrer le courage des forces de l’ordre et de pointer les violences individuelles des agents. Non, je pense que les fautes individuelles lorsqu’elles sont trop fréquentes résultent d’un dysfonctionnement du collectif.
+
+== La responsabilité de l’institution policière face aux violences des agents
+
+Pour ce qui concerne les violences policières, il est difficile de les nier. Par définition, les agents de police sont l’émanation de la violence légitime de l’Etat. Mais pour être légitime, cette violence étatique doit s’inscrire dans un cadre précis. La violence policière peut alors être illégitime de différentes manières.
+
+=== Une violence illégitime car au-delà du cadre réglementaire
+
+La première, et la plus évidente, c’est lorsque cette violence s’exerce en dehors du cadre précis existant tel qu’il est défini au sein de l’institution. Dans ce cas, cette violence est couramment désignée par différents euphémismes tels que «{nbsp}dérapages{nbsp}» ou «{nbsp}bavures policières{nbsp}» pour signaler ce débordement, ce passage au-delà de la limite, sous-entendu que ce dépassement reste à voisinage du contour et donc n’est pas très grave. Or précisément, le fait que l’Etat et l’institution policière permettent l’usage d’euphémismes pour désigner cette forme de violence illégitime suffit à dire que l’institution cautionne cette forme de violence.
+
+D’autre part, si l’institution accepte sans impunité que les agents puissent travailler à la limite du cadre précis, tant bien même leurs actions se déroulent encore à l’intérieur du cadre, alors l’institution cautionne de fait les débordements qui peuvent en résulter. Si j’accepte qu’un verre puisse être rempli à ras bord, alors j’accepte de fait qu’il puisse déborder par moment et donc je suis en partie responsable de ce débordement tant bien même la cause effective de ce débordement se trouve être externe (par exemple quelqu’un me bouscule ou un coup de vent). Autrement dit, l’institution doit sanctionner les agents qui se rapprochent trop des limites internes du cadre de la violence légitime telle qu’elle l’a défini dans son cadre réglementaire. Le principe est que dans une société de droit, la violence doit toujours être une exception et non une norme. Si l’institution de police ne sanctionne pas de manière claire l’usage fréquent de la violence et qui plus est d’une violence extrême par ses agents, alors ce type de violence est institutionnelle.
+
+'''
+
+=== Une violence illégitime au sein du cadre réglementaire
+
+La deuxième source d’illégitimité de cette violence consiste à pointer le fait que le cadre lui-même autorise une violence illégitime. Par exemple, le serrage du cou pour interpeller un individu violent était autorisé par le cadre légal d’intervention des agents de police jusqu’à présent. A la suite des mouvements de protestation actuels, cette technique est rejetée en dehors du cadre. Est-ce que cette technique était illégitime avant son interdiction{nbsp}? On peut le penser. Cela soulève une question théorique ancienne qui remonte à la République de Platon et qui n’a jamais été totalement résolue à savoir le lien entre la loi et la justice, par extension entre la loi et la légitimité. Est-ce que ce qui est autorisé légalement peut être illégitime. Inversement, est-ce que le fait que le cadre légal autorise le serrage de cou pour interpeller une personne rend l’usage de cette technique légitime{nbsp}? C’est une question qui traverse les sciences politiques depuis ses origines et qui n’est pas résolue car c’est une question morale et non une question factuelle. Autrement dit, c’est à chaque génération d’apporter sa réponse à cette question. Notre réponse est que cette violence était illégitime tant bien même elle s’opère dans le cadre réglementaire de la police. Autrement dit, puisque l’institution policière est en charge de la définition de son cadre réglementaire et qu’elle inclue dans ce cadre des violences illégitimes, elle est donc clairement responsable de cette violence illégitime.
+
+'''
+
+=== Un cadre réglementaire illégitime car en contradiction avec l’état de droit et la séparation des pouvoirs
+
+Le troisième point consiste à interroger le pourquoi de la violence. Il y a un problème de fond et structurel avec les violences policières. Les violences de l’Etat ne sont légitimes qu’après le passage de la justice. Or en pratique, dans la très grande majorité des cas, l’institution policière intervient presque toujours en amont de la justice. C’est elle qui est souvent en charge de constater les écarts à la loi. Or, dans un état de droit avec une séparation des pouvoirs, la notion de maintien de l’ordre ne peut pas être une fonction légitime d’une seule institution. Si une seule institution est en charge de maintenir l’ordre, alors forcément, cette institution dispose à la fois du pouvoir de prévenir l’écart, de constater l’écart et du pouvoir de réprimer l’écart à la loi. Ce qui est contradictoire avec la séparation des pouvoirs. Dans le moins mauvais scénario, la constatation de l’écart à la loi (sans disposer d’aucune forme de violence) devrait être du ressort de la police mais le maintien de l’ordre devrait dépendre de la justice. Car seule la justice est habilitée à émettre des sanctions pour permettre de maintenir l’ordre qu’elle a établi.
+
+De fait, structurellement, les prérogatives et par extension, le ministère de l’intérieur est en contradiction avec les principes d’état de droit et de séparation des pouvoirs. Dit autrement, nous avons un dilemme logique, soit nous acceptons que nous ne sommes pas dans un état de droit avec la séparation des pouvoirs, soit nous acceptons de garder l’institution policière telle qu’elle est aujourd’hui. La France et l’ensemble des démocraties qui s’attachent à l’état de droit et à la séparation des pouvoirs ont un problème de fond à résoudre quant à la place de l’institution policière au sein de ces systèmes d’état de droit.
+
+.Illustration par https://pixabay.com/fr/users/openclipart-vectors-30363[OpenClipart-Vectors^]
+image::{{'/images/mohamednajib/violence1.png' | relative_url}}[image,width=80%,align="center"]
+
+== La responsabilité de l’institution policière face au racisme
+
+Pour ce qui est du racisme à proprement parler, si celui-ci existe bien au sein de la société française de manière générale, sans un effort spécifique, il est logique qu’il soit présent par défaut au sein de l’institution policière. Sauf que si c’est cela est logique, cela n’est pas normal. Le racisme consiste par définition à faire une différence entre les citoyens et cela s’oppose frontalement aux principes républicains dont la police est garante. Le fait que l’Etat sache qu’il existe un racisme au sein de la population française doit l’amener à prendre des mesures drastiques pour se prémunir de ce virus au sein de ses institutions et qui plus est au sein de la police qui est garante de la sécurité et du respect de la loi. Or, c’est exactement le contraire qui existe actuellement. La police loin d’être exempte du racisme qui existe au sein de la population se trouve être davantage infectée que le reste de la population. Ce fait ne peut être que de la responsabilité de l’Etat. Si l’institution policière laisse des propos racistes se répandre au sein de son institution comme ce fut le cas avec les groupes Facebook et WhatsApp qui regroupent plusieurs dizaines de milliers d’agents de police, alors l’institution et non seulement les individus est effectivement raciste.
+
+== Comment rendre compte de ces fléaux en pratique à commencer par le racisme? Laissons la charge de la preuve à l’Etat.
+
+Il y a un désaccord sur la fréquence de ces débordements. La solution est simple pour dépasser ces désaccords. Si l’Etat empêche de mesurer cette fréquence, la charge de la preuve revient aux représentants de l’État. Ils doivent faire la preuve que l’État se conduit correctement envers l’ensemble des citoyens. De manière générale, ce n’est pas au citoyen, souvent sans moyen, de prouver le tort de l’État mais c’est à l’État de prouver qu’elle ne fait pas de tort au citoyen lorsque ce dernier pointe l’existence d’un tort.
+
+Autrement dit, à défaut que l’Etat nous prouve le contraire à savoir que l’institution policière n’est ni violente ni raciste, étant donné les différentes accusations émanant de citoyens, elle est responsable.
