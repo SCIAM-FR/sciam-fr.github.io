@@ -1,0 +1,62 @@
+= L’éthique du Nudge en question
+:showtitle:
+:page-navtitle: L’éthique du Nudge en question
+:page-excerpt: Il existe une interrogation grandissante autour de l’utilisation du _nudge_ issue de la recherche en sciences comportementales. Avant de questionner la légitimité du nudge, je propose de situer la pratique dans son contexte académique.
+:layout: post
+:author: mohamednajib
+:page-tags: ['SciencesComportementales','Nudge','Ethique']
+:docinfo: shared-footer
+:page-vignette: choice_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/qimono-1962238' target='_blank'>qimono</a>.
+:page-liquid:
+
+«_{nbsp}Nudge{nbsp}: “Le gouvernement est tenté d’orienter nos comportements dans la gestion de la crise_” » (https://www.marianne.net/agora/tribunes-libres/nudge-le-gouvernement-est-tente-dorienter-nos-comportements-dans-la-gestion-de-la-crise[Marianne^]){nbsp}; «_{nbsp}Le “nudge”, manipulation douce par temps de crise{nbsp}_» (https://www.marianne.net/agora/tribunes-libres/nudge-le-gouvernement-est-tente-dorienter-nos-comportements-dans-la-gestion-de-la-crise[France Info^]){nbsp}; «_{nbsp}Le “Nudge”{nbsp}: incitation ou manipulation{nbsp}?{nbsp}_» (https://information.tv5monde.com/video/le-nudge-incitation-ou-manipulation[TV5 monde^]). Ce sont là quelques titres médiatiques du mois d’avril 2021 autour d’une pratique qui trouve ses fondements dans les sciences comportementales{nbsp}: le _nudge_.
+
+Ces différents titres révèlent l’existence d’une #interrogation grandissante# autour de l’utilisation de cette méthode issue de la recherche en sciences comportementales. Avant de questionner la légitimité du nudge, je propose de situer la pratique dans son contexte académique.
+
+'''
+
+== De la modélisation des comportements à l’incitation
+
+Depuis plusieurs décennies, les chercheurs en sciences comportementales analysent et répertorient les biais comportementaux (ou heuristiques).
+
+Cela a commencé, dans la lignée des travaux de https://www.newyorker.com/books/page-turner/the-two-friends-who-changed-how-we-think-about-how-we-think[Kahneman et Tversky^], par une meilleure prise en compte des biais pour #améliorer la modélisation du comportement des agents économiques#. Pour y parvenir, les chercheurs ont tenté de tenir compte de différents biais dans leurs modèles, dont celui de l’#aversion à la perte#. Il se résume assez simplement{nbsp}: notre aversion à perdre 100€ n’est pas compensée par la possibilité de gagner 100€, mais par celle de gagner quelque chose comme 200€. Cela révèle une asymétrie entre l’évaluation subjective du gain et l’évaluation subjective de la perte au profit d’une surévaluation de la perte. Ces travaux ont valu un prix Nobel d’économie à https://fr.wikipedia.org/wiki/Daniel_Kahneman[Kahneman^] en 2002, Tversky étant décédé quelques années auparavant.
+
+D’autres chercheurs ont ensuite travaillé non plus à décrire le comportement des agents, mais à l’#influencer# en s’appuyant sur plusieurs biais comportementaux. Cette approche a été rendue célèbre par le livre de Richard Thaler et Cass Sunstein «{nbsp}https://fr.wikipedia.org/wiki/Nudge_(livre)[Nudge^]{nbsp}» paru en 2008. Le nudge consiste à #utiliser des automatismes#, des heuristiques soigneusement analysées et répertoriées par les sciences comportementales en vue d’#orienter le comportement des agents dans une direction particulière#.
+
+== Le paternalisme libertarien du nudge : une incitation pour orienter nos décisions
+
+D’emblée, cette approche pose des #questions philosophiques et politiques importantes# à savoir{nbsp}: dans quelle mesure sommes-nous en droit d’utiliser ces mécanismes pour influencer le comportement des individus{nbsp}? Dans nos sociétés où la liberté de l’individu constitue la valeur cardinale, sommes-nous en droit de porter atteinte à cette liberté et qui plus est au noyau de cette liberté à savoir le libre arbitre ; celui qui nous fait préférer automatiquement une glace au chocolat plutôt qu’une glace à la vanille (ou inversement){nbsp}?
+
+.Illustration par https://pixabay.com/fr/users/openclipart-vectors-30363[OpenClipart-Vectors^]
+image::{{'/images/mohamednajib/chevet4.png' | relative_url}}[image,width=80%,align="center"]
+
+La réponse de Thaler et Sunstein consiste à admettre l’existence d’une forme de paternalisme au sens où les choix de l’individu sont #orientés vers ce qu’on pense être son bien-être ou le bien-être collectif#. En revanche, pour les auteurs, ce paternalisme est un paternalisme libertarien. Cela veut dire simplement qu’il #ne remet pas en cause la liberté de choix# de l’individu, ou plus précisément que les choix de l’individu ne sont pas restreints par l’approche.
+
+#Il s’agit d’un principe fondamental chez Thaler et Sunstein{nbsp}: ne pas restreindre les choix de l’individu mais plutôt présenter ces choix différemment selon ce qu’ils appellent une autre «{nbsp}architecture de choix{nbsp}».#
+
+Richard Thaler est très critique vis-à-vis de la notion d’homo economicus utilisée dans les modèles existants en économie (voir son livre https://en.wikipedia.org/wiki/Misbehaving:_The_Making_of_Behavioral_Economics[_Misbehaving-^]). Pourtant, Cass Sunstein et lui préconisent une approche du nudge qui consiste à transformer les individus en «{nbsp}homo economicus{nbsp}» malgré eux pour leur propre bien-être. Il s’agit de «{nbsp}jouer{nbsp}» sur la pente naturelle des individus pour les aider _in fine_ à effectuer des choix plus «{nbsp}raisonnables{nbsp}» pour eux{nbsp}; à savoir des choix dignes d’un «{nbsp}homo economicus{nbsp}» ou d’un expert disposant de toutes les informations suffisantes. C’est la notion de «_{nbsp}nudge for good{nbsp}_». Elle s’appuie sur deux principes fondamentaux{nbsp}: #viser le bien de l’individu concerné et ne pas restreindre sa liberté de choisir#.
+
+== Que faire lorsque ces incitations sont utilisées à mauvais escient{nbsp}?
+
+Les deux principes précédents suffisent à disqualifier un grand nombre de pratiques marketing qui exploitent les biais comportementaux pour orienter les choix des individus en vue d’augmenter le profit de l’entreprise, parfois au détriment même du bien-être des individus concernés. #Ces pratiques ne constituent pas du nudge au sens historique du terme#.
+
+Nous pouvons alors poser la question de l’encadrement de techniques de ventes qui s’appuient sur l’asymétrie de connaissance et de moyens entre l’entreprise et les consommateurs. L’asymétrie de moyens, à savoir la concentration de moyens pour faire mieux qu’un individu, a toujours existé. C’est d’ailleurs l’une des raisons d’être de l’entreprise. En revanche, #les avancées en sciences comportementales et dans la maîtrise des données semblent renforcer cette asymétrie#, à tel point qu’elles pourraient devenir potentiellement dangereuses et porter une atteinte grave à la liberté des individus et à leur bien-être. L’atteinte est d’autant plus grave lorsque les individus concernés sont des personnes fragiles, à savoir des enfants qui n’ont pas encore développé les outils et les capacités suffisantes pour se protéger de ce «{nbsp}piratage cognitif{nbsp}».
+
+== Quels garde-fous pour encadrer la pratique{nbsp}?
+
+Il s’agit certainement d’un enjeu majeur qui pourrait inciter le législateur à se saisir de la question et à induire un minimum de transparence sur l’utilisation des sciences comportementales dans des domaines sensibles (l’alimentation, la santé, …). De manière générale, sans renier l’intérêt des sciences comportementales, #un encadrement des pratiques serait souhaitable#.
+
+.Illustration par https://pixabay.com/fr/users/geralt-9301[Gerd Altmann^]
+image::{{'/images/mohamednajib/nudge1.png' | relative_url}}[image,width=80%,align="center"]
+
+Les gouvernements utilisent également le nudge. Là encore, un encadrement des pratiques semble nécessaire pour protéger les citoyens de tout abus de la part des personnes au pouvoir. L’utilisation des nudges, en période de crise sanitaire, a d’ailleurs soulevé des interrogations dans différents pays. En découvrant la pratique du nudge, des citoyens se sont demandé s’il ne s’agissait pas là d’un palliatif qui viserait à couvrir certaines faiblesses ou manquements avérés ou vis-à-vis de la gestion de la crise. Il faut prendre en considération ces interrogations et tenter d’y répondre sans pour autant jeter le bébé avec l’eau du bain.
+
+L’administration et l’entreprise ne peuvent que gagner à utiliser les connaissances scientifiques liées au comportement réel des individus. En s’appuyant sur les sciences comportementales, elles sont #plus à même de proposer des services qui soient en adéquation avec les comportements réels des personnes# à l’image du travail de recherche que réalise notre chercheur Hugo Trad autour du https://blog.sciam.fr/tag/sludge/[sludge^] et de la complexité administrative.
+
+Au-delà de répondre aux inquiétudes des citoyens, un tel encadrement est également nécessaire pour les administrations et les entreprises. Ces dernières ont besoin de garanties pour s’assurer qu’elles puissent s’appuyer sereinement sur les acquis issus des sciences comportementales. Disposer de garde-fous, c’est #se donner un cadre serein pour agir dans le respect des principes fondamentaux de notre démocratie{nbsp}: la liberté et le bien-être des personnes#.
+
+Dans un futur proche, nous pouvons imaginer la mise en place d’une instance indépendante qui recevrait les déclarations de pratiques de nudge faites par les acteurs privés et publics pour orienter les comportements. Elle aurait la charge d’examiner le bien-fondé à postériori de ces pratiques sur le modèle de la CNIL (un sludge supplémentaire pour certains). Les déclarations faites à cette instance pourraient prendre la forme d’un cadre uniforme. Ce dernier permettrait de caractériser l’usage qui serait fait du nudge (quel comportement est ciblé, dans l’intérêt de qui, quels sont les choix possibles avant et après, quelles conséquences pour celui qui subit, quels sont les moyens utilisés...)
+
+Sans attendre l’émergence d’un cadre légal qui prendra certainement du temps, les acteurs publics et privés qui le souhaitent gagneraient à #créer un comité d’éthique# en charge de définir les principes éthiques de la profession. Ce comité peut s’inscrire dans un cadre associatif existant à l’image de https://gaabs.org/team[GAABS^] (Global Association of Applied Behavioral Scientists) ou dans un cadre dédié. Ce cadre réglementaire (contraignant ou pas) permettrait aux acteurs privés et publics de tirer profit des sciences comportementales dans le respect des valeurs de notre démocratie.

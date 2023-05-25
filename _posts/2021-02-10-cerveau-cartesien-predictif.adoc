@@ -1,0 +1,95 @@
+= Du cerveau cartésien au cerveau prédictif
+:showtitle:
+:page-navtitle: Du cerveau cartésien au cerveau prédictif
+:page-excerpt: Si notre conception cartésienne du monde était parfaitement correcte, lorsque les informations reçues sont parcellaires, notre représentation devrait s’avérer incomplète. Or, nous faisons chaque jour l’expérience d’une représentation complète et lisse.
+:layout: post
+:author: mohamednajib
+:page-tags: ['Neuroscience','MachineLearning','Cerveau','Prediction']
+:docinfo: shared-footer
+:page-vignette: brain_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/openclipart-vectors-30363/' target='_blank'>OpenClipart-Vectors</a>.
+:page-liquid:
+
+Notre représentation du monde est globalement le résultat de deux éléments{nbsp}:
+
+* des signaux qui se dirigent vers un ensemble de détecteurs sensoriels,
+* un système nerveux (le cerveau pour faire court) qui transforme ces signaux en une représentation.
+
+Or, si cette conception cartésienne était parfaitement correcte, lorsque les informations reçues sont parcellaires, notre représentation devrait s’avérer incomplète. Il en résulterait une sorte de «{nbsp}trou{nbsp}», de la même manière qu’une image vidéo peut «{nbsp}pixeliser{nbsp}» à certains endroits par manque d’informations. Pourtant, nous faisons chaque jour l’expérience d’une représentation complète et lisse.
+
+'''
+
+== Une nouvelle conception du cerveau a émergé au début des années 2000
+
+Depuis les années 2000, des neuroscientifiques (avec à leur tête https://en.wikipedia.org/wiki/Karl_J._Friston[Karl Friston^]) ont proposé une nouvelle conception du cerveau{nbsp}: celle du cerveau prédictif (K. Friston 2005{nbsp}; Hobson et Friston 2014{nbsp}; A. Clark 2013b, 2018). Cette dernière trouve ses racines dans les travaux du physicien https://en.wikipedia.org/wiki/Hermann_von_Helmholtz[Hermann von Helmholtz^] (Helmholtz 1862).
+
+Selon cette théorie, le cerveau ne se contente pas de recevoir des signaux sensoriels. Il émet également des #prédictions# sur le monde et plus précisément les applique sur les signaux sensoriels en s’appuyant sur des #modèles génératifs#.
+
+#Ce que le cerveau traite in fine, ce ne sont pas des signaux sensoriels brutes relatifs au monde, mais un différentiel entre la prédiction des signaux sensoriels qu’il devrait recevoir et les signaux réellement reçus.#
+
+Le cerveau se construit ainsi une représentation du monde en tentant de générer, de lui-même, les types de signaux qui pourraient correspondre à ceux qu’il aurait reçus s’il avait été passif.
+
+Pour illustrer ce point, considérons le schéma suivant{nbsp}:
+
+.Schéma 1 : Deep Predictive Coding Networks (PredNets) (https://www.zotero.org/google-docs/?gcXrgi[Lotter, Kreiman, et Cox 2018^])
+image::{{'/images/mohamednajib/predictif2.png' | relative_url}}[image,width=50%,align="center"]
+
+* Un système de représentation (Representation en vert) génère des prédictions (Prediction en bleu).
+* Ces dernières sont comparées au signal d’entrée (Input en bleu) à travers un comparateur d’erreur (Error en rouge).
+* Le différentiel est transmis à la couche supérieure et ainsi de suite.
+
+Prenons un exemple plus concret via un extrait audio que je vous propose d’écouter{nbsp}:
+
+http://www.scholarpedia.org/w/images/d/d3/Jazz_sw.mp3[scholarpedia.org/w/images/d/d3/Jazz_sw.mp3^]
+
+Il devrait vous sembler totalement incompréhensible. Maintenant écoutez le même extrait audio sans détérioration cette fois{nbsp}:
+
+http://www.scholarpedia.org/w/images/6/61/Jazz_nat.mp3[scholarpedia.org/w/images/6/61/Jazz_nat.mp3^]
+
+Si vous êtes anglophone, vous devriez distinguer la phrase suivante{nbsp}: “_Jazz and swing fans like fast music._”
+
+Réécoutez maintenant le premier extrait qui était auparavant indéchiffrable{nbsp}:
+
+http://www.scholarpedia.org/w/images/d/d3/Jazz_sw.mp3[scholarpedia.org/w/images/d/d3/Jazz_sw.mp3^]
+
+Chose étonnante, il est devenu compréhensible alors que les signaux reçus par notre oreille sont exactement les mêmes que lors de la première écoute.
+
+Pourquoi{nbsp}?
+
+Lors de la première écoute (de la version détériorée), votre cerveau ne disposait d’aucun modèle satisfaisant pour traiter convenablement les signaux reçus. A l’issue il a généré un modèle sonore. Il utilise à la seconde écoute ce nouveau «{nbsp}modèle d’interprétation{nbsp}». Cette dernière devient alors intelligible.
+
+Bien comprendre son environnement, c’est finalement #générer les «{nbsp}bons{nbsp}» signaux sensoriels qui minimisent le signal d’erreur#. Ce dernier jouant un rôle important{nbsp}: il fait évoluer notre représentation initiale vers une nouvelle représentation afin d’éviter un «{nbsp}trou{nbsp}» dans notre perception.
+
+En poussant plus loin cette idée, certains auteurs tels que Andy Clark (A. Clark 2018) évoquent la perception comme une «{nbsp}hallucination contrôlée{nbsp}». L’idée que cherche à pointer Andy Clark est relativement simple{nbsp}: l’hallucination n’est in fine qu’une représentation qui a échoué à être contrôlée correctement lorsqu’elle se trouve confrontée à l’expérience du monde. Les «{nbsp}bonnes{nbsp}» représentations sont des hallucinations qui ont réussi à passer correctement le test de contrôle de manière fiable.
+
+L’ensemble de ces théories s’appuie sur la notion de processus prédictifs.
+
+== De la théorie des processus prédictifs au cerveau prédictif
+
+La théorie des processus prédictifs s’appuie sur deux éléments conceptuels{nbsp}: les #modèles génératifs probabilistes# et le #codage prédictif#.
+
+.Illustration par https://pixabay.com/fr/users/cdd20-1193381[CDD20^]
+image::{{'/images/mohamednajib/predictif3.png' | relative_url}}[image,width=80%,align="center"]
+
+Dans ces théories, l’action et la perception dépendent de l’apprentissage et de l’utilisation de #modèles génératifs probabilistes# (des modèles probabilistes apparentés sont actuellement utilisés dans les techniques d’apprentissage machine ou _machine learning_ à l’aide de réseaux de neurones artificiels). Le modèle génératif permet précisément de générer des modèles, des versions plausibles de l’état sensoriel en utilisant ce qui a été appris et les probabilités associées aux différentes versions plausibles. C’est le composant vert de notre schéma précédent.
+
+Le second concept c’est l’utilisation du #codage prédictif#. Plutôt que de repartir à chaque fois de zéro, #l’ajustement du modèle s‘appuie sur un signal d’erreur#. Le codage prédictif est une technique classique utilisée dans la compression d’image. Dans ce contexte, en considérant que peu d’informations varient d’une image à l’autre, on ne transmet pas toutes les informations contenues dans une nouvelle image, mais seulement le différentiel avec l’image d’avant.
+
+Seule l’erreur, ou #erreur de prédiction# «{nbsp}Prediction Error{nbsp}» (PE), se propage au sein des couches. Cette dernière transporte la nouveauté au sein du système. Le flux d’erreur de prédiction joue le rôle de flux sensoriel d’entrée (Feldman et Friston 2010). L’erreur de prédiction permet de sélectionner la meilleure prédiction descendante en affectant l’équivalent d’une pondération statistique selon le niveau de précision associé aux différents modèles. #Le système de pondération permet de régler le niveau d’erreur au niveau de chaque couche#.
+
+En complément des modèles génératifs et du codage prédictif, la théorie ajoute un autre élément important à savoir une #dimension hiérarchique#. Chaque couche du modèle échange avec le niveau suivant un signal d’erreur. Ces modèles génératifs s’apparentent à des couches successives hiérarchiquement ordonnées. Chaque couche supérieure tente de générer un modèle qui prédit un état sensoriel compatible avec les signaux reçus de la part de la couche inférieure.
+
+.Schéma 1{nbsp}: Exemple de modèle hiérarchique (https://www.zotero.org/google-docs/?gcXrgi[Lotter, Kreiman, et Cox 2018^])
+image::{{'/images/mohamednajib/predictif4.png' | relative_url}}[image,width=50%,align="center"]
+
+#Notre cerveau perçoit le monde en générant le modèle prédisant le mieux un état sensoriel compatible avec les signaux reçus et tenant suffisamment compte du bruit présent.#
+
+Dans notre exemple audio, les sons reçus en première intention et les prédictions émises par notre cerveau étaient trop éloignés. Résultat, l’extrait était incompréhensible. Une fois votre modèle de représentation mis à jour via l’écoute d’un extrait directement intelligible, le morceau devient intelligible à son tour.
+
+'''
+
+Les modèles actuels de https://blog.sciam.fr/tag/machinelearning[machine learning^] utilisent l’ensemble de ces principes. L’équipe de David Cox du https://mitibmwatsonailab.mit.edu/[MIT-IBM Watson AI lab^] a ainsi conçu un réseau de neurones utilisant le codage prédictif et baptisé https://cbmm.mit.edu/publications/prednet-deep-predictive-coding-networks-video-prediction-and-unsupervised-learning-code[PredNet^] pour «{nbsp}_Predictive Coding Network_{nbsp}» (Lotter, Kreiman, et Cox 2016). Ce modèle est doublement intéressant. D’une part, il permet de produire des résultats techniques remarquables. D’autre part, il permet également de résumer le modèle prédictif et de #confirmer la théorie prédictive# en reproduisant des observations réalisées dans le domaine des neurosciences (Lotter, Kreiman, et Cox 2018).
+
+Cet exemple illustre parfaitement l’émergence d’un https://bdtechtalks.com/2020/12/07/vonenet-neurscience-inspired-deep-learning/[cercle vertueux entre les domaines du _Machine Learning_ et des neurosciences^]. Il met donc en exergue toute la valeur d’une approche de résolution de problèmes qui se nourrirait tant des nouvelles techniques issues du machine learning que des travaux en sciences comportementales.
+

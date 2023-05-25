@@ -1,0 +1,67 @@
+= La rationalité collective face au désaccord des experts
+:showtitle:
+:page-navtitle: La rationalité collective face au désaccord des experts
+:page-excerpt: La semaine dernière, la France est entrée en confinement sur décision du président de la République après consultation d’un groupe d’experts. Cette situation exceptionnelle et inédite nous invite à nous pencher sur la question suivante{nbsp}: est-ce qu’un choix rationnel produit toujours un résultat rationnel{nbsp}?
+:layout: post
+:author: mohamednajib
+:page-tags: ['Science','IntelligenceCollective']
+:docinfo: shared-footer
+:page-vignette: noswiming_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/cdd20-1193381' target='_blank'>CDD20</a>.
+:page-liquid:
+
+.Illustration par https://pixabay.com/fr/users/geralt-9301[Gerd Altmann^]
+image::{{'/images/mohamednajib/experts1.png' | relative_url}}[image,width=80%,align="center"]
+
+La semaine dernière, la France est entrée en confinement sur décision du président de la République après consultation d’un groupe d’experts. Cette semaine, la France attend les recommandations des experts concernant la suite à donner au confinement. Cette situation exceptionnelle et inédite nous invite à nous pencher sur la question suivante{nbsp}: est-ce qu’un choix rationnel produit toujours un résultat rationnel{nbsp}?
+
+'''
+
+== L’expertise scientifique, une source de rationalité
+
+Si le président dispose du pouvoir de confiner l’ensemble de la population, l’exercice de ce pouvoir se veut rationnel. Le principe de rationalité impose de fonder le choix des actions sur des raisons épistémiques valides et consistantes. Or, un agent individuel ne peut porter à lui seul tout le savoir collectif. Un agent rationnel doit donc s’adresser à des experts issus de différents domaines, à des sachants pour les interroger. *Puisque dans nos sociétés modernes la science est le réservoir de la connaissance, il est rationnel d’interroger en premier lieu des experts scientifiques*.
+
+== Le principe de rationalité face au désaccord des experts
+
+Si les scientifiques sont globalement *en accord sur les connaissances acquises*, il se trouve qu’ils sont toujours, par principe, *en désaccord sur les connaissances en construction*. C’est le propre de la science de se construire et de s’enrichir des désaccords des chercheurs. *Les résultats de la méthode scientifique permettent de faire converger ces désaccords au fil du temps*. Pour cela, il faut du temps et nous ne disposons pas toujours de ce temps.
+
+.Illustration par https://pixabay.com/fr/users/geralt-9301[Gerd Altmann^]
+image::{{'/images/mohamednajib/experts2.png' | relative_url}}[image,width=80%,align="center"]
+
+Ainsi, lorsque le pouvoir interroge des experts sur une nouvelle question, c’est donc logiquement qu’il fait face à un ensemble de points de vue discordants. Comment dans ce cas procéder pour émettre une décision politique fondée sur la raison{nbsp}?
+
+== La simple agrégation des jugements rationnels ne donne pas toujours un résultat rationnel
+
+Nous pourrions simplement identifier ce que pense la majorité des scientifiques, c’est-à-dire définir une procédure d’agrégation des jugements de type majoritaire. Mais malheureusement, cela ne suffit pas à résoudre le problème de façon satisfaisante.
+
+En premier lieu, pour un novice, https://www.oxfordscholarship.com/view/10.1093/0195138791.001.0001/acprof-9780195138795-chapter-7[il est toujours difficile d’identifier les véritables experts d’un domaine^]. Ainsi que le fait remarquer https://blog.sciam.fr/2020/02/13/recherche-entreprise-sciencescogn.html[Brent Strickland^], c’est le premier problème auquel font face les politiques.
+
+En second lieu, en supposant que ce problème d’identification des experts soit résolu, *la procédure majoritaire pourrait produire des résultats inconsistants et donc irrationnels d’une certaine manière*. Autrement dit, l’agrégation des jugements rationnels ne produit pas toujours un résultat rationnel. Je propose d’illustrer ce second point à travers l’exemple simple du *paradoxe discursif*.
+
+Imaginons que le président réunisse un ensemble d’experts et leur pose 3 questions simples{nbsp}:
+
+* _Est-ce que la situation est grave ? (Est-ce que ``p``{nbsp}?)_
+* _Est-ce que la gravité implique de confiner la population ? (Est-ce que ``p -> q``{nbsp}?)_
+* _Est-ce qu’il faut confiner la population ? (Est-ce que ``q``{nbsp}?)_
+
+Imaginons que ces experts se divisent en trois groupes (G1, G2, G3) ayant des avis différents comme décrit dans le tableau ci-dessous.
+
+image::{{'/images/mohamednajib/experts3.png' | relative_url}}[image,width=80%,align="center"]
+
+Dans ce cas, chaque groupe est rationnel dans ses jugements. Les propositions que chaque groupe soutient sont parfaitement consistantes entre elles.
+
+En revanche *les jugements majoritaires (ligne Majorité) sont inconsistants puisque la majorité pense que la situation est grave. La majorité pense également que si la situation est grave, il faudrait confiner la population. En même temps, la majorité pense qu’il ne faut pas confiner la population. Ce qui est contradictoire.*
+
+C’est ce qu’on appelle le https://www.princeton.edu/~ppettit/papers/Deliberative_PhilosophicalIssues_2001.pdf[dilemme discursif^] (Pettit 2004 ; List and Pettit 2011).
+
+.Illustration par https://pixabay.com/fr/users/cdd20-1193381[CDD20^]
+image::{{'/images/mohamednajib/experts4.png' | relative_url}}[image,width=80%,align="center"]
+
+== Ce paradoxe est évitable en s’appuyant sur des méthodes d’intelligence collective
+
+La consultation d’expert est un choix rationnel. Mais ce choix ne suffit pas à produire un résultat rationnel. *Le mode d’agrégation des points de vue des experts peut aboutir à des conclusions inconsistantes entre elles*. Pour éviter ce genre de situation, il est *essentiel de mettre en place des procédures d’agrégation (et ou de délibération) des jugements des différents experts* afin que le résultat global assure une concertation et une rationalité collective.
+
+Nous pouvons donner l’exemple des «{nbsp}procédures prioritaires séquentielles{nbsp}» (List 2004) ou encore des fonctions d’agrégation basées sur «{nbsp}la distance{nbsp}» (Konieczny et Pino-Perez 2002, Pigozzi 2006) avec des modèles incluant des priorisations possibles (Miller et Osherson 2009).
+
+Chez SCIAM, nous mettons des https://blog.sciam.fr/tag/intelligencecollective/[méthodes d’intelligence collective^] au service de nos partenaires pour les accompagner tant dans le choix des experts que dans la définition de la mécanique de délibération des points de vue de ces derniers.

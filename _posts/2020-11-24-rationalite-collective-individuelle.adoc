@@ -1,0 +1,62 @@
+= La rationalité collective au chevet de la rationalité individuelle
+:showtitle:
+:page-navtitle: La rationalité collective au chevet de la rationalité individuelle
+:page-excerpt: Selon le prix Nobel d’économie Richard Thaler, il semble donc que plus un choix est important, plus sa fréquence est faible. Par conséquent, moins nous avons l’occasion d’acquérir de l’expertise individuelle face à un choix spécifique, plus nous sommes ignorants face à ce choix. 
+:layout: post
+:author: mohamednajib
+:page-tags: ['IntelligenceCollective','SciencesComportementales','DecisionMarketing','Nudge']
+:docinfo: shared-footer
+:page-vignette: choice_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/openclipart-vectors-30363/' target='_blank'>OpenClipart-Vectors</a>.
+:page-liquid:
+
+Dans son livre https://www.seuil.com/ouvrage/misbehaving-richard-h-thaler/9782021393972[_Misbehaving_^], le prix Nobel d’économie Richard Thaler avance que nous effectuons les choix les plus structurants de notre vie (religion, mariage, profession, lieu d’habitation, école…) dans une ignorance quasi-absolue. Alors que paradoxalement nous prenons les décisions moins déterminantes en nous appuyant sur une certaine expertise. Selon le prix Nobel, il semble donc que{nbsp}: #plus un choix est important, plus sa fréquence est faible#. Par conséquent, moins nous avons l’occasion d’acquérir de l’expertise individuelle face à un choix spécifique, plus nous sommes ignorants face à ce choix.
+
+'''
+
+== Face aux choix les plus déterminants, la rationalité collective s’est toujours substituée à la rationalité individuelle
+
+Cette critique de Richard Thaler vise plus largement l’approche classique de l’économie selon laquelle chaque individu serait un agent rationnel capable de choix éclairés fondés sur ses préférences, ainsi que sur ses connaissances passées et futures. Les adeptes de l’économie comportementale (dont Richard Thaler et https://www.amazon.fr/Thinking-Fast-Slow-Daniel-Kahneman/dp/0374533555[Daniel Kahneman^] sont les principaux fondateurs et promoteurs) considèrent cette hypothèse classique comme étant fausse à double titre. D’un point de vue théorique, une telle hypothèse conduit à des prédictions erronées sur les comportements des agents (cf. https://www.uzh.ch/cmsssl/suz/dam/jcr:00000000-64a0-5b1c-0000-00003b7ec704/10.05-kahneman-tversky-79.pdf[Prospect Theory^]). D’un point de vue pratique, une telle hypothèse n’est pas conforme à la réalité des observations comportementales. En effet, #depuis plusieurs décennies maintenant, la littérature en sciences comportementales a identifié une liste considérable de biais cognitifs qui vont à l’encontre de l’hypothèse classique# (voir codex ci-dessous).
+
+.Codex des biais cognitifs (source{nbsp}: Wikipédia)
+image::{{'/images/mohamednajib/chevet1.png' | relative_url}}[image,width=80%,align="center"]
+
+Pour autant, le prix Nobel, à son tour, semble négliger quelque chose de fondamental{nbsp}: #au cours de l’Histoire, quel que soit la culture, les décisions les plus cruciales (à priori prises en toute ignorance) étaient prises en charge par le collectif auquel appartenait l’individu#.
+
+D’une certaine manière, la rationalité collective se substitue à la rationalité individuelle. Le collectif oriente l’individu vers une religion, un conjoint, un métier… De fait, #le collectif en tant que tel dispose d’une très longue expérience dans la prise de décision#, donc d’une certaine connaissance vis-à-vis de ces différents choix et donc par prolongement d’un certain niveau d’expertise. Cette connaissance ancrée au sein de collectifs se matérialise sous la forme de connaissances partagées ou de normes sociales structurant le collectif auquel l’individu appartient.
+
+Par conséquent, les choix individuels les plus importants sont effectués dans une ignorance individuelle apparente compensée par la rationalité collective.
+
+== La vraie problématique, c’est lorsque l’individu se désolidarise de la dimension collective ou du moins d’un certain noyau collectif «{nbsp}primitif{nbsp}»
+
+Dès lors qu’un individu se désolidarise du collectif, il #perd accès à un immense réservoir d’informations et de connaissances#. Il doit alors effectuer lui-même des choix pour lesquels, historiquement, il n’avait pas besoin de disposer de connaissances particulières et pour lesquels, historiquement, la responsabilité était en fait confiée en grande partie à son noyau collectif «{nbsp}primitif{nbsp}».
+
+#C’est l’expérience de la modernité de tendre à sortir l’individu du noyau collectif auquel il était associé pour l’intégrer dans un espace collectif plus large allant jusqu’à prendre la forme d’un Etat.#
+
+Mais cette expérience n’est pas pour autant une expérience individualiste et égoïste comme nous l’entendons trop souvent. #Il s’agit davantage d’un mouvement de dépersonnalisation des rapports sociaux#. Pour le dire plus simplement, les rapports de l’individu au nouveau collectif sont moins personnels. Ils deviennent davantage formels et portés par des règles de fonctionnement. Dans ce nouveau collectif, la solidarité ne consiste plus à aider personnellement un proche mais à cotiser pour un régime médical, d’assurance sociale, de retraite… particulier.
+
+#Ces relations formelles entre individu et collectif semblent plus efficaces# (je préfère compter sur la sécurité sociale pour prendre en charge mes soins que sur la générosité des membres de mon village ou de ma famille). Néanmoins, cette formalisation de nouveaux types de rapports sociaux s’accompagne de deux dimensions structurantes{nbsp}:
+
+* la monétisation,
+* et la légalisation des rapports sociaux.
+
+#La monnaie et le droit sont devenus les principaux vecteurs de nos rapports sociaux.#
+
+Pour s’en rendre compte de manière brute, il suffit d’observer l’inflation monétaire et https://fr.wikipedia.org/wiki/Inflation_l%C3%A9gislative[l’inflation législative^] au sein de nos sociétés.
+
+.L'inflation normative (source{nbsp}: https://www.dalloz-actualite.fr/flash/des-indicateurs-pour-mesurer-l-inflation-normative#.X7zeGc1Kg2x[dalloz-actualite.fr^])
+image::{{'/images/mohamednajib/chevet3.png' | relative_url}}[image,width=80%,align="center"]
+
+Lorsque l’individu décide de se désolidariser du noyau collectif «{nbsp}primitif{nbsp}», il se retrouve donc dans une phase transitoire. Il doit effectuer seul des choix importants. Or, il ne peut pas compter sur son expérience individuelle pour effectuer ces choix primordiaux car il n’a que très peu d’occasions de les effectuer. Pour autant il ne peut pas se permettre de les effectuer au hasard.
+
+Il se tourne donc naturellement vers plusieurs collectifs (l’entreprise et l’Etat étant actuellement les principaux exemples) auxquels il est directement lié pour disposer d’une partie du socle de connaissances et de valeurs nécessaires à l’orienter dans ses propres choix. #Ces collectifs doivent aider l’individu à prendre des décisions en proposant d’emblée une architecture de choix qui puisse l’orienter positivement#.
+
+.Quelle porte choisir{nbsp}? (https://pixabay.com/fr/users/openclipart-vectors-30363[OpenClipart-Vectors^])
+image::{{'/images/mohamednajib/chevet4.png' | relative_url}}[image,width=80%,align="center"]
+
+C’est l’idée du https://blog.sciam.fr/tag/nudge[Nudge^] fondée par Richard Thaler et https://hls.harvard.edu/faculty/directory/10871/Sunstein[Cass Sunstein^] qui consiste à mieux orienter les choix individuels.
+
+'''
+
+De manière générale, ce que nous révèlent les sciences comportementales, c’est que la rationalité individuelle ne peut s’auto-suffire. Il lui faut s’appuyer sur la rationalité collective. Chez SCIAM, à notre échelle, c’est également ce que nous faisons, nous travaillons à aligner les dimensions individuelles et collectives en tirant profit de notre expertise en https://blog.sciam.fr/tag/sciencescomportementales/[sciences comportementales^] et en https://blog.sciam.fr/tag/intelligencecollective/[intelligence collective^].

@@ -1,0 +1,67 @@
+= Pourquoi changer radicalement de comportement individuel à court terme serait inconscient{nbsp}?
+:showtitle:
+:page-navtitle: Pourquoi changer radicalement de comportement individuel à court terme serait inconscient{nbsp}?
+:page-excerpt: Avec l’expérience du confinement, nous avons baigné dans le tourbillon de la grande Histoire. La grande Histoire, c’est celle qui ouvre la porte à des possibles insoupçonnés, celle qui change l’horizon des possibles. Des choses qui nous paraissaient impossibles deviennent possibles. 
+:layout: post
+:author: mohamednajib
+:page-tags: ['Philosophie','IntelligenceCollective','Raison']
+:docinfo: shared-footer
+:page-vignette: death_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/TheDigitalArtist-202249' target='_blank'>Pete Linforth</a>.
+:page-liquid:
+
+//.Illustration par https://pixabay.com/fr/users/TheDigitalArtist-202249[Pete Linforth^]
+//image::{{'/images/mohamednajib/comportement1.png' | relative_url}}[image,width=80%,align="center"]
+
+Avec l’expérience du confinement, nous avons baigné dans le *tourbillon de la grande Histoire*. La grande Histoire, c’est celle qui ouvre la porte à des possibles insoupçonnés, celle qui *change l’horizon des possibles*. https://theconversation.com/la-menace-du-covid-19-force-les-chercheurs-a-partager-leurs-decouvertes-et-cest-une-revolution-pour-la-science-132401[Des choses qui nous paraissaient impossibles deviennent possibles^]. Des choses qui nous paraissaient évidentes deviennent difficiles voire impossibles. *Les grandes Histoires humaines portent presque toujours en elles le signe de la mort*. La nôtre ne fait pas exception. Si elle ne s’est pas écrite avec la guerre, elle laisse derrière elle l’encre de la mort qui marque l’histoire des hommes à jamais.
+
+'''
+
+== La «{nbsp}drôle de guerre{nbsp}» est une défaite qui n’ose pas dire son nom
+
+C’est bien une véritable guerre mondiale que nous venons de connaître. Mais cette fois-ci elle n’a pas opposé les hommes entre eux, *elle a opposé l’humanité à un virus*. Cette guerre s’est une nouvelle fois soldée par une *défaite de l’humanité* dans son ensemble.
+
+.Illustration par https://pixabay.com/fr/users/Pexels-2286921[Pexels^]
+image::{{'/images/mohamednajib/comportement2.png' | relative_url}}[image,width=80%,align="center"]
+
+Tous les gouvernants ont beau jeu de revendiquer une victoire face au virus, mais c’est bien d’une défaite dont il s’agit. Et si c’est une victoire, elle est digne d’une https://fr.wikipedia.org/wiki/Victoire_%C3%A0_la_Pyrrhus[*victoire à la Pyrrhus], une victoire de la terre brûlée*, où nous avons brûlé notre économie pour éviter au virus de s’installer.
+
+[quote,Plutarque,Vies des hommes illustres]   
+Encore une victoire comme celle-là et [notre société] serait complètement défaite.
+
+Cette guerre, comme toute guerre, nous place face à la mort et plus insidieusement *face à la pensée de la mort*. Contrairement aux sociétés traditionnelles qui sont préparées à gérer l’expérience de la mort au quotidien, *nos sociétés modernes ont perdu le lien social avec la mort*.
+
+L’expérience de la mort a été extirpée du milieu de nos sociétés et laissée en sous-traitance aux professionnels de la mort. Nous l’avons mise à l’abri des regards dans la solitude de l’hôpital, des pensionnats ou au milieu d’un isolement individuel des plus âgés. «{nbsp}Jamais la mort n’a été aussi discrète, aussi hygiénique qu’elle l’est aujourd’hui, et jamais aussi solitaire{nbsp}» (https://www.payot.ch/Detail/la_solitude_des_mourants-elias_norbert-9782267023367?fp=1[_la solitude des mourants_^], Norbert Elias). Au milieu de cette crise, la mort des autres se révèle au grand jour, à la une de notre actualité quotidienne.
+
+#Face à la crise, nous redécouvrons que nous sommes mortels en tant qu’individu, et que nous le sommes également en tant que société et en tant qu’espèce.#
+
+== Une tragédie mondiale, une destinée commune… un besoin d’intelligence collective
+
+Nous avons tous vécu une expérience tragique. Cette crise mondiale nous a rappelé à quel point nous appartenons à une société dont la structure est mondiale.
+
+.Illustration par https://pixabay.com/fr/users/geralt-9301[Gerd Altmann^]
+image::{{'/images/mohamednajib/comportement3.png' | relative_url}}[image,width=80%,align="center"]
+
+Nous sommes tous *dépendants les uns des autres*. Ce n’est pas nouveau, notre survie dépend de notre capacité travailler les uns pour les autres à l’échelle mondiale (Ricardo, 1817). Il n’existe peut-être plus une seule personne totalement isolée sur cette planète dont l’existence n’est pas en partie interdépendante du reste de l’humanité. Nous avons un *destin commun*.
+
+*Il n’y a de richesse que par ce qu’on apporte aux autres*, en répondant à ce dont les autres ont besoin, ce dont ils ont envie, ce qu’ils aiment. Quelle société plus solidaire que celle où la réussite des uns réside dans leur capacité à répondre aux envies des autres{nbsp}! Contrairement à ce que laisse entendre la critique facile de nos sociétés, *nous sommes bien plus solidaires que nous n’avons jamais été au cours de l’histoire humaine*. Nous sommes une espèce sociale{nbsp}: la valeur de notre richesse réside dans le regard des autres, dans le besoin des autres.
+
+== De la tempérance individuelle… à une société de la tempérance{nbsp}?
+
+Certains préconisent une société de la tempérance en invitant à un changement radical des comportements pour une *tempérance individuelle* face aux excès d’une certaine société de consommation. La tempérance est l’une des conditions de la *vertu* chez Aristote (https://fr.wikipedia.org/wiki/%C3%89thique_%C3%A0_Nicomaque[Éthique à Nicomaque^]). Elle est louable en tant que telle. C’est oublier trop vite que les comportements individuels ne relèvent pas tous de l’ordre du libre-arbitre. Ils s’inscrivent avant tout dans un cadre social et environnemental contraignant.
+
+[quote,Platon, La République]   
+Ce ne sont pas les bonnes mœurs qui font les bonnes lois, mais davantage les bonnes lois qui font les bonnes mœurs.
+
+Par ailleurs, si les autres changent leur besoin du jour au lendemain, comme certains le prônent, tous ceux qui aujourd’hui travaillent à subvenir à ce besoin n’auront plus de travail du jour au lendemain. C’est une fausse bonne idée. Il y a là une forme d’inconscience de la part de ceux qui prônent un changement radical de comportement individuel à *court terme*. La meilleure chose que nous puissions faire, à titre individuel, c’est de *continuer à vivre comme avant*, de continuer à travailler et à échanger les uns avec les autres. *C’est l’échange qui fait la cohésion des citoyens* (Aristote, Éthique à Nicomaque).
+
+.Illustration par https://pixabay.com/fr/users/geralt-9301[Gerd Altmann^]
+image::{{'/images/mohamednajib/comportement4.png' | relative_url}}[image,width=80%,align="center"]
+
+'''
+
+En revanche, *au niveau institutionnel, réglementaire, les choses doivent changer radicalement mais progressivement*. L’humanité ne peut pas se permettre de perdre une nouvelle bataille face aux menaces qui existent dans la nature, une nature dont nous faisons partie intégrante. Arrêtons de croire qu’en étant sage avec la déesse Nature, cette https://fr.wikipedia.org/wiki/Natura_naturans[_nature naturante_^] (Spinoza, Éthique), celle-ci nous épargnera d’une catastrophe. *La nature n’est ni notre ami, ni notre ennemi*. Elle est l’environnement dont nous faisons partie, une https://fr.wikipedia.org/wiki/Natura_naturata[_nature naturée_^] (Spinoza, Éthique). Nous devons la gérer intelligemment pour notre survie à tous, en évitant de causer des catastrophes et en étant prêts à faire face aux catastrophes qui nous attendent malgré nous.
+
+Face à ces catastrophes, nous savons aujourd’hui plus que jamais qu’*aucune réponse individuelle ne saurait suffire*. Notre destinée commune dépendra de notre *intelligence collective à gérer nos divergences et à en faire une force créatrice*. C’est ainsi qu’on pourra espérer résoudre les défis pluriels qui nous attendent.
+

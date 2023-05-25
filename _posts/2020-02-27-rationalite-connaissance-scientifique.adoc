@@ -1,0 +1,76 @@
+= Revenir à la rationnalité et à la connaissance scientifique devient primordial
+:showtitle:
+:page-navtitle: Revenir à la rationnalité et à la connaissance scientifique devient primordial
+:page-excerpt: La semaine dernière un fervent «{nbsp}platiste{nbsp}», Mike Hughes, a fait l’expérience, maheureusement au prix de sa vie, que la maîtrise des lois de la physique nécessitait davantage que de l’improvisation.
+:layout: post
+:author: mohamednajib
+:page-tags: ['Science','SciencesCognitives','Philosophie']
+:docinfo: shared-footer
+:page-vignette: philo_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/morhamedufmg-1003717/' target='_blank'>morhamedufmg</a>.
+:page-liquid:
+
+La semaine dernière un fervent «{nbsp}platiste{nbsp}», https://www.francetvinfo.fr/monde/usa/il-veut-prouver-que-la-terre-est-plate-et-meurt-dans-le-crash-de-sa-fusee-artisanale_3838247.html[Mike Hughes^], a fait l’expérience, maheureusement au prix de sa vie, que la maîtrise des lois de la physique nécessitait davantage que de l’improvisation. Ce platiste, adepte de l’hypothèse selon laquelle la Terre serait plate, a voulu démontrer que la Terre n’est pas ronde. Il a construit seul une fusée (en se basant par ailleurs sur des technologies existantes) pour observer notre planète de suffisamment haut en espérant être ainsi capable de prouver son hypothèse. La suite, nous la connaissons{nbsp}: un engin qui explose à quelques mètres d’altitude conduisant au décès de cet homme et causant un chagrin terrible à ses proches.
+
+'''
+
+== Il faut distinguer croyance, raison, connaissance et méthode scientifique
+
+Mike Hughes, qui se surnommait lui-même «{nbsp}Mad Mike{nbsp}», est un être raisonnable au sens où il avait des raisons (intuitives) de croire que la Terre est plate et donc de vouloir tester sa théorie. Malheureusement, ses raisons n’étaient pas les bonnes et ses méthodes de test non plus. Il en a fait la triste expérience. Il a ignoré que le travail inhérent à la maîtrise des lois physiques implique une *communauté scientifique au sommet de la connaissance humaine qui, génération après génération, travaille exclusivement à comprendre, à observer, à modéliser et à tester rigoureusement, laborieusement la manière avec laquelle nous pouvons interagir avec la nature qui nous environne*.
+
+Ce faisant, il a donc aussi vraisemblablement ignoré la distinction entre croyance, raison, connaissance et méthode scientifique (la science).
+
+== Qu’est-ce que la croyance{nbsp}?
+
+*La croyance, c’est l’opinion que nous pouvons avoir sur quelque chose*. Je peux croire que les fantômes existent. https://www.hup.harvard.edu/catalog.php?isbn=9780674952812[Cette croyance n’est pas volontaire^]. Il ne me suffit pas de vouloir croire quelque chose pour le croire instantanément, j’ai besoin de raisons.
+
+== Qu’est-ce que la raison{nbsp}?
+
+*La raison, constitue ce qui va justifier mon opinion, ma croyance*. Les raisons peuvent être de formes multiples. Elles peuvent reposer sur des opinions que je considère fermement comme vraies et qu’il n’est pas possible de discuter. C’est l’approche fondationnaliste, à savoir qui repose sur une fondation qui prend la forme de principe ou de dogme (dogmatisme).
+
+== Qu’est-ce que le raisonnement{nbsp}?
+
+.Illustration par https://pixabay.com/fr/users/openclipart-vectors-30363[OpenClipart-Vectors^]
+image::{{'/images/mohamednajib/rationalite1.png' | relative_url}}[image,width=80%,align="center"]
+
+En général, l’opinion qui m’intéresse n’est pas le principe fondamental ou le dogme fondamental de mon cadre de pensée. Par exemple, si je crois au fantôme parce que cela découle des dogmes de ma tradition religieuse, il faut encore expliquer le *processus «{nbsp}d’écoulement de la vérité{nbsp}»* entre ce dogme religieux et ma croyance. Ce processus, c’est ce que nous appelons communément le raisonnement. *Dans sa forme rigoureuse, le raisonnement prend une forme logico-mathématique*. Au passage, rappelons que la logique moderne est relativement récente et date des travaux du mathématicien https://www.hup.harvard.edu/catalog.php?isbn=9780674324497[Frege^] à la fin du 19ème siècle et début 20ème siècle. Ces travaux furent repris par https://plato.stanford.edu/entries/principia-mathematica/[Bertrand Russel dans les _Principia Mathematica_^] ouvrage qui ne fût lu et compris que par une dizaine de personnes dans le monde à ses débuts. Ce qui souligne une fois de plus les difficultés liées à la spécialisatisation du savoir.
+
+== Qu’est-ce que la rationalité{nbsp}?
+
+C’est l’*utilisation de raisons et de raisonnements jugés valides par le canon actuel* (hypothèses fondées et arguments valides).
+
+== Qu’est-ce que la connaissance{nbsp}?
+
+.Illustration par https://pixabay.com/fr/users/dariuszsankowski-1441456[DariuszSankowski^]
+image::{{'/images/mohamednajib/rationalite2.png' | relative_url}}[image,width=80%,align="center"]
+
+*La connaissance est une croyance vraie à laquelle nous avons accès*. Il ne suffit pas que je crois qu’il pleut pour savoir qu’il pleut. Il faut encore qu’il pleuve réellement. S’il ne pleut pas, tant bien même je crois qu’il pleut, cela n’en fait pas une connaissance. Il faut que la croyance soit effectivement vraie. Or la vérité n’est pas une «{nbsp}immanence{nbsp}» pour nous. Nous n’avons pas un accès immédiat, nous avons besoin d’en faire l’expérience, de l’observer que ce soit à travers nos sens (ces outils embarqués comme dirait https://www.oxfordscholarship.com/view/10.1093/0198238797.001.0001/acprof-9780198238799[E. Craig^]) ou à travers des outils de mesures ou encore par le biais d’autres personnes qui auraient accès à cette https://www.scholars.northwestern.edu/en/publications/the-epistemology-of-testimony[vérité et qui nous l’ont transmise^] ou encore de méthodes. *Ce mode d’accès à la vérité est ce qui alimente la justification, ce qui va donner des raisons de croire*. https://editions.flammarion.com/Catalogue/gf/philosophie/theetete[On résume classiquement la connaissance à une croyance vraie justifiée^]. Naturellement, les notions de croyances, de justification et de vérités sont extrêmement https://plato.stanford.edu/entries/epistemology[débattues en épistémologie^]. En ce qui concerne la vérité, l’approche du mathématicien logicien https://plato.stanford.edu/entries/tarski-truth/[A. Tarski^] me semble la plus pertinente.
+
+== Et la méthode scientifique{nbsp}?
+
+*Pour acquérir ces connaissances, il faut des procédures qui nous permettent de constituer un accès potentiel à un grand nombre de croyances vraies, à savoir de la connaissance*. De nombreuses méthodes ont existé et ont été testées{nbsp}: l’observation, l’art divinatoire, l’autorité religieuse, la révélation divine… La méthode la plus récente que l’humanité ait découverte, c’est la méthode scientifique. Cette dernière a fait ses preuves *depuis plus de 400 ans*. Les ingrédients de la méthode scientifique trouvent leur noyau dans un cercle vertueux entre l’*observation*, la *modélisation* (mathématico-logique) et l’*expérimentation*, cercle qui fut mis en mouvement dans sa forme moderne par Bacon et Galilée.
+
+.Illustration par https://pixabay.com/fr/users/publicdomainpictures-14[PublicDomainPictures^]
+image::{{'/images/mohamednajib/rationalite3.png' | relative_url}}[image,width=80%,align="center"]
+
+*La méthode scientifique a permis à l’humanité des progrès inimaginables* (les autres méthodes n’ont pas disparu pour autant). Pour autant, seule une minorité de scientifiques est capable de la développer au travers de la recherche. Il n’est donc pas surprenant que certains d’entre-nous, extérieurs au champs de la recherche scientifique, puissent avoir des questions légitimes sur le fondement de la méthode scientifique. Pour ceux-là, il ne s’agit là que d’un argument d’autorité parmi d’autres. Ils ont bien raison. Mais cette autorité de la méthode scientifique est tirée de l’expérience. *C’est l’expérience qui a donné raison à la méthode scientifique*. Par conséquent, *remettre en cause la méthode scientifique, c’est prendre le risque de remettre en cause l’expérience*. C’est le risque qui fût pris par Mike Hughes.
+
+== Et la science{nbsp}?
+
+*La science est l’ensemble des croyances vraies qui sont établies.*
+
+Pour certains, la science se résume aux résultats qui furent compilés au fil du temps grâce à la méthode scientifique. Cette définition restrictive tend à confondre la science et la méthode scientifique. Or, *la science à savoir la compilation de connaissances n’a pas attendu la méthode scientifique*. Les anciens avaient une forme de science de leur environnement qui ne résulte pas de la méthode scientifique. Aujourd’hui, nous tendons à confondre les deux dimensions.
+
+'''
+
+Pour conclure, nous devons reconnaître que dans un monde où l’expertise croît de manière exponentielle, où le savoir-faire qui paraissait immuable et qui pouvait être transmis par le passé sur plusieurs générations peut rapidement devenir obsolète au bout de quelques années, *il n’est plus possible de tout savoir même sur un seul domaine et pour toujours*. Cette obsolescence a un autre effet paradoxal{nbsp}: elle conduit à la disparition de pans entiers d’expertise qui ne trouvent plus preneur au sein de la société moderne.
+
+Par ailleurs, le moindre objet de notre quotidien (produit alimentaire, outils digitaux, véhicules...) emmagasine une masse colossale de connaissances nouvelles et pointues pour arriver à notre portée. Dans cet océan de connaissances qui recouvre notre univers matériel, nous faisons plus que jamais l’expérience de notre ignorance. *Face à cette complexité du monde, à cette dynamique exponentielle de l’expertise, http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.498.7661&rep=rep1&type=pdf[nous finissons rapidement par confondre l’ensemble des catégories et dans le meilleur des cas à nous adosser à des experts qui ne semblent pas toujours d’accords entre eux^]*. Dans le pire des cas, nous tombons sur une forme de https://www.oxfordscholarship.com/view/10.1093/acprof:oso/9780199287185.001.0001/acprof-9780199287185[relativisme^], voire sur une pensée magique irrationnelle pouvant virer à l’obscurantisme.
+
+.Illustration par https://pixabay.com/photos/[Pixababy^]
+image::{{'/images/mohamednajib/rationalite4.png' | relative_url}}[image,width=80%,align="center"]
+
+*Pour garder pied, nous avons besoin de revenir à la rationalité et à la connaissance scientifique. C’est le pari de SCIAM*. Sans tomber dans un scientisme béat qui ferait de la science l’Alpha et l’Oméga, nous nous appuyons sur la démarche scientifique et en particulier sur les travaux qui ont fait leur preuve scientifique.
+
+Par ailleurs, face à cette diversification de l’expertise, nous avons plus que jamais besoin d’intelligence collective ; à savoir de travailler collectivement en bonne intelligence pour faire mieux que la somme des individualités ou du moins espérer collectivement ne pas faire moins bien que la somme des individualités.
