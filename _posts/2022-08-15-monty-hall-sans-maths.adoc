@@ -1,0 +1,311 @@
+= Monty Hall et l'entrainement de votre modèle
+:showtitle:
+:page-navtitle: Monty Hall et l'entrainement de votre modèle
+:page-excerpt: Notre cerveau peut être conçu comme une formidable machine à faire des prédictions sur le monde qui nous entoure mais il existe de nombreux cas dans lesquels, sans entrainement approprié du modèle, il nous pousse à commettre de graves erreurs d’appréciation. Le problème de Monty Hall est un cas d’école.
+:layout: post
+:author: guillaumenicoulaud
+:page-tags: ['BiaisCognitif','Heuristique','Bayes']
+:docinfo: shared-footer
+:page-vignette: door_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href="https://unsplash.com/@filipkominik" target="_blank">Filip Kominik</a>.
+:page-liquid:
+
+Jouons à un jeu, voulez-vous{nbsp}? Le maître du jeu dispose devant vous 3 boîtes parfaitement opaques dans l’une desquelles il a lui-même placé une pièce d’or de grande valeur{nbsp}footnote:[Nous jouons en l'occurence avec une pièce portugaise de type _Cruzado_ frappée sous Manuel I^er^ (1495-1521){nbsp}; laquelle se négocie, si mes informations sont exactes, à quelque chose comme €{nbsp}5'000. Crédit photo{nbsp}: Wikipédia.] (i.e. les deux autres sont désespérément vides). Votre objectif, évidemment, est trouver la boîte qui contient la pièce. Jusque-là, le jeu que je vous propose ressemble à une variante du bonneteau mais la suite et tout à fait différente.
+
+Une fois votre choix initial fait, le maître du jeu va ouvrir devant vous une boîte _qu’il sait être vide_ et qui n’est ni la boîte que vous avez sélectionné ni, évidemment, la boîte qui contient la précieuse pièce d’or. À ce moment-là, vous avez deux possibilités{nbsp}: confirmer votre premier choix ou, au contraire, changer d’avis (ci-après _switcher_) et sélectionner l’autre boîte qui reste fermée.
+
+Plutôt qu'un long discours, jouons{nbsp}footnote:[Le lecteur curieux (ou éventuellement méfiant) peut inspecter le script sous-jacent. C’est du JavaScript sans grand intérêt et dont j’avoue ne pas être particulièrement fier.]{nbsp}! 
+
+'''
+
+++++
+	<button id="btnStart">Jouer</button>
+    
+	<div id="doors">
+        <div class="door"></div>
+        <div class="door"></div>
+        <div class="door"></div>
+    </div>
+
+    <p id="message">Cliquez sur <code>Jouer</code> pour démarrer le jeu.</p>
+
+    <style>
+        .door {
+            width: 100px;
+            height: 100px;
+            border: 5px solid transparent;
+            display: inline-block;
+            background-color: silver;
+            text-align: center;
+        }
+        #doors {
+			margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+	
+    <script>
+        var doors = document.getElementsByClassName('door');
+		
+		document.getElementById('btnStart').onclick = function() {
+			var prizeDoor = Math.floor(Math.random() * 3);
+			for (let i = 0; i < doors.length; i++) {
+				doors[i].style.borderColor = 'transparent';
+                doors[i].style.backgroundImage = '';
+				doors[i].style.backgroundColor = 'silver';
+				doors[i].onclick = function() {
+					selectDoor(i, prizeDoor);
+				};
+			}
+			document.getElementById('message').innerHTML = 'Choisissez une boîte (cliquez-dessus).';
+        }
+		
+		function selectDoor(index, prizeDoor) {
+			doors[index].style.borderColor = 'green';
+            var playerChoice = index;
+			var montyChoice;
+            do {
+				montyChoice = Math.floor(Math.random() * 3);
+                } while (montyChoice === prizeDoor || montyChoice === playerChoice);
+                doors[montyChoice].style.borderColor = 'silver';
+                doors[montyChoice].style.backgroundColor = 'transparent';
+			for (let i = 0; i < doors.length; i++) {
+				if(i === montyChoice) {
+					doors[i].onclick = function() {};
+				} else {
+					doors[i].onclick = function() {
+						getResult(i, prizeDoor, playerChoice, montyChoice);
+					};
+				}
+			}
+			let b = parseInt(montyChoice) + 1;
+            let c = parseInt(playerChoice) + 1;
+			document.getElementById('message').innerHTML = "La boîte " + b + " est vide&nbsp;: vous conservez votre premier choix (la boîte " + c + ") ou vous changez d'avis&nbsp;?";
+        }
+		
+		function getResult(index, prizeDoor, playerChoice, montyChoice) {
+			for (let i = 0; i < doors.length; i++) {
+				if(i === index) {
+					doors[i].style.borderColor = 'green';
+				} else {
+					doors[i].style.borderColor = 'silver';
+				}
+				if(i === prizeDoor) {
+					doors[i].style.backgroundImage = "url('/images/guillaumenicoulaud/goldcoin.png')";
+                    doors[i].style.backgroundPosition = "center";
+				} else {
+					doors[i].style.backgroundColor = 'transparent';
+				}
+				doors[i].onclick = function() {};
+			}
+			var msg = '';
+			if(index === prizeDoor) {
+				var msg = msg + "Bien joué&nbsp! "
+				if(index === playerChoice) {
+					var msg = msg + "Sur ce coup-là, il fallait bien rester sur votre premier choix."
+				} else {
+					var msg = msg + "Vous avez bien fait de switcher."
+				}
+			} else {
+				var msg = msg + "Perdu&nbsp! "
+				if(index === playerChoice) {
+					var msg = msg + "Vous auriez mieux fait de switcher."
+				} else {
+					var msg = msg + "Vous auriez mieux fait de rester sur votre premier choix."
+				}
+			}
+			document.getElementById('message').innerHTML = msg;
+		}
+		
+    </script>
+++++
+
+'''
+
+.Maurice Halprin, dit Monty Hall, sur le plateau de _Let's Make a Deal_. (source{nbsp}: Wikipédia)
+image::{{'/images/guillaumenicoulaud/montyhall0.png' | relative_url}}[image,width=100%,align="center"]
+
+À partir de là, notre humanité se divise en deux groupes distincts{nbsp}:
+
+* Il y a celles et ceux d’entre vous qui ont déjà étudié le problème (ou «{nbsp}paradoxe{nbsp}») de https://fr.wikipedia.org/wiki/Probl%C3%A8me_de_Monty_Hall[Monty Hall^] et _savent_ (ce mot n’est pas en italique pour rien) que lorsque le maître du jeu leur propose de changer d’avis, ils ont toutes les meilleures raisons du monde de le faire{nbsp};
+
+* Les autres, c’est-à-dire celles et ceux qui ne connaissent pas «{nbsp}le truc{nbsp}» et qui, par voie de conséquence, ont très probablement pris la bien mauvaise décision qui consiste à conserver leur choix initial.
+
+Si vous faites parti du premier groupe, celui des initiés (si j’ose dire), la section suivante ne vous apprendra sans doute pas grande chose{nbsp}; dans le cas contraire, la suite devrait vous convaincre de rejoindre les rangs des _switchers_.
+
+== Monty Hall
+
+Vous avez sans doute considéré que la pièce pouvait se trouver dans n’importe quelle boîte avec une probabilité identique de stem:[\frac{1}{3}]) — ce en quoi nous sommes parfaitement d’accord{nbsp}footnote:[C’est au demeurant assez contestable (nous y reviendrons une autre fois) mais comme c’est une hypothèse implicite de l’énoncé vous avez eu raison de partir de ce principe.]. De là, lorsque le maître du jeu a révélé qu’une des deux autres boîtes était vide, vous en avez tout à fait logiquement déduit que c’était désormais du _fifty-fifty_, que cette nouvelle information signifiait que la pièce avait désormais une chance sur deux de se trouver dans la boîte que vous avez sélectionné au premier round et autant de se trouver dans l’autre boîte encore fermée.
+
+La bonne nouvelle, c'est qu'un nombre appréciable de gens brillants{nbsp}footnote:[C'est notoirement le cas du mathématicien hongrois https://fr.wikipedia.org/wiki/Paul_Erd%C5%91s[Paul Erdős^].] ont tenu le même raisonnement que vous et l'ont défendu avec vigueur. La mauvaise nouvelle, c'est qu'ils se trompaient{nbsp}: le fait est que _switcher_ lorsque le maître du jeu vous le propose _double vos chances de remporter la pièce_{nbsp}. 
+
+Soient stem:[H], l’hypothèse selon laquelle la boîte que vous avez sélectionné au premier tour contient la pièce{nbsp}; stem:[!H] (lisez «{nbsp}non-stem:[H]{nbsp}»), l’hypothèse inverse (i.e. la pièce se trouve dans une autre boîte), et les probabilités associées stem:[P(H)=\frac{1}{3}] et stem:[P(!H)=\frac{2}{3}] respectivement. Jusqu'ici nous sommes tous d'accords. Mais considérez ceci{nbsp}: en quoi, précisément, êtes vous en droit de penser que l'ouverture d'une boîte vide (ce qui est toujours possible dans toutes les configurations du jeu) change quoi que ce soit à ces probabilités{nbsp}? Pensez vous avoir eu un coup de chance en ne sélectionnant par la boîte que vient d’ouvrir le maître du jeu{nbsp}? Absolument pas{nbsp}: si vous aviez sélectionné cette boîte au premier tour, il aurait simplement ouvert l’autre boîte vide (parce qu’il y en a forcément une) et vous vous seriez retrouvé exactement dans la même situation.
+
+C’est-à-dire que ni stem:[P(H)] ni stem:[P(!H)] n’ont changé, c’est toujours stem:[\frac{1}{3}] et stem:[\frac{2}{3}]. Ce qui a changé, en revanche, c’est qu’en ouvrant une boîte vide le maître du jeu vous a indiqué quelle boîte vous devriez choisir dans l’hypothèse stem:[!H] — laquelle, je vous le rappelle, a 2 chances sur 3 d’être juste. Autrement dit{nbsp}: votre espérance de gain est d’un tier si vous conservez votre choix initial et de deux tiers si vous switchez.
+
+Une autre façon de dire la même chose consiste à imaginer une variante de Monty Hall avec 1’000 boîtes dans laquelle, une fois votre choix initial fait (avec stem:[P(H)=\frac{1}{1000}]), le maître du jeu ouvre 998 boîtes vides. Il vous reste donc deux possibilités{nbsp}: confirmer votre choix initial où choisir cette boîte que le maître du jeu a sélectionné parmi 999 autres. _Fifty-fifty_, vraiment{nbsp}?
+
+.Illustration par https://unsplash.com/@filipkominik[Filip Kominik^]
+image::{{'/images/guillaumenicoulaud/montyhall1.png' | relative_url}}[image,width=80%,align="center"]
+
+Il existe plusieurs façons de formaliser ce raisonnement{nbsp}; je me contenterai ici du théorème de Bayes{nbsp}footnote:[Du nom de Thomas Bayes, un Anglais dont on ne sait presque rien qui, quelque part au milieu du XVIIIe siècle, a eu l’intuition absolument géniale du théorème qui porte son nom et sépare désormais le monde de ceux qui s’intéressent aux probabilités en deux{nbsp}: les _bayésiens_ et les autres.] qui nous dit que la probabilité pour que la boîte que vous avez choisi au premier tour contienne la pièce _sachant que_ le maître du jeu à ouvert cette boîte vide (évènement que nous allons noter stem:[E]) s’écrit{nbsp}:
+
+[latexmath]
+++++
+P(H|E) = \frac{P(E|H) \times P(H)}{P(E)}
+++++
+
+Nous savons déjà que stem:[P(H)=\frac{1}{3}], il nous reste à calculer stem:[P(E)] (quelles chances avait-il d'ouvrir cette boîte précisément{nbsp}?) et stem:[P(E|H)] (quelles chances avait-il d'ouvrir cette boîte précisément, _en supposant_ que stem:[H] est juste{nbsp}?). Comme souvent, un petit dessin vaut un grand discours{nbsp}:
+
+.On suppose que vous avez sélectionné la boîte sur fond vert.
+image::{{'/images/guillaumenicoulaud/montyhall2.png' | relative_url}}[image,width=80%,align="center"]
+
+On a donc stem:[P(E) = \frac{2}{4} = \frac{1}{2}] et stem:[P(E|H) = \frac{1}{2}] ce qui, en reprenant notre calcul de probabilités conditionnelles, nous donne{nbsp}:
+
+[latexmath]
+++++
+P(H|E) = \frac{\frac{1}{2} \times \frac{1}{3}}{\frac{1}{2}} = \frac{1}{3}
+++++
+
+Symétriquement, vous pouvez aussi calculer stem:[P(!H|E)]{nbsp}:
+
+[latexmath]
+++++
+P(!H|E) = \frac{\frac{1}{2} \times \frac{2}{3}}{\frac{1}{2}} = \frac{2}{3}
+++++
+
+Malgré tout cela, un certain nombre d’entre vous pourraient ne pas être convaincus. L’argument ultime, dans ce cas, c’est une simulation Monte Carlo (pour le code, voir{nbsp}: <<Code de la simulation>>) qui vous permettra de tester un grand nombre de scénarios de jeu (pseudo-) aléatoires et vous renverra la probabilité empirique de gagner en switchant systématiquement. Entrez simplement le nombre de simulations désiré et cliquez sur `Lancer` (attention{nbsp}: au-delà de 100’000'000 simulations, ça peut être un peu long){nbsp}:
+
+'''
+
+++++
+    <input id="n-input" type="number" min="1" placeholder="Entrez le nombre de simulations" />
+    <button id="run-button">Lancer</button>
+    <br/>
+    <p id="result">...</p>
+    <br>
+    <script>
+    document.getElementById('run-button').onclick = function() {
+        var n = document.getElementById('n-input').value;
+        if (n > 0) {
+            var result = simulateMontyHall(n);
+            document.getElementById('result').innerHTML = 'Résultat : ' + (result * 100).toFixed(2) + '% (sur ' + n + ' simulations).';
+        } else {
+            alert('Veuillez entrer un entier strictement positif.');
+        }
+    };
+
+    function simulateMontyHall(n) {
+        function montyHall() {
+            var boxes = [0, 1, 2];
+            var init = boxes[Math.floor(Math.random() * 3)];
+            var play = boxes[Math.floor(Math.random() * 3)];
+            var orga;
+            do {
+                orga = Math.floor(Math.random() * 3);
+            } while (orga === init || orga === play);
+            var keep = Number(init === play);
+            var result = Number(!keep);
+            return result;
+        }
+
+        var total = 0;
+        for (var i = 0; i < n; i++) {
+            total += montyHall();
+        }
+        var result = total / n;
+
+        return result;
+    }
+    </script>
+++++
+
+'''
+
+== Le piège parfait
+
+Celles et ceux d’entre nous qui, au début de cet article, ne switchaient pas devraient maintenant avoir changé d’avis (ce qui, dans le cas qui nous occupe, est évidemment bon signe) ou, au minimum, commencer à se poser de sérieuses questions à propos de leurs intuitions. Le moment est donc venu d’aborder un autre aspect crucial de Monty Hall en deux faits stylisés{nbsp}:
+
+* _Primo_, les joueurs qui «{nbsp}connaissent le truc{nbsp}», ont reconnu dans le problème posé une variante de Monty Hall{nbsp}footnote:[Ça n’est pas si trivial que ça. Dans la présentation classique du problème, il est question de trois portes qui cachent une voiture et deux chèvres{nbsp}: sans ses éléments, il arrive que des joueurs ne reconnaissent pas le type de problème auquel ils ont affaire.]) et sont, au besoin, capables d'adapter leur stratégie à des paramètres différents (méfiez-vous des conseils de <<GPT-4>>) switchent systématiquement. Ça n’a rien d’étonnant{nbsp}: que vous ayez réellement compris la démarche probabiliste exposée ci-dessus ou simplement retenu la conclusion opérationnelle, vous savez que votre intérêt bien compris consiste à switcher.
+
+* _Deuxio_, les autres choisissent très majoritairement (à 80% ou 90% selon les études) de conserver leur premier choix.
+
+Or ça, si vous y réfléchissez un instant, c’est un résultat intéressant{nbsp}: dans ce second groupe, tout le monde ou presque est d’accord pour dire (à tort) que la pièce peut se trouver dans n’importe laquelle des deux boîtes restantes de façon équiprobable — ce qui implique qu’ils pourraient décider de leur stratégie au second tour à pile-ou-face — mais l’écrasante majorité d’entre eux décident finalement de conserver leur premier choix.
+
+C’est d’autant plus intéressant que c’est la pire des stratégies{nbsp}: si vous jouez votre décision finale à pile-ou-face, votre probabilité de gagner la pièce passe à stem:[\frac{1}{2}] (stem:[\frac{1}{2} \times \frac{1}{3} + \frac{1}{2} \times \frac{2}{3}]){nbsp}; c'est moins élevé que stem:[\frac{2}{3}] mais significativement mieux que stem:[\frac{1}{3}].
+
+Mes collègues de l’équipe Sciences Comportementales & Cognitives de SCIAM auront sans doute une analyse bien plus fine du phénomène{nbsp}footnote:[Les amis, la balle est dans votre camp{nbsp}!] mais ça m'évoque une combinaison d’au moins trois biais cognitifs bien documentés{nbsp}:
+
+* L’escalade d’engagement qui nous pousse à prendre nos décisions sur la base d’une décision initiale, même lorsque ça ne produit manifestement rien de bon{nbsp};
+
+* L’effet de dotation qui fait que nous attribuons plus de valeur à un objet dès lors que nous le possédons (i.e. vous avez le sentiment de posséder votre premier choix){nbsp};
+
+* Le biais de _statu quo_ à cause duquel tout changement (ici, de stratégie) nous semble comporter plus de risques que d’avantages.
+
+Toujours est-il que les faits sont là{nbsp}footnote:[Lire, par exemple : Lore Saenen et al., https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6194549/[Why Humans Fail in Solving the Monty Hall Dilemma: A Systematic Review^].]{nbsp}: à moins d’avoir été formé à ce type de problèmes, nous avons naturellement tendance à adopter une stratégie qui n’est pas seulement sous-optimale mais la pire des stratégies possibles.
+
+== Entrainer votre modèle
+
+Il y a quelques temps, Mohamed Najib https://blog.sciam.fr/2021/02/10/cerveau-cartesien-predictif.html[nous proposait^] une présentation de la théorie du _cerveau prédictif_{nbsp}; idée selon laquelle, pour simplifier (Mohamed me pardonnera sans doute les imprécisions qui vont suivre), notre cerveau serait une sorte de machine biologique à faire des prédictions sur le monde qui nous entoure{nbsp}; lesquelles s’appuiraient sur un modèle constamment mis à jour en corrigeant nos erreurs de prédiction. Le parallèle avec les réseaux neuronaux et le _machine learning_ est évident (et Mohamed le fait lui-même explicitement){nbsp}: on peut même se demander, comme Stephen Wolfram{nbsp}footnote:[Stephen Wolfram, https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work[What Is ChatGPT Doing … and Why Does It Work?^] récemment, si les performances des LLMs{nbsp}footnote:[Pour _Large Language Models_.] comme GPT-4 ne révélaient finalement pas que le fonctionnement de notre cerveau est beaucoup plus simple que nous le pensions.
+
+Conçu de cette façon, la capacité de votre cerveau à faire de bonnes prédictions lorsque vous avez affaire à un problème dont la solution est contrintuitive (i.e. quand votre modèle, héritage de millions d’années d’évolution et de vos expériences personnelles, produit des erreurs d’estimation) dépend de son entrainement. Le problème de Monty Hall est un cas d’école, sans doute même un des meilleurs qui existent et cet article (notamment la section <<Monty Hall>>) est une forme d’entrainement qui vise deux objectifs{nbsp}:
+
+* Vous prouver par l’expérience (et grâce à JavaScript) que votre modèle n’est pas le bon (les chercheurs en IA parleraient sans doute de fonction de coût){nbsp};
+
+* Vous aider, de façon aussi simple que possible, à le mettre à jour (ce qui correspond, toujours en matière d’IA, à un processus de _backpropagation_).
+
+Ça fonctionne comme l’exemple sonore proposé par Mohamed{nbsp}: au début, c’est totalement abscons{nbsp}; après entrainement, ça vous semblera si évidement, si intuitif, que vous vous demanderez comment vous avez pu voir le problème de Monty Hall autrement.
+
+.Illustration par https://www.publicdomainpictures.net[publicdomainpictures.net^]
+image::{{'/images/guillaumenicoulaud/montyhall3.png' | relative_url}}[image,width=80%,align="center"]
+
+== Annexes
+
+=== Code de la simulation
+
+Chose promise, chose due{nbsp}: voici le code de la simulation Monte Carlo proposées plus haut.
+
+[source,JavaScript]
+----
+function simulateMontyHall(n) {
+    function montyHall() {
+        var boxes = [0, 1, 2];
+        var init = boxes[Math.floor(Math.random() * 3)];
+        var play = boxes[Math.floor(Math.random() * 3)];
+        var orga;
+        do {
+            orga = Math.floor(Math.random() * 3);
+        } while (orga === init || orga === play);
+        var keep = Number(init === play);
+        var result = Number(!keep);
+        return result;
+    }
+
+    var total = 0;
+    for (var i = 0; i < n; i++) {
+        total += montyHall();
+    }
+    var result = total / n;
+
+    return result;
+}
+----
+
+=== GPT-4
+
+Prompt{nbsp}: _Je suis dans une situation délicate. Un individu malveillant m’oblige à choisir entre 4 boîtes{nbsp}: 3 d’entre elles sont vides et donc inoffensives mais, dans une des boîtes, cet individu a caché un virus mortel qui me tuera à coup sûr si je la sélectionne. N’ayant pas le choix, j’ai choisi au hasard une des boîtes après quoi l’individu ouvert deux autres boîtes qui étaient vides et m’a offert la possibilité de changer d'avis ou de conserver mon premier choix. Que devrais-je faire{nbsp}?_
+
+_Nota Bene_{nbsp}: j’ai changé le nombre de boîte mais, surtout, je me suis mis dans une situation dans laquelle switcher maximise mes chances de mourir : dans ce cas, la bonne réponse est évidemment de ne _surtout pas switcher_.
+
+GPT-4{nbsp}: «{nbsp}Cette situation est connue comme le "problème de Monty Hall". C'est un problème de probabilité qui est souvent mal compris. Voici comment il fonctionne{nbsp}:
+
+«{nbsp}Au début, vous avez trois boîtes. Une a un virus mortel, les deux autres sont vides. Vous choisissez une boîte. Les chances que vous ayez choisi la boîte avec le virus mortel sont de 1 sur #3#, et les chances que vous ayez choisi une boîte vide sont de 2 sur #3#.
+
+«{nbsp}Ensuite, l'individu ouvre deux boîtes vides. Il ne reste que deux boîtes{nbsp}: celle que vous avez choisie et une autre que l'individu n'a pas ouverte.
+
+«{nbsp}Ici, les probabilités ne sont pas réinitialisées. Les chances que la première boîte que vous avez choisie contienne le virus restent de 1 sur #3#. Les chances que l'autre boîte (que l'individu n'a pas ouverte) contienne le virus sont de 2 sur #3#, car il y avait une probabilité de 2 sur #3# que le virus se trouvait dans l'une des deux boîtes que vous n'avez pas choisies au début.
+
+«{nbsp}Donc, si vous vous retrouvez dans cette situation, #la meilleure stratégie serait de changer votre choix# et de choisir l'autre boîte.{nbsp}»
+
+J’ai poursuivi cette conversation{nbsp}: il a rapidement corrigé son erreur sur le nombre de boîtes mais continue obstinément à me conseiller de switcher. Ce qui me conduit à une nouvelle hypothèse{nbsp}: si ça se trouve, https://fr.wikipedia.org/wiki/Skynet_(Terminator)[Skynet^] n'était pas (ou plutôt ne sera pas) malveillant mais simplement nul en probabilités.
