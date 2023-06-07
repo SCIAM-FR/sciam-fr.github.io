@@ -1,0 +1,129 @@
+= Alignements de k points
+:showtitle:
+:page-navtitle: Alignements de k points
+:page-excerpt: Notre cerveau peut être conçu comme une formidable machine à faire des prédictions sur le monde qui nous entoure mais il existe de nombreux cas dans lesquels, sans entrainement approprié du modèle, il nous pousse à commettre de graves erreurs d’appréciation. Le problème de Monty Hall est un cas d’école.
+:layout: post
+:author: guillaumenicoulaud
+:page-tags: ['BiaisCognitif','IllusionDesSeries','Alea']
+:docinfo: shared-footer
+:page-vignette: lines_300x300.png
+//:post-vignette:
+:page-vignette-licence: Illustration par <a href="https://unsplash.com/@designedbyflores" target="_blank">Omar Flores</a>.
+:page-liquid:
+
+Dans le graphique ci-dessous, j’ai placé 30 points de façon (pseudo-)aléatoire — en l’occurrence, les coordonnées (stem:[x] et stem:[y]) suivent une loi uniforme continue entre 0 et 1. Question{nbsp}: à votre avis, combien d'alignements de 3 points peut-on trouver là-dedans{nbsp}?
+
+image::{{'https://4.bp.blogspot.com/-WSZG4TOXUPY/Wlc891PtKrI/AAAAAAAAEgk/7R1huHfBbWYcPLCGNxOz0jbxUPb-7xr1wCLcBGAs/s1600/001.png'}}[image,width=70%,align="center"]
+
+Celles et ceux qui me font l’honneur de me lire le devinent sans doute{nbsp}: il y en a beaucoup plus que ce que notre intuition nous suggère. C’est une forme d’illusion des séries (_clustering illusion_), ce biais cognitif qui nous porte à voir des phénomènes déterministes là où il n’y rien d’autre que de l’aléa. En l’espèce, nous aurons tendance à penser qu’un alignement de 3, 4 ou 5 points ne peut pas être dû au hasard{nbsp}: que _quelqu’un l’a sans doute voulu comme ça_.
+
+== Le problème
+
+Commençons par poser les bases du problème{nbsp}: qu’est-ce qu’on entend par des points _alignés_, précisément. Par exemple, considérez le graphique suivant{nbsp}:
+
+image::{{'https://2.bp.blogspot.com/-7uLBoP9Z6uc/Wlc899fIk7I/AAAAAAAAEgg/hHHnVzMHOgoJVP0GPxExdXoHsJwKVTOwwCLcBGAs/s1600/002.png'}}[image,width=70%,align="center"]
+
+Au premier abord, ces trois points semblent bien alignés. Sauf qu’en traçant la droite de régression, ils sont raisonnablement alignés… mais pas parfaitement.{nbsp}:
+
+image::{{'https://4.bp.blogspot.com/-H7vu_MKUu5M/Wlc899uuTuI/AAAAAAAAEgc/Qn-L2KnxnIMi-r5f6feVKy7hvDvgdNzYACLcBGAs/s1600/003.png'}}[image,width=70%,align="center"]
+
+Juger de l’alignement de stem:[k] points, c’est donc une affaire de précision. Par _points alignés_, on entend habituellement qu’ils se trouvent tous dans une bande, un chemin rectiligne d’une largeur donnée. Sur le graphique ci-dessus, vous pouvez facilement imaginer deux droites parallèles à ma droite de régression — une un peu au-dessus, l’autre légèrement en dessous — de telle sorte que les trois points se trouvent dans cette zone du plan. Si cette bande a une largeur stem:[w] et si vous estimez que ce degré de précision est suffisant, vous considérerez que ces points sont _alignés_.
+
+Partant de là, on peut tenter d'estimer grossièrement la probabilité de trouver stem:[k] points alignés dans un ensemble de stem:[n] points situés dans un carré de côtés stem:[L] avec une largeur de bande stem:[w]. Elle dépend du nombre de paquets de stem:[k] points qu'il est possible de former parmi les stem:[n] points (ce qui, dans un ensemble de 30 points stem:[n=30] donne tout de même 4'060 triplets (i.e. stem:[k=3]) possibles{nbsp}!){nbsp}:
+
+[latexmath]
+++++
+\binom{n}{k} = \frac{n!}{(n-k)!k!}
+++++
+
+Et elle dépend du rapport entre la surface occupée par la bande (stem:[L \times w]) et la surface totale du carré (stem:[L^2]). Si vous considérez toutes les bandes contenant 2 points, le nombre de troisièmes points situés dans l'une de ces bandes devrait très approximativement être{nbsp}:
+
+[latexmath]
+++++
+\frac{n!}{(n-k)!k!} \left(\frac{w}{L}\right)^{k-2}
+++++
+
+Dans mon exemple, avec stem:[n=30], stem:[k=3], stem:[L=1] et stem:[w=0.01], ça devrait nous faire une quarantaine d'alignements de 3 points.
+
+== Simulation
+
+Évidemment, j’ai eu envie de simuler ça sous R pour vérifier. Pour ce faire, j’ai concocté un petit algorithme que je soumets à votre sagacité. L'idée consiste, pour chaque stem:[k]-uplet possible, à déterminer les coefficients de la droite de régression — la pente (stem:[\beta]) et l'ordonnée à l'origine (stem:[\alpha]) — puis, à vérifier que les stem:[k] points se situent bien dans une bande de plus ou moins stem:[\frac{w}{2}] autour de cette droite.
+
+image::{{'https://3.bp.blogspot.com/-dElIZrUudYA/Wlc8-uAZuYI/AAAAAAAAEgo/9Oq5zMyOx9AVbbY14KDeORIoWVZcxStpACLcBGAs/s1600/004.png'}}[image,width=70%,align="center"]
+
+Dans le graphique ci-dessus, par exemple, nous souhaitons savoir si les stem:[k] points sont situés à l’intérieur de la bande délimitée par les deux droites en pointillés rouges. Pour ce faire, il nous faut transformer les résidus de la régression (stem:[\varepsilon]) en distances perpendiculaires à la droite de régression et vérifier que la longueur obtenue est bien inférieure à celle des segments [ob] ou [od] (en bleu), soit stem:[\frac{w}{2}].
+
+En principe, la valeur de l'angle [cob] (appelons-le stem:[\theta]), en radians, doit être égale à l'arctangente de la pente de notre droite de régression (stem:[\beta]){nbsp}:
+
+[latexmath]
+++++
+\theta = \arctan{\beta}
+++++
+
+Et, par ailleurs{nbsp}:
+
+[latexmath]
+++++
+\cos(\theta) = \frac{[ob]}{[oc]} = \frac{\frac{w}{2}}{\epsilon}
+++++
+
+Avec un peu d'algèbre, nous cherchons donc à vérifier si{nbsp}:
+
+[latexmath]
+++++
+\frac{\epsilon}{\cos(\theta)} \leq \frac{w}{2}
+++++
+
+En faisant tourner cet algorithme sur tous les triplets possibles de mon set de stem:[n] points{nbsp}footnote:[Ce qui, j'en conviens volontiers, n'est sans doute pas la façon la plus rapide de faire.] avec stem:[w = 0.01], on vérifie qu'il y a pas moins de 47 alignements de 3 points{nbsp}:
+
+image::{{'https://4.bp.blogspot.com/-DstKmzes7io/Wlc8-9zJWAI/AAAAAAAAEgs/y1GxV3aTbuMj8GiWyYqTNin1JU63AxprgCLcBGAs/s1600/005.png'}}[image,width=70%,align="center"]
+
+Et, si vous vous posiez la question, il y a aussi 4 alignements de 4 points{nbsp}:
+
+image::{{'https://3.bp.blogspot.com/-AZztBA9B6SM/Wlc8_MLCIKI/AAAAAAAAEgw/km6TehPB6b0PhqU_aYT64PVvlXiqmXCvQCLcBGAs/s1600/006.png'}}[image,width=70%,align="center"]
+
+== Le code
+
+Voici mon code sous R. Gardez en tête qu’il n’est clairement pas optimisé pour la vitesse d’exécution (et ce, d’autant plus que R est relativement lent{nbsp}footnote:[Ceci étant dit, si quelqu’un trouve le courage de développer un algorithme plus efficient, je le publierai volontiers ici.]){nbsp}: je vous recommande de vous contenter de petites valeurs pour `n`.
+
+[source,R]
+----
+alignments = function(x, y, k = 3, w = 1/1000) {
+	N <- length(x)
+	I <- gtools:::combinations(N, k, 1:N)
+	res <- list()
+	j <- 0
+	for(i in 1:nrow(I)) {
+		xi <- x[I[i, ]]
+		yi <- y[I[i, ]]
+		ri <- lm(yi~1+xi)
+		hh <- ri$res / cos(atan(ri$co[2]))
+		if(all(hh <= w/2)) {
+			tmp <- list(coef = unname(ri$co), x = xi, y = yi)
+			j <- j + 1
+			res[[j]] <- tmp
+		}
+	}
+	return(res)
+}
+
+n <- 30
+x <- runif(n)
+y <- runif(n)
+k <- 3
+w <- 1/100
+res <- alignments(x, y, k, w)
+length(res)
+
+cols <- rainbow(length(res))
+op <- par(mar = rep(5, 4))
+plot(x, y, cex.lab = .7, cex.axis = .7, pch = 16, cex = 1/2,
+	xlim = 0:1, ylim = 0:1, main = "Figure 5", cex.main = .8)
+for(i in 1:length(res)) {
+	ri <- res[[i]]
+	abline(ri$co[1], ri$co[2], lty = "dotted", col = cols[i])
+	points(ri$x, ri$y, cex = 1/2, pch = 16, col = cols[i])
+}
+par(op)
+----
+
