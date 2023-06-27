@@ -5,7 +5,6 @@
 :layout: post
 :author: oliviersavrimoutoo
 :page-tags: ['SCC','SciencesComportementales','Securite']
-:docinfo: shared-footer
 :page-vignette: falling_300x300.png
 //:post-vignette:
 :page-vignette-licence: Illustration par https://pixabay.com/fr/users/pexels-2286921[Pexels^].

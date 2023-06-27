@@ -5,7 +5,6 @@
 :layout: post
 :author: oliviersans
 :page-tags: ['Direct Feedback Alignement','Back-Propagation']
-:docinfo: shared-footer
 :page-vignette: direct-feedback-alignement-001.png
 :post-vignette: direct-feedback-alignement-001.png
 :page-vignette-licence: 'Image par <a href="https://pixabay.com/fr/users/gdj-1086657/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=3816319">Gordon Johnson</a> de Pixabay'

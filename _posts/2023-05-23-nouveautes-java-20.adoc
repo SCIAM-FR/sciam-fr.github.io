@@ -4,7 +4,6 @@
 :layout: post
 :author: jeanmicheldoudoux
 :page-tags: [Java, Java 20, Projet Amber, Projet Panama, Projet Loom]
-:docinfo: shared-footer
 :page-vignette: java-20.png
 :page-liquid:
 

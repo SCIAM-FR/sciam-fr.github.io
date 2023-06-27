@@ -5,7 +5,6 @@
 :layout: post
 :author: hugotrad
 :page-tags: ['SCC','SciencesComportementales','Sludge','Administration']
-:docinfo: shared-footer
 :page-vignette: infinity_300x300.png
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://pixabay.com/users/8385-8385' target='_blank'>Reimund Bertrams</a>.

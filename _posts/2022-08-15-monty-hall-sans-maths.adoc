@@ -5,7 +5,6 @@
 :layout: post
 :author: guillaumenicoulaud
 :page-tags: ['BiaisCognitif','Heuristique','Bayes']
-:docinfo: shared-footer
 :page-vignette: door_300x300.png
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href="https://unsplash.com/@filipkominik" target="_blank">Filip Kominik</a>.

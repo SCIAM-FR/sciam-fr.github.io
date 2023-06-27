@@ -5,7 +5,6 @@
 :layout: post
 :author: loichermann
 :page-tags: ['WebRTC']
-:docinfo: shared-footer
 :page-vignette: introduction-webrtc-001.jpeg
 :post-vignette: introduction-webrtc-001.jpeg
 :page-vignette-licence: 'Image par Joshua Sortino'

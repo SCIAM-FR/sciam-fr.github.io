@@ -5,7 +5,6 @@
 :layout: post
 :author: antoinesabotdurand
 :page-tags: [CDI,SPI,Extension,Java]
-:docinfo: shared-footer
 :page-vignette: fishbowl.png
 :post-vignette: fishbowl.png
 :page-vignette-licence: 'Source Shutterstock'

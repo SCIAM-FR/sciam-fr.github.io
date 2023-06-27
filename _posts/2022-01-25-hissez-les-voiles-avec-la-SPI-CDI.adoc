@@ -5,7 +5,6 @@
 :layout: post
 :author: antoinesabotdurand
 :page-tags: [CDI,SPI,Extension]
-:docinfo: shared-footer
 :page-vignette: legobricks.jpg
 :post-vignette: legobricks.jpg
 :page-vignette-licence: 'Source Legomania'

@@ -5,7 +5,6 @@
 :layout: post
 :author: mohamednajib
 :page-tags: ['Science','IntelligenceCollective']
-:docinfo: shared-footer
 :page-vignette: noswiming_300x300.png
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/cdd20-1193381' target='_blank'>CDD20</a>.

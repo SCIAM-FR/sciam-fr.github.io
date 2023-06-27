@@ -5,7 +5,6 @@
 :layout: post
 :author: christopheblondeau
 :page-tags: ['Terraformring Mars', 'Excel', 'VBA']
-:docinfo: shared-footer
 :page-vignette: terraforming-mars-001.jpeg
 :post-vignette: terraforming-mars-001.jpeg
 :page-vignette-licence: 'Image par <a href="https://pixabay.com/fr/users/jannikr64-11653526/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=4489346">JannikR64</a> de Pixabay'
