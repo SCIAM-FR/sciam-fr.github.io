@@ -5,7 +5,6 @@
 :layout: post
 :author: guillaumenicoulaud
 :page-tags: ['misc']
-:docinfo: shared-footer
 :page-vignette: buildings.png
 :post-vignette: buildings.png
 :page-vignette-licence: Photo de <a href="https://unsplash.com/@matosem?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Kevin Matos</a> sur <a href="https://unsplash.com/fr/photos/Nl_FMFpXo2g?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>

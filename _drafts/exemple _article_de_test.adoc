@@ -5,7 +5,6 @@
 :layout: post
 :page-auteurs: [antoinesabotdurand,jeanmicheldoudoux]
 :page-tags: [Test,Java,Blog]
-:docinfo: shared-footer
 :page-toc: false
 :page-vignette: 1_wP4DCPy7MxRbZGkCQ1y7tw.jpeg
 

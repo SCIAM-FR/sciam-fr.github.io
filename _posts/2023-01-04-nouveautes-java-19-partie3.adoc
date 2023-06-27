@@ -4,7 +4,6 @@
 :layout: post
 :author: jeanmicheldoudoux
 :page-tags: [Java, Java 19]
-:docinfo: shared-footer
 :page-vignette: java-19.png
 :page-liquid:
 

@@ -5,7 +5,6 @@
 :layout: post
 :author: alexismevellec
 :page-tags: ['Misc','Blockchain','Startup','Banking']
-:docinfo: shared-footer
 :page-vignette: ttm_300x300.png
 //:post-vignette:
 :page-vignette-licence: Illustration par Jon Berkeley pour <a href="https://www.economist.com/" target="_blank">The Economist</a>.

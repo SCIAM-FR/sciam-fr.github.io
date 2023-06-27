@@ -5,7 +5,6 @@
 :layout: post
 :author: mohamednajib
 :page-tags: ['Neuroscience','MachineLearning','Cerveau','Prediction']
-:docinfo: shared-footer
 :page-vignette: brain_300x300.png
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/openclipart-vectors-30363/' target='_blank'>OpenClipart-Vectors</a>.

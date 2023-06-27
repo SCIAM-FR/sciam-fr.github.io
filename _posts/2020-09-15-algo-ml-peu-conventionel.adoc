@@ -5,7 +5,6 @@
 :layout: post
 :author: samuelberrien
 :page-tags: ['Algorithme','Machine learning']
-:docinfo: shared-footer
 :page-vignette: algo-ml-peu-conventionel-001.jpeg
 :post-vignette: algo-ml-peu-conventionel-001.jpeg
 :page-vignette-licence: 'Image par ElisaRiva de Pixabay'

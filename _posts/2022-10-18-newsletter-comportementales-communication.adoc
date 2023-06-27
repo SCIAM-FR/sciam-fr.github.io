@@ -5,7 +5,6 @@
 :layout: post
 :author: alexismevellec
 :page-tags: ['SCC','NewletterSCC', 'SciencesComportementales', 'Communication']
-:docinfo: shared-footer
 :page-vignette: SoCo.png
 //:post-vignette: SoCo.png
 :page-vignette-licence: Illustration par <a href="https://www.istockphoto.com/fr/portfolio/CrailsheimStudio" target="_blank">CrailsheimStudio</a>.

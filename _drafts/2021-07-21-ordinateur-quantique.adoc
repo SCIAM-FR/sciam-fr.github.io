@@ -5,7 +5,6 @@
 :layout: post
 :author: kacikechadi
 :page-tags: ['Ordinateur quantique']
-:docinfo: shared-footer
 :page-vignette: ordinateur-quantique-001.jpeg
 :post-vignette: ordinateur-quantique-001.jpeg
 :page-vignette-licence: 'Zoom sur le processeur Sycamore (Crédit : <a href="https://www.nature.com/articles/s41586-019-1666-5">F. Arute, et al</a>)'

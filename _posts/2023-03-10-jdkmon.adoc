@@ -4,7 +4,6 @@
 :layout: post
 :author: jeanmicheldoudoux
 :page-tags: [JDK, Java, JDKMon, Outillage]
-:docinfo: shared-footer
 :page-vignette: jdkmon.png
 :page-liquid:
 

@@ -5,7 +5,6 @@
 :layout: post
 :author: hugotrad
 :page-tags: ['SCC','SciencesComportementales','Communication','Chatbot']
-:docinfo: shared-footer
 :page-vignette: chatbot_300x300.png
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/mohamed_hassan-5229782' target='_blank'>Mohamed Hassan</a>.

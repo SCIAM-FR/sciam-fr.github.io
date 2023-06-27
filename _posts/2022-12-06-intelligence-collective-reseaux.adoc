@@ -5,7 +5,6 @@
 :layout: post
 :author: hugotrad
 :page-tags: ['SCC','IntelligenceCollective','SagesseDesFoules','Reseaux']
-:docinfo: shared-footer
 :page-vignette: crossing_300x300.png
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://unsplash.com/@cbarbalis' target='_blank'>Chris Barbalis</a>.
