@@ -6,6 +6,7 @@ gem 'rake-jekyll'
 gem 'wdm', '~> 0.1.1', :install_if => Gem.win_platform?
 
 group :jekyll_plugins do
+  gem 'jekyll', '~> 4.3', '>= 4.3.2'
   gem 'asciidoctor-diagram'
   gem 'jekyll-asciidoc'
   gem 'jekyll-paginate-v2'
