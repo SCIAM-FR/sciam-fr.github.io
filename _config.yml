@@ -31,6 +31,11 @@ exclude:
   - Rakefile
   - .idea
   - .jekyll-cache
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby
 
 keep_files:
   - images
