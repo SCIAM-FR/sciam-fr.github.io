@@ -1,0 +1,248 @@
+:showtitle:
+:page-navtitle: Parlons de Jakarta Model View Controller (MVC)
+:page-excerpt: Dans cet article, nous allons parler de la spécification Jakarta MVC, comprendre son fonctionnement pour une base solide dans la création des applications web basé sur l'action
+:layout: post
+:author: rickenbazolo
+:page-tags: [Application WEB, Java, Jakarta EE, Jakarta MVC, Jakarta RESTful Web Service]
+:docinfo: shared-footer
+:page-vignette: jakarta-mvc.png
+:page-liquid:
+
+= Parlons de Jakarta MVC
+
+La plateforme https://jakarta.ee/[Jakarta EE^] définit des standards pour la création d'applications web utilisant le modèle d'architecture MVC (Model-View-Controller) orienté composants et actions. https://jakarta.ee/specifications/faces/[Jakarta Faces^] le plus ancien connu comme étant la spécification définie pour la création d'applications web MVC orientées composants. Dans cet article, nous allons parler de la récente spécification, Jakarta MVC pour la création d'applications web MVC orientées actions.
+
+Avant d'aller plus loin, il est peut-être utile de définir la différence entre l'approche orientée composants et celle orientée actions.
+
+* Approche orientée actions : dans ce contexte, vos vues acheminent les requêtes HTTP vers les contrôleurs créés par le code de l'application. Le contrôleur, à son tour, les associe à des actions.
+* Approche orientée composants : dans ce contexte, le framework regroupe et gère les requêtes HTTP en interagissant très peu avec le code de l'application. En d'autres termes, le framework gère la majorité de la logique du contrôleur, le contrôleur est transparent pour le développeur.
+
+== Jakarta MVC
+
+https://projects.eclipse.org/projects/ee4j.mvc[Jakarta MVC^] est une spécification construite au-dessus de https://projects.eclipse.org/projects/ee4j.rest[Jakarta RESTful Web Services^] permettant de définir des applications Web basées sur des actions. Il s'agit d'un standard supplémentaire pour créer des applications Web sur la plate-forme Jakarta EE. Jakarta MVC est une spécification autonome facultative qui ne fait pas partie de Jakarta EE par défaut. En tant que spécification basée sur Jakarta RESTful Web Services, elle met à disposition toutes les fonctionnalités et options de développement de services REST pour développer des applications Web sur la plate-forme Jakarta EE.
+
+TIP: L'API Jakarta MVC s'intègre aux spécifications Jakarta EE existantes telles que Jakarta Contexts and Dependency Injection, Jakarta Bean Validation, Jakarta Persistence.
+
+=== Eclipse Krazo
+
+Jakarta MVC étant une spécification, pour l'utiliser, nous avons besoin d'une implémentation. https://projects.eclipse.org/projects/ee4j.krazo[Eclipse Krazo^] est une implémentation de Jakarta MVC. Elle s'appuie sur les services Web RESTful de Jakarta et prend actuellement en charge https://resteasy.dev/[RESTEasy^] et https://eclipse-ee4j.github.io/jersey/[Eclipse Jersey^], avec une SPI (Service Programming Interfaces) bien définie pour l'intégration de frameworks tiers.
+
+TIP: Eclipse Krazo est une implémentation de la spécification Jakarta Model View Controller
+
+== Configuration
+
+Nous allons aborder les concepts de base pour créer une application web avec la plate-forme Jakarta EE.
+
+=== Le fichier pom.xml
+
+Le fichier pom.xml de base doit déclarer plusieurs dépendances : 
+
+[source,xml]
+----
+<dependencies>
+  <dependency>
+    <groupId>jakarta.platform</groupId>
+    <artifactId>jakarta.jakartaee-web-api</artifactId>
+    <version>${jakartaee.version}</version>
+    <scope>provided</scope>
+  </dependency>
+  <dependency>
+    <groupId>jakarta.mvc</groupId>
+    <artifactId>jakarta.mvc-api</artifactId>
+    <version>${jakarta-mvc.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>org.eclipse.krazo</groupId>
+    <artifactId>krazo-core</artifactId>
+    <version>${eclipse-krazo.version}</version>
+  </dependency>
+</dependencies>
+----
+
+* `jakarta.mvc-api` :  contient les API définies dans la spécification Jakarta MVC
+* `krazo-core` : c'est l'implémentation principale de Jakarta MVC
+
+Pour utiliser Jakarta MVC avec les fournisseurs JAX-RS sous-jacents, vous devez ajouter des adaptateurs supplémentaires à vos dépendances.
+
+* `krazo-resteasy` : pour utiliser Jakarta MVC avec https://resteasy.dev[RESTEasy^], en exécutant l'application sur https://www.wildfly.org/[WildFly^] ou https://www.redhat.com/en/technologies/jboss-middleware/web-server[JBOSS EAP^].
+
+[source,xml]
+----
+  <dependency>
+    <groupId>org.eclipse.krazo</groupId>
+    <artifactId>krazo-resteasy</artifactId>
+    <version>${org.eclipse.krazo}</version>
+  </dependency>
+----
+
+* `krazo-jersey` : Pour utiliser Jakarta MVC avec https://eclipse-ee4j.github.io/jersey/[Eclipse Jersey^] en exécutant l'application sur https://glassfish.org/[Eclipse Glassfish^] ou https://www.payara.fish/[Payara Server^].
+
+=== Définition de l'application
+
+Sachant que Jakarta MVC est construit au-dessus de Jakarta RESTful Web Services, nous devons mettre en place un chemin d'accès (un point d'entré) pour notre application.
+Les contrôleurs et les fournisseurs qui composent une application Jakarta MVC peuvent être configurés en implémentant une sous-classe d'`Application` de Jakarta RESTful Web Services. Dans cette classe, vous pouvez spécifier la base de l'URL qui déclenchera le traitement par le moteur REST pour les contrôleurs Jakarta MVC.
+
+[source,java]
+----
+@ApplicationPath("app")
+public class WebApplication extends Application {
+
+}
+----
+
+Une application Jakarta MVC typique se compose de trois parties : le Contrôleur, la Vue et le Modèle.
+
+=== Définition du contrôleur
+
+Un Contrôleur dans une application Jakarta MVC, peut-être configuré comme étant un contrôleur REST ou un contrôleur MVC.
+
+* Pour configurer une classe comme étant un bean JAX-RS (ici le contrôleur REST), je vous invite à lire cet article sur la https://bit.ly/3Tqieti[création d'une API REST avec Jakarta EE 10^]
+* Comme pour https://spring.io/guides/gs/serving-web-content/[Spring MVC^], Jakarta MVC a introduit une nouvelle annotation `@Controller` pour indiquer qu'un bean JAX-RS est un contrôleur MVC.
+
+TIP: Un contrôleur peut être à la fois REST et MVC, une méthode d'un bean JAX-RS peut être annoté avec `@Controller`, dans ce cas cette méthode retournera une vue en réponse de la requête.
+
+Le contrôleur MVC.
+
+[source,java]
+----
+@Controller
+@Path("/demo")
+public class DemoController {
+
+    @Inject
+    private Models models;
+
+    @Inject
+    private UserService userService;
+
+    @GET
+    public String showHomePage() {
+        return "home.jsp";
+    }
+
+    @GET
+    @Path("users/{status}")
+    @View("list.jsp")
+    public void showListPage(
+            @QueryParam("title") String title,
+            @PathParam("status") String status
+    ) {
+        models.put("title", title);
+        models.put("users", userService.getAllByStatus(status));
+    }
+}
+----
+
+Le contrôleur accepte les requêtes et les mappe sur des actions, voici un exemple de requête que le contrôleur défini ci-dessus accepte :
+
+[source,httprequest]
+----
+ http://localhost:8080/context/app/demo
+----
+
+* `localhost` : le nom d’hôte de la machine exécutant le serveur d’application (ici, nous sommes en local)
+* `8080` : le port du serveur qui écoute les requêtes HTTP entrantes. Il s’agit du port 8080 par défaut mais, il peut être configuré.
+* `context` : la racine de contexte attribuée à l’application déployée. Il s’agit du nom de fichier (sans l’extension) du fichier WAR déployé par défaut, mais il peut être spécifié lors du déploiement.
+* `app` : identifie le chemin de l’application qui sert d’URI de base, qui correspond à la valeur que nous avons définie pour l’annotation `@ApplicationPath` lors de la création de notre application.
+* `demo` : la valeur définie dans l’annotation `@Path` au niveau du contrôleur, identifie la ressource qui traite la requête.
+
+Regardons les éléments qui composent le contrôleur :
+
+* L'annotation `jakarta.mvc.Controller` indique que notre classe est un contrôleur MVC;
+* L’annotation `jakarta.ws.rs.Path` définit le lien entre l’URL saisie par l’utilisateur et la classe Java chargée de traiter cette requête, identifiée comme ressource.
+
+[source,java]
+----
+@Controller
+@Path("/demo")
+----
+
+* L'annotation `jakarta.inject.Inject` définit un point d'injection pour un bean CDI;
+* L'objet models de type `jakarta.mvc.Models` est une map d'instances des modèles qui sera utilisée par un moteur `jakarta.mvc.engine.ViewEngine` pour traiter une vue. Nous utilisons cet objet pour faire passer (injecter) un modèle de données dans la vue
+
+[source,java]
+----
+@Inject
+private Models models;
+----
+
+* La méthode `showHomePage` retourne le contenu de la page "home" à l'utilisateur
+
+[source,java]
+----
+@GET
+public String showHomePage() {
+    return "home.jsp";
+}
+----
+
+Regardons la methode `showListPage` du contrôleur
+
+[source,java]
+----
+@GET
+@Path("users/{status}")
+@View("list.jsp")
+public void showListPage(
+        @QueryParam("title") String title,
+        @PathParam("status") String status
+) {
+    models.put("title", title);
+    models.put("users", userService.getAllByStatus(status));
+}
+----
+
+* `@GET` indique que la méthode est appelée en utilisant la méthode HTTP Get
+* `@Path` utilisée sur une méthode, cette annotation permet de spécifier une sous-ressource ('users'), dans notre cas, la sous-ressource comporte des accolades. Les accolades indiquent qu’il s’agit d’un espace réservé et que la valeur réelle spécifiée dans l’URL est transférée à la variable ‘status’. Le nom de la variable est également spécifié dans l’annotation `jakarta.ws.rs.PathParam`
+* `@View` indique la page retournée par la méthode : notons que dans ce cas la méthode doit retourner 'void'
+* `@PathParam("status") String status` est un paramètre avec l'annotation `jakarta.ws.rs.PathParam`. La valeur spécifiée dans le `@Path` entre les accolades est transférée au niveau du paramètre ‘status’
+* `@QueryParam("title") String title` est le deuxième paramètre avec l'annotation `jakarta.ws.rs.QueryParam` qui transfère la valeur du paramètre de la requête 'title' à ce paramètre.
+
+=== Définition du Modèle
+
+Le modèle ne doit pas nécessairement être une entité de la base de données. Je considère que toutes les données affichées par l'interface utilisateur constituent le modèle.
+
+=== Définition de la Vue
+
+La façon dont la spécification Jakarta MVC fonctionne est la suivante : vous avez un endpoint JAX-RS qui renvoie une chaîne de caractères qui est annotée `@View` avec le nom du modèle de la vue. C'est ainsi que le framework détermine la page à utiliser pour répondre à la requête.
+
+Dans notre cas, la méthode `showListPage` du contrôleur fait un peu de travail pour charger les données de modèle requises pour la page, puis les transmet au moteur de vue, identifié ici en renvoyant `list.jsp`, qui est, à son tour chargé depuis `/WEB-INF/views/list.jsp`, l'emplacement par défaut des vues dans l'application.
+
+Nous pouvons personnaliser l'emplacement par défaut `/WEB-INF/views/` des vues au niveau de l'application :
+
+[source,java]
+----
+@ApplicationPath("app")
+public class WebApplication extends Application {
+    @Override
+    public Map<String, Object> getProperties() {
+        final Map<String, Object> map = new HashMap<>();
+        map.put(ViewEngine.VIEW_FOLDER, "/MON_DOSSIER/");
+        return map;
+    }
+}
+----
+
+Le framework recherche parmi les instances de `jakarta.mvc.engine.ViewEngine` celle qui peut gérer la page nommée. L'implémentation par défaut de la spécification est livrée avec quelques-unes d'entre elles :
+
+* `JspViewEngine` est celle qui gère les noms de vues se terminant par `.jsp` ou `.jspx`;
+* `FaceletsViewEngine` une implémentation de JSF qui gère les noms de vues terminant par `.xhtml`
+
+Nous pouvons configurer le framework pour utiliser d'autre moteur de templates comme FreeMarker, Velocity, Thymeleaf, etc. le contrat de ViewEngine est assez simple :
+
+[source,java]
+----
+public interface ViewEngine {
+  // ....
+  // Définition des variables
+
+  boolean supports(String view);
+  void processView(ViewEngineContext context) throws ViewEngineException;
+}
+----
+
+== Conclusion
+
+Dans cet article, nous avons découvert Jakarta MVC et parlé de son fonctionnement. Nous avons vu comment il utilise les fonctionnalités de JAX-RS pour faciliter le développement des applications web MVC orientées actions et la possibilité d'utiliser le moteur de vue de notre choix.
+
+
