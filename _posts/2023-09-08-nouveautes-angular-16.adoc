@@ -133,7 +133,7 @@ const count: Observable<number> = toObservable(mySignal);
 
 Ici, Count est un observable en prenant la valeur du signal qui va être inspecter par les différents opérateurs de Rxjs (Pipe, subscribe, ...).
 
-* 	En interne, *toSignal* s'abonne à l'Observable fourni et met à jour le Signal renvoyé chaque fois que l'Observable émet une valeur
+* En interne, *toSignal* s'abonne à l'Observable fourni et met à jour le Signal renvoyé chaque fois que l'Observable émet une valeur
 
 [source,typescript]
 ----
@@ -145,3 +145,55 @@ Ici, Count est un observable en prenant la valeur du signal qui va être inspect
 Cet cas est pertinent dans le cas de l'observable d'un service par exemple API get qui renvoie un observale et pour inspecter la valeur côté controller en utilisant Signal , on pourra convertir cet dernier en Signal en utilisant *toSignal*.
 
 
+== Router :
+
+Rendre plus simple la récupération des informations (paraméteres, data,..)  de Router sans utilisation de module *ActivatedRouter*.
+
+*Comment?*
+
+* Activez la fonctionnalité *bindToComponentInputs* dans la fonction RouterModule ou provideRouter .
+* Ajoutez le décorateur *@Input()* aux propriétés que nous voulons lier aux informations de route.
+
+=== Exemple App routing file :
+
+==== App-routing.module.ts
+
+[source,typescript]
+----
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { UserComponent } from './user/user.component';
+
+const routes: Routes = [
+  {path:'users/:surname', component: UserComponent, }
+];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(routes, {bindToComponentInputs: true})
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { };
+
+----
+
+* Définir un path vers la page user avec un paramétre *surname*
+* Activer en ajoutant dans RouterModule object l'option *{bindToComponentInputs: true}*
+
+==== User.component.ts
+
+
+[source,typescript]
+----
+@Component({
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.scss'],
+  
+})
+export class UserComponent {
+  @Input() surname?: string;
+
+  
+----
