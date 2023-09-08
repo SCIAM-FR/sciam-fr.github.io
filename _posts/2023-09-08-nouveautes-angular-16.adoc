@@ -14,12 +14,38 @@ Avec cette version la façon d’écriture de code sera changé, une grande rév
 
 == Hydratation 
 
-SSR (Server-side rending)
-Lors de lancement de l’application côté navigateur, Angular réutilise les informations disponibles dans le code HTML généré par le serveur. Et à chaque changement de comportement le serveur va enregistrer une copie de la version ce qui permet une rapidité de lancement de nos applications, le temps de chargement va être réduit. 
-Cette technologie est faite par Angular Universal qui permet à Angular de restituer une application sur le serveur , générant un contenu HTML statique.
+*SSR* (Server-side rending)
+Lors de lancement de l’application côté navigateur, Angular réutilise les informations disponibles dans le code HTML généré par le serveur. 
+
+
+image::{{'/images/khaoulamrabet/code-hydratation.png' | relative_url}}[image,width=50%,align="center"]
+
+A chaque changement de comportement, le serveur va enregistrer une copie de la version ce qui permet d'améliorer la rapidité de lancement de nos applications, le temps de chargement va être réduit. 
+Cette technologie est faite par Angular Universal qui permet à Angular de restituer une application sur le serveur, générant un contenu HTML statique.
 
 Avec Angular, la restitution de code HTML de tous les nœuds de zéro à chaque changement fait.
 Alors que Angular 16 recherche les nœuds DOM existants tout en créant des structures de données internes et attache des écouteurs d'événements à ces nœuds. 
 Donc le changement sera fait que sur le nœud cible. Avec cette amélioration on gagne plus dans le temps de chargement de l’application.
-Pour commencer avec l’hydratation c’est juste d’ajouter ce code à main.ts 
+Pour commencer avec l’hydratation c’est juste d’ajouter ce code à *main.ts* 
+
+
+image::{{'/images/khaoulamrabet/code-hydratation.png' | relative_url}}[image,width=50%,align="center"]
+
+
+== ESBUILD
+
+Dans cette nouvelle version d'Angular, *le système de construction* est basé sur esbuild pour les développeurs
+
+image::{{'/images/khaoulamrabet/es-build.png' | relative_url}}[image,width=50%,align="center"]
+
+EsBuild améliore le temps d'exécution de l'application en produition froid. Il utilse vite comme capot. Changer la propriété Build dans *angular.json*:
+
+[source,javascript]
+----
+  "architecte" :{
+       "build" : "@angular-devkit/build-angular:browser- esbuild" } 
+
+----
+
+
 
