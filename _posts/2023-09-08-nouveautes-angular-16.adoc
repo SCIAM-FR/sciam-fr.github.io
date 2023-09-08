@@ -193,7 +193,77 @@ export class AppRoutingModule { };
   
 })
 export class UserComponent {
+   @Input() surname?: string;
+
+    ngOnInit()  {
+    console.log('User surname : ', this.surname);
+    }
+}
+----
+
+* Avec Input on récupére directement le paramétre de route.
+
+== Rxjs-interpo
+
+Comprend des utilitaires liés à l'utilisation de la bibliothèque *RxJS* en conjonction avec le système de réactivité basé sur le signal d'Angular. 
+
+*TakeUntilDestroy*:  Opérateur qui complète l'Observable lorsque le contexte appelant (composant, directive, service, etc.) est détruit.
+
+[source,typescript]
+----
+import { Component, effect, inject, Input, Signal, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Subject, takeUntil } from 'rxjs';
+import { User } from './user.model';
+import { UserService } from './user.service';
+
+@Component({
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.scss'],
+  
+})
+export class UserComponent {
   @Input() surname?: string;
 
+  destroyed$: Subject<boolean> = new Subject();
   
+  userService = inject(UserService);
+  users? : User[] | undefined;
+  initialData: Signal<User[] | undefined> = signal([]);
+  constructor() {
+    
+    effect(() => this.users = this.users?.concat(this.userService.list()));
+    this.initUsers();
+  }
+  initUsers() {
+   // new version 
+    this.userService.getUsers()
+    .pipe(takeUntilDestroyed())
+    .subscribe(data => {
+       this.users = data;
+    });
+   // old version  
+    this.userService.getUsers()
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe(data => {
+       this.users = data;
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+} 
+
 ----
+
+Les ancienne version d'angular on utilise takeUntil de la bibliotéque Rxjs, pour détuire un observable on est obligé de déclarer destroyed$ un subject et le complete dans ngOnDestry .
+
+
+== Conclusion 
+
+Avec cette nouvelle version 16, il y a deux grandes phases d'amélioration, en premier lieu est l'hydratation pour réduire le temps de chargement et en dexiéme le Signal où angular a ajouté pas mal des bibliothéques qui tournent autour de Signal.
+
+Attendons la prochaine Version! 
