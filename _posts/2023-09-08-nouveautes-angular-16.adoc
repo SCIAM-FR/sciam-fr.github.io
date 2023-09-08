@@ -259,11 +259,13 @@ export class UserComponent {
 
 ----
 
-Les ancienne version d'angular on utilise takeUntil de la bibliotéque Rxjs, pour détuire un observable on est obligé de déclarer destroyed$ un subject et le complete dans ngOnDestry .
+Les ancienne version d'angular on utilise *takeUntil* de la bibliothéque Rxjs, pour détuire un observable on est obligé de déclarer *destroyed$* un subject et le complete dans ngOnDestry.
 
 
 == Conclusion 
 
 Avec cette nouvelle version 16, il y a deux grandes phases d'amélioration, en premier lieu est l'hydratation pour réduire le temps de chargement et en dexiéme le Signal où angular a ajouté pas mal des bibliothéques qui tournent autour de Signal.
+
+Et j'ai adoré le faite que le code sera plus simple et moins compliqué que les ancienne versions :D. 
 
 Attendons la prochaine Version! 
