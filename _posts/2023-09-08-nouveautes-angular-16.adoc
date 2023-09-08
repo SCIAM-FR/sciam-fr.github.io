@@ -62,7 +62,7 @@ Le composant autocomplète partagé dans toute l’application *Shared* qui perm
 
 ==== Partie TS: auto-complete.component.ts
 
-[source,javascript]
+[source,typescript]
 ----
 import {Component, Input, OnChanges, signal}from '@angular/core';
 import { FormControl} from '@angular/forms';
@@ -119,4 +119,29 @@ Dans la fonction *change()* implementé dans le code au-dessus : on filtre les d
 ----
 
 * Avec Directive *ngFor* on pourra parcourir le signal de façon asynchrone.
+
+== toObservable et toSignal 
+
+*La sous-RFC 4* c'est une approche présente deux API innovantes, toObservable et toSignal, conversation entre Observables et Signals. Vous pouvez les trouver dans *@angular/core/rxjs-interop*.
+
+* L'Observable produit par *toObservable* utilise un effect pour envoyer la valeur suivante. Toutes les valeurs émises par l' toObservable Observable sont délivrées de manière asynchrone.
+
+[source,typescript]
+----
+const count: Observable<number> = toObservable(mySignal);
+----
+
+Ici, Count est un observable en prenant la valeur du signal qui va être inspecter par les différents opérateurs de Rxjs (Pipe, subscribe, ...).
+
+* 	En interne, *toSignal* s'abonne à l'Observable fourni et met à jour le Signal renvoyé chaque fois que l'Observable émet une valeur
+
+[source,typescript]
+----
+    Counter$ = of(1000);               
+    const counter : Signal < nombre > = toSignal (counter$);
+
+----
+
+Cet cas est pertinent dans le cas de l'observable d'un service par exemple API get qui renvoie un observale et pour inspecter la valeur côté controller en utilisant Signal , on pourra convertir cet dernier en Signal en utilisant *toSignal*.
+
 
