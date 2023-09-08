@@ -137,3 +137,12 @@ rickenbazolo:
   picture: rickenbazolo.png
   socials:
   linkedin: "rickenbazolo"
+
+khaoulamrabet:
+  name: "Khaoula Mrabet"
+  bio: "Ingénieur Informatique, passionnée par le développement web, ."
+  job: "Expert Frontend"
+  website: "https://sciam.fr/fr/equipe/72"
+  picture: khaoula.jpg
+  socials:
+  linkedin: ""
