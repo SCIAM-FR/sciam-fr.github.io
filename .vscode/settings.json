@@ -1,0 +1,7 @@
+{
+    "asciidoc.preview.attributes": {
+        "imagesdir":"../images",
+        "source-highlighter":"highlightjs",
+        "stem":"latexmath"
+    }
+}
