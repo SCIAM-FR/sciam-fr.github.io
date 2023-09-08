@@ -7,7 +7,7 @@
 :page-vignette: java-20.png
 :page-liquid:
  
- = Nouveautés de Angular16
+= Nouveautés de Angular16
 
 Dans ce article on va provoquer les principales nouveautés d’Angular 16 .
 Avec cette version la façon d’écriture de code sera changé, une grande révolution nous attend :D .
