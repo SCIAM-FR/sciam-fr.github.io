@@ -148,6 +148,9 @@ img.right {
   float: right;
   margin: 0px 0px 10px 15px;
 }
+.post-list {
+  margin-left: 0px; 
+}
 ul.twitter-list li {
   padding-bottom: 6px;
   margin-bottom: 6px;
