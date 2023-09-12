@@ -36,7 +36,6 @@ clementdetastes:
   socials:
     linkedin: "cl%C3%A9ment-de-tastes-a19734120"
 
-
 jeanmicheldoudoux:
   name: "Jean-Michel Doudoux"
   bio: "Passionné par le développement de logiciels depuis ses débuts, adolescent avec un Commodore 64, et par la veille technologique, Jean-Michel possède une longue expérience, en SSII/ESN et personnelle, dans l’écriture d’applications avec différents langages.<br>
@@ -48,6 +47,7 @@ Il utilise Java depuis sa version 1.0 et aime partager sa passion pour cette pla
   twitter: "jmdoudoux"
   socials:
     linkedin: "jmdoudoux"
+
 loichermann:
   name: "Loic Hermann"
   job: "CTO"
