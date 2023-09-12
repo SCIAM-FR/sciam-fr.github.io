@@ -168,9 +168,10 @@ ul.twitter-list li.nav-header {
 .post h1 > a {
   margin-right: 15px;
 }
-.post h1, .post .content, .post .footer {
+.post h1, .post .footer {
   border-bottom: 1px solid #ddd;
   margin-bottom: 10px;
+  padding-bottom: 10px;
 }
 .post .footer {
   padding-bottom: 10px;
