@@ -16,7 +16,7 @@ layout: default
     {% for post in paginator.posts %}
       <li>
         <h2>
-          <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+          <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title }}</a>
         </h2>
         {% assign author = site.data.authors[post.author] %}
         <div class="meta"><strong>Ecrit par <span
