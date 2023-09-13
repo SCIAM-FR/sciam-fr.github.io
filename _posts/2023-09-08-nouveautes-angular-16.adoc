@@ -161,7 +161,7 @@ Ici, Count est un observable en prenant la valeur du signal qui va être inspect
 Cet cas est pertinent dans le cas de l'observable d'un service par exemple API get qui renvoie un observale et pour inspecter la valeur côté controller en utilisant Signal , on pourra convertir cet dernier en Signal en utilisant *toSignal*.
 
 
-== Router :
+== Router
 
 Rendre plus simple la récupération des informations (paraméteres, data,..)  de Router sans utilisation de module *ActivatedRouter*.
 
@@ -282,7 +282,7 @@ Avec Angular 16, un simple appel de l'opérateur *takeUntilDestroyed* fait le n�
 
 == Conclusion 
 
-Avec cette nouvelle version 16, il y a deux grandes phases d'amélioration, en premier lieu est l'hydratation pour réduire le temps de chargement et en dexiéme, le Signal où angular a ajouté des bibliothèques qui tournent autour de Signal.
+Avec cette nouvelle *version 16*, il y a deux grandes phases d'amélioration, en premier lieu est l'hydratation pour réduire le temps de chargement et en dexiéme, le Signal où angular a ajouté des bibliothèques qui tournent autour de Signal.
 
 J'ai adoré le faite que le code sera plus simple et moins compliqué que les anciennes versions et c'est très remarquable dans les différents exemples de cet article :D. 
 
