@@ -259,7 +259,7 @@ export class UserComponent {
 
 ----
 
-Les ancienne version d'angular on utilise *takeUntil* de la bibliothéque Rxjs, pour détuire un observable on est obligé de déclarer *destroyed$* un subject et le complete dans ngOnDestry.
+Les ancienne version d'angular on utilise *takeUntil* de la bibliothéque Rxjs, pour détruire un observable. Ici, on est obligé de déclarer *destroyed$* comme un subject et le compléter dans ngOnDestry.
 
 
 == Conclusion 
