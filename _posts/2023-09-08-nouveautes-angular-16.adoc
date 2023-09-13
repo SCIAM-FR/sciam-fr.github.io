@@ -9,38 +9,54 @@
  
 = Nouveautés de Angular16
 
-Dans ce article on va provoquer les principales nouveautés d’Angular 16 .
-Avec cette version la façon d’écriture de code sera changé, une grande révolution nous attend :D .
+
+Angular est un framework Client fondé par Google en 2009 et depuis la version Angular 2, le framework est devenu bien structuré, solide et qui permet de créer des aplications performantes.
+
+L'équipe Angular travaille chaque année sur une nouvelle version pour améliorer la performance de framework et là, la version 16 est sortie avec des nouveautés principalement sur les améliorations de la réactivité et du rendu côté serveur d'Angular.
+
+Dans cet article, on va détailler les principales nouveautés de la version 16 d'Angular.
 
 == Hydratation 
-
 *SSR* (Server-side rending)
+
+L'hydratation est le processus qui restaure l'application rendue côté serveur sur le client. Cela inclut des éléments tels que la réutilisation des structures DOM rendues par le serveur, la conservation de l'état de l'application, le transfert des données d'application déjà récupérées par le serveur et d'autres processus.
+
 Lors de lancement de l’application côté navigateur, Angular réutilise les informations disponibles dans le code HTML généré par le serveur. 
 
+image::khaoulamrabet/hydratation.png[image,width=50%,align="center"]
 
-image::{{'/images/khaoulamrabet/code-hydratation.png' | relative_url}}[image,width=50%,align="center"]
-
-A chaque changement de comportement, le serveur va enregistrer une copie de la version ce qui permet d'améliorer la rapidité de lancement de nos applications, le temps de chargement va être réduit. 
+À chaque changement de comportement, le serveur va enregistrer une copie de la version ce qui permet d'améliorer la rapidité de lancement de nos applications, le temps de chargement va être réduit.
 Cette technologie est faite par Angular Universal qui permet à Angular de restituer une application sur le serveur, générant un contenu HTML statique.
 
 Avec Angular, la restitution de code HTML de tous les nœuds de zéro à chaque changement fait.
-Alors que Angular 16 recherche les nœuds DOM existants tout en créant des structures de données internes et attache des écouteurs d'événements à ces nœuds. 
-Donc le changement sera fait que sur le nœud cible. Avec cette amélioration on gagne plus dans le temps de chargement de l’application.
-Pour commencer avec l’hydratation c’est juste d’ajouter ce code à *main.ts* 
 
+Alors qu'Angular 16 recherche les nœuds DOM existants tout en créant des structures de données internes et attache des écouteurs d'événements à ces nœuds.
+Donc le changement ne sera fait que sur le nœud cible. Avec cette amélioration, on gagne plus dans le temps de chargement de l’application.
+Pour commencer avec l’hydratation, c’est juste d’ajouter *provideClientHydration* dans le provider de *App.module.ts* .
 
-image::{{'/images/khaoulamrabet/code-hydratation.png' | relative_url}}[image,width=50%,align="center"]
+[source, typescript]
+----
+import {provideClientHydration} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
+@NgModule({
+  declarations: [RootCmp],
+  exports: [RootCmp],
+  bootstrap: [RootCmp],
+  providers: [provideClientHydration()],
+})
+export class AppModule {}
+----
 
 == ESBUILD
 
-Dans cette nouvelle version d'Angular, *le système de construction* est basé sur esbuild pour les développeurs
+Dans cette nouvelle version d'Angular, *le système de construction* est basé sur esbuild pour les développeurs.
 
-image::{{'/images/khaoulamrabet/es-build.png' | relative_url}}[image,width=50%,align="center"]
+image::khaoulamrabet/es-build.png[image,width=50%,align="center"]
 
 EsBuild améliore le temps d'exécution de l'application en produition froid. Il utilse vite comme capot. Changer la propriété Build dans *angular.json*:
 
-[source,javascript]
+[source,typescript]
 ----
   "architecte" :{
        "build" : "@angular-devkit/build-angular:browser- esbuild" } 
@@ -54,7 +70,7 @@ La grande nouveauté d’Angular 16 est le *Signal* Angular. Le concept de signa
 Il permet de définir des valeurs réactives et d'exprimer des dépendances entre ces valeurs.
 Ce schéma détaille l’interface *WritableSignal* et ses méthodes pour la manipulation de Signal.
 
-image::{{'/images/khaoulamrabet/es-build.png' | relative_url}}[image,width=50%,align="center"]
+image::khaoulamrabet/signal.png[image,width=50%,align="center"]
 
 === Exemple Autocomplete Général utilisant Signal: 
 
@@ -259,13 +275,15 @@ export class UserComponent {
 
 ----
 
-Les ancienne version d'angular on utilise *takeUntil* de la bibliothéque Rxjs, pour détruire un observable. Ici, on est obligé de déclarer *destroyed$* comme un subject et le compléter dans ngOnDestry.
+Dans les anciennes versions d'Angular, on utilise *takeUntil* de la bibliothèque  Rxjs, pour détruire un observable. Ici, on est obligé de déclarer *destroyed$* comme un subject et le compléter dans ngOnDestry.
+
+Avec Angular 16, un simple appel de l'opérateur *takeUntilDestroyed* fait le nécessaire.
 
 
 == Conclusion 
 
-Avec cette nouvelle version 16, il y a deux grandes phases d'amélioration, en premier lieu est l'hydratation pour réduire le temps de chargement et en dexiéme le Signal où angular a ajouté pas mal des bibliothéques qui tournent autour de Signal.
+Avec cette nouvelle version 16, il y a deux grandes phases d'amélioration, en premier lieu est l'hydratation pour réduire le temps de chargement et en dexiéme, le Signal où angular a ajouté des bibliothèques qui tournent autour de Signal.
 
-Et j'ai adoré le faite que le code sera plus simple et moins compliqué que les ancienne versions :D. 
+J'ai adoré le faite que le code sera plus simple et moins compliqué que les anciennes versions et c'est très remarquable dans les différents exemples de cet article :D. 
 
 Attendons la prochaine Version! 
