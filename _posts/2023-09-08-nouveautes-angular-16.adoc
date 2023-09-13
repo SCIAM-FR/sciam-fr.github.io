@@ -149,7 +149,7 @@ const count: Observable<number> = toObservable(mySignal);
 
 Ici, Count est un observable en prenant la valeur du signal qui va être inspecter par les différents opérateurs de Rxjs (Pipe, subscribe, ...).
 
-* En interne, *toSignal* s'abonne à l'Observable fourni et met à jour le Signal renvoyé chaque fois que l'Observable émet une valeur
+* En interne, *toSignal* s'abonne à l'Observable fourni et met à jour le Signal renvoyé chaque fois que l'Observable émet une valeur.
 
 [source,typescript]
 ----
