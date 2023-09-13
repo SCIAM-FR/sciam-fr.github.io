@@ -4,7 +4,7 @@
 :layout: post
 :author: khaoulamrabet
 :page-tags: [Angular, Angular16, Signal, Hydratation, Router, Sous-RFC, Rxjs]
-:page-vignette: java-20.png
+:page-vignette: angular-16.png
 :page-liquid:
  
 = Nouveautés de Angular16
