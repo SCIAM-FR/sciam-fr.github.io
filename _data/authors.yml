@@ -142,7 +142,7 @@ khaoulamrabet:
   name: "Khaoula Mrabet"
   bio: "Ingénieur Informatique, passionnée par le développement web, Spécialisée en Front end."
   job: "Expert Frontend"
-  website: "https://sciam.fr/fr/equipe/72"
+  pagesciam: "https://sciam.fr/fr/equipe/72"
   picture: khaoula.jpg
   socials:
-  linkedin: "mrabet khaoula"
+    linkedin: "mrabet-khaoula-b78ab0103"
