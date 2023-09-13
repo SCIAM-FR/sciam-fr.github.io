@@ -23,12 +23,12 @@ pagination:
     
     <p>
       {% if author.twitter %}
-      <a href="https://twitter.com/{{ author.twitter }}" title="Twitter" target="_blank">
+      <a href="https://twitter.com/{{ author.twitter }}" title="X (Twitter)" target="_blank">
         <span class="fa-stack fa-lg" aria-hidden="true">
           <i class="fas fa-circle fa-stack-2x"></i>
-          <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+          <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
         </span>
-        <span class="sr-only">Twitter</span>
+        <span class="sr-only">X (Twitter)</span>
       </a>
       {% endif %}
   
@@ -82,6 +82,16 @@ pagination:
         <i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
       </span>
       <span class="sr-only">Gitlab</span>
+   </a>
+   {% endif %}
+
+   {% if author.pagesciam %}
+   <a href="{{ author.pagesciam }}" title="Equipier Sciam" target="_blank">
+    <span class="fa-stack fa-lg" aria-hidden="true">
+      <i class="fas fa-circle fa-stack-2x"></i>
+      <i class="fas fa-circle-user fa-stack-1x fa-inverse"></i>
+    </span>
+    <span class="sr-only">Bio Sciam</span>
    </a>
    {% endif %}
 
