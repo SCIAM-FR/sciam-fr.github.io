@@ -143,3 +143,13 @@ rickenbazolo:
   picture: rickenbazolo.png
   socials:
     linkedin: "rickenbazolo"
+
+saidboudjelda:
+  name: "Said BOUDJELDA"
+  bio: "Ingénieur en informatique depuis 2007, Said n’a pas arrêté d’exercer sa passion pour le développement software. Il a travaillé sur plusieurs projets dans plusieurs domaines tels que l’industrie, le B2B, l’assurance, l’audit et comptabilité les télécoms et surtout les banques. Saïd a cette soif aiguë pour les challenges, et SCIAM est le terrain fertile qui lui permettra d’en avoir plus. Il est fasciné par la nature, la marche et les balades. Il adore notamment les voyages. "
+  job: "Backend Engineer Senior"
+  pagesciam: "https://sciam.fr/en/team/80"
+  picture: saidboudjelda.png
+  socials:
+    linkedin: "bmscomp"
+    github: "bmscomp"
