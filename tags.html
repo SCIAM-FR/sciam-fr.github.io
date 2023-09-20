@@ -4,15 +4,19 @@ title: 'Tags'
 ---
 
 <h1>Tous les tags</h1>
+<hr>
 <p>&nbsp;</p>
 <div class="all-tags">
-    {% assign tags = site.posts | all_tags %}
-    {% for tag in tags %}
-      {% assign tag_slug = tag['name'] | slugify: "raw" %}
-        <a class="btn btn-primary tag-btn" style="margin-bottom: 10px;"
-          href="{{ '/tag/' | relative_url }}{{ tag_slug }}/"
-          rel="category tag"><i class="fas fa-tag" aria-hidden="true"></i>&nbsp;{{ tag['name'] }} ({{ tag['count'] }})</a>&nbsp;
-    {% endfor %}
+{% assign tagsTries =  site.tags | sort %}
+
+{% for tag in tagsTries %}
+  {% assign tagName = tag | first %} 
+  {% assign tagNameRaw = tagName| downcase | slugify: "raw" %} 
+  {% assign postsCount = tag | last | size %} 
+  <a class="btn btn-primary tag-btn" style="margin-bottom: 10px;"
+      href="{{ '/tag/' | relative_url }}{{ tagNameRaw }}/"
+       rel="category tag"><i class="fas fa-tag" aria-hidden="true"></i>&nbsp;{{ tagName }} ({{ postsCount }})</a>&nbsp;
+{% endfor %}
 </div>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
