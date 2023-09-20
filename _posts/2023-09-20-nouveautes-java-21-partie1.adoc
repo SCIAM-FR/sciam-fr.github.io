@@ -1,0 +1,517 @@
+:showtitle:
+:page-navtitle: Les nouveautés de Java 21 : partie 1
+:page-excerpt: Ce premier article sur les nouveautés de Java 21 détaille les fonctionnalités proposées par les JEP des projets Amber, Loom et Panama.
+:layout: post
+:author: jeanmicheldoudoux
+:page-tags: [Java, Java 21, Projet Amber, Projet Panama, Projet Loom]
+:page-vignette: java-21.png
+:page-liquid:
+
+= Les nouveautés de Java 21 : partie 1
+
+Ce premier article est consacré aux nouveautés de Java 21 et détaille les fonctionnalités proposées par les projets https://openjdk.org/projects/amber/[Amber^], https://openjdk.org/projects/loom/[Loom^] et https://openjdk.org/projects/panama/[Panama^] d’OpenJDK.
+
+Juste après la sortie de Java 17, le délai entre deux version LTS (Long Term Support) du JDK a été réduit de 3 à 2 ans. 
+https://openjdk.org/projects/jdk/21/[JDK 21^] étant la quatrième release publiée depuis le JDK 17, le JDK 21 est estampillé LTS par Oracle et les distributeurs de JDK.
+
+La version GA 21 du JDK a été publiée le mardi 19 septembre 2023.
+
+Elle contient quinze JEPs que l’on peut regrouper en plusieurs catégories :
+
+* des évolutions dans le langage,
+* des évolutions dans les API,
+* des évolutions dans la JVM
+
+Toutes ces JEPs sont en preview ou en incubation. Elles sont issues des travaux de plusieurs projets :
+
+Six JEPs concernent des évolutions dans la syntaxe du langage Java principalement issues du projet Amber :
+
+* JEP 430 : https://openjdk.org/jeps/430[String Templates (Preview)^],
+* JEP 431 : https://openjdk.org/jeps/431[Sequenced Collections^],
+* JEP 440 : https://openjdk.org/jeps/440[Record Patterns^],
+* JEP 441 : https://openjdk.org/jeps/441[Pattern Matching for switch^],
+* JEP 443 : https://openjdk.org/jeps/443[Unnamed Patterns and Variables (Preview)^],
+* JEP 445 : https://openjdk.org/jeps/445[Unnamed Classes and Instance Main Methods (Preview)^]
+
+Trois JEPS concernent des évolutions dans la JVM :
+
+* JEP 439 : https://openjdk.org/jeps/439[Generational ZGC^],
+* JEP 449 : https://openjdk.org/jeps/449[Deprecate the Windows 32-bit x86 Port for Removal^],
+* JEP 451 : https://openjdk.org/jeps/451[Prepare to Disallow the Dynamic Loading of Agents^]
+
+Six JEPS concernent des évolutions dans les API issues des projets Loom et Panama :
+
+* JEP 442 : https://openjdk.org/jeps/442[Foreign Function & Memory API (Third Preview)^],
+* JEP 444 : https://openjdk.org/jeps/444[Virtual Threads^],
+* JEP 446 : https://openjdk.org/jeps/446[Scoped Values (Preview)^],
+* JEP 448 : https://openjdk.org/jeps/448[Vector API (Sixth Incubator)^],
+* JEP 452 : https://openjdk.org/jeps/452[Key Encapsulation Mechanism API^],
+* JEP 453 : https://openjdk.org/jeps/453[Structured Concurrency (Preview)^]
+
+Certaines de ces fonctionnalités sont proposées :
+
+* en standard soit directement soit après plusieurs itérations en preview ou en incubation,
+* en preview pour la première fois ou pour une N^eme^ itération,
+* en incubation pour la 6eme itération pour l’unique fonctionnalité concernée
+
+Les spécifications de la version 21 de la plateforme Java SE sont définies dans la https://openjdk.org/projects/jdk/21/spec[JSR 396^].
+
+== Les fonctionnalités du projet Amber
+
+Le projet Amber d’OpenJDK investigue et propose des évolutions dans la syntaxe du langage de programmation Java pour améliorer la productivité du développeur dans l'écriture de code Java.
+
+Le projet Amber propose deux fonctionnalités en standard :
+
+* les records patterns,
+* le pattern matching dans l’instruction switch
+
+Et trois fonctionnalités en preview :
+
+* String Templates,
+* Unnamed Patterns and Variables,
+* Unnamed Classes and Instance Main Methods
+
+=== Les record patterns
+
+Cette fonctionnalité a été proposée en preview en Java 19 (https://openjdk.org/jeps/420[JEP 420^]) et 20 (https://openjdk.org/jeps/432[JEP 432^]).
+
+Elle devient standard en Java 21 (https://openjdk.org/jeps/440[JEP 440^]).
+
+Le but est d’ajouter un nouveau pattern utilisable dans le pattern matching : le record pattern pour déconstruire les valeurs d’un record.
+
+La principale modification apportée depuis la seconde preview est la suppression du support des record patterns dans l'en-tête d'une déclaration d’une boucle `for` améliorée. Cette fonctionnalité pourra être reproposée dans une future JEP.
+
+=== Le pattern matching pour switch
+
+Historiquement, cette fonctionnalité a été proposée dans 4 preview en Java 17 (https://openjdk.org/jeps/406[JEP 406^]), 18 (https://openjdk.org/jeps/420[JEP 420^]), 19 (https://openjdk.org/jeps/427[JEP 427^]) et 20 (https://openjdk.org/jeps/433[JEP 433^]).
+
+Elle devient standard en Java 21 (https://openjdk.org/jeps/441[JEP 441^]).
+
+Deux changements majeurs sont apportés depuis la précédente JEP :
+
+* supprimer les parenthesized patterns, car ils n'avaient pas suffisamment de plus value,
+* et autoriser les constantes d'énumération qualifiées en tant que constantes dans les clauses `case` d’une instruction ou une expression `switch`. Cela évite d’avoir à utiliser un guarded pattern case label comme précédemment
+
+[source,java]
+----
+public sealed interface MonInterface permits MonEnum, MaClasse {}
+
+public enum MonEnum implements MonInterface { PAIRE, IMPAIRE }
+
+public final class MaClasse implements MonInterface {}
+
+// ...
+
+  static void traiter(MonInterface c) {
+    switch (c) {
+      // case MonEnum e when e == MonEnum.PAIRE -> { System.out.println("Paire"); }    
+      case MonEnum.PAIRE -> { System.out.println("Paire"); }
+      case MonEnum.IMPAIRE -> { System.out.println("Impaire"); }
+      case MonEnum e -> { System.out.println("MonEnum"); }
+      case MaClasse mc -> { System.out.println("MaClasse"); }
+    }
+  }
+----
+
+=== Les String Templates (Preview)
+
+Il est courant de devoir composer des chaînes de caractères à partir d'une combinaison de textes littéraux et de valeurs ou d'expressions.
+
+De nombreux langages proposent l'interpolation de chaînes comme alternative à la concaténation de chaînes.
+
+Mais le résultat peut parfois engendrer des soucis indirects tels que SQL ou JSON injection.
+
+Le but de la https://openjdk.org/jeps/430[JEP 430^] est d’enrichir le langage Java avec des string templates qui complètent les chaînes littérales et les blocs de texte.
+
+Les string templates combinent un texte littéral avec des expressions intégrées et un processeur de templates pour construire des chaînes de caractères dynamiquement avec la clarté de l’interpolation et un résultat plus sûr.
+
+Pour cela, nouveau type d'expression est introduit dans le langage : les templates expressions pour effectuer une interpolation de chaîne pour créer une chaîne ou un objet.
+
+Syntaxiquement, cela ressemble à une chaîne littérale avec un préfixe :
+
+[source,shell]
+----
+jshell> String prenom = "Pierre";
+prenom ==> "Pierre"
+
+jshell> String message = STR."Bonjour \{prenom}";
+message ==> "Bonjour Pierre"
+----
+
+Une template expression est composée de trois éléments :
+
+* un processeur de templates (`STR` dans l’exemple ci-dessus),
+* un caractère point (`U+002E`), celui utilisé dans les autres expressions,
+* un template (`"Bonjour \\{prenom}"`) qui contient une expression intégrée (`\\{prenom}`)
+
+Le template peut utiliser plusieurs lignes de code source en utilisant une syntaxe similaire à celle des blocs de texte.
+
+CAUTION: chaîne de caractères littérale ne peut pas contenir une expression de de la forme `\\{xxx}` sinon une erreur est émise par le compilateur car dans ce cas la valeur littérale est considérée comme un template qui doit donc être obligatoirement préfixé par un processeur de templates pour être valide.
+
+[source,shell]
+----
+jshell> String message = "Bonjour \{prenom}";
+|  Error:
+|  processor missing from string template expression
+|  String message = "Bonjour \{prenom}";
+|                   ^ 
+----
+
+3 processeurs de templates sont fournis dans le JDK :
+
+* `java.lang.StringTemplate.STR` : effectue une interpolation pour créer une chaîne. `STR` est un champ static implicitement et automatiquement importé comme le package `java.lang.*`. Attention à la collision de nom malencontreuse si un type utilisé se nomme aussi `STR`.
++
+[source,shell]
+----
+jshell> int a = 1, b = 2;
+a ==> 1
+b ==> 2
+
+jshell> String s = STR."\{a} + \{b} = \{a + b}";
+s ==> "1 + 2 = 3"
+----
++
+* `java.util.FormatProcessor.FMT` : effectue une interpolation pour créer une chaîne. Il interprète les spécificateurs de format à gauche des expressions intégrées. Les spécificateurs de format sont ceux définis dans `java.util.Formatter`
++
+[source,shell]
+----
+jshell> import static java.util.FormatProcessor.FMT;
+
+jshell> int a = 1, b = 2;
+a ==> 1
+b ==> 2
+
+jshell> String s = FMT."%05d\{a} + %05d\{b} = %05d\{a + b}";
+s ==> "00001 + 00002 = 00003"
+----
++
+* `java.lang.StringTemplate.RAW` : produit un objet de type `StringTemplate`
++
+[source,shell]
+----
+jshell> import static java.lang.StringTemplate.RAW;
+
+jshell> String prenom = "Pierre";
+prenom ==> "Pierre"
+
+jshell> StringTemplate st = RAW."Bonjour \{prenom}";
+st ==> StringTemplate{ fragments = [ "Bonjour ", "" ], values = [Pierre] }
+
+jshell> String message = STR.process(st);
+message ==> "Bonjour Pierre"
+----
++
+
+
+Il est possible de définir des processeurs de templates personnalisés pour générer des chaînes ou des objets qui peuvent être validés.
+
+Il faut obtenir une instance de l'interface fonctionnelle `StringTemplate.Processor` qui implémente l’unique méthode `process()`.
+
+L’utilisation de la fabrique `StringTemplate.Processor::of` permet d’obtenir une instance.
+
+[source,shell]
+----
+C:\java>jshell --enable-preview --class-path "./libs/json-20230618.jar"
+|  Welcome to JShell -- Version 21
+|  For an introduction type: /help intro
+
+jshell> import org.json.*;
+
+jshell> var JSON = StringTemplate.Processor.of((StringTemplate st) -> new JSONObject(st.interpolate()));
+JSON ==> java.lang.StringTemplate$Processor$$Lambda/0x000002945205af38@5d76b067
+
+jshell> String nom     = "Durant";
+nom ==> "Durant"
+
+jshell> String prenom  = "Pierre";
+prenom ==> "Pierre"
+
+jshell> JSONObject doc = JSON."""
+   ...>         {
+   ...>           "nom":    "\{nom}",
+   ...>           "prenom": "\{prenom}"
+   ...>         }""";
+doc ==> {"nom":"Durant","prenom":"Pierre"}
+----
+
+=== Unnamed Patterns and Variables (Preview)
+
+Le but de la https://openjdk.org/jeps/443[JEP 443^] est d’enrichir le langage d’une syntaxe pour les patterns inutilisés dans les records pattern imbriqués et les variables inutilisées qui doivent être déclarées.
+
+La mise en œuvre syntaxique se fait en utilisant le dernier mot clé réservé de Java, introduit en Java 9 : l’unique caractère `_` (underscore).
+
+Trois patterns sont proposés :
+
+* Unnamed pattern : un pattern inconditionnel qui ne correspond à rien utilisable dans un pattern imbriqué à la place d'un type ou record pattern
++
+[source,java]
+----
+    record Grade(String code, String designation) {}
+    record Employe(String nom, String prenom, Grade grade) {}
+    
+    Object o = new Employe("Nom1", "Prenom1", new Grade("DEV", "Développeur"));
+   
+    if (o instanceof Employe(var nom, var prenom, _)) {
+      System.out.println("Employe : " + nom + " " + prenom);
+    }
+----
++
+* Unnamed pattern variable : utilisable avec tous types de patterns
++
+[source,java]
+----
+    if (o instanceof Employe(var nom, var _, _)) {
+      System.out.println("Employe : " + nom);
+    }
+----
++
+* Unnamed variable : pour une variable qui peut être initialisée mais non utilisée dans :
+** une variable locale dans un bloc,
+** une ressource dans un try-with-resources,
+** l'en-tête d'une boucle `for` et `for` améliorée,
+** une exception d'un bloc `catch`,
+** un paramètre formel d'une expression Lambda,
+** utilisable plusieurs fois dans la même portée
++
+[source,java]
+----
+    try (var _ = ScopedContext.acquire()) {
+      var _ = service.traiter((_, _) -> System.out.printn("traiter"));
+    }  catch (Throwable _) { }
+----
++
+
+
+Le pattern unnamed pattern variable sera particulièrement utile dans des switchs avec des patterns sur des types scellés.
+
+[source,java]
+----
+sealed interface Forme permits Cercle, Carre, Rectangle  {}
+----
+
+Il n’est pas possible d’avoir plusieurs patterns nommés dans une même clause `case`. Si plusieurs patterns ne sont pas utile, il faut les définir chacun dans un `case` avec un bloc de code vide.
+
+[source,java]
+----
+void traiterFormeRonde(Forme forme) {
+    switch(forme) {
+      case Cercle c -> afficher(c);
+      case Carre c -> {}
+      case Rectangle r -> {}   
+    }
+}
+----
+
+Il est alors tentant d’utiliser une clause `default`.
+
+[source,java]
+----
+    switch(forme) {
+      case Cercle c -> afficher(c);
+      default -> {}
+    }
+----
+
+Cette approche risque d’introduire des bugs en cas d’ajout d’un nouveau type dans la hiérarchie scellée.
+
+Il sera préférable d’utiliser des unnamed pattern variables.
+
+[source,java]
+----
+    switch(forme) {
+      case Cercle c -> afficher(c);
+      case Carre _, Rectangle _ -> {}   
+    }
+----
+
+Si un nouveau type est ajoutée à la hiérarchie scellée, alors le compilateur émettra une erreur à la compilation du code contenant le `switch` et la JVM lèvera une exception si le code n'est pas recompilé.
+
+=== Unnamed Classes and Instance Main Methods (Preview)
+
+Les buts de la https://openjdk.org/jeps/445[JEP 445^] sont :
+
+[arabic^]
+. faire évoluer le langage pour simplifier les programmes simples
+. et faciliter l’apprentissage des débutants avec le langage Java
+
+Deux évolutions sont proposées dans un fichier unique.
+
+La méthode `main()` peut être une méthode d’instance avec ou sans tableau de chaînes de caractères en paramètre.
+
+[source,java]
+----
+class HelloWorld { 
+  void main() { 
+    System.out.println("Hello world");
+  }
+}
+----
+
+Il est possible de ne pas définir explicitement la classe : dans ce cas, une classe sans nom (unnamed class) sera utilisée.
+
+[source,shell]
+----
+C:\java>type Hello.java
+void main() {
+  System.out.println("Hello");
+}
+
+C:\java>javac --enable-preview --source=21 Hello.java
+Note: Hello.java uses preview features of Java SE 21.
+Note: Recompile with -Xlint:preview for details.
+
+C:\java>java --enable-preview Hello
+Hello
+----
+
+NOTE: le nom du fichier est libre tant que qu’il soit un identifiant Java valide.
+
+Le tableau de chaînes de caractères contenant les arguments passés à l’application sont optionnels mais peut être utilisé si besoin.
+
+[source,shell]
+----
+C:\java>type Hello.java
+void main(String[] args) {
+  System.out.println("Hello");
+}
+C:\java>javac --enable-preview --source=21 Hello.java
+Note: Hello.java uses preview features of Java SE 21.
+Note: Recompile with -Xlint:preview for details.
+
+C:\java>java --enable-preview Hello
+Hello
+----
+
+Depuis Java 11, il est aussi possible d’utiliser directement la JVM pour exécuter un unique fichier source Java qui sera compilé à la volée au lancement de la JVM.
+
+[source,shell]
+----
+C:\java>del Hello.class
+
+C:\java>type Hello.java
+void main() {
+  System.out.println("Hello");
+}
+
+C:\java>java --enable-preview --source=21 Hello.java
+Note: Hello.java uses preview features of Java SE 21.
+Note: Recompile with -Xlint:preview for details.
+Hello
+----
+
+Il est possible d’ajouter dans le code de l’unique fichier source des attributs, des méthodes ou des types.
+
+[source,shell]
+----
+C:\java>type Hello.java
+
+static String WORLD = "world";
+
+void main() {
+  System.out.print("Hello");
+  Util.afficher(" "+WORLD);
+}
+
+class Util {
+  static void afficher(String message) {
+    System.out.println(message);
+  }
+}
+C:\java>java --enable-preview --source=21 Hello.java
+Note: Hello.java uses preview features of Java SE 21.
+Note: Recompile with -Xlint:preview for details.
+Hello world 
+----
+
+== Les fonctionnalités du projet Loom
+
+Le projet Loom d’OpenJDK explore, incube et fournit des fonctionnalités pour prendre en charge une concurrence légère, facile à utiliser et à haut débit ainsi que de nouveaux modèles de programmation concurrente.
+
+En Java 21, il propose une fonctionnalité en standard :
+
+* les threads virtuels
+
+Et deux fonctionnalités en preview :
+
+* l’API Structured Concurrency,
+* l’API Scoped Values
+
+=== Les threads virtuels
+
+Les threads virtuels ont été proposés en preview en Java 19 (https://openjdk.org/jeps/425[JEP 425^]) et 20 (https://openjdk.org/jeps/436[JEP 436^]).
+
+Ils sont proposés en standard en Java 21 (https://openjdk.org/jeps/444[JEP 444^]) avec deux évolutions par rapport à la précédente preview.
+
+La première évolution apportée, à la suite des retours de la précédente preview, est que les threads virtuels prennent désormais en charge les variables de type `ThreadLocal` en permanence.
+
+Il n'est plus possible, comme c'était le cas dans les versions préliminaires, de créer des threads virtuels qui ne peuvent pas avoir de variables de type `ThreadLocal` et `InheritableThreadLocal`. 
+La prise en charge garantie des variables locales aux threads garantit que de nombreuses bibliothèques existantes peuvent être utilisées sans modification avec les threads virtuels et facilite la migration du code orienté tâches vers l'utilisation des threads virtuels.
+
+La propriété système booléenne `jdk.traceVirtualThreadLocals` de la JVM permet avec la valeur `true` d’afficher dans la sortie standard une stacktrace à chaque qu’un thread virtuel assigne une valeur à une instance de type `ThreadLocal`. 
+Les informations fournies facilitent l’identification des cas d’utilisation d’un `ThreadLocal` dans un thread virtuel pour envisage sa suppression ou son remplacement par un `ScopedValue` lorsque cette fonctionnalité sera standard.
+
+La seconde évolution concerne les threads virtuels créés directement avec l'API `Thread.Builder` (par opposition à ceux créés via `Executors.newVirtualThreadPerTaskExecutor()`) qui sont désormais également, par défaut, surveillés tout au long de leur durée de vie et observables via le thread dump.
+
+Si la propriété système `jdk.trackAllThreads` est définie avec la valeur `false` (`-Djdk.trackAllThreads=false`) alors les threads virtuels créés directement avec l'API `Thread.Builder` ne seront pas surveillés par le runtime et n'apparaîtront peut-être pas dans le new thread dump. Dans ce cas, un thread dump listera les threads virtuels qui sont bloqués dans les opérations d'I/O réseau, et les threads virtuels qui sont créés via la méthode `newVirtualThreadPerTaskExecutor()` de la classe `ExecutorService`.
+
+=== Structured Concurrency
+
+L’API Structured Concurrency a été proposée en incubation en Java 19 (https://openjdk.org/jeps/418[JEP 418^]) et 20 (https://openjdk.org/jeps/437[JEP 437^]).
+
+L’API est proposée en preview en Java 21 (https://openjdk.org/jeps/453[JEP 453^]) dans le package `java.util.concurrent`.
+
+Hormis le changement de package de l’API, le seul changement majeur est que la méthode `StructuredTaskScope::fork(...)` renvoie une `java.util.concurrent.StructuredTaskScope.Subtask` plutôt qu'un `java.util.concurrent.Future`.
+
+=== Scoped Values
+
+L’API Scoped Value a été proposée en incubation dans Java 20 (https://openjdk.org/jeps/429[JEP 429^])
+
+L’API est proposée en preview dans Java 21 (https://openjdk.org/jeps/446[JEP 446^]) dans le package `java.lang`.
+
+== Les fonctionnalités du projet Panama
+
+Le projet Panama d’OpenJDK investigue, incube et propose des fonctionnalités pour améliorer les interactions avec le système hôte.
+
+En Java 21, il propose une fonctionnalité en preview :
+
+* l’API Foreign Function & Memory
+
+Et une fonctionnalité en incubation :
+
+* l’API Vector
+
+=== L’API Foreign Function & Memory
+
+L’API Foreign Function & Memory est proposée en preview en Java 19 (https://openjdk.org/jeps/424[JEP 424^]), 20 (https://openjdk.org/jeps/434[JEP 434^]) et 21 (https://openjdk.org/jeps/442[JEP 442^]) dans le package `java.lang.foreign` du module `java.base`.
+
+Des évolutions dans l’API sont appliquées pour répondre aux retours de la précédente incubation. :
+
+* la centralisation de la gestion des durées de vie des segments natifs dans l'interface `Arena`,
+* l’amélioration des layouts grâce à un nouvel élément permettant de déréférencer les address layouts,
+* la possibilité de fournir des options au linker pour optimiser les appels aux fonctions qui ont une courte durée de vie et qui ne seront pas appelées en Java (par exemple, `clock_gettime`),
+* la mise à disposition d'un linker natif de secours, basé sur https://github.com/libffi/libffi[libffi^], pour faciliter le portage,
+* la classe `VaList` est supprimée
+
+=== L’API Vector (Incubator)
+
+L’API Vector est proposée en incubation en Java depuis 6 versions : 16 (https://openjdk.org/jeps/338[JEP 338^]), 17 (https://openjdk.org/jeps/414[JEP 414^]), 18 (https://openjdk.org/jeps/417[JEP 417^]), 19 (https://openjdk.org/jeps/426[JEP 426^]), 20 (https://openjdk.org/jeps/438[JEP 438^]) et 21 (https://openjdk.org/jeps/448[JEP 448^]). Cela fait donc 3 ans qu’elle est en incubation.
+
+L’API est proposée pour une sixième incubation, avec des améliorations mineures de l'API par rapport au JDK 20, notamment des corrections de bogues et des améliorations de performance.
+
+Il y a aussi deux évolutions dans l’API :
+
+* ajout de l'opération &quot;ou exclusif&quot; (`XOR`) aux masques vectoriels,
+* amélioration des performances des vector shuffles, en particulier lorsqu'ils sont utilisés pour réorganiser les éléments d'un vecteur et lors de la conversion entre vecteurs
+
+== Conclusion
+
+Java 21 propose en standard plusieurs fonctionnalités très importantes notamment les threads virtuels et le pattern matching qui vont avoir un impact dans le futur sur les applications Java.
+
+Plusieurs nouvelles fonctionnalités sont introduites en preview pour répondre à des problématiques particulières et plusieurs fonctionnalités poursuivent leurs évolutions en preview ou en incubation.
+
+Cette version 21 du JDK est particulière car elle est LTS, donc une cible pour les entreprises dans un futur plus ou moins proche.
+
+N’hésitez donc pas à télécharger une distribution du JDK 21 auprès d’un fournisseur. Oracle publie déjà ses JDK et les autres fournisseurs vont rapidement suivre.
+
+Le second article de cette série sera consacré aux autres fonctionnalités et évolutions non définies dans une JEP.
+
