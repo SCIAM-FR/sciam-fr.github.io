@@ -21,9 +21,8 @@ Chaque année, l'équipe Angular livre une nouvelle version apportant nouveauté
 Dans cet article, on va détailler les principales nouveautés de la version 16 d'Angular.
 
 == Hydratation 
-*SSR* (Server-side rending)
 
-L'hydratation est le processus qui restaure l'application rendue côté serveur sur le client. Cela inclut des éléments tels que la réutilisation des structures DOM rendues par le serveur, la conservation de l'état de l'application, le transfert des données d'application déjà récupérées par le serveur et d'autres processus.
+L'hydratation est le processus qui restaure l'application rendue côté serveur *SSR* (Server-side rending) sur le client. Cela inclut des éléments tels que la réutilisation des structures DOM rendues par le serveur, la conservation de l'état de l'application, le transfert des données d'application déjà récupérées par le serveur et d'autres processus.
 
 Lors de lancement de l’application côté navigateur, Angular réutilise les informations disponibles dans le code HTML généré par le serveur. 
 
@@ -69,16 +68,16 @@ EsBuild améliore le temps d'exécution de l'application en produition froid. Il
 
 == Signals Angular 
 
-La grande nouveauté d’Angular 16 est le *Signal* Angular. Le concept de signal dans Angular est une fonctionnalité introduite dans la version 16 de la bibliothèque *@angular/core* . 
+Il s'agit probablement de la plus grande nouveauté introduite dans la version 16 par la bibliothèque *@angular/core* . 
 
-Il permet de définir des valeurs réactives et d'exprimer des dépendances entre ces valeurs.
+Signal permet de définir des valeurs réactives et d'exprimer des dépendances entre ces valeurs.
 Ce schéma détaille l’interface *WritableSignal* et ses méthodes pour la manipulation de Signal.
 
 image::khaoulamrabet/signal.png[image,width=50%,align="center"]
 
 === Exemple Autocomplete Général utilisant Signal: 
 
-Le composant autocomplète partagé dans toute l’application *Shared* qui permet d’afficher une liste de donnée envoyé par le composant parent avec la possibilité d’affiner la recherche en entrent le nom de donnée dans l’input. 
+L'exemple permet de créer un composant d'autocompléte qui soit partagé dans toute l'application en utilisant la fonction Signal. 
 
 ==== Partie TS: auto-complete.component.ts
 
@@ -95,16 +94,16 @@ import { ListDataType} from'@app/shared/interfaces/ListDataType.inteface';
 })
 export class AutoCompleteComponent implements OnChanges {
 
-  @Input({required:true}) listData?:ListDataType;
+  @Input({required:true}) listData?:ListDataType; // <3>
   myControl= new FormControl('');
-  filteredOptions= signal<never[]|undefined>([]);
+  filteredOptions= signal<never[]|undefined>([]) // <1>;
   constructor() {
     this.change();
   }
   ngOnChanges() {
     this.filteredOptions.set(this.listData?.list);
   }
-  change() {
+  change() { // <2>
     const list = this._filter(this.myControl.value);
     this.filteredOptions.set(list);
   }
@@ -116,10 +115,10 @@ export class AutoCompleteComponent implements OnChanges {
 }
 ----
 
-* *FilteredOptions* : le signal qui contient les données de la liste à afficher 
-Dans la fonction *change()* implementé dans le code au-dessus : on filtre les données et affecter les données au Signal avec la méthode *set()*.
+<1> `filteredOptions` est le signal contenant les données de la liste à afficher.
+<2> Dans `change()`, on filtre et on affecte les données au signal via la méthode `set()`.
 
-* ListDataType: c'est un type définit dans l'application.
+<3> `ListDataType`: c'est un type définit dans l'application.
 
 ==== Partie Html : auto-complete.componont.html 
 
@@ -131,14 +130,15 @@ Dans la fonction *change()* implementé dans le code au-dessus : on filtre les d
        [formControl]="myControl"
        [matAutocomplete]="auto">
 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">   
-   <mat-option *ngFor="let option of filteredOptions()" [value]="option">
+   <mat-option *ngFor="let option of filteredOptions()" [value]="option"> <!--1-->
       {{option}}
    </mat-option>
 </mat-autocomplete>
 
 ----
 
-* Avec Directive *ngFor* on pourra parcourir le signal de façon asynchrone.
+<1> Avec la directive `*ngFor` on pourra parcourir le signal de façon asynchrone.
+
 
 == toObservable et toSignal 
 
@@ -151,9 +151,9 @@ Dans la fonction *change()* implementé dans le code au-dessus : on filtre les d
 const count: Observable<number> = toObservable(mySignal);
 ----
 
-Ici, Count est un observable en prenant la valeur du signal qui va être inspecter par les différents opérateurs de Rxjs (Pipe, subscribe, ...).
+Ici, `count` est un `Observable` en prenant la valeur du signal qui va être inspecté par les différents opérateurs de Rxjs (Pipe, subscribe, ...).
 
-* En interne, *toSignal* s'abonne à l'Observable fourni et met à jour le Signal renvoyé chaque fois que l'Observable émet une valeur.
+En interne, `toSignal` s'abonne à l'Observable fourni et met à jour le Signal renvoyé chaque fois que l'Observable  émet une valeur.
 
 [source,typescript]
 ----
@@ -161,18 +161,14 @@ Ici, Count est un observable en prenant la valeur du signal qui va être inspect
     const counter : Signal < nombre > = toSignal (counter$);
 
 ----
-
-Cet cas est pertinent dans le cas de l'observable d'un service par exemple API get qui renvoie un observale et pour inspecter la valeur côté controller en utilisant Signal , on pourra convertir cet dernier en Signal en utilisant *toSignal*.
-
+L'opérateur `toSignal` permet de convertir l'Observale d'un service utilisant le module HttpClientModule(Get, Post, ..). La récupération de données dans le controller sera plus simple avec la déclaration de Signal qui reçoit la valeur de retour de toSignal.
 
 == Router
 
-Rendre plus simple la récupération des informations (paraméteres, data,..)  de Router sans utilisation de module *ActivatedRouter*.
+Angular rend plus simple la récupération des informations (paraméteres, data,..)  de Router sans utilisation de module `ActivatedRouter`.
 
-*Comment?*
-
-* Activez la fonctionnalité *bindToComponentInputs* dans la fonction RouterModule ou provideRouter .
-* Ajoutez le décorateur *@Input()* aux propriétés que nous voulons lier aux informations de route.
+* Activez la fonctionnalité `bindToComponentInputs` dans la fonction RouterModule ou provideRouter .
+* Ajoutez le décorateur `@Input()` aux propriétés que nous voulons lier aux informations de route.
 
 === Exemple App routing file :
 
@@ -185,12 +181,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserComponent } from './user/user.component';
 
 const routes: Routes = [
-  {path:'users/:surname', component: UserComponent, }
+  {path:'users/:surname', component: UserComponent, } //<1>
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, {bindToComponentInputs: true})
+    RouterModule.forRoot(routes, {bindToComponentInputs: true}) //<2>
   ],
   exports: [RouterModule]
 })
@@ -198,8 +194,8 @@ export class AppRoutingModule { };
 
 ----
 
-* Définir un path vers la page user avec un paramétre *surname*
-* Activer en ajoutant dans RouterModule object l'option *{bindToComponentInputs: true}*
+<1>Définir un path vers la page user avec un paramétre `toSignal`.
+<2>Activer en ajoutant dans RouterModule object l'option `{bindToComponentInputs: true}`.
 
 ==== User.component.ts
 
@@ -213,7 +209,7 @@ export class AppRoutingModule { };
   
 })
 export class UserComponent {
-   @Input() surname?: string;
+   @Input() surname?: string; // <1>
 
     ngOnInit()  {
     console.log('User surname : ', this.surname);
@@ -221,11 +217,11 @@ export class UserComponent {
 }
 ----
 
-* Avec Input on récupére directement le paramétre de route.
+<1> Avec Input on récupére directement le paramétre de route.
 
 == Rxjs-interpo
 
-Comprend des utilitaires liés à l'utilisation de la bibliothèque *RxJS* en conjonction avec le système de réactivité basé sur le signal d'Angular. 
+  Un nouveau module d'angular propose des opérations qui conviennent avec le le système de réactivité basé sur le signal d'Angular.
 
 *TakeUntilDestroy*:  Opérateur qui complète l'Observable lorsque le contexte appelant (composant, directive, service, etc.) est détruit.
 
@@ -290,7 +286,4 @@ Cette nouvelle *version 16* apporte deux amélioration majeures :
 * l'hydratation qui réduit le temps de chargement des applications
 * Signal qui améliore l'observabilité des composants.
 
-
-J'ai adoré le faite que le code sera plus simple et moins compliqué que les anciennes versions et c'est très remarquable dans les différents exemples de cet article :D. 
-
-Attendons la prochaine Version! 
+Comme le montre les exemples de cet articles, le code produit avec la version 16 est moins compliqué et nettement plus expressif, ce qui améliore grandement l'expérience de développement.
