@@ -11,7 +11,8 @@
 
 
 
-Angular est un framework Client fondé par Google en 2009 et depuis la version Angular 2, le framework est devenu bien structuré, solide et qui permet de créer des aplications performantes.
+Angular est un framework web créé par Google en 2009. A partir de sa version 2, le framework a acquis un niveau de structuration et de solidité permettant de développer rapidement des applications performantes.
+
 
 L'équipe Angular travaille chaque année sur une nouvelle version pour améliorer la performance de framework et là, la version 16 est sortie avec des nouveautés principalement sur les améliorations de la réactivité et du rendu côté serveur d'Angular.
 
