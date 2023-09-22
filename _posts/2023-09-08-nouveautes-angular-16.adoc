@@ -286,7 +286,10 @@ Avec Angular 16, un simple appel de l'opérateur *takeUntilDestroyed* fait le n�
 
 == Conclusion 
 
-Avec cette nouvelle *version 16*, il y a deux grandes phases d'amélioration, en premier lieu est l'hydratation pour réduire le temps de chargement et en dexiéme, le Signal où angular a ajouté des bibliothèques qui tournent autour de Signal.
+Cette nouvelle *version 16* apporte deux amélioration majeures : 
+* l'hydratation qui réduit le temps de chargement des applications
+* Signal qui améliore l'observabilité des composants.
+
 
 J'ai adoré le faite que le code sera plus simple et moins compliqué que les anciennes versions et c'est très remarquable dans les différents exemples de cet article :D. 
 
