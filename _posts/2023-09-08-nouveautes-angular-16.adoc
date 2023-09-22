@@ -7,7 +7,8 @@
 :page-vignette: angular-16.png
 :page-liquid:
  
-= Nouveautés de Angular16
+= Les Nouveautés d'Angular 16
+
 
 
 Angular est un framework Client fondé par Google en 2009 et depuis la version Angular 2, le framework est devenu bien structuré, solide et qui permet de créer des aplications performantes.
