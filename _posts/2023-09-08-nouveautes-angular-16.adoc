@@ -1,6 +1,7 @@
 :showtitle:
 :page-navtitle: Les nouveautés de Angular 16
-:page-excerpt: Cet article provoque les nouveautés de Angular 16 et la nouvelle révolution façon de développer avec Angular.
+:page-excerpt: Cet article présente les nouveautés apportées par Angular 16, comme l'hydratation, le nouveau système de build ou `Signal` qui améliore grandement l'expérience de développement avec le framework.
+
 :layout: post
 :author: khaoulamrabet
 :page-tags: [Angular, Angular16, Signal, Hydratation, Router, Sous-RFC, Rxjs]
