@@ -11,7 +11,7 @@
 
 Ce premier article est consacré aux nouveautés de Java 21 et détaille les fonctionnalités proposées par les projets https://openjdk.org/projects/amber/[Amber^], https://openjdk.org/projects/loom/[Loom^] et https://openjdk.org/projects/panama/[Panama^] d’OpenJDK.
 
-Juste après la sortie de Java 17, le délai entre deux version LTS (Long Term Support) du JDK a été réduit de 3 à 2 ans. 
+Juste après la sortie de Java 17, le délai entre deux versions LTS (Long Term Support) du JDK a été réduit de 3 à 2 ans. 
 https://openjdk.org/projects/jdk/21/[JDK 21^] étant la quatrième release publiée depuis le JDK 17, le JDK 21 est estampillé LTS par Oracle et les distributeurs de JDK.
 
 La version GA 21 du JDK a été publiée le mardi 19 septembre 2023.
@@ -50,15 +50,15 @@ Six JEPS concernent des évolutions dans les API issues des projets Loom et Pana
 
 Certaines de ces fonctionnalités sont proposées :
 
-* en standard soit directement soit après plusieurs itérations en preview ou en incubation,
-* en preview pour la première fois ou pour une N^eme^ itération,
-* en incubation pour la 6eme itération pour l’unique fonctionnalité concernée
+* en standard soit directement, soit après plusieurs itérations en preview ou en incubation,
+* en preview pour la première fois ou pour une N^ème^ itération,
+* en incubation pour la 6^ème^ itération pour l’unique fonctionnalité concernée
 
 Les spécifications de la version 21 de la plateforme Java SE sont définies dans la https://openjdk.org/projects/jdk/21/spec[JSR 396^].
 
 == Les fonctionnalités du projet Amber
 
-Le projet Amber d’OpenJDK investigue et propose des évolutions dans la syntaxe du langage de programmation Java pour améliorer la productivité du développeur dans l'écriture de code Java.
+Le projet Amber d’OpenJDK explore et propose des évolutions dans la syntaxe du langage de programmation Java pour améliorer la productivité du développeur dans l'écriture de code Java.
 
 Le projet Amber propose deux fonctionnalités en standard :
 
@@ -83,13 +83,13 @@ La principale modification apportée depuis la seconde preview est la suppressio
 
 === Le pattern matching pour switch
 
-Historiquement, cette fonctionnalité a été proposée dans 4 preview en Java 17 (https://openjdk.org/jeps/406[JEP 406^]), 18 (https://openjdk.org/jeps/420[JEP 420^]), 19 (https://openjdk.org/jeps/427[JEP 427^]) et 20 (https://openjdk.org/jeps/433[JEP 433^]).
+Historiquement, cette fonctionnalité a été proposée dans 4 previews en Java 17 (https://openjdk.org/jeps/406[JEP 406^]), 18 (https://openjdk.org/jeps/420[JEP 420^]), 19 (https://openjdk.org/jeps/427[JEP 427^]) et 20 (https://openjdk.org/jeps/433[JEP 433^]).
 
 Elle devient standard en Java 21 (https://openjdk.org/jeps/441[JEP 441^]).
 
 Deux changements majeurs sont apportés depuis la précédente JEP :
 
-* supprimer les parenthesized patterns, car ils n'avaient pas suffisamment de plus value,
+* supprimer les parenthesized patterns, car ils n'avaient pas suffisamment de plus-value,
 * et autoriser les constantes d'énumération qualifiées en tant que constantes dans les clauses `case` d’une instruction ou une expression `switch`. Cela évite d’avoir à utiliser un guarded pattern case label comme précédemment
 
 [source,java]
@@ -119,7 +119,7 @@ Il est courant de devoir composer des chaînes de caractères à partir d'une co
 
 De nombreux langages proposent l'interpolation de chaînes comme alternative à la concaténation de chaînes.
 
-Mais le résultat peut parfois engendrer des soucis indirects tels que SQL ou JSON injection.
+Mais le résultat peut parfois engendrer des soucis indirects tels que l'injection SQL ou JSON.
 
 Le but de la https://openjdk.org/jeps/430[JEP 430^] est d’enrichir le langage Java avec des string templates qui complètent les chaînes littérales et les blocs de texte.
 
@@ -146,7 +146,7 @@ Une template expression est composée de trois éléments :
 
 Le template peut utiliser plusieurs lignes de code source en utilisant une syntaxe similaire à celle des blocs de texte.
 
-CAUTION: chaîne de caractères littérale ne peut pas contenir une expression de de la forme `\\{xxx}` sinon une erreur est émise par le compilateur car dans ce cas la valeur littérale est considérée comme un template qui doit donc être obligatoirement préfixé par un processeur de templates pour être valide.
+CAUTION: Une chaîne de caractères littérale ne peut pas contenir une expression de la forme `\\{xxx}` sinon une erreur est émise par le compilateur car, dans ce cas la valeur littérale est considérée comme un template qui doit donc être obligatoirement préfixé par un processeur de templates pour être valide.
 
 [source,shell]
 ----
@@ -265,7 +265,7 @@ Trois patterns sont proposés :
     }
 ----
 +
-* Unnamed variable : pour une variable qui peut être initialisée mais non utilisée dans :
+* Unnamed variable : pour une variable qui peut être initialisée, mais non utilisée dans :
 ** une variable locale dans un bloc,
 ** une ressource dans un try-with-resources,
 ** l'en-tête d'une boucle `for` et `for` améliorée,
@@ -324,7 +324,7 @@ Il sera préférable d’utiliser des unnamed pattern variables.
     }
 ----
 
-Si un nouveau type est ajoutée à la hiérarchie scellée, alors le compilateur émettra une erreur à la compilation du code contenant le `switch` et la JVM lèvera une exception si le code n'est pas recompilé.
+Si un nouveau type est ajouté à la hiérarchie scellée, alors le compilateur émettra une erreur à la compilation du code contenant le `switch` et la JVM lèvera une exception si le code n'est pas recompilé.
 
 === Unnamed Classes and Instance Main Methods (Preview)
 
@@ -364,9 +364,9 @@ C:\java>java --enable-preview Hello
 Hello
 ----
 
-NOTE: le nom du fichier est libre tant que qu’il soit un identifiant Java valide.
+NOTE: Le nom du fichier est libre pour peu qu’il soit un identifiant Java valide.
 
-Le tableau de chaînes de caractères contenant les arguments passés à l’application sont optionnels mais peut être utilisé si besoin.
+Le tableau de chaînes de caractères contenant les arguments passés à l’application sont optionnels, mais peut être utilisé si besoin.
 
 [source,shell]
 ----
@@ -447,8 +447,8 @@ La première évolution apportée, à la suite des retours de la précédente pr
 Il n'est plus possible, comme c'était le cas dans les versions préliminaires, de créer des threads virtuels qui ne peuvent pas avoir de variables de type `ThreadLocal` et `InheritableThreadLocal`. 
 La prise en charge garantie des variables locales aux threads garantit que de nombreuses bibliothèques existantes peuvent être utilisées sans modification avec les threads virtuels et facilite la migration du code orienté tâches vers l'utilisation des threads virtuels.
 
-La propriété système booléenne `jdk.traceVirtualThreadLocals` de la JVM permet avec la valeur `true` d’afficher dans la sortie standard une stacktrace à chaque qu’un thread virtuel assigne une valeur à une instance de type `ThreadLocal`. 
-Les informations fournies facilitent l’identification des cas d’utilisation d’un `ThreadLocal` dans un thread virtuel pour envisage sa suppression ou son remplacement par un `ScopedValue` lorsque cette fonctionnalité sera standard.
+La propriété système booléenne `jdk.traceVirtualThreadLocals` de la JVM permet avec la valeur `true` d’afficher dans la sortie standard une stacktrace à chaque fois qu’un thread virtuel assigne une valeur à une instance de type `ThreadLocal`. 
+Les informations fournies facilitent l’identification des cas d’utilisation d’un `ThreadLocal` dans un thread virtuel pour envisager sa suppression ou son remplacement par un `ScopedValue` lorsque cette fonctionnalité sera standard.
 
 La seconde évolution concerne les threads virtuels créés directement avec l'API `Thread.Builder` (par opposition à ceux créés via `Executors.newVirtualThreadPerTaskExecutor()`) qui sont désormais également, par défaut, surveillés tout au long de leur durée de vie et observables via le thread dump.
 
@@ -470,7 +470,7 @@ L’API est proposée en preview dans Java 21 (https://openjdk.org/jeps/446[JEP 
 
 == Les fonctionnalités du projet Panama
 
-Le projet Panama d’OpenJDK investigue, incube et propose des fonctionnalités pour améliorer les interactions avec le système hôte.
+Le projet Panama d’OpenJDK explore, incube et propose des fonctionnalités pour améliorer les interactions avec le système hôte.
 
 En Java 21, il propose une fonctionnalité en preview :
 
@@ -509,7 +509,7 @@ Java 21 propose en standard plusieurs fonctionnalités très importantes notamme
 
 Plusieurs nouvelles fonctionnalités sont introduites en preview pour répondre à des problématiques particulières et plusieurs fonctionnalités poursuivent leurs évolutions en preview ou en incubation.
 
-Cette version 21 du JDK est particulière car elle est LTS, donc une cible pour les entreprises dans un futur plus ou moins proche.
+Cette version 21 du JDK est particulière, car elle est LTS, donc une cible pour les entreprises dans un futur plus ou moins proche.
 
 N’hésitez donc pas à télécharger une distribution du JDK 21 auprès d’un fournisseur. Oracle publie déjà ses JDK et les autres fournisseurs vont rapidement suivre.
 
