@@ -91,7 +91,7 @@ Deux changements majeurs sont apportés depuis la précédente JEP :
 
 * supprimer les parenthesized patterns, car ils n'avaient pas suffisamment de plus-value,
 * et autoriser les constantes d'énumération qualifiées en tant que constantes dans les clauses `case` d’une instruction ou une expression `switch`. Cela évite d’avoir à utiliser un guarded pattern case label comme précédemment
-
++
 [source,java]
 ----
 public sealed interface MonInterface permits MonEnum, MaClasse {}
@@ -129,7 +129,7 @@ Pour cela, nouveau type d'expression est introduit dans le langage : les templat
 
 Syntaxiquement, cela ressemble à une chaîne littérale avec un préfixe :
 
-[source,shell]
+[source,plain]
 ----
 jshell> String prenom = "Pierre";
 prenom ==> "Pierre"
@@ -148,7 +148,7 @@ Le template peut utiliser plusieurs lignes de code source en utilisant une synta
 
 CAUTION: Une chaîne de caractères littérale ne peut pas contenir une expression de la forme `\\{xxx}` sinon une erreur est émise par le compilateur car, dans ce cas la valeur littérale est considérée comme un template qui doit donc être obligatoirement préfixé par un processeur de templates pour être valide.
 
-[source,shell]
+[source,plain]
 ----
 jshell> String message = "Bonjour \{prenom}";
 |  Error:
@@ -161,7 +161,7 @@ jshell> String message = "Bonjour \{prenom}";
 
 * `java.lang.StringTemplate.STR` : effectue une interpolation pour créer une chaîne. `STR` est un champ static implicitement et automatiquement importé comme le package `java.lang.*`. Attention à la collision de nom malencontreuse si un type utilisé se nomme aussi `STR`.
 +
-[source,shell]
+[source,plain]
 ----
 jshell> int a = 1, b = 2;
 a ==> 1
@@ -170,10 +170,10 @@ b ==> 2
 jshell> String s = STR."\{a} + \{b} = \{a + b}";
 s ==> "1 + 2 = 3"
 ----
-+
+
 * `java.util.FormatProcessor.FMT` : effectue une interpolation pour créer une chaîne. Il interprète les spécificateurs de format à gauche des expressions intégrées. Les spécificateurs de format sont ceux définis dans `java.util.Formatter`
 +
-[source,shell]
+[source,plain]
 ----
 jshell> import static java.util.FormatProcessor.FMT;
 
@@ -184,10 +184,10 @@ b ==> 2
 jshell> String s = FMT."%05d\{a} + %05d\{b} = %05d\{a + b}";
 s ==> "00001 + 00002 = 00003"
 ----
-+
+
 * `java.lang.StringTemplate.RAW` : produit un objet de type `StringTemplate`
 +
-[source,shell]
+[source,plain]
 ----
 jshell> import static java.lang.StringTemplate.RAW;
 
@@ -200,7 +200,6 @@ st ==> StringTemplate{ fragments = [ "Bonjour ", "" ], values = [Pierre] }
 jshell> String message = STR.process(st);
 message ==> "Bonjour Pierre"
 ----
-+
 
 
 Il est possible de définir des processeurs de templates personnalisés pour générer des chaînes ou des objets qui peuvent être validés.
@@ -209,7 +208,7 @@ Il faut obtenir une instance de l'interface fonctionnelle `StringTemplate.Proces
 
 L’utilisation de la fabrique `StringTemplate.Processor::of` permet d’obtenir une instance.
 
-[source,shell]
+[source,plain]
 ----
 C:\java>jshell --enable-preview --class-path "./libs/json-20230618.jar"
 |  Welcome to JShell -- Version 21
@@ -255,7 +254,7 @@ Trois patterns sont proposés :
       System.out.println("Employe : " + nom + " " + prenom);
     }
 ----
-+
+
 * Unnamed pattern variable : utilisable avec tous types de patterns
 +
 [source,java]
@@ -264,14 +263,18 @@ Trois patterns sont proposés :
       System.out.println("Employe : " + nom);
     }
 ----
+
+* Unnamed variable : pour une variable qui doit être déclarée et peut être initialisée, mais non utilisée dans :
 +
-* Unnamed variable : pour une variable qui peut être initialisée, mais non utilisée dans :
+--
 ** une variable locale dans un bloc,
 ** une ressource dans un try-with-resources,
 ** l'en-tête d'une boucle `for` et `for` améliorée,
 ** une exception d'un bloc `catch`,
 ** un paramètre formel d'une expression Lambda,
-** utilisable plusieurs fois dans la même portée
+--
++
+On peut définir plusieurs variables avec `_` dans la même portée puisque qu'elles ne seront pas utilisées.
 +
 [source,java]
 ----
@@ -279,7 +282,6 @@ Trois patterns sont proposés :
       var _ = service.traiter((_, _) -> System.out.printn("traiter"));
     }  catch (Throwable _) { }
 ----
-+
 
 
 Le pattern unnamed pattern variable sera particulièrement utile dans des switchs avec des patterns sur des types scellés.
@@ -349,7 +351,7 @@ class HelloWorld {
 
 Il est possible de ne pas définir explicitement la classe : dans ce cas, une classe sans nom (unnamed class) sera utilisée.
 
-[source,shell]
+[source,plain]
 ----
 C:\java>type Hello.java
 void main() {
@@ -368,7 +370,7 @@ NOTE: Le nom du fichier est libre pour peu qu’il soit un identifiant Java vali
 
 Le tableau de chaînes de caractères contenant les arguments passés à l’application sont optionnels, mais peut être utilisé si besoin.
 
-[source,shell]
+[source,plain]
 ----
 C:\java>type Hello.java
 void main(String[] args) {
@@ -384,7 +386,7 @@ Hello
 
 Depuis Java 11, il est aussi possible d’utiliser directement la JVM pour exécuter un unique fichier source Java qui sera compilé à la volée au lancement de la JVM.
 
-[source,shell]
+[source,plain]
 ----
 C:\java>del Hello.class
 
@@ -401,7 +403,7 @@ Hello
 
 Il est possible d’ajouter dans le code de l’unique fichier source des attributs, des méthodes ou des types.
 
-[source,shell]
+[source,plain]
 ----
 C:\java>type Hello.java
 
@@ -513,5 +515,5 @@ Cette version 21 du JDK est particulière, car elle est LTS, donc une cible pour
 
 N’hésitez donc pas à télécharger une distribution du JDK 21 auprès d’un fournisseur. Oracle publie déjà ses JDK et les autres fournisseurs vont rapidement suivre.
 
-Le second article de cette série sera consacré aux autres fonctionnalités et évolutions non définies dans une JEP.
+Le second article de cette série sera consacré aux autres fonctionnalités et évolutions.
 
