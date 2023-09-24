@@ -1,0 +1,664 @@
+:showtitle:
+:page-navtitle: Les nouveautés de Java 21 : partie 2
+:page-excerpt: Ce second article sur les nouveautés de Java 21 est consacré aux autres améliorations, que ce soit les évolutions dans les outils, les API et dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
+:layout: post
+:author: jeanmicheldoudoux
+:page-tags: [Java, Java 21]
+:page-vignette: java-21.png
+:page-liquid:
+
+= Les nouveautés de Java 21 : partie 2
+
+Le premier article de cette série a détaillé les différentes JEPs de Java 21 issues des projets Amber, Loom et Panama. 
+Comme pour les précédentes versions de Java, cette version 21 inclut des JEPs, mais aussi, et surtout, des évolutions et des améliorations sur la fiabilité (corrections de nombreux bugs) et la sécurité.
+
+Cet article est consacré aux autres améliorations, que ce soit les évolutions dans les outils, les API et dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
+
+== Les évolutions dans les API du JDK
+
+Le JDK 21 inclus de nombreuses évolutions dans les API.
+
+=== Sequenced collections
+
+L’API Collections propose des collections ordonnées mais n’est pas homogène dans les fonctionnalités proposées. Les opérations liées à l'ordre de parcours sont soit incohérentes soit absentes.
+
+Des implémentations permettent d'obtenir le premier ou le dernier élément, chacune avec leurs propres méthodes, dont certaines pas évidentes ou inexistantes.
+
+Le but de la https://openjdk.org/jeps/431[JEP 431^] est d’introduire 3 nouvelles interfaces pour représenter des collections avec un ordre de parcours défini :
+
+* SequencedCollection,
+* SequencedSet, 
+* et SequencedMap
+
+Elles possèdent des éléments parcourables du premier au dernier élément dans un certain ordre et fournissent des API uniformes :
+
+* pour accéder au 1er et dernier élément
+* et pour parcourir ses éléments dans l'ordre inverse
+
+.Le diagramme de classes des Sequenced Collections
+image::{{'/images/java-21-partie-2-001.png' | relative_url}}[image, width=100%]
+
+=== La classe java.net.http.HttpClient
+
+Elle implémente l’interface AutoClosable.
+
+[source,java]
+----
+  try (var client = HttpClient.newHttpClient()) {
+    // utilisation du client
+  }
+----
+
+Plusieurs méthodes ont été ajoutées pour gérer l’arrêt :
+
+* boolean `awaitTermination(Duration)` : bloque jusqu'à ce que toutes les opérations soient terminées ou jusqu'à ce que la durée soit écoulée
+* void `close()`
+* boolean `isTerminated()`
+* void `shutdown()` : demande un arrêt ordonné des requêtes précédemment soumises avec send ou sendAsync et n’accepte plus aucune nouvelle requête
+* void `shutdownNow()`
+
+=== Les autres modifications
+
+De nombreuses autres modifications sont apportées dans diverses API notamment :
+
+* Ajout de méthodes dans les classes `java.lang.StringBuffer` et `StringBuilder` :
+** `repeat(CharSequence, int)` et `repeat(int, int)` : répète une sous-chaîne ou un caractère
++
+[source,plain]
+----
+jshell> var chaine = new StringBuilder().repeat("*",10).toString()
+chaine ==> "**********"
+----
++
+
+
+* Ajout de méthodes dans la classe `java.lang.Math` et `StrictMath` : 
+** Surcharges de `clamp(valeur, min, max)` : la valeur retournée est comprise entre min et max pour les types primitifs `double`, `float`, `long` et `int`
++
+[source,plain]
+----
+jshell> Math.clamp(5, 1, 10)
+$32 ==> 5
+
+jshell> Math.clamp(5, 10, 20)
+$33 ==> 10
+
+jshell> Math.clamp(20, 1, 10)
+$34 ==> 10
+----
++
+
+
+* Ajout de méthodes dans la classe `java.lang.String` : 
+** `int indexOf(String str, int beginIndex, int endIndex)`
+** `int indexOf(int ch, int beginIndex, int endIndex)`
+** `String[] splitWithDelimiters(String regex, int limit)` : agit comme la méthode `split()` mais renvoie aussi le délimiteur
++
+[source,plain]
+----
+jshell> var elements = "e1:e2:e3:e4"
+elements ==> "e1:e2:e3:e4"
+
+jshell> elements.splitWithDelimiters(":", 0)
+$31 ==> String[7] { "e1", ":", "e2", ":", "e3", ":", "e4" }
+----
++
+
+
+* Ajout d’une méthode dans la classe `java.util.regex.Pattern` : 
+** `String[] splitWithDelimiters(CharSequence input int limit)` : agit comme la méthode `split()` mais renvoie aussi le délimiteur
+
+* Ajout de méthodes dans la classe `java.utils.Collections` : 
+** `void shuffle(List<?>, RandomGenerator)` : surcharge avec `RandomGenerator`
++
+[source,plain]
+----
+jshell> import java.util.random.*
+
+jshell> var randomizer = RandomGenerator.getDefault();
+randomizer ==> jdk.random.L32X64MixRandom@76508ed1
+
+jshell> var liste = Arrays.asList("e1","e2","e3", "e4")
+liste ==> [e1, e2, e3, e4]
+
+jshell> Collections.shuffle(liste,randomizer)
+
+jshell> liste.forEach(System.out::println)
+e3
+e4
+e2
+e1
+----
++
+
+** `SequencedSet<E> newSequencedSetFromMap(SequencedMap<E,Boolean>)`
+** `SequencedCollection<T> unmodifiableSequencedCollection(SequencedCollection<? extends T>)`
+** `SequencedMap<K,V> unmodifiableSequencedMap(SequencedMap<? extends K,? extends V>)`
+** `SequencedSet<T> unmodifiableSequencedSet(SequencedSet<? extends T>)`
+
+* Ajout de méthodes dans la classe `java.util.Locale` : 
+
+** `Stream<Locale> availableLocales()` pour obtenir les Locales disponibles
++
+[source,plain]
+----
+jshell> Locale.availableLocales().map(l -> l.toLanguageTag()).filter(l -> l.contains("fr")).sorted().forEach(System.out::println)
+fr
+fr-BE
+fr-BF
+fr-BI
+fr-BJ
+fr-BL
+fr-CA
+...
+----
++
+
+** `String caseFoldLanguageTag(String)` pour formatter le code langue selon la RFC5646
++
+[source,plain]
+----
+jshell> Locale.caseFoldLanguageTag("fr-fr")
+$20 ==> "fr-FR"
+----
++
+
+* Ajout de méthodes dans la classe `java.lang.Character` pour le support des Emojis :
+
+** `boolean isEmoji(int)`
+** `boolean isEmojiComponent(int)`
+** `boolean isEmojiModifier(int)`
+** `boolean isEmojiModifierBase(int)`
+** `boolean isEmojiPresentation(int)`
+** `boolean isExtendedPictographic(int)`
+
+== Les évolutions dans la JVM Hotspot
+
+Comme avec chaque version de Java, la JVM HotSpot propose aussi plusieurs améliorations.
+
+=== Les évolutions dans G1
+
+Plusieurs évolutions sont proposées dans le ramasse-miettes G1.
+
+* durant les Full GC, G1 est autorisé à déplacer des objets volumineux afin de permettre de réduire les risques d’`OutOfMemoryError` liés à la fragmentation des régions (https://bugs.openjdk.org/browse/JDK-8191565[JDK-8191565^]),
+* durant les full GC, amélioration du compactage (https://bugs.openjdk.org/browse/JDK-8302215[JDK-8302215^]),
+* le « Hot Card Cache » a été retiré : cela permet de réduire la consommation de mémoire native de 0.2%,
+* le tear down et set up des TLABs par thread ont été parallélisés pour réduire les temps de pauses avec beaucoup de threads (https://bugs.openjdk.org/browse/JDK-8302122[JDK-8302122^] et https://bugs.openjdk.org/browse/JDK-8301116[JDK-8301116^]),
+* la fonction de GC préventifs a été complètement retirée (https://bugs.openjdk.org/browse/JDK-8297639[JDK-8297639^])
+
+Globalement, cela permet à G1 d’utiliser un peu moins de ressources et d’améliorer ses performances dans certaines circonstances.
+
+=== Generational ZGC
+
+Le but de la https://openjdk.org/jeps/439[JEP 439^] est de rendre le ramasse-miettes ZGC générationnel tout en maintenant ses caractéristiques actuelles :
+
+* les tailles du heap allant de quelques centaines de Mo à 16 To,
+* les temps de pause ne doivent pas dépasser 1 milliseconde
+
+Pour utiliser ZGC et activer sa mise en œuvre de génération, il faut utiliser les deux options :
+
+[source,plain]
+----
+-XX:+UseZGC -XX:+ZGenerational
+----
+
+ZGC générationnel devrait être une meilleure solution pour la plupart des cas d'utilisation que le ZGC non générationnel.
+
+=== Les évolutions dans JFR
+
+Trois nouveaux événements sont ajoutés :
+
+* `jdk.JavaAgent`,
+* `jdk.NativeAgent`,
+* et `jdk.ResidentSetSize`
+
+Les 4 événements expérimentaux relatifs aux threads virtuels deviennent standard :
+
+* `jdk.VirtualThreadStartEvent`,
+* `jdk.VirtualThreadEndEvent`,
+* `jdk.VirtualThreadPinnedEvent`,
+* et `jdk.VirtualThreadSubmitFailedEvent`
+
+Le nouveau paramètre `preserve-repository` de l’option `-XX:FlightRecorderOptions` indique si les fichiers stockés dans le référentiel disque doivent être conservés après la sortie de la JVM (par défaut `false`)
+
+[source,plain]
+----
+-XX:FlightRecorderOptions=preserve-repository=[true|false]
+----
+
+Les messages d’erreurs au lancement de la JVM liés à la configuration de JFR ont été améliorés.
+
+Exemple en Java 20
+
+[source,plain]
+----
+C:\java>java -XX:StartFlightRecording=filename=app.jfr,filename=app.jfr MonApp
+[0.068s][error][jfr,startup] Duplicates in diagnostic command arguments
+Error occurred during initialization of VM
+Failure when starting JFR on_create_vm_3
+----
+
+Exemple en Java 21
+
+[source,plain]
+----
+C:\java>java -XX:StartFlightRecording=filename=app.jfr,filename=app.jfr MonApp
+[0.057s][error][jfr,startup] Option filename can only be specified once.
+Error occurred during initialization of VM
+Failure when starting JFR on_create_vm_3
+----
+
+=== Deprecate the Windows 32-bit x86 Port for Removal
+
+Le but de la https://openjdk.org/jeps/449[JEP 449^] est de déprécier le portage sous Windows 32-bit x86, avec l'intention de le supprimer dans une prochaine version.
+
+Windows 10, le dernier système d'exploitation Windows à fonctionner en 32 bits, arrivera en fin de vie en octobre 2025.
+
+=== Prepare to Disallow the Dynamic Loading of Agents
+
+Le but de la https://openjdk.org/jeps/451[JEP 451^] est d’émettre un avertissement lorsqu’un agent est chargé dynamiquement dans une JVM en cours d'exécution pour préparer les utilisateurs à une future version qui interdira le chargement dynamique des agents par défaut sauf pour les outils de maintenance.
+
+L'option `-XX:+EnableDynamicAgentLoading` de la JVM peut être utilisée pour permettre de charger dynamiquement des agents sans avertissement.
+
+L’option `-Djdk.instrument.traceUsage` de la JVM permet :
+
+* d’afficher un message et une stacktrace lors de l’invocation de l’API `java.lang.Instrument`
+* et facilite l’identification les bibliothèques qui utilisent des agents chargés dynamiquement
+
+== Les évolutions dans les outils du JDK
+
+Plusieurs outils du JDK présentent aussi des évolutions.
+
+=== Les vues JFR
+
+Le support des vues JFR (views) a été ajouté afin de permettre l’affichage d’une agrégation d’événements : 
+
+* soit à partir d’un enregistrement dans un fichier avec l’option `view` de la commande `jfr`. Plusieurs options de formatage sont proposées,
++
+[source,plain]
+----
+jfr view [--verbose] [--width <integer>] [--truncate <mode>] [--cell-height <integer>] <view> <file>
+----
++
+* soit à partir d’une JVM en cours d’exécution avec la commande `JFR.view` de la commande `jcmd`. Par défaut, les 10 dernières minutes ou les derniers 32Mo sont pris en compte, modifiables avec les options `maxage` et `maxsize`.
++
+[source,plain]
+----
+jcmd <pid > JFR.view <view>
+----
++
+
+
+Plus de soixante-dix vues prédéfinies sont proposées. Pour obtenir la liste des vues, il faut utiliser la commande : `jcmd <pid> JFR.view` ou `jfr view`.
+
+[source,plain]
+----
+C:\java>jfr view
+jfr view: missing file
+
+Usage:
+
+ jfr view [--verbose]
+          [--width <integer>]
+          [--truncate <mode>]
+          [--cell-height <integer>]
+          <view>
+          <file>
+
+  --verbose               Displays the query that makes up the view
+
+  --width <integer>       The width of the view in characters. Default value depends on the view
+
+  --truncate <mode>       How to truncate content that exceeds space in a table cell.
+                          Mode can be 'beginning' or 'end'. Default value is 'end'
+
+  --cell-height <integer> Maximum number of rows in a table cell. Default value 
+depends on the view
+
+  <view>                  Name of the view or event type to display. See list below for
+                          available views
+
+  <file>                  Location of the recording file (.jfr)
+
+Java virtual machine views:
+ class-modifications       gc-concurrent-phases longest-compilations
+ compiler-configuration    gc-configuration     native-memory-committed
+ compiler-phases           gc-cpu-time          native-memory-reserved
+ compiler-statistics       gc-pause-phases      safepoints
+ deoptimizations-by-reason gc-pauses            tlabs
+ deoptimizations-by-site   gc-references        vm-operations
+ gc                        heap-configuration
+
+Environment views:
+ active-recordings        cpu-information       jvm-flags
+ active-settings          cpu-load              native-libraries
+ container-configuration  cpu-load-samples      network-utilization
+ container-cpu-throttling cpu-tsc               recording
+ container-cpu-usage      environment-variables system-information
+ container-io-usage       events-by-count       system-processes
+ container-memory-usage   events-by-name        system-properties
+
+Application views:
+ allocation-by-class   exception-count       native-methods
+ allocation-by-site    file-reads-by-path    object-statistics
+ allocation-by-thread  file-writes-by-path   pinned-threads
+ class-loaders         finalizers            socket-reads-by-host
+ contention-by-address hot-methods           socket-writes-by-host
+ contention-by-class   latencies-by-type     thread-allocation
+ contention-by-site    longest-class-loading thread-count
+ contention-by-thread  memory-leaks-by-class thread-cpu-load
+ exception-by-message  memory-leaks-by-site  thread-start
+ exception-by-site     modules
+
+ The <view> parameter can be an event type name. Use the 'jfr view types <file>'
+ to see a list. To display all views, use 'jfr view all-views <file>'. To display
+ all events, use 'jfr view all-events <file>'.
+
+Example usage:
+
+ jfr view gc recording.jfr
+
+ jfr view --width 160 hot-methods recording.jfr
+
+ jfr view --verbose allocation-by-class recording.jfr
+
+ jfr view contention-by-site recording.jfr
+
+ jfr view jdk.GarbageCollection recording.jfr
+
+ jfr view --cell-height 10 ThreadStart recording.jfr
+
+ jfr view --truncate beginning SystemProcess recording.jfr
+----
+
+Exemples d'utilisation : 
+
+[source,plain]
+----
+C:\java>jfr view gc monapp.jfr
+
+                                Garbage Collections
+
+Start    GC ID Type                     Heap Before GC Heap After GC Longest Pause
+-------- ----- ------------------------ -------------- ------------- -------------
+14:46:51   298 Young Garbage Collection       602,1 MB        4,7 MB       1,25 ms
+14:46:51   299 Young Garbage Collection       600,7 MB        5,7 MB       1,38 ms
+14:46:51   300 Young Garbage Collection       601,7 MB        5,2 MB       1,22 ms
+14:46:52   301 Young Garbage Collection       601,2 MB        5,1 MB       1,30 ms
+14:46:52   302 Young Garbage Collection       599,1 MB        4,7 MB       1,04 ms
+14:46:52   303 Young Garbage Collection       600,7 MB        4,1 MB      0,862 ms
+…
+
+C:\java>jfr view gc-pauses hotmethods_fixed.jfr
+
+GC Pauses
+---------
+
+Total Pause Time: 830 ms
+
+Number of Pauses: 812
+
+Minimum Pause Time: 0,493 ms
+
+Median Pause Time: 1,02 ms
+
+Average Pause Time: 1,02 ms
+
+P90 Pause Time: 1,24 ms
+
+P95 Pause Time: 1,30 ms
+
+P99 Pause Time: 1,37 ms
+
+P99.9% Pause Time: 1,42 ms
+
+Maximum Pause Time: 1,42 ms
+----
+
+
+=== L’interdiction d’avoir plusieurs « ; » entre deux imports 
+
+Avant Java 21, le compilateur javac tolère d’avoir plusieurs caractères `;` entre deux instructions `import`. (https://bugs.openjdk.org/browse/JDK-8027682[JDK-8027682^])
+
+[source,java]
+----
+import java.util.List;;
+
+import java.util.Set;
+
+class MaClasse { }
+----
+
+Cette classe se compile sans erreur.
+
+[source,plain]
+----
+C:\>javac MaClasse.java
+
+C:\>
+----
+
+A partir de Java 21, le compilateur javac interdit d’avoir plusieurs points-virgules entre imports.
+
+[source,plain]
+----
+C:\>javac MaClasse.java
+MaClasse.java:1: error: extraneous semicolon
+import java.util.List;;
+                      ^
+1 error
+----
+
+=== L’ajout du script prédéfini TOOLING dans JShell
+
+Ce nouveau script prédéfini permet d'utiliser directement des outils en ligne de commande du JDK tels que `javac`, `javadoc`, `javap`, … à partir de JShell.
+
+Il définit plusieurs méthodes pour invoquer ces outils :
+
+* `void jar(String...)`
+* `void javac(String...)`
+* `void javadoc(String...)`
+* `void javap(String...)`
+* `void jdeps(String...)`
+* `void jlink(String...)`
+* `void jmod(String...)`
+* `void jpackage(String...)`
+* `void javap(Class<?>)`
+* `void run(String, String...)`
+* `void tools()`
+
+[source,plain]
+----
+C:\java>jshell
+|  Welcome to JShell -- Version 21
+|  For an introduction type: /help intro
+
+jshell> /open TOOLING
+
+jshell> interface MonInterface {}
+|  created interface MonInterface
+
+jshell> javap(MonInterface.class)
+Classfile /C:/Users/JEAN-M~1/AppData/Local/Temp/TOOLING-16027415010418519056.class
+  Last modified 19 sept. 2023; size 205 bytes
+  SHA-256 checksum 303d5b68f16eae0e11484ba508593099ab2ad6ea2a6c20e3b049fbbf18513a43
+  Compiled from "$JShell$43.java"
+public interface REPL.$JShell$43$MonInterface
+  minor version: 0
+  major version: 65
+  flags: (0x0601) ACC_PUBLIC, ACC_INTERFACE, ACC_ABSTRACT
+  this_class: #1                          // REPL/$JShell$43$MonInterface
+  super_class: #3                         // java/lang/Object
+  interfaces: 0, fields: 0, methods: 0, attributes: 3
+Constant pool:
+   #1 = Class              #2             // REPL/$JShell$43$MonInterface
+   #2 = Utf8               REPL/$JShell$43$MonInterface
+   #3 = Class              #4             // java/lang/Object
+   #4 = Utf8               java/lang/Object
+   #5 = Utf8               SourceFile
+   #6 = Utf8               $JShell$43.java
+   #7 = Utf8               NestHost
+   #8 = Class              #9             // REPL/$JShell$43
+   #9 = Utf8               REPL/$JShell$43
+  #10 = Utf8               InnerClasses
+  #11 = Utf8               MonInterface
+{
+}
+SourceFile: "$JShell$43.java"
+NestHost: class REPL/$JShell$43
+InnerClasses:
+  public static #11= #1 of #8;            // MonInterface=class REPL/$JShell$43$MonInterface of class REPL/$JShell$43
+----
+
+
+== Les fonctionnalités dépréciées ou retirées
+
+Comme avec toutes les versions de Java depuis Java 11, des fonctionnalités sont dépréciées, dépréciées forRemoval ou même retirées.
+
+=== Les fonctionnalités dépréciées
+
+Le fichier `stax.properties` qui était défini dans l'API StAX et utilisé par les fabriques StAX est déprécié. Il a été rendu superflu après l'intégration de StAX dans JAXP puisque la fonction a été entièrement couverte par le fichier de configuration JAXP. Il est recommandé aux applications de migrer vers le fichier de configuration JAXP car le fichier `stax.properties` est obsolète et pourrait ne plus être supporté à l'avenir. (https://bugs.openjdk.org/browse/JDK-8303530[JDK-8303530^])
+
+L'option `MetaspaceReclaimPolicy` de la JVM, introduite en Java 16 via la https://openjdk.org/jeps/387[JEP 387^], permettait d'affiner le comportement de récupération de la mémoire de metaspace après le déchargement de classes. L'option a été rendue obsolète, son utilisation émet un avertissement et est ignorée. (https://bugs.openjdk.org/browse/JDK-8302385[JDK-8302385^])
+
+[source,plain]
+----
+C:\java>java -XX:MetaspaceReclaimPolicy=balanced HelloWorld
+OpenJDK 64-Bit Server VM warning: Ignoring option MetaspaceReclaimPolicy; support was removed in 21.0
+Hello world
+----
+
+Le support par AWT/Swing de GTK2 sur Linux est déprécié forRemoval car GTK2 arrive en fin de vie, GTK3 est utilisé par défaut. (https://bugs.openjdk.org/browse/JDK-8280031[JDK-8280031^]) L’utilisation de `-Djdk.gtk.version=2` pour forcer l’utilisation de GTK2 affiche un warning :
+
+[source,plain]
+----
+WARNING: the GTK 2 library is deprecated and its support will be removed in a future release.
+----
+
+La classe `com.sun.nio.file.SensitivityWatchEventModifier` est dépréciée forRemoval. (https://bugs.openjdk.org/browse/JDK-8303175[JDK-8303175^])
+
+Un message d'avertissement est affiché lorsque la valeur `COMPAT` ou `JRE` avec la propriété système `java.locale.providers` et invoquent certaines opérations sensibles à la Locale. Il est recommandé de migrer vers les données linguistiques CLDR. (https://bugs.openjdk.org/browse/JDK-8304982[JDK-8304982^])
+
+[source,plain]
+----
+C:\java>java -Djava.locale.providers=COMPAT HelloWorld
+Hello world
+sept. 20, 2023 5:48:43 PM sun.util.locale.provider.LocaleProviderAdapter <clinit>
+WARNING: COMPAT locale provider will be removed in a future release
+----
+
+La fonctionnalité Subject Delegation de JMX est dépréciée forRemoval. Cette fonctionnalité est activée par la méthode `javax.management.remote.JMXConnector.getMBeanServerConnection(javax.security.auth.Subject)` qui est aussi dépréciée forRemoval. (https://bugs.openjdk.org/browse/JDK-8298966[JDK-8298966^])
+
+=== Les API et les fonctionnalités retirées
+
+Quelques API et fonctionnalités sont retirées :
+
+* La classe `java.lang.Compiler` (dépréciée forRemoval depuis Java 9)
+* La méthode `ThreadGroup::allowThreadSuspension(boolean)` (https://bugs.openjdk.org/browse/JDK-8297295[JDK-8297295^])
+* La classe `javax.management.remote.rmi.RMIIIOPServerImpl` (https://bugs.openjdk.org/browse/JDK-8307244[JDK-8307244^])
+* L’option de la JVM HotSpot `-XX:+EnableWaitForParallelLoad` (https://bugs.openjdk.org/browse/JDK-8298469[JDK-8298469^])
++
+[source,plain]
+----
+C:\java>java -XX:+EnableWaitForParallelLoad HelloWorld
+OpenJDK 64-Bit Server VM warning: Ignoring option EnableWaitForParallelLoad; support was removed in 21.0
+Hello world
+----
++
+
+
+* L’API `ContentSigner` dans le package `com.sun.jarsigner` et les options `-jarsigner`, `-altsigner` et `-altsignerpath` (https://bugs.openjdk.org/browse/JDK-8303410[JDK-8303410^])
+
+== Les évolutions dans la sécurité
+
+Comme dans toutes les versions du JDK, le JDK 21 propose des évolutions qui renforcent la sécurité :
+
+* Des mises à jour de certificats racine des CA dans le keystore cacert (https://bugs.openjdk.org/browse/JDK-8305975[JDK-8305975^], https://bugs.openjdk.org/browse/JDK-8304760[JDK-8304760^], https://bugs.openjdk.org/browse/JDK-8245654[JDK-8245654^], https://bugs.openjdk.org/browse/JDK-8295894[JDK-8295894^], https://bugs.openjdk.org/browse/JDK-8307134[JDK-8307134^])
+* Le support de l’algorithme de signature standard "HSS/LMS" défini dans la RFC 8554 (https://bugs.openjdk.org/browse/JDK-8298127[JDK-8298127^])
+* La taille du groupe TLS Diffie-Hellman par défaut est passée de 1024 à 2048 bits (https://bugs.openjdk.org/browse/JDK-8301700[JDK-8301700^])
+* Le fournisseur SunJCE supporte désormais SHA-512/224 et SHA-512/256 comme digests pour les algorithmes PBES2 (https://bugs.openjdk.org/browse/JDK-8288050[JDK-8288050^])
+* Une nouvelle propriété du système de la JVM `jdk.jar.maxSignatureFileSize` pour contrôler la taille maximale des fichiers de signature dans un jar signé
+* Une nouvelle propriété système de la JVM `org.jcp.xml.dsig.secureValidation` pour activer (`true`) ou désactiver (`false`) le mode de validation sécurisé de la signature XML (https://bugs.openjdk.org/browse/JDK-8301260[JDK-8301260^])
+* La mise à jour de XML Security for Java vers la version 3.0.2 (https://bugs.openjdk.org/browse/JDK-8305972[JDK-8305972^])
+* Les commandes `-genseckey` et `-importpass` de `keytool` affichent un warning lorsque l'option `-keyalg` utilise des algorithmes de chiffrement basés sur des mots de passe faibles (https://bugs.openjdk.org/browse/JDK-8286907[JDK-8286907^])
+* La suppression de l’API `ContentSigner` et des options `-altsigner` et `–altsignerpath` de l’outil `jarsigner` (https://bugs.openjdk.org/browse/JDK-8303410[JDK-8303410^])
+* L'implémentation du `KeychainStore` de macOS expose maintenant les certificats avec une confiance appropriée dans le domaine de l'utilisateur, le domaine de l'administrateur, ou les deux (https://bugs.openjdk.org/browse/JDK-8303465[JDK-8303465^])
+
+=== L’API Key Encapsulation Mecanism
+
+Le but de la https://openjdk.org/jeps/452[JEP 452^] est de proposer une API pour mettre en œuvre le mécanisme d’encapsulation de clé (Key Encapsulation Mecanism ou KEM).
+
+KEM permet l’échange d’une clé symétrique partagée sécurisée avec un interlocuteur via un canal non sécurisé.
+
+Le JDK inclut une implémentation de Diffie-Hellman KEM (DHKEM) défini dans la RFC 9180.
+
+L’utilisation de l’API dans le package `javax.crypto` requiert plusieurs étapes :
+
+[arabic]
+. La génération d’une paire de clé (publique/privée) en utilisant les API existantes
++
+[source,java]
+----
+KeyPairGenerator kpg = KeyPairGenerator.getInstance("X25519"); 
+KeyPair kp = kpg.generateKeyPair();
+----
++
+
+[arabic, start=2]
+. L’utilisation d’une fonction d’encapsulation qui utilise la clé publique pour chiffrer le contenu
++
+[source,java]
+----
+KEM kemSender = KEM.getInstance("DHKEM");
+KEM.Encapsulator sender = kemSender.newEncapsulator(kp.getPublic());
+KEM.Encapsulated encapsulated = sender.encapsulate();
+----
++
+
+[arabic, start=3]
+. L’envoi du byte[] retourné par encapsulated.encapsulation() à l’interlocuteur
+. L’utilisation d’une fonction de désencapsulation qui utilise la clé privée pour déchiffrer
++
+[source,java]
+----
+KEM kemReceiver = KEM.getInstance("DHKEM");
+KEM.Decapsulator receiver = kemReceiver.newDecapsulator(kp.getPrivate());
+SecretKey sharedKey = receiver.decapsulate(encapsulated.encapsulation());
+----
++
+
+
+Il est possible de configurer les algorithmes de génération de clés et de chiffrement.
+
+== Le support par les IDE
+
+Présentement au moment de la rédaction de cet article, il est particulier pas bon et parcelaire. 
+Il y a de nombreuses évolutions dans le JDK 21 et les IDE semblent avoir des difficultés à les intégrer pour être opérationnel au moment de la diffusion du JDK 21.
+
+En attendant que le support du JDK 21 par les IDE s’améliore, il est toujours possible d’utiliser les outils fournis par le JDK `javac`, `java`, … et `JShell` pour tester les nombreuses fonctionnalités dans le JDK 21. `JShell` est d’ailleurs excellent pour cela.
+
+=== Le Java Playground
+
+Le Java Playground est un outil en ligne simple qui permet d’explorer les fonctionnalités du langage Java proposé par le groupe des devrel Java d’Oracle. Il est à l’url : https://dev.java/playground/
+
+Aucune installation n'est nécessaire : il suffit d’ouvrir l’url, de taper un extrait de code Java et de l’exécuter.
+
+Son but est essentiellement d’explorer les fonctionnalités syntaxiques du langage. Les fonctionnalités de Java 21 sont déjà supportées même celles en preview.
+
+.Le Playground Java
+image::{{'/images/java-21-partie-2-002.png' | relative_url}}[image, width=100%]
+
+Il fournit aussi quelques exemples de code pour différentes fonctionnalités syntaxique ou API.
+
+.Les exemple du Playground Java
+image::{{'/images/java-21-partie-2-003.png' | relative_url}}[width=217,height=408]
+
+Cet outil vient de sortir et il est donc très jeune. Il est possible signaler des problèmes en ouvrant une issue dans le https://github.com/java/devrel[projet github] dédié des devrel d’Oracle.
+
+== Conclusion
+
+Java poursuit son évolution avec ce JDK 21 qui propose beaucoup de nouveautés et d’améliorations qui vont permettre à Java de rester pertinent aujourd’hui et demain.
+
+Toutes les évolutions proposées dans le JDK 21 sont détaillées dans les https://jdk.java.net/21/release-notes[releases notes^].
+
+N’hésitez pas à télécharger une distribution du JDK 21 auprès d’un fournisseur pour essayer et utiliser ce nouveau JDK qui est LTS.
