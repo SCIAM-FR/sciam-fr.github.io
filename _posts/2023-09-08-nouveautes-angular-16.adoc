@@ -71,11 +71,11 @@ EsBuild améliore le temps d'exécution de l'application en produition froid. Il
 Il s'agit probablement de la plus grande nouveauté introduite dans la version 16 par la bibliothèque *@angular/core* . 
 
 Signal permet de définir des valeurs réactives et d'exprimer des dépendances entre ces valeurs.
-Ce schéma détaille l’interface *WritableSignal* et ses méthodes pour la manipulation de Signal.
+Ce schéma détaille l’interface `WritableSignal` et ses méthodes pour la manipulation de Signal.
 
 image::khaoulamrabet/signal.png[image,width=50%,align="center"]
 
-=== Exemple Autocomplete Général utilisant Signal: 
+=== Exemple `Autocomplete` Général utilisant Signal: 
 
 L'exemple permet de créer un composant d'autocompléte qui soit partagé dans toute l'application en utilisant la fonction Signal. 
 
@@ -120,7 +120,7 @@ export class AutoCompleteComponent implements OnChanges {
 
 <3> `ListDataType`: c'est un type définit dans l'application.
 
-==== Partie Html : auto-complete.componont.html 
+==== Partie Html : `auto-complete.componont.html ` 
 
 [source,html]
 ----
@@ -142,9 +142,9 @@ export class AutoCompleteComponent implements OnChanges {
 
 == toObservable et toSignal 
 
-*La sous-RFC 4* c'est une approche présente deux API innovantes, toObservable et toSignal, conversation entre Observables et Signals. Vous pouvez les trouver dans *@angular/core/rxjs-interop*.
+La *sous-RFC 4* Angular inclue deux API innovantes : `toObservable` et `toSignal`. Elles permettent de gérer la conversation entre observables et signals. Vous pouvez les trouver dans `@angular/core/rxjs-interop`.
 
-* L'Observable produit par *toObservable* utilise un effect pour envoyer la valeur suivante. Toutes les valeurs émises par l' toObservable Observable sont délivrées de manière asynchrone.
+L'Observable produit par `toObservable` utilise un `effect` pour envoyer la valeur suivante. Toutes les valeurs émises par `toObservable` sont délivrées de manière asynchrone.
 
 [source,typescript]
 ----
@@ -161,7 +161,7 @@ En interne, `toSignal` s'abonne à l'Observable fourni et met à jour le Signal 
     const counter : Signal < nombre > = toSignal (counter$);
 
 ----
-L'opérateur `toSignal` permet de convertir l'Observale d'un service utilisant le module HttpClientModule(Get, Post, ..). La récupération de données dans le controller sera plus simple avec la déclaration de Signal qui reçoit la valeur de retour de toSignal.
+L'opérateur `toSignal` permet de convertir le résultat d'un service (GET, POST,...) de type Observale en signal. La récupération de données dans le controller sera plus simple avec la déclaration d'un signal qui reçoit la valeur de retour de toSignal.
 
 == Router
 
@@ -194,8 +194,8 @@ export class AppRoutingModule { };
 
 ----
 
-<1>Définir un path vers la page user avec un paramétre `toSignal`.
-<2>Activer en ajoutant dans RouterModule object l'option `{bindToComponentInputs: true}`.
+<1> Définir un path vers la page user avec un paramétre `toSignal`.
+<2> Activer en ajoutant dans RouterModule object l'option `{bindToComponentInputs: true}`.
 
 ==== User.component.ts
 
@@ -221,7 +221,7 @@ export class UserComponent {
 
 == Rxjs-interpo
 
-  Un nouveau module d'angular propose des opérations qui conviennent avec le le système de réactivité basé sur le signal d'Angular.
+Un nouveau module d'angular propose des opérations qui conviennent avec le système de réactivité basé sur le signal d'Angular.
 
 *TakeUntilDestroy*:  Opérateur qui complète l'Observable lorsque le contexte appelant (composant, directive, service, etc.) est détruit.
 
@@ -255,13 +255,13 @@ export class UserComponent {
   initUsers() {
    // new version 
     this.userService.getUsers()
-    .pipe(takeUntilDestroyed())
+    .pipe(takeUntilDestroyed()) //<2>
     .subscribe(data => {
        this.users = data;
     });
    // old version  
     this.userService.getUsers()
-    .pipe(takeUntil(this.destroyed$))
+    .pipe(takeUntil(this.destroyed$)) //<1>
     .subscribe(data => {
        this.users = data;
     });
@@ -275,9 +275,9 @@ export class UserComponent {
 
 ----
 
-Dans les anciennes versions d'Angular, on utilise *takeUntil* de la bibliothèque  Rxjs, pour détruire un observable. Ici, on est obligé de déclarer *destroyed$* comme un subject et le compléter dans ngOnDestry.
+<1> Dans les anciennes versions d'Angular, on utilise *takeUntil* de la bibliothèque  Rxjs, pour détruire un observable. Ici, on est obligé de déclarer *destroyed$* comme un subject et le compléter dans ngOnDestry.
 
-Avec Angular 16, un simple appel de l'opérateur *takeUntilDestroyed* fait le nécessaire.
+<2> Avec Angular 16, un simple appel de l'opérateur *takeUntilDestroyed* fait le nécessaire.
 
 
 == Conclusion 
