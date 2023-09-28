@@ -20,7 +20,8 @@ Le JDK 21 inclus de nombreuses évolutions dans les API.
 
 === Sequenced collections
 
-L’API Collections propose des collections ordonnées mais n’est pas homogène dans les fonctionnalités proposées. Les opérations liées à l'ordre de parcours sont soit incohérentes soit absentes.
+L’API Collections propose des collections ordonnées, mais n’est pas homogène dans les fonctionnalités proposées. Les opérations liées à l'ordre de parcours sont soit incohérentes, soit absentes.
+
 
 Des implémentations permettent d'obtenir le premier ou le dernier élément, chacune avec leurs propres méthodes, dont certaines pas évidentes ou inexistantes.
 
@@ -36,7 +37,8 @@ Elles possèdent des éléments parcourables du premier au dernier élément dan
 * et pour parcourir ses éléments dans l'ordre inverse
 
 .Le diagramme de classes des Sequenced Collections
-image::{{'/images/java-21-partie-2-001.png' | relative_url}}[image, width=100%]
+image::java-21-partie-2-001.png[image, width=100%]
+
 
 === La classe java.net.http.HttpClient
 
@@ -280,7 +282,8 @@ Le support des vues JFR (views) a été ajouté afin de permettre l’affichage 
 jfr view [--verbose] [--width <integer>] [--truncate <mode>] [--cell-height <integer>] <view> <file>
 ----
 +
-* soit à partir d’une JVM en cours d’exécution avec la commande `JFR.view` de la commande `jcmd`. Par défaut, les 10 dernières minutes ou les derniers 32Mo sont pris en compte, modifiables avec les options `maxage` et `maxsize`.
+* soit à partir d’une JVM en cours d’exécution avec la commande `JFR.view` de la commande `jcmd`. Par défaut, les 10 dernières minutes où les derniers 32Mo sont pris en compte, modifiables avec les options `maxage` et `maxsize`.
+
 +
 [source,plain]
 ----
@@ -438,7 +441,8 @@ C:\>javac MaClasse.java
 C:\>
 ----
 
-A partir de Java 21, le compilateur javac interdit d’avoir plusieurs points-virgules entre imports.
+À partir de Java 21, le compilateur javac interdit d’avoir plusieurs points-virgules entre imports.
+
 
 [source,plain]
 ----
@@ -632,7 +636,8 @@ Il est possible de configurer les algorithmes de génération de clés et de chi
 
 == Le support par les IDE
 
-Présentement au moment de la rédaction de cet article, il est particulier pas bon et parcelaire. 
+Présentement au moment de la rédaction de cet article, il est particulier pas bon et parcellaire. 
+
 Il y a de nombreuses évolutions dans le JDK 21 et les IDE semblent avoir des difficultés à les intégrer pour être opérationnel au moment de la diffusion du JDK 21.
 
 En attendant que le support du JDK 21 par les IDE s’améliore, il est toujours possible d’utiliser les outils fournis par le JDK `javac`, `java`, … et `JShell` pour tester les nombreuses fonctionnalités dans le JDK 21. `JShell` est d’ailleurs excellent pour cela.
@@ -646,9 +651,11 @@ Aucune installation n'est nécessaire : il suffit d’ouvrir l’url, de taper 
 Son but est essentiellement d’explorer les fonctionnalités syntaxiques du langage. Les fonctionnalités de Java 21 sont déjà supportées même celles en preview.
 
 .Le Playground Java
-image::{{'/images/java-21-partie-2-002.png' | relative_url}}[image, width=100%]
+image::java-21-partie-2-002.png[image, width=100%]
 
-Il fournit aussi quelques exemples de code pour différentes fonctionnalités syntaxique ou API.
+
+Il fournit aussi quelques exemples de code pour différentes fonctionnalités syntaxiques ou API.
+
 
 .Les exemple du Playground Java
 image::{{'/images/java-21-partie-2-003.png' | relative_url}}[width=217,height=408]
