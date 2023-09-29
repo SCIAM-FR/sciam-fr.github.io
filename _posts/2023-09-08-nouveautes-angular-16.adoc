@@ -147,9 +147,10 @@ export class AutoCompleteComponent implements OnChanges {
 
 == toObservable et toSignal 
 
-La *sous-RFC 4* Angular inclue deux API innovantes : `toObservable` et `toSignal`. Elles permettent de gérer la conversation entre observables et signals. Vous pouvez les trouver dans `@angular/core/rxjs-interop`.
+La *sous-RFC 4* Angular inclue deux API innovantes
+`toObservable` et `toSignal`. Elles permettent de gérer la conversation entre observables et signals. Vous pouvez les trouver dans `@angular/core/rxjs-interop`.
 
-L'Observable produit par `toObservable` utilise un `effect` pour envoyer la valeur suivante. Toutes les valeurs émises par `toObservable` sont délivrées de manière asynchrone.
+* `toObservable` permet de convertir le signal à un observable. Toutes les valeurs émises par toObservable sont délivrées de manière asynchrone.
 
 [source,typescript]
 ----
@@ -158,7 +159,8 @@ const count: Observable<number> = toObservable(mySignal);
 
 Ici, `count` est un `Observable` en prenant la valeur du signal qui va être inspecté par les différents opérateurs de Rxjs (Pipe, subscribe, ...).
 
-En interne, `toSignal` s'abonne à l'Observable fourni et met à jour le Signal renvoyé chaque fois que l'Observable  émet une valeur.
+* `toSignal` crée un signal à partir l'Observable passé en paramétre et met à jour le Signal renvoyé chaque fois que l'Observable  émet une valeur.
+L'opérateur effect() s'abonne au signal pour inspecter ses données.
 
 [source,typescript]
 ----
