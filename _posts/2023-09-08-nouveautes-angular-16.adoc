@@ -59,7 +59,7 @@ export class AppModule {}
 
 == ESBUILD
 
-Cette nouvelle version d'Angular introduit un nouveau système de build pour les développeurs :esbuild.
+Cette nouvelle version d'Angular introduit un nouveau système de build pour les développeurs c'est le esbuild.
 
 
 image::khaoulamrabet/es-build.png[image,width=50%,align="center"]
