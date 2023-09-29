@@ -31,7 +31,8 @@ image::khaoulamrabet/hydratation.png[image,width=50%,align="center"]
 
 À chaque changement de comportement, le serveur va enregistrer une copie de la version ce qui permet d'améliorer la rapidité de lancement de l'application en réduisant le temps de chargement.
 
-Cette technologie est faite par Angular Universal qui permet à Angular de restituer une application sur le serveur, générant un contenu HTML statique.
+Cette technologie fournie par Angular Universal permet de restituer une application sur le serveur en générant un contenu HTML statique.
+
 
 Avec les versions précédentes d'Angular, la restitution du code HTML de tous les nœuds se faisait de zéro à chaque changement.
 
@@ -63,7 +64,8 @@ Cette nouvelle version d'Angular introduit un nouveau système de build pour les
 
 image::khaoulamrabet/es-build.png[image,width=50%,align="center"]
 
-EsBuild améliore le temps d'exécution de l'application en produition froid. Il utilse vite comme capot. Changer la propriété Build dans *angular.json*:
+EsBuild améliore sensiblement le temps de création de l'application. C'est encore une fonctionnalité expérimentale mais elle semble très prometteuse. Pour l'activer, il suffit de changer la propriété `builder` dans `angular.json`:
+
 
 [source,typescript]
 ----
