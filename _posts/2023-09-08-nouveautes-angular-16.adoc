@@ -83,7 +83,7 @@ Ce schéma détaille l’interface `WritableSignal` et ses méthodes pour la man
 
 image::khaoulamrabet/signal.png[image,width=50%,align="center"]
 
-=== Exemple `Autocomplete` Général utilisant Signal: 
+=== Exemple Autocomplete Général utilisant Signal: 
 
 L'exemple permet de créer un composant d'autocompléte qui soit partagé dans toute l'application en utilisant la fonction Signal. 
 
