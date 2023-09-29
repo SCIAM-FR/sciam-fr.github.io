@@ -18,7 +18,8 @@ Angular est un framework web créé par Google en 2009. A partir de sa version 2
 Chaque année, l'équipe Angular livre une nouvelle version apportant nouveautés et gains de performance.  La mouture de 2023 est la version 16 dont les principales améliorations portent sur la réactivité et le rendu côté serveur.
 
 
-Dans cet article, on va détailler les principales nouveautés de la version 16 d'Angular.
+Dans cet article, nous allons détailler les principales nouveautés de cette version 16.
+
 
 == Hydratation 
 
@@ -28,14 +29,18 @@ Lors de lancement de l’application côté navigateur, Angular réutilise les i
 
 image::khaoulamrabet/hydratation.png[image,width=50%,align="center"]
 
-À chaque changement de comportement, le serveur va enregistrer une copie de la version ce qui permet d'améliorer la rapidité de lancement de nos applications, le temps de chargement va être réduit.
+À chaque changement de comportement, le serveur va enregistrer une copie de la version ce qui permet d'améliorer la rapidité de lancement de l'application en réduisant le temps de chargement.
+
 Cette technologie est faite par Angular Universal qui permet à Angular de restituer une application sur le serveur, générant un contenu HTML statique.
 
-Avec Angular, la restitution de code HTML de tous les nœuds de zéro à chaque changement fait.
+Avec les versions précédentes d'Angular, la restitution du code HTML de tous les nœuds se faisait de zéro à chaque changement.
 
-Alors qu'Angular 16 recherche les nœuds DOM existants tout en créant des structures de données internes et attache des écouteurs d'événements à ces nœuds.
-Donc le changement ne sera fait que sur le nœud cible. Avec cette amélioration, on gagne plus dans le temps de chargement de l’application.
-Pour commencer avec l’hydratation, c’est juste d’ajouter *provideClientHydration* dans le provider de *App.module.ts* .
+Le nouveau mécanisme d'hydratation de la version 16 recherche les nœuds DOM existants tout en créant des structures de données internes et attache des listeners d'événements à ces nœuds.
+
+Cette approche permet de n'effectuer changement que sur le nœud cible, ce qui diminue considérablement le temps de chargement de l'application.
+
+Pour activer cette nouvelle fonctionnalité d’hydratation, il suffit juste d’ajouter `provideClientHydration` dans le provider de `App.module.ts` .
+
 
 [source, typescript]
 ----
@@ -53,7 +58,8 @@ export class AppModule {}
 
 == ESBUILD
 
-Dans cette nouvelle version d'Angular, *le système de construction* est basé sur esbuild pour les développeurs.
+Cette nouvelle version d'Angular introduit un nouveau système de build pour les développeurs :esbuild.
+
 
 image::khaoulamrabet/es-build.png[image,width=50%,align="center"]
 
@@ -114,10 +120,8 @@ export class AutoCompleteComponent implements OnChanges {
   }
 }
 ----
-
 <1> `filteredOptions` est le signal contenant les données de la liste à afficher.
 <2> Dans `change()`, on filtre et on affecte les données au signal via la méthode `set()`.
-
 <3> `ListDataType`: c'est un type définit dans l'application.
 
 ==== Partie Html : `auto-complete.componont.html ` 
@@ -136,7 +140,6 @@ export class AutoCompleteComponent implements OnChanges {
 </mat-autocomplete>
 
 ----
-
 <1> Avec la directive `*ngFor` on pourra parcourir le signal de façon asynchrone.
 
 
