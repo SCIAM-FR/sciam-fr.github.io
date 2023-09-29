@@ -23,7 +23,7 @@ Dans cet article, nous allons détailler les principales nouveautés de cette ve
 
 == Hydratation 
 
-L'hydratation est le processus qui restaure l'application rendue côté serveur *SSR* (Server-side rending) sur le client. Cela inclut des éléments tels que la réutilisation des structures DOM rendues par le serveur, la conservation de l'état de l'application, le transfert des données d'application déjà récupérées par le serveur et d'autres processus.
+L'hydratation est le processus qui restaure l'application rendue côté serveur ;;;`SSR` (Server-side rending) sur le client. Cela inclut des éléments tels que la réutilisation des structures DOM rendues par le serveur, la conservation de l'état de l'application, le transfert des données d'application déjà récupérées par le serveur et d'autres processus.
 
 Lors de lancement de l’application côté navigateur, Angular réutilise les informations disponibles dans le code HTML généré par le serveur. 
 
@@ -74,9 +74,9 @@ EsBuild améliore sensiblement le temps de création de l'application. C'est enc
 
 ----
 
-== Signals Angular 
+== Les Signals d'Angular 
 
-Il s'agit probablement de la plus grande nouveauté introduite dans la version 16 par la bibliothèque *@angular/core* . 
+Il s'agit probablement de la plus grande nouveauté introduite dans la version 16 par la bibliothèque `@angular/core`. 
 
 Signal permet de définir des valeurs réactives et d'exprimer des dépendances entre ces valeurs.
 Ce schéma détaille l’interface `WritableSignal` et ses méthodes pour la manipulation de Signal.
@@ -147,7 +147,7 @@ export class AutoCompleteComponent implements OnChanges {
 
 == toObservable et toSignal 
 
-La *sous-RFC 4* Angular inclue deux API innovantes
+La `sous-RFC 4` Angular inclue deux API innovantes
 `toObservable` et `toSignal`. Elles permettent de gérer la conversation entre observables et signals. Vous pouvez les trouver dans `@angular/core/rxjs-interop`.
 
 * `toObservable` permet de convertir le signal à un observable. Toutes les valeurs émises par toObservable sont délivrées de manière asynchrone.
@@ -230,7 +230,7 @@ export class UserComponent {
 
 Un nouveau module d'angular propose des opérations qui conviennent avec le système de réactivité basé sur le signal d'Angular.
 
-*TakeUntilDestroy*:  Opérateur qui complète l'Observable lorsque le contexte appelant (composant, directive, service, etc.) est détruit.
+`TakeUntilDestroy`:  Opérateur qui complète l'Observable lorsque le contexte appelant (composant, directive, service, etc.) est détruit.
 
 [source,typescript]
 ----
@@ -282,14 +282,14 @@ export class UserComponent {
 
 ----
 
-<1> Dans les anciennes versions d'Angular, on utilise *takeUntil* de la bibliothèque  Rxjs, pour détruire un observable. Ici, on est obligé de déclarer *destroyed$* comme un subject et le compléter dans ngOnDestry.
+<1> Dans les anciennes versions d'Angular, on utilise `takeUntil` de la bibliothèque  Rxjs, pour détruire un observable. Ici, on est obligé de déclarer `destroyed$` comme un subject et le compléter dans ngOnDestry.
 
-<2> Avec Angular 16, un simple appel de l'opérateur *takeUntilDestroyed* fait le nécessaire.
+<2> Avec Angular 16, un simple appel de l'opérateur `takeUntilDestroyed$` fait le nécessaire.
 
 
 == Conclusion 
 
-Cette nouvelle *version 16* apporte deux amélioration majeures : 
+Cette nouvelle `version 16` apporte deux amélioration majeures : 
 * l'hydratation qui réduit le temps de chargement des applications
 * Signal qui améliore l'observabilité des composants.
 
