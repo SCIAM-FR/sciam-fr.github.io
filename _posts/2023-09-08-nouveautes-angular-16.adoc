@@ -1,0 +1,296 @@
+:showtitle:
+:page-navtitle: Les nouveautés de Angular 16
+:page-excerpt: Cet article présente les nouveautés apportées par Angular 16, comme l'hydratation, le nouveau système de build ou `Signal` qui améliore grandement l'expérience de développement avec le framework.
+
+:layout: post
+:author: khaoulamrabet
+:page-tags: [Angular, Angular16, Signal, Hydratation, Router, Sous-RFC, Rxjs]
+:page-vignette: angular-16.png
+:page-liquid:
+ 
+= Les Nouveautés d'Angular 16
+
+
+
+Angular est un framework web créé par Google en 2009. A partir de sa version 2, le framework a acquis un niveau de structuration et de solidité permettant de développer rapidement des applications performantes.
+
+
+Chaque année, l'équipe Angular livre une nouvelle version apportant nouveautés et gains de performance.  La mouture de 2023 est la version 16 dont les principales améliorations portent sur la réactivité et le rendu côté serveur.
+
+
+Dans cet article, nous allons détailler les principales nouveautés de cette version 16.
+
+
+== Hydratation 
+
+L'hydratation est le processus qui restaure l'application rendue côté serveur ;;;`SSR` (Server-side rending) sur le client. Cela inclut des éléments tels que la réutilisation des structures DOM rendues par le serveur, la conservation de l'état de l'application, le transfert des données d'application déjà récupérées par le serveur et d'autres processus.
+
+Lors de lancement de l’application côté navigateur, Angular réutilise les informations disponibles dans le code HTML généré par le serveur. 
+
+image::khaoulamrabet/hydratation.png[image,width=50%,align="center"]
+
+À chaque changement de comportement, le serveur va enregistrer une copie de la version ce qui permet d'améliorer la rapidité de lancement de l'application en réduisant le temps de chargement.
+
+Cette technologie fournie par Angular Universal permet de restituer une application sur le serveur en générant un contenu HTML statique.
+
+
+Avec les versions précédentes d'Angular, la restitution du code HTML de tous les nœuds se faisait de zéro à chaque changement.
+
+Le nouveau mécanisme d'hydratation de la version 16 recherche les nœuds DOM existants tout en créant des structures de données internes et attache des listeners d'événements à ces nœuds.
+
+Cette approche permet de n'effectuer changement que sur le nœud cible, ce qui diminue considérablement le temps de chargement de l'application.
+
+Pour activer cette nouvelle fonctionnalité d’hydratation, il suffit juste d’ajouter `provideClientHydration` dans le provider de `App.module.ts` .
+
+
+[source, typescript]
+----
+import {provideClientHydration} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+
+@NgModule({
+  declarations: [RootCmp],
+  exports: [RootCmp],
+  bootstrap: [RootCmp],
+  providers: [provideClientHydration()],
+})
+export class AppModule {}
+----
+
+== ESBUILD
+
+Cette nouvelle version d'Angular introduit un nouveau système de build pour les développeurs c'est le esbuild.
+
+
+image::khaoulamrabet/es-build.png[image,width=50%,align="center"]
+
+EsBuild améliore sensiblement le temps de création de l'application. C'est encore une fonctionnalité expérimentale mais elle semble très prometteuse. Pour l'activer, il suffit de changer la propriété `builder` dans `angular.json`:
+
+
+[source,typescript]
+----
+  "architecte" :{
+       "build" : "@angular-devkit/build-angular:browser- esbuild" } 
+
+----
+
+== Les Signals d'Angular 
+
+Il s'agit probablement de la plus grande nouveauté introduite dans la version 16 par la bibliothèque `@angular/core`. 
+
+Signal permet de définir des valeurs réactives et d'exprimer des dépendances entre ces valeurs.
+Ce schéma détaille l’interface `WritableSignal` et ses méthodes pour la manipulation de Signal.
+
+image::khaoulamrabet/signal.png[image,width=50%,align="center"]
+
+=== Exemple Autocomplete Général utilisant Signal: 
+
+L'exemple permet de créer un composant d'autocompléte qui soit partagé dans toute l'application en utilisant la fonction Signal. 
+
+==== Partie TS: auto-complete.component.ts
+
+[source,typescript]
+----
+import {Component, Input, OnChanges, signal}from '@angular/core';
+import { FormControl} from '@angular/forms';
+import { ListDataType} from'@app/shared/interfaces/ListDataType.inteface';
+
+@Component({
+  selector: 'sciam-auto-complete',
+  templateUrl:'./auto-complete.component.html',
+  styleUrls: ['./auto-complete.component.scss']
+})
+export class AutoCompleteComponent implements OnChanges {
+
+  @Input({required:true}) listData?:ListDataType; // <3>
+  myControl= new FormControl('');
+  filteredOptions= signal<never[]|undefined>([]) // <1>;
+  constructor() {
+    this.change();
+  }
+  ngOnChanges() {
+    this.filteredOptions.set(this.listData?.list);
+  }
+  change() { // <2>
+    const list = this._filter(this.myControl.value);
+    this.filteredOptions.set(list);
+  }
+  private _filter(value?:string | null) {
+    const filterValue =value?.toLowerCase();
+
+    return this.listData?.list?.filter((option: string)  => option?.toLowerCase().includes(<string>filterValue));
+  }
+}
+----
+<1> `filteredOptions` est le signal contenant les données de la liste à afficher.
+<2> Dans `change()`, on filtre et on affecte les données au signal via la méthode `set()`.
+<3> `ListDataType`: c'est un type définit dans l'application.
+
+==== Partie Html : `auto-complete.componont.html ` 
+
+[source,html]
+----
+  <input type="text" 
+       placeholder="{{listData?.label}}" 
+       matInput (click)="change()" 
+       [formControl]="myControl"
+       [matAutocomplete]="auto">
+<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">   
+   <mat-option *ngFor="let option of filteredOptions()" [value]="option"> <!--1-->
+      {{option}}
+   </mat-option>
+</mat-autocomplete>
+
+----
+<1> Avec la directive `*ngFor` on pourra parcourir le signal de façon asynchrone.
+
+
+== toObservable et toSignal 
+
+La `sous-RFC 4` Angular inclue deux API innovantes
+`toObservable` et `toSignal`. Elles permettent de gérer la conversation entre observables et signals. Vous pouvez les trouver dans `@angular/core/rxjs-interop`.
+
+* `toObservable` permet de convertir le signal à un observable. Toutes les valeurs émises par toObservable sont délivrées de manière asynchrone.
+
+[source,typescript]
+----
+const count: Observable<number> = toObservable(mySignal);
+----
+
+Ici, `count` est un `Observable` en prenant la valeur du signal qui va être inspecté par les différents opérateurs de Rxjs (Pipe, subscribe, ...).
+
+* `toSignal` crée un signal à partir l'Observable passé en paramétre et met à jour le Signal renvoyé chaque fois que l'Observable  émet une valeur.
+L'opérateur effect() s'abonne au signal pour inspecter ses données.
+
+[source,typescript]
+----
+    Counter$ = of(1000);               
+    const counter : Signal < nombre > = toSignal (counter$);
+
+----
+L'opérateur `toSignal` permet de convertir le résultat d'un service (GET, POST,...) de type Observale en signal. La récupération de données dans le controller sera plus simple avec la déclaration d'un signal qui reçoit la valeur de retour de toSignal.
+
+== Router
+
+Angular rend plus simple la récupération des informations (paraméteres, data,..)  de Router sans utilisation de module `ActivatedRouter`.
+
+* Activez la fonctionnalité `bindToComponentInputs` dans la fonction RouterModule ou provideRouter .
+* Ajoutez le décorateur `@Input()` aux propriétés que nous voulons lier aux informations de route.
+
+=== Exemple App routing file :
+
+==== App-routing.module.ts
+
+[source,typescript]
+----
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { UserComponent } from './user/user.component';
+
+const routes: Routes = [
+  {path:'users/:surname', component: UserComponent, } //<1>
+];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(routes, {bindToComponentInputs: true}) //<2>
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { };
+
+----
+
+<1> Définir un path vers la page user avec un paramétre `toSignal`.
+<2> Activer en ajoutant dans RouterModule object l'option `{bindToComponentInputs: true}`.
+
+==== User.component.ts
+
+
+[source,typescript]
+----
+@Component({
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.scss'],
+  
+})
+export class UserComponent {
+   @Input() surname?: string; // <1>
+
+    ngOnInit()  {
+    console.log('User surname : ', this.surname);
+    }
+}
+----
+
+<1> Avec Input on récupére directement le paramétre de route.
+
+== Rxjs-interpo
+
+Un nouveau module d'angular propose des opérations qui conviennent avec le système de réactivité basé sur le signal d'Angular.
+
+`TakeUntilDestroy`:  Opérateur qui complète l'Observable lorsque le contexte appelant (composant, directive, service, etc.) est détruit.
+
+[source,typescript]
+----
+import { Component, effect, inject, Input, Signal, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Subject, takeUntil } from 'rxjs';
+import { User } from './user.model';
+import { UserService } from './user.service';
+
+@Component({
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.scss'],
+  
+})
+export class UserComponent {
+  @Input() surname?: string;
+
+  destroyed$: Subject<boolean> = new Subject();
+  
+  userService = inject(UserService);
+  users? : User[] | undefined;
+  initialData: Signal<User[] | undefined> = signal([]);
+  constructor() {
+    
+    effect(() => this.users = this.users?.concat(this.userService.list()));
+    this.initUsers();
+  }
+  initUsers() {
+   // new version 
+    this.userService.getUsers()
+    .pipe(takeUntilDestroyed()) //<2>
+    .subscribe(data => {
+       this.users = data;
+    });
+   // old version  
+    this.userService.getUsers()
+    .pipe(takeUntil(this.destroyed$)) //<1>
+    .subscribe(data => {
+       this.users = data;
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+} 
+
+----
+
+<1> Dans les anciennes versions d'Angular, on utilise `takeUntil` de la bibliothèque  Rxjs, pour détruire un observable. Ici, on est obligé de déclarer `destroyed$` comme un subject et le compléter dans ngOnDestry.
+
+<2> Avec Angular 16, un simple appel de l'opérateur `takeUntilDestroyed$` fait le nécessaire.
+
+
+== Conclusion 
+
+Cette nouvelle `version 16` apporte deux amélioration majeures : 
+* l'hydratation qui réduit le temps de chargement des applications
+* Signal qui améliore l'observabilité des composants.
+
+Comme le montre les exemples de cet articles, le code produit avec la version 16 est moins compliqué et nettement plus expressif, ce qui améliore grandement l'expérience de développement.
