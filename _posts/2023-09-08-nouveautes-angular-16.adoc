@@ -8,7 +8,8 @@
 :page-vignette: angular-16.png
 :page-liquid:
  
-= Les Nouveautés d'Angular 16
+= Les nouveautés d'Angular 16
+
 
 
 
@@ -21,7 +22,7 @@ Chaque année, l'équipe Angular livre une nouvelle version apportant nouveauté
 Dans cet article, nous allons détailler les principales nouveautés de cette version 16.
 
 
-== Hydratation 
+== L'hydratation 
 
 L'hydratation est le processus qui restaure l'application rendue côté serveur ;;;`SSR` (Server-side rending) sur le client. Cela inclut des éléments tels que la réutilisation des structures DOM rendues par le serveur, la conservation de l'état de l'application, le transfert des données d'application déjà récupérées par le serveur et d'autres processus.
 
@@ -40,7 +41,8 @@ Le nouveau mécanisme d'hydratation de la version 16 recherche les nœuds DOM ex
 
 Cette approche permet de n'effectuer changement que sur le nœud cible, ce qui diminue considérablement le temps de chargement de l'application.
 
-Pour activer cette nouvelle fonctionnalité d’hydratation, il suffit juste d’ajouter `provideClientHydration` dans le provider de `App.module.ts` .
+Pour activer cette nouvelle fonctionnalité d’hydratation, il suffit juste d’ajouter `provideClientHydration` dans le provider de `App.module.ts`.
+
 
 
 [source, typescript]
@@ -57,9 +59,11 @@ import {NgModule} from '@angular/core';
 export class AppModule {}
 ----
 
-== ESBUILD
+== Le nouveau système de build
 
-Cette nouvelle version d'Angular introduit un nouveau système de build pour les développeurs c'est le esbuild.
+
+Cette nouvelle version d'Angular introduit un nouveau système de build pour les développeurs basé sur EsBuild.
+
 
 
 image::khaoulamrabet/es-build.png[image,width=50%,align="center"]
@@ -81,14 +85,14 @@ Il s'agit probablement de la plus grande nouveauté introduite dans la version 1
 Signal permet de définir des valeurs réactives et d'exprimer des dépendances entre ces valeurs.
 Ce schéma détaille l’interface `WritableSignal` et ses méthodes pour la manipulation de Signal.
 
-image::khaoulamrabet/signal.png[image,width=50%,align="center"]
+image::khaoulamrabet/signal.png[image, width=100%]
 
-=== Exemple Autocomplete Général utilisant Signal: 
+=== Un exemple d'auto-complétions utilisant Signal
+
 
 L'exemple permet de créer un composant d'autocompléte qui soit partagé dans toute l'application en utilisant la fonction Signal. 
 
-==== Partie TS: auto-complete.component.ts
-
+.Partie TS : auto-complete.component.ts
 [source,typescript]
 ----
 import {Component, Input, OnChanges, signal}from '@angular/core';
@@ -104,17 +108,21 @@ export class AutoCompleteComponent implements OnChanges {
 
   @Input({required:true}) listData?:ListDataType; // <3>
   myControl= new FormControl('');
-  filteredOptions= signal<never[]|undefined>([]) // <1>;
+  filteredOptions= signal<never[]|undefined>([]) // <1>
+
   constructor() {
     this.change();
   }
-  ngOnChanges() {
+
+    ngOnChanges() {
     this.filteredOptions.set(this.listData?.list);
   }
-  change() { // <2>
+
+    change() { // <2>
     const list = this._filter(this.myControl.value);
     this.filteredOptions.set(list);
   }
+
   private _filter(value?:string | null) {
     const filterValue =value?.toLowerCase();
 
@@ -126,8 +134,7 @@ export class AutoCompleteComponent implements OnChanges {
 <2> Dans `change()`, on filtre et on affecte les données au signal via la méthode `set()`.
 <3> `ListDataType`: c'est un type définit dans l'application.
 
-==== Partie Html : `auto-complete.componont.html ` 
-
+.Partie Html : `auto-complete.component.html` 
 [source,html]
 ----
   <input type="text" 
@@ -142,7 +149,7 @@ export class AutoCompleteComponent implements OnChanges {
 </mat-autocomplete>
 
 ----
-<1> Avec la directive `*ngFor` on pourra parcourir le signal de façon asynchrone.
+<1> Avec la directive `*ngFor` on peut parcourir le signal de façon asynchrone.
 
 
 == toObservable et toSignal 
