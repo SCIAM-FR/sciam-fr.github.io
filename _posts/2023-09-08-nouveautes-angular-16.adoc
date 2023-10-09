@@ -152,42 +152,41 @@ export class AutoCompleteComponent implements OnChanges {
 <1> Avec la directive `*ngFor` on peut parcourir le signal de façon asynchrone.
 
 
-== toObservable et toSignal 
+== Les fonctions toObservable et toSignal 
 
-La `sous-RFC 4` Angular inclue deux API innovantes
-`toObservable` et `toSignal`. Elles permettent de gérer la conversation entre observables et signals. Vous pouvez les trouver dans `@angular/core/rxjs-interop`.
+La `sous-RFC 4` d'Angular inclue deux API innovantes :
+`toObservable` et `toSignal`. Elles permettent de gérer la conversation entre Observables et Signals. Vous pouvez les trouver dans `@angular/core/rxjs-interop`.
 
-* `toObservable` permet de convertir le signal à un observable. Toutes les valeurs émises par toObservable sont délivrées de manière asynchrone.
-
+* La fonction `toObservable` permet de convertir le Signal vers un Observable. Toutes les valeurs émises par toObservable sont délivrées de manière asynchrone.
++
 [source,typescript]
 ----
 const count: Observable<number> = toObservable(mySignal);
 ----
-
 Ici, `count` est un `Observable` en prenant la valeur du signal qui va être inspecté par les différents opérateurs de Rxjs (Pipe, subscribe, ...).
 
-* `toSignal` crée un signal à partir l'Observable passé en paramétre et met à jour le Signal renvoyé chaque fois que l'Observable  émet une valeur.
-L'opérateur effect() s'abonne au signal pour inspecter ses données.
-
+* La fonction `toSignal` crée un signal à partir l'Observable passé en paramètre et met à jour le Signal renvoyé chaque fois que l'Observable émet une valeur.
++
 [source,typescript]
 ----
     Counter$ = of(1000);               
-    const counter : Signal < nombre > = toSignal (counter$);
+    const counter : Signal < nombre > = toSignal(counter$);
 
 ----
-L'opérateur `toSignal` permet de convertir le résultat d'un service (GET, POST,...) de type Observale en signal. La récupération de données dans le controller sera plus simple avec la déclaration d'un signal qui reçoit la valeur de retour de toSignal.
+L'opérateur `toSignal` permet de convertir le résultat d'un service (GET, POST,...) de type Observable en Signal. La récupération de données dans le Controller sera plus simple avec la déclaration d'un Signal qui reçoit la valeur de retour de toSignal.
 
-== Router
+* La fonction `effect()` s'abonne au signal pour inspecter ses données.
 
-Angular rend plus simple la récupération des informations (paraméteres, data,..)  de Router sans utilisation de module `ActivatedRouter`.
+== Le routage
 
-* Activez la fonctionnalité `bindToComponentInputs` dans la fonction RouterModule ou provideRouter .
-* Ajoutez le décorateur `@Input()` aux propriétés que nous voulons lier aux informations de route.
+Angular rend plus simple la récupération des informations (paramètres, data,..) de Router sans utilisation du module `ActivatedRouter` :
 
-=== Exemple App routing file :
+* Activer la fonctionnalité `bindToComponentInputs` dans la fonction RouterModule ou provideRouter.
+* Ajouter le décorateur `@Input()` aux propriétés que nous voulons lier aux informations de routage.
 
-==== App-routing.module.ts
+Exemple de fichier App routing :
 
+.App-routing.module.ts
 [source,typescript]
 ----
 import { NgModule } from '@angular/core';
@@ -207,13 +206,10 @@ const routes: Routes = [
 export class AppRoutingModule { };
 
 ----
+<1> Définir un path vers la page user avec un paramètre `toSignal`.
+<2> Activer en ajoutant dans l'objet RouterModule l'option `{bindToComponentInputs: true}`.
 
-<1> Définir un path vers la page user avec un paramétre `toSignal`.
-<2> Activer en ajoutant dans RouterModule object l'option `{bindToComponentInputs: true}`.
-
-==== User.component.ts
-
-
+.User.component.ts
 [source,typescript]
 ----
 @Component({
@@ -222,6 +218,7 @@ export class AppRoutingModule { };
   styleUrls: ['./user.component.scss'],
   
 })
+
 export class UserComponent {
    @Input() surname?: string; // <1>
 
@@ -230,14 +227,13 @@ export class UserComponent {
     }
 }
 ----
+<1> Avec Input on récupère directement le paramètre de routage.
 
-<1> Avec Input on récupére directement le paramétre de route.
+== Le module Rxjs-interpo
 
-== Rxjs-interpo
+Un nouveau module d'Angular propose des opérations qui conviennent avec le système de réactivité basé sur les Signals d'Angular.
 
-Un nouveau module d'angular propose des opérations qui conviennent avec le système de réactivité basé sur le signal d'Angular.
-
-`TakeUntilDestroy`:  Opérateur qui complète l'Observable lorsque le contexte appelant (composant, directive, service, etc.) est détruit.
+`TakeUntilDestroy`:  un opérateur qui complète l'Observable lorsque le contexte appelant (composant, directive, service, etc.) est détruit.
 
 [source,typescript]
 ----
@@ -253,6 +249,7 @@ import { UserService } from './user.service';
   styleUrls: ['./user.component.scss'],
   
 })
+
 export class UserComponent {
   @Input() surname?: string;
 
@@ -261,11 +258,13 @@ export class UserComponent {
   userService = inject(UserService);
   users? : User[] | undefined;
   initialData: Signal<User[] | undefined> = signal([]);
+
   constructor() {
     
     effect(() => this.users = this.users?.concat(this.userService.list()));
     this.initUsers();
   }
+
   initUsers() {
    // new version 
     this.userService.getUsers()
@@ -286,18 +285,16 @@ export class UserComponent {
     this.destroyed$.complete();
   }
 } 
-
 ----
-
 <1> Dans les anciennes versions d'Angular, on utilise `takeUntil` de la bibliothèque  Rxjs, pour détruire un observable. Ici, on est obligé de déclarer `destroyed$` comme un subject et le compléter dans ngOnDestry.
-
 <2> Avec Angular 16, un simple appel de l'opérateur `takeUntilDestroyed$` fait le nécessaire.
 
 
 == Conclusion 
 
-Cette nouvelle `version 16` apporte deux amélioration majeures : 
+Cette nouvelle version 16 apporte deux améliorations majeures : 
+
 * l'hydratation qui réduit le temps de chargement des applications
 * Signal qui améliore l'observabilité des composants.
 
-Comme le montre les exemples de cet articles, le code produit avec la version 16 est moins compliqué et nettement plus expressif, ce qui améliore grandement l'expérience de développement.
+Comme le montre les exemples de cet article, le code produit avec la version 16 est moins compliqué et nettement plus expressif, ce qui améliore grandement l'expérience de développement.
