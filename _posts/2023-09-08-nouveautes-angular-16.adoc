@@ -259,11 +259,13 @@ export class UserComponent {
   users? : User[] | undefined;
   initialData: Signal<User[] | undefined> = signal([]);
 
+
   constructor() {
     
     effect(() => this.users = this.users?.concat(this.userService.list()));
     this.initUsers();
   }
+
 
   initUsers() {
    // new version 
@@ -293,6 +295,7 @@ export class UserComponent {
 == Conclusion 
 
 Cette nouvelle version 16 apporte deux améliorations majeures : 
+
 
 * l'hydratation qui réduit le temps de chargement des applications
 * Signal qui améliore l'observabilité des composants.
