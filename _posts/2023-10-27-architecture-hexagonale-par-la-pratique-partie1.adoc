@@ -10,7 +10,7 @@
 
 = Architecture Hexagonale par la pratique : partie 1
 
-Pour cette première partie, nous allons parler des éléments de l’architecture hexagonale : entités du domaine, cas d'utilisation, ports et adaptateurs; nous allons appliquer ces principes à notre projet pour avancer progressivement en apprenant comment organiser du code.
+Pour cette première partie, nous allons parler des éléments de l’architecture hexagonale : entités du domaine, cas d'utilisation, ports et adaptateurs. Nous allons appliquer ces principes à notre projet pour avancer progressivement en apprenant comment organiser notre code.
 
 == Architecture hexagonale
 
