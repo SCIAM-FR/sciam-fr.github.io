@@ -22,7 +22,7 @@ TIP: Mais ce n’est pas tout, il faut aussi s’assurer que le côté technolog
 
 En partant de la nécessité d’isoler la logique métier des services techniques d’une application, nous devons trouver un endroit pour placer le code métier afin qu’il soit isolé et protégé de tout souci technologique. Cela donnera lieu à la création de notre premier hexagone : `l’hexagone du Domaine`.
 
-Nous avons également besoin de moyens pour utiliser, traiter et orchestrer les règles métier provenant de l’hexagone de domaine. C’est ce que fait `l’hexagone de l’Application` a travers des ports et des cas d’utilisation pour remplir ses fonctions.
+Nous avons également besoin de moyens pour utiliser, traiter et orchestrer les règles métier provenant de l’hexagone de domaine. C’est ce que fait `l’hexagone de l’Application` a travers des ports et des cas d’utilisation pour remplir ces fonctions.
 
 `L’hexagone du Framework` fournit l’interface du monde extérieur. C’est l’endroit où nous avons la possibilité de déterminer comment exposer les fonctionnalités de l’application, c’est là que nous définissons les points de terminaison REST, GraphQl ou gRPC, nous matérialisons les décisions technologiques par des adaptateurs.
 
