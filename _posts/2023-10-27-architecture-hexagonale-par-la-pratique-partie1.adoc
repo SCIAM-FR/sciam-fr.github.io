@@ -20,7 +20,7 @@ TIP: Mais ce n’est pas tout, il faut aussi s’assurer que le côté technolog
 
 == Les éléments de l'architecture hexagonale
 
-En partant du principe d’isoler la logique métier des services techniques d’une application, nous devons trouver un endroit pour placer le code métier, isolé et protégé de tout souci technologique. Cela donnera lieu à la création de notre premier hexagone : `l’hexagone du Domaine`.
+En partant de la nécessité d’isoler la logique métier des services techniques d’une application, nous devons trouver un endroit pour placer le code métier afin qu’il soit isolé et protégé de tout souci technologique. Cela donnera lieu à la création de notre premier hexagone : `l’hexagone du Domaine`.
 
 Nous avons également besoin de moyens pour utiliser, traiter et orchestrer les règles métier provenant de l’hexagone de domaine. C’est ce que fait `l’hexagone de l’Application` a travers des ports et des cas d’utilisation pour remplir ses fonctions.
 
