@@ -1,6 +1,6 @@
 :showtitle:
 :page-navtitle: Architecture Hexagonale par la pratique : partie 1
-:page-excerpt: Dans cette première partie, nous allons présenter les principes fondamentaux de l’architecture hexagonale en s'appuyant sur des exemples concrets en Java
+:page-excerpt: Parfois critiquée, mais souvent mal utilisée, l'architecture hexagonale offre une approche qui mérite votre attention. C'est pourquoi nous vous proposons ce petit retour en deux parties.
 :layout: post
 :author: rickenbazolo
 :page-tags: [Architecture Hexagonale, Domain Driven Design, Craftsmanship, Java]
@@ -16,7 +16,7 @@ Pour cette première partie, nous allons parler des éléments de l’architectu
 
 https://alistair.cockburn.us/hexagonal-architecture[Introduit par Alistair Cockburn^], ce pattern d’architecture aussi connue sous le nom de `Port & Adapters Architecture` place le métier au centre de l’architecture, l’une des principales idées de cette approche architecturale est d’isoler la logique métier des services techniques d’une application. Ce principe peut être mis en relation avec le `Domain-Driven Design (DDD)`, ces deux concepts peuvent être complémentaires; dans cet article nous allons pas traité les aspects du DDD.
 
-TIP: Mais ce n’est pas tout, il faut aussi s’assurer que le côté technologique dépend de l’aspect métier afin que ce dernier puisse évoluer sans se soucier de la technologie utilisée pour atteindre les objectifs du métier.
+TIP: Il est également essentiel de garantir que l'aspect technologique dépende de l'aspect métier, permettant ainsi à ce dernier d'évoluer sans être entravé par la technologie employée pour atteindre les objectifs du métier.
 
 == Les éléments de l'architecture hexagonale
 
