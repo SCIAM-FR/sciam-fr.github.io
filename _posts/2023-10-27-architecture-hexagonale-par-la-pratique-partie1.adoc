@@ -246,3 +246,5 @@ public class ArticleFileOutputAdapter implements ArticleOutputPort {
 
 L'architecture hexagonale offre une grande flexibilité pour supporter les exigences changeantes des entreprises et des projets, tout en garantissant une certaine cohérence et une meilleure compréhension de la structure du code. Grâce à cette approche, vous pouvez créer des applications plus solides, plus faciles à faire évoluer et à maintenir, et donc plus susceptibles de répondre aux besoins de vos clients ou de vos utilisateurs finaux.
 
+Dans la deuxième partie, nous mettrons l'accent sur la manière de structurer un projet en utilisant une architecture hexagonale et de concrétiser la séparation des éléments dont nous avons discuté dans la première partie.
+
