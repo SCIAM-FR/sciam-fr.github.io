@@ -48,7 +48,7 @@ Analysons en détail les composants de cet hexagone.
 
 ==== Entities
 
-Les entités nous aident à construire un code plus expressif. Ce qui caractérise une entité, c'est son sens de la continuité et de l'identité. Cette continuité est liée au cycle de vie et aux caractéristiques mutables de l'objet. Par exemple, dans notre scénario d’application, nous avons mentionné l'existence d’articles. Pour un article, nous pouvons définir un  type technique ou scientifique.
+Les entités nous aident à construire un code plus expressif. Ce qui caractérise une entité, c'est son sens de la continuité et de l'identité. Cette continuité est liée au cycle de vie et aux caractéristiques mutables de l'objet. Par exemple, dans notre scénario d’application, nous avons mentionné l'existence d’articles. Pour un article, nous pouvons définir un type technique ou scientifique.
 
 Nous pouvons également attribuer certaines propriétés décrivant la relation qu'un article entretient avec d'autres objets. Toutes ces propriétés peuvent évoluer avec le temps, démontrant ainsi que l'article n'est pas un objet statique et que ses caractéristiques peuvent changer. C'est pourquoi nous pouvons affirmer qu'un article a un cycle de vie. Par ailleurs, chaque article doit être `unique` dans un blog, il doit donc avoir une `identité`. Ce sens de la continuité et de l'identité sont donc les éléments qui déterminent une entité.
 
