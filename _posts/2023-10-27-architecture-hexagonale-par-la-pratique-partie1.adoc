@@ -222,7 +222,7 @@ Imaginons que votre application ait initialement été configurée avec des base
 
 Pour permettre la communication avec MongoDB, vous devez créer un adaptateur de sortie sur l'hexagone Framework, sans toucher aux hexagones Application et, surtout, du Domaine. Comme les adaptateurs d'entrée et de sortie pointent tous deux à l'intérieur de l'hexagone, nous les faisons dépendre à la fois de l'hexagone de l'application et de l'hexagone du domaine, `inversant ainsi la dépendance`.
 
-Le terme "piloté" est utilisé parce que ces opérations sont pilotées et contrôlées par l'application hexagonale elle-même, ce qui déclenche des actions dans d'autres systèmes externes. elle-même, en déclenchant des actions dans d'autres systèmes externes.
+Le terme "piloté" est utilisé parce que ces opérations sont pilotées et contrôlées par l'application hexagonale elle-même, ce qui déclenche des actions dans d'autres systèmes externes.
 
 Notez dans l'exemple suivant comment l'adaptateur de sortie met en œuvre l'interface de port de sortie pour spécifier comment l'application va obtenir des données externes :
 
