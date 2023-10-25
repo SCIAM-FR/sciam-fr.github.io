@@ -131,7 +131,7 @@ Notez le filtre Predicate. Nous allons l'utiliser pour filtrer la liste des arti
 
 ==== Input Ports
 
-Si les cas d'utilisation décrivent simplement les fonctionnalités du logiciel, il est toujours nécessaire d'implémenter l'interface correspondante. C'est là que les ports d'entrée entrent en jeu. En tant que composants directement liés aux cas d'utilisation au niveau de l'application, les ports d'entrée nous permettent d'exécuter le comportement prévu du logiciel conformément à la sémantique du domaine. En d'autres termes, ils fournissent un moyen de traduire les entrées de l'utilisateur en actions qui peuvent être exécutées par le logiciel. Voici un port d'entrée fournissant une implémentation du cas d'utilisation ArticleUseCase :
+Si les cas d'utilisation décrivent simplement les fonctionnalités du logiciel, il est toujours nécessaire d'implémenter l'interface correspondante. C'est là que les ports d'entrée entrent en jeu. En tant que composants directement liés aux cas d'utilisation au niveau de l'application, les ports d'entrée nous permettent d'exécuter le comportement prévu du logiciel conformément à la sémantique du domaine. En d'autres termes, ils fournissent un moyen de traduire les entrées de l'utilisateur en actions qui peuvent être exécutées par le logiciel. Voici un port d'entrée fournissant une implémentation du cas d'utilisation `ArticleUseCase` :
 
 [source,java]
 ----
