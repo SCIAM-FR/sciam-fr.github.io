@@ -14,7 +14,7 @@ Pour cette première partie, nous allons parler des éléments de l’architectu
 
 == Architecture hexagonale
 
-https://alistair.cockburn.us/hexagonal-architecture[Introduit par Alistair Cockburn^], ce pattern d’architecture aussi connue sous le nom de `Port & Adapters Architecture` place le métier au centre de l’architecture, l’une des principales idées de cette approche architecturale est d’isoler la logique métier des services techniques d’une application. Ce principe peut être mis en relation avec le `Domain-Driven Design (DDD)`, ces deux concepts peuvent être complémentaires; dans cet article nous allons pas traité les aspects du DDD.
+https://alistair.cockburn.us/hexagonal-architecture[Introduit par Alistair Cockburn^], ce pattern d’architecture aussi connu sous le nom de `Port & Adapters Architecture` place le métier au centre de l’architecture. L’une des principales idées de cette approche architecturale est d’isoler la logique métier des services techniques d’une application. Ce principe peut être mis en relation avec le `Domain-Driven Design (DDD)`. Ces deux concepts peuvent être complémentaires. Dans cet article nous n’allons pas traiter les aspects du DDD.
 
 TIP: Mais ce n’est pas tout, il faut aussi s’assurer que le côté technologique dépend de l’aspect métier afin que ce dernier puisse évoluer sans se soucier de la technologie utilisée pour atteindre les objectifs du métier.
 
