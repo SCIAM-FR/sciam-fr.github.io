@@ -171,7 +171,7 @@ Examinons à présent le dernier type d'hexagone
 
 === Framework hexagon
 
-L'organisation semble bien structurée, avec nos règles métier essentielles étant restreintes à l'hexagone du domaine, suivies par l'hexagone de l'application qui traite de certaines opérations spécifiques à l'application au moyen de cas d'utilisation, de ports d'entrée et de ports de sortie. Maintenant, il est temps de décider quelles technologies seront autorisées à interagir avec notre logiciel. Cette communication peut se faire sous deux formes, l'une connue sous le nom de `driving` et l'autre sous le nom de `driven`. Pour le côté pilote, nous utilisons des `adaptateurs d'entrée`, et pour le côté piloté, nous utilisons des `adaptateurs de sortie`, comme le montre le diagramme suivant :
+L'organisation semble bien structurée, avec nos règles métier essentielles restreintes à l'hexagone du domaine, suivies par l'hexagone de l'application qui traite de certaines opérations spécifiques à l'application au moyen de cas d'utilisation, de ports d'entrée et de ports de sortie. Maintenant, il est temps de décider quelles technologies seront autorisées à interagir avec notre logiciel. Cette communication peut se faire sous deux formes, l'une connue sous le nom de `driving` et l'autre sous le nom de `driven`. Pour le côté pilote, nous utilisons des `adaptateurs d'entrée`, et pour le côté piloté, nous utilisons des `adaptateurs de sortie`, comme le montre le diagramme suivant :
 
 image::rickenbazolo/arch_hexagonal/hexagon_framework.png[image,width=50%,align="center"]
 
