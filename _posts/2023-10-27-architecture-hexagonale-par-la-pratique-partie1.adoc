@@ -32,7 +32,7 @@ image::rickenbazolo/arch_hexagonal/diagram_archi_hexagonal.png[image,width=50%,a
 
 Par la suite, nous explorerons plus en détail les composants, les rôles et les structures de chaque hexagone à travers des exemples concrets.
 
-== Mettez en pratique l'architecture hexagonale
+== Mise en pratique l'architecture hexagonale
 
 Imaginons que vous soyez impliqué dans un projet visant à créer un blog où les utilisateurs peuvent publier des articles. L'objectif est de créer une structure de base pour démarrer le développement de votre application de blog en utilisant l'architecture hexagonale.
 
