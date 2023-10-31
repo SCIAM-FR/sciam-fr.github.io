@@ -3,5 +3,6 @@
         "imagesdir":"../images",
         "source-highlighter":"highlightjs",
         "stem":"latexmath"
-    }
+    },
+    "cSpell.language": "en,fr,fr-FR"
 }
