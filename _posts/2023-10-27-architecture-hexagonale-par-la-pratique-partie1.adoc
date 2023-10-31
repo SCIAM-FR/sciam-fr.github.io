@@ -67,7 +67,7 @@ public class Article {
     }
 
     public static Predicate<Article> filterByType(ArticleType articleType) {
-        return articleType.equal(ArticleType.TECHNICAL) ? isTechnical() : isScientific();
+        return articleType.equals(ArticleType.TECHNICAL) ? isTechnical() : isScientific();
     }
 
     public static Predicate<Article> isTechnical() {
