@@ -53,7 +53,6 @@ asciidoctor:
     source-language: java
     rouge-css: style
     rouge-style: github
-    asciidoctor-stylesheet: asciidoctor.css
     icons: font
     imagesdir: "/images"
 
