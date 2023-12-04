@@ -1,0 +1,621 @@
+= Assurer la cohérence des données dans Quarkus grâce à MicroProfile LRA (Long Running Actions)
+:author: pcheucle
+:docinfo: shared-footer
+:layout: post
+:page-excerpt: À l’aide d’un exemple concret, nous allons voir dans cet article comment mettre œuvre MicroProfile LRA dans une application Quarkus.
+:page-navtitle: LRA Quarkus demo
+:page-tags: [MicroProfile,SAGA,Quarkus,Java,LRA]
+:post-vignette: quarkus-microprofile.jpg
+:page-vignette: quarkus-microprofile.jpg
+:page-vignette-licence: Sources: MicroProfile, Quarkus
+:showtitle:
+:source-highlighter: rouge
+:page-liquid:
+
+Il est fréquent de devoir modifier des données dans plusieurs microservices lors d’une opération métier.
+Par exemple, supprimer un client dans un microservice Client et clôturer ses comptes bancaires dans un microservice Account.
+
+Contrairement aux applications monolithiques, où l'ensemble des modifications peuvent être gérées dans une même transaction ACID, garantir la cohérence des données dans une architecture microservice repose sur la mise en place d'un modèle de transaction plus complexe.
+
+https://download.eclipse.org/microprofile/microprofile-lra-2.0/microprofile-lra-spec-2.0.html[Eclipse MicroProfile LRA] propose un modèle de transaction basé sur les Long-Running Actions, ou plus communément appelées https://en.wikipedia.org/wiki/Long-running_transaction[SAGAS].
+
+À l'aide d'un exemple concret, nous allons voir dans cet article comment mettre œuvre ce modèle dans une application https://quarkus.io/[Quarkus].
+
+== Présentation de l'application
+
+Nous allons prendre comme exemple une application composée de trois microservices Quarkus :
+
+* Client : gestion des clients
+* Account : gestion des comptes bancaires des clients
+* Administration : gestion des opérations d'administration impliquant plusieurs microservices
+
+image::{{'/images/lra/application.png' | relative_url}}[width=50%]
+
+
+Les microservices Client et Account ont chacun leur propre base de données relationnelle H2.
+
+== Démarrage de l'application
+
+Pour pouvoir démarrer les microservices et dérouler les différents scénarii proposés dans cet article, nous aurons besoin :
+
+* d'un JDK en version 17 ou supérieure (par exemple, la distribution Eclipse Temurin)
+* de Maven en version 3.9.3 ou supérieure
+* d'un terminal pour exécuter des commandes Git et curl (par exemple https://git-scm.com/downloads[Git BASH])
+
+La première étape consiste à récupérer le code source de l'application depuis le dépôt Git distant :
+
+[source,shell]
+----
+git clone https://github.com/SCIAM-FR/quarkus-lra-demo
+----
+
+Puis nous démarrons chaque microservice dans un terminal dédié : 
+
+[source,shell]
+----
+cd quarkus-lra-demo
+----
+
+[source,shell]
+----
+cd administration
+mvn quarkus:dev
+----
+
+[source,shell]
+----
+cd client
+mvn quarkus:dev
+----
+
+[source,shell]
+----
+cd account
+mvn quarkus:dev
+----
+
+
+== Initialisation des données
+
+Un script permettant d'initialiser les données est disponible à la racine du dépôt Git. 
+
+Pour l'exécuter : 
+
+----
+./init.sh
+----
+
+Le script créé : 
+
+* un client dans le microservice Client :
+
+[source,shell]
+----
+curl http://localhost:8081/clients/1784e89b-7a3b-45ed-b2f2-6a562756a2e3
+----
+
+[source,json]
+----
+{
+    "id": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3",
+    "fullName": "John Smith",
+    "email": "john.smith@gmail.com",
+    "deleted": false
+}
+----
+
+* trois comptes associés à ce client dans le microservice Account :
+
+[source,shell]
+----
+curl http://localhost:8082/accounts?clientId=1784e89b-7a3b-45ed-b2f2-6a562756a2e3
+----
+
+[source,json]
+----
+[
+    {
+        "id": "86c2de0c-d330-4032-b476-c56682f434ea",
+        "clientId": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3",
+        "number": "ACC00001",
+        "balance": 0,
+        "closed": false
+    },
+    {
+        "id": "ecafb910-0e3e-40b7-b304-6115b708606a",
+        "clientId": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3",
+        "number": "ACC00002",
+        "balance": 0,
+        "closed": false
+    },
+    {
+        "id": "76be90c1-0d30-4d68-b4c2-b77bbf185f5b",
+        "clientId": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3",
+        "number": "ACC00003",
+        "balance": 0,
+        "closed": false
+    }
+]
+----
+
+== Suppression d’un client
+
+Lors de la suppression d'un client, le microservice Administration orchestre :
+
+* l'appel au microservice Client pour supprimer le client
+* l'appel au microservice Account pour clôturer l’ensemble des comptes du clients
+
+Les comptes d'un client ne peuvent être clôturés que si le solde de chacun des comptes est nul.
+
+Que se passe-t-il si, au moment du supprimer le client, le solde d'un des comptes est crédité de 100 € ? 
+
+Pour vérifier cela, nous mettons à jour le solde du compte ACC00002 : 
+
+[source,shell]
+----
+curl -d '{"id":"ecafb910-0e3e-40b7-b304-6115b708606a", "clientId": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3", "number": "ACC00002", "balance": 100 }' -H "Content-Type: application/json" -X PUT http://localhost:8082/accounts
+----
+
+Puis nous supprimons le client :
+
+[source,shell]
+----
+curl -X DELETE http://localhost:8080/administration/clients/1784e89b-7a3b-45ed-b2f2-6a562756a2e3
+----
+
+Le client a bien été supprimé :
+
+[source,shell]
+----
+curl http://localhost:8081/clients/1784e89b-7a3b-45ed-b2f2-6a562756a2e3
+----
+
+[source,json]
+----
+{
+    "id": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3",
+    "fullName": "John Smith",
+    "email": "john.smith@gmail.com",
+    "deleted": true
+}
+----
+
+Mais ses comptes n'ont pas été clôturés, le solde du compte ACC00002 n'étant pas nul lors de l'appel au microservice Account :
+
+[source,shell]
+----
+curl http://localhost:8082/accounts?clientId=1784e89b-7a3b-45ed-b2f2-6a562756a2e3
+----
+
+[source,json]
+----
+[
+    {
+        "id": "86c2de0c-d330-4032-b476-c56682f434ea",
+        "clientId": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3",
+        "number": "ACC00001",
+        "balance": 0,
+        "closed": false
+    },
+    {
+        "id": "ecafb910-0e3e-40b7-b304-6115b708606a",
+        "clientId": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3",
+        "number": "ACC00002",
+        "balance": 100,
+        "closed": false
+    },
+    {
+        "id": "76be90c1-0d30-4d68-b4c2-b77bbf185f5b",
+        "clientId": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3",
+        "number": "ACC00003",
+        "balance": 0,
+        "closed": false
+    }
+]
+----
+
+Nous venons de produire un état incohérent dans notre application, où un client a été supprimé alors que ses comptes sont toujours ouverts.
+
+== Le problème de la double écriture
+
+Dans notre exemple, nous devons modifier des données dans 2 microservices, chacun ayant sa propre transaction locale. 
+
+image::{{'/images/lra/dual_write.png' | relative_url}}[dual_write,600,300]
+
+
+Lorsque le client est supprimé dans le microservice Client, nous n’avons aucune garantie que les comptes associés seront clôturés dans le microservice Account.
+
+En cas d'erreur lors de la clôture des comptes, nous pourrions annuler la suppression du client depuis le microservice Administration. Mais nous n'avons aucune garantie que le microservice Client sera disponible à ce moment-là.  
+
+On parle ici du problème de la double écriture, où des données doivent être modifiées dans deux systèmes. Si l’un d’eux échoue, nos données seront dans un état incohérent. 
+
+== MicroProfile LRA (Long-Running Actions)
+
+La spécification MicroProfile LRA est proposée en Standalone dans la partie Outside Umbrella de MicroProfile, qui constitue un bac à sable de projets pouvant un jour être intégrés dans la suite MicroProfile. 
+
+image::{{'/images/lra/microprofile.png' | relative_url}}[microprofile,800,400]
+
+La spécification MicroProfile LRA s’appuie sur le modèle de transaction https://www.oasis-open.org/committees/document.php?document_id=12794[Long Running Action] pour les Web Services créé au milieu des années 2000 par le comité OASIS Open qui regroupe plusieurs acteurs du secteur tel que IBM.
+
+MicroProfile LRA reprend le concept des SAGAs apparu pour la première fois en 1987 dans un https://www.cs.cornell.edu/andru/cs711/2002fa/reading/sagas.pdf[article] sur les transactions longues en base de données. Il s'agit de découper une transaction longue en une séquence de plus petites transactions, avec, en cas d’erreur, la possibilité de compenser tout ou partie des changement effectués.
+
+SAGA est un pattern que l'on retrouve de nos jours dans l'écosystème des microservices. 
+
+On distingue :
+
+*   Les SAGAs de type chorégraphie, où les microservices s’échangent des messages pour exécuter et compenser les changements.
+*   Les SAGAs de type orchestration, où un coordinateur maintient l’état de la transaction globale et exécute les opérations de compensation auprès des microservices participants.
+
+MicroProfile LRA entre dans la deuxième catégorie.
+
+== Mise en place de MicroProfile LRA
+
+Nous allons voir maintenant comment mettre en place MicroProfile LRA dans notre application Quarkus.
+
+Les modifications apportées au code sont disponibles dans la branche lra du dépôt Git : 
+
+[source,shell]
+----
+git checkout lra
+----
+
+Un redémarrage des microservices est nécessaire pour la prise en compte des modifications.
+
+=== Le coordinateur LRA
+
+Dans notre exemple, le coordinateur LRA est déployé comme un microservice standalone, mais il est également possible de l'embarquer dans un microservice existant.
+
+Le coordinateur LRA est une application Quarkus qui possède comme dépendance principale l'implémentation https://www.narayana.io/lra/[Narayana] :
+
+[source, xml]
+----
+<dependency>
+    <groupId>org.jboss.narayana.rts</groupId>
+    <artifactId>lra-coordinator-jar</artifactId>
+</dependency>
+----
+
+Le port HTTP du coordinateur est configuré dans le fichier application.properties :
+
+[source, properties]
+----
+quarkus.http.port=50000
+----
+
+Pour démarrer le coordinateur LRA, nous exécutons les commandes ci-dessous depuis la racine du dépôt Git :
+
+[source,shell]
+----
+cd coordinator/
+mvn quarkus:dev
+----
+
+Nous pouvons alors vérifier le bon fonctionnement du coordinateur LRA : 
+
+[source,shell]
+----
+curl http://localhost:50000/lra-coordinator
+----
+
+La commande retourne un tableau vide puisqu'il n'y a pas de transaction LRA active.
+
+Le coordinateur créé un dossier nommé ObjectStore sur le système de fichiers.
+Celui est utilisé par le coordinateur pour stocker durablement l'état des transactions.
+
+=== Configuration des participants LRA
+
+Quarkus propose l'extension https://quarkus.io/extensions/io.quarkus/quarkus-narayana-lra[quarkus-narayana-lra] pour la configuration des participants.
+
+Cette extension apporte l'implémentation Narayana du client LRA, qui va permettre à nos microservices de pouvoir communiquer avec le coordinateur LRA.
+
+L'extension est présente dans chacun des microservices :
+
+[source,xml]
+----
+<dependency>
+  <groupId>io.quarkus</groupId>
+  <artifactId>quarkus-narayana-lra</artifactId>
+</dependency>
+----
+
+L'extension rest-client-reactive, déjà présente dans le microservice Administration, doit également être ajoutée dans les microservices Client et Account, puisqu'ils jouent dorénavant le rôle de client auprès du Coordinateur LRA :
+
+[source,xml]
+----
+<dependency>
+  <groupId>io.quarkus</groupId>
+  <artifactId>quarkus-rest-client-reactive-jackson</artifactId>
+</dependency>
+----
+
+Puis nous devons spécifier dans chacun des microservices l'URL du coordinateur LRA dans le fichier application.properties :
+
+[source, properties]
+----
+quarkus.lra.coordinator-url=http://localhost:50000/lra-coordinator
+----
+
+==== Administration
+
+Le microservice Administration va démarrer la transaction LRA. 
+
+Pour cela, l'annotation *@LRA* est ajoutée sur la méthode de suppression d'un client :
+
+[source,java]
+----
+@DELETE
+@Path("clients/{id}")
+@LRA(value = Type.REQUIRES_NEW,   <1>
+		      cancelOnFamily = { Family.CLIENT_ERROR, Family.SERVER_ERROR },  <2>
+		      end = true,  //<3>
+		      timeLimit = 20)  //<4>
+public void deleteClient(@PathParam("id") UUID clientId) {
+	LOG.info("Deleting client " + clientId);
+	clientService.deleteClient(clientId);
+	accountService.deleteClientAccounts(clientId);
+}
+----
+<1> Le type de la LRA est REQUIRES_NEW pour créer un nouveau contexte de transaction lors de l'appel de la méthode
+<2> La LRA sera annulée en cas d'erreur HTTP 4XX ou 5XX
+<3> end = true signifie que la LRA sera terminée à la fin de l'exécution de la méthode
+<4> Un timeLimit est défini pour que LRA s'annule après 20 secondes
+
+Comme les exceptions ne sont pas automatiquement mappées vers les codes erreurs HTTP, c'est au développeur qu'il incombe d'effectuer ce mapping. 
+
+Voici un exemple pour convertir les exceptions de type WebApplicationException en erreur HTTP 500 : 
+
+[source,java]
+----
+@ServerExceptionMapper
+public Response mapException(WebApplicationException ex) {
+    return Response.serverError().build();
+}
+----
+
+Enfin, il est obligatoire de déclarer une méthode annotée avec @Compensate, qui sera appelée en cas d'annulation de la LRA pour compenser le travail effectué par la méthode annotée avec @LRA.
+
+Dans le cas du microservice Administration, la méthode compensate ne fait que loguer la phase de compensation :
+
+[source,java]
+----
+@Compensate
+public Response compensate(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) URI lra) throws Exception {
+    LOG.info("Compensating LRA " + lra);
+    return Response.ok().build();
+}
+----
+
+==== Client
+
+L'annotation *@LRA* est ajoutée sur la méthode de suppression d'un client :
+
+[source,java]
+----
+@DELETE
+@Path("{id}")
+@Transactional
+@LRA(value = LRA.Type.MANDATORY, <1>
+	end = false) <2>
+public Response deleteClient(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) URI lra, <3>
+					@PathParam("id") UUID clientId) {
+
+    LOG.info("Deleting client " + clientId);
+
+    Client client = Client.findById(clientId, LockModeType.PESSIMISTIC_WRITE);
+
+    if (client != null) {
+        client.setLra(lra); <4>
+        client.setDeleted(true); <5>
+        LOG.info("Client " + clientId + " deleted");
+        return Response.noContent().build();
+
+    } else {
+        LOG.info("Client " + clientId + " not found");
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+}
+----
+<1> Le type de la LRA est MANDATORY : la méthode doit obligatoirement être appelée dans un contexte LRA existant.
+<2> end = false signifie que la LRA ne sera pas terminée à la fin de l'exécution de la méthode
+<3> l'identifiant de la LRA est récupéré depuis le header de la requête HTTP   
+<4> l'identifiant de la LRA est stocké dans l'objet Client, ce qui nous sera utile pour le retrouver en cas de compensation
+<5> Le client est supprimé (soft delete)
+
+La méthode compensate va permettre d'annuler la suppression du Client en cas d'annulation de la LRA :
+
+[source,java]
+----
+@Path("compensate")
+@Compensate
+@Transactional
+public Response compensate(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) URI lra) throws Exception {
+
+    LOG.info("Compensating LRA " + lra);
+    Client client = Client.find("lra", lra).withLock(LockModeType.PESSIMISTIC_WRITE).firstResult(); <1>
+    if (client != null) {
+        LOG.info("Revert client " + client.getId() + " deletion corresponding to LRA " + lra);
+        client.setDeleted(false); <2>
+    }
+
+    return Response.ok().build();
+
+}
+----
+<1> Le client est retrouvé dans la base de données grâce à l'identifiant de la LRA préalablement stocké lors de sa suppression
+<2> La suppression du client est annulée
+
+==== Account
+
+Le même principe s'applique pour le microservice Account :
+[source,java]
+----
+@DELETE
+@Transactional
+@LRA(value = LRA.Type.MANDATORY, end = false)
+public Response deleteAccounts(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) URI lra, @QueryParam("clientId") UUID clientId) {
+
+    List<Account> accounts = Account.find("clientId", clientId).withLock(LockModeType.PESSIMISTIC_WRITE).list();
+
+    for (Account account : accounts) {
+        if (account.getBalance().compareTo(BigDecimal.ZERO) == 0) {
+            account.setLra(lra);
+            account.setClosed(true);
+            LOG.info("Close account " + account.getNumber());
+        } else {
+            LOG.info("Cannot close account " + account.getNumber() + " as balance is not 0. Cancel accounts deletion.");
+            Account.getEntityManager().clear();
+            return Response.status(Status.CONFLICT).build();
+        }
+    }
+
+    return Response.noContent().build();
+}
+----
+
+On note ci-dessus la réponse avec un code retour CONFLICT (409) qui déclenchera l'annulation de la LRA.
+
+[source,java]
+----
+@Path("compensate")
+@Compensate
+@Transactional
+public Response compensate(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) URI lra) throws Exception {
+
+    LOG.info("Compensating LRA " + lra);
+    List<Account> accounts = Account.find("lra", lra).list();
+    if(accounts.isEmpty()) {
+        LOG.info("No account to revert found with LRA " + lra);
+    }
+    for (Account account : accounts) {
+        LOG.info("Revert account " + account.getId() + " closing corresponding to LRA " + lra);
+        account.setClosed(false);
+    }
+
+    return Response.ok().build();
+
+}
+----
+
+Les méthodes annotées avec @Compensate doivent toujours être idempotentes. En effet, comme nous le verrons dans l'exemple suivant, la méthode est tout le temps exécutée en cas d'annulation de la LRA, même si aucun changement n'a été effectué sur les données. 
+
+== Suppression d’un client avec LRA
+
+Nous réinitialisons les données : 
+
+----
+./init.sh
+----
+
+Nous mettons à jour le solde du compte ACC00002 : 
+
+[source,shell]
+----
+curl -d '{"id":"ecafb910-0e3e-40b7-b304-6115b708606a", "clientId": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3", "number": "ACC00002", "balance": 100 }' -H "Content-Type: application/json" -X PUT http://localhost:8082/accounts
+----
+
+Puis nous supprimmons le client :
+
+[source,shell]
+----
+curl -X DELETE http://localhost:8080/administration/clients/1784e89b-7a3b-45ed-b2f2-6a562756a2e3
+----
+
+Comme dans l'exemple précédent, les comptes du client ne peuvent pas être clôturés. 
+Dans ce cas, le microservice Account retourne le code HTTP 409, ce qui déclenche l'annulation de la LRA.
+Le coordinateur procède de ce fait à la phase de compensation, comme nous pouvons le voir ci-dessous dans les logs des différents microservices : 
+
+ - La suppression du client effectuée avant l’annulation de la LRA a bien été compensée dans le microservice Client :
+
+[text]
+----
+Deleting client 1784e89b-7a3b-45ed-b2f2-6a562756a2e3
+Client 1784e89b-7a3b-45ed-b2f2-6a562756a2e3 deleted
+Compensating LRA http://localhost:50000/lra-coordinator/0_ffffc0a80114_f7b9_656b3fb0_2
+Revert client 1784e89b-7a3b-45ed-b2f2-6a562756a2e3 deletion corresponding to LRA http://localhost:50000/lra-coordinator/0_ffffc0a80114_f7b9_656b3fb0_2
+----
+
+- La compensation a bien été exécutée bien qu'il n'y ait rien eu à compenser dans le microservice Account :
+
+[text]
+----
+Compensating LRA http://localhost:50000/lra-coordinator/0_ffffc0a80114_f7b9_656b3fb0_2
+No account to revert found with LRA http://localhost:50000/lra-coordinator/0_ffffc0a80114_f7b9_656b3fb0_2
+----
+
+- Idem dans le microservice Administration : 
+
+[text]
+----
+Compensating LRA http://localhost:50000/lra-coordinator/0_ffffc0a80114_f7b9_656b3fb0_2
+----
+
+On note également l'avertissement ci-dessous : 
+
+[text]
+----
+LRA025023: Could not compensate LRA 'http://localhost:50000/lra-coordinator/0_ffffc0a80114_f7b9_656b3fb0_2': coordinator 'http://localhost:50000/lra-coordinator' responded with status 'Not Found'
+----
+
+La présence de cet avertissement est normale. 
+La récupération du code HTTP 409 génère une exception dans le microservice Administration qui, transformée en erreur 500 par notre ServerExceptionMapper, déclenche à son tour l'annulation de la LRA.
+La LRA ayant déjà été annulée, elle n'est plus présente dans le coordinateur.
+
+Une fois la phase de compensation terminée, on constate que notre application est toujours dans un état cohérent : 
+
+Le client n'est pas supprimé :
+
+[source,shell]
+----
+curl http://localhost:8081/clients/1784e89b-7a3b-45ed-b2f2-6a562756a2e3
+----
+
+[source,json]
+----
+{
+    "id": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3",
+    "fullName": "John Smith",
+    "email": "john.smith@gmail.com",
+    "deleted": false
+}
+----
+
+Les comptes du client sont toujours ouverts :
+
+[source,shell]
+----
+curl http://localhost:8082/accounts?clientId=1784e89b-7a3b-45ed-b2f2-6a562756a2e3
+----
+
+[source,json]
+----
+[
+    {
+        "id": "86c2de0c-d330-4032-b476-c56682f434ea",
+        "clientId": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3",
+        "number": "ACC00001",
+        "balance": 0,
+        "closed": false
+    },
+    {
+        "id": "ecafb910-0e3e-40b7-b304-6115b708606a",
+        "clientId": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3",
+        "number": "ACC00002",
+        "balance": 100,
+        "closed": false
+    },
+    {
+        "id": "76be90c1-0d30-4d68-b4c2-b77bbf185f5b",
+        "clientId": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3",
+        "number": "ACC00003",
+        "balance": 0,
+        "closed": false
+    }
+]
+----
+
+== Conclusion
+
+Nous avons vu dans cet article qu'il pouvait être nécessaire d'adopter un système de transaction plus complexe pour assurer la cohérence des données dans nos microservices.  
+MicroProfile LRA propose une solution élégante qui demande peu d'adaptation dans le code, et puisque basée sur REST, ne nécessite pas l'ajout de technologies tel qu'un message broker.
+Sa mise en place est d'autant plus facilitée par l'extension proposée dans Quarkus, ce qui offre aux développeurs une solution clé en main.
