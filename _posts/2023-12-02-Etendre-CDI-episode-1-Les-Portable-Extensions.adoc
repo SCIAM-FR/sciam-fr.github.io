@@ -1,0 +1,764 @@
+= Étendre CDI, épisode 1 : Les Portable Extensions
+:showtitle:
+:page-navtitle: Étendre CDI, épisode 1 : Les Portable Extensions
+:page-excerpt: 'Présentes dans la spécification depuis la version 1.0, les portable extensions sont un moyen puissant d''étendre CDI. Ce mécanisme qui permet d''intégrer des frameworks et bibliothèques tierces dans le modèle de programmation de CDI, va bien au-delà en donnant de puissant moyen de masquer la quasi-totalité du boiler-plate code de vos applications. Cet article vous présente les bases de cette fonctionnalité.'
+:layout: post
+:author: antoinesabotdurand
+:page-tags: [CDI,SPI,Extension]
+:page-vignette: rainbow_lego.jpg
+:page-vignette-licence: 'Source Legomania'
+:page-liquid:
+
+Depuis sa version 1.0, sortie en 2009, CDI inclut le mécanisme de _Portable Extension_ qui permet aux développeurs d'ajouter des fonctionnalités au modèle de programmation CDI.
+L'année dernière, CDI a introduit la notion de _Build Time Compatible Extension_ permettant d'étendre CDI d'une façon compatible avec la compilation statique (utilisée par des frameworks comme Quarkus).
+Cette série d'articles passera en revue les 2 systèmes d'extension et vous montrera comment les utiliser.
+
+CAUTION: Pour une bonne compréhension du contenu de cet article, il est conseillé d'être familier avec les concepts de base de CDI : comme la notion d'injection de dépendance, de link:{% post_url 2021-01-14-cinquante-nuances-de-beans-CDI %}[beans^], de link:{% post_url 2021-01-14-cinquante-nuances-de-beans-CDI %}#les_producers[producers^], https://jakarta.ee/specifications/cdi/4.0/jakarta-cdi-spec-4.0.html#events[d'événements et d'observers^] et plus généralement de link:{% post_url 2022-01-25-hissez-les-voiles-avec-la-SPI-CDI %}[la SPI CDI^].
+
+À tout seigneur tout honneur, commençons par les Portable Extensions (dans la suite de cet article la mention _extension_ désignera toujours le terme _Portable Extension_).
+Celles-ci constituent probablement la fonctionnalité la plus intéressante de CDI.
+
+Malheureusement, ce joyau est un peu caché dans la spécification et certains développeurs l'ont totalement manqué tandis que d'autres peuvent penser à tort que son utilisation est beaucoup trop compliquée.
+
+Dans cet article, je vais essayer de démystifier les Portable Extensions, en montrant que tout à chacun peut en développer, que ce soit pour  une fonctionnalité simple ou un mécanisme d'intégration avancé.
+
+Mais tout d'abord, répondons à la question de base :
+
+== Que puis-je faire avec une extension ?
+
+Au démarrage de l'application, CDI scanne la plupart des classes dans le classpath pour créer sa configuration et le graphe de beans.
+La configuration et les méta-données qui sont créées à ce moment, le sont à partir d'un contenu statique (fichier de classe) et peuvent avoir besoin d'un contenu plus dynamique.
+
+C'est là qu'interviennent les extensions.
+
+Une extension CDI vous permet de vous greffer sur le processus d'analyse CDI qui se produit au boot et de modifier ou d'ajouter des informations aux méta-données créées par le conteneur CDI.
+
+Cela inclut l'ajout de Beans, la suppression de classes de l'ensemble des types qui devraient devenir des Beans, l'ajout de producers, d'observers et de la plupart des link:{% post_url 2022-01-25-hissez-les-voiles-avec-la-SPI-CDI %}[éléments de la SPI^] de CDI.
+
+Pour résumer, les extensions permettent aux développeurs de configurer CDI et de remplacer le comportement par défaut créé à partir de la lecture des classes.
+Au-delà de l'intégration de bibliothèques ou frameworks tiers, cet outil vous permet aussi de masquer la quasi-totalité du boiler-plate code de vos applications.
+
+== Comment débuter avec les extensions CDI ?
+
+Les extensions CDI sont basées sur le mécanisme de https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/ServiceLoader.html[Java SE service provider^].
+
+L'interface du service est `jakarta.enterprise.inject.spi.Extension`, donc pour ajouter une extension vous devrez créer une classe implémentant l'interface `jakarta.enterprise.inject.spi.Extension` et ajouter le nom qualifié de cette classe au fichier texte du fournisseur de service `META-INF/services/jakarta.enterprise.inject.spi.Extension`.
+
+La fonction d'extension est définie par l'ajout d'observers sur des événements spécifiques du cycle de vie du conteneur CDI.
+Au démarrage, le conteneur CDI utilise le mécanisme du fournisseur de services pour découvrir toutes les extensions et enregistrer ces observers.
+
+Cette approche permet de se greffer sur les étapes de démarrage du cycle de vie du conteneur et de modifier leur résultat.
+
+Voyons quelles sont ces étapes.
+
+== Les extensions pas à pas
+
+Pour comprendre comment fonctionnent les extensions, le mieux est de commencer par diviser le cycle de vie du conteneur en 4 grandes étapes :
+
+.Les 4 principales étapes du cycle de vie du conteneur CDI
+[plantuml, broaderlifecycle, svg]
+....
+@startuml
+skinparam activity {
+  BackgroundColor #337788
+  BackgroundColor<< Internal >> #888888
+  ArrowColor #888888
+  BarColor #888888
+  BorderColor White
+  FontColor White
+  FontSize 20
+}
+
+(*) -right-> "Découverte des Types"
+-right-> "Découverte des Beans"
+-right-> "Exécution de l'application" << Internal >>
+-right-> "Avant le shutdown"
+-right-> (*)
+@enduml
+....
+
+Chacune de ces étapes (à l'exception d'"Exécution de l'application") contient un ou plusieurs événements pour lesquels vous pouvez définir des observers.
+Ces observers se grefferont sur le processus de découverte et de construction des méta-données CDI en vue de les altérer.
+L'ensemble de ces observers constitueront votre extension.
+
+Concentrons-nous sur chacune de ces étapes et décrivons les événements que vous pouvez utiliser dans chacune d'entre elles.
+
+== Découverte des types
+
+La découverte des types peut être illustrée comme suit
+
+.Découverte des types
+[plantuml, typesdiscovery, svg]
+....
+@startuml
+
+
+#lightyellow:Déclenchement de l'événement **BeforeTypeDiscovery**;
+#lightgrey:Début du processus de la recherche des types;
+#lightgrey:while (Le processus a-t'il trouvé un nouveau type ?) is (oui)
+  #lightgrey:Création d'un **AnnotatedType** pour le type trouvé;
+#lightyellow:Déclenchement de l'événement **ProcessAnnotatedType** (PAT) pour l'**AnnotatedType**;
+  #lightgrey:if(PAT.veto() a été appelé ?) then (oui)
+  else(non)
+   #lightgrey:ajout de PAT.getAnnotatedType() à l'ensemble des types découverts;
+  endif
+endwhile (non)
+#lightyellow:Déclenchement de l'événement **AfterTypeDiscovery**;
+
+@enduml
+....
+
+NOTE: Dans ce schéma (et les suivants), les cases jaunes sont celles dans lesquelles une extension peut observer un événement et effectuer des actions, les cases grises sont des simplifications du comportement interne du conteneur.
+
+Le but de cette étape est de créer l'ensemble d'`AnnotatedType` qui seront candidats pour devenir des beans.
+
+Cet ensemble peut être alimenté explicitement via un observer `BeforeTypeDiscovery` ou `AfterDiscovery` (en entrée et sortie du processus ci-dessus)
+
+Il est également alimenté automatiquement par le processus de recherches des types inclus dans l'application.
+Processus sur lequel le développeur peut greffer un traitement pour surcharger ou disqualifier (via la méthode `veto`) le type découvert en utilisant un observer de l'événement `ProcessAnnotatedType`.
+
+Regardons en détail comment cela fonctionne.
+
+=== Ajouter des types avant l'analyse (événement `BeforeBeanDiscovery`)
+
+Avant que le conteneur CDI ne commence le processus de recherche des types, il déclenche l'événement `BeforeBeanDiscovery`.
+
+L'observation de cet événement permet d'ajouter un type spécifique à l'ensemble des types découverts ou d'ajouter des annotations CDI spécifiques comme un _qualifier_, un _stereotype_ ou un _interceptor binding_.
+
+[source, java]
+----
+public interface BeforeBeanDiscovery {
+  void addQualifier(Class< ? extends Annotation> qualifier);//<1>
+  void addQualifier(AnnotatedType< ? extends Annotation> qualifier);//<1>
+  void addScope(Class< ? extends Annotation> scopeType, boolean normal, boolean passivating);//<2>
+  void addStereotype(Class< ? extends Annotation> stereotype, Annotation... stereotypeDef);//<3>
+  void addInterceptorBinding(AnnotatedType< ? extends Annotation> bindingType);//<4>
+  void addInterceptorBinding(Class< ? extends Annotation> bindingType, Annotation... bindingTypeDef);//<4>
+  void addAnnotatedType(AnnotatedType<?> type, String id);//<5>
+
+  /* Méthodes introduites dans CDI 2.0 */
+  <T> AnnotatedTypeConfigurator<T> addAnnotatedType(Class<T> type, String id);//<5>
+  <T extends Annotation> AnnotatedTypeConfigurator<T> configureQualifier(Class<T> qualifier);//<1>
+  <T extends Annotation> AnnotatedTypeConfigurator<T> configureInterceptorBinding(Class<T> bt);//<4>
+}
+----
+<1> Ajoute un nouveau qualifier avec une `Annotation`, un `AnnotatedType` ou via le builder `AnnotatedTypeConfigurator`
+<2> Ajoute une annotation relative à un nouveau scope
+<3> Définit un nouveau `Stereotype` en donnant son `Annotation` et la collection d'`Annotations` qu'il représente
+<4> Ajoute un nouvel interceptor binding avec une `Annotation` et ses méta-annotations, un `AnnotatedType` ou via le builder `AnnotatedTypeConfigurator`
+<5> Ajoute un nouveau `AnnotatedType` à partir d'un `AnnotatedType` personnalisé ou via le builder `AnnotatedTypeConfigurator`
+
+L'exemple suivant illustre l'utilisation de cet événement.
+
+[source,java]
+----
+public class MetricsExtension implements Extension {//<1>
+
+    public void addMetricAsQual(@Observes BeforeBeanDiscovery bbd) {//<2>
+        bbd.addQualifier(Metric.class);//<3>
+    }
+}
+----
+<1> Définition de l'extension (n'oubliez pas d'ajouter le FQN de la classe au fichier texte `META-INF/services/jakarta.enterprise.inject.spi.Extension`)
+<2> Un observer pour l'événement du cycle de vie `BeforeBeanDiscovery`
+<3> Déclarer une annotation d'un framework non CDI tiers comme qualifier
+
+L'exemple ci-dessus est une partie de l'extension d'intégration CDI du framework Dropwizard.
+Il déclare une annotation standard du framework (`@Metrics`) comme qualifier CDI.
+
+Vous pouvez également transformer une classe non-CDI pour qu'elle soit découverte par le conteneur en tant que managed bean.
+Cela peut aller jusqu'à l'ajout d'un scope et d'une annotation `@Inject` sur un constructeur.
+
+[source,java]
+----
+public class MyLegacyFrameworkService {//<1>
+
+    private Configurator config;
+
+    public MyLegacyFrameworkService(Configurator config) {
+        this.config = config;
+    }
+}
+
+...
+
+public class LegacyIntegrationExtension implements Extension {
+
+    public void addLegacyServiceAsBean(@Observes BeforeBeanDiscovery bbd) {
+        bbd.addAnnotatedType(MyLegacyFrameworkService.class,MyLegacyFrameworkService.class.getName())//<2>
+                .add(ApplicationScoped.Literal.INSTANCE)//<3>
+                .filterConstructors(c -> c.getParameters().size() == 1)
+                .findFirst().get().add(InjectLiteral.INSTANCE);//<4>
+    }
+----
+<1> Classe issue d'un framework legacy que nous souhaitons intégrer dans le modèle de programmation CDI sans en modifier le code
+<2> En utilisant un `AnnotatedTypeConfigurator` basé sur la classe `MyLegacyFrameworkService`
+<3> Ajoute le scope `@ApplicationScoped` sur l'`AnnotatedTypeConfigurator`
+<4> Cherche le premier constructeur avec un seul paramètre et lui ajoute `@Inject`
+
+L'exemple ci-dessus utilise le builder `AnnotatedTypeConfigurator` renvoyé par l'une des méthodes `addAnnotatedType()` de l'événement `BeforeBeanDiscovery`.
+Pour configurer un nouveau `AnnotatedType`, ajoutez-lui un scope et une annotation `@Inject` sur l'un de ses constructeurs.
+À la fin de l'invocation de l'observer, le conteneur construira automatiquement l' `AnnotatedType` correspondant à partir de ce configurateur et l'ajoutera à l'ensemble des types découverts.
+
+=== Processus d'analyse automatique des types
+
+Après ce premier événement, le conteneur démarre le processus de découverte des types dans le classpath de l'application.
+
+Ce balayage peut être configuré différemment pour chaque bean archive, (i.e. jar) dans le classpath.
+
+Chaque jar dans le classpath de l'application peut (ou non) contenir un fichier `beans.xml` définissant comment les types seront analysés par le conteneur CDI pour ce bean archive.
+
+Rappelez-vous que CDI ne fournit pas de fichier de configuration global, donc chacune de vos archives de beans doit déclarer son mode de découverte.
+
+Il y a 3 modes de découverte :
+
+* `none` : aucun type ne sera découvert pour ce bean archive.
+* `annotated` (mode par défaut) : seuls les types portant des annotations spécifiques listées dans https://jakarta.ee/specifications/cdi/4.0/jakarta-cdi-spec-4.0.html#bean_defining_annotations[ce paragraphe de la spécification^], seront découvertes.
+* `all` : tous les types seront découverts
+
+Le mode de découverte est déduit en analysant le fichier `beans.xml` du bean archive.
+
+.Quel est le mode de découverte de l'archive ?
+|===
+^|État du fichier `beans.xml`|Mode de découverte
+
+|Pas de `beans.xml`
+|`annotated`
+
+|`beans.xml` vide
+|`annotated` (`all` avant CDI 4.0)
+
+|`beans.xml` utilisant le xsd CDI 1.0 xsd
+|`all`
+
+|`beans.xml` utilisant le xsd CDI > 1.0
+|Valeur de l'attribut `bean-discovery-mode` +
+ou `annotated` si l'attribut est absent
+|===
+
+Vous pouvez également affiner la découverte des types en utilisant les https://jakarta.ee/specifications/cdi/4.0/jakarta-cdi-spec-4.0.html#exclude_filters[filtres d'exclusion^]
+
+=== Événement `ProcessAnnotatedType`
+
+Après cette phase d'analyse, le conteneur crée un `AnnotatedType` et déclenche un événement `ProcessAnnotatedType` pour chaque type découvert (à l'exception des annotations).
+
+Comme expliqué dans l'article sur link:{% post_url 2022-01-25-hissez-les-voiles-avec-la-SPI-CDI %}[la SPI CDI^], un `AnnotatedType` est une représentation mutable des méta-données d'un type Java.
+Le fait qu'il soit mutable permet de changer les meta-données qu'il porte.
+
+[source,java]
+----
+public interface ProcessAnnotatedType<X> {//<1>
+    AnnotatedType<X> getAnnotatedType();//<2>
+    void setAnnotatedType(AnnotatedType<X> type);//<3>
+    void veto();//<4>
+
+    /* A partir de CDI 2.0 */
+    AnnotatedTypeConfigurator<X> configureAnnotatedType();//<3>
+}
+----
+<1> L'événement est un type paramétré permettant à l'utilisateur de ne traiter que l' `AnnotatedType` en fonction d'un type original donné
+<2> Renvoie le type `AnnotatedType` actuellement traité
+<3> Remplace l' `AnnotatedType` traité en implémentant l'interface `AnnotatedType` ou à l'aide d'un `AnnotatedTypeConfigurator`
+<4> Disqualifie l' `AnnotatedType` traité qui ne fera donc pas partie de l'ensemble des types découverts par le conteneur (i.e. ce type ne pourra pas devenir un bean)
+
+Cet événement est souvent utilisé pour modifier la configuration d'un type existant.
+
+L'exemple ci-dessous ajoute une annotation transactionnelle à la classe `StandardService` dans une bibliothèque tierce.
+
+[source,java]
+----
+public class AddTranscationalToServiceExtension implements Extension {
+
+    public void addTransactional(@Observes ProcessAnnotatedType<StandardService> pat) {//<1>
+        pat.configureAnnotatedType().add(new AnnotationLiteral<Transactional>(){});
+    }
+----
+<1> L'observer ne sera déclenché que pour tout `AnnotatedType` basé sur le type `StandardService`
+
+Il peut aussi être utilisé pour mettre un veto à un type implémentant une interface ou ayant une annotation spécifique (grâce au filtre `@WithAnnotations`).
+
+[source,java]
+----
+public class VetEntitiesExtension implements Extension {
+
+    public void veto(@Observes @WithAnnotations(Entity.class) ProcessAnnotatedType<?> pat) {//<1>
+        pat.veto();
+    }
+----
+<1> L'observer sera déclenché pour tout `AnnotatedType` basé sur n'importe quel type ayant l'annotation `@Entity`
+
+Ce dernier exemple met en `veto` toutes les entités JPA de l'application afin d'éviter de les utiliser en tant que beans CDI.
+
+=== Événement AfterTypeDiscovery
+
+Cet événement achève le processus de découverte de type.
+
+[source,java]
+----
+public interface AfterTypeDiscovery {
+    Liste<Classe<?>> getAlternatives();//<1>
+    List<Class<?>> getInterceptors();//<1>
+    List<Class<?>> getDecorators();//<1>
+    void addAnnotatedType(AnnotatedType<?> type, String id);//<2>
+
+    /* depuis CDI 2.0 */
+    <T> AnnotatedTypeConfigurator<T> addAnnotatedType(Class<T> type, String id);//<2>
+}
+----
+<1> Ces méthodes vous donnent accès à la liste des classes découvertes comme alternatives possibles aux beans, intercepteurs ou décorateurs.
+Vous pouvez utiliser ces listes pour vérifier que tout ce dont vous avez besoin s'y trouve ou y ajouter une nouvelle classe puisque ces listes sont mutables
+<2> Comme dans `BeforeBeanDiscovery` vous pouvez ajouter un `AnnotatedType` personnalisé à l'ensemble des `AnnotatedType` découverts
+
+L'extension suivante vérifie que si la classe `LastInterceptor` a été découverte en tant qu'intercepteur, celle-ci sera invoquée après tous les autres intercepteurs.
+
+[source,java]
+----
+public class lastInteceptorExtension implements Extension {
+
+public void lastInterceptorCheck (@Observes AfterTypeDiscovery atd) {
+        List<Class<?>> interceptors = atd.getInterceptors() ;
+        if(interceptors.indexOf(LastInterceptor.class) < interceptors.size()) {
+            interceptors.remove(LastInterceptor.class) ;
+            interceptors.add(LastInterceptor.class) ;
+        }
+    }
+}
+----
+
+== Phase de découverte des beans
+
+Dans cette phase, chaque type découvert est analysé pour vérifier s'il est éligible à devenir un bean.
+
+Si c'est le cas, une série d'événements sera déclenchée pour permettre la modification du futur bean.
+
+Si le bean n'a pas fait l'objet d'un veto de la part d'une extension, le conteneur lance les processus de découverte des producers et des observers.
+
+À la fin de cette phase, l'extension a la possibilité d'enregistrer des beans ou des observers personnalisés avec l'événement `AfterBeanDiscovery`.
+
+La phase se termine par la validation de tous les éléments par le conteneur et l'événement `AfterDeploymentValidation`.
+
+Le schéma suivant illustre toutes les étapes de la phase.
+Bien qu'il puisse sembler compliqué de prime abord, ce processus est plutôt facile à comprendre.
+
+.Processus de découverte des Beans
+[plantuml, beansdiscovery, svg]
+....
+@startuml
+#lightgrey:while (Il reste des types dans l'ensemble de types découverts ?) is (oui)
+  #lightgrey:Récupération du prochain type dans l'ensemble des types découverts;
+  #lightgrey:if (le type remplit les conditions pour définir un bean ?) then (oui)
+    #lightgrey:if (la classe comporte des "definitions errors" ?) then (non)
+      #lightgrey:while (Il reste des des points d'injection dans la classe) is (oui)
+        #lightyellow:Déclenchement de **ProcessInjectionPoint**\n pour le prochain point d'injection;
+      endwhile (no)
+      #lightyellow:Déclenchement de **ProcessInjectionTarget**;
+      #lightyellow:Déclenchement de **ProcessBeanAttributes** (PBA);
+      #lightgrey:if (PBA.veto() a été appelé ?) then (no)
+        #lightyellow:Déclenchement de **ProcessBean**;
+        #lightgrey:le bean est enregistré dans le conteneur;
+          fork
+            partition #lightblue Producers {
+            #lightgrey:while (Il reste des producers (champs ou méthodes) dans le bean) is (yes)
+              :traitement du prochain producer;
+              #lightgrey:while (Il reste des points d'injection dans le Producer ?) is (yes)
+                #lightyellow:Déclenchement de **ProcessInjectionPoint**\n pour le prochain point d'injection du producer;
+              endwhile (no)
+              #lightyellow:Déclenchement de **ProcessProducer**;
+              #lightyellow:Déclenchement de **ProcessBeanAttributes** (PBA);
+              #lightgrey:if (PBA.veto() a été appelé ?) then (non)
+                #lightyellow:Déclenchement de **ProcessProducerMethod** ou **ProcessProducerField**;
+                else (oui)
+              endif
+            endwhile (non)
+            }
+          fork again
+            partition #lightgreen Observers {
+            #lightgrey:while (ìl reste des méthodes observer dans le bean) is (oui)
+              :traitement du prochain observer;
+              #lightgrey:while (Il reste des points d'injection dans l'observer ?) is (yes)
+                #lightyellow:Déclenchement de **ProcessInjectionPoint**;
+               endwhile (non)
+              #lightyellow:Déclenchement de **ProcessObserverMethod**;
+            endwhile (non)
+            }
+          end fork
+      else (oui)
+      endif
+    else (yes)
+      #lightgrey:Lance une exception de deployment;
+      stop
+    endif
+  else (non)
+  endif
+endwhile (non)
+#lightyellow:Déclenchement de **AfterBeanDiscovery**;
+#lightgrey:if (Les méta données des beans sont invalides) then (oui)
+  #lightgrey:Lance une exception de deployment;
+  stop
+else (non)
+endif
+#lightyellow:Déclenchement de **AfterDeploymentValidation**;
+#lightgrey: l'Application s'exécute;
+@enduml
+....
+
+=== Événement `ProcessInjectionPoint`
+
+Pour chaque point d'injection rencontré au cours de ce processus, le conteneur déclenche un événement `ProcessInjectionPoint`.
+Les points d'injection sont déclenchés pour les managed beans, les méthodes producer et les méthodes observer.
+
+[source,java]
+----
+public interface ProcessInjectionPoint<T, X> {//<1>
+    InjectionPoint getInjectionPoint();//<2>
+    void setInjectionPoint(InjectionPoint injectionPoint);//<3>
+    void addDefinitionError(Throwable t);//<4>
+
+    /* Depuis CDI 2.0 */
+    InjectionPointConfigurator configureInjectionPoint();//<3>
+}
+----
+<1> L'événement `ProcessInjectionPoint` est un type paramétré permettant à l'observer de cibler une classe spécifique `T` contenant le point d'injection ou un type de point d'injection spécifique `X`
+<2> Renvoie l' `InjectionPoint` traité par cet événement
+<3> Permet de remplacer l' `InjectionPoint` traité, soit en implémentant un `InjectionPoint` personnalisé, soit en utilisant un `InjectionPointConfigurator`
+<4> Permet à l'observer d'interrompre le déploiement en ajoutant une erreur de définition
+
+Une extension peut observer cet événement pour de multiples raisons.
+Par exemple, pour collecter tous les types sur lesquels figure un qualifier donné et, plus tard, créer un ou plusieurs beans pour satisfaire ces points d'injection.
+
+[source,java]
+----
+public class ConvertExtension implements Extension {
+
+    Set<Type> convertTypes = new HashSet() ;
+
+    public void captureConfigTypes(@Observes ProcessInjectionPoint< ?, ?> pip) {
+        InjectionPoint ip = pip.getInjectionPoint() ;
+        if (ip.getQualifiers().contains(Convert.Literal.Instance)) {
+            convertTypes.add(ip.getType()) ;
+        }
+    }
+}
+----
+
+L'exemple ci-dessus va créer un ensemble de types pour tous les points d'injection de l'application ayant le qualifier `@Convert`.
+
+Plus tard, il pourra utiliser cette collection pour créer des beans personnalisés correspondant à chaque type trouvé.
+
+=== Événement `ProcessInjectionTarget`
+
+Une `InjectionTarget` peut être envisagée a minima comme link:{% post_url 2022-04-04-instances-non-contextuelles-avec-CDI %}[une instance non contextuelle^].
+Elle fournit principalement un mécanisme d'injection de dépendance et quelques fonctions de callback.
+
+Cet événement est déclenché pour tous les éléments supportant l'injection (champs ou méthodes).
+
+[source,java]
+----
+public interface ProcessInjectionTarget<X> {//<1>
+    public AnnotatedType<X> getAnnotatedType();//<2>
+    public InjectionTarget<X> getInjectionTarget();//<3>
+    public void setInjectionTarget(InjectionTarget<X> injectionTarget);//<4>
+    public void addDefinitionError(Throwable t);//<5>
+}
+----
+<1> L'événement est un type paramétré permettant cibler un type de base spécifique de l' `InjectionTarget` à traiter
+<2> Renvoie l' `AnnotatedType` qui a défini l' `InjectionTarget` traitée
+<3> Renvoie l' `InjectionTarget` traitée par cet événement
+<4> Permet de remplacer l' `InjectionTarget` traitée
+<5> Permet à l'observer d'interrompre le déploiement en ajoutant une erreur de définition
+
+
+L'observation de cet événement permet à une extension de surcharger le comportement par défaut de l' `InjectionTarget` et d'effectuer des tâches spécifiques pendant l'injection, comme l'appel d'une fonctionnalité spécifique sur un framework tiers.
+
+=== Événement `ProcessBeanAttributes`
+
+Cet événement est déclenché avant l'enregistrement d'un bean dans le conteneur.
+
+L'observation de cet événement permet de modifier les attributs ou d'annuler l'enregistrement de ce bean.
+
+Cet événement est déclenché pour tous les types de beans :
+
+* Managed Beans
+* Les EJB Session Beans
+* Champs producer
+* Méthode producer
+* Custom Beans
+
+[source,java]
+----
+public interface ProcessBeanAttributes<T> {//<1>
+    public Annotated getAnnotated();//<2>
+    public BeanAttributes<T> getBeanAttributes();//<3>
+    public void setBeanAttributes(BeanAttributes<T> beanAttributes);//<4>
+    public void addDefinitionError(Throwable t);//<5>
+    public void veto();//<6>
+
+    /* Depuis CDI 2.0 */
+    public BeanAttributesConfigurator<T> configureBeanAttributes();//<4>
+    public void ignoreFinalMethods();//<7>
+}
+----
+<1> Le fait que l'événement soit un type paramétré permet d'observer cet événement uniquement pour un type donné
+<2> Renvoie l' `Annotated` définissant le bean, (i.e. un `AnnotatedType` pour un managed Bean ou un session bean, un `AnnotatedField` ou un `AnnotatedMethod` pour un producer et `null` pour un custom bean)
+<3> Renvoie les `BeanAttributes` traités
+<4> Permet de remplacer les `BeanAttributes` traités soit en implémentant l'interface `BeanAttributes` soit en utilisant un `BeanAttributesConfigurator`
+<5> Permet à l'observer d'interrompre le déploiement en ajoutant une erreur de définition
+<6> Demande au conteneur d'ignorer le bean correspondant et de sauter son enregistrement
+<7> Méthode introduite dans CDI 2.0 pour déroger explicitement à une restriction dans la spécification concernant la création de proxy
+
+L'extension suivante vérifie qu'aucun bean n'a été ajouté par le développeur pour le type `SpecialClass` et le qualifier par défaut, puisqu'elle enregistrera un bean personnalisé pour ce type.
+
+[source,java]
+----
+public class CheckExtension implements Extension {
+
+public void filterSpecialClassBean(@Observes ProcessBeanAttributes<SpecialClass> pba) {
+        if(pba.getBeanAttributes().getQualifiers().contains(Default.Literal.INSTANCE))
+            pba.veto() ;
+    }
+}
+----
+
+=== Événement `ProcessBean`
+
+Cet événement est déclenché lorsqu'un bean est enregistré dans le conteneur.
+
+[source,java]
+----
+public interface ProcessBean<X> {//<1>
+    public Annotated getAnnotated();//<2>
+    public Bean<X> getBean();//<3>
+    public void addDefinitionError(Throwable t);//<4>
+}
+----
+<1> Type paramétré pour ne traiter que les beans d'un type spécifique
+<2> Renvoie l' `Annotated` définissant le bean (i.e. un `AnnotatedType` pour un managed Bean ou un EJB session bean, un `AnnotatedField` ou un `AnnotatedMethod` pour un producer et null pour un custom bean)
+<3> Renvoie le `Bean` créé
+<4> Permet à l'observer d'interrompre le déploiement en ajoutant une erreur de définition
+
+
+Cet événement sert principalement à vérifier qu'un bean spécifique a été créé et parfois à capturer sa définition pour une utilisation ultérieure.
+
+Un observer sur `ProcessBean` pour tous les types de bean.
+Si vous voulez être plus précis, vous pouvez utiliser une classe enfant de cet événement pour n'observer l'événement que pour un type de bean spécifique.
+
+[plantuml, "processBean_hierarchy", "svg", width="100%"]
+....
+@startuml
+
+ProcessBean <|-- ProcessProducerMethod
+ProcessBean <|-- ProcessProducerField
+ProcessBean <|-- ProcessManagedBean
+ProcessManagedBean <|-- ProcessSessionBean
+
+interface ProcessBean<X> {
+    +Annotated getAnnotated()
+    +Bean<X> getBean()
+    +void addDefinitionError(Throwable)
+}
+
+
+interface ProcessProducerMethod<T, X> {
+    +AnnotatedMethod<T> getAnnotatedProducerMethod()
+    +AnnotatedParameter<T> getAnnotatedDisposedParameter()
+}
+
+interface ProcessProducerField<T, X> {
+    +AnnotatedField<T> getAnnotatedProducerField()
+    +AnnotatedParameter<T> getAnnotatedDisposedParameter()
+}
+
+interface ProcessManagedBean<X> {
+    +AnnotatedType<X> getAnnotatedBeanClass();
+}
+
+interface ProcessSessionBean<X> {
+    +String getEjbName();
+    +SessionBeanType getSessionBeanType();
+}
+
+
+@enduml
+....
+
+=== Événement `ProcessProducer`
+
+Cet événement est déclenché pour tous les producers trouvés dans l'application.
+
+Rappelons qu'un producer est link:{% post_url 2021-01-14-cinquante-nuances-de-beans-CDI %}#les_producers[une catégorie de bean^].
+Mais sa définition et sa découverte dépendent du bean qui le contient.
+En d'autres termes, pour qu'un producer soit découvert, la classe qui le définit doit être découverte comme bean.
+
+Cet événement permet principalement de surcharger le code du producer.
+Cette façon de surcharger du code applicatif via une extension (plutôt que d'ajouter directement le code dans le producer), est un bon moyen pour masquer du code complexe d'intégration d'un framework ou d'une bibliothèque tierce.
+
+[source,java]
+----
+public interface ProcessProducer<T,X> {//<1>
+    AnnotatedMember<T> getAnnotatedMember();//<2>
+    Producer<X> getProducer();//<3>
+    void addDefinitionError(Throwable t);//<4>
+    void setProducer(Producer<X> producer);//<5>
+
+    /* Introduit avec CDI 2.0 */
+    ProducerConfigurator<X> configureProducer();//<5>
+}
+----
+<1> Type paramétré pour un meilleur filtrage des observers
+`T` est la classe du bean contenant le producer, `X` est le type du producer
+<2> Renvoie le membre annoté définissant le producer (i.e. un `AnnotatedField` pour un producer issu d'un champ ou `AnnotatedMethod` pour un producer issu d'une méthode)
+<3> Renvoie le producer en cours de traitement
+<4> Permet à l'observer d'interrompre le déploiement en ajoutant une erreur de définition
+<5> Permet de remplacer le producer traité, soit en implémentant l'interface `Producer`, soit en utilisant l'aide `ProducerConfigurator`
+
+L'exemple suivant est inspiré de l'extension pour intégrer les fonctionnalités de DropWizard Metric.
+
+Ce Framework dispose d'un registre dans lequel sont enregistrées toutes les métriques de l'application courantes.
+
+Lorsque l'utilisateur va déclarer un producer pour une métrique dans l'application, nous voulons vérifier dans le registre des métriques qu'elle n'existe pas déjà.
+Si elle existe, au lieu de créer une nouvelle instance, nous retournerons celle qui se trouve dans le registre.
+Si elle n'existe pas, nous utiliserons le code du producer pour instancier la métrique, l'ajouter au registre et la renvoyer à l'application.
+
+[source,java]
+----
+public class MetricsExtension implements Extension {
+
+<T extends com.codahale.metrics.Metric> void processMetricProducer(@Observes ProcessProducer<?,T> pp, BeanManager bm) {//<1>
+    Metric m = pp.getAnnotatedMember().getAnnotation(Metric.class);//<2>
+
+    if (m != null) {//<3>
+        String name = m.name();//<4>
+        Producer<T> prod = pp.getProducer();//<5>
+        pp.configureProducer()//<6>
+            .produceWith(ctx -> {//<7>
+                MetricRegistry reg = bm.createInstance().select(MetricRegistry.class).get();//<8>
+                if (!reg.getMetrics().containsKey(name))//<9>
+                    reg.register(name, prod.produce(ctx));//<10>
+                return (T) reg.getMetrics().get(name);//<11>
+            }) ;
+    }
+  }
+}
+----
+<1> Cet observer a besoin du `BeanManager`. Ce bean helper peut être injecté dans n'importe quel observer d'une extension.
+Nous observons les producers présent dans n'importe type (?), mais produisant un descendant du type `Metric`
+<2> Récupération de l'annotation `@Metric` sur le producer
+<3> Le traitement sera ignoré si aucune annotation n'est trouvée
+On aurait pu aussi ajouter une erreur de définition avec `pp.addDefinitionError()`
+<4> Récupération du nom de la métrique à partir de l'annotation
+<5> Obtention le producer initial pour pouvoir l'utiliser dans le call back
+<6> Utilisation de `ProducerConfigurator`, un builder qui permet de remplacer le producer traité.
+<7> Nous définissons un callback fonctionnel pour produire l'instance du producer
+<8> Récupération l'instance du bean de registre
+<9> Recherche d'une métrique avec le nom correspondant
+<10> S'il n'existe pas, nous le créons en utilisant le code original du producer et nous l'ajoutons au registre
+<11> Nous renvoyons la métrique contenue dans le registre portant le nom demandé
+
+=== Événement `ProcessObserverMethod`
+
+Cet événement est déclenché pour tous les observers déclarés dans les beans activés.
+
+Avant CDI 2.0, il s'agissait principalement d'un événement permettant de vérifier l'existence d'une méthode d'observer.
+Depuis CDI 2.0, cet événement donne plus de contrôle en permettant le remplacement ou la suppression de `ObserverMethod`.
+
+[source,java]
+----
+public interface ProcessObserverMethod<T,X> {//<1>
+    AnnotatedMethod<X> getAnnotatedMethod();//<2>
+    ObserverMethod<T> getObserverMethod();//<3>
+    void addDefinitionError(Throwable t);//<4>
+
+    /* depuis CDI 2.0 */
+    void setObserverMethod(ObserverMethod<T> observerMethod);//<5>
+    ObserverMethodConfigurator<T> configureObserverMethod();//<5>
+    void veto();//<6>
+}
+----
+<1> Type paramétré pour un meilleur filtrage des observers.
+`T` est la classe du bean contenant la méthode de l'observer, `X` est le type de l'événement
+<2> Renvoie l' `AnnotatedMethod` définissant l' `ObserverMethod`
+<3> Renvoie la méthode de l'observer
+<4> Permet à l'observer d'interrompre le déploiement en ajoutant une erreur de définition
+<5> Permet de remplacer ou de surcharger la `ObserverMethod` soit en fournissant une instance de `ObserverMethod` personnalisée, soit en utilisant un `ObserverMethodConfigurator` (nouveau dans CDI 2.0)
+
+L'exemple ci-dessous montre comment une extension peut changer tous les observers synchrones pour le type d'événement `MyClass` en observers asynchrone.
+Cet exemple n'est évidemment pas une bonne pratique, mais il montre comment utiliser l'événement `ProcessObserverMethod` pour modifier le comportement par défaut du conteneur.
+
+[source,java]
+----
+public class SwitchExtension implements Extension {
+
+   public void switchToAsync(@Observes ProcessObserverMethod<?,MyClass> pom) {
+       pom.configureObserverMethod().async(true) ;
+   }
+}
+----
+
+=== Événement `AfterBeanDiscovery`
+
+Cet événement est déclenché après la découverte de tous les beans, producers et observers.
+
+C'est la dernière occasion avant l'exécution du code de modifier ou d'améliorer les métadonnées découvertes.
+
+[source,java]
+----
+public interface AfterBeanDiscovery {
+    void addDefinitionError(Throwable t);//<1>
+    void addBean(Bean<?> bean);//<2>
+    void addObserverMethod(ObserverMethod<?> observerMethod);//<3>
+    void addContext(Context context);//<4>
+    <T> AnnotatedType<T> getAnnotatedType(Class<T> type, String id);//<5>
+    <T> Iterable<AnnotatedType<T> getAnnotatedTypes(Class<T> type);//<6>
+
+    /* Depuis CDI 2.0 */
+    <T> BeanConfigurator<T> addBean();//<2>
+    <T> ObserverMethodConfigurator<T> addObserverMethod();//<3>
+}
+----
+<1> Permet à l'observer d'interrompre le déploiement en ajoutant une erreur de définition
+<2> Permet la création d'un custom bean soit en créant une implémentation personnalisée de l'interface `Bean`, soit en utilisant l'aide `BeanConfigurator`.
+L'enregistrement d'un custom bean déclenche tous les événements vus ci-dessus liés à la découverte et à la création du bean
+<3> Permet la création d'un `ObserverMethod` soit en créant une implémentation personnalisée de l'interface `ObserverMethod`, soit en utilisant le builder `ObserverMethodConfigurator`.
+<4> Ajoute un contexte custom au conteneur
+<5> Renvoie un `AnnotatedType` découvert pour la classe et l'identifiant donnés
+<6> Renvoie un `Iterable` sur tous les `AnnotatedType` découverts dans l'application
+
+=== Événement `AfterDeploymentValidation`
+
+Ce dernier événement de démarrage n'est qu'un moyen pour vérifier que tout est conforme aux attentes dans les métadonnées (n'oubliez pas que l'observer peut injecter le `BeanManager` pour inspecter ces métadonnées).
+
+Lorsque cet événement est déclenché, les méta-données du conteneur ne sont plus mutables et l'application est prête à s'exécuter.
+
+[source,java]
+----
+public interface AfterDeploymentValidation {
+    void addDeploymentProblem(Throwable t) ; <1>
+}
+----
+<1> Permet à l'observer d'interrompre le déploiement en ajoutant une erreur de définition
+
+== La vie et la mort de l'application
+
+En ce qui concerne le mécanisme de _portable extension_, nous avons presque terminé.
+
+Après cette riche phase de boot, l'application s'exécute jusqu'à ce que son arrêt soit requis.
+C'est à ce moment que le dernier événement de l'extension portable est déclenché.
+
+=== Événement `BeforeShutdown`
+
+Cet événement est l'occasion de faire le nettoyage de ressources spécifiques créées dans la phase de boot ou durant la vie de l'application.
+
+[source,java]
+----
+public interface BeforeShutdown {
+}
+----
+
+== Conclusion
+
+Les portable extensions constituent un outil très puissant.
+
+Les maîtriser peut sembler difficile, mais une fois que l'on a compris la plupart des SPI et le cycle de vie du conteneur présenté dans ce billet, ce n'est plus qu'une sorte de grande boîte de Lego seulement limitée par votre imagination.
+
+Mais ce n'est pas tout, avec l'arrivée de CDI 4.0 et plus particulièrement de CDI Lite, un nouveau type d'extension a vu le jour : les _build time compatible extensions_.
+Que nous verrons dans un prochain article.
