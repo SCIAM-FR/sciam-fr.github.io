@@ -1,27 +1,25 @@
 = Assurer la cohérence des données dans Quarkus grâce à MicroProfile LRA (Long Running Actions)
 :author: pcheucle
-:docinfo: shared-footer
 :layout: post
-:page-excerpt: À l’aide d’un exemple concret, nous allons voir dans cet article comment mettre œuvre MicroProfile LRA dans une application Quarkus.
+:page-excerpt: La spécification MicroProfile LRA propose un modèle de transaction permettant de garantir la cohérence des données lors d'opérations métiers impliquant plusieurs microservices. À l’aide d’un exemple concret, nous allons voir dans cet article comment mettre en œuvre MicroProfile LRA dans une application Quarkus.
 :page-navtitle: LRA Quarkus demo
 :page-tags: [MicroProfile,SAGA,Quarkus,Java,LRA]
 :post-vignette: quarkus-microprofile.jpg
 :page-vignette: quarkus-microprofile.jpg
 :page-vignette-licence: Sources: MicroProfile, Quarkus
 :showtitle:
-:source-highlighter: rouge
 :page-liquid:
 
 Il est fréquent de devoir modifier des données dans plusieurs microservices lors d’une opération métier.
 Par exemple, supprimer un client dans un microservice Client et clôturer ses comptes bancaires dans un microservice Account.
 
-Contrairement aux applications monolithiques, où l'ensemble des modifications peuvent être gérées dans une même transaction ACID, garantir la cohérence des données dans une architecture microservice repose sur la mise en place d'un modèle de transaction plus complexe.
+Contrairement aux applications monolithiques, où l'ensemble des modifications peuvent être gérées dans une même transaction ACID, garantir la cohérence des données dans une architecture microservices repose sur la mise en place d'un modèle de transaction plus complexe.
 
-https://download.eclipse.org/microprofile/microprofile-lra-2.0/microprofile-lra-spec-2.0.html[Eclipse MicroProfile LRA] propose un modèle de transaction basé sur les Long-Running Actions, ou plus communément appelées https://en.wikipedia.org/wiki/Long-running_transaction[SAGAS].
+https://download.eclipse.org/microprofile/microprofile-lra-2.0/microprofile-lra-spec-2.0.html[Eclipse MicroProfile LRA^] propose un modèle de transaction basé sur les Long-Running Actions, ou plus communément appelées https://en.wikipedia.org/wiki/Long-running_transaction[SAGAs^].
 
 À l'aide d'un exemple concret, nous allons voir dans cet article comment mettre œuvre ce modèle dans une application https://quarkus.io/[Quarkus].
 
-== Présentation de l'application
+== La présentation de l'application
 
 Nous allons prendre comme exemple une application composée de trois microservices Quarkus :
 
@@ -29,18 +27,18 @@ Nous allons prendre comme exemple une application composée de trois microservic
 * Account : gestion des comptes bancaires des clients
 * Administration : gestion des opérations d'administration impliquant plusieurs microservices
 
-image::{{'/images/lra/application.png' | relative_url}}[width=50%]
+image::lra/application.png[align="center",width=50%]
 
 
 Les microservices Client et Account ont chacun leur propre base de données relationnelle H2.
 
-== Démarrage de l'application
+== Le démarrage de l'application
 
 Pour pouvoir démarrer les microservices et dérouler les différents scénarii proposés dans cet article, nous aurons besoin :
 
-* d'un JDK en version 17 ou supérieure (par exemple, la distribution Eclipse Temurin)
+* d'un JDK en version 17 ou supérieure (par exemple, la distribution https://adoptium.net/fr/temurin/[Eclipse Temurin^])
 * de Maven en version 3.9.3 ou supérieure
-* d'un terminal pour exécuter des commandes Git et curl (par exemple https://git-scm.com/downloads[Git BASH])
+* d'un terminal pour exécuter des commandes Git et curl (par exemple https://git-scm.com/downloads[Git BASH^])
 
 La première étape consiste à récupérer le code source de l'application depuis le dépôt Git distant :
 
@@ -49,7 +47,7 @@ La première étape consiste à récupérer le code source de l'application depu
 git clone https://github.com/SCIAM-FR/quarkus-lra-demo
 ----
 
-Puis nous démarrons chaque microservice dans un terminal dédié : 
+Puis, nous démarrons chaque microservice dans un terminal dédié : 
 
 [source,shell]
 ----
@@ -64,23 +62,24 @@ mvn quarkus:dev
 
 [source,shell]
 ----
-cd client
+cd ../client
 mvn quarkus:dev
 ----
 
 [source,shell]
 ----
-cd account
+cd ../account
 mvn quarkus:dev
 ----
 
 
-== Initialisation des données
+== L'initialisation des données
 
 Un script permettant d'initialiser les données est disponible à la racine du dépôt Git. 
 
 Pour l'exécuter : 
 
+[source,shell]
 ----
 ./init.sh
 ----
@@ -88,12 +87,12 @@ Pour l'exécuter :
 Le script créé : 
 
 * un client dans le microservice Client :
-
++
 [source,shell]
 ----
 curl http://localhost:8081/clients/1784e89b-7a3b-45ed-b2f2-6a562756a2e3
 ----
-
++
 [source,json]
 ----
 {
@@ -105,12 +104,12 @@ curl http://localhost:8081/clients/1784e89b-7a3b-45ed-b2f2-6a562756a2e3
 ----
 
 * trois comptes associés à ce client dans le microservice Account :
-
++
 [source,shell]
 ----
 curl http://localhost:8082/accounts?clientId=1784e89b-7a3b-45ed-b2f2-6a562756a2e3
 ----
-
++
 [source,json]
 ----
 [
@@ -138,12 +137,12 @@ curl http://localhost:8082/accounts?clientId=1784e89b-7a3b-45ed-b2f2-6a562756a2e
 ]
 ----
 
-== Suppression d’un client
+== La suppression d’un client
 
 Lors de la suppression d'un client, le microservice Administration orchestre :
 
 * l'appel au microservice Client pour supprimer le client
-* l'appel au microservice Account pour clôturer l’ensemble des comptes du clients
+* l'appel au microservice Account pour clôturer l’ensemble des comptes du client
 
 Les comptes d'un client ne peuvent être clôturés que si le solde de chacun des comptes est nul.
 
@@ -156,7 +155,7 @@ Pour vérifier cela, nous mettons à jour le solde du compte ACC00002 :
 curl -d '{"id":"ecafb910-0e3e-40b7-b304-6115b708606a", "clientId": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3", "number": "ACC00002", "balance": 100 }' -H "Content-Type: application/json" -X PUT http://localhost:8082/accounts
 ----
 
-Puis nous supprimons le client :
+Puis, nous supprimons le client :
 
 [source,shell]
 ----
@@ -220,7 +219,7 @@ Nous venons de produire un état incohérent dans notre application, où un clie
 
 Dans notre exemple, nous devons modifier des données dans 2 microservices, chacun ayant sa propre transaction locale. 
 
-image::{{'/images/lra/dual_write.png' | relative_url}}[dual_write,600,300]
+image::lra/dual_write.png[dual_write,600,300,align="center"]
 
 
 Lorsque le client est supprimé dans le microservice Client, nous n’avons aucune garantie que les comptes associés seront clôturés dans le microservice Account.
@@ -233,11 +232,11 @@ On parle ici du problème de la double écriture, où des données doivent être
 
 La spécification MicroProfile LRA est proposée en Standalone dans la partie Outside Umbrella de MicroProfile, qui constitue un bac à sable de projets pouvant un jour être intégrés dans la suite MicroProfile. 
 
-image::{{'/images/lra/microprofile.png' | relative_url}}[microprofile,800,400]
+image::lra/microprofile.png[microprofile,800,400,align="center"]
 
-La spécification MicroProfile LRA s’appuie sur le modèle de transaction https://www.oasis-open.org/committees/document.php?document_id=12794[Long Running Action] pour les Web Services créé au milieu des années 2000 par le comité OASIS Open qui regroupe plusieurs acteurs du secteur tel que IBM.
+La spécification MicroProfile LRA s’appuie sur le modèle de transaction https://www.oasis-open.org/committees/document.php?document_id=12794[Long Running Action^] pour les Web Services créé au milieu des années 2000 par le comité OASIS Open qui regroupe plusieurs acteurs du secteur tel qu'IBM.
 
-MicroProfile LRA reprend le concept des SAGAs apparu pour la première fois en 1987 dans un https://www.cs.cornell.edu/andru/cs711/2002fa/reading/sagas.pdf[article] sur les transactions longues en base de données. Il s'agit de découper une transaction longue en une séquence de plus petites transactions, avec, en cas d’erreur, la possibilité de compenser tout ou partie des changement effectués.
+MicroProfile LRA reprend le concept des SAGAs apparu pour la première fois en 1987 dans un https://www.cs.cornell.edu/andru/cs711/2002fa/reading/sagas.pdf[article^] sur les transactions longues en base de données. Il s'agit de découper une transaction longue en une séquence de plus petites transactions, avec, en cas d’erreur, la possibilité de compenser tout ou partie des changements effectués.
 
 SAGA est un pattern que l'on retrouve de nos jours dans l'écosystème des microservices. 
 
@@ -248,7 +247,7 @@ On distingue :
 
 MicroProfile LRA entre dans la deuxième catégorie.
 
-== Mise en place de MicroProfile LRA
+== La mise en place de MicroProfile LRA
 
 Nous allons voir maintenant comment mettre en place MicroProfile LRA dans notre application Quarkus.
 
@@ -265,7 +264,7 @@ Un redémarrage des microservices est nécessaire pour la prise en compte des mo
 
 Dans notre exemple, le coordinateur LRA est déployé comme un microservice standalone, mais il est également possible de l'embarquer dans un microservice existant.
 
-Le coordinateur LRA est une application Quarkus qui possède comme dépendance principale l'implémentation https://www.narayana.io/lra/[Narayana] :
+Le coordinateur LRA est une application Quarkus qui possède comme dépendance principale l'implémentation https://www.narayana.io/lra/[Narayana^] :
 
 [source, xml]
 ----
@@ -275,7 +274,7 @@ Le coordinateur LRA est une application Quarkus qui possède comme dépendance p
 </dependency>
 ----
 
-Le port HTTP du coordinateur est configuré dans le fichier application.properties :
+Le port HTTP du coordinateur est configuré dans le fichier `application.properties` :
 
 [source, properties]
 ----
@@ -300,11 +299,11 @@ curl http://localhost:50000/lra-coordinator
 La commande retourne un tableau vide puisqu'il n'y a pas de transaction LRA active.
 
 Le coordinateur créé un dossier nommé ObjectStore sur le système de fichiers.
-Celui est utilisé par le coordinateur pour stocker durablement l'état des transactions.
+Celui-ci est utilisé par le coordinateur pour stocker durablement l'état des transactions.
 
-=== Configuration des participants LRA
+=== La configuration des participants LRA
 
-Quarkus propose l'extension https://quarkus.io/extensions/io.quarkus/quarkus-narayana-lra[quarkus-narayana-lra] pour la configuration des participants.
+Quarkus propose l'extension https://quarkus.io/extensions/io.quarkus/quarkus-narayana-lra[quarkus-narayana-lra^] pour la configuration des participants.
 
 Cette extension apporte l'implémentation Narayana du client LRA, qui va permettre à nos microservices de pouvoir communiquer avec le coordinateur LRA.
 
@@ -328,18 +327,18 @@ L'extension rest-client-reactive, déjà présente dans le microservice Administ
 </dependency>
 ----
 
-Puis nous devons spécifier dans chacun des microservices l'URL du coordinateur LRA dans le fichier application.properties :
+Puis, nous devons spécifier dans chacun des microservices l'URL du coordinateur LRA dans le fichier `application.properties` :
 
 [source, properties]
 ----
 quarkus.lra.coordinator-url=http://localhost:50000/lra-coordinator
 ----
 
-==== Administration
+==== Le microservice Administration
 
 Le microservice Administration va démarrer la transaction LRA. 
 
-Pour cela, l'annotation *@LRA* est ajoutée sur la méthode de suppression d'un client :
+Pour cela, l'annotation `@LRA` est ajoutée sur la méthode de suppression d'un client :
 
 [source,java]
 ----
@@ -355,14 +354,14 @@ public void deleteClient(@PathParam("id") UUID clientId) {
 	accountService.deleteClientAccounts(clientId);
 }
 ----
-<1> Le type de la LRA est REQUIRES_NEW pour créer un nouveau contexte de transaction lors de l'appel de la méthode
+<1> Le type de la LRA est `REQUIRES_NEW` pour créer un nouveau contexte de transaction lors de l'appel de la méthode
 <2> La LRA sera annulée en cas d'erreur HTTP 4XX ou 5XX
 <3> end = true signifie que la LRA sera terminée à la fin de l'exécution de la méthode
 <4> Un timeLimit est défini pour que LRA s'annule après 20 secondes
 
 Comme les exceptions ne sont pas automatiquement mappées vers les codes erreurs HTTP, c'est au développeur qu'il incombe d'effectuer ce mapping. 
 
-Voici un exemple pour convertir les exceptions de type WebApplicationException en erreur HTTP 500 : 
+Voici un exemple pour convertir les exceptions de type `WebApplicationException` en erreur HTTP 500 : 
 
 [source,java]
 ----
@@ -372,9 +371,9 @@ public Response mapException(WebApplicationException ex) {
 }
 ----
 
-Enfin, il est obligatoire de déclarer une méthode annotée avec @Compensate, qui sera appelée en cas d'annulation de la LRA pour compenser le travail effectué par la méthode annotée avec @LRA.
+Enfin, il est obligatoire de déclarer une méthode annotée avec `@Compensate`, qui sera appelée en cas d'annulation de la LRA pour compenser le travail effectué par la méthode annotée avec `@LRA`.
 
-Dans le cas du microservice Administration, la méthode compensate ne fait que loguer la phase de compensation :
+Dans le cas du microservice Administration, la méthode `compensate` ne fait que loguer la phase de compensation :
 
 [source,java]
 ----
@@ -385,9 +384,9 @@ public Response compensate(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) URI lra) throws
 }
 ----
 
-==== Client
+==== Le microservice Client
 
-L'annotation *@LRA* est ajoutée sur la méthode de suppression d'un client :
+L'annotation `@LRA` est ajoutée sur la méthode de suppression d'un client :
 
 [source,java]
 ----
@@ -422,7 +421,7 @@ public Response deleteClient(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) URI lra, <3>
 <4> l'identifiant de la LRA est stocké dans l'objet Client, ce qui nous sera utile pour le retrouver en cas de compensation
 <5> Le client est supprimé (soft delete)
 
-La méthode compensate va permettre d'annuler la suppression du Client en cas d'annulation de la LRA :
+La méthode `compensate` va permettre d'annuler la suppression du Client en cas d'annulation de la LRA :
 
 [source,java]
 ----
@@ -445,7 +444,7 @@ public Response compensate(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) URI lra) throws
 <1> Le client est retrouvé dans la base de données grâce à l'identifiant de la LRA préalablement stocké lors de sa suppression
 <2> La suppression du client est annulée
 
-==== Account
+==== Le microservice Account
 
 Le même principe s'applique pour le microservice Account :
 [source,java]
@@ -496,13 +495,14 @@ public Response compensate(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) URI lra) throws
 
 }
 ----
+En cas d'annulation de la LRA, la méthode `compensate` sera appelée par le coordinateur même si aucun changement n'a été effectué sur les données. 
+Il est donc nécessaire de gérer le cas où il n'y a rien à compenser puisque les comptes n'ont pas été modifiés lors de l'appel à la méthode `deleteAccounts`.
 
-Les méthodes annotées avec @Compensate doivent toujours être idempotentes. En effet, comme nous le verrons dans l'exemple suivant, la méthode est tout le temps exécutée en cas d'annulation de la LRA, même si aucun changement n'a été effectué sur les données. 
-
-== Suppression d’un client avec LRA
+== La suppression d’un client avec LRA
 
 Nous réinitialisons les données : 
 
+[source,shell]
 ----
 ./init.sh
 ----
@@ -514,7 +514,7 @@ Nous mettons à jour le solde du compte ACC00002 :
 curl -d '{"id":"ecafb910-0e3e-40b7-b304-6115b708606a", "clientId": "1784e89b-7a3b-45ed-b2f2-6a562756a2e3", "number": "ACC00002", "balance": 100 }' -H "Content-Type: application/json" -X PUT http://localhost:8082/accounts
 ----
 
-Puis nous supprimmons le client :
+Puis, nous supprimons le client :
 
 [source,shell]
 ----
@@ -526,7 +526,7 @@ Dans ce cas, le microservice Account retourne le code HTTP 409, ce qui déclench
 Le coordinateur procède de ce fait à la phase de compensation, comme nous pouvons le voir ci-dessous dans les logs des différents microservices : 
 
  - La suppression du client effectuée avant l’annulation de la LRA a bien été compensée dans le microservice Client :
-
++
 [text]
 ----
 Deleting client 1784e89b-7a3b-45ed-b2f2-6a562756a2e3
@@ -535,8 +535,8 @@ Compensating LRA http://localhost:50000/lra-coordinator/0_ffffc0a80114_f7b9_656b
 Revert client 1784e89b-7a3b-45ed-b2f2-6a562756a2e3 deletion corresponding to LRA http://localhost:50000/lra-coordinator/0_ffffc0a80114_f7b9_656b3fb0_2
 ----
 
-- La compensation a bien été exécutée bien qu'il n'y ait rien eu à compenser dans le microservice Account :
-
+- La compensation a bien été exécutée, bien qu'il n'y ait rien eu à compenser dans le microservice Account :
++
 [text]
 ----
 Compensating LRA http://localhost:50000/lra-coordinator/0_ffffc0a80114_f7b9_656b3fb0_2
@@ -544,7 +544,7 @@ No account to revert found with LRA http://localhost:50000/lra-coordinator/0_fff
 ----
 
 - Idem dans le microservice Administration : 
-
++
 [text]
 ----
 Compensating LRA http://localhost:50000/lra-coordinator/0_ffffc0a80114_f7b9_656b3fb0_2
