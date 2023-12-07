@@ -154,3 +154,12 @@ khaoulamrabet:
   picture: khaoula.jpg
   socials:
     linkedin: "mrabet-khaoula-b78ab0103"
+
+pcheucle:
+  name: "Pierre Cheucle"
+  bio: "Ingénieur logiciel diplômé de l’Efrei en 2014, Pierre a rejoint SCIAM après une belle carrière dans la banque, pour que son quotidien soit nourri de sa passion pour la tech.Pierre possède une triple compétence développement, lead technique et management qu’il a développée lors de diverses expériences, principalement sur des projets d’envergure pour différents métiers critiques de la banque (Paiement, Trésorerie, Conformité…).Il possède une solide vision et expérience sur le développement de systèmes distribués (applications Cloud Native, architecture microservice, API, Messaging, etc.).Pierre est avant tout un passionné qui aime partager avec ses pairs autour des approches de conception logicielle (DDD, CQRS, microservice…) et des bonnes pratiques de code."
+  job: "Tech Lead"
+  pagesciam: "https://www.sciam.fr/equipe/pierre-cheucle"
+  picture: pcheucle.jpg
+  socials:
+    linkedin: "pierre-cheucle"
