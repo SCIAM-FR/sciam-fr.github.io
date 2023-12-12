@@ -60,7 +60,7 @@ jobs:
 
   # Deployment job
   deploy:
-    if: branch = main AND github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
