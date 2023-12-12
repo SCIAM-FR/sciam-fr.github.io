@@ -4,12 +4,13 @@
 # documentation.
 
 # Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Deploy Jekyll site to Pages
+name: Build and Deploy Main branch to Pages
 
 on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
+
   pull_request:
     branches: ["main"]
 
@@ -59,7 +60,7 @@ jobs:
 
   # Deployment job
   deploy:
-    if: github.ref != 'refs/heads/main' # Only deploy on the main branch
+    if: branch = main AND github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
