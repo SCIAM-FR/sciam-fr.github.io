@@ -1,0 +1,267 @@
+= Démarrer du bon pied 2024 avec JavaFX
+:page-navtitle: Démarrer du bon pied 2024 avec JavaFX
+:page-excerpt: 'Une présentation sous forme de tutoriel pour démarrer JavaFX du bon pied.'
+:layout: post
+:author: clementdetastes
+:page-tags: [JavaFX, Java, UI]
+:page-vignette: javafx.png
+:page-vignette-licence: 'Source Oracle'
+:page-liquid:
+
+== Introduction
+
+Dans cet article-tutoriel, je vous propose de vous accompagner dans la création de votre future application JavaFX. +
+JavaFX est un Toolkit graphique pour la création d'applications de type "client riche". +
+Né de la volonté de moderniser les interfaces utilisateur en Java, JavaFX offre une alternative élégante à Swing, le framework historique de Java pour les interfaces graphiques.
+
+image::javafx/gift.png[JavaFX, 512, 512, align="center"]
+
+== Mise en oeuvre
+Si Oracle incluait JavaFX dans son JDK, il a été retiré de sa distribution depuis la version 11. +
+Plusieurs solutions s'offrent à nous pour l'utiliser :
+
+* Utiliser un build du JDK qui inclut JavaFX, par exemple https://www.azul.com/downloads/?package=jdk#zulu[Zulu fourni par Azul]
+* Télécharger le .jmod et builder son propre JRE avec jlink
+
+.Exemple avec la version 21 de JavaFX
+```bash
+jlink \
+    --output jre-javafx-21 \
+    --module-path javafx-jmods-21 \
+    --add-modules ALL-MODULE-PATH
+```
+
+* Utiliser un outil de gestion de dépendances comme Maven ou Gradle
+
+Par simplicité et praticité, c'est vers cette dernière solution que nous nous tournerons. Difficile en pratique de ce passer d'un tel outil, autant en exploiter les fonctionnalités et le confort.
+
+.Exemple de pom.xml Maven
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-fxml</artifactId>
+        <version>21.0.1</version>
+    </dependency>
+</dependencies>
+```
+
+JavaFX étant modulaire, il faudra piocher parmi les https://openjfx.io/javadoc/21/[modules disponibles] ceux nécessaires à votre application.
+
+== Allez, on démarre !
+Comme je suis un peu du genre impatient, j'ai envie de lancer un petit Hello World pour voir si mon environnement est bien configuré.
+
+```java	
+package fr.sciam.javafx;
+
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
+public class HelloWorldApp extends Application {
+
+  @Override
+  public void start(final Stage primaryStage) {
+    Pane root = new Pane(new Label("Hello World !"));
+    Scene scene = new Scene(root);
+    primaryStage.setScene(scene);
+    primaryStage.show();
+  }
+}
+```
+On peut voir qu'il faut pour cela hériter de la classe `Application` et implémenter la méthode `start()`, dans laquelle nous disposerons d'une instance de `Stage`, la fenêtre principale de notre application.
+
+Si l'on est dans le contexte d'une application modulaire, on devra déclarer un `module-info.java` de la forme :
+
+```java
+module fr.sciam.javafx {
+  requires javafx.fxml;
+  exports fr.sciam.javafx to javafx.graphics;
+}
+```
+
+Ok, on est prêt pour la suite.
+
+== Créer une interface avec SceneBuilder
+
+On va essayer d'aller un peu plus loin que le Hello World (ça devrait aller !). Pour créer des interfaces riches, on va pouvoir s'appuyer sur un outil comme SceneBuilder qui est la référence pour créer des interfaces graphiques avec JavaFX. Cet éditeur `WYSIWYG` (What You See Is What You Get) offre un certain confort pour la conception de notre UI. +
+Il est disponible en téléchargement sur le site de https://gluonhq.com/products/scene-builder/[Gluon].
+
+image::javafx/scenebuilder.png[SceneBuilder, align="center"]
+
+SceneBuilder propose diverses vues :
+
+* Un catalogue de composants disponibles (conteneurs, contrôles...)
+* Une vue de la hiérarchie des composants du _Scene Graph_
+* Une vue de l'aperçu de l'interface en cours de conception
+* Les propriétés modifiables du composant sélectionné
+
+Les interfaces créées avec SceneBuilder sont sauvegardées au format FXML, une représentation XML qui décrit la hiérarchie des composants et leurs propriétés. +
+Ce format est nativement interprétable par JavaFX, ce sont d'ailleurs ces APIs que nous allons utiliser pour charger notre interface.
+
+```java
+package fr.sciam.javafx;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class FXMLApp extends Application {
+
+  @Override
+  public void start(final Stage primaryStage) throws Exception {
+    Parent root = FXMLLoader.load(this.getClass().getResource("/fxml/sample.fxml"));
+    primaryStage.setScene(new Scene(root, 300, 275));
+    primaryStage.show();
+  }
+}
+```
+
+Pour la modularisation, une retouche sur le `module-info.java` est nécessaire :
+
+```java
+module fr.sciam.javafx {
+  requires javafx.controls;
+  requires javafx.fxml;
+  exports fr.sciam.javafx to javafx.graphics, javafx.fxml;
+  opens fr.sciam.javafx to javafx.fxml;
+}
+```
+
+Nous allons maintenant essayer de donner un peu de vie à notre application. +
+Notre FXML est une description statique de notre interface, mais nous allons pouvoir lui associer un _Controller_ qui va nous permettre d'implémenter la dynamique souhaitée.
+Ce contrôleur va être associé à notre FXML via l'attribut `fx:controller` et sera automatiquement instancié par JavaFX lors du chargement du FXML. +
+JavaFX va ensuite injecter les composants du FXML dans les attributs du contrôleur annotés avec `@FXML` en mappant les identifiants des composants du FXML avec les noms des attributs.
+
+Commençons donc par définir quelques identifiants sur nos composants dans SceneBuilder.
+
+image::javafx/fxid.png[fx:id, align="center"]
+
+ainsi que d'éventuels _callbacks_ d'événements, ici sur l'action de click d'un bouton.
+
+image::javafx/onaction.png[onAction, align="center"]
+
+Une fois ceci réalisé, SceneBuilder nous propose _optionnellement_ un squelette de contrôleur via le menu `View > Show Sample Controller Skeleton`.
+
+image::javafx/controller_scenebuilder.png[Controller SceneBuilder, align="center"]
+
+Il est important de noter que les composants injectés dans le contrôleur ne sont pas disponibles directement le constructeur de ce dernier. D'abord, le contrôleur est instancié, puis les composants sont injectés, et enfin la méthode `initialize()` est appelée. Si des traitements préparatoires sont nécessaires sur les composants, il faudra donc les réaliser dans cette méthode, qui est optionnelle.
+
+```java	
+package fr.sciam.javafx;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+
+public class SampleController {
+
+  @FXML
+  private TextField loginTextField;
+
+  @FXML
+  private PasswordField passwordField;
+
+  public SampleController() {
+    // loginTextField and passwordField are null at this stage
+  }
+
+  @FXML
+  void initialize() {
+    // Injected components are ready to be used
+  }
+
+  @FXML
+  void handleValidateAction(final ActionEvent event) {
+    System.out.println("Button has been clicked");
+  }
+}
+```
+
+Si vous utilisez un IDE tel qu'IntelliJ, on peut facilement vérifier le bon mapping des composants du FXML avec les attributs du contrôleur. +
+La présence du petit icône `</>` indique qu'un composant correspondant à l'identifiant est bien présent dans le FXML.
+
+image::javafx/fxml_link.png[FXML Link, align="center"]
+
+En cliquant dessus, on peut naviguer directement vers le composant dans le FXML.
+
+image::javafx/fxml_in.png[FXML In, align="center"]
+
+A ce stade, on dispose d'une interface statique définie en FXML et d'un contrôleur qui lui est associé. Cette séparation naturelle entre la vue et le contrôleur intrinsèque au fonctionnement de JavaFX nous assure un partage clair des responsabilités.
+
+== Une UI avec du style !
+
+Un apport majeur de JavaFX par rapport à Swing est le support des feuilles de style CSS. +
+Bien qu'il soit tout de même possible de customiser le rendu de nos composants directement par API, profitons des fonctionnalités offertes par CSS pour ajouter un niveau supplémentaire de découplage entre notre UI et son rendu. Il sera aussi bien pratique de pouvoir basculer à la volée entre un thème _light_ ou _dark_, par exemple.
+
+Par défaut, JavaFX utilise un thème qui répond au doux nom de _Modena_. +
+Un petit tour dans la https://openjfx.io/javadoc/21/javafx.graphics/javafx/scene/doc-files/cssref.html[javadoc] nous permet de découvrir les différents sélecteurs CSS disponibles pour customiser le rendu de nos composants.
+
+L'ajout d'une feuille de style se fait en l'associant à notre `Scene`.
+
+```java
+URL styleResource = this.getClass().getResource("/style/dark.css");
+scene.getStylesheets().add(styleResource.toExternalForm());
+```
+
+On pourra remarquer que l'API nous permet d'ajouter plusieurs feuilles de style. Et ceci peut se faire dynamiquement, au _runtime_, aussi bien l'ajout que la suppression grâce à l'observabilité de la propriété `stylesheets`. Cela pourra nous servir pour changer de style à la volée, ou encore de recharger un fichier CSS modifié sans avoir à redémarrer l'application dans un contexte de développement par exemple.
+
+image::javafx/dark_theme.png[Dark Theme, align="center"]
+
+Pour avoir un aperçu du rendu avec la prise en compte de feuilles de style directement depuis SceneBuilder, on pourra les ajouter via le menu `Preview > Scene Style Sheets`. A noter qu'il ne s'agit que d'une simple prévisualisation, l'association doit se faire de manière effective comme vu précédemment.
+
+image::javafx/preview_style.png[Scene Style Sheets, align="center"]
+
+== Internationalisation
+
+JavaFX propose un support natif de l'internationalisation via le mécanisme des `ResourceBundle`. +
+Dans SceneBuilder, on peut définir des identifiants pour nos composants, mais aussi pour les textes affichés. Ces identifiants seront utilisés comme clés pour récupérer les textes correspondants dans le `ResourceBundle` associé à notre `Scene`.
+
+image::javafx/i18n_key.png[I18n Key, align="center"]
+
+image::javafx/i18n_keys.png[I18n Keys, align="center"]
+
+image::javafx/i18n_preview_en.png[I18n EN Preview, align="center"]
+
+En fournissant un fichier d'internationalisation français par exemple :
+
+```properties
+auth.title=Authentification
+auth.login=Identifiant
+auth.password=Mot de passe
+auth.validate=Valider
+```
+
+image::javafx/i18n_preview_fr.png[I18n FR Preview, align="center"]
+
+== Un peu de data-binding
+
+JavaFX propose une API riche de data-binding, permettant l'expression de relations entre les propriétés de nos composants. Ces relations peuvent être uni ou bidirectionnelles, et subir des transformations arithmétiques et conditionnelles. +
+Supposons que dans notre exemple, nous souhaitions rendre le bouton de validation actif seulement si les champs de login et de mot de passe sont remplis. On va pouvoir exprimer cette relation de la manière suivante :
+
+```java
+@FXML
+void initialize() {
+  this.validateButton.disableProperty().bind(
+    this.loginTextField.textProperty().isEmpty()
+      .or(this.passwordField.textProperty().isEmpty())
+  );
+}
+```
+
+Dans une architecture `MVVM` _(`Model`, `View`, `ViewModel`)_ par exemple, on pourra utiliser le data-binding pour lier les propriétés de notre `ViewModel` à celles de nos composants graphiques de la `View`. L'idée étant de ne rendre que le `ViewModel` adhérent à JavaFX (via l'utilisation de propriété observables et bindables) et pas le `Model` qui lui est associé. Les mécanismes de binding assurerons la synchronisation des données affichées dans la `View` avec celles du `ViewModel`.
+
+```java
+public void setUserViewModel(final UserViewModel viewModel) {
+  this.loginLabel.textProperty().bind(viewModel.loginProperty());
+}
+```
+
+
+
+== Intégration dans un contexte CDI
