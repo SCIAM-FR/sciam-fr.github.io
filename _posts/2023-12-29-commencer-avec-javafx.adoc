@@ -33,7 +33,7 @@ jlink \
 
 * Utiliser un outil de gestion de dépendances comme Maven ou Gradle
 
-Par simplicité et praticité, c'est vers cette dernière solution que nous nous tournerons. Difficile en pratique de ce passer d'un tel outil, autant en exploiter les fonctionnalités et le confort.
+Pour des raisons de simplicité et de praticité, nous opterons pour cette dernière solution. Difficile en pratique de se passer d'un tel outil, autant en exploiter les fonctionnalités et le confort.
 
 .Exemple de pom.xml Maven
 ```xml
@@ -194,6 +194,24 @@ image::javafx/fxml_in.png[FXML In, align="center"]
 
 A ce stade, on dispose d'une interface statique définie en FXML et d'un contrôleur qui lui est associé. Cette séparation naturelle entre la vue et le contrôleur intrinsèque au fonctionnement de JavaFX nous assure un partage clair des responsabilités.
 
+== SceneGraph et threading
+
+Le SceneGraph est une représentation hiérarchique des composants graphiques de notre interface. +
+Au sommet de sa hiérarchie, on retrouve notre fenêtre principale, le `Stage`, qui contient une `Scene`, qui elle-même contient un noeud racine. Au dessous, on retrouve une structure arborescente de conteneurs et de composants. +
+
+Les propriétés observables des composants graphiques permettent au moteur de rendu de JavaFX de détecter les changements et de mettre à jour l'interface en conséquence.
+
+image::javafx/scenegraph.png[SceneGraph, align="center"]
+
+JavaFX est un framework _mono-threadé_, ce qui signifie que toutes les intéractions avec les composants graphiques doivent se faire depuis le `JavaFX Application Thread`. A l'instar de Swing, on dispose d'une API permettant de réaliser ces opérations au sein de ce thread, à savoir `Platform.runLater()`. +
+
+```java
+Platform.runLater(() -> {
+  Label label = new Label("Dynamically Added Label");
+  pane.getChildren().add(label);
+});
+```
+
 == Une UI avec du style !
 
 Un apport majeur de JavaFX par rapport à Swing est le support des feuilles de style CSS. +
@@ -224,7 +242,18 @@ Dans SceneBuilder, on peut définir des identifiants pour nos composants, mais a
 
 image::javafx/i18n_key.png[I18n Key, align="center"]
 
+On peut voir que la syntaxe associée dans le FXML est de la forme :
+
+```xml
+<Label text="%auth.login" />
+```
+
+Le caractère `%` en prefix indique qu'il s'agit d'une clé d'internationalisation et non d'une valeur statique. +
+
 image::javafx/i18n_keys.png[I18n Keys, align="center"]
+
+Nous voici à ce stade avec nos clés correctement définies. +
+On va pouvoir bénéficier d'une prévisualisation en chargeant un fichier d'internationalisation.
 
 image::javafx/i18n_preview_en.png[I18n EN Preview, align="center"]
 
@@ -239,9 +268,20 @@ auth.validate=Valider
 
 image::javafx/i18n_preview_fr.png[I18n FR Preview, align="center"]
 
+A l'instar des feuilles de style, il ne s'agit que d'une prévisualisation fournie par SceneBuilder. Il faudra spécifier le `ResourceBundle` à utiliser au chargement du fichier FXML.
+
+```java
+ResourceBundle bundle = ResourceBundle.getBundle("/i18n/language");
+Parent root = FXMLLoader.load(resource, bundle);
+```
+
+== Effets et animations
+
+
+
 == Un peu de data-binding
 
-JavaFX propose une API riche de data-binding, permettant l'expression de relations entre les propriétés de nos composants. Ces relations peuvent être uni ou bidirectionnelles, et subir des transformations arithmétiques et conditionnelles. +
+JavaFX propose une API riche de data-binding, permettant l'expression de relations entre les propriétés de nos composants. Ces relations peuvent être uni ou bidirectionnelles, et induire des transformations arithmétiques et conditionnelles. +
 Supposons que dans notre exemple, nous souhaitions rendre le bouton de validation actif seulement si les champs de login et de mot de passe sont remplis. On va pouvoir exprimer cette relation de la manière suivante :
 
 ```java
@@ -257,11 +297,26 @@ void initialize() {
 Dans une architecture `MVVM` _(`Model`, `View`, `ViewModel`)_ par exemple, on pourra utiliser le data-binding pour lier les propriétés de notre `ViewModel` à celles de nos composants graphiques de la `View`. L'idée étant de ne rendre que le `ViewModel` adhérent à JavaFX (via l'utilisation de propriété observables et bindables) et pas le `Model` qui lui est associé. Les mécanismes de binding assurerons la synchronisation des données affichées dans la `View` avec celles du `ViewModel`.
 
 ```java
+public class UserViewModel {
+  private StringProperty loginProperty;
+  public StringProperty loginProperty() {
+    return this.loginProperty;
+  }
+}
+```
+
+```java
 public void setUserViewModel(final UserViewModel viewModel) {
   this.loginLabel.textProperty().bind(viewModel.loginProperty());
 }
 ```
 
-
-
 == Intégration dans un contexte CDI
+
+Le dernier exemple vu précédemment peut légitimement nous amener à la question de l'intégration de JavaFX dans un contexte `CDI` (_Context and Dependendy Injection_). On aimerait pouvoir bénéficier des fonctionnalités de `CDI`, comme l'injection de dépendances, au sein de nos contrôleurs. Plutôt que d'utiliser explicitement un setter pour injecter notre `ViewModel`, on aimerait que cela soit fait automatiquement par le conteneur `CDI`. On va aussi vouloir appeler des services métiers de notre application lors de la validation d'un formulaire par exemple. +
+Comme c'est JavaFX qui instancie et gère le cycle de vie de nos contrôleurs, ils passent sous le radar de notre conteneur `CDI`.
+
+Gluon fournit avec sa bibliothèque _Ignite_ une solution pour les frameworks `Spring`, `Guice` et `Dagger`. +
+
+https://github.com/gluonhq/ignite[Gluon Ignite]
+
