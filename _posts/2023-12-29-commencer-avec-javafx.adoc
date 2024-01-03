@@ -278,16 +278,16 @@ Parent root = FXMLLoader.load(resource, bundle);
 
 == Effets et animations
 
-Pour donner un peu de vie à notre application, profitons de ce qui est un véritable apport de JavaFX par rapport à Swing : les effets et les animations. +
+Pour donner un peu de vie à notre application, profitons d'un autre véritable apport de JavaFX par rapport à Swing : les effets et les animations. +
 
 Les effets permettent d'appliquer une modification du rendu d'un composant graphique. On peut par exemple appliquer un flou, une ombre, un effet de lumière... Ces effets peuvent être chaînés (via un la propriété `input` de `javafx.scene.effect.Effect` dont ils héritent) afin d'en appliquer plusieurs à la suite. +
-Ces effets peuvent être appliqués aussi via FXML ou par API java directement. +
+Ces effets peuvent être appliqués aussi bien via FXML que par API java directement. +
 
 Dans SceneBuilder, on peut appliquer un effet à un composant via l'onglet `Effect` de la vue des propriétés.
 
 image::javafx/effects.png[Effet, align="center"]
 
-Et directement dans le code java :
+Ou directement dans le code java :
 
 ```java
 // Application d'un ombrage par API
@@ -301,12 +301,14 @@ Pour une animation simple, utilisons une transition pour faire apparaitre progre
 
 ```java
 FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), imageView);
+fadeTransition.setFromValue(0);
+fadeTransition.setToValue(1);
 fadeTransition.play();
 ```
 
-Lorsque l'animation sera jouée, JavaFX se chargera de modifier progressivement la propriété `opacity` de notre image pour la faire passer de 0 à 1 en interpolant toutes les valeurs intermédiaires. +
+Lorsque l'animation sera jouée, JavaFX se chargera de modifier progressivement la propriété `opacity` de notre image pour la faire passer de 0 à 1 en interpolant les valeurs intermédiaires. +
 
-Pour réaliser des animations plus complexes, les apis `Timeline` / `KeyFrame`, `SequentialTransition` et `ParallelTransition` permettent des combinaisons sans fin.
+Pour réaliser des animations plus complexes, les APIs `Timeline` / `KeyFrame`, `SequentialTransition` et `ParallelTransition` permettent des combinaisons sans fin.
 
 == Un peu de data-binding
 
