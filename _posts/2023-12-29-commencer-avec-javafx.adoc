@@ -10,14 +10,15 @@
 
 == Introduction
 
-Dans cet article-tutoriel, je vous propose de vous accompagner dans la création de votre future application JavaFX. +
 JavaFX est un Toolkit graphique pour la création d'applications de type "client riche". +
 Né de la volonté de moderniser les interfaces utilisateur en Java, JavaFX offre une alternative élégante à Swing, le framework historique de Java pour les interfaces graphiques.
+
+Dans cet article-tutoriel, je vous propose de vous accompagner dans la création de votre future application JavaFX. +
 
 image::javafx/gift.png[JavaFX, 512, 512, align="center"]
 
 == Mise en oeuvre
-Si Oracle incluait JavaFX dans son JDK, il a été retiré de sa distribution depuis la version 11. +
+Bien qu'Oracle ait inclus JavaFX dans son JDK, il a été retiré de sa distribution depuis la version 11. +
 Plusieurs solutions s'offrent à nous pour l'utiliser :
 
 * Utiliser un build du JDK qui inclut JavaFX, par exemple https://www.azul.com/downloads/?package=jdk#zulu[Zulu fourni par Azul]
@@ -196,14 +197,14 @@ A ce stade, on dispose d'une interface statique définie en FXML et d'un contrô
 
 == SceneGraph et threading
 
-Le SceneGraph est une représentation hiérarchique des composants graphiques de notre interface. +
+JavaFX se base sur ce concept de SceneGraph qui est une représentation hiérarchique des composants graphiques de notre interface. +
 Au sommet de sa hiérarchie, on retrouve notre fenêtre principale, le `Stage`, qui contient une `Scene`, qui elle-même contient un noeud racine. Au dessous, on retrouve une structure arborescente de conteneurs et de composants. +
 
 Les propriétés observables des composants graphiques permettent au moteur de rendu de JavaFX de détecter les changements et de mettre à jour l'interface en conséquence.
 
 image::javafx/scenegraph.png[SceneGraph, align="center"]
 
-JavaFX est un framework _mono-threadé_, ce qui signifie que toutes les intéractions avec les composants graphiques doivent se faire depuis le `JavaFX Application Thread`. A l'instar de Swing, on dispose d'une API permettant de réaliser ces opérations au sein de ce thread, à savoir `Platform.runLater()`. +
+JavaFX est un framework _mono-threadé_, ce qui signifie que toutes les interactions avec les composants graphiques doivent se faire depuis le `JavaFX Application Thread`.Tous les callbacks annotés `@FXML` des contrôleurs sont déjà appelés depuis ce thread. Pour le reste, et à l'instar de Swing, on dispose d'une API permettant de réaliser ces opérations au sein du thread ad hoc, à savoir `Platform.runLater()`. +
 
 ```java
 Platform.runLater(() -> {
@@ -277,7 +278,35 @@ Parent root = FXMLLoader.load(resource, bundle);
 
 == Effets et animations
 
+Pour donner un peu de vie à notre application, profitons de ce qui est un véritable apport de JavaFX par rapport à Swing : les effets et les animations. +
 
+Les effets permettent d'appliquer une modification du rendu d'un composant graphique. On peut par exemple appliquer un flou, une ombre, un effet de lumière... Ces effets peuvent être chaînés (via un la propriété `input` de `javafx.scene.effect.Effect` dont ils héritent) afin d'en appliquer plusieurs à la suite. +
+Ces effets peuvent être appliqués aussi via FXML ou par API java directement. +
+
+Dans SceneBuilder, on peut appliquer un effet à un composant via l'onglet `Effect` de la vue des propriétés.
+
+image::javafx/effects.png[Effet, align="center"]
+
+Et directement dans le code java :
+
+```java
+// Application d'un ombrage par API
+DropShadow dropShadow = new DropShadow();
+label.setEffect(dropShadow);
+```
+
+Les animations quant à elles vont nous permettre de faire varier dynamiquement les proprétés d'un composant au cours du temps. Il est possible d'utiliser des animations prédéfinies, comme des animations de translation, de rotation, de changement de couleur... ou bien de créer ses propres animations. Les possibilités en deviennent quasiment infinies. +
+
+Pour une animation simple, utilisons une transition pour faire apparaitre progressivement notre image via un fondu.
+
+```java
+FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1), imageView);
+fadeTransition.play();
+```
+
+Lorsque l'animation sera jouée, JavaFX se chargera de modifier progressivement la propriété `opacity` de notre image pour la faire passer de 0 à 1 en interpolant toutes les valeurs intermédiaires. +
+
+Pour réaliser des animations plus complexes, les apis `Timeline` / `KeyFrame`, `SequentialTransition` et `ParallelTransition` permettent des combinaisons sans fin.
 
 == Un peu de data-binding
 
@@ -316,7 +345,83 @@ public void setUserViewModel(final UserViewModel viewModel) {
 Le dernier exemple vu précédemment peut légitimement nous amener à la question de l'intégration de JavaFX dans un contexte `CDI` (_Context and Dependendy Injection_). On aimerait pouvoir bénéficier des fonctionnalités de `CDI`, comme l'injection de dépendances, au sein de nos contrôleurs. Plutôt que d'utiliser explicitement un setter pour injecter notre `ViewModel`, on aimerait que cela soit fait automatiquement par le conteneur `CDI`. On va aussi vouloir appeler des services métiers de notre application lors de la validation d'un formulaire par exemple. +
 Comme c'est JavaFX qui instancie et gère le cycle de vie de nos contrôleurs, ils passent sous le radar de notre conteneur `CDI`.
 
-Gluon fournit avec sa bibliothèque _Ignite_ une solution pour les frameworks `Spring`, `Guice` et `Dagger`. +
+Gluon fournit avec sa bibliothèque https://github.com/gluonhq/ignite[Ignite] une solution clé en main pour le populaire `Spring` ainsi que `Guice` et `Dagger`. +
 
-https://github.com/gluonhq/ignite[Gluon Ignite]
+Comme chez SCIAM on aime bien `Quarkus`, on va faire quelques efforts pour rendre notre application compatible avec ce framework. +
+La première étape consiste à déclarer un `Producer` pour notre `FXMLLoader`.
 
+```java
+public class FXMLLoaderProducer {
+
+  @Inject
+  Instance<Object> instance;
+
+  @Produces
+  public FXMLLoader produceFXMLLoader() {
+    FXMLLoader loader = new FXMLLoader();
+    loader.setControllerFactory(param -> this.instance.select(param).get());
+    return loader;
+  }
+}
+```
+
+La seconde étape consiste à définir un nouveau `main` pour `Quarkus` qui va démarrer notre application JavaFX. +
+En héritant de `javafx.application.Application` on va pouvoir bénéficier de notre instance de `Stage` et la propager au reste de notre application.
+
+```java
+@QuarkusMain
+public class QuarkusFxApplication extends javafx.application.Application implements QuarkusApplication {
+
+  @Qualifier
+  @Target(ElementType.PARAMETER)
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface PrimaryStage {
+  }
+
+  public static void main(final String[] args) {
+    Quarkus.run(QuarkusFxApplication.class);
+  }
+
+  @Override
+  public int run(final String... args) throws IOException {
+    Application.launch(QuarkusFxApplication.class, args);
+    return 0;
+  }
+
+  @Override
+  public void start(final Stage primaryStage) throws Exception {
+    CDI.current()
+      .getBeanManager()
+      .getEvent()
+      .select(new AnnotationLiteral<PrimaryStage>() {})
+      .fire(primaryStage);
+  }
+}
+```
+
+La dernière étape est celle où la magie va pouvoir opérer. Dans notre `FxAppComponent` on va pouvoir se faire injecter de notre instance de `FXMLLoader` et l'utiliser pour charger notre UI. Dès lors, tous les contrôleurs instanciés par JavaFX seront gérés par `CDI` et pourront bénéficier de l'injection de dépendances.
+
+```java
+@ApplicationScoped
+public class FxAppComponent {
+
+  @Inject
+  private FXMLLoader fxmlLoader;
+
+  public void start(@Observes @PrimaryStage final Stage primaryStage) throws IOException {
+    InputStream stream = QuizApp.class.getResourceAsStream("/fxml/app.fxml");
+    Parent root = this.fxmlLoader.load(stream);
+    Scene scene = new Scene(root);
+    primaryStage.setScene(scene);
+    primaryStage.show();
+  }
+}
+```
+
+Si vous souhaitez directement bénéficier d'une extension Quarkus, vous pourrez en trouver une sur mon https://github.com/CodeSimcoe/quarkus-fx-extension[dépôt github].
+
+== Conclusion
+
+JavaFX est un Toolkit graphique qui vous permettra de réaliser votre application desktop (ou mobile !), entièrement en Java. Vous pouvez l'intégrer dans un contexte `CDI` en bénéficier de toutes ses fonctionnalités pour construire une application robuste. +
+
+Ce billet vous aidera peut-être à vous mettre le pied à l'étrier pour démarrer une application JavaFX et en explorer les possibilités qu'il pourra vous offrir.
