@@ -401,7 +401,7 @@ public class QuarkusFxApplication extends javafx.application.Application impleme
 }
 ```
 
-La dernière étape est celle où la magie va pouvoir opérer. Dans notre `FxAppComponent` on va pouvoir se faire injecter de notre instance de `FXMLLoader` et l'utiliser pour charger notre UI. Dès lors, tous les contrôleurs instanciés par JavaFX seront gérés par `CDI` et pourront bénéficier de l'injection de dépendances.
+La dernière étape est celle où la magie va pouvoir opérer. Dans notre `FxAppComponent` on va se faire injecter de notre instance de `FXMLLoader` et l'utiliser pour charger notre UI. Dès lors, tous les contrôleurs instanciés par JavaFX seront gérés par `CDI` et pourront à leur tour bénéficier de l'injection de dépendances.
 
 ```java
 @ApplicationScoped
@@ -411,7 +411,7 @@ public class FxAppComponent {
   private FXMLLoader fxmlLoader;
 
   public void start(@Observes @PrimaryStage final Stage primaryStage) throws IOException {
-    InputStream stream = QuizApp.class.getResourceAsStream("/fxml/app.fxml");
+    InputStream stream = FxAppComponent.class.getResourceAsStream("/fxml/app.fxml");
     Parent root = this.fxmlLoader.load(stream);
     Scene scene = new Scene(root);
     primaryStage.setScene(scene);
@@ -424,6 +424,6 @@ Si vous souhaitez directement bénéficier d'une extension Quarkus, vous pourrez
 
 == Conclusion
 
-JavaFX est un Toolkit graphique qui vous permettra de réaliser votre application desktop (ou mobile !), entièrement en Java. Vous pouvez l'intégrer dans un contexte `CDI` en bénéficier de toutes ses fonctionnalités pour construire une application robuste. +
+JavaFX est un Toolkit graphique qui vous permettra de réaliser votre application desktop (ou mobile !), entièrement en Java. Vous pouvez l'intégrer dans un contexte `CDI` et bénéficier de ses fonctionnalités pour construire une application robuste. +
 
-Ce billet vous aidera peut-être à vous mettre le pied à l'étrier pour démarrer une application JavaFX et en explorer les possibilités qu'il pourra vous offrir.
+Ce billet vous aidera peut-être à vous mettre le pied à l'étrier pour démarrer une application JavaFX et en explorer les possibilités qu'il pourra vous offrir, comme de la 3D !
