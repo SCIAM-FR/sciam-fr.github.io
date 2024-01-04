@@ -137,7 +137,6 @@ Ce format est nativement interprétable par JavaFX : ce sont d'ailleurs ces APIs
 
 ```
 
-
 ```java
 package fr.sciam.javafx;
 
@@ -168,6 +167,10 @@ module fr.sciam.javafx {
   opens fr.sciam.javafx to javafx.fxml;
 }
 ```
+
+Et voici le résultat :
+
+image::javafx/loginscreen.png[Login Screen, align="center"]
 
 Nous allons maintenant essayer de donner un peu de vie à notre application. +
 Notre FXML est une description statique de notre interface, mais nous allons pouvoir lui associer un _Controller_ qui va nous permettre d'implémenter la dynamique souhaitée.
