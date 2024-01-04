@@ -204,7 +204,7 @@ Les propriétés observables des composants graphiques permettent au moteur de r
 
 image::javafx/scenegraph.png[SceneGraph, align="center"]
 
-JavaFX est un framework _mono-threadé_, ce qui signifie que toutes les interactions avec les composants graphiques doivent se faire depuis le `JavaFX Application Thread`.Tous les callbacks annotés `@FXML` des contrôleurs sont déjà appelés depuis ce thread. Pour le reste, et à l'instar de Swing, on dispose d'une API permettant de réaliser ces opérations au sein du thread ad hoc, à savoir `Platform.runLater()`. +
+JavaFX est un framework _mono-threadé_, ce qui signifie que toutes les interactions avec les composants graphiques doivent se faire depuis le `JavaFX Application Thread`. Tous les callbacks annotés `@FXML` des contrôleurs sont déjà appelés depuis ce thread. Pour le reste, et à l'instar de Swing, on dispose d'une API permettant de réaliser ces opérations au sein du thread ad hoc, à savoir `Platform.runLater()`. +
 
 ```java
 Platform.runLater(() -> {
