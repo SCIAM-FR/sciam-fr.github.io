@@ -12,12 +12,12 @@
 JavaFX est un Toolkit graphique pour la création d'applications de type "client riche". +
 Né de la volonté de moderniser les interfaces utilisateur en Java, JavaFX offre une alternative élégante à Swing, le framework historique de Java pour les interfaces graphiques.
 
-Dans cet article-tutoriel, je vous propose de vous accompagner dans la création de votre future application JavaFX. +
+Dans cet article, je vous propose de vous accompagner dans la création de votre future application JavaFX. +
 
 image::javafx/gift.png[JavaFX, 512, 512, align="center"]
 
 == Mise en oeuvre
-Bien qu'Oracle ait inclus JavaFX dans son JDK, il a été retiré de sa distribution depuis la version 11. +
+Bien qu'Oracle ait inclus JavaFX dans son JDK, il a été retiré de sa distribution depuis la version 11 et vu son code reversé dans le projet Open Source https://openjfx.io/[OpenJFX] +
 Plusieurs solutions s'offrent à nous pour l'utiliser :
 
 * Utiliser un build du JDK qui inclut JavaFX, par exemple https://www.azul.com/downloads/?package=jdk#zulu[Zulu fourni par Azul]
@@ -99,7 +99,44 @@ SceneBuilder propose diverses vues :
 * Les propriétés modifiables du composant sélectionné
 
 Les interfaces créées avec SceneBuilder sont sauvegardées au format FXML, une représentation XML qui décrit la hiérarchie des composants et leurs propriétés. +
-Ce format est nativement interprétable par JavaFX, ce sont d'ailleurs ces APIs que nous allons utiliser pour charger notre interface.
+Ce format est nativement interprétable par JavaFX : ce sont d'ailleurs ces APIs que nous allons utiliser pour charger notre interface.
+
+.sample.fxml
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<TitledPane animated="false" collapsible="false" text="Authentification" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1">
+    <HBox alignment="CENTER">
+        <ImageView fitHeight="125.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../images/logo.png"/>
+        </ImageView>
+        <VBox alignment="CENTER" spacing="10.0">
+            <HBox alignment="CENTER" spacing="5.0">
+                <Label nodeOrientation="RIGHT_TO_LEFT" prefWidth="125.0" text="Login"/>
+                <TextField fx:id="loginTextField"/>
+            </HBox>
+            <HBox alignment="CENTER" spacing="5.0">
+                <Label nodeOrientation="RIGHT_TO_LEFT" prefWidth="125.0" text="Mot de passe"/>
+                <PasswordField fx:id="passwordField"/>
+            </HBox>
+            <Button fx:id="validateButton" text="Valider"/>
+        </VBox>
+    </HBox>
+</TitledPane>
+
+```
+
 
 ```java
 package fr.sciam.javafx;
@@ -149,7 +186,7 @@ Une fois ceci réalisé, SceneBuilder nous propose _optionnellement_ un squelett
 
 image::javafx/controller_scenebuilder.png[Controller SceneBuilder, align="center"]
 
-Il est important de noter que les composants injectés dans le contrôleur ne sont pas disponibles directement le constructeur de ce dernier. D'abord, le contrôleur est instancié, puis les composants sont injectés, et enfin la méthode `initialize()` est appelée. Si des traitements préparatoires sont nécessaires sur les composants, il faudra donc les réaliser dans cette méthode, qui est optionnelle.
+Il est important de noter que les composants injectés dans le contrôleur ne sont pas disponibles directement au sein du constructeur de ce dernier. D'abord, le contrôleur est instancié, puis les composants sont injectés, et enfin la méthode `initialize()` est appelée. Si des traitements préparatoires sont nécessaires sur les composants, il faudra donc les réaliser dans cette méthode, qui est optionnelle.
 
 ```java	
 package fr.sciam.javafx;
@@ -192,12 +229,12 @@ En cliquant dessus, on peut naviguer directement vers le composant dans le FXML.
 
 image::javafx/fxml_in.png[FXML In, align="center"]
 
-A ce stade, on dispose d'une interface statique définie en FXML et d'un contrôleur qui lui est associé. Cette séparation naturelle entre la vue et le contrôleur intrinsèque au fonctionnement de JavaFX nous assure un partage clair des responsabilités.
+A ce stade, on dispose d'une interface statique définie en FXML et d'un contrôleur qui lui est associé. Cette séparation entre la vue et le contrôleur intrinsèque au fonctionnement de JavaFX nous assure un partage clair des responsabilités.
 
 == SceneGraph et threading
 
 JavaFX se base sur ce concept de SceneGraph qui est une représentation hiérarchique des composants graphiques de notre interface. +
-Au sommet de sa hiérarchie, on retrouve notre fenêtre principale, le `Stage`, qui contient une `Scene`, qui elle-même contient un noeud racine. Au dessous, on retrouve une structure arborescente de conteneurs et de composants. +
+Au sommet de sa hiérarchie, on retrouve notre fenêtre principale, le `Stage`, qui contient une `Scene`, qui elle-même contient un noeud racine. Au-dessous, on retrouve une structure arborescente de conteneurs et de composants. +
 
 Les propriétés observables des composants graphiques permettent au moteur de rendu de JavaFX de détecter les changements et de mettre à jour l'interface en conséquence.
 
@@ -259,6 +296,7 @@ image::javafx/i18n_preview_en.png[I18n EN Preview, align="center"]
 
 En fournissant un fichier d'internationalisation français par exemple :
 
+.language_fr.properties
 ```properties
 auth.title=Authentification
 auth.login=Identifiant
@@ -279,7 +317,7 @@ Parent root = FXMLLoader.load(resource, bundle);
 
 Pour donner un peu de vie à notre application, profitons d'un autre véritable apport de JavaFX par rapport à Swing : les effets et les animations. +
 
-Les effets permettent d'appliquer une modification du rendu d'un composant graphique. On peut par exemple appliquer un flou, une ombre, un effet de lumière... Ces effets peuvent être chaînés (via un la propriété `input` de `javafx.scene.effect.Effect` dont ils héritent) afin d'en appliquer plusieurs à la suite. +
+Les effets permettent d'appliquer une modification du rendu d'un composant graphique. On peut par exemple appliquer un flou, une ombre, un effet de lumière... Ces effets peuvent être chaînés (via la propriété `input` de `javafx.scene.effect.Effect` dont ils héritent) afin d'en appliquer plusieurs à la suite. +
 Ces effets peuvent être appliqués aussi bien via FXML que par API java directement. +
 
 Dans SceneBuilder, on peut appliquer un effet à un composant via l'onglet `Effect` de la vue des propriétés.
@@ -294,7 +332,7 @@ DropShadow dropShadow = new DropShadow();
 label.setEffect(dropShadow);
 ```
 
-Les animations quant à elles vont nous permettre de faire varier dynamiquement les proprétés d'un composant au cours du temps. Il est possible d'utiliser des animations prédéfinies, comme des animations de translation, de rotation, de changement de couleur... ou bien de créer ses propres animations. Les possibilités en deviennent quasiment infinies. +
+Les animations quant à elles vont nous permettre de faire varier dynamiquement les propriétés d'un composant au cours du temps. Il est possible d'utiliser des animations prédéfinies, comme des animations de translation, de rotation, de changement de couleur... ou bien de créer ses propres animations. Les possibilités en deviennent quasiment infinies. +
 
 Pour une animation simple, utilisons une transition pour faire apparaitre progressivement notre image via un fondu.
 
@@ -324,7 +362,7 @@ void initialize() {
 }
 ```
 
-Dans une architecture `MVVM` _(`Model`, `View`, `ViewModel`)_ par exemple, on pourra utiliser le data-binding pour lier les propriétés de notre `ViewModel` à celles de nos composants graphiques de la `View`. L'idée étant de ne rendre que le `ViewModel` adhérent à JavaFX (via l'utilisation de propriété observables et bindables) et pas le `Model` qui lui est associé. Les mécanismes de binding assurerons la synchronisation des données affichées dans la `View` avec celles du `ViewModel`.
+Dans une architecture `MVVM` _(`Model`, `View`, `ViewModel`)_ par exemple, on pourra utiliser le data-binding pour lier les propriétés de notre `ViewModel` à celles de nos composants graphiques de la `View`. L'idée étant de ne rendre que le `ViewModel` adhérent à JavaFX (via l'utilisation de propriété observables et bindables) et pas le `Model` qui lui est associé. Les mécanismes de binding assureront la synchronisation des données affichées dans la `View` avec celles du `ViewModel`.
 
 ```java
 public class UserViewModel {
