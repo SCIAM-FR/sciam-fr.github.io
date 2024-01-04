@@ -1,4 +1,4 @@
-= Démarrer du bon pied 2024 avec JavaFX
+= Démarrer du bon pied avec JavaFX 21
 :page-navtitle: Démarrer du bon pied avec JavaFX 21
 :page-excerpt: 'Une présentation sous forme de tutoriel pour démarrer JavaFX du bon pied.'
 :layout: post
@@ -168,17 +168,17 @@ public class SampleController {
   private PasswordField passwordField;
 
   public SampleController() {
-    // loginTextField and passwordField are null at this stage
+    // loginTextField et passwordField sont null à ce stade
   }
 
   @FXML
   void initialize() {
-    // Injected components are ready to be used
+    // Les composants injectés sont prêts à être utilisés
   }
 
   @FXML
   void handleValidateAction(final ActionEvent event) {
-    System.out.println("Button has been clicked");
+    System.out.println("Bouton de validation cliqué");
   }
 }
 ```
