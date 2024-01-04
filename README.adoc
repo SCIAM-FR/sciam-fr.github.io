@@ -1,4 +1,4 @@
 = Mode d'emploi SCIAM Blog
 :toc:
 
-Consultez le https://gitlab.com/sciam/blog-tech/-/wikis/home[Wiki du blog]
+Consultez le https://github.com/SCIAM-FR/sciam-fr.github.io/wiki[Wiki du blog]

@@ -146,10 +146,20 @@ rickenbazolo:
 
 khaoulamrabet:
   name: "Khaoula Mrabet"
-  bio: "Ingénieur informatique génie logiciel, Khaoula est passionnée par le développement web où elle a travaillé sur plusieurs projets dans différents secteurs tels que le commerce, le transport, le secteur bancaire et l'énergétique.  Pendant ces 8 ans d’expérience, elle apprécié le travail en équipe dans les différentes missions où elle a appris et amélioré ses compétences en cherchant toujours à optimiser les projets. Aujourd'hui, elle maîtrise plusieurs framework back mais pour elle , son expertise s'exprime dans le développement frontend."
+  bio: "Ingénieur informatique génie logiciel, Khaoula est passionnée par le développement web où elle a travaillé sur plusieurs projets dans différents secteurs tels que le commerce, le transport, le secteur bancaire et l'énergétique.  Pendant ces 8 ans d’expérience, elle a apprécié le travail en équipe dans les différentes missions où elle a appris et amélioré ses compétences en cherchant toujours à optimiser les projets. Aujourd'hui, elle maîtrise plusieurs framework back mais pour elle, son expertise s'exprime dans le développement frontend."
+
 
   job: "Expert Frontend"
   pagesciam: "https://sciam.fr/fr/equipe/72"
   picture: khaoula.jpg
   socials:
     linkedin: "mrabet-khaoula-b78ab0103"
+
+pcheucle:
+  name: "Pierre Cheucle"
+  bio: "Ingénieur logiciel diplômé de l’Efrei en 2014, Pierre a rejoint SCIAM après une belle carrière dans la banque, pour que son quotidien soit nourri de sa passion pour la tech.Pierre possède une triple compétence développement, lead technique et management qu’il a développée lors de diverses expériences, principalement sur des projets d’envergure pour différents métiers critiques de la banque (Paiement, Trésorerie, Conformité…).Il possède une solide vision et expérience sur le développement de systèmes distribués (applications Cloud Native, architecture microservice, API, Messaging, etc.).Pierre est avant tout un passionné qui aime partager avec ses pairs autour des approches de conception logicielle (DDD, CQRS, microservice…) et des bonnes pratiques de code."
+  job: "Tech Lead"
+  pagesciam: "https://www.sciam.fr/equipe/pierre-cheucle"
+  picture: pcheucle.jpg
+  socials:
+    linkedin: "pierre-cheucle"

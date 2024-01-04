@@ -1,7 +1,7 @@
 ---
 layout: default
-pagination: 
-  enabled: true
+pagination:
+enabled: true
 ---
 <style>
   ul#toc {
@@ -88,33 +88,56 @@ pagination:
         <hr>
       </div>
       <div class="col-lg-9">
-        <div class="doc">
-          {{ content }}
-          <p>&nbsp;</p>
+        <div class="row">
+          <div class="doc">
+            {{ content }}
+          </div>
         </div>
 
-        <!--
-          Boutons de pagination
-        -->
-        <div>
-          <ul class="pager">
+        <div class="row">
+          <!--
+            Boutons de pagination
+          -->
+          <div class="col-lg-3">
             {% if page.previous.url %}
-            <li class="previous">
-              <a class="page-link" data-placement="top"
-                 data-toggle="tooltip" href="{{ page.previous.url | relative_url }}"
+            <p class="btn btn-outline-primary">
+              <a href="{{ page.previous.url | relative_url }}"
                  title="{{page.previous.title | strip_html | xml_escape}}">&larr; Article
                 précédent</a>
-            </li>
-            {% endif %}
+            </p>
+          </div>
+          {% endif %}
+          <div class="col-lg-6">
+            &nbsp;
+          </div>
+          <div class="col-lg-3 d-md-flex justify-content-md-end">
             {% if page.next.url %}
-            <li class="next">
-              <a class="page-link" data-placement="top" data-toggle="tooltip"
-                 href="{{ page.next.url | relative_url }}"
+            <p class="btn btn-outline-primary">
+              <a href="{{ page.next.url | relative_url }}"
                  title="{{page.next.title | strip_html | xml_escape}}">Article
                 suivant &rarr;</a>
-            </li>
+            </p>
             {% endif %}
-          </ul>
+          </div>
+        </div>
+        <div class="row">
+
+          <script src="https://giscus.app/client.js"
+                  data-repo="SCIAM-FR/sciam-fr.github.io"
+                  data-repo-id="R_kgDOJnEX-w"
+                  data-category="General"
+                  data-category-id="DIC_kwDOJnEX-84Cbj8_"
+                  data-mapping="pathname"
+                  data-strict="0"
+                  data-reactions-enabled="0"
+                  data-emit-metadata="0"
+                  data-input-position="top"
+                  data-theme="light"
+                  data-lang="fr"
+                  data-loading="lazy"
+                  crossorigin="anonymous"
+                  async>
+          </script>
         </div>
       </div>
     </div>
