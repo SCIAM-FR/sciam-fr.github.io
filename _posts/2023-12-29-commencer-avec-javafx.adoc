@@ -17,7 +17,7 @@ Dans cet article, je vous propose de vous accompagner dans la création de votre
 image::javafx/gift.png[JavaFX, 512, 512, align="center"]
 
 == Mise en oeuvre
-Bien qu'Oracle ait inclus JavaFX dans son JDK, il a été retiré de sa distribution depuis la version 11 et vu son code reversé dans le projet Open Source https://openjfx.io/[OpenJFX] +
+Bien qu'Oracle ait inclus JavaFX dans son JDK, il a été retiré de sa distribution depuis la version 11 et vu son code reversé dans l'OpenJDK sous le projet https://openjfx.io/[OpenJFX] +
 Plusieurs solutions s'offrent à nous pour l'utiliser :
 
 * Utiliser un build du JDK qui inclut JavaFX, par exemple https://www.azul.com/downloads/?package=jdk#zulu[Zulu fourni par Azul]
