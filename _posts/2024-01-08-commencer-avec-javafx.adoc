@@ -4,7 +4,7 @@
 :layout: post
 :author: clementdetastes
 :page-tags: [JavaFX, Java, UI]
-:page-image: images/vignettes/javafx.png
+:page-image: images/vignettes/javafx_square.png
 :page-vignette: javafx.png
 :page-vignette-licence: Source Oracle
 :page-liquid:
@@ -386,7 +386,7 @@ void initialize() {
 }
 ----
 
-Dans une architecture `MVVM` _(`Model`, `View`, `ViewModel`)_ par exemple, on pourra utiliser le data-binding pour lier les propriétés de notre `ViewModel` à celles de nos composants graphiques de la `View`. L'idée étant de ne rendre que le `ViewModel` adhérent à JavaFX (via l'utilisation de propriété observables et bindables) et pas le `Model` qui lui est associé. Les mécanismes de binding assureront la synchronisation des données affichées dans la `View` avec celles du `ViewModel`.
+Dans une architecture `MVVM` _(`Model`, `View`, `ViewModel`)_ par exemple, on pourra utiliser le data-binding pour lier les propriétés de notre `ViewModel` à celles de nos composants graphiques de la `View`. L'idée étant de ne rendre que le `ViewModel` adhérent à JavaFX (via l'utilisation de propriétés observables et bindables) et pas le `Model` qui lui est associé. Les mécanismes de binding assureront la synchronisation des données affichées dans la `View` avec celles du `ViewModel`.
 
 [source,java]
 ----
