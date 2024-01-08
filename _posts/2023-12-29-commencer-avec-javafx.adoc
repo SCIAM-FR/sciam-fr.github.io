@@ -4,6 +4,7 @@
 :layout: post
 :author: clementdetastes
 :page-tags: [JavaFX, Java, UI]
+:page-image: images/vignettes/javafx.png
 :page-vignette: javafx.png
 :page-vignette-licence: 'Source Oracle'
 :page-liquid:
