@@ -326,7 +326,7 @@ auth.validate=Valider
 
 image::javafx/i18n_preview_fr.png[I18n FR Preview, align="center"]
 
-A l'instar des feuilles de style, il ne s'agit que d'une prévisualisation fournie par SceneBuilder. Il faudra spécifier le `ResourceBundle` à utiliser au chargement du fichier FXML.
+À l'instar des feuilles de style, il ne s'agit que d'une prévisualisation fournie par SceneBuilder. Il faudra spécifier le `ResourceBundle` à utiliser au chargement du fichier FXML.
 
 [source,java]
 ----
@@ -412,7 +412,7 @@ Comme c'est JavaFX qui instancie et gère le cycle de vie de nos contrôleurs, i
 
 Gluon fournit avec sa bibliothèque https://github.com/gluonhq/ignite[Ignite] une solution clé en main pour le populaire `Spring` ainsi que `Guice` et `Dagger`.
 
-Comme chez SCIAM on aime bien `Quarkus`, on va faire quelques efforts pour rendre notre application compatible avec ce framework. +
+Comme chez SCIAM, on aime bien `Quarkus`, on va faire quelques efforts pour rendre notre application compatible avec ce framework. +
 La première étape consiste à déclarer un `Producer` pour notre `FXMLLoader`.
 
 [source,java]
