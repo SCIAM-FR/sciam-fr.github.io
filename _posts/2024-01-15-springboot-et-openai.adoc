@@ -1,3 +1,4 @@
+= Spring Boot et OpenAI - Une incursion dans l’AI générative
 :page-navtitle: Spring Boot et OpenAI - Une incursion dans l’AI générative
 :page-excerpt: L'IA s'est rapprochée de nombreux domaines, en particulier du secteur de la programmation, la prochaine vague d'application d'IA générative est appelée à se répandre dans divers langages de programmation.
 :layout: post
