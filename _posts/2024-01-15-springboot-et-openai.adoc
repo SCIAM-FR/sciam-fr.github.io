@@ -14,7 +14,7 @@ Spring Boot, un Framework très utilisé pour le développement d'applications J
 
 Dans cet article, nous verrons quelques-unes des techniques d'ingénierie de prompt (invites) à l'aide de `Spring AI`
 
-= Qu’est-ce que Spring AI
+== Qu’est-ce que Spring AI
 
 L'initiative https://docs.spring.io/spring-ai/reference/index.html[Spring AI^], vise à simplifier la création d'application qui intègre des fonctions d'intelligence artificielle, à la rendre plus simple et à éviter toute complexité inutile.
 
