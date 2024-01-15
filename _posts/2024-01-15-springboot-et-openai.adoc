@@ -1,6 +1,6 @@
 = Spring Boot et OpenAI - Une incursion dans l’AI générative
 :page-navtitle: Spring Boot et OpenAI - Une incursion dans l’AI générative
-:page-excerpt: L'IA s'est rapprochée de nombreux domaines, en particulier du secteur de la programmation, la prochaine vague d'application d'IA générative est appelée à se répandre dans divers langages de programmation.
+:page-excerpt: L'IA s'est rapprochée de nombreux domaines, en particulier du secteur de la programmation. La prochaine génération d'applications d'IA générative est destinée à se propager à travers divers langages de programmation. C'est également le cas pour Java, et étant donné que Spring Boot est l'un des frameworks les plus populaires sur cette plateforme, il est naturel que l'intégration des API OpenAI se fasse également dans le modèle de programmation Spring. Cet article explore cette intégration.
 :layout: post
 :author: rickenbazolo
 :page-tags: [java, spring boot, ai, openai, genAI]
@@ -330,7 +330,7 @@ public class DemoOpenAiController {
 
 == Le test de l'application
 
-Pour tester l'application, vous pouvez utiliser un client REST, dans mon cas j'utilise https://www.postman.com/[postman^]
+Pour tester l'application, vous pouvez utiliser un client REST, dans mon cas, j'utilise https://www.postman.com/[postman^]
 
 Voici les résultats de mes tests lorsque j'interroge le endpoint OpenAI en passant par notre application.
 
