@@ -22,19 +22,19 @@ Cette initiative prend inspiration de projets Python largement reconnus tels que
 
 Spring AI repose sur la conviction que la prochaine génération d'applications d'IA générative ne sera pas restreinte exclusivement aux seuls passionnés de https://www.python.org/[Python^].
 
-= Générer le projet Spring Boot
+== Générer le projet Spring Boot
 
-Pour simplifier la génération de votre projet, vous pouvez utiliser le projet https://start.spring.io[spring initializr^] ou encore https://spring.io/projects/spring-cli[spring cli^], les starters sont disponibles pour aider à mettre en place les dépendances et les classes essentielles.
+Pour simplifier la génération de votre projet, vous pouvez utiliser le projet https://start.spring.io[Spring Initializr^] ou encore https://spring.io/projects/spring-cli[Spring Cli^], les starters sont disponibles pour aider à mettre en place les dépendances et les classes essentielles.
 
 TIP: Il existe également une https://docs.spring.io/spring-ai/reference/getting-started.html[collection d'exemples d'applications^] pour vous aider à explorer les fonctionnalités du projet Spring AI.
 
-Voici à quoi ressemble mon projet Spring Boot générer (dans mon cas, j’ai utilisé IntelliJ IDEA).
+Voici à quoi ressemble mon projet Spring Boot généré (dans mon cas, j’ai utilisé IntelliJ IDEA).
 
 image::rickenbazolo/spring_ai/project_structure.png[image,width=50%,align="center"]
 
-= Le fichier pom.xml
+== Le fichier pom.xml
 
-Pour notre fichier de compilation, nous aurons besoin de l'artefact `spring-ai-openai-spring-boot-starter`
+Pour notre projet, nous aurons besoin de l'artefact `spring-ai-openai-spring-boot-starter`
 
 [source,xml]
 ----
@@ -45,22 +45,22 @@ Pour notre fichier de compilation, nous aurons besoin de l'artefact `spring-ai-o
 </dependency>
 ----
 
-ce starter nous aide à mettre en place l’ensemble des dépendances et classes essentielles pour travailler
+Ce starter nous aide à mettre en place l’ensemble des dépendances et classes essentielles pour travailler.
 
 image::rickenbazolo/spring_ai/starter_dependances.png[image,width=50%,align="center"]
 
 TIP: `Spring Starter` est un terme spécifique à l'écosystème de Spring Boot. Les starters facilitent la mise en place rapide d'une application Spring Boot avec les fonctionnalités souhaitées.
 
-Nous allons comprendre l'auto-configuration fournie par Spring Boot pour nous aider à maitriser et personnaliser la configuration des composants prochainement.
+Dans un prochain article, nous explorerons l'auto-configuration fournie par Spring Boot afin de mieux comprendre et maîtriser la configuration des composants, ainsi que d'apprendre à les personnaliser.
 
 image::rickenbazolo/spring_ai/springai_autoconfig.png[image,width=50%,align="center"]
 
 La version actuelle est la 0.8.0, à la date de rédaction de cet article.
 
-Nous utilisant une version Snapshot du projet. Le projet Spring AI fournit des artefacts dans les dépôts Spring Milestone et Snapshot.
-Vous devez ajouter des références aux référentiels Spring Milestone et/ou Snapshot dans votre fichier pom.xml
+Nous utilisons une version Snapshot du projet. Le projet Spring AI fournit des artefacts dans les dépôts Spring Milestone et Snapshot.
+Vous devez ajouter des références aux référentiels Spring Milestone et/ou Snapshot dans votre fichier pom.xml.
 
-Pour un projet Maven, ajouté
+Pour un projet Maven, il faut ajouter :
 
 [source,xml]
 ----
@@ -84,7 +84,7 @@ Pour un projet Maven, ajouté
 </repositories>
 ----
 
-Voici le contenu du fichier pom.xml de notre projet
+Voici le contenu du fichier pom.xml de notre projet :
 
 [source,xml]
 ----
@@ -158,15 +158,15 @@ Voici le contenu du fichier pom.xml de notre projet
 
 Alors, sans plus attendre, commençons à coder.
 
-= Configuration du projet
+== La configuration du projet
 
 `Spring AI` prend en charge ChatGPT, le modèle de langage AI d'OpenAI.
 
 Le projet Spring AI définit une propriété de configuration nommée `spring.ai.openai.api-key` que vous devez définir sur la valeur de la clé API.
 
-Pour obtenir la clé de l’API, créer un compte sur https://platform.openai.com/signup[la platform openai^] et générez une https://platform.openai.com/api-keys[API Keys^]
+Pour obtenir la clé de l’API, créer un compte sur https://platform.openai.com/signup[la platform openai^] et générez une https://platform.openai.com/api-keys[API Keys^].
 
-Voici la configuration dans le fichier `application.yml`
+Voici la configuration dans le fichier `application.yml` :
 
 [source,yaml]
 ----
@@ -176,16 +176,16 @@ spring:
       api-key: <VOTRE_API_KEY>
 ----
 
-Vous pouvez vous retrouver à configurer un fichier `application.properties`
+Vous pouvez alternativement utiliser un fichier `application.properties`
 
 [source,properties]
 ----
 spring.ai.openai.api-key=<VOTRE_API_KEY>
 ----
 
-= Le Controller
+== Le Controller
 
-Nous allons utiliser `OpenAiChatClient` une implémentation de `ChatClient` pour OpenAI que vous pourrez injecter dans votre classe. Voici un exemple
+Nous allons utiliser `OpenAiChatClient` une implémentation de `ChatClient` pour OpenAI que vous pourrez vous faire injecter via le constructeur dans votre classe. Voici un exemple :
 
 [source,java]
 ----
@@ -207,19 +207,19 @@ public class DemoOpenAiController {
 }
 ----
 
-= Les Modèles et la Température
+== Les Modèles et la Température
 
-== Les Modèles
+=== Les Modèles
 
 Les `modèles` d’IA sont des algorithmes conçus pour traiter et générer des informations, imitant souvent les fonctions cognitives humaines.
 
 TIP: En apprenant des modèles et des informations à partir de grands ensembles de données, ces modèles peuvent générer des prédictions, des textes, des images ou d'autres résultats, améliorant ainsi diverses applications dans tous les secteurs.
 
-Le modèle par défaut fournit par Spring AI est `gpt-3.5-turbo`, pour en savoirs plus sur les modèles, c'est par https://platform.openai.com/docs/models[ici^]
+Le modèle par défaut fourni par Spring AI est `gpt-3.5-turbo`, pour en savoir plus sur les modèles, c'est par https://platform.openai.com/docs/models[ici^]
 
-== Température
+=== La notion de température
 
-La notion de `température`; D'un point de vue technique, elle est étroitement associée à la notion d'échantillonnage, qui implique de choisir une réponse parmi plusieurs possibilités en fonction de leurs probabilités respectives. La température agit comme un paramètre de mise à l'échelle pour ces probabilités.
+D'un point de vue technique, la notion de `température` est étroitement associée à la notion d'échantillonnage, qui implique de choisir une réponse parmi plusieurs possibilités en fonction de leurs probabilités respectives. La température agit comme un paramètre de mise à l'échelle pour ces probabilités.
 
 D'un point de vue `humain`, la température est un paramètre utilisé pour réguler le degré de créativité et de prise de risque dans les réponses générées par les modèles GPT.
 
@@ -227,17 +227,17 @@ En modulant la température, il devient possible d'obtenir des réponses plus ou
 
 Vous pouvez ajuster cette valeur sur une échelle de 0 à 1 en fonction de vos besoins spécifiques.
 
-`Spring AI configure par défaut la température à 0,7`, un échantillonnage proportionnel aux probabilités du modèle, il représente un compromis entre la créativité et la cohérence.
+`Spring AI configure par défaut la température à 0,7`, un échantillonnage proportionnel aux probabilités du modèle, qui représente un compromis entre la créativité et la cohérence.
 
-= Le Prompt
+== Le Prompt
 
 Dans le domaine de l'intelligence artificielle, on utilise fréquemment le terme `prompt` pour décrire une directive ou une demande spécifiée à un modèle de langage ou à un système d'IA. Un prompt peut consister en une phrase ou une série de mots fournie par l'utilisateur pour solliciter des informations ou générer une réponse du modèle.
 
-Supposons que vous utilisiez un modèle de langage génératif tel que GPT-3 ou 4. Dans ce cas, vous pourriez soumettre un exemple d'instruction tel que "écrit du code Java clean..." pour obtenir une réponse générée par le modèle. Le prompt agit comme le point initial pour l'IA, lui permettant de comprendre la nature de la tâche a effectué.
+Supposons que vous utilisiez un modèle de langage génératif tel que GPT-3 ou 4. Dans ce cas, vous pourriez soumettre un exemple d'instruction tel que "écrit du code Java clean..." pour obtenir une réponse générée par le modèle. Le prompt agit comme le point initial pour l'IA, lui permettant de comprendre la nature de la tâche à effectuer.
 
-= Spring AI, générer du texte avec L’IA
+== La génération de texte avec L’IA
 
-Spring AI nous fournit une classe `Prompt` qui sert de support structuré à une séquence d'objets `Message`, chacun représentant une partie du prompt complète.
+Spring AI fournit la classe `Prompt` qui sert de support structuré à une séquence d'objets `Message`, chacun représentant une partie du prompt complet.
 Chaque message présent dans l'instruction a une fonction unique, caractérisée par des différences dans son contenu et son objectif.
 
 Les fonctions de ces messages sont variées, englobant des aspects tels que les questions de l'utilisateur, les réponses générées par l'intelligence artificielle ou des détails contextuels pertinents.
@@ -273,7 +273,7 @@ public class DemoOpenAiController {
 }
 ----
 
-Mais la méthode `generate` de `ChatClient` prend également un objet String comme paramètre qui ressemble à ci-dessous et renvoie simplement une chaine de caractère.
+Une surcharge de la méthode `generate` de `ChatClient` prend également un objet de type String en paramètre et renvoie simplement une chaine de caractère, comme dans l'exemple ci-dessous :
 
 [source,java]
 ----
@@ -328,20 +328,20 @@ public class DemoOpenAiController {
 }
 ----
 
-= Tester l'application
+== Le test de l'application
 
-Pour tester l'application vous pouvez utiliser un client REST, dans mon cas j'utilise https://www.postman.com/[postman^]
+Pour tester l'application, vous pouvez utiliser un client REST, dans mon cas j'utilise https://www.postman.com/[postman^]
 
-Voici les résultats de nos tests lorsque nous interrogeons le endpoint OpenAI en passant par notre applicatip
+Voici les résultats de mes tests lorsque j'interroge le endpoint OpenAI en passant par notre application.
 
-image::rickenbazolo/spring_ai/demo_genai-a.png[image,width=50%,align="center"]
+image::rickenbazolo/spring_ai/demo_genai-a.png[image,width=100%,align="center"]
 
-image::rickenbazolo/spring_ai/demo_genai-b.png[image,width=50%,align="center"]
+image::rickenbazolo/spring_ai/demo_genai-b.png[image,width=100%,align="center"]
 
-image::rickenbazolo/spring_ai/demo_genai-c.png[image,width=50%,align="center"]
+image::rickenbazolo/spring_ai/demo_genai-c.png[image,width=100%,align="center"]
 
-image::rickenbazolo/spring_ai/demo_genai-d.png[image,width=50%,align="center"]
+image::rickenbazolo/spring_ai/demo_genai-d.png[image,width=100%,align="center"]
 
-= Conclusion
+== Conclusion
 
 Dans cet article, nous avons posé les bases de l'intégration de Spring AI avec OpenAI et exploré quelques techniques de prompt (invites). Dans les prochains articles, nous verrons comment intégrer Spring AI à Azure OpenAI.
