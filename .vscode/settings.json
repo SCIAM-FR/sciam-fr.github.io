@@ -4,5 +4,6 @@
         "source-highlighter":"highlightjs",
         "stem":"latexmath"
     },
-    "cSpell.language": "en,fr,fr-FR"
+    "cSpell.language": "en,fr,fr-FR",
+    "asciidoc.antora.enableAntoraSupport": true
 }
