@@ -1,0 +1,726 @@
+:showtitle:
+:page-navtitle: Les collections séquencées (sequenced collections)
+:page-excerpt: Dans le JDK 21, l'API Collections a été enrichie de nouvelles interfaces pour modéliser des collections séquencées. Ces interfaces proposent des opérations de manière cohérente pour les collections de type List, Set et Map ayant un ordre de parcours défini.
+:layout: post
+:author: jeanmicheldoudoux
+:page-tags: [Java, Java 21, Collections]
+:page-vignette: java-21.png
+:page-liquid:
+
+
+= Les collections séquencées (sequenced collections)
+
+Introduit dans Java 1.2, le framework Collections propose de nombreuses interfaces et classes pour représenter et manipuler des groupes d'objets. Des interfaces fournissent une abstraction pour des implémentations générales et spéciales sous-jacentes, y compris des implémentations pour des utilisations concurrentes.
+
+Initialement l’API Collections est composée de deux grandes hiérarchies :
+
+* Les Collections : représentent une collection d’éléments. Elles démarrent avec l’interface `Collection` dont hérite les interfaces `Set` et `List`
+* Les Maps : représentent une collection de paires clé/valeurs, chaque clé étant unique dans la collection
+
+Les implémentations proposent différentes caractéristiques et fonctionnalités pour couvrir de nombreux besoins. Notamment, plusieurs types du framework Collections proposent un ordre de parcours. Par exemple :
+
+* Dans une `List`, les éléments sont parcourus dans leur ordre d’insertion et chaque élément possède un index
+* Dans un `SortedSet`, les éléments sont parcourus selon l’ordre de comparaison naturel pour des objets qui implémentent l’interface `Comparable` ou celui défini avec une implémentation de l’interface `Comparator`
+
+Il y a donc une notion de collections ordonnées et de collections triées, mais aucun type dédié n’exprime cette notion dans la hiérarchie des types de l’API Collections avant le JDK 21.
+
+Une collection séquencée est un ensemble d’éléments parcourable dans un ordre défini avec un premier et un dernier élément, les éléments intermédiaires ayant un successeur et un prédécesseur.
+
+Dans le JDK 21, l’API Collections est enrichie avec les "Sequenced Collections" : la hiérarchie de types est complétée par des interfaces qui permettent d'accéder au premier et au dernier élément de la collection en utilisant les nouvelles méthodes par défaut et d'obtenir une vue inversée des éléments de la collection.
+
+== Le besoin
+
+Il n'existait pas de super-type commun pour les collections qui ont un ordre de parcours.
+
+Un autre problème est qu'il n'existe pas de méthode uniforme pour accéder au premier et au dernier élément d'une collection, ou pour parcourir ses éléments dans l'ordre inverse. 
+
+Avant Java 21, il n’est pas facile d’obtenir le premier et le dernier élément d'une collection. Exemple avec une `ArrayList` :
+
+[source,java]
+----
+package fr.sciam.java21.sequenced_collection;
+
+import java.util.List;
+
+public class MainSequencedCollection {
+
+  public static void main(String[] args) {
+
+    List<String> elements = List.of("A","B","C");
+    String premier = elements.get(0); 
+    String dernier = elements.get(elements.size() - 1);
+
+    System.out.println(premier);
+    System.out.println(dernier);
+  }
+}
+----
+
+Sans interfaces pour les définir, les opérations liées à l'ordre de parcours sont incohérentes et parfois même absentes. Bien que les implémentations permettent d'obtenir le premier ou le dernier élément, chaque collection utilise sa propre méthode, et certaines ne sont pas évidentes ou sont même absentes :
+
+[width="100%",cols="34%,33%,33%",options="header",]
+|===
+|Collection |Premier élément |Dernier élément
+|`List` |`get(0)` |`get(list.size() - 1)`
+|`Deque` |`getFirst()` |`getLast()`
+|`SortedSet` |`first()` |`last()`
+|`LinkedHashSet` |`iterator().next()` |
+|===
+
+Certaines d'entre elles sont inutilement verbeuses, comme l'obtention du dernier élément d'une liste. D'autres ne sont même pas possibles sans une grande complexité et une lourdeur, comme pour obtenir le dernier élément d'un `LinkedHashSet` qui requière d’itérer sur l'ensemble des éléments.
+
+L'itération des éléments d'une collection du premier au dernier est simple et cohérente, car toutes les implémentations de Collection peuvent être parcourues vers l'avant à l'aide d'un `Iterator`.
+
+Mais l'itération dans l'ordre inverse ne l'est pas : elle est différente dans chaque cas. Le manque de cohérence lorsque l'on souhaite obtenir une vue inversée d'une collection est aussi flagrant.
+
+Par exemple :
+
+* L’interface `List` propose la méthode `listIterator()` qui retourne une instance de type `ListIterator()`
+* L’interface `Deque` propose la méthode `descendingIterator()`
+* L’interface `NavigableSet` propose la méthode `descendingSet()`
+* La classe `LinkedHashSet` ne propose pas de support pour l'itération inverse sur les éléments
+
+== L’ordre de parcours des éléments
+
+Une collection séquencée est une collection dont les éléments ont un ordre de parcours défini. Le terme "séquencé" tel qu'il est utilisé est le participe passé du verbe séquencer, qui signifie "arranger des éléments dans un ordre particulier".
+
+Le framework Collections possède le concept d'ordre de parcours, ce qui signifie qu'il existe un ordre bien défini pour parcourir les éléments d’une collection et que l'itération les visitera toujours dans cet ordre. C'est évidemment vrai pour tout ce qui est trié, mais l'ordre pour une séquence peut être plus lâche. Par exemple, les éléments non triés d'une liste sont séquencés parce que chaque élément a une position bien définie dans cette liste et le parcours des éléments va se faire dans leur ordre d’insertion. Toutes les `List` sont donc séquencées.
+
+Un exemple classique de collection non séquencée, donc sans ordre de parcours particulier, est une collection de type `Set`. Du moins en général, car il existe des implémentations de `Set` qui ont une séquence : c’est le cas pour les implémentations de l’interface `SortedSet` comme la classe `LinkedHashSet`.
+
+Pour les collections qui définissent un ordre de parcours, c’est uniquement précisé dans leurs spécifications, car il n’y avait pas de type dédié qui garantisse cette propriété dans l’API Collections.
+
+Il est important de noter que l’ordre de parcours n’implique pas forcément le positionnement physique des éléments dans cet ordre dans la structure de stockage. Cela signifie plutôt qu’un élément est soit avant (plus proche du premier élément), soit après (plus proche du dernier élément) un autre élément lors du parcours.
+
+Par exemple, une `List` est une collection séquencée parce que son ordre est basé sur l'index de chaque élément. `Un SortedSet` est également une collection séquencée, car son ordre est basé sur le comparateur naturel ou le comparateur spécifié de ses éléments. Un `LinkedHashSet` est un autre exemple de collection séquencée, car son ordre est basé sur l'ordre d'insertion de ses éléments.
+
+== Les collections séquencées
+
+Les collections séquencées proposent de répondre à certains de ces problèmes en introduisant de nouvelles interfaces qui définissent des opérations de manière cohérente pour toutes les collections ayant un ordre de parcours défini.
+
+Ces nouvelles interfaces de l'API Collections sont dites "séquencées", car les éléments sont arrangés dans une séquence", ce qui leur permet d’avoir un ordre de parcours bien défini. Une collection séquencée non vide possède un premier et un dernier élément, et les éléments entre eux ont des successeurs et des prédécesseurs.
+
+Le terme de séquence implique des éléments disposés dans un certain ordre. Le terme "ordonné" est utilisé pour indiquer une itération dans les deux sens et des opérations aux deux extrémités. Une collection ordonnée telle qu'une `Queue` est une exception notable : elle est ordonnée, mais elle n’est parcourable que dans un seul sens.
+
+Les collections séquencées (sequenced collections) sont définies dans la https://openjdk.org/jeps/431[JEP 431^] et sont introduites dans le JDK 21. Leur but est de modéliser des fonctionnalités communes des collections avec un ordre de parcours défini que sont les collections ordonnées et les collections triées.
+
+Trois nouvelles interfaces pour des Collections séquencées, des Sets séquencés et des Maps séquencées sont définis et intégrés dans la hiérarchie existante des types du framework Collections :
+
+* `SequencedCollection<E>` qui hérite de `Collection<E>`
+* `SequencedSet<E>` qui hérite de `SequencedCollection<E>` et de `Set<E>`
+* `SequencedMap<K, V>` qui hérite de `Map<K, V>`
+
+La plupart des méthodes déclarées dans ces interfaces possèdent une implémentation par défaut.
+
+Elles proposent d'effectuer des opérations communes à chaque extrémité et de parcourir les éléments du premier au dernier et du dernier au premier. Les fonctionnalités proposées par les interfaces offrent une API uniforme pour :
+
+* l’obtention du premier et du dernier élément
+* l’ajout au début et en fin de la collection
+* la suppression au début et en fin de la collection
+* le parcours dans l’ordre inverse des éléments avec la méthode `reversed()`
+
+Les nouvelles interfaces SequenceCollection du JDK 21 offrent plusieurs avantages aux développeurs :
+
+* un contrôle amélioré : les développeurs peuvent gérer des collections ordonnées en contrôlant précisément l'insertion, la récupération et la suppression d'éléments aux deux extrémités
+* un ordre de parcours cohérent : l'implémentation applique un ordre de parcours bien défini, garantissant que les éléments sont traités dans l'ordre spécifié
+* un ordre de parcours inverse : la méthode `reversed()` offre un support homogène pour le parcours dans l'ordre inverse des collections séquencées
+* la compatibilité avec l’existant : les nouvelles interfaces s'intègrent de manière transparente dans les API du framework Collections, ce qui facilite son intégration dans le code existant
+
+== L’intégration dans l’API Collections
+
+Les trois nouvelles interfaces SequencedCollection, SequencedSet et SequencedMap sont intégrées dans la hiérarchie des types existants afin d’offrir toutes les nouveautés sans compromettre la compatibilité.
+
+Leur implémentation est un compromis qui privilégie la rétrocompatibilité.
+
+.Le diagramme de classes des Sequenced Collections
+image::java-21-partie-2-001.png[image, width=100%]
+
+&nbsp;
+
+Plusieurs modifications sont apportées dans la hiérarchie des types de l’API Collections :
+
+* Les interfaces `List` et `Deque` héritent désormais de `SequencedCollection` comme super-interface immédiate,
+* L’interface `SortedSet` hérite de `SequencedSet` comme super-interface immédiate,
+* La classe `LinkedHashSet` implémente l’interface `SequencedSet`
+* L’interface `SequenceMap` hérite de `Map`
+* L’interface `SortedMap` hérite de `SequencedMap` comme super-interface immédiate,
+* La classe `LinkedHashMap` implémente l’interface `SequencedMap`
+
+La méthode `reversed()` permet d'obtenir une vue inversée d’une collection séquencée. Dans cette vue inversée, les concepts de premier et de dernier éléments sont inversés, de même que les concepts de successeur et de prédécesseur : cela signifie que le premier élément de la collection originale devient le dernier élément dans la vue inversée et vice versa. Cette fonctionnalité permet aux développeurs de travailler facilement avec des collections dans l'ordre inverse lorsque cela est nécessaire.
+
+Des redéfinitions covariantes de la méthode `reversed()` sont faites dans différences classes : par exemple, la méthode `reversed()` de l’interface `List` est redéfinie pour renvoyer une instance de type `List` plutôt qu'une instance de type `SequencedCollection`.
+
+== L’interface SequencedCollection
+
+L’interface `SequencedCollection` hérite de l’interface `Collection`.
+
+L’interface `SequencedCollection` concerne un type de collection qui représente une séquence d'éléments possédant un ordre de parcours défini et simplifie la gestion des données ordonnées d'une collection, en offrant un accès facile et uniforme aux éléments aux deux extrémités et en fournissant une méthode pour obtenir une vue de la collection dans l'ordre inverse :
+
+* `void addFirst(E)`
+* `void addLast(E)`
+* `E getFirst()`
+* `E getLast()`
+* `E removeFirst()`
+* `E removeLast()`
+
+Toutes ces méthodes sont des méthodes par défaut qui proposent donc une implémentation par défaut.
+
+[source,java]
+----
+package fr.sciam.java21.sequenced_collection;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainSequencedCollection {
+
+  public static void main(String[] args) {
+
+    List<Integer> nombres = new ArrayList<>();
+    nombres.add(2);
+    nombres.addFirst(1);
+    nombres.addLast(3);
+    System.out.println(nombres);
+    System.out.println(nombres.getFirst());
+    System.out.println(nombres.getLast());
+    nombres.removeLast();
+    nombres.removeFirst();
+    System.out.println(nombres);
+  }
+}
+----
+
+L'exécution du code affiche : 
+
+[source,plain]
+----
+[1, 2, 3]
+1
+3
+[2]
+----
+
+Les méthodes `addXxx()` et `removeXxx()` sont facultatives et leur implémentation par défaut lèvent une exception de type `UnsupportedOperationException`, principalement pour prendre en charge le cas des collections non modifiables et des collections dont l'ordre de tri est déjà défini. Les méthodes `getXxx()` et `removeXxx()` lèvent une exception de type `NoSuchElementException` si la collection est vide.
+
+L’interface `SequencedCollection` propose la méthode `reversed()` qui renvoie une `SequencedCollection` pour obtenir une vue inversée des éléments de la collection d'origine. L'ordre de parcours des éléments dans la vue renvoyée est l'inverse de l'ordre de parcours des éléments dans cette collection.
+
+Les modifications apportées à la collection sous-jacente peuvent ou non être visibles dans la vue inversée, en fonction de l'implémentation. Si elles sont autorisées, les modifications apportées à la vue modifient la collection d'origine.
+
+[source,java]
+----
+package fr.sciam.java21.sequenced_collection;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class TestSequencedCollection {
+
+  public static void main(String[] args) {
+
+    var elements = new ArrayList<>(Arrays.asList("1", "2", "3", "4"));
+    System.out.println("elements : " + elements);
+    var inverse = elements.reversed();
+    System.out.println("inverse  : " + inverse);
+
+    elements.add(2, "5");
+    System.out.println("\nelements : " + elements);
+    System.out.println("inverse  : " + inverse);
+
+    inverse.add(1, "6");
+    System.out.println("\ninverse  : " + inverse);
+    System.out.println("elements : " + elements);
+  }
+}
+----
+
+L'exécution du code affiche : 
+
+[source,plain]
+----
+elements : [1, 2, 3, 4]
+inverse  : [4, 3, 2, 1]
+
+elements : [1, 2, 5, 3, 4]
+inverse  : [4, 3, 5, 2, 1]
+
+inverse  : [4, 6, 3, 5, 2, 1]
+elements : [1, 2, 5, 3, 6, 4]
+----
+
+
+== L’interface SequencedSet
+
+Un `SequencedSet` peut être considéré soit comme un `Set` qui possède également un ordre de parcours bien défini, soit comme une `SequencedCollection` qui possède des éléments uniques.
+
+L’interface `SequencedSet<E>` hérite des interfaces `Set<E>` et `SequencedCollection<E>`.
+
+Elle n'offre aucune méthode supplémentaire, mais contient une redéfinition covariante de la méthode `reversed()` qui renvoie une instance de type `SequenceSet<E>`.
+
+L’interface `SequencedSet` est étendue par `SortedSet` et implémentée par `LinkedHashSet`.
+
+Les méthodes `addXxx()` de l’interface `SequencedSet` ont des comportements spécifiques pour la classe `LinkedHashSet` et l’interface `SortedSet`.
+
+Pour la classe `LinkedHashSet`, les méthodes `addFirst()` et `addLast()` ont une sémantique particulière : elles positionnent l'entrée si elle est déjà présente dans l'ensemble. Si l'élément est déjà présent dans l'ensemble, il est déplacé à la position appropriée. Cela permet de remédier partiellement à un manque de longue date de `LinkedHashSet` qui empêchait de repositionner des éléments.
+
+L’interface `SortedSet`, dont la sémantique positionne les éléments par comparaison relative, ne peut pas prendre en charge les opérations de positionnement explicite telles que les méthodes `addFirst(E)` et `addLast(E)` déclarées dans la superinterface `SequencedCollection`. L’invocation de ces méthodes lève une exception de type `UnsupportedOperationException`.
+
+[source,java]
+----
+package fr.sciam.java21.sequenced_collection;
+
+import java.util.LinkedHashSet;
+import java.util.List;
+
+public class TestSequencedCollection {
+
+  public static void main(String[] args) {
+
+    LinkedHashSet<Integer> nombres = new LinkedHashSet<>(List.of(2, 3, 4));
+    System.out.println(nombres);
+    
+    Integer premier = nombres.getFirst();
+    Integer dernier = nombres.getLast();
+    System.out.println(premier);
+    System.out.println(dernier);
+    
+    nombres.addFirst(1);
+    nombres.addLast(5);
+    System.out.println(nombres);
+    
+    System.out.println(nombres.reversed());
+  }
+}
+----
+
+L'exécution du code affiche : 
+
+[source,plain]
+----
+[2, 3, 4]
+2
+4
+[1, 2, 3, 4, 5]
+[5, 4, 3, 2, 1]
+----
+
+== L’interface SequencedMap
+
+L’interface `SequencedMap` est une interface spécialisée conçue pour les `Map` dont les clés, les valeurs et les entrées ont un ordre de parcours défini tout comme `LinkedHashMap`, qui introduit une nouvelle approche de la gestion des données ordonnées dans les Maps.
+
+L’interface `SequencedMap<K, V>` hérite de l’interface `Map<K, V>` et fournit des méthodes pour accéder à ses entrées et les manipuler en fonction de leur ordre de parcours.
+
+Elle propose des méthodes pour manipuler les entrées d’une Map en tenant compte de leur ordre d'accès :
+
+* `Map.Entry<K, V> firstEntry()` : renvoyer la première entrée de la Map
+* `Map.Entry<K, V> lastEntry()` : renvoyer la dernière entrée de la Map
+* `Map.Entry<K, V> pollFirstEntry()` : supprimer et renvoyer la première entrée de la Map
+* `Map.Entry<K, V> pollLastEntry()` : supprimer et renvoyer la dernière entrée de la Map
+* `Map.Entry<K, V> putFirst(K k, V v)` : insérer une entrée au début de la Map
+* `Map.Entry<K, V> putLast(K k, V v)` : insérer une entrée à la fin de la Map
+* `SequencedMap<K,V> reversed()` : obtenir une vue inversée de la Map
+* `SequencedSet<Map.Entry<K,V>> sequencedEntrySet()` : renvoyer un SequencedSet des entrées de la Map, en conservant l'ordre de parcours
+* `SequencedSet<K> sequencedKeySet()` : renvoyer un SequencedSet des clés de la Map, en conservant l'ordre de parcours
+* `SequencedCollection<V> sequencedValues()` : renvoyer une SequencedCollection des valeurs Map, en conservant l'ordre de parcours
+
+Toutes les méthodes, à l'exception de `reversed()`, sont des méthodes par défaut et fournissent donc une implémentation par défaut.
+
+Les objets retournés par les méthodes `firstEntry()`, `lastEntry()`, `pollFirstEntry()` et `pollLastEntry()` de l’interface `SequencedMap` ne prennent pas en charge la mutation de la Map sous-jacente en utilisant leur méthode optionnelle `setValue()`. L’invocation de la méthode `setValue()` dans ce contexte lève une exception de type `UnsupportedOperationException`.
+
+[source,java]
+----
+package fr.sciam.jav21.sequenced_collection;
+
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
+
+public class MainSequencedCollection {
+
+  public static void main(String[] args) {
+    
+  LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+  map.put(1, "Valeur1");
+  map.put(2, "Valeur2");
+  map.put(3, "Valeur3");
+
+  Entry<Integer, String> entry = map.firstEntry();
+  entry.setValue("Valeur1 modifiee");
+  }
+}
+----
+
+L'exécution du code affiche : 
+
+[source,plain]
+----
+Exception in thread "main" java.lang.UnsupportedOperationException: not supported
+	at java.base/jdk.internal.util.NullableKeyValueHolder.setValue(NullableKeyValueHolder.java:126)
+	at fr.sciam.java21.sequenced_collection.TestSequencedCollection.main(TestSequencedCollection.java:20)
+----
+
+Ce type de modification est cependant toujours possible en utilisant un `Iterator`.
+
+Les méthodes `putXxx(K, V)` ont une sémantique particulière, similaire aux méthodes `addXxx(E)` correspondantes de `SequencedSet` : pour les Maps telles que `LinkedHashMap`, elles ont pour effet supplémentaire de repositionner l'entrée si elle est déjà présente dans la `Map`. Pour des instances de type `SortedMap`, ces méthodes lèvent une exception de type `UnsupportedOperationException`.
+
+Les méthodes `putLast()` et `putFirst()`, qui sont supportées par `LinkedHashMap`, ne le sont pas par `SortedMap`, pour les mêmes raisons que par `SortedSet`.
+
+Comme pour l’interface `SequencedCollection`, les méthodes `putXxx()` lèvent une exception de type `UnsupportedOperationException` pour les Maps non modifiables ou les Maps dont l'ordre de tri est déjà défini. L’invocation de l’une des méthodes promues à partir de `NavigableMap` sur une `Map` vide lève une exception de type `NoSuchElementException`.
+
+Plusieurs méthodes permettent de faciliter le parcours des éléments :
+
+* `SequencedMap<K,V> reversed()` :
+* `SequencedSet<K> sequencedKeySet()`;
+* `SequencedCollection<V> sequencedValues()`;
+* `SequencedSet<Entry<K,V>> sequencedEntrySet()`;
+
+L'ensemble des clés et l'ensemble des entrées sont désormais des `SequencedSet`, et les méthodes s'appellent `sequencedKeySet()` et `sequencedEntrySet()`, mais ce sont toujours des vues sur le contenu de la `Map`.
+
+Les vues fournies par les méthodes `keySet()`, `values()`, `entrySet()`, `sequencedKeySet()`, `sequencedValues()` et `sequencedEntrySet()` reflètent toutes le même ordre de parcours des éléments. La différence est que les valeurs de retour des méthodes `sequencedKeySet()`, `sequencedValues()` et `sequencedEntrySet()` sont des types séquencés.
+
+La méthode `reversed()` renvoie une vue inversée de la Map.
+
+Les vues `SequencedMap.sequencedKeySet().reversed()` et `SequencedMap.reversed().sequencedKeySet()` sont fonctionnellement équivalentes.
+
+Les méthodes `sequencedKeySet()`, `sequencedValues()` et `sequencedEntrySet()` sont analogues aux méthodes `keySet()`, `values()` et `entrySet()` de l'interface `Map`. Toutes ces méthodes renvoient des vues de la collection sous-jacente, les modifications apportées à la vue étant visibles dans la collection sous-jacente et vice versa. L'ordre de parcours de ces vues correspond à l'ordre de parcours de la `Map` sous-jacente. +
+ +
+La différence entre les méthodes de l'interface `SequencedMap` et les méthodes de `Map` est que les méthodes `sequencedXxx()` ont un type de retour sous la forme d’une collection séquencée.
+
+L’implémentation de la méthode `sequencedKeySet()` renvoie une vue de type SequencedSet de l'ensemble de clés de la Map et se comporte comme suit :
+
+* Les méthodes `add()` et `addAll()` lèvent une exception de type `UnsupportedOperationException`
+* La méthode `reversed()` renvoie une vue inversée de la Map de type `SequencedKeySet`
+* Les autres méthodes invoquent les méthodes correspondantes de la vue `keySet` de la `Map`
+
+L’implémentation de la méthode `sequencedValues()` retourne une vue de type `SequencedCollection<V>` des valeurs de la Map et se comporte comme suit :
+
+* Les méthodes `add()` et `addAll()` lèvent une exception de type `UnsupportedOperationException`
+* La méthode `reversed()` renvoie une vue inversée des valeurs de la `Map`
+* Les autres méthodes invoquent les méthodes correspondantes de la vue des valeurs de la `Map`
+
+L’implémentation de la méthode `sequencedEntrySet()` retourne une vue de type `SequencedSet<Entry>` des entrées de la `Map` et se comporte comme suit :
+
+* Les méthodes `add()` et `addAll()` lèvent une exception de type `UnsupportedOperationException`
+* La méthode `reversed()` renvoie la vue inversée des entrées de la `Map`
+* Les autres méthodes invoquent les méthodes correspondantes de la vue `entrySet` de la Map
+
+[source,java]
+----
+package fr.sciam.java21.sequenced_collection;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class MainSequencedCollection {
+
+  public static void main(String[] args) {
+
+    LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+
+    map.put(1, "Valeur1");
+    map.put(2, "Valeur2");
+    map.put(3, "Valeur3");
+
+    System.out.println(map);
+
+    System.out.println(map.firstEntry());
+    System.out.println(map.lastEntry());
+
+    
+    Map.Entry<Integer, String> premier = map.pollFirstEntry();
+    Map.Entry<Integer, String> dernier = map.pollLastEntry();
+
+    System.out.println("\n"+premier);
+    System.out.println(dernier);
+    System.out.println(map);
+
+    map.putFirst(1, "Valeur1");
+    map.putLast(3, "Valeur3");
+
+    System.out.println("\n"+map);
+    
+    System.out.println("\n"+map.reversed());
+  }
+}
+----
+
+L'exécution du code affiche : 
+
+[source,plain]
+----
+{1=Valeur1, 2=Valeur2, 3=Valeur3}
+1=Valeur1
+3=Valeur3
+
+1=Valeur1
+3=Valeur3
+{2=Valeur2}
+
+{1=Valeur1, 2=Valeur2, 3=Valeur3}
+
+{3=Valeur3, 2=Valeur2, 1=Valeur1}
+----
+
+== Les exceptions levées par certaines méthodes
+
+L’invocation des nouvelles méthodes `addXxx()` ou `removeXxx()` sur une collection non modifiable lève une exception de type `UnsupportedOperationException`.
+
+[source,java]
+----
+import java.util.List;
+
+public class Main {
+
+  public static void main(String[] args) {
+
+    List<Integer> nombres = List.of(1, 2, 3);
+    nombres.addFirst(0);
+  }
+}
+----
+
+L'exécution du code affiche : 
+
+[source,plain]
+----
+Exception in thread "main" java.lang.UnsupportedOperationException
+        at java.base/java.util.ImmutableCollections.uoe(ImmutableCollections.java:142)
+        at java.base/java.util.ImmutableCollections$AbstractImmutableList.add(ImmutableCollections.java:258)
+        at java.base/java.util.List.addFirst(List.java:796)
+        at Main.main(Main.java:8)
+----
+
+Dans les collections qui ont déjà un ordre de tri défini, l’invocation des méthodes forçant l'ordre, par exemple `addFirst()`, `addLast()`, ..., n'a pas de sens et lève une exception de type `UnsupportedOperationException`.
+
+[source,java]
+----
+import java.util.List;
+import java.util.TreeSet;
+
+public class Main {
+
+  public static void main(String[] args) {
+
+    TreeSet<Integer> set = new TreeSet<>(List.of(1, 2, 3));
+    set.addFirst(4);
+  }
+}
+----
+
+L'exécution du code affiche : 
+
+[source,plain]
+----
+Exception in thread "main" java.lang.UnsupportedOperationException
+        at java.base/java.util.TreeSet.addFirst(TreeSet.java:476)
+        at Main.main(Main.java:9)
+----
+
+== La gestion des collections séquencées vides
+
+Toute tentative d'utiliser une méthode des interfaces séquencées sur une collection vide lève une exception de type `NoSuchElementException`.
+
+[source,java]
+----
+import java.util.List;
+import java.util.SequencedCollection;
+
+public class Main {
+
+  public static void main(String[] args) {
+    SequencedCollection<String> elements = List.of();
+    elements.getFirst();
+  }
+}
+----
+
+L'exécution du code affiche : 
+
+[source,plain]
+----
+Exception in thread "main" java.util.NoSuchElementException
+        at java.base/java.util.List.getFirst(List.java:825)
+        at Main.main(Main.java:8)
+----
+
+== Les incompatibilités
+
+Les modifications apportées aux collections séquencées ont été intégrées dans le framework Collections, et le code qui utilise simplement des implémentations de collections ne sera pas affecté. Cependant, si des classes implémentent d'autres interfaces du framework Collections pour créer des types personnalisés, quelques incompatibilités peuvent survenir.
+
+Les nouvelles interfaces dans la hiérarchie du framework Collections introduisent de nouvelles méthodes par défaut. Lorsque de tels changements sont apportés, ils peuvent entraîner des conflits qui se traduisent par des incompatibilités au niveau des sources ou des binaires. Tous les conflits qui se produisent concernent le code qui implémente de nouvelles collections ou qui sous-classe des classes de collections existantes.
+
+=== Les confits de nommage des méthodes
+
+De nouvelles interfaces avec de nouvelles méthodes ont été intégrées dans la hiérarchie des types de l’API Collections. Ces nouvelles méthodes peuvent entrer en conflit avec des méthodes de classes existantes. Par exemple :
+
+[source,java]
+----
+class MaList<E> implements List<E> {
+  public Optional<E> getFirst() {
+    // ...
+  }
+}
+----
+
+L'interface `SequencedCollection`, dont hérite `java.util.List` en Java 21, définit une nouvelle méthode : `E getFirst()`.
+
+Puisque le type de retour est différent, cela créera une incompatibilité de source. Il ne devrait cependant pas y avoir d’incompatibilité binaire, puisque les binaires existants continueront à appeler l'ancienne méthode.
+
+Un autre type de conflit peut survenir vis à vis des modificateurs d'accès. Par exemple, une méthode avec une visibilité `package-private` ne peut pas remplacer une méthode définie dans une interface, qui doit avoir une visibilité `public`. Malheureusement, le seul moyen d'atténuer l'incompatibilité des sources est de renommer la méthode conflictuelle ou de réorganiser la hiérarchie des types, par exemple, pour que `MaList` n'implémente plus `List`.
+
+=== Les conflits de redéfinitions covariantes
+
+Les interfaces List et Deque possèdent toutes deux des redéfinitions covariantes de la méthode `reversed()` :
+
+* Pour List : `List<E> reversed()`;
+* Pour Deque : `Deque<E> reversed()`;
+
+Cela ne pose aucun souci tant qu'une implémentation de collection n'implémente qu'une seule des deux interfaces, `List` ou `Deque`, mais pas les deux. Cependant, une implémentation peut implémenter à la fois `List` et `Deque` :
+
+[source,java]
+----
+public class MaList<E> implements List<E>, Deque<E> { 
+  // … 
+}
+----
+
+Cela se compile correctement jusqu’à java 20, mais la compilation échoue à partir de Java 21. Les interfaces `List` et `Deque` définissent la méthode `reversed()`, l'une renvoyant un objet de type `List` et l'autre un objet de type `Deque`. Le compilateur ne peut pas choisir l'une ou l'autre, donc il émet une erreur de compilation.
+
+La solution consiste à ajouter une redéfinition de la méthode `reversed()` dans la classe `MaList` qui renvoie un type qui est à la fois une `List` et une `Deque`. Il peut s’agir du type `MaList` elle-même (ou d’une sous-classe), ou d’une autre interface définie à cet effet.
+
+Il y a un exemple de cela dans le JDK lui-même. La classe `java.util.LinkedList` implémente à la fois `List` et `Deque` et a résolu ce problème en redéfinissant une méthode `reversed()` qui renvoie une instance de type `LinkedList`.
+
+=== Les conflits d’inférence de type
+
+Les résultats de l’inférence de type par le compilateur peuvent différer, ce qui peut créer des conflits Par exemple :
+
+[source,plain]
+----
+C:\java>jshell
+|  Welcome to JShell -- Version 20
+|  For an introduction type: /help intro
+
+jshell> var list = List.of(new ArrayDeque<String>(), List.of("test"));
+list ==> [[], [test]]
+|  created variable list : List<Collection<String>>
+
+jshell>
+----
+
+À partir de Java 21, le type inféré par le compilateur est différent à cause de l’introduction de l’interface `SequencedCollection` commune à `List` et `Deque`.
+
+[source,plain]
+----
+C:\java>jshell
+|  Welcome to JShell -- Version 21
+|  For an introduction type: /help intro
+
+jshell> var list = List.of(new ArrayDeque<String>(), List.of("test"));
+list ==> [[], [test]]
+|  modified variable list : List<SequencedCollection<String>>
+|    update overwrote variable list : List<SequencedCollection<String>>
+----
+
+Ainsi le code ci-dessous se compile sans erreur avec le JDK 20.
+
+[source,java]
+----
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.List;
+
+public class TestInference {
+
+  List<Collection<String>> getListe() {
+    var liste = List.of(new ArrayDeque<String>(), List.of("test"));
+    return liste;
+  }
+}
+----
+
+Il génère une erreur de compilation avec le JDK 21, car le type paramétré de la liste déduit change avec l'ajout des nouveaux types de collection.
+
+[source,plain]
+----
+C:\java>javac TestInference.java
+TestInference.java:9: error: incompatible types: List<SequencedCollection<String>> cannot be converted to List<Collection<String>>
+    return liste;
+           ^
+1 error
+----
+
+Le type de `List.of(a, b)` est `List<T>` où `T` est le supertype commun, plus formellement, la "plus proche borne supérieure" (least upper bound) des arguments a et b. Dans le JDK 20, `T` était `Collection<String>` et le type de la liste était donc `List<Collection<String>>`. Cela correspond au type de retour de la méthode, et le code se compile correctement.
+
+Avec le JDK 21, l'interface `SequencedCollection` a été introduite et les implémentations de `List` et `Deque` l’implémentent toutes les deux, de sorte que le nouveau supertype commun `T` est devenu `SequencedCollection<String>`. Le type de la liste est donc `List<SequencedCollection<String>>`. Cela ne correspond pas au type de retour de la méthode, ce qui entraîne l’erreur de compilation.
+
+Il y a plusieurs façons de corriger cette erreur, mais la plus simple est d'utiliser une déclaration de type explicite pour la liste au lieu d'utiliser l’inférence de type.
+
+[source,java]
+----
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.List;
+
+public class TestInference {
+
+  List<Collection<String>> getListe() {
+    List<Collection<String>> liste = List.of(new ArrayDeque<String>(), List.of("test"));
+    return liste;
+  }
+}
+----
+
+Cela permet de déclarer explicitement que le type de la liste est un type en accord avec le type de retour de la méthode, empêchant ainsi la déduction d'un type différent par inférence en désaccord avec le type de retour de la méthode.
+
+== Les collections séquencées immutables
+
+Trois nouvelles fabriques ont été ajoutées dans la classe `java.utils.Collections` pour obtenir des collections non modifiables sur les collections séquencées passées en paramètre :
+
+* `SequencedCollection<T> unmodifiableSequencedCollection(SequencedCollection<? extends T>)`
+* `SequencedSet<T> unmodifiableSequencedSet(SequencedSet<? extends T>)`
+* `<K, V> SequencedMap<K,V> unmodifiableSequencedMap(SequencedMap<? extends K,? extends V>)`
+
+[source,java]
+----
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.SequencedMap;
+
+public class Main {
+
+  public static void main(String[] args) {
+
+    LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+    map.put(1, "Valeur1");
+    map.put(2, "Valeur2");
+    map.put(3, "Valeur3");
+
+    SequencedMap<Integer, String> unmodifiableSequencedMap = Collections.unmodifiableSequencedMap(map);
+
+    try {
+      unmodifiableSequencedMap.pollFirstEntry();      
+    } catch (UnsupportedOperationException e) {
+      e.printStackTrace();
+    }
+  }
+}
+----
+
+L'exécution du code affiche : 
+
+[source,plain]
+----
+java.lang.UnsupportedOperationException
+        at java.base/java.util.Collections$UnmodifiableSequencedMap.pollFirstEntry(Collections.java:2018)
+        at Main.main(Main.java:17)
+----
+
+== Conclusion
+
+Le framework Collection de Java est riche, mais il est toujours possible de l'améliorer.
+
+En répondant au besoin de longue date d'une API unifiée pour gérer les collections avec un ordre de parcours défini, les Sequenced Collections du JDK 21 permettent aux développeurs de travailler de manière simple et uniforme avec des collections séquencées en proposant des opérations aux deux extrémités, un ordre de rencontre cohérent et la possibilité de créer des vues inversées.
+
+L’introduction des collections, des ensembles et des Maps séquencés, peut offrir aux développeurs une approche plus intuitive et rationalisée de la gestion des structures de données proposant un ordre de parcours défini.
+
+Elles constituent un ajout pratique au JDK 21 et améliorent la facilité d'utilisation de certaines collections.
+
+&nbsp;
