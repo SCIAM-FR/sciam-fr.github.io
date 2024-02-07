@@ -20,7 +20,7 @@ Initialement l’API Collections est composée de deux grandes hiérarchies :
 Les implémentations proposent différentes caractéristiques et fonctionnalités pour couvrir de nombreux besoins. Notamment, plusieurs types du framework Collections proposent un ordre de parcours, par exemple :
 
 * Dans une `List`, les éléments sont parcourus dans leur ordre d’insertion et chaque élément possède un index
-* Dans une `SortedSet`, les éléments sont parcourus selon l’ordre de comparaison naturel pour des objets qui implémentent l’interface `Comparable` ou celui défini avec une implémentation de l’interface `Comparator`
+* Dans un `SortedSet`, les éléments sont parcourus selon l’ordre de comparaison naturel pour des objets qui implémentent l’interface `Comparable` ou celui défini avec une implémentation de l’interface `Comparator`
 
 Il y a donc une notion de collections ordonnées et de collections triées mais aucun type dédié n’exprime cette notion dans la hiérarchie des types de l’API Collections avant le JDK 21.
 
@@ -67,7 +67,7 @@ Sans interfaces pour les définir, les opérations liées à l'ordre de parcours
 |`LinkedHashSet` |`iterator().next()` |
 |===
 
-Certaines d'entre elles sont inutilement lourdes, comme l'obtention du dernier élément d'une liste. D'autres ne sont même pas possibles sans une grande complexité, comme pour obtenir le dernier élément d'un `LinkedHashSet` qui requière d’itérer sur l'ensemble des éléments.
+Certaines d'entre elles sont inutilement verbeux, comme l'obtention du dernier élément d'une liste. D'autres ne sont même pas possibles sans une grande complexité et une lourdeur, comme pour obtenir le dernier élément d'un `LinkedHashSet` qui requière d’itérer sur l'ensemble des éléments.
 
 L'itération des éléments d'une collection du premier au dernier est simple et cohérente car toutes les implémentations de Collection peuvent être parcourues vers l'avant à l'aide d'un `Iterator`.
 
