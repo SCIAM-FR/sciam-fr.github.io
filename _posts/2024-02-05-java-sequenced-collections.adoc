@@ -67,7 +67,7 @@ Sans interfaces pour les définir, les opérations liées à l'ordre de parcours
 |`LinkedHashSet` |`iterator().next()` |
 |===
 
-Certaines d'entre elles sont inutilement verbeux, comme l'obtention du dernier élément d'une liste. D'autres ne sont même pas possibles sans une grande complexité et une lourdeur, comme pour obtenir le dernier élément d'un `LinkedHashSet` qui requière d’itérer sur l'ensemble des éléments.
+Certaines d'entre elles sont inutilement verbeuses, comme l'obtention du dernier élément d'une liste. D'autres ne sont même pas possibles sans une grande complexité et une lourdeur, comme pour obtenir le dernier élément d'un `LinkedHashSet` qui requière d’itérer sur l'ensemble des éléments.
 
 L'itération des éléments d'une collection du premier au dernier est simple et cohérente car toutes les implémentations de Collection peuvent être parcourues vers l'avant à l'aide d'un `Iterator`.
 
