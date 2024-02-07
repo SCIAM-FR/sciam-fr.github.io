@@ -17,12 +17,12 @@ Initialement l’API Collections est composée de deux grandes hiérarchies :
 * Les Collections : représentent une collection d’éléments. Elles démarrent avec l’interface `Collection` dont hérite les interfaces `Set` et `List`
 * Les Maps : représentent une collection de paires clé/valeurs, chaque clé étant unique dans la collection
 
-Les implémentations proposent différentes caractéristiques et fonctionnalités pour couvrir de nombreux besoins. Notamment, plusieurs types du framework Collections proposent un ordre de parcours, par exemple :
+Les implémentations proposent différentes caractéristiques et fonctionnalités pour couvrir de nombreux besoins. Notamment, plusieurs types du framework Collections proposent un ordre de parcours. Par exemple :
 
 * Dans une `List`, les éléments sont parcourus dans leur ordre d’insertion et chaque élément possède un index
 * Dans un `SortedSet`, les éléments sont parcourus selon l’ordre de comparaison naturel pour des objets qui implémentent l’interface `Comparable` ou celui défini avec une implémentation de l’interface `Comparator`
 
-Il y a donc une notion de collections ordonnées et de collections triées mais aucun type dédié n’exprime cette notion dans la hiérarchie des types de l’API Collections avant le JDK 21.
+Il y a donc une notion de collections ordonnées et de collections triées, mais aucun type dédié n’exprime cette notion dans la hiérarchie des types de l’API Collections avant le JDK 21.
 
 Une collection séquencée est un ensemble d’éléments parcourable dans un ordre défini avec un premier et un dernier élément, les éléments intermédiaires ayant un successeur et un prédécesseur.
 
@@ -69,7 +69,7 @@ Sans interfaces pour les définir, les opérations liées à l'ordre de parcours
 
 Certaines d'entre elles sont inutilement verbeuses, comme l'obtention du dernier élément d'une liste. D'autres ne sont même pas possibles sans une grande complexité et une lourdeur, comme pour obtenir le dernier élément d'un `LinkedHashSet` qui requière d’itérer sur l'ensemble des éléments.
 
-L'itération des éléments d'une collection du premier au dernier est simple et cohérente car toutes les implémentations de Collection peuvent être parcourues vers l'avant à l'aide d'un `Iterator`.
+L'itération des éléments d'une collection du premier au dernier est simple et cohérente, car toutes les implémentations de Collection peuvent être parcourues vers l'avant à l'aide d'un `Iterator`.
 
 Mais l'itération dans l'ordre inverse ne l'est pas : elle est différente dans chaque cas. Le manque de cohérence lorsque l'on souhaite obtenir une vue inversée d'une collection est aussi flagrant.
 
@@ -88,23 +88,23 @@ Le framework Collections possède le concept d'ordre de parcours, ce qui signifi
 
 Un exemple classique de collection non séquencée, donc sans ordre de parcours particulier, est une collection de type `Set`. Du moins en général, car il existe des implémentations de `Set` qui ont une séquence : c’est le cas pour les implémentations de l’interface `SortedSet` comme la classe `LinkedHashSet`.
 
-Pour les collections qui définissent un ordre de parcours, c’est uniquement précisé dans leurs spécifications car il n’y avait pas de type dédié qui garantisse cette propriété dans l’API Collections.
+Pour les collections qui définissent un ordre de parcours, c’est uniquement précisé dans leurs spécifications, car il n’y avait pas de type dédié qui garantisse cette propriété dans l’API Collections.
 
 Il est important de noter que l’ordre de parcours n’implique pas forcément le positionnement physique des éléments dans cet ordre dans la structure de stockage. Cela signifie plutôt qu’un élément est soit avant (plus proche du premier élément), soit après (plus proche du dernier élément) un autre élément lors du parcours.
 
-Par exemple, une `List` est une collection séquencée parce que son ordre est basé sur l'index de chaque élément. `Un SortedSet` est également une collection séquencée car son ordre est basé sur le comparateur naturel ou le comparateur spécifié de ses éléments. Un `LinkedHashSet` est un autre exemple de collection séquencée car son ordre est basé sur l'ordre d'insertion de ses éléments.
+Par exemple, une `List` est une collection séquencée parce que son ordre est basé sur l'index de chaque élément. `Un SortedSet` est également une collection séquencée, car son ordre est basé sur le comparateur naturel ou le comparateur spécifié de ses éléments. Un `LinkedHashSet` est un autre exemple de collection séquencée, car son ordre est basé sur l'ordre d'insertion de ses éléments.
 
 == Les collections séquencées
 
 Les collections séquencées proposent de répondre à certains de ces problèmes en introduisant de nouvelles interfaces qui définissent des opérations de manière cohérente pour toutes les collections ayant un ordre de parcours défini.
 
-Ces nouvelles interfaces de l'API Collections sont dites "séquencées" car les éléments sont arrangés dans une séquence", ce qui leur permet d’avoir un l'ordre de parcours bien défini. Une collection séquencée non vide possède un premier et un dernier élément, et les éléments entre eux ont des successeurs et des prédécesseurs.
+Ces nouvelles interfaces de l'API Collections sont dites "séquencées", car les éléments sont arrangés dans une séquence", ce qui leur permet d’avoir un ordre de parcours bien défini. Une collection séquencée non vide possède un premier et un dernier élément, et les éléments entre eux ont des successeurs et des prédécesseurs.
 
-Le terme de séquence implique des éléments disposés dans un certain ordre. Le terme "ordonné" est utilisé pour indiquer une itération dans les deux sens et des opérations aux deux extrémités. Une collection ordonnée telle qu'une `Queue` est une exception notable : elle est ordonnée mais elle n’est parcourable que dans un seul sens.
+Le terme de séquence implique des éléments disposés dans un certain ordre. Le terme "ordonné" est utilisé pour indiquer une itération dans les deux sens et des opérations aux deux extrémités. Une collection ordonnée telle qu'une `Queue` est une exception notable : elle est ordonnée, mais elle n’est parcourable que dans un seul sens.
 
 Les collections séquencées (sequenced collections) sont définies dans la https://openjdk.org/jeps/431[JEP 431^] et sont introduites dans le JDK 21. Leur but est de modéliser des fonctionnalités communes des collections avec un ordre de parcours défini que sont les collections ordonnées et les collections triées.
 
-Trois nouvelles interfaces pour des Collections séquencées, des Set séquencés et des Maps séquencées sont définies et intégrées dans la hiérarchie existante des types du framework Collections :
+Trois nouvelles interfaces pour des Collections séquencées, des Sets séquencés et des Maps séquencées sont définis et intégrés dans la hiérarchie existante des types du framework Collections :
 
 * `SequencedCollection<E>` qui hérite de `Collection<E>`
 * `SequencedSet<E>` qui hérite de `SequencedCollection<E>` et de `Set<E>`
@@ -254,7 +254,7 @@ Un `SequencedSet` peut être considéré soit comme un `Set` qui possède égale
 
 L’interface `SequencedSet<E>` hérite des interfaces `Set<E>` et `SequencedCollection<E>`.
 
-Elle n'offre aucune méthode supplémentaire mais contient une redéfinition covariante de la méthode `reversed()` qui renvoie une instance de type `SequenceSet<E>`.
+Elle n'offre aucune méthode supplémentaire, mais contient une redéfinition covariante de la méthode `reversed()` qui renvoie une instance de type `SequenceSet<E>`.
 
 L’interface `SequencedSet` est étendue par `SortedSet` et implémentée par `LinkedHashSet`.
 
@@ -262,7 +262,7 @@ Les méthodes `addXxx()` de l’interface `SequencedSet` ont des comportements s
 
 Pour la classe `LinkedHashSet`, les méthodes `addFirst()` et `addLast()` ont une sémantique particulière : elles positionnent l'entrée si elle est déjà présente dans l'ensemble. Si l'élément est déjà présent dans l'ensemble, il est déplacé à la position appropriée. Cela permet de remédier partiellement à un manque de longue date de `LinkedHashSet` qui empêchait de repositionner des éléments.
 
-L’interface `SortedSet`, dont la sémantique positionne les éléments par comparaison relative, ne peut pas prendre en charge les opérations de positionnement explicite telles que les méthodes `addFirst(E)` et `addLast(E)` déclarées dans la superinterface `SequencedCollection`. L’invocation de ces méthodes lèvent une exception de type `UnsupportedOperationException`.
+L’interface `SortedSet`, dont la sémantique positionne les éléments par comparaison relative, ne peut pas prendre en charge les opérations de positionnement explicite telles que les méthodes `addFirst(E)` et `addLast(E)` déclarées dans la superinterface `SequencedCollection`. L’invocation de ces méthodes lève une exception de type `UnsupportedOperationException`.
 
 [source,java]
 ----
@@ -305,7 +305,7 @@ L'exécution du code affiche :
 
 == L’interface SequencedMap
 
-L’interface `SequencedMap` est une interface spécialisée conçue pour les `Map` dont les clés, les valeurs et les entrées ont un ordre de parcours défini telles que `LinkedHashMap`, qui introduit une nouvelle approche de la gestion des données ordonnées dans les Maps.
+L’interface `SequencedMap` est une interface spécialisée conçue pour les `Map` dont les clés, les valeurs et les entrées ont un ordre de parcours défini tout comme `LinkedHashMap`, qui introduit une nouvelle approche de la gestion des données ordonnées dans les Maps.
 
 L’interface `SequencedMap<K, V>` hérite de l’interface `Map<K, V>` et fournit des méthodes pour accéder à ses entrées et les manipuler en fonction de leur ordre de parcours.
 
@@ -384,7 +384,7 @@ Les méthodes `sequencedKeySet()`, `sequencedValues()` et `sequencedEntrySet()` 
  +
 La différence entre les méthodes de l'interface `SequencedMap` et les méthodes de `Map` est que les méthodes `sequencedXxx()` ont un type de retour sous la forme d’une collection séquencée.
 
-L’implémentations de la méthode `sequencedKeySet()` renvoie une vue de type SequencedSet de l'ensemble de clés de la Map et se comporte comme suit :
+L’implémentation de la méthode `sequencedKeySet()` renvoie une vue de type SequencedSet de l'ensemble de clés de la Map et se comporte comme suit :
 
 * Les méthodes `add()` et `addAll()` lèvent une exception de type `UnsupportedOperationException`
 * La méthode `reversed()` renvoie une vue inversée de la Map de type `SequencedKeySet`
@@ -605,7 +605,7 @@ list ==> [[], [test]]
 jshell>
 ----
 
-A partir de Java 21, le type inféré par le compilateur est différent à cause de l’introduction de l’interface `SequencedCollection` commune à `List` et `Deque`.
+À partir de Java 21, le type inféré par le compilateur est différent à cause de l’introduction de l’interface `SequencedCollection` commune à `List` et `Deque`.
 
 [source,plain]
 ----
@@ -636,7 +636,7 @@ public class TestInference {
 }
 ----
 
-Il génère une erreur de compilation avec le JDK 21 car le type paramétré de la liste déduit change avec l'ajout des nouveaux types de collection.
+Il génère une erreur de compilation avec le JDK 21, car le type paramétré de la liste déduit change avec l'ajout des nouveaux types de collection.
 
 [source,plain]
 ----
@@ -715,7 +715,7 @@ java.lang.UnsupportedOperationException
 
 == Conclusion
 
-Le framework Collection de Java est riche mais il est toujours possible de l'améliorer.
+Le framework Collection de Java est riche, mais il est toujours possible de l'améliorer.
 
 En répondant au besoin de longue date d'une API unifiée pour gérer les collections avec un ordre de parcours défini, les Sequenced Collections du JDK 21 permettent aux développeurs de travailler de manière simple et uniforme avec des collections séquencées en proposant des opérations aux deux extrémités, un ordre de rencontre cohérent et la possibilité de créer des vues inversées.
 
