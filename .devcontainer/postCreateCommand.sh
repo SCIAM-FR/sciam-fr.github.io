@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "Before Launch"
-sudo apt-get update
-sudo apt-get install graphviz
+echo "Installation de Graphviz"
+sudo apt-get -y update
+sudo apt-get -y install graphviz
 bundle install
