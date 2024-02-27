@@ -1,3 +1,3 @@
 #!/bin/sh
-bundle exec jekyll serve -l -o
+bundle exec jekyll serve -i -o
 
