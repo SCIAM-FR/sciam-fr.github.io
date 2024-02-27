@@ -1,4 +1,5 @@
 {
   "image": "mcr.microsoft.com/devcontainers/universal:2",
-  "postCreateCommand": "bash .devcontainer/postCreateCommand.sh"
+  "postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
+  "postStartCommand": "bash runServer.sh"
 }
