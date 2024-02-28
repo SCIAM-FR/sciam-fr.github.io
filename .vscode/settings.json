@@ -5,5 +5,5 @@
         "stem":"latexmath"
     },
     "cSpell.language": "en,fr,fr-FR",
-    "asciidoc.antora.enableAntoraSupport": false
+    "asciidoc.antora.enableAntoraSupport": true
 }
