@@ -38,7 +38,7 @@ Nous allons explorer en détail les nouvelles syntaxes de @if, @for et @switch.
 === La syntaxe @if
 @If permet un rendu conditionnel dans vos template. la nouvelle v ersion apporte une simplification majeure est définie par rapport à la clause Else de la directive *ngIf. Et depuis, Le flux de contrôle actuel rend également simple l'utilisation de @else if.
 
-[source,typescript,html]
+[source,html]
 ----
   @if (user.role === 'ADMIN' ) {
    <app-add-user></app-add-user>
@@ -53,7 +53,7 @@ Nous allons explorer en détail les nouvelles syntaxes de @if, @for et @switch.
 
 Avec le nouveau syntaxe, l’ajout des cas en plus peuvent être distingués et plus lisible.
 
-[source,typescript,html]
+[source,html]
 ----
    @switch (user.role) {
     @case ('ADMIN') {
@@ -69,6 +69,7 @@ Avec le nouveau syntaxe, l’ajout des cas en plus peuvent être distingués et 
 ----
 
 === La syntaxe @for
+
 Nous constatons souvent des problèmes de performances de chargements des éléments d’une liste à chaque traitement effectué sur une partie de la liste en raison du manque de trackBy dans *ngFor. 
 
 La nouvelle syntaxe de track est bien plus facile à utiliser puisqu'il s'agit simplement d'une expression plutôt que d'une méthode dans la classe du composant.
@@ -90,6 +91,128 @@ En plus, @for dispose également d'un raccourci pour les collections sans élém
 === Migration vers Angular 17
 
 Pour avoir ce syntaxe dans nos anciennes applications, juste après l’installation angular/core@17, il reste que de lancer cette commande ng générer @angular/core:control-flow qui permet automatiquement de mettre en place ce nouveau syntaxe dans nos Templates.
+
+== Lazy loading des Templates
+
+Le lazy loading est une technique recommandée dans le développement web moderne. Elle permet de ne charger que les ressources nécessaires lors de l’interaction avec l’utilisateur.
+
+Angular a introduit ce concepet avec les routes où on pourra changer que les modules nécessaires de la page actuelle. La bonne nouvelle de cette version, le chargement déféré de la Template. En respectant les conditions, cette fonctionnalité permet de charger le contenu d'un bloc de Template de manière déférée. 
+
+La principale directive est @defer, qui englobe le bloc des éléments DOM à charger une fois qu'il y a certaines conditions remplies.
+
+=== Exemple @defer
+
+[source,html]
+----
+@defer (on immediate) { // <1>
+  
+  <app-add-product></app-add-product>
+
+}
+----
+
+<1> Le composant Ajouter nouveau produit sera chargé dans la page immédiatement aprés que le client termine le rendu. Immediate est un triggeur qui va être déclenché en intéraction avec le client.
+
+=== Les triggers de @defer 
+
+Pour déclencher ce bloc de @defer, il faut utiliser l’un de ces déclencheurs dans la condition :
+
+* `Viewport`: le changement sera déclenché lorsque l’utilisateur scroller jusqu’à le bloc .
+
+* `Idle`: déclenche le chargement différé une fois que le navigateur aura atteint un état d'inactivité (détecté à l'aide de l'api requestIdleCallbackAPI sous le capot).
+
+* `Interaction`:  déclenche le bloc différé lorsque l'utilisateur interagit avec l'élément spécifié via click ou keydown des événements.
+
+* `Hover`:  déclenche un chargement différé lorsque la souris a survolé la zone de déclenchement. Les événements utilisés pour cela sont mouseenter et focusin.
+
+* `Immediate`: déclenche immédiatement le chargement différé, ce qui signifie qu'une fois que le client a terminé le rendu, le morceau différé commencerait alors à être récupéré immédiatement.
+
+* `Timer(x)`: se déclencherait après une durée spécifiée. La durée est obligatoire et peut être précisée en ms ou s.
+
+=== Les autres Blocs 
+
+On va lister les ensembles des directives qui peuvent définir des autres blocs avant de déclencher le bloc principal de @defer :
+
+* `@placeholder`: il s'agit d'un bloc facultatif qui déclare le contenu à afficher avant le déclenchement du bloc  principal. Il accepte un paramètre facultatif pour spécifier la minimum durée pendant laquelle cet espace réservé doit être affiché.
+
+* `@loading` : ce bloc est facultatif qui vous permet de déclarer le contenu qui sera affiché lors du chargement.
+
+* `@error`: Le bloc vous permet de déclarer le contenu qui sera affiché en cas d'échec du chargement
+
+Ce nouveau mécanisme nous permet de rendre le chargement des pages webs rapides en chargeant que les ressources nécessaires.
+
+=== Exemple avec des différents blocs de lazy laoding : 
+[source,typescript,html]
+----
+<div class="content">
+  <app-add-user able="true"></app-add-user>
+</div>
+<h4>List of Users added by {{surname}} ! </h4>
+
+@defer (on timer(2000)) { // <3>
+
+  @for (user of users(); track user) {
+    <div class="item">
+      <p>First Name: {{user.firstName}} </p>
+      <p>last name: {{user.lastName}}</p>
+      <p>Phone: {{user.phone}}</p>
+    </div>
+  } @empty {
+    <p>Aucun Utilisateur ajouté.</p>
+  }
+
+} @placeholder (minimum 1000) { // <1>
+
+    <span>Here , bloc users added</span>
+
+} @loading (minimum 1000) { // <2>
+
+    <ng-container *skeleton="true ; repeat: users()?.length; height: '20px'; width: '200px'" /> 
+
+} @error { // <4>
+
+    <p class="text-red-500">Something went wrong...</p>
+}
+----
+En respectant l'ordre d'affichages de ces différents blocs , il y a le rendu  côté navigateur :
+ * <1> En premier lieu, l'affichage de message de bloc @placeholder.
+ * <2> Après 1000 ms, ls skeleton sera rendu dans la page.
+ * <3> Quand le temps de 2000 ms collé, le principal bloc de @defer sera changé.
+ * <4> En cas d'erreur de chargement, le @error est déclenché. 
+
+== Les nouvelles Hooks: 
+
+Les nouvelles fonctions de cycle de vie d'Angular afterRender et afterNextRender vous permettent de sauvegarder un rappel de rendu à appeler une fois que Angular a terminé de restituer tous les éléments de la page dans le DOM.
+
+afterNextRender: l'utiliser si vous avez besoin de lire ou d'écrire manuellement des informations de mise en page telles que la taille ou l'emplacement. Elle remplace AfterViewInit.
+
+afterRender: s'exécuter après chaque détection de changement comme OnChanges.
+
+[source,typescript]
+----
+@Component({
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.scss'],
+  
+})
+export class UserComponent {
+  @Input() surname?: string;
+  userService = inject(UserService);
+  users: Signal<User[] | undefined> = toSignal (this.userService.getUsers());
+  
+  constructor() {
+      afterNextRender(() => { 
+        this.users()?.push({firstName: 'Khaoula', lastName: 'Mrabet', role: 'ADMIN'})
+    });
+  }
+}
+----
+
+== Signals
+
+Les Signals sont désormais stables en version 17, vous pouvez donc les utiliser sans crainte de changements ultérieurs trop impactant.
+
 
 == Conclusion
 
