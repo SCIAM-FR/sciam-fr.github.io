@@ -76,7 +76,7 @@ La nouvelle syntaxe de track est bien plus facile à utiliser puisqu'il s'agit s
 
 En plus, @for dispose également d'un raccourci pour les collections sans élément via un @empty bloc facultatif.
 
-[source,typescript,html]
+[source,html]
 ----
   @for (user of users(); track user) {
     <div class="item">
@@ -142,7 +142,7 @@ On va lister les ensembles des directives qui peuvent définir des autres blocs 
 Ce nouveau mécanisme nous permet de rendre le chargement des pages webs rapides en chargeant que les ressources nécessaires.
 
 === Exemple avec des différents blocs de lazy laoding : 
-[source,typescript,html]
+[source,html]
 ----
 <div class="content">
   <app-add-user able="true"></app-add-user>
@@ -213,6 +213,48 @@ export class UserComponent {
 
 Les Signals sont désormais stables en version 17, vous pouvez donc les utiliser sans crainte de changements ultérieurs trop impactant.
 
+Nous utilisons le décorateur @Input dans le projet Angular pour passer des variables de composant parent au composant fils. Maintenant, nous avons la possibilité d'utiliser le signal avec input() pour assurer une communication plus réactive. 
+
+En utilisant le signal input(), il est possible de dériver l'entrée sans implémenter la fonction ngOnchanges. Le traitement peut être effectué dans le constructor avec effect().
+
+=== Composant parent
+
+[source,typescript]
+----
+@Component({
+  selector: 'app-user',
+  template: `<app-add-user [surnameAdmin]="surname()"></app-add-user>`,  // <2>
+  styleUrls: ['./user.component.scss'], 
+  
+})
+export class UserComponent {
+  surname = input<string>(); // <1>
+  userService = inject(UserService);
+  users: Signal<User[] | undefined> = toSignal (this.userService.getUsers());
+  admin = signal(this.surname);
+} 
+----
+
+* <1> Déclarer le surname en tant que Signal input : c'est une variable qu'on récupere de  routing  et on va envoyer au composant fils "Ajouter un nouveau utilisateur" 
+
+* <2> Intégrer le composant "Add user" dans la template de composant parent en envoyant la valeur un signal 'surname()'.
+=== Composant Fils
+
+[source,typescript]
+----
+@Component({
+  selector: 'app-add-user',
+  template: `@if (surnameAdmin()) {
+              <span> You have access to this feature</span>
+            }`,
+  styleUrls: ['./add-user.component.scss']
+})
+export class AddUserComponent {
+  surnameAdmin = input<string>(); // <3>
+  userService = inject(UserService);
+}
+----
+* <3> Déclarer le signal input entrante 'surnameAdmin' dans le composant fils pour avoir l'afficher dans la template. Cette valeur vient de composant parent.
 
 == Conclusion
 
