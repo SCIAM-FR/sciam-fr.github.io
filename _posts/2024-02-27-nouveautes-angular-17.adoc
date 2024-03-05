@@ -238,6 +238,7 @@ export class UserComponent {
 * <1> Déclarer le surname en tant que Signal input : c'est une variable qu'on récupere de  routing  et on va envoyer au composant fils "Ajouter un nouveau utilisateur" 
 
 * <2> Intégrer le composant "Add user" dans la template de composant parent en envoyant la valeur un signal 'surname()'.
+
 === Composant Fils
 
 [source,typescript]
