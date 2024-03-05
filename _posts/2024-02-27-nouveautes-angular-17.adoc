@@ -174,11 +174,11 @@ Ce nouveau mécanisme nous permet de rendre le chargement des pages webs rapides
     <p class="text-red-500">Something went wrong...</p>
 }
 ----
-En respectant l'ordre d'affichages de ces différents blocs , il y a le rendu  côté navigateur :
- * <1> En premier lieu, l'affichage de message de bloc @placeholder.
- * <2> Après 1000 ms, ls skeleton sera rendu dans la page.
- * <3> Quand le temps de 2000 ms collé, le principal bloc de @defer sera changé.
- * <4> En cas d'erreur de chargement, le @error est déclenché. 
+Le rendu côté navigateur est le suivant en respectant l'ordre d'affichage de ses différents blocs :
+<1> En premier lieu, l'affichage de message de bloc @placeholder.
+<2> Après 1000 ms, ls skeleton sera rendu dans la page.
+<3> Quand le temps de 2000 ms collé, le principal bloc de @defer sera changé.
+<4> En cas d'erreur de chargement, le @error est déclenché. 
 
 == Les nouvelles Hooks: 
 
@@ -235,9 +235,9 @@ export class UserComponent {
 } 
 ----
 
-* <1> Déclarer le surname en tant que Signal input : c'est une variable qu'on récupere de  routing  et on va envoyer au composant fils "Ajouter un nouveau utilisateur" 
+ <1> Déclarer le surname en tant que Signal input : c'est une variable qu'on récupere de  routing  et on va envoyer au composant fils "Ajouter un nouveau utilisateur" 
 
-* <2> Intégrer le composant "Add user" dans la template de composant parent en envoyant la valeur un signal 'surname()'.
+ <2> Intégrer le composant "Add user" dans la template de composant parent en envoyant la valeur un signal 'surname()'.
 
 === Composant Fils
 
@@ -255,13 +255,74 @@ export class AddUserComponent {
   userService = inject(UserService);
 }
 ----
-* <3> Déclarer le signal input entrante 'surnameAdmin' dans le composant fils pour avoir l'afficher dans la template. Cette valeur vient de composant parent.
+<3> Déclarer le signal input entrante 'surnameAdmin' dans le composant fils pour avoir l'afficher dans la template. Cette valeur vient de composant parent.
+
+== Autres nouvéautés 
+
+=== Nouveau Package SSR (Server side render )
+
+L'hydratation a été l'élément essentiel dans la version 16 d'Angular grâce à l'amélioration de la détection de chargement de DOM. La nouveauté de cette version est d'ajouter un nouveau package angular/ssr pour activer le SSR sans avoir installé Angular Universal.
+
+Nous avons la possibilité d'utiliser la technique SSR dans les nouvelles applications créées selon les deux options suivantes: 
+
+*Option 1 : en lancent la commande ng new my-app : Angular cli demande d’utiliser SSR/SSG / Prerendring 
+
+*Option 2: en ajoutant l’option directement au niveau de la commande ng new my-app  --ssr
+
+Pour Ajouter l’hydratation dans nos applications existantes il suffit de lancer : ng add angular/ssr
+
+=== Api View transitions
+La transitions entre les interfaces est assurer avec l'api View transitions. Le router d’Angular supporte le nouvelle API View Transition afin que vous puissiez contrôler les animations de transitions entre les routes.
+
+Vous pouvez ajouter cette fonctionnalité à votre application dès aujourd'hui en la configurant dans la déclaration du fournisseur du routeur lors du bootstrap :
+
+[source,typescript]
+----
+bootstrapApplication(MyApp, {providers: [
+  provideRouter(routes, withViewTransitions()),
+]});
+----
+
+=== Nouvel Application Builder 
+
+Jusqu'à présent, Webpack était la solution par défaut pour Angular.
+
+Mais de nouveaux outils plus rapides sont venus le challenger ESBuild et vite. Dans la version 17 d'Angular, ces deux outils sont automatiquement ajoutés en remplacement de Webpack.
+
+Cela indique que vos builds ( ng serve et ng build) seront bien plus rapides qu'auparavant. On parle d’un facteur de 2 à 4 !
+
+=== Nouvelle directive Image : NgOptimizedImage
+
+Pour la prémiere fois , une directive qui améliore les performances de chargement des images.
+
+Avec son Selector ngSrc le navigateur ne charge que les images que lorsqu’elles vont entrer dans le viewport.
+
+[source,typescript]
+----
+@Component({
+  selector: 'app-user',
+  imports:[NgOptimizedImage],
+  standalone: true
+  template: `@for (user of users(); track user) {
+    <img [ngSrc]="user.photo">
+  }`,
+  styleUrls: ['./user.component.scss'],
+  
+})
+export class UserComponent {
+  surname = input<string>();
+  userService = inject(UserService);
+  users: Signal<User[] | undefined> = toSignal (this.userService.getUsers());
+} 
+[source,typescript]
+----
 
 == Conclusion
 
-Cette nouvelle version 16 apporte deux améliorations majeures :
+Angular 17 apporte un grand changement sur la façon de développement des templates après la sortie de la nouvelle syntaxe de flux et des blocs différés.
+ 
+Google intègre de nouvelles fonctionnalités de signalisation d'une version à l'autre pour améliorer la réactivité. 
 
-* Dans l'hydratation, ce qui réduit le temps de chargement des applications
-* Signal qui améliore l'observabilité des composants.
+Les développeurs utilisent des signaux car cela leur permet de gagner du temps sur le codage et d'être pertinents dans la détection des changements de statut des composants cibles.
 
-Comme le montre les exemples de cet article, le code produit avec la version 16 est moins compliqué et nettement plus expressif, ce qui améliore grandement l'expérience de développement.
+On pourra constater qu'avec les prochaines versions, Angular délibérer de Zone js.
