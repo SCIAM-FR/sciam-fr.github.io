@@ -1,6 +1,6 @@
 :showtitle:
 :page-navtitle: Les nouveautés d'Angular 17
-:page-excerpt: Google a publié le 8 novembre 2023, la nouvelle version 17 est sortie avec une nouvelle image de marque, une nouvelle syntaxe de contrôle de flux, le déférée de blocs et des nouveaux Hooks de cycle de vie.  Cet article explique en détail toutes les nouveautés mentionnées précédemment, afin d'avoir les clés nécessaires pour démarrer la nouvelle version.
+:page-excerpt: Google a publié le 8 novembre 2023 la nouvelle version 17 avec une nouvelle image de marque, une nouvelle syntaxe de contrôle de flux, le déférée de blocs et des nouveaux Hooks de cycle de vie.
 :layout: post
 :author: khaoulamrabet
 :page-tags: [Angular, Angular17, control Flow, lazy loading blocs, Signal, Hydratation par défaut, Hooks,]
@@ -11,32 +11,36 @@
 
 Angular attire encore l’attention dans le domaine IT après les différents changements apporté par la version 16 et il est devenu le choix numéro 1 dans le marché Français selon les statistiques de 2023.
 
-Google a publié le 8 novembre 2023, la nouvelle version 17 est sortie avec une nouvelle image de marque, une nouvelle syntaxe de modèle de blocs, le déférée de blocs et des nouveaux Hooks de cycle de vie.  
+Google a publié le 8 novembre 2023 la nouvelle version 17 avec une nouvelle image de marque, une nouvelle syntaxe de modèle de blocs, le déférée de blocs et des nouveaux Hooks de cycle de vie.  
 
-Cet article explique en détail toutes les nouveautés mentionnées précédemment, afin d'avoir les clés nécessaires pour démarrer la 
+Cet article explique en détail toutes les nouveautés mentionnées précédemment, afin d'avoir les clés nécessaires pour démarrer la nouvelle version.
 
 == Nouvelle image de marque 
 
 En premier lieu, une nouvelle image de marque avec un nouveau logo est sortie, dans le but de régler le différend entre Angular Js et Angular 2+. 
-La création d'une nouvelle plateforme de documentation avec une méthode d'apprentissage interactive vous permettra d'acquérir des compétences en Angular.Il est plus facile de repérer les informations nécessaires pour nous présenter les principes fondamentaux du Framework via une plateforme plus moderne.
-Pour accéder à la plateforme : https://angular.dev/ 
+
+Ainsi, la création d'une nouvelle plateforme de documentation avec une méthode d'apprentissage interactive vous permettra d'acquérir des compétences en Angular.Il est plus facile de repérer les informations nécessaires pour nous présenter les principes fondamentaux du Framework via une plateforme plus moderne.
+Voici le lien pour accéder à la plateforme : https://angular.dev/ 
 
 image::khaoulamrabet/plateforme.png[image,width=70%,align="center"]
 
-== La nouvelle syntaxe control flow
+== La nouvelle syntaxe de control flow
 
 Depuis Angular 2, le flux de contrôle est fait par les directives *ngIf, *ngFor et *ngSwitch.
 Une nouvelle syntaxe de Flux de contrôles cette fois-ci sans directive, il vous suffit d'entourer vos morceaux de codes par la `@-syntax`.
-Les directives structurelles *ngIf et *ngFor sont remplacés par `@if` et `@for`. 
-On pourra voir une amélioration au niveau de code des templates : 
+Les directives structurelles *ngIf, *ngSwitch et *ngFor sont remplacés par `@if` , `@Switch` et `@for`. 
+
+Il est possible d'observer une amélioration dans le code des templates en citant: 
 1. Moins de complexité au niveau des lignes de code.
 2. Proche au syntaxe Javascript.
-3. Réduire l’utilisation de ng-container pour ajouter des conditions d’affichage
-4. Il est automatiquement disponible dans vos modèles sans importations supplémentaires
+3. Réduire l’utilisation de ng-container pour ajouter des conditions d’affichage.
+4. Il est automatiquement disponible dans vos modèles sans importations supplémentaires.
+
 Nous allons explorer en détail les nouvelles syntaxes de @if, @for et @switch.
 
 === La syntaxe @if
-@If permet un rendu conditionnel dans vos template. la nouvelle v ersion apporte une simplification majeure est définie par rapport à la clause Else de la directive *ngIf. Et depuis, Le flux de contrôle actuel rend également simple l'utilisation de @else if.
+
+`@if` permet un rendu conditionnel dans vos template. la nouvelle version apporte une simplification majeure est définie par rapport à la clause `Else` de la directive *ngIf. Et depuis, Le flux de contrôle actuel rend également simple l'utilisation de `@else` if.
 
 [source,html]
 ----
@@ -51,7 +55,7 @@ Nous allons explorer en détail les nouvelles syntaxes de @if, @for et @switch.
 ----
 === La syntaxe @Switch 
 
-Avec le nouveau syntaxe, l’ajout des cas en plus peuvent être distingués et plus lisible.
+Avec la nouvelle syntaxe, l’ajout des cas en plus peuvent être distingués et plus lisible.
 
 [source,html]
 ----
@@ -70,11 +74,11 @@ Avec le nouveau syntaxe, l’ajout des cas en plus peuvent être distingués et 
 
 === La syntaxe @for
 
-Nous constatons souvent des problèmes de performances de chargements des éléments d’une liste à chaque traitement effectué sur une partie de la liste en raison du manque de trackBy dans *ngFor. 
+Nous constatons souvent des problèmes de performances de chargements des éléments d’une liste à chaque traitement effectué sur une partie de la liste en raison du manque de `@trackBy` dans *ngFor. 
 
-La nouvelle syntaxe de track est bien plus facile à utiliser puisqu'il s'agit simplement d'une expression plutôt que d'une méthode dans la classe du composant.
+La nouvelle syntaxe de `track` est bien plus facile à utiliser puisqu'il s'agit simplement d'une expression plutôt que d'une méthode dans la classe du composant.
 
-En plus, @for dispose également d'un raccourci pour les collections sans élément via un @empty bloc facultatif.
+En plus,`@for` dispose également d'un raccourci pour les collections sans élément via un `@empty` bloc facultatif.
 
 [source,html]
 ----
@@ -90,15 +94,15 @@ En plus, @for dispose également d'un raccourci pour les collections sans élém
 ----
 === Migration vers Angular 17
 
-Pour avoir ce syntaxe dans nos anciennes applications, juste après l’installation angular/core@17, il reste que de lancer cette commande ng générer @angular/core:control-flow qui permet automatiquement de mettre en place ce nouveau syntaxe dans nos Templates.
+Pour avoir ce syntaxe dans nos anciennes applications, juste après l’installation `angular/core@17`, il reste que de lancer cette commande ng générer `@angular/core:control-flow` qui permet automatiquement de mettre en place ce nouveau syntaxe dans nos Templates.
 
 == Lazy loading des Templates
 
 Le lazy loading est une technique recommandée dans le développement web moderne. Elle permet de ne charger que les ressources nécessaires lors de l’interaction avec l’utilisateur.
 
-Angular a introduit ce concepet avec les routes où on pourra changer que les modules nécessaires de la page actuelle. La bonne nouvelle de cette version, le chargement déféré de la Template. En respectant les conditions, cette fonctionnalité permet de charger le contenu d'un bloc de Template de manière déférée. 
+Angular a introduit ce concept avec les routes où on pourra changer que les modules nécessaires de la page actuelle. La bonne nouvelle de cette version est le chargement déféré de la Template. En respectant les conditions, cette fonctionnalité permet de charger le contenu d'un bloc de Template de manière déférée. 
 
-La principale directive est @defer, qui englobe le bloc des éléments DOM à charger une fois qu'il y a certaines conditions remplies.
+La principale directive est `@defer`, qui englobe le bloc des éléments DOM à charger une fois qu'il y a certaines conditions remplies.
 
 === Exemple @defer
 
@@ -111,11 +115,12 @@ La principale directive est @defer, qui englobe le bloc des éléments DOM à ch
 }
 ----
 
-<1> Le composant Ajouter nouveau produit sera chargé dans la page immédiatement aprés que le client termine le rendu. Immediate est un triggeur qui va être déclenché en intéraction avec le client.
+<1> Le composant "Ajouter nouveau produit" sera chargé dans la page immédiatement aprés que le navigateur termine le rendu. 
+`immediate` est un triggeur qui va être déclenché en intéraction avec le client.
 
 === Les triggers de @defer 
 
-Pour déclencher ce bloc de @defer, il faut utiliser l’un de ces déclencheurs dans la condition :
+Pour déclencher ce bloc de `@defer`, il faut utiliser l’un de ces déclencheurs dans la condition :
 
 * `Viewport`: le changement sera déclenché lorsque l’utilisateur scroller jusqu’à le bloc .
 
@@ -142,6 +147,7 @@ On va lister les ensembles des directives qui peuvent définir des autres blocs 
 Ce nouveau mécanisme nous permet de rendre le chargement des pages webs rapides en chargeant que les ressources nécessaires.
 
 === Exemple avec des différents blocs de lazy laoding : 
+
 [source,html]
 ----
 <div class="content">
@@ -182,11 +188,11 @@ Le rendu côté navigateur est le suivant en respectant l'ordre d'affichage de s
 
 == Les nouvelles Hooks: 
 
-Les nouvelles fonctions de cycle de vie d'Angular afterRender et afterNextRender vous permettent de sauvegarder un rappel de rendu à appeler une fois que Angular a terminé de restituer tous les éléments de la page dans le DOM.
+Les nouvelles fonctions de cycle de vie d'Angular `afterRender` et `afterNextRender` vous permettent de sauvegarder un rappel de rendu à appeler une fois que Angular a terminé de restituer tous les éléments de la page dans le DOM.
 
-afterNextRender: l'utiliser si vous avez besoin de lire ou d'écrire manuellement des informations de mise en page telles que la taille ou l'emplacement. Elle remplace AfterViewInit.
+* `afterNextRender`: l'utiliser si vous avez besoin de lire ou d'écrire manuellement des informations de mise en page telles que la taille ou l'emplacement. Elle remplace AfterViewInit.
 
-afterRender: s'exécuter après chaque détection de changement comme OnChanges.
+* `afterRender`: s'exécuter après chaque détection de changement comme OnChanges.
 
 [source,typescript]
 ----
@@ -213,9 +219,9 @@ export class UserComponent {
 
 Les Signals sont désormais stables en version 17, vous pouvez donc les utiliser sans crainte de changements ultérieurs trop impactant.
 
-Nous utilisons le décorateur @Input dans le projet Angular pour passer des variables de composant parent au composant fils. Maintenant, nous avons la possibilité d'utiliser le signal avec input() pour assurer une communication plus réactive. 
+Nous utilisons le décorateur `@Input` dans le projet Angular pour passer des variables de composant parent au composant fils. Maintenant, nous avons la possibilité d'utiliser à la place de @Input, le signal avec `input()` pour assurer une communication plus réactive. 
 
-En utilisant le signal input(), il est possible de dériver l'entrée sans implémenter la fonction ngOnchanges. Le traitement peut être effectué dans le constructor avec effect().
+En utilisant le signal `input()`, il est possible de dériver l'entrée sans implémenter la fonction ngOnchanges. Le traitement peut être effectué dans le constructor avec le triggeur effect().
 
 === Composant parent
 
@@ -235,7 +241,7 @@ export class UserComponent {
 } 
 ----
 
- <1> Déclarer le surname en tant que Signal input : c'est une variable qu'on récupere de  routing  et on va envoyer au composant fils "Ajouter un nouveau utilisateur" 
+ <1> Déclarer le surname en tant que Signal input : c'est une variable qu'on récupere de route et on va l'envoyer au composant fils "Add user".
 
  <2> Intégrer le composant "Add user" dans la template de composant parent en envoyant la valeur un signal 'surname()'.
 
@@ -261,18 +267,19 @@ export class AddUserComponent {
 
 === Nouveau Package SSR (Server side render )
 
-L'hydratation a été l'élément essentiel dans la version 16 d'Angular grâce à l'amélioration de la détection de chargement de DOM. La nouveauté de cette version est d'ajouter un nouveau package angular/ssr pour activer le SSR sans avoir installé Angular Universal.
+L'hydratation a été l'élément essentiel dans la version 16 d'Angular grâce à l'amélioration de la détection de chargement de DOM. La nouveauté de cette version est d'ajouter un nouveau package `angular/ssr` pour activer le SSR sans avoir installé `Angular Universal`.
 
 Nous avons la possibilité d'utiliser la technique SSR dans les nouvelles applications créées selon les deux options suivantes: 
 
-*Option 1 : en lancent la commande ng new my-app : Angular cli demande d’utiliser SSR/SSG / Prerendring 
+*Option 1 : en lancent la commande ng new my-app : Angular cli demande d’utiliser SSR/SSG / Prerendring , on pourra choisir `SSR` SSR.
 
-*Option 2: en ajoutant l’option directement au niveau de la commande ng new my-app  --ssr
+*Option 2: en ajoutant l’option directement au niveau de la commande `ng new my-app --ssr`.
 
-Pour Ajouter l’hydratation dans nos applications existantes il suffit de lancer : ng add angular/ssr
+Pour Ajouter l’hydratation dans nos applications existantes il suffit de lancer : `ng add angular/ssr`.
 
 === Api View transitions
-La transitions entre les interfaces est assurer avec l'api View transitions. Le router d’Angular supporte le nouvelle API View Transition afin que vous puissiez contrôler les animations de transitions entre les routes.
+
+La transitions entre les interfaces est assurer avec l'api `View transitions`. Le router d’Angular supporte le nouvelle API View Transition afin que vous puissiez contrôler les animations de transitions entre les routes.
 
 Vous pouvez ajouter cette fonctionnalité à votre application dès aujourd'hui en la configurant dans la déclaration du fournisseur du routeur lors du bootstrap :
 
@@ -285,9 +292,9 @@ bootstrapApplication(MyApp, {providers: [
 
 === Nouvel Application Builder 
 
-Jusqu'à présent, Webpack était la solution par défaut pour Angular.
+Jusqu'à présent, `Webpack` était la solution par défaut pour Angular.
 
-Mais de nouveaux outils plus rapides sont venus le challenger ESBuild et vite. Dans la version 17 d'Angular, ces deux outils sont automatiquement ajoutés en remplacement de Webpack.
+Mais de nouveaux outils plus rapides sont venus le challenger `ESBuild` et `vite`. Dans la version 17 d'Angular, ces deux outils sont automatiquement ajoutés en remplacement de Webpack.
 
 Cela indique que vos builds ( ng serve et ng build) seront bien plus rapides qu'auparavant. On parle d’un facteur de 2 à 4 !
 
@@ -295,7 +302,7 @@ Cela indique que vos builds ( ng serve et ng build) seront bien plus rapides qu'
 
 Pour la prémiere fois , une directive qui améliore les performances de chargement des images.
 
-Avec son Selector ngSrc le navigateur ne charge que les images que lorsqu’elles vont entrer dans le viewport.
+Avec son Selector `ngSrc` le navigateur ne charge que les images que lorsqu’elles vont entrer dans le viewport.
 
 [source,typescript]
 ----
