@@ -28,19 +28,19 @@ image::khaoulamrabet/plateforme.png[image,width=70%,align="center"]
 
 Depuis Angular 2, le flux de contrôle est fait par les directives *ngIf, *ngFor et *ngSwitch.
 Une nouvelle syntaxe de Flux de contrôles cette fois-ci sans directive, il vous suffit d'entourer vos morceaux de codes par la `@-syntax`.
-Les directives structurelles *ngIf, *ngSwitch et *ngFor sont remplacés par `@if` , `@Switch` et `@for`. 
+Les directives structurelles *ngIf, *ngSwitch et *ngFor sont remplacées par `@if` , `@Switch` et `@for`. 
 
 Il est possible d'observer une amélioration dans le code des templates en citant: 
 1. Moins de complexité au niveau des lignes de code.
-2. Proche au syntaxe Javascript.
-3. Réduire l’utilisation de ng-container pour ajouter des conditions d’affichage.
-4. Il est automatiquement disponible dans vos modèles sans importations supplémentaires.
+2. Proximité syntaxique avec Javascript.
+3. Réduction l’utilisation de ng-container pour ajouter des conditions d’affichage.
+4. Disponibilité automatique dans les modèles, sans importations supplémentaires.
 
 Nous allons explorer en détail les nouvelles syntaxes de @if, @for et @switch.
 
 === La syntaxe @if
 
-`@if` permet un rendu conditionnel dans vos template. la nouvelle version apporte une simplification majeure est définie par rapport à la clause `Else` de la directive *ngIf. Et depuis, Le flux de contrôle actuel rend également simple l'utilisation de `@else` if.
+`@if` permet un rendu conditionnel dans vos templates. La nouvelle version apporte une simplification majeure, qui est définie par rapport à la clause `Else` de la directive *ngIf. En plus de ça, le flux de contrôle actuel rend également plus simple l'utilisation de `@else` if.
 
 [source,html]
 ----
@@ -55,7 +55,7 @@ Nous allons explorer en détail les nouvelles syntaxes de @if, @for et @switch.
 ----
 === La syntaxe @Switch 
 
-Avec la nouvelle syntaxe, l’ajout des cas en plus peuvent être distingués et plus lisible.
+Avec la nouvelle syntaxe, l’ajout des cas en plus peuvent être distingués et plus lisibles.
 
 [source,html]
 ----
@@ -74,11 +74,11 @@ Avec la nouvelle syntaxe, l’ajout des cas en plus peuvent être distingués et
 
 === La syntaxe @for
 
-Nous constatons souvent des problèmes de performances de chargements des éléments d’une liste à chaque traitement effectué sur une partie de la liste en raison du manque de `@trackBy` dans *ngFor. 
+Nous constatons souvent des problèmes de performance de chargement des éléments d’une liste à chaque traitement effectué, sur une partie de la liste, en raison du manque de `@trackBy` dans *ngFor. 
 
-La nouvelle syntaxe de `track` est bien plus facile à utiliser puisqu'il s'agit simplement d'une expression plutôt que d'une méthode dans la classe du composant.
+La nouvelle syntaxe de `track` est bien plus facile à utiliser puisqu'il s'agit simplement d'une expression, plutôt que d'une méthode dans la classe du composant.
 
-En plus,`@for` dispose également d'un raccourci pour les collections sans élément via un `@empty` bloc facultatif.
+En plus,`@for` dispose également d'un raccourci pour les collections sans élément, via un `@empty` bloc facultatif.
 
 [source,html]
 ----
@@ -94,13 +94,13 @@ En plus,`@for` dispose également d'un raccourci pour les collections sans élé
 ----
 === Migration vers Angular 17
 
-Pour avoir ce syntaxe dans nos anciennes applications, juste après l’installation `angular/core@17`, il reste que de lancer cette commande ng générer `@angular/core:control-flow` qui permet automatiquement de mettre en place ce nouveau syntaxe dans nos Templates.
+Pour avoir cette syntaxe dans nos anciennes applications, juste après l’installation `angular/core@17`, il suffit de lancer la commande  `ng g @angular/core:control-flow` qui permet automatiquement de mettre en place cette nouvelle syntaxe dans nos Templates.
 
 == Lazy loading des Templates
 
 Le lazy loading est une technique recommandée dans le développement web moderne. Elle permet de ne charger que les ressources nécessaires lors de l’interaction avec l’utilisateur.
 
-Angular a introduit ce concept avec les routes où on pourra changer que les modules nécessaires de la page actuelle. La bonne nouvelle de cette version est le chargement déféré de la Template. En respectant les conditions, cette fonctionnalité permet de charger le contenu d'un bloc de Template de manière déférée. 
+Angular a introduit ce concept avec les routes où il est possible de ne changer que les modules nécessaires de la page actuelle. La bonne nouvelle avec cette version, c'est le chargement déféré de la Template. En respectant les conditions, cette fonctionnalité permet de charger le contenu d'un bloc de Template de manière déférée. 
 
 La principale directive est `@defer`, qui englobe le bloc des éléments DOM à charger une fois qu'il y a certaines conditions remplies.
 
@@ -115,14 +115,14 @@ La principale directive est `@defer`, qui englobe le bloc des éléments DOM à 
 }
 ----
 
-<1> Le composant "Ajouter nouveau produit" sera chargé dans la page immédiatement aprés que le navigateur termine le rendu. 
+<1> Le composant "Ajouter nouveau produit" sera chargé dans la page immédiatement une fois que le navigateur aura terminé le rendu.
 `immediate` est un triggeur qui va être déclenché en intéraction avec le client.
 
 === Les triggers de @defer 
 
 Pour déclencher ce bloc de `@defer`, il faut utiliser l’un de ces déclencheurs dans la condition :
 
-* `Viewport`: le changement sera déclenché lorsque l’utilisateur scroller jusqu’à le bloc .
+* `Viewport`: le changement sera déclenché lorsque l’utilisateur scrolle jusqu’à le bloc .
 
 * `Idle`: déclenche le chargement différé une fois que le navigateur aura atteint un état d'inactivité (détecté à l'aide de l'api requestIdleCallbackAPI sous le capot).
 
@@ -132,19 +132,19 @@ Pour déclencher ce bloc de `@defer`, il faut utiliser l’un de ces déclencheu
 
 * `Immediate`: déclenche immédiatement le chargement différé, ce qui signifie qu'une fois que le client a terminé le rendu, le morceau différé commencerait alors à être récupéré immédiatement.
 
-* `Timer(x)`: se déclencherait après une durée spécifiée. La durée est obligatoire et peut être précisée en ms ou s.
+* `Timer(x)`: se déclenche après une durée spécifiée. La durée est obligatoire et peut être précisée en ms ou s.
 
 === Les autres Blocs 
 
-On va lister les ensembles des directives qui peuvent définir des autres blocs avant de déclencher le bloc principal de @defer :
+On va lister les ensembles de directives qui peuvent définir des autres blocs avant de déclencher le bloc principal de @defer :
 
-* `@placeholder`: il s'agit d'un bloc facultatif qui déclare le contenu à afficher avant le déclenchement du bloc  principal. Il accepte un paramètre facultatif pour spécifier la minimum durée pendant laquelle cet espace réservé doit être affiché.
+* `@placeholder`: il s'agit d'un bloc facultatif qui déclare le contenu à afficher avant le déclenchement du bloc  principal. Il accepte un paramètre facultatif pour spécifier la durée minimale pendant laquelle cet espace réservé doit être affiché.
 
-* `@loading` : ce bloc est facultatif qui vous permet de déclarer le contenu qui sera affiché lors du chargement.
+* `@loading` : ce bloc, facultatif, permet de déclarer le contenu qui sera affiché lors du chargement.
 
-* `@error`: Le bloc vous permet de déclarer le contenu qui sera affiché en cas d'échec du chargement
+* `@error`: Le bloc vous permet de déclarer le contenu qui sera affiché en cas d'échec du chargement.
 
-Ce nouveau mécanisme nous permet de rendre le chargement des pages webs rapides en chargeant que les ressources nécessaires.
+Ce nouveau mécanisme nous permet de rendre rapide le chargement des pages web, en s'occupant uniquement des ressources nécessaires.
 
 === Exemple avec des différents blocs de lazy laoding : 
 
@@ -180,9 +180,9 @@ Ce nouveau mécanisme nous permet de rendre le chargement des pages webs rapides
     <p class="text-red-500">Something went wrong...</p>
 }
 ----
-Le rendu côté navigateur est le suivant en respectant l'ordre d'affichage de ses différents blocs :
+Le rendu côté navigateur est le suivant, en respectant l'ordre d'affichage de ses différents blocs :
 <1> En premier lieu, l'affichage de message de bloc @placeholder.
-<2> Après 1000 ms, ls skeleton sera rendu dans la page.
+<2> Après 1000 ms, le skeleton sera rendu dans la page.
 <3> Quand le temps de 2000 ms collé, le principal bloc de @defer sera changé.
 <4> En cas d'erreur de chargement, le @error est déclenché. 
 
@@ -190,9 +190,9 @@ Le rendu côté navigateur est le suivant en respectant l'ordre d'affichage de s
 
 Les nouvelles fonctions de cycle de vie d'Angular `afterRender` et `afterNextRender` vous permettent de sauvegarder un rappel de rendu à appeler une fois que Angular a terminé de restituer tous les éléments de la page dans le DOM.
 
-* `afterNextRender`: l'utiliser si vous avez besoin de lire ou d'écrire manuellement des informations de mise en page telles que la taille ou l'emplacement. Elle remplace AfterViewInit.
+* `afterNextRender`: s'utilise si vous avez besoin de lire ou d'écrire manuellement des informations de mise en page, telles que la taille ou l'emplacement. Elle remplace AfterViewInit.
 
-* `afterRender`: s'exécuter après chaque détection de changement comme OnChanges.
+* `afterRender`: s'exécute après chaque détection de changement, comme OnChanges.
 
 [source,typescript]
 ----
@@ -217,7 +217,7 @@ export class UserComponent {
 
 == Signals
 
-Les Signals sont désormais stables en version 17, vous pouvez donc les utiliser sans crainte de changements ultérieurs trop impactant.
+Les Signals sont désormais stables en version 17, vous pouvez donc les utiliser sans crainte de changements ultérieurs trop impactants.
 
 Nous utilisons le décorateur `@Input` dans le projet Angular pour passer des variables de composant parent au composant fils. Maintenant, nous avons la possibilité d'utiliser à la place de @Input, le signal avec `input()` pour assurer une communication plus réactive. 
 
@@ -241,9 +241,9 @@ export class UserComponent {
 } 
 ----
 
- <1> Déclarer le surname en tant que Signal input : c'est une variable qu'on récupere de route et on va l'envoyer au composant fils "Add user".
+ <1> Déclarer le surname en tant que Signal input : variable qu'on récupere de route et que l'on va envoyer au composant fils "Add user".
 
- <2> Intégrer le composant "Add user" dans la template de composant parent en envoyant la valeur un signal 'surname()'.
+ <2> Intégrer le composant "Add user" dans la template de composant parent en envoyant la valeur du signal 'surname()'.
 
 === Composant Fils
 
@@ -261,27 +261,27 @@ export class AddUserComponent {
   userService = inject(UserService);
 }
 ----
-<3> Déclarer le signal input entrante 'surnameAdmin' dans le composant fils pour avoir l'afficher dans la template. Cette valeur vient de composant parent.
+<3> Déclarer le signal input entrant 'surnameAdmin' dans le composant fils pour l'afficher dans le template. Cette valeur vient du composant parent.
 
 == Autres nouvéautés 
 
 === Nouveau Package SSR (Server side render )
 
-L'hydratation a été l'élément essentiel dans la version 16 d'Angular grâce à l'amélioration de la détection de chargement de DOM. La nouveauté de cette version est d'ajouter un nouveau package `angular/ssr` pour activer le SSR sans avoir installé `Angular Universal`.
+L'hydratation a été l'élément essentiel dans la version 16 d'Angular grâce à l'amélioration de la détection de chargement de DOM. La nouveauté de cette version est d'ajouter un package `angular/ssr` pour activer le SSR sans avoir à installer `Angular Universal`.
 
-Nous avons la possibilité d'utiliser la technique SSR dans les nouvelles applications créées selon les deux options suivantes: 
+Nous avons la possibilité d'utiliser la technique SSR dans les nouvelles applications créées, selon les deux options suivantes: 
 
-*Option 1 : en lancent la commande ng new my-app : Angular cli demande d’utiliser SSR/SSG / Prerendring , on pourra choisir `SSR` SSR.
+*Option 1 : en lançant la commande ng new my-app : Angular cli demande d’utiliser SSR/SSG / Prerendring , on pourra choisir `SSR` SSR.
 
 *Option 2: en ajoutant l’option directement au niveau de la commande `ng new my-app --ssr`.
 
-Pour Ajouter l’hydratation dans nos applications existantes il suffit de lancer : `ng add angular/ssr`.
+Pour Ajouter l’hydratation dans nos applications existantes, il suffit de lancer : `ng add angular/ssr`.
 
 === Api View transitions
 
-La transitions entre les interfaces est assurer avec l'api `View transitions`. Le router d’Angular supporte le nouvelle API View Transition afin que vous puissiez contrôler les animations de transitions entre les routes.
+La transitions entre les interfaces est assurée avec l'API `View transitions`. Le routeur d’Angular supporte le nouvelle API View Transition afin que vous puissiez contrôler les animations de transitions entre les routes.
 
-Vous pouvez ajouter cette fonctionnalité à votre application dès aujourd'hui en la configurant dans la déclaration du fournisseur du routeur lors du bootstrap :
+Vous pouvez ajouter cette fonctionnalité à votre application dès aujourd'hui, en la configurant dans la déclaration du fournisseur du routeur lors du bootstrap :
 
 [source,typescript]
 ----
@@ -300,7 +300,7 @@ Cela indique que vos builds ( ng serve et ng build) seront bien plus rapides qu'
 
 === Nouvelle directive Image : NgOptimizedImage
 
-Pour la prémiere fois , une directive qui améliore les performances de chargement des images.
+Pour la première fois , une directive qui améliore les performances de chargement des images.
 
 Avec son Selector `ngSrc` le navigateur ne charge que les images que lorsqu’elles vont entrer dans le viewport.
 
@@ -326,10 +326,10 @@ export class UserComponent {
 
 == Conclusion
 
-Angular 17 apporte un grand changement sur la façon de développement des templates après la sortie de la nouvelle syntaxe de flux et des blocs différés.
+Angular 17 apporte un grand changement sur la manière de développer les templates, avec la sortie de la nouvelle syntaxe de flux et des blocs différés.
  
 Google intègre de nouvelles fonctionnalités de signalisation d'une version à l'autre pour améliorer la réactivité. 
 
-Les développeurs utilisent des signaux car cela leur permet de gagner du temps sur le codage et d'être pertinents dans la détection des changements de statut des composants cibles.
+Les développeurs utilisent des signaux permettant de gagner du temps sur le codage et d'être pertinents dans la détection des changements de statut des composants cibles.
 
 On pourra constater qu'avec les prochaines versions, Angular délibérer de Zone js.
