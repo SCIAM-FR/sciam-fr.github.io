@@ -20,6 +20,7 @@ Cet article explique en détail toutes les nouveautés mentionnées précédemme
 En premier lieu, un nouveau logo est sortie, dans le but de régler le différend entre Angular Js et Angular 2+. 
 
 Ainsi, la création d'une nouvelle plateforme de documentation, avec une méthode d'apprentissage interactive, permet d'acquérir des compétences en Angular. Il est plus facile de repérer les informations nécessaires qui présentent les principes fondamentaux du Framework, via cette nouvelle une plateforme, plus moderne.
+
 Voici le lien pour accéder à la plateforme : https://angular.dev/ 
 
 image::khaoulamrabet/plateforme.png[image,width=70%,align="center"]
@@ -102,7 +103,7 @@ Le lazy loading est une technique recommandée dans le développement web modern
 
 Angular a introduit ce concept avec les routes où on pourra changer que les modules nécessaires de la page actuelle. La bonne nouvelle de cette version est le chargement différé de la Template. En respectant les conditions, cette fonctionnalité permet de charger le contenu d'un bloc de Template de manière différée. 
 
-La principale directive est `@defer`, qui englobe le bloc des éléments DOM à charger une fois qu'il y a certaines conditions remplies.
+Le `@defer` englobe le bloc des éléments DOM à charger une fois que les conditions sont bien remplies.
 
 === Exemple @defer
 
