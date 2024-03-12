@@ -9,7 +9,7 @@
 
 = Les nouveautés d'Angular 17
 
-Angular attire encore l’attention dans le domaine IT après les différents changements apporté par la version 16 et il est devenu le choix numéro 1 dans le marché Français selon les statistiques de 2023.
+Angular attire encore l’attention dans le domaine IT. Après les différents changements apportés par la version 16, il est devenu le choix numéro 1 dans le marché Français selon les statistiques de 2023.
 
 Google a publié le 8 novembre 2023 la nouvelle version 17 avec une nouvelle image de marque, une nouvelle syntaxe de modèle de blocs, le déférée de blocs et des nouveaux Hooks de cycle de vie.  
 
