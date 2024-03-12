@@ -1,9 +1,9 @@
 :showtitle:
 :page-navtitle: Les nouveautés d'Angular 17
-:page-excerpt: Google a publié le 8 novembre 2023 la nouvelle version 17 avec une nouvelle image de marque, une nouvelle syntaxe de contrôle de flux, le déférée de blocs et des nouveaux Hooks de cycle de vie.
+:page-excerpt: Google a publié le 8 novembre 2023 la nouvelle version 17 avec une nouvelle image de marque, une nouvelle syntaxe de contrôle de flux, le vues différées et des nouveaux Hooks de cycle de vie.
 :layout: post
 :author: khaoulamrabet
-:page-tags: [Angular, Angular17, control Flow, lazy loading blocs, Signal, Hydratation par défaut, Hooks,]
+:page-tags: [Angular, Angular17, control Flow, lazy loading blocs, Signal, Hydratation par défaut, Hooks, le signal Input()]
 :page-vignette: angular17.png
 :page-liquid:
 
@@ -11,24 +11,24 @@
 
 Angular attire encore l’attention dans le domaine IT. Après les différents changements apportés par la version 16, il est devenu le choix numéro 1 dans le marché Français selon les statistiques de 2023.
 
-Google a publié le 8 novembre 2023 la nouvelle version 17 avec une nouvelle image de marque, une nouvelle syntaxe de modèle de blocs, le déférée de blocs et des nouveaux Hooks de cycle de vie.  
+Google a publié le 8 novembre 2023 la nouvelle version 17 avec une nouvelle image de marque, une nouvelle syntaxe de modèle de blocs, les vues différées et des nouveaux Hooks de cycle de vie.  
 
 Cet article explique en détail toutes les nouveautés mentionnées précédemment, afin d'avoir les clés nécessaires pour démarrer la nouvelle version.
 
-== Nouvelle image de marque 
+== Nouvelle documentation et nouveau logo 
 
-En premier lieu, une nouvelle image de marque avec un nouveau logo est sortie, dans le but de régler le différend entre Angular Js et Angular 2+. 
+En premier lieu, un nouveau logo est sortie, dans le but de régler le différend entre Angular Js et Angular 2+. 
 
 Ainsi, la création d'une nouvelle plateforme de documentation, avec une méthode d'apprentissage interactive, permet d'acquérir des compétences en Angular. Il est plus facile de repérer les informations nécessaires qui présentent les principes fondamentaux du Framework, via cette nouvelle une plateforme, plus moderne.
 Voici le lien pour accéder à la plateforme : https://angular.dev/ 
 
 image::khaoulamrabet/plateforme.png[image,width=70%,align="center"]
 
-== La nouvelle syntaxe de control flow
+== La nouvelle syntaxe de contôle flux
 
-Depuis Angular 2, le flux de contrôle est fait par les directives *ngIf, *ngFor et *ngSwitch.
-Une nouvelle syntaxe de Flux de contrôles cette fois-ci sans directive, il vous suffit d'entourer vos morceaux de codes par la `@-syntax`.
-Les directives structurelles *ngIf, *ngSwitch et *ngFor sont remplacées par `@if` , `@Switch` et `@for`. 
+Depuis Angular 2, le contrôle de flux est fait par les directives *ngIf, *ngFor et *ngSwitch.
+Une nouvelle syntaxe du contrôle de flux cette fois-ci sans directive, il vous suffit d'entourer vos morceaux de codes par la `@-syntax`.
+Les directives structurelles *ngIf, *ngSwitch et *ngFor sont remplacés par `@if` , `@Switch` et `@for`. 
 
 Il est possible d'observer une amélioration dans le code des templates en citant: 
 1. Moins de complexité au niveau des lignes de code.
@@ -100,7 +100,7 @@ Pour avoir cette syntaxe dans nos anciennes applications, juste après l’insta
 
 Le lazy loading est une technique recommandée dans le développement web moderne. Elle permet de ne charger que les ressources nécessaires lors de l’interaction avec l’utilisateur.
 
-Angular a introduit ce concept avec les routes où il est possible de ne changer que les modules nécessaires de la page actuelle. La bonne nouvelle avec cette version, c'est le chargement déféré de la Template. En respectant les conditions, cette fonctionnalité permet de charger le contenu d'un bloc de Template de manière déférée. 
+Angular a introduit ce concept avec les routes où on pourra changer que les modules nécessaires de la page actuelle. La bonne nouvelle de cette version est le chargement différé de la Template. En respectant les conditions, cette fonctionnalité permet de charger le contenu d'un bloc de Template de manière différée. 
 
 La principale directive est `@defer`, qui englobe le bloc des éléments DOM à charger une fois qu'il y a certaines conditions remplies.
 
@@ -130,7 +130,7 @@ Pour déclencher ce bloc de `@defer`, il faut utiliser l’un de ces déclencheu
 
 * `Hover`:  déclenche un chargement différé lorsque la souris a survolé la zone de déclenchement. Les événements utilisés pour cela sont mouseenter et focusin.
 
-* `Immediate`: déclenche immédiatement le chargement différé, ce qui signifie qu'une fois que le client a terminé le rendu, le morceau différé commencerait alors à être récupéré immédiatement.
+* `Immediate`: déclenche immédiatement le chargement différé, une fois le client a terminé le rendu.
 
 * `Timer(x)`: se déclenche après une durée spécifiée. La durée est obligatoire et peut être précisée en ms ou s.
 
@@ -182,13 +182,13 @@ Ce nouveau mécanisme nous permet de rendre rapide le chargement des pages web, 
 ----
 Le rendu côté navigateur est le suivant, en respectant l'ordre d'affichage de ses différents blocs :
 <1> En premier lieu, l'affichage de message de bloc @placeholder.
-<2> Après 1000 ms, le skeleton sera rendu dans la page.
-<3> Quand le temps de 2000 ms collé, le principal bloc de @defer sera changé.
+<2> Après 1000 ms, ls skeleton sera rendu dans la page.
+<3> Après 2000 ms, le principal bloc de @defer sera changé.
 <4> En cas d'erreur de chargement, le @error est déclenché. 
 
 == Les nouvelles Hooks: 
 
-Les nouvelles fonctions de cycle de vie d'Angular `afterRender` et `afterNextRender` vous permettent de sauvegarder un rappel de rendu à appeler une fois que Angular a terminé de restituer tous les éléments de la page dans le DOM.
+Les nouvelles fonctions de cycle de vie d'Angular `afterRender` et `afterNextRender` vous permettent de sauvegarder un rappel de rendu à lancer une fois que Angular a terminé de restituer tous les éléments de la page dans le DOM.
 
 * `afterNextRender`: s'utilise si vous avez besoin de lire ou d'écrire manuellement des informations de mise en page, telles que la taille ou l'emplacement. Elle remplace AfterViewInit.
 
@@ -215,9 +215,9 @@ export class UserComponent {
 }
 ----
 
-== Signals
+== Signaux
 
-Les Signals sont désormais stables en version 17, vous pouvez donc les utiliser sans crainte de changements ultérieurs trop impactants.
+Les Signaux sont désormais stables en version 17, vous pouvez donc les utiliser sans crainte de changements ultérieurs trop impactant.
 
 Nous utilisons le décorateur `@Input` dans le projet Angular pour passer des variables de composant parent au composant fils. Maintenant, nous avons la possibilité d'utiliser à la place de @Input, le signal avec `input()` pour assurer une communication plus réactive. 
 
@@ -332,4 +332,4 @@ Google intègre de nouvelles fonctionnalités de signalisation d'une version à 
 
 Les développeurs utilisent des signaux permettant de gagner du temps sur le codage et d'être pertinents dans la détection des changements de statut des composants cibles.
 
-On pourra constater qu'avec les prochaines versions, Angular délibérer de Zone js.
+Au cours du prochain version, attendez-vous à de nombreuses évolutions dans la réactivité basée sur le signal, le rendu hybride et le parcours d'apprentissage d'Angular.
