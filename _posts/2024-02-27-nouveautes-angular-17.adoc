@@ -166,7 +166,7 @@ Ce nouveau mécanisme permet de rendre plus rapide le chargement des pages web, 
       <p>Phone: {{user.phone}}</p>
     </div>
   } @empty {
-    <p>Aucun Utilisateur ajouté.</p>
+    <p>No users added!.</p>
   }
 
 } @placeholder (minimum 1000) { // <1>
