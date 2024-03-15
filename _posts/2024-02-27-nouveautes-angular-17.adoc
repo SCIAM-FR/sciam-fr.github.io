@@ -244,9 +244,9 @@ export class UserComponent {
 } 
 ----
 
- <1> Déclarer le surname en tant que Signal input : variable qu'on récupère de route et que l'on va envoyer au composant fils `Add user`.
+<1> Déclarer le surname en tant que Signal input : variable qu'on récupère de route et que l'on va envoyer au composant fils `Add user`.
 
- <2> Intégrer le composant `Add user` dans le template de composant parent en envoyant la valeur du signal `surname()`.
+<2> Intégrer le composant `Add user` dans le template de composant parent en envoyant la valeur du signal `surname()`.
 
 === Le composant fils
 
