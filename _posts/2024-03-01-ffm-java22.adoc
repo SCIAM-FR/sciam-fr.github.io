@@ -1,0 +1,211 @@
+= L'API Foreign Function & Memory dans Java 22
+:page-navtitle: L'API Foreign Function & Memory dans Java 22
+:page-excerpt: JNI est mort, vive FFM ! Java 22 propose (enfin) en standard son API FFM : "Foreign Function a Memory". Son but est de proposer un moyen sûr et performant de manipuler des données en dehors de la heap memory et d'intéragir avec du code natif.
+:layout: post
+:author: clementdetastes
+:page-tags: [Java, Java 22, FFM]
+:page-image: images/vignettes/javafx_square.png
+:page-vignette: javafx.png
+//:page-vignette-licence: Source Oracle
+:page-liquid:
+:showtitle:
+
+== Un peu d'histoire
+
+Depuis le JDK 1.1, il est possible de manipuler des données "off-heap" et d'intéragir avec du code natif via JNI "Java Native Interface".
+
+== Une longue gestation
+
+Dire que la route a été longue serait un euphémisme. FFM est la fusion des JEP "Foreign Memory Access API" et "Foreign Linker API" apparues toutes deux en _incubator_ respectivement en JDK 14 et JDK 16. Il aura donc fallu pas moins de 4 années pour voir arriver en standard, dans le JDK 22, ces fonctionnalités.
+
+== Une plongée dans l'API
+
+Module java.base / package java.lang.foreign
+
+=== La gestion de la mémoire "off-heap"
+
+Pour manipuler les données stockées dans la mémoire "off-heap", l'API FFM nous propose une répresentation de celles-ci sous la forme de l'objet `MemorySegment`. Un tel objet peut être obtenu par l'intermédiaire d'une _arena_ qui va en contrôler la portée et nous permettra de déterminer à quel moment la mémoire allouée à ce segment sera libérée.
+
+NOTE: Contrairement à la "heap", la mémoire "off-heap" n'est pas soumise à la collecte du Garbage Collector.
+
+NOTE: `Memory Segment` permet également d'accéder à de la mémoire "on-heap" mais nous n'allons pas aborder ce point.
+
+Une instance de l'interface `Arena` peut être obtenue via l'une de ses 4 fabriques disponibles :
+
+* `Arena::global` : les segments sont toujours accessibles, et ce, par n'importe quel thread. La mémoire native "off-heap" correspondante n'est libérée qu'à l'arrêt de la JVM.
+* `Arena::ofAuto` : les segments sont ici encore accessibles par n'importe quel thread, mais le Garbage Collector se chargera de libérer les zones mémoires après que les `MemorySegment` correspondants deviennent inatteignables.
+* `Arena::ofConfined` : les segments ne sont accessibles que depuis le thread qui a créé l'arena et ne seront libérés que lorsque celle-ci sera fermée, par l'invocation de sa méthode `close()` ou l'utilisation d'un "try-with-resources", l'interface `Arena` héritant d' `AutoCloseable`.
+* `Arena::ofShared` : comme `Arena::ofConfined`, mais les segments sont accessibles par tous les threads.
+
+Ces différences sont synthétisées dans ce tableau :
+
+.Récapitulatif des différents types d'arenas
+|===
+| Type | Durée de vie limitée | Explicitement fermable | Accessible depuis plusieurs threads
+
+| Global | ✗ | ✗ | ✓
+| Automatic | ✓ | ✗ | ✓
+| Confined | ✓ | ✓ | ✗
+| Shared | ✓ | ✓ | ✓
+|===
+
+NOTE: Il est également possible de fournir sa propre implémentation de l'interface `Arena`.
+
+`Arena` possède un certain nombre de surcharges de la méthode `allocateFrom()` permettant par exemple la très utile allocation d'une chaîne de caractères dans sa représentation native.
+
+.Allocation d'une chaîne de caractères "off-heap" via un `MemorySegment`
+[source,java]
+----
+String message = "Hello Sciam";
+try (Arena arena = Arena.ofConfined()) {
+  MemorySegment memorySegment = arena.allocateFrom(message);
+}
+----
+
+L'interface `MemorySegment` possède une variété de méthodes permettant de lire ou d'écrire dans la mémoire "off-heap". Ces méthodes prennent en paramètre un objet de type `ValueLayout` qui modélise la structure de données sous-jacente, telles que des valeurs primitives. Ce `ValueLayout` précise :
+
+* la taille de la donnée,
+* son "endianness" (big-endian / little-endian),
+* l'alignement,
+* et le type de donnée java correspondant.
+
+Par exemple, si l'on souhaite lire octet par octet le contenu de la chaîne de caractère en mémoire, on pourra utiliser le _layout_ `ValueLayout.JAVA_BYTE`, qui correspond à la structure suivante :
+
+* taille = 1 octet
+* endianness = `ByteOrder.nativeOrder()`
+* alignement = 1, autrement dit l'adresse mémoire correspondante est un multiple de 8 bits
+* type java associé : `byte`
+
+.Lecture des caractères en mémoire "off-heap"
+[source,java]
+----
+MemorySegment memorySegment = arena.allocateFrom("Hello Sciam");
+for (int i = 0; i < memorySegment.byteSize(); i++) {
+  char c = (char) memorySegment.get(ValueLayout.JAVA_BYTE, i);
+  System.out.print(c);
+}
+----
+.Sortie du programme
+----
+Hello Sciam
+----
+
+NOTE: On notera qu'on lit un 12^ème^ caractère qui correspond au caractère de terminaison des chaînes en C, à savoir `\0`, automatiquement ajouté lors de l'écriture faite avec `MemorySegment::allocateFrom`
+
+
+TODO : layouts (StructLayout) etc
+
+== Recherche et description de fonctions étrangères
+
+Intéressons-nous maintenant à la possibilité d'invoquer des fonctions depuis une bibliothèque native. Les API de FFM mettent à disposition un certain nombre de façons d'y accéder.
+
+L'interface `SymbolLookup` permet de fournir un accès aux bibliothèques et fonctions natives qui adhèrent aux spécifications de la plateforme. Pour en obtenir une instance, on dispose de 3 fabriques :
+
+* `SymbolLookup.libraryLookup(String, arena)` et `SymbolLookup.libraryLookup(Path, arena)` permettent de charger dynamiquement une bibliothèque par son nom ou son chemin et en liant son cycle de vie à celui de l'_arena_,
+* `SymbolLookup.loaderLookup()` crée un `SymbolLookup` qui recherchera dans les bibliothèques chargées par le class loader, par exemple via `System.load()` ou `System.loadLibrary()` comme on le ferait pour JNI.
+
+=== Chargement d'une bibliothèque native
+
+Nous allons utiliser à titre d'exemple https://www.sqlite.org/[SQLite] dont le code est écrit en langage C, par l'intermédiaire de sa bibliothèque _sqlite3.dll_ sur windows afin de manipuler localement une base de données dans notre application.
+
+.Chargement dynamique de la bibliothèque sqlite3
+[source,java]
+----
+try (Arena arena = Arena.ofConfined()) { // <1>
+    SymbolLookup lookup = SymbolLookup.libraryLookup("sqlite3", arena); // <2>
+}
+----
+<1> Création d'une _arena_ de type "confined"
+<2> Obtention d'une instance de `SymbolLookup` sur la bibliothèque sqlite3. Omettre l'extension fonctionne et est recommandé pour des raisons de portabilité, permettant ainsi au même code de charger le .dll sur windows ou le .so sur linux par exemple.
+
+=== Localisation d'une fonction native
+
+Après avoir initialisé une base de données vide dans le fichier _ffm.db_, la prochaine étape va consister à l'appel de la fonction native `sqlite3_open` qui permet d'établir un lien avec la base.
+
+L'interface `SymbolLookup` précédemment obtenue va nous permettre de localiser l'adresse mémoire correspondant à la fonction, via sa méthode `find()`. Son type de retour est `Optional<MemorySegment>`, ce qui permet de gérer le cas où la recherche aurait échoué.
+
+.Obtention du `MemorySegment` correspondant à la fonction `sqlite3_open`
+[source,java]
+----
+String openFunctionName = "sqlite3_open";
+MemorySegment openSegment = lookup.find(openFunctionName)
+    .orElseThrow(() -> new IllegalStateException("Impossible de localiser la fonction " + openFunctionName));
+----
+
+=== Appel d'une fonction native
+
+L'interface `Linker` va nous permettre d'obtenir une instance de `MethodHandle` sur la fonction native. +
+Son rôle est de nous abstraire d'un certain nombre de considérations techniques. En effet, chaque bibliothèque adhère à une "Application Binary Interface" (ABI) qui est un ensemble de conventions et types de données qui dépendent du système d'exploitation, du compilateur et du processeur. `Linker` a connaissance de ces conventions et jouera le rôle de médiateur entre le code java et le code natif.
+
+Une instance de `Linker` s'obtient via la fabrique `nativeLinker()`.
+
+.Obtention d'une instance de `Linker`
+[source,java]
+----
+Linker linker = Linker.nativeLinker();
+----
+
+Pour invoquer la fonction native, il va falloir fournir une description de la signature de la méthode. +
+L'interface `FunctionDescriptor` et sa fabrique `of()` permet de définir le type de retour et les paramètres acceptés par la méthode.
+
+Le fichier header _sqlite3.h_ nous indique la signature :
+
+[source,C]
+----
+int sqlite3_open(
+  const char *filename,   /* Database filename (UTF-8) */
+  sqlite3 **ppDb          /* OUT: SQLite db handle */
+);
+----
+
+On obtient la description correspondante en java :
+
+[source,java]
+----
+FunctionDescriptor openDesc = FunctionDescriptor.of(
+    ValueLayout.JAVA_INT, // <1>
+    ValueLayout.ADDRESS,  // <2>
+    ValueLayout.ADDRESS   // <3>
+);
+----
+<1> Type de retour de la méthode
+<2> Type du premier paramètre : pointeur vers le nom du fichier _.db_
+<3> Type du second paramètre : pointeur vers un _handle_ de la base de données
+
+L'interface `Linker`, par l'intermédiaire de sa méthode `downcallHandle()` permet l'obtention de l'instance de `MethodHandle`. Comme l'indique son nom, cela permet de réaliser des appels descendants, de Java vers le code natif.
+
+[source,java]
+----
+MethodHandle openHandle = linker.downcallHandle(openSegment, openDesc);
+----
+
+Il ne nous reste plus qu'à préparer les paramètres et invoquer la méthode native.
+
+WARNING: Tous les paramètres de la méthode native à invoquer doivent aussi se trouver dans la mémoire "off-heap" et donc faire l'objet d'allocations au travers des API de FFM, pour en obtenir les `MemorySegment` correspondants.
+
+[source,java]
+----
+String databaseFilename = "ffm.db";
+MemorySegment filenameSegment = arena.allocateFrom(databaseFilename); // <1>
+MemorySegment dbPtr = arena.allocate(ValueLayout.ADDRESS); // <2>
+try {
+    int code = (int) openHandle.invokeExact(filenameSegment, dbPtr); // <3>
+    if (code == 0) {
+        System.out.println("Lien avec la base " + databaseFilename + " établi avec succès");
+    } else {
+        System.err.println("Erreur au chargement de la base : code = " + code);
+    }
+} catch (Throwable e) {
+    throw new IllegalStateException("Erreur lors de l'invocation de la fonction native " + openFunctionName, e);
+}
+----
+<1> Allocation de la chaîne de caractères native contenant le nom du fichier de base de données, premier paramètre de la méthode
+<2> Allocation d'un segment vers le pointeur du _handle_ de la base de données
+<3> Invocation de la méthode native
+
+== Un cas pratique avec SQLite
+
+SQLite est un moteur de base de données
+
+== L'outil JExtract
+
