@@ -134,6 +134,8 @@ MemorySegment openSegment = lookup.find(openFunctionName)
 
 === Appel d'une fonction native
 
+==== Utilisation du `Linker`
+
 L'interface `Linker` va nous permettre d'obtenir une instance de `MethodHandle` sur la fonction native. +
 Son rôle est de nous abstraire d'un certain nombre de considérations techniques. En effet, chaque bibliothèque adhère à une "Application Binary Interface" (ABI) qui est un ensemble de conventions et types de données qui dépendent du système d'exploitation, du compilateur et du processeur. `Linker` a connaissance de ces conventions et jouera le rôle de médiateur entre le code java et le code natif.
 
@@ -145,12 +147,14 @@ Une instance de `Linker` s'obtient via la fabrique `nativeLinker()`.
 Linker linker = Linker.nativeLinker();
 ----
 
+==== Obtention d'un `MethodHandle` vers la fonction native
+
 Pour invoquer la fonction native, il va falloir fournir une description de la signature de la méthode. +
 L'interface `FunctionDescriptor` et sa fabrique `of()` permet de définir le type de retour et les paramètres acceptés par la méthode.
 
 Le fichier header _sqlite3.h_ nous indique la signature :
 
-[source,C]
+[source,c]
 ----
 int sqlite3_open(
   const char *filename,   /* Database filename (UTF-8) */
@@ -179,6 +183,8 @@ L'interface `Linker`, par l'intermédiaire de sa méthode `downcallHandle()` per
 MethodHandle openHandle = linker.downcallHandle(openSegment, openDesc);
 ----
 
+==== Invocation de la méthode native
+
 Il ne nous reste plus qu'à préparer les paramètres et invoquer la méthode native.
 
 WARNING: Tous les paramètres de la méthode native à invoquer doivent aussi se trouver dans la mémoire "off-heap" et donc faire l'objet d'allocations au travers des API de FFM, pour en obtenir les `MemorySegment` correspondants.
@@ -187,9 +193,9 @@ WARNING: Tous les paramètres de la méthode native à invoquer doivent aussi se
 ----
 String databaseFilename = "ffm.db";
 MemorySegment filenameSegment = arena.allocateFrom(databaseFilename); // <1>
-MemorySegment dbPtr = arena.allocate(ValueLayout.ADDRESS); // <2>
+MemorySegment dbPtrPtr = arena.allocate(ValueLayout.ADDRESS); // <2>
 try {
-    int code = (int) openHandle.invokeExact(filenameSegment, dbPtr); // <3>
+    int code = (int) openHandle.invokeExact(filenameSegment, dbPtrPtr); // <3>
     if (code == 0) {
         System.out.println("Lien avec la base " + databaseFilename + " établi avec succès");
     } else {
@@ -200,12 +206,125 @@ try {
 }
 ----
 <1> Allocation de la chaîne de caractères native contenant le nom du fichier de base de données, premier paramètre de la méthode
-<2> Allocation d'un segment vers le pointeur du _handle_ de la base de données
+<2> Allocation d'un segment vers le pointeur du _handle_ de la base de données, second paramètre
 <3> Invocation de la méthode native
 
-== Un cas pratique avec SQLite
+=== Appel montant : natif vers java
 
-SQLite est un moteur de base de données
+L'interface `Linker` permet également de réaliser des _upcalls_, à savoir des appels montants depuis le code natif jusqu'au code java. +
+Cela se réalise par le biais de la méthode `upcallStub()` qui prendre en paramètres :
+
+* un `MethodHandle` de la fonction java à appeler depuis le code natif
+* une description de cette fonction sous la forme de `FunctionDescriptor`
+* une instance de `Arena`
+
+La fonction native `sqlite3_trace_v2` permet de configurer des traces avec l'appel d'une fonction callback. Sa signature est la suivante :
+
+[source,c]
+----
+SQLITE_API int sqlite3_trace_v2(
+  sqlite3*,
+  unsigned uMask,
+  int(*xCallback)(unsigned,void*,void*,void*),
+  void *pCtx
+);
+----
+
+On va pouvoir déclarer une méthode java qui sera appelée comme callback de trace. La signature de la méthode java doit correspondre son homologue natif.
+
+[source,java]
+----
+static int traceCallback(
+    final MemorySegment m1,
+    final MemorySegment m2,
+    final MemorySegment m3,
+    final MemorySegment m4) {
+
+    System.out.println("Appel de traceCallback()");
+
+    return 0;
+}
+----
+
+Obtenons le `MethodHandle` correspondant :
+
+[source,java]
+----
+MethodHandle traceCallbackHandle = MethodHandles.lookup().findStatic(
+    SQLite.class,
+    "traceCallback",
+    MethodType.methodType(
+        int.class,
+        MemorySegment.class,
+        MemorySegment.class,
+        MemorySegment.class,
+        MemorySegment.class
+    )
+);
+----
+
+Puis le `FunctionDescriptor` associé :
+
+[source,java]
+----
+FunctionDescriptor traceCallbackDesc = FunctionDescriptor.of(
+    ValueLayout.JAVA_INT,
+    ValueLayout.ADDRESS,
+    ValueLayout.ADDRESS,
+    ValueLayout.ADDRESS,
+    ValueLayout.ADDRESS
+);
+----
+
+On peut désormais créer l'_upcall_ grâce au `Linker`. Ce dernier va se charger de créer un pointeur de fonction.
+
+[source,java]
+----
+MemorySegment upcallSegment = linker.upcallStub(traceCallbackHandle, traceCallbackDesc, arena);
+----
+
+Enfin, l'appel à la fonction `sqlite3_trace_v2` peut être effectué, en lui fournissant notre _upcall_. On reproduit les étapes précédentes comme pour la connexion à la base de données, en réalisant un _downcall_.
+
+[source,java]
+----
+String traceFunctionName = "sqlite3_trace_v2";
+MemorySegment traceSegment = lookup.find("sqlite3_trace_v2").orElseThrow(); // <1>
+
+FunctionDescriptor traceDesc = FunctionDescriptor.of( // <2>
+    ValueLayout.JAVA_INT,
+    ValueLayout.ADDRESS,
+    ValueLayout.JAVA_INT,
+    ValueLayout.ADDRESS,
+    ValueLayout.ADDRESS
+);
+
+MethodHandle traceHandle = linker.downcallHandle(traceSegment, traceDesc); // <3>
+try {
+    int traceCode = (int) traceHandle.invokeExact( // <4>
+        dbPtr,
+        0x01, // SQLITE_TRACE_STMT <5>
+        upcallStub,
+        MemorySegment.NULL
+    );
+
+    System.out.println("traceCode " + traceCode);
+
+} catch (Throwable e) {
+    throw new IllegalStateException("Erreur lors de l'invocation de la fonction " + traceFunctionName, e);
+}
+----
+<1> Obtention de l'adresse de la fonction en mémoire
+<2> Description de la signature de la fonction
+<3> Création du _handle_ vers la fonction native
+<4> Invocation de la fonction native
+<5> Événement déclenchant une trace, ici la valeur SQLITE_TRACE_STMT
+
+Pour vérifier que notre callback est fonctionnel et la méthode java effectivement appelée en bout de chaîne, on peut exécuter une requête SQL via la fonction `sqlite3_exec()`. Par exemple, en créant une table dans notre base de données. On reproduit les étapes précédentes à chaque fois :
+
+* recherche de la fonction,
+* description de la signature,
+* obtention d'un `MethodHandle`
+* invocation
 
 == L'outil JExtract
 
