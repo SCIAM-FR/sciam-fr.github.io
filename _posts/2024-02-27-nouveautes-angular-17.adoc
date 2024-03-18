@@ -9,7 +9,7 @@
 
 = Les nouveautés d'Angular 17
 
-Angular attire encore l’attention dans le domaine IT. Après les différents changements apportés par la version 16, il est devenu le choix numéro 1 dans le marché Français selon les statistiques de 2023.
+Angular attire encore l’attention dans le domaine IT. Après les différents changements apportés par la version 16, il est devenu le choix numéro 1 dans le marché Français selon les statistiques de 2023, voir plus de détails sur https://blog.dyma.fr/quel-framework-choisir-angular-vue-js-ou-react/amp/.
 
 Google a publié, le 8 novembre 2023, la nouvelle version 17 avec un nouveau logo, une nouvelle syntaxe de modèle de blocs, les vues différées et des nouveaux Hooks de cycle de vie.  
 
@@ -17,7 +17,7 @@ Cet article explique en détail toutes les nouveautés mentionnées précédemme
 
 == La nouvelle documentation et le nouveau logo 
 
-En premier lieu, un nouveau logo est utilisé, dans le but de régler le différend entre Angular Js et Angular 2+. 
+En premier lieu, un nouveau logo est utilisé, dans le but de régler la différence entre Angular Js et Angular 2+. 
 
 Ensuite, la création d'une nouvelle plateforme de documentation, avec une méthode d'apprentissage interactive, permet d'acquérir des compétences en Angular. Il est plus facile de repérer les informations nécessaires qui présentent les principes fondamentaux du Framework, via cette nouvelle plateforme, plus moderne.
 
