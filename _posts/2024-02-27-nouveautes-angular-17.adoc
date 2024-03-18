@@ -96,7 +96,7 @@ En plus, `@for` dispose également d'un raccourci pour les collections sans él�
 ----
 === La migration vers Angular 17
 
-Pour avoir cette syntaxe dans nos applications existantes, juste après l’installation d'`angular/core@17`, il suffit de lancer la commande  `ng g @angular/core:control-flow` qui permet automatiquement de mettre en place cette nouvelle syntaxe dans nos Templates.
+Pour avoir cette syntaxe dans nos applications existantes, juste après l’installation d'``angular/core@17`, il suffit de lancer la commande  `ng g @angular/core:control-flow` qui permet automatiquement de mettre en place cette nouvelle syntaxe dans nos Templates.
 
 == Le lazy loading des Templates
 
@@ -268,7 +268,7 @@ export class AddUserComponent {
 
 == Les autres nouveautés 
 
-=== Le nouveau Package SSR (Server side render )
+=== Le nouveau Package SSR (Server side render)
 
 L'hydratation a été l'élément essentiel dans la version 16 d'Angular grâce à l'amélioration de la détection de chargement de DOM. La nouveauté de cette version est d'ajouter un package `angular/ssr` pour activer le SSR sans avoir à installer `Angular Universal`.
 
@@ -299,7 +299,7 @@ Jusqu'à présent, `Webpack` était la solution par défaut pour Angular.
 
 Mais de nouveaux outils plus rapides sont venus le challenger `ESBuild` et `vite`. Dans la version 17 d'Angular, ces deux outils sont automatiquement ajoutés en remplacement de Webpack.
 
-Cela implique que vos builds ( ng serve et ng build) seront bien plus rapides qu'auparavant. On parle d’un facteur de 2 à 4 !
+Cela implique que vos builds (ng serve et ng build) seront bien plus rapides qu'auparavant. On parle d’un facteur de 2 à 4 !
 
 === La nouvelle directive Image : `NgOptimizedImage`
 
