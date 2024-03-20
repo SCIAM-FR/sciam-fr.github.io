@@ -1,0 +1,338 @@
+:showtitle:
+:page-navtitle: Les nouveautés d'Angular 17
+:page-excerpt: Google a publié, le 8 novembre 2023, la nouvelle version 17 avec un nouveau logo, une nouvelle syntaxe de contrôle de flux, les vues différées et des nouveaux Hooks pour le cycle de vie.
+:layout: post
+:author: khaoulamrabet
+:page-tags: [Angular, Angular17, control Flow, lazy loading blocs, Signal, Hydratation par défaut, Hooks, le signal Input()]
+:page-vignette: angular17.png
+:page-liquid:
+
+= Les nouveautés d'Angular 17
+
+Angular attire encore l’attention dans le domaine IT. Après les différents changements apportés par la version 16, il est devenu le choix numéro 1 dans le marché Français selon les statistiques de 2023, voir plus de détails  https://blog.dyma.fr/quel-framework-choisir-angular-vue-js-ou-react/amp/[ici^].
+
+Google a publié, le 8 novembre 2023, la nouvelle version 17 avec un nouveau logo, une nouvelle syntaxe de modèle de blocs, les vues différées et des nouveaux Hooks de cycle de vie.  
+
+Cet article explique en détail toutes les nouveautés mentionnées précédemment, afin d'avoir les clés nécessaires pour utiliser la nouvelle version.
+
+== La nouvelle documentation et le nouveau logo 
+
+En premier lieu, un nouveau logo est utilisé, dans le but de régler la différence entre Angular Js et Angular 2+. 
+
+Ensuite, la création d'une nouvelle plateforme de documentation, avec une méthode d'apprentissage interactive, permet d'acquérir des compétences en Angular. Il est plus facile de repérer les informations nécessaires qui présentent les principes fondamentaux du Framework, via cette nouvelle plateforme, plus moderne.
+
+Voici le lien pour accéder à la plateforme : https://angular.dev/ 
+
+image::khaoulamrabet/plateforme.png[image,width=70%,align="center"]
+
+== La nouvelle syntaxe de contôle flux
+
+Depuis Angular 2, le contrôle de flux est fait par les directives `*ngIf`, `*ngFor` et `*ngSwitch`.
+Une nouvelle syntaxe du contrôle de flux, cette fois-ci sans directive, est proposée : il suffit d'entourer les portions de codes avec la `@-syntax`.
+Les directives structurelles *ngIf, *ngSwitch et *ngFor sont remplacés par `@if` , `@Switch` et `@for`. 
+
+Il est possible d'observer une amélioration dans le code des templates en citant :
+
+. Moins de complexité au niveau des lignes de code
+. Proximité syntaxique avec Javascript
+. Réduction de l’utilisation de `ng-container` pour ajouter des conditions d’affichage
+. Disponibilité automatique dans les modèles, sans importations supplémentaires
+
+Nous allons explorer en détail les nouvelles syntaxes de `@if`, `@for` et `@switch`.
+
+=== La syntaxe `@if`
+
+`@if` permet un rendu conditionnel dans les templates. La nouvelle version apporte une simplification majeure, qui est définie par rapport à la clause `Else` de la directive `*ngIf`. En plus de ça, le flux de contrôle actuel rend également plus simple l'utilisation de `@else`.
+
+[source,html]
+----
+  @if (user.role === 'ADMIN' ) {
+   <app-add-user></app-add-user>
+  }
+  @else {
+   <p>
+     Contactez votre administrateur pour pouvoir ajouter un nouvel utilisateur
+   </p>
+  }
+----
+=== La syntaxe `@Switch` 
+
+Avec la nouvelle syntaxe, l’ajout de cas supplémentaires peuvent être mieux distingués et plus lisibles.
+
+[source,html]
+----
+   @switch (user.role) {
+    @case ('ADMIN') {
+      <app-add-user></app-add-user>
+    }
+    @case ('MANAGER') {
+      <app-add-product></app-add-product>
+    }
+    @default {
+      <p>Vous n\'avez pas l\'accés à créer un nouvel utilisateur ou produit.</p>
+    }
+  }
+----
+
+=== La syntaxe `@for`
+
+Nous constatons souvent des problèmes de performance lors du chargement des éléments d’une liste, à chaque traitement effectué sur une partie de la liste, en raison du manque de `@trackBy` dans `*ngFor`. 
+
+La nouvelle syntaxe de `track` est bien plus facile à utiliser puisqu'il s'agit simplement d'une expression, plutôt que d'une méthode dans la classe du composant.
+
+En plus, `@for` dispose également d'un raccourci pour les collections sans élément, via un `@empty` qui est un bloc facultatif.
+
+[source,html]
+----
+  @for (user of users(); track user) {
+    <div class="item">
+      <p>First Name: {{user.firstName}} </p>
+      <p>last name: {{user.lastName}}</p>
+      <p>Phone: {{user.phone}}</p>
+    </div>
+  } @empty {
+    <p>Aucun Utilisateur ajouté.</p>
+  }
+----
+=== La migration vers Angular 17
+
+Pour avoir cette syntaxe dans nos applications existantes, juste après l’installation d'``angular/core@17`, il suffit de lancer la commande  `ng g @angular/core:control-flow` qui permet automatiquement de mettre en place cette nouvelle syntaxe dans nos Templates.
+
+== Le lazy loading des Templates
+
+Le lazy loading est une technique recommandée dans le développement web moderne. Elle permet de ne charger que les ressources nécessaires lors de l’interaction avec l’utilisateur.
+
+Angular a introduit ce concept avec les routes où on ne pourra changer que les modules nécessaires à la page actuelle. La bonne nouvelle de cette version est le chargement différé dans le Template. En respectant les conditions, cette fonctionnalité permet de charger le contenu d'un bloc de Template de manière différée. 
+
+Le `@defer` englobe le bloc des éléments DOM à charger une fois que les conditions sont bien remplies.
+
+=== Un exemple avec `@defer`
+
+[source,html]
+----
+@defer (on immediate) { // <1>
+  
+  <app-add-product></app-add-product>
+
+}
+----
+
+<1> Le composant `app-add-product` sera chargé dans la page immédiatement, une fois que le navigateur aura terminé le rendu.
+`immediate` est un trigger qui va être déclenché en interaction avec le client.
+
+=== Les triggers de `@defer` 
+
+Pour déclencher un bloc `@defer`, il faut utiliser l’un de ces déclencheurs dans la condition :
+
+* `Viewport`: le changement sera déclenché lorsque l’utilisateur scrolle jusqu’au bloc
+
+* `Idle`: déclenche le chargement différé une fois que le navigateur aura atteint un état d'inactivité (détecté à l'aide de l'api `requestIdleCallbackAPI` sous le capot)
+
+* `Interaction`: déclenche le bloc différé lorsque l'utilisateur interagit avec l'élément spécifié via des événements `click` ou `keydown`
+
+* `Hover`:  déclenche un chargement différé lorsque la souris a survolé la zone de déclenchement. Les événements utilisés pour cela sont `mouseenter` et `focusin`
+
+* `Immediate`: déclenche immédiatement le chargement différé, une fois que le client a terminé le rendu
+
+* `Timer(x)`: se déclenche après une durée spécifiée. La durée est obligatoire et peut être précisée en `ms` ou `s`
+
+=== Les autres Blocs 
+
+On va lister les ensembles de directives qui peuvent définir des autres blocs avant de déclencher le bloc principal de `@defer` :
+
+* `@placeholder`: il s'agit d'un bloc facultatif qui déclare le contenu à afficher avant le déclenchement du bloc principal. Il accepte un paramètre facultatif pour spécifier la durée minimale pendant laquelle cet espace réservé doit être affiché
+
+* `@loading` : ce bloc, facultatif, permet de déclarer le contenu qui sera affiché lors du chargement
+
+* `@error`: ce bloc permet de déclarer le contenu qui sera affiché en cas d'échec du chargement
+
+Ce nouveau mécanisme permet de rendre plus rapide le chargement des pages web, en s'occupant uniquement des ressources nécessaires.
+
+=== Un exemple avec différents blocs de lazy loading : 
+
+[source,html]
+----
+<div class="content">
+  <app-add-user able="true"></app-add-user>
+</div>
+<h4>List of Users added by {{surname}} ! </h4>
+
+@defer (on timer(2000)) { // <3>
+
+  @for (user of users(); track user) {
+    <div class="item">
+      <p>First Name: {{user.firstName}} </p>
+      <p>last name: {{user.lastName}}</p>
+      <p>Phone: {{user.phone}}</p>
+    </div>
+  } @empty {
+    <p>No users added!.</p>
+  }
+
+} @placeholder (minimum 1000) { // <1>
+
+    <span>Here , bloc users added</span>
+
+} @loading (minimum 1000) { // <2>
+
+    <ng-container *skeleton="true ; repeat: users()?.length; height: '20px'; width: '200px'" /> 
+
+} @error { // <4>
+
+    <p class="text-red-500">Something went wrong...</p>
+}
+----
+Le rendu côté navigateur est le suivant, en respectant l'ordre d'affichage de ses différents blocs :
+
+<1> En premier lieu, l'affichage de message de bloc `@placeholder`
+<2> Après 1000 ms, le `skeleton` sera rendu dans la page
+<3> Après 2000 ms, le principal bloc de `@defer` sera changé
+<4> En cas d'erreur de chargement, le `@error` est déclenché
+
+== Les nouveaux Hooks: 
+
+Les nouvelles fonctions de cycle de vie d'Angular `afterRender` et `afterNextRender` permettent de sauvegarder un rappel de rendu à lancer une fois qu'Angular a terminé de restituer tous les éléments de la page dans le DOM.
+
+* `afterNextRender`: s'utilise si vous avez besoin de lire ou d'écrire manuellement des informations de mise en page, telles que la taille ou l'emplacement. Elle remplace `AfterViewInit`
+
+* `afterRender`: s'exécute après chaque détection de changement, comme `OnChanges`
+
+[source,typescript]
+----
+@Component({
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.scss'],
+  
+})
+export class UserComponent {
+  @Input() surname?: string;
+  userService = inject(UserService);
+  users: Signal<User[] | undefined> = toSignal (this.userService.getUsers());
+  
+  constructor() {
+      afterNextRender(() => { 
+        this.users()?.push({firstName: 'Khaoula', lastName: 'Mrabet', role: 'ADMIN'})
+    });
+  }
+}
+----
+
+== Les signaux
+
+Les Signaux sont désormais stables en version 17, vous pouvez donc les utiliser sans crainte de changements ultérieurs trop impactant.
+
+Nous utilisons le décorateur `@Input` dans le projet Angular pour passer des variables de composant parent au composant fils. Maintenant, nous avons la possibilité d'utiliser à la place de `@Input`, le signal avec `input()` pour assurer une communication plus réactive. 
+
+En utilisant le signal `input()`, il est possible de dériver l'entrée sans implémenter la fonction `ngOnchanges`. Le traitement peut être effectué dans le constructeur avec le trigger `effect()`.
+
+=== Le composant parent
+
+[source,typescript]
+----
+@Component({
+  selector: 'app-user',
+  template: `<app-add-user [surnameAdmin]="surname()"></app-add-user>`,  // <2>
+  styleUrls: ['./user.component.scss'], 
+  
+})
+export class UserComponent {
+  surname = input<string>(); // <1>
+  userService = inject(UserService);
+  users: Signal<User[] | undefined> = toSignal (this.userService.getUsers());
+  admin = signal(this.surname);
+} 
+----
+
+<1> Déclarer le surname en tant que Signal input : variable qu'on récupère de route et que l'on va envoyer au composant fils `Add user`.
+
+<2> Intégrer le composant `Add user` dans le template de composant parent en envoyant la valeur du signal `surname()`.
+
+=== Le composant fils
+
+[source,typescript]
+----
+@Component({
+  selector: 'app-add-user',
+  template: `@if (surnameAdmin()) {
+              <span> You have access to this feature</span>
+            }`,
+  styleUrls: ['./add-user.component.scss']
+})
+export class AddUserComponent {
+  surnameAdmin = input<string>(); // <1>
+  userService = inject(UserService);
+}
+----
+<1> Déclarer le signal input entrant `surnameAdmin` dans le composant fils pour l'afficher dans le template. Cette valeur vient du composant parent.
+
+== Les autres nouveautés 
+
+=== Le nouveau Package SSR (Server side render)
+
+L'hydratation a été l'élément essentiel dans la version 16 d'Angular grâce à l'amélioration de la détection de chargement de DOM. La nouveauté de cette version est d'ajouter un package `angular/ssr` pour activer le SSR sans avoir à installer `Angular Universal`.
+
+Nous avons la possibilité d'utiliser la technique SSR dans les nouvelles applications créées, en utilisant les deux options suivantes : 
+
+* Option 1 : en lançant la commande `ng new my-app` : Angular cli demande d’utiliser SSR/SSG / Prerendring , on pourra choisir `SSR`.
+
+* Option 2: en ajoutant l’option directement au niveau de la commande `ng new my-app --ssr`.
+
+Pour Ajouter l’hydratation dans nos applications existantes, il suffit de lancer : `ng add angular/ssr`.
+
+=== L'API View transitions
+
+La transition entre les interfaces est assurée avec l'API `View transitions`. Le routeur d’Angular supporte le nouvelle API View Transition afin que vous puissiez contrôler les animations de transitions entre les routes.
+
+Vous pouvez ajouter cette fonctionnalité à votre application dès aujourd'hui, en la configurant dans la déclaration du fournisseur du routeur lors du bootstrap :
+
+[source,typescript]
+----
+bootstrapApplication(MyApp, {providers: [
+  provideRouter(routes, withViewTransitions()),
+]});
+----
+
+=== Le nouvel Application Builder 
+
+Jusqu'à présent, `Webpack` était la solution par défaut pour Angular.
+
+Mais de nouveaux outils plus rapides sont venus le challenger `ESBuild` et `vite`. Dans la version 17 d'Angular, ces deux outils sont automatiquement ajoutés en remplacement de Webpack.
+
+Cela implique que vos builds (ng serve et ng build) seront bien plus rapides qu'auparavant. On parle d’un facteur de 2 à 4 !
+
+=== La nouvelle directive Image : `NgOptimizedImage`
+
+Pour la première fois, une directive améliore les performances de chargement des images.
+
+Avec son Selector `ngSrc`, le navigateur ne charge que les images que lorsqu’elles entrent dans le viewport.
+
+[source,typescript]
+----
+@Component({
+  selector: 'app-user',
+  imports:[NgOptimizedImage],
+  standalone: true
+  template: `@for (user of users(); track user) {
+    <img [ngSrc]="user.photo">
+  }`,
+  styleUrls: ['./user.component.scss'],
+  
+})
+export class UserComponent {
+  surname = input<string>();
+  userService = inject(UserService);
+  users: Signal<User[] | undefined> = toSignal (this.userService.getUsers());
+} 
+[source,typescript]
+----
+
+== Conclusion
+
+Angular 17 apporte un grand changement sur la manière de développer les templates, avec la nouvelle syntaxe de flux et des blocs différés.
+ 
+Google intègre de nouvelles fonctionnalités de signalisation d'une version à l'autre pour améliorer la réactivité. 
+
+Les développeurs utilisent des signaux permettant de gagner du temps sur le codage et d'être pertinents dans la détection des changements de statut des composants cibles.
+
+Dans la prochaine version, attendez-vous à de nombreuses évolutions dans la réactivité basée sur `signal`, le rendu hybride et le parcours d'apprentissage d'Angular.
