@@ -356,7 +356,7 @@ La possibilité d'automatiser cette partie prend alors tout son sens.
 Si l'on venait à migrer d'une version de bibliothèque à une autre sur une volumétrie importante de code, il serait fastidieux de mettre à niveau le code java.
 Régénérer les _bindings_ avec l'outil JExtract permet de nous soulager d'une partie du travail.
 
-NOTE: Bien que l'outil fasse partie du projet https://openjdk.org/projects/code-tools/[CodeTools] d'OpenJDK, il ne fait pas partie du JDK en tant que tel et n'est donc pas disponible de base dans les distributions du JDK.
+WARNING: Bien que l'outil fasse partie du projet https://openjdk.org/projects/code-tools/[CodeTools] d'OpenJDK, il ne fait pas partie du JDK en tant que tel et n'est donc pas disponible de base dans les distributions du JDK.
 
 === Génération du code java
 
