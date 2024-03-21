@@ -526,9 +526,10 @@ StructLayout structure = MemoryLayout.structLayout(
 
 NOTE: La structure ainsi que les champs qui la constituent peuvent être nommés, afin d'en faciliter l'accès ultérieur.
 
+.Répétition de la structure
 [source,java]
 ----
-SequenceLayout sequence = MemoryLayout.sequenceLayout(8, structure);
+SequenceLayout sequence = MemoryLayout.sequenceLayout(array.length, structure);
 ----
 
 On peut obtenir des `VarHandle` permettant d'accéder directement aux champs en mémoire, avec une gestion automatique de l'adresse mémoire au sein de la séquence et de la structure.
