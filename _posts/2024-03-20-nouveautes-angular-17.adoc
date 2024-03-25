@@ -82,7 +82,7 @@ La nouvelle syntaxe de `track` est bien plus facile à utiliser puisqu'il s'agit
 
 En plus, `@for` dispose également d'un raccourci pour les collections sans élément, via un `@empty` qui est un bloc facultatif.
 
-[source,html]
+[source,html,typescript]
 ----
   @for (user of users(); track user) {
     <div class="item">
@@ -150,7 +150,7 @@ Ce nouveau mécanisme permet de rendre plus rapide le chargement des pages web, 
 
 === Un exemple avec différents blocs de lazy loading : 
 
-[source,html]
+[source,html,typescript]
 ----
 <div class="content">
   <app-add-user able="true"></app-add-user>
@@ -324,7 +324,6 @@ export class UserComponent {
   userService = inject(UserService);
   users: Signal<User[] | undefined> = toSignal (this.userService.getUsers());
 } 
-[source,typescript]
 ----
 
 == Conclusion
