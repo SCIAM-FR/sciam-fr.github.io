@@ -1,5 +1,6 @@
 {
-    "asciidoc.preview.attributes": {
+    "asciidoc.extensions.enableKroki": true,
+    "asciidoc.preview.asciidoctorAttributes": {
         "imagesdir":"../images",
         "source-highlighter":"highlightjs",
         "stem":"latexmath"
