@@ -1,5 +1,14 @@
 {
   "image": "mcr.microsoft.com/devcontainers/universal:2",
   "postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
-  "postStartCommand": "bash runServer.sh"
+  "postStartCommand": "bash runServer.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "asciidoctor.asciidoctor-vscode",
+        "streetsidesoftware.code-spell-checker",
+        "streetsidesoftware.code-spell-checker-french"
+      ]
+    }
+  }
 }
