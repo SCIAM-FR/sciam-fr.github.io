@@ -187,7 +187,7 @@ int sqlite3_open(
 );
 ----
 
-On obtient la description correspondante en java :
+On obtient la description correspondante en Java :
 
 [source,java]
 ----
@@ -234,9 +234,9 @@ try {
 <2> Allocation d'un segment vers le pointeur du handle de la base de données, second paramètre
 <3> Invocation de la méthode native
 
-=== L'appel montant : natif vers java
+=== L'appel montant : natif vers Java
 
-L'interface `Linker` permet également de réaliser des upcalls, à savoir des appels montants depuis le code natif jusqu'au code java. +
+L'interface `Linker` permet également de réaliser des upcalls, à savoir des appels montants depuis le code natif jusqu'au code Java. +
 Cela se réalise par le biais de la méthode `upcallStub()` qui prendre en paramètres :
 
 * un `MethodHandle` de la fonction Java à appeler depuis le code natif
