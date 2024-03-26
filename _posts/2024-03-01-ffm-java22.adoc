@@ -6,7 +6,6 @@
 :page-tags: [Java, Java 22, FFM]
 :page-image: images/vignettes/ffm-java22-300x300.jpg
 :page-vignette: ffm-java22.jpg
-//:page-vignette-licence: Source Oracle
 :page-liquid:
 :showtitle:
 
@@ -22,16 +21,16 @@ Historiquement, le JDK propose 2 API permettant de manipuler la mémoire "off-he
 * `ByteBuffer::allocateDirect` permet d'interagir avec une zone mémoire "off-heap" sous forme de tableau d'octets,
 * `Unsafe` fournit diverses API de bas niveau telles que `allocateMemory()`.
 
-Ces APIs présentent un certain nombre d'inconvénients : `ByteBuffer` limite l'accès à une zone dont la taille maximale est de 2Go et les méthodes permettant d'y accéder restent rudimentaires.
-`Unsafe` n'est pas une API standard (et doit être retirée dans une version ultérieure une fois toutes ses fonctionnalités proposées avec un équivalent standard) et ouvre la porte à divers écueils en termes de sécurité ou de contrôle.
+Ces APIs présentent un certain nombre d'inconvénients : `ByteBuffer` limite l'accès à une zone dont la taille maximale est de 2Go, les méthodes permettant d'y accéder restent rudimentaires et ses performances ne sont pas optimales.
+`Unsafe` est quant à lui performant mais n'est pas une API standard (et doit être retirée dans une version ultérieure une fois toutes ses fonctionnalités proposées avec un équivalent standard) et ouvre la porte à divers écueils en termes de sécurité ou de contrôle.
 
 FFM a pour ambition de fournir un moyen sûr et performant de répondre à ces problématiques.
 
 == Une longue gestation
 
-Dire que la route a été longue serait un euphémisme. FFM est la fusion des JEP "Foreign Memory Access API" et "Foreign Linker API" apparues toutes deux en _incubator_ respectivement en JDK 14 et JDK 16.
-Il aura donc fallu pas moins de 4 années depuis la première version en _incubator_ pour voir arriver ces fonctionnalités en standard dans le JDK 22 au travers de la https://openjdk.org/jeps/454[JEP 454].
-Néanmoins, on pourra reconnaître un certain mérite à la stratégie de releases incrémentales sous forme d'_incubator_ ou de _preview_ : celle-ci a permis une montée en maturité progressive en tenant compte des retours de la communauté et des différents acteurs.
+Dire que la route a été longue serait un euphémisme. FFM est la fusion des JEP "Foreign Memory Access API" et "Foreign Linker API" apparues toutes deux en incubator respectivement en JDK 14 et JDK 16.
+Il aura donc fallu pas moins de 4 années depuis la première version en incubator pour voir arriver ces fonctionnalités en standard dans le JDK 22 au travers de la https://openjdk.org/jeps/454[JEP 454].
+Néanmoins, on pourra reconnaître un certain mérite à la stratégie de releases incrémentales sous forme d'incubator ou de preview : celle-ci a permis une montée en maturité progressive en tenant compte des retours de la communauté et des différents acteurs.
 
 L'API Foreign Function & Memory trouve sa place dans le JDK dans le package `java.lang.foreign` du module `java.base`.
 
@@ -55,10 +54,10 @@ Ces différences sont synthétisées dans ce tableau :
 |===
 | Type | Durée de vie limitée | Explicitement fermable | Accessible depuis plusieurs threads
 
-| Global | ✗ | ✗ | ✓
-| Automatic | ✓ | ✗ | ✓
-| Confined | ✓ | ✓ | ✗
-| Shared | ✓ | ✓ | ✓
+| Global ^| ✗ ^| ✗ ^| ✓
+| Automatic ^| ✓ ^| ✗ ^| ✓
+| Confined ^| ✓ ^| ✓ ^| ✗
+| Shared ^| ✓ ^| ✓ ^| ✓
 |===
 
 NOTE: Il est également possible de fournir sa propre implémentation de l'interface `Arena`.
@@ -74,6 +73,8 @@ try (Arena arena = Arena.ofConfined()) {
 }
 ----
 
+NOTE: `allocateFrom()` se charge de l'encodage de la chaîne de caractères, ainsi que de l'ajout du caractère de terminaison `\0`
+
 L'interface `MemorySegment` possède une variété de méthodes permettant de lire ou d'écrire dans la mémoire "off-heap". Ces méthodes prennent en paramètre un objet de type `ValueLayout` qui modélise la structure de données sous-jacente, telles que des valeurs primitives. Ce `ValueLayout` précise :
 
 * la taille de la donnée,
@@ -81,28 +82,36 @@ L'interface `MemorySegment` possède une variété de méthodes permettant de li
 * l'alignement,
 * et le type de donnée Java correspondant.
 
-Par exemple, si l'on souhaite lire octet par octet le contenu de la chaîne de caractères en mémoire, on pourra utiliser le _layout_ `ValueLayout.JAVA_BYTE`, qui correspond à la structure suivante :
+Par exemple, si l'on souhaite lire octet par octet le contenu de la chaîne de caractères en mémoire, on pourra utiliser le layout `ValueLayout.JAVA_BYTE`, qui correspond à la structure suivante :
 
 * taille = 1 octet
 * endianness = `ByteOrder.nativeOrder()`
 * alignement = 1, autrement dit l'adresse mémoire correspondante est un multiple de 8 bits
 * type Java associé : `byte`
 
-.Lecture des caractères en mémoire "off-heap"
+.Lecture et écriture dans la mémoire "off-heap"
 [source,java]
 ----
-MemorySegment memorySegment = arena.allocateFrom("Hello Sciam");
-for (int i = 0; i < memorySegment.byteSize(); i++) {
-  char c = (char) memorySegment.get(ValueLayout.JAVA_BYTE, i);
-  System.out.print(c);
+byte[] values = { -2, -1, 0, 1, 2 };
+MemorySegment memorySegment = arena.allocate(values.length); // <1>
+
+for (int i = 0; i < values.length; i++) {
+    memorySegment.set(ValueLayout.JAVA_BYTE, i, values[i]); // <2>
+}
+
+for (int i = 0; i < values.length; i++) {
+    byte b = memorySegment.get(ValueLayout.JAVA_BYTE, i); // <3>
+    System.out.println(b);
 }
 ----
+<1> Allocation d'un `MemorySegment`
+<2> Écriture dans le segment
+<3> Lecture depuis le segment
+
 .Sortie du programme
 ----
-Hello Sciam
+-2 -1 0 1 2
 ----
-
-NOTE: On notera qu'on lit un 12^ème^ caractère qui correspond au caractère de terminaison des chaînes en C, à savoir `\0`, automatiquement ajouté lors de l'écriture faite avec `MemorySegment::allocateFrom`
 
 == La recherche et la description de fonctions étrangères
 
@@ -178,7 +187,7 @@ int sqlite3_open(
 );
 ----
 
-On obtient la description correspondante en java :
+On obtient la description correspondante en Java :
 
 [source,java]
 ----
@@ -189,8 +198,8 @@ FunctionDescriptor openDesc = FunctionDescriptor.of(
 );
 ----
 <1> Type de retour de la méthode
-<2> Type du premier paramètre : pointeur vers le nom du fichier _.db_
-<3> Type du second paramètre : pointeur vers un _handle_ de la base de données
+<2> Type du premier paramètre : pointeur vers le nom du fichier `.db`
+<3> Type du second paramètre : pointeur vers un handle de la base de données
 
 L'interface `Linker`, par l'intermédiaire de sa méthode `downcallHandle()` permet l'obtention de l'instance de `MethodHandle`. Comme l'indique son nom, cela permet de réaliser des appels descendants, de Java vers le code natif.
 
@@ -221,13 +230,13 @@ try {
     throw new IllegalStateException("Erreur lors de l'invocation de la fonction native " + openFunctionName, e);
 }
 ----
-<1> Allocation de la chaîne de caractères native contenant le nom du fichier de base de données, premier paramètre de la méthode
-<2> Allocation d'un segment vers le pointeur du _handle_ de la base de données, second paramètre
+<1> Allocation de la chaîne de caractères native contenant le nom du fichier de base de données
+<2> Allocation d'un segment vers le pointeur du handle de la base de données, second paramètre
 <3> Invocation de la méthode native
 
-=== L'appel montant : natif vers java
+=== L'appel montant : natif vers Java
 
-L'interface `Linker` permet également de réaliser des _upcalls_, à savoir des appels montants depuis le code natif jusqu'au code java. +
+L'interface `Linker` permet également de réaliser des upcalls, à savoir des appels montants depuis le code natif jusqu'au code Java. +
 Cela se réalise par le biais de la méthode `upcallStub()` qui prendre en paramètres :
 
 * un `MethodHandle` de la fonction Java à appeler depuis le code natif
@@ -292,14 +301,14 @@ FunctionDescriptor traceCallbackDesc = FunctionDescriptor.of(
 );
 ----
 
-On peut désormais créer l'_upcall_ grâce au `Linker`. Ce dernier va se charger de créer un pointeur sur notre fonction.
+On peut désormais créer l'upcall grâce au `Linker`. Ce dernier va se charger de créer un pointeur sur notre fonction.
 
 [source,java]
 ----
 MemorySegment upcallSegment = linker.upcallStub(traceCallbackHandle, traceCallbackDesc, arena);
 ----
 
-Enfin, l'appel à la fonction `sqlite3_trace_v2` peut être effectué, en lui fournissant notre _upcall_. On reproduit les étapes précédentes comme pour la connexion à la base de données, en réalisant un _downcall_.
+Enfin, l'appel à la fonction `sqlite3_trace_v2` peut être effectué, en lui fournissant notre upcall. On reproduit les étapes précédentes comme pour la connexion à la base de données, en réalisant un downcall.
 
 [source,java]
 ----
@@ -334,7 +343,7 @@ try {
 ----
 <1> Obtention de l'adresse de la fonction en mémoire
 <2> Description de la signature de la fonction
-<3> Création du _handle_ vers la fonction native
+<3> Création du handle vers la fonction native
 <4> `sqlite3_open` renvoie un pointeur de pointeur (`sqlite3 **ppDb`) et on a besoin ici du pointeur (`sqlite3 *pDb`) comme paramètre
 <5> Invocation de la fonction native
 <6> Événement déclenchant une trace, ici la valeur SQLITE_TRACE_STMT
@@ -350,12 +359,12 @@ Pour vérifier que notre callback est fonctionnel et la méthode Java effectivem
 
 === Présentation
 
-https://jdk.java.net/jextract/[JExtract] est un outil en Early-Access du projet OpenJDK dont le but est la génération automatique d'un _binding_ Java depuis les fichiers headers natifs.
-L'outil est capable d'interpréter les fichiers _.h_ et de générer le code Java permettant l'invocation des méthodes natives sous-jacentes par le biais de l'API FFM.
+https://jdk.java.net/jextract/[JExtract] est un outil en Early-Access du projet OpenJDK dont le but est la génération automatique d'un binding Java depuis les fichiers headers natifs.
+L'outil est capable d'interpréter les fichiers `.h` et de générer le code Java permettant l'invocation des méthodes natives sous-jacentes par le biais de l'API FFM.
 Les exemples réalisés précédemment faits à la main peuvent être répétitifs, chronophages et source d'erreurs. Ils nécessitent de lire et analyser les fichiers headers individuellement et d'écrire toutes les recherches de fonctions et définitions de structures manuellement.
 La possibilité d'automatiser cette partie prend alors tout son sens.
 Si l'on venait à migrer d'une version de bibliothèque à une autre sur une volumétrie importante de code, il serait fastidieux de mettre à niveau le code Java.
-Régénérer les _bindings_ avec l'outil `JExtract` permet de nous soulager d'une partie du travail.
+Régénérer les bindings avec l'outil `JExtract` permet de nous soulager d'une partie du travail.
 
 WARNING: Bien que l'outil fasse partie du projet https://openjdk.org/projects/code-tools/[CodeTools] d'OpenJDK, il ne fait pas partie du JDK en tant que tel et n'est donc pas disponible de base dans les distributions du JDK 22.
 
@@ -421,10 +430,17 @@ public static int sqlite3_open(MemorySegment filename, MemorySegment ppDb) { // 
 
 Le gain est donc de ne pas avoir eu à écrire tout ce code technique.
 
-=== L'utilisation du code généré pour un appel descendant (`downcall`)
+=== L'utilisation du code généré pour un appel descendant (downcall)
 
 Pour l'utiliser, le code de notre application pourrait ressembler à :
 
+.Import de la méthode `sqlite3_open`
+[source,java]
+----
+import static fr.sciam.sqlite.SQLite3.sqlite3_open;
+----
+
+.Invocation
 [source,java]
 ----
 try (Arena arena = Arena.ofConfined()) {
@@ -435,9 +451,9 @@ try (Arena arena = Arena.ofConfined()) {
 }
 ----
 
-=== L'utilisation du code généré pour un appel montant (_upcall_)
+=== L'utilisation du code généré pour un appel montant (upcall)
 
-Il en est de même pour la configuration de notre _upcall_ pour la configuration des traces, dont l'obtention était particulièrement verbeuse.
+Il en est de même pour la configuration de notre upcall pour la configuration des traces, dont l'obtention était particulièrement verbeuse.
 JExtract a généré une méthode utilitaire d'allocation du `MemorySegment` correspondant au callback Java à appeler depuis le code natif :
 
 [source,java]
@@ -477,7 +493,7 @@ Pour cela, l'API utilise un `MemorySegment` de taille nulle pour représenter ce
 Ceci est utilisé pour :
 
 * les pointeurs renvoyés par une fonction native
-* les pointeurs passés depuis le code natif vers un _upcall_
+* les pointeurs passés depuis le code natif vers un upcall
 * les pointeurs lus depuis un `MemorySegment`
 
 Il est impossible de manipuler directement un tel `MemorySegment`, sous peine de voir la JVM lever l'exception `IndexOutOfBoundsException`. En effet, elle ne peut pas accéder ou valider en toute sécurité une opération d'accès à une région mémoire dont la taille est inconnue.
@@ -500,7 +516,7 @@ int blob_size = sqlite3_column_bytes(stmt, 0);
 == Les Memory layouts et les accès structurés
 
 Accéder à des données structurées en mémoire en ne se limitant qu'à des opérations basiques nuirait à la lisibilité et à la maintenabilité du code, et l'on tomberait dans l'un des écueils du direct `ByteBuffer`.
-FFM tente d'y remédier avec l'interface `MemoryLayout` qui permet de définir une structuration de la donnée et d'y accéder de manière simplifiée.
+FFM tente d'y remédier avec l'interface `MemoryLayout` qui permet de définir une structuration de la donnée et d'y accéder de manière simplifiée. `StructLayout` et `SequenceLayout` sont des interfaces filles de l'interface scellée `MemoryLayout`
 
 `MemoryLayout::structLayout` permet de définir une structure de données. +
 `MemoryLayout::sequenceLayout` permet de définir une répétition de la structure.
@@ -514,7 +530,7 @@ record Coordinates(float latitude, float longitude) {}
 Coordinates[] array = { /* ... */ };
 ----
 
-On modélise le _layout_ :
+On modélise le layout :
 
 .Représentation d'une structure de coordonnées GPS
 [source,java]
@@ -533,7 +549,7 @@ NOTE: La structure ainsi que les champs qui la constituent peuvent être nommés
 SequenceLayout sequence = MemoryLayout.sequenceLayout(array.length, structure);
 ----
 
-On peut obtenir des `VarHandle` permettant d'accéder directement aux champs en mémoire, avec une gestion automatique de l'adresse mémoire au sein de la séquence et de la structure.
+On peut obtenir des `VarHandle` permettant d'accéder directement aux champs, avec une gestion automatique de l'adresse mémoire au sein de la séquence et de la structure.
 
 [source,java]
 ----
@@ -563,13 +579,13 @@ for (int i = 0; i < array.length; i++) {
 }
 ----
 
-NOTE: `MemoryLayout` propose également les layouts de type _union_ et _padding_
+NOTE: `MemoryLayout` propose également les layouts de type union et padding
 
 == Le mot de la fin
 
 FFM propose le confort de ne pas avoir à écrire la moindre ligne de code natif et apporte un niveau de sûreté dont JNI faisait défaut. Cela dit, une bonne compréhension des mécanismes de bas niveau reste indispensable : gestion de la mémoire, des pointeurs et la capacité à interpréter les signatures des méthodes natives.
 
-À votre tour d'explorer les API de FFM en téléchargeant le https://jdk.java.net/22/[JDK 22] ou en consultant la https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/foreign/package-summary.html[javadoc].
+À votre tour d'explorer les API de FFM en téléchargeant le https://jdk.java.net/22/[JDK 22] et en consultant la https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/foreign/package-summary.html[javadoc].
 
 .On ferme !
 [source,java]
