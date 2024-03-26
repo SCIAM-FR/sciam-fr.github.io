@@ -6,7 +6,6 @@
 :page-tags: [Java, Java 22, FFM]
 :page-image: images/vignettes/ffm-java22-300x300.jpg
 :page-vignette: ffm-java22.jpg
-//:page-vignette-licence: Source Oracle
 :page-liquid:
 :showtitle:
 
@@ -29,9 +28,9 @@ FFM a pour ambition de fournir un moyen sûr et performant de répondre à ces p
 
 == Une longue gestation
 
-Dire que la route a été longue serait un euphémisme. FFM est la fusion des JEP "Foreign Memory Access API" et "Foreign Linker API" apparues toutes deux en _incubator_ respectivement en JDK 14 et JDK 16.
-Il aura donc fallu pas moins de 4 années depuis la première version en _incubator_ pour voir arriver ces fonctionnalités en standard dans le JDK 22 au travers de la https://openjdk.org/jeps/454[JEP 454].
-Néanmoins, on pourra reconnaître un certain mérite à la stratégie de releases incrémentales sous forme d'_incubator_ ou de _preview_ : celle-ci a permis une montée en maturité progressive en tenant compte des retours de la communauté et des différents acteurs.
+Dire que la route a été longue serait un euphémisme. FFM est la fusion des JEP "Foreign Memory Access API" et "Foreign Linker API" apparues toutes deux en incubator respectivement en JDK 14 et JDK 16.
+Il aura donc fallu pas moins de 4 années depuis la première version en incubator pour voir arriver ces fonctionnalités en standard dans le JDK 22 au travers de la https://openjdk.org/jeps/454[JEP 454].
+Néanmoins, on pourra reconnaître un certain mérite à la stratégie de releases incrémentales sous forme d'incubator ou de preview : celle-ci a permis une montée en maturité progressive en tenant compte des retours de la communauté et des différents acteurs.
 
 L'API Foreign Function & Memory trouve sa place dans le JDK dans le package `java.lang.foreign` du module `java.base`.
 
@@ -54,10 +53,10 @@ Ces différences sont synthétisées dans ce tableau :
 |===
 | Type | Durée de vie limitée | Explicitement fermable | Accessible depuis plusieurs threads
 
-| Global | ✗ | ✗ | ✓
-| Automatic | ✓ | ✗ | ✓
-| Confined | ✓ | ✓ | ✗
-| Shared | ✓ | ✓ | ✓
+| Global ^| ✗ ^| ✗ ^| ✓
+| Automatic ^| ✓ ^| ✗ ^| ✓
+| Confined ^| ✓ ^| ✓ ^| ✗
+| Shared ^| ✓ ^| ✓ ^| ✓
 |===
 
 NOTE: Il est également possible de fournir sa propre implémentation de l'interface `Arena`.
@@ -80,25 +79,35 @@ L'interface `MemorySegment` possède une variété de méthodes permettant de li
 * l'alignement,
 * et le type de donnée java correspondant.
 
-Par exemple, si l'on souhaite lire octet par octet le contenu de la chaîne de caractère en mémoire, on pourra utiliser le _layout_ `ValueLayout.JAVA_BYTE`, qui correspond à la structure suivante :
+Par exemple, si l'on souhaite lire octet par octet le contenu de la chaîne de caractère en mémoire, on pourra utiliser le layout `ValueLayout.JAVA_BYTE`, qui correspond à la structure suivante :
 
 * taille = 1 octet
 * endianness = `ByteOrder.nativeOrder()`
 * alignement = 1, autrement dit l'adresse mémoire correspondante est un multiple de 8 bits
 * type java associé : `byte`
 
-.Lecture des caractères en mémoire "off-heap"
+.Lecture et écriture dans la mémoire "off-heap"
 [source,java]
 ----
-MemorySegment memorySegment = arena.allocateFrom("Hello Sciam");
-for (int i = 0; i < memorySegment.byteSize(); i++) {
-  char c = (char) memorySegment.get(ValueLayout.JAVA_BYTE, i);
-  System.out.print(c);
+byte[] values = { -2, -1, 0, 1, 2 };
+MemorySegment memorySegment = arena.allocate(values.length); // <1>
+
+for (int i = 0; i < values.length; i++) {
+    memorySegment.set(ValueLayout.JAVA_BYTE, i, values[i]); // <2>
+}
+
+for (int i = 0; i < values.length; i++) {
+    byte b = memorySegment.get(ValueLayout.JAVA_BYTE, i); // <3>
+    System.out.println(b);
 }
 ----
+<1> allocation d'un `MemorySegment`
+<2> écriture dans le segment
+<3> lecture depuis le segment
+
 .Sortie du programme
 ----
-Hello Sciam
+-2 -1 0 1 2
 ----
 
 NOTE: On notera qu'on lit un 12^ème^ caractère qui correspond au caractère de terminaison des chaînes en C, à savoir `\0`, automatiquement ajouté lors de l'écriture faite avec `MemorySegment::allocateFrom`
@@ -347,8 +356,6 @@ Pour vérifier que notre callback est fonctionnel et la méthode java effectivem
 
 == L'outil JExtract
 
-=== Présentation
-
 https://jdk.java.net/jextract/[JExtract] est un outil en Early-Access du projet OpenJDK dont le but est la génération automatique d'un _binding_ java depuis les fichiers headers natifs.
 L'outil est capable d'interpréter les fichiers _.h_ et de générer le code java permettant l'invocation des méthodes natives sous-jacentes par le biais de l'API FFM.
 Les exemples réalisés précédemment faits à la main peuvent être répétitifs, chronophages et source d'erreurs. Ils nécessitent de lire et analyser les fichiers headers individuellement et d'écrire toutes les recherches de fonctions et définitions de structures manuellement.
@@ -532,7 +539,7 @@ NOTE: La structure ainsi que les champs qui la constituent peuvent être nommés
 SequenceLayout sequence = MemoryLayout.sequenceLayout(array.length, structure);
 ----
 
-On peut obtenir des `VarHandle` permettant d'accéder directement aux champs en mémoire, avec une gestion automatique de l'adresse mémoire au sein de la séquence et de la structure.
+On peut obtenir des `VarHandle` permettant d'accéder directement aux champs, avec une gestion automatique de l'adresse mémoire au sein de la séquence et de la structure.
 
 [source,java]
 ----
