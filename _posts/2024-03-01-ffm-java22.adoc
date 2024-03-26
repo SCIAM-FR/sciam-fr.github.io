@@ -6,37 +6,38 @@
 :page-tags: [Java, Java 22, FFM]
 :page-image: images/vignettes/ffm-java22-300x300.jpg
 :page-vignette: ffm-java22.jpg
+//:page-vignette-licence: Source Oracle
 :page-liquid:
 :showtitle:
 
 == Un peu d'histoire
 
-Depuis le JDK 1.1, il est possible de manipuler des données "off-heap" et d'intéragir avec du code natif via JNI : "Java Native Interface".
+Depuis le JDK 1.1, il est possible de manipuler des données "off-heap" et d'interagir avec du code natif via l'API JNI : "Java Native Interface".
 L'utilisation du modificateur `native` permet l'invocation de fonctions natives, moyennement une succession d'étapes parfois périlleuses.
-Cela implique notamment le développement d'une "glue" en langage natif permettant de faire le lien entre code C et java par exemple, dans laquelle il faudra effectuer les conversions des types de données.
+Cela implique notamment le développement d'une "glue" en langage natif permettant de faire le lien entre code C et Java par exemple, dans laquelle il faudra effectuer les conversions des types de données.
 Il faut aussi être particulièrement vigilant quant à la gestion de la mémoire, le Garbage Collector ne réalisant pas de collecte en dehors de la mémoire "heap".
 
 Historiquement, le JDK propose 2 API permettant de manipuler la mémoire "off-heap" :
 
-* `ByteBuffer::allocateDirect` permet d'intéragir avec une zone mémoire "off-heap" sous forme de tableau d'octets,
+* `ByteBuffer::allocateDirect` permet d'interagir avec une zone mémoire "off-heap" sous forme de tableau d'octets,
 * `Unsafe` fournit diverses API de bas niveau telles que `allocateMemory()`.
 
 Ces APIs présentent un certain nombre d'inconvénients : `ByteBuffer` limite l'accès à une zone dont la taille maximale est de 2Go et les méthodes permettant d'y accéder restent rudimentaires.
-`Unsafe` n'est pas standard (et peut donc potentiellement être retirée dans une version ultérieure) et ouvre la porte à diverses dérives en termes de sécurité ou de contrôle.
+`Unsafe` n'est pas une API standard (et doit être retirée dans une version ultérieure une fois toutes ses fonctionnalités proposées avec un équivalent standard) et ouvre la porte à divers écueils en termes de sécurité ou de contrôle.
 
 FFM a pour ambition de fournir un moyen sûr et performant de répondre à ces problématiques.
 
 == Une longue gestation
 
-Dire que la route a été longue serait un euphémisme. FFM est la fusion des JEP "Foreign Memory Access API" et "Foreign Linker API" apparues toutes deux en incubator respectivement en JDK 14 et JDK 16.
-Il aura donc fallu pas moins de 4 années depuis la première version en incubator pour voir arriver ces fonctionnalités en standard dans le JDK 22 au travers de la https://openjdk.org/jeps/454[JEP 454].
-Néanmoins, on pourra reconnaître un certain mérite à la stratégie de releases incrémentales sous forme d'incubator ou de preview : celle-ci a permis une montée en maturité progressive en tenant compte des retours de la communauté et des différents acteurs.
+Dire que la route a été longue serait un euphémisme. FFM est la fusion des JEP "Foreign Memory Access API" et "Foreign Linker API" apparues toutes deux en _incubator_ respectivement en JDK 14 et JDK 16.
+Il aura donc fallu pas moins de 4 années depuis la première version en _incubator_ pour voir arriver ces fonctionnalités en standard dans le JDK 22 au travers de la https://openjdk.org/jeps/454[JEP 454].
+Néanmoins, on pourra reconnaître un certain mérite à la stratégie de releases incrémentales sous forme d'_incubator_ ou de _preview_ : celle-ci a permis une montée en maturité progressive en tenant compte des retours de la communauté et des différents acteurs.
 
 L'API Foreign Function & Memory trouve sa place dans le JDK dans le package `java.lang.foreign` du module `java.base`.
 
 == La gestion de la mémoire "off-heap"
 
-Pour manipuler les données stockées dans la mémoire "off-heap", l'API FFM nous propose une répresentation de celles-ci sous la forme de l'objet `MemorySegment`. Un tel objet peut être obtenu par l'intermédiaire d'une _arena_ qui va en contrôler la portée et nous permettra de déterminer à quel moment la mémoire allouée à ce segment sera libérée.
+Pour manipuler les données stockées dans la mémoire "off-heap", l'API FFM nous propose une représentation de celles-ci sous la forme de l'objet `MemorySegment`. Un tel objet peut être obtenu par l'intermédiaire d'une `Arena` qui va en contrôler la portée et nous permettra de déterminer à quel moment la mémoire allouée à ce segment sera libérée.
 
 NOTE: `Memory Segment` permet également d'accéder à de la mémoire "on-heap" mais nous n'allons pas aborder ce point.
 
@@ -44,24 +45,25 @@ Une instance de l'interface `Arena` peut être obtenue via l'une de ses 4 fabriq
 
 * `Arena::global` : les segments sont toujours accessibles, et ce, par n'importe quel thread. La mémoire native "off-heap" correspondante n'est libérée qu'à l'arrêt de la JVM.
 * `Arena::ofAuto` : les segments sont ici encore accessibles par n'importe quel thread, mais le Garbage Collector se chargera de libérer les zones mémoires après que les `MemorySegment` correspondants deviennent inatteignables.
-* `Arena::ofConfined` : les segments ne sont accessibles que depuis le thread qui a créé l'arena et ne seront libérés que lorsque celle-ci sera fermée, par l'invocation de sa méthode `close()` ou l'utilisation d'un "try-with-resources", l'interface `Arena` héritant d' `AutoCloseable`.
+* `Arena::ofConfined` : les segments ne sont accessibles que depuis le thread qui a créé l'`Arena` et ne seront libérés que lorsque celle-ci sera fermée, par l'invocation de sa méthode `close()` explicitement ou par l'utilisation d'un "try-with-resources", l'interface `Arena` héritant d' `AutoCloseable`.
 * `Arena::ofShared` : comme `Arena::ofConfined`, mais les segments sont accessibles par tous les threads.
 
 Ces différences sont synthétisées dans ce tableau :
 
-.Récapitulatif des différents types d'arenas
+.Récapitulatif des différents types d'Arenas
+[cols="<1,^1,^1,^1", options="header"]
 |===
 | Type | Durée de vie limitée | Explicitement fermable | Accessible depuis plusieurs threads
 
-| Global ^| ✗ ^| ✗ ^| ✓
-| Automatic ^| ✓ ^| ✗ ^| ✓
-| Confined ^| ✓ ^| ✓ ^| ✗
-| Shared ^| ✓ ^| ✓ ^| ✓
+| Global | ✗ | ✗ | ✓
+| Automatic | ✓ | ✗ | ✓
+| Confined | ✓ | ✓ | ✗
+| Shared | ✓ | ✓ | ✓
 |===
 
 NOTE: Il est également possible de fournir sa propre implémentation de l'interface `Arena`.
 
-`Arena` possède un certain nombre de surcharges de la méthode `allocateFrom()` permettant par exemple la très utile allocation d'une chaîne de caractères dans sa représentation native.
+`Arena` possède un certain nombre de surcharges de la méthode `allocateFrom()` permettant, par exemple, la très utile allocation d'une chaîne de caractères dans sa représentation native.
 
 .Allocation d'une chaîne de caractères "off-heap" via un `MemorySegment`
 [source,java]
@@ -77,50 +79,40 @@ L'interface `MemorySegment` possède une variété de méthodes permettant de li
 * la taille de la donnée,
 * son "endianness" (big-endian / little-endian),
 * l'alignement,
-* et le type de donnée java correspondant.
+* et le type de donnée Java correspondant.
 
-Par exemple, si l'on souhaite lire octet par octet le contenu de la chaîne de caractère en mémoire, on pourra utiliser le layout `ValueLayout.JAVA_BYTE`, qui correspond à la structure suivante :
+Par exemple, si l'on souhaite lire octet par octet le contenu de la chaîne de caractères en mémoire, on pourra utiliser le _layout_ `ValueLayout.JAVA_BYTE`, qui correspond à la structure suivante :
 
 * taille = 1 octet
 * endianness = `ByteOrder.nativeOrder()`
 * alignement = 1, autrement dit l'adresse mémoire correspondante est un multiple de 8 bits
-* type java associé : `byte`
+* type Java associé : `byte`
 
-.Lecture et écriture dans la mémoire "off-heap"
+.Lecture des caractères en mémoire "off-heap"
 [source,java]
 ----
-byte[] values = { -2, -1, 0, 1, 2 };
-MemorySegment memorySegment = arena.allocate(values.length); // <1>
-
-for (int i = 0; i < values.length; i++) {
-    memorySegment.set(ValueLayout.JAVA_BYTE, i, values[i]); // <2>
-}
-
-for (int i = 0; i < values.length; i++) {
-    byte b = memorySegment.get(ValueLayout.JAVA_BYTE, i); // <3>
-    System.out.println(b);
+MemorySegment memorySegment = arena.allocateFrom("Hello Sciam");
+for (int i = 0; i < memorySegment.byteSize(); i++) {
+  char c = (char) memorySegment.get(ValueLayout.JAVA_BYTE, i);
+  System.out.print(c);
 }
 ----
-<1> allocation d'un `MemorySegment`
-<2> écriture dans le segment
-<3> lecture depuis le segment
-
 .Sortie du programme
 ----
--2 -1 0 1 2
+Hello Sciam
 ----
 
 NOTE: On notera qu'on lit un 12^ème^ caractère qui correspond au caractère de terminaison des chaînes en C, à savoir `\0`, automatiquement ajouté lors de l'écriture faite avec `MemorySegment::allocateFrom`
 
-== Recherche et description de fonctions étrangères
+== La recherche et la description de fonctions étrangères
 
-=== Utilisation du `Linker`
+=== L'utilisation du `Linker`
 
 L'interface `Linker` va nous être utile à plus d'un titre, notamment pour le chargement d'une bibliothèque native.
 
 Son principal atout est de nous abstraire d'un certain nombre de considérations techniques.
 En effet, chaque bibliothèque adhère à une "Application Binary Interface" (ABI) qui est un ensemble de conventions et types de données qui dépendent du système d'exploitation, du compilateur et du processeur.
-`Linker` a connaissance de ces conventions et jouera le rôle de médiateur entre le code java et le code natif.
+`Linker` a connaissance de ces conventions et jouera le rôle de médiateur entre le code Java et le code natif.
 
 Une instance de `Linker` s'obtient via la fabrique `nativeLinker()`.
 
@@ -135,12 +127,12 @@ SymbolLookup defaultLookup = linker.defaultLookup(); // <2>
 
 L'interface `SymbolLookup` permet de fournir un accès aux bibliothèques et fonctions natives qui adhèrent aux spécifications de la plateforme. Pour en obtenir une instance, on dispose de 3 fabriques :
 
-* `SymbolLookup.libraryLookup(String, arena)` et `SymbolLookup.libraryLookup(Path, arena)` permettent de charger dynamiquement une bibliothèque par son nom ou son chemin et en liant son cycle de vie à celui de l'_arena_,
-* `SymbolLookup.loaderLookup()` crée un `SymbolLookup` qui recherchera dans les bibliothèques chargées par le class loader, par exemple via `System.load()` ou `System.loadLibrary()` comme on le ferait pour JNI.
+* `SymbolLookup.libraryLookup(String, arena)` et `SymbolLookup.libraryLookup(Path, arena)` permettent de charger dynamiquement une bibliothèque par son nom ou son chemin et en liant son cycle de vie à celui de l' `Arena`,
+* `SymbolLookup.loaderLookup()` crée un `SymbolLookup` qui recherchera dans les bibliothèques chargées par le `Classloader`, par exemple via `System.load()` ou `System.loadLibrary()` comme on le ferait avec JNI.
 
-== Chargement d'une bibliothèque native
+== Le chargement d'une bibliothèque native
 
-Nous allons utiliser à titre d'exemple https://www.sqlite.org/[SQLite] dont le code est écrit en langage C, par l'intermédiaire de sa bibliothèque _sqlite3.dll_ sur windows afin de manipuler localement une base de données dans notre application.
+Nous allons utiliser à titre d'exemple https://www.sqlite.org/[SQLite] dont le code est écrit en langage C, par l'intermédiaire de sa bibliothèque `sqlite3.dll` sur Windows afin de manipuler localement une base de données dans notre application.
 
 .Chargement dynamique de la bibliothèque sqlite3
 [source,java]
@@ -149,12 +141,12 @@ try (Arena arena = Arena.ofConfined()) { // <1>
     SymbolLookup lookup = SymbolLookup.libraryLookup("sqlite3", arena); // <2>
 }
 ----
-<1> Création d'une _arena_ de type "confined"
-<2> Obtention d'une instance de `SymbolLookup` sur la bibliothèque sqlite3. Omettre l'extension fonctionne et est recommandé pour des raisons de portabilité, permettant ainsi au même code de charger le .dll sur windows ou le .so sur linux par exemple.
+<1> Création d'une `Arena` de type "confined"
+<2> Obtention d'une instance de `SymbolLookup` sur la bibliothèque sqlite3. Omettre l'extension fonctionne et est recommandé pour des raisons de portabilité, permettant ainsi au même code de charger la .dll sur Windows ou le .so sur Linux par exemple.
 
-== Localisation d'une fonction native
+== La localisation d'une fonction native
 
-Après avoir initialisé le fichier vide _ffm.db_ qui contiendra notre base de données, la prochaine étape va consister à l'appel de la fonction native `sqlite3_open` qui permet d'établir un lien avec la base.
+Après avoir initialisé le fichier vide `ffm.db` qui contiendra notre base de données, la prochaine étape va consister à l'appel de la fonction native `sqlite3_open` qui permet d'établir un lien avec la base.
 
 L'interface `SymbolLookup` précédemment obtenue nous permet de localiser l'adresse mémoire correspondant à la fonction, via sa méthode `find()`.
 Son type de retour est `Optional<MemorySegment>`, ce qui permet de gérer le cas où la recherche aurait échoué.
@@ -167,16 +159,16 @@ MemorySegment openSegment = lookup.find(openFunctionName)
     .orElseThrow(() -> new IllegalStateException("Impossible de localiser la fonction " + openFunctionName));
 ----
 
-== Appel d'une fonction native
+== L'appel d'une fonction native
 
-=== Obtention d'un `MethodHandle` vers la fonction native
+=== L'obtention d'un `MethodHandle` vers la fonction native
 
 Le `Linker` va nous permettre d'obtenir une instance de `MethodHandle` sur la fonction native. +
 
 Pour invoquer la fonction native, il va falloir fournir une description de la signature de la méthode. +
 L'interface `FunctionDescriptor` et sa fabrique `of()` permet de définir le type de retour et les paramètres acceptés par la méthode.
 
-Le fichier header _sqlite3.h_ nous indique la signature :
+Le fichier header `sqlite3.h` nous indique la signature :
 
 [source,c]
 ----
@@ -207,7 +199,7 @@ L'interface `Linker`, par l'intermédiaire de sa méthode `downcallHandle()` per
 MethodHandle openHandle = linker.downcallHandle(openSegment, openDesc);
 ----
 
-=== Invocation de la méthode native
+=== L'invocation de la méthode native
 
 Il ne nous reste plus qu'à préparer les paramètres et invoquer la méthode native.
 
@@ -233,14 +225,14 @@ try {
 <2> Allocation d'un segment vers le pointeur du _handle_ de la base de données, second paramètre
 <3> Invocation de la méthode native
 
-=== Appel montant : natif vers java
+=== L'appel montant : natif vers java
 
 L'interface `Linker` permet également de réaliser des _upcalls_, à savoir des appels montants depuis le code natif jusqu'au code java. +
 Cela se réalise par le biais de la méthode `upcallStub()` qui prendre en paramètres :
 
-* un `MethodHandle` de la fonction java à appeler depuis le code natif
+* un `MethodHandle` de la fonction Java à appeler depuis le code natif
 * une description de cette fonction sous la forme de `FunctionDescriptor`
-* une instance de `Arena`
+* une instance de type `Arena`
 
 La fonction native `sqlite3_trace_v2` permet de configurer des traces avec l'appel d'une fonction callback. Sa signature est la suivante :
 
@@ -254,7 +246,7 @@ SQLITE_API int sqlite3_trace_v2(
 );
 ----
 
-On va pouvoir déclarer une méthode java qui sera appelée comme callback de trace. La signature de la méthode java doit correspondre à son homologue natif.
+On va pouvoir déclarer une méthode Java qui sera appelée comme callback de trace. La signature de la méthode Java doit correspondre à son homologue natif.
 
 [source,java]
 ----
@@ -347,7 +339,7 @@ try {
 <5> Invocation de la fonction native
 <6> Événement déclenchant une trace, ici la valeur SQLITE_TRACE_STMT
 
-Pour vérifier que notre callback est fonctionnel et la méthode java effectivement appelée en bout de chaîne, on peut exécuter une requête SQL via la fonction `sqlite3_exec()`. Par exemple, en créant une table dans notre base de données. On reproduit les étapes précédentes à chaque fois :
+Pour vérifier que notre callback est fonctionnel et la méthode Java effectivement appelée en bout de chaîne, on peut exécuter une requête SQL via la fonction `sqlite3_exec()`. Par exemple, en créant une table dans notre base de données. On reproduit les étapes précédentes à chaque fois :
 
 * recherche de la fonction,
 * description de la signature,
@@ -356,19 +348,21 @@ Pour vérifier que notre callback est fonctionnel et la méthode java effectivem
 
 == L'outil JExtract
 
-https://jdk.java.net/jextract/[JExtract] est un outil en Early-Access du projet OpenJDK dont le but est la génération automatique d'un _binding_ java depuis les fichiers headers natifs.
-L'outil est capable d'interpréter les fichiers _.h_ et de générer le code java permettant l'invocation des méthodes natives sous-jacentes par le biais de l'API FFM.
+=== Présentation
+
+https://jdk.java.net/jextract/[JExtract] est un outil en Early-Access du projet OpenJDK dont le but est la génération automatique d'un _binding_ Java depuis les fichiers headers natifs.
+L'outil est capable d'interpréter les fichiers _.h_ et de générer le code Java permettant l'invocation des méthodes natives sous-jacentes par le biais de l'API FFM.
 Les exemples réalisés précédemment faits à la main peuvent être répétitifs, chronophages et source d'erreurs. Ils nécessitent de lire et analyser les fichiers headers individuellement et d'écrire toutes les recherches de fonctions et définitions de structures manuellement.
 La possibilité d'automatiser cette partie prend alors tout son sens.
-Si l'on venait à migrer d'une version de bibliothèque à une autre sur une volumétrie importante de code, il serait fastidieux de mettre à niveau le code java.
-Régénérer les _bindings_ avec l'outil JExtract permet de nous soulager d'une partie du travail.
+Si l'on venait à migrer d'une version de bibliothèque à une autre sur une volumétrie importante de code, il serait fastidieux de mettre à niveau le code Java.
+Régénérer les _bindings_ avec l'outil `JExtract` permet de nous soulager d'une partie du travail.
 
-WARNING: Bien que l'outil fasse partie du projet https://openjdk.org/projects/code-tools/[CodeTools] d'OpenJDK, il ne fait pas partie du JDK en tant que tel et n'est donc pas disponible de base dans les distributions du JDK.
+WARNING: Bien que l'outil fasse partie du projet https://openjdk.org/projects/code-tools/[CodeTools] d'OpenJDK, il ne fait pas partie du JDK en tant que tel et n'est donc pas disponible de base dans les distributions du JDK 22.
 
-=== Génération du code java
+=== La génération du code Java
 
 Mettons en pratique cet outil pour voir comment il peut nous aider dans l'utilisation de la bibliothèque sqlite3.
-La commande prend en paramètre un certain nombre d'options suivi du fichier header dont on souhaite extraire les données pour en générer le code java.
+La commande prend en paramètre un certain nombre d'options suivi du fichier header dont on souhaite extraire les données pour en générer le code Java.
 
 .Utilisation de la commande jextract
 [source,shell]
@@ -378,9 +372,9 @@ jextract -l sqlite3 \ <1>
     --header-class-name SQLite3 \ <3>
     sqlite3.h <4>
 ----
-<1> nom de la bibliothèque à charger au runtime (avec ou sans l'extension _.dll_, _.so_, ...)
-<2> package dans lequel les sources java seront générées
-<3> nom de la classe header java (par défaut cela aurait été ici _sqlite3_h.java_)
+<1> nom de la bibliothèque à charger au runtime (avec ou sans l'extension `.dll`, `.so`, ...)
+<2> package dans lequel les sources Java seront générées
+<3> nom de la classe header Java (par défaut cela aurait été ici `sqlite3_h.java`)
 <4> le fichier header
 
 NOTE: Ce n'est pas la liste exhaustive des paramètres, cf. `jextract --help` pour plus de détails
@@ -427,7 +421,7 @@ public static int sqlite3_open(MemorySegment filename, MemorySegment ppDb) { // 
 
 Le gain est donc de ne pas avoir eu à écrire tout ce code technique.
 
-=== Utilisation du code généré pour un appel descendant (_downcall_)
+=== L'utilisation du code généré pour un appel descendant (`downcall`)
 
 Pour l'utiliser, le code de notre application pourrait ressembler à :
 
@@ -441,10 +435,10 @@ try (Arena arena = Arena.ofConfined()) {
 }
 ----
 
-=== Utilisation du code généré pour un appel montant (_upcall_)
+=== L'utilisation du code généré pour un appel montant (_upcall_)
 
 Il en est de même pour la configuration de notre _upcall_ pour la configuration des traces, dont l'obtention était particulièrement verbeuse.
-JExtract a généré une méthode utilitaire d'allocation du `MemorySegment` correspondant au callback java à appeler depuis le code natif :
+JExtract a généré une méthode utilitaire d'allocation du `MemorySegment` correspondant au callback Java à appeler depuis le code natif :
 
 [source,java]
 ----
@@ -471,11 +465,11 @@ sqlite3_trace_v2( // <3>
     MemorySegment.NULL
 );
 ----
-<1> Définition du callback java, avec un petit clin d'œil à cette nouvelle syntaxe disponible en standard depuis java 22 (https://openjdk.org/jeps/456[JEP 456] : Unnamed Variables & Patterns)
+<1> Définition du callback Java, avec un petit clin d'œil à cette nouvelle syntaxe disponible en standard depuis Java 22 (https://openjdk.org/jeps/456[JEP 456] : Unnamed Variables & Patterns)
 <2> Allocation du `MemorySegment` correspondant au callback
 <3> Invocation de la fonction native
 
-== Fonctions natives renvoyant un pointeur
+== Les fonctions natives renvoyant un pointeur
 
 Certaines fonctions natives sont susceptibles de renvoyer un pointeur vers une région mémoire.
 La JVM n'a pas la possibilité de connaître la taille ni la structure de cette région, ni même sa durée de vie.
@@ -488,22 +482,22 @@ Ceci est utilisé pour :
 
 Il est impossible de manipuler directement un tel `MemorySegment`, sous peine de voir la JVM lever l'exception `IndexOutOfBoundsException`. En effet, elle ne peut pas accéder ou valider en toute sécurité une opération d'accès à une région mémoire dont la taille est inconnue.
 
-Néanmoins, la méthode `MemorySegment::reinterpret` permet de travailler sur de tels segments en y accédant de manière sûre et en rattachant la zone mémoire associée à une _arena_. Il existe plusieurs surcharges de cette méthode dont les paramètres font intervenir :
+Néanmoins, la méthode `MemorySegment::reinterpret` permet de travailler sur de tels segments en y accédant de manière sûre et en rattachant la zone mémoire associée à une `Arena`. Il existe plusieurs surcharges de cette méthode dont les paramètres font intervenir :
 
 * la taille en octet à laquelle le segment va être redimensionné
-* l'_arena_ à associer avec le `MemorySegment`
-* une action à exécuter lorsque l'_arena_ sera fermée, sous la forme d'un `Consumer<MemorySegment>`
+* l' `Arena` à associer avec le `MemorySegment`
+* une action à exécuter lorsque l' `Arena` sera fermée, sous la forme d'un `Consumer<MemorySegment>`
 
-Cela est par exemple le cas pour la gestion des colonnes de type _blob_ (Binary Large Object) dans SQLite : la fonction `sqlite3_column_blob` renvoie un pointeur vers la région mémoire contenant l'objet, et sa taille est donnée par `sqlite3_column_bytes`.
+Cela est par exemple le cas pour la gestion des colonnes de type `blob` (Binary Large Object) dans SQLite : la fonction `sqlite3_column_blob` renvoie un pointeur vers la région mémoire contenant l'objet, et sa taille est donnée par `sqlite3_column_bytes`.
 
-.Obtention d'un pointeur vers un _blob_ en C
+.Obtention d'un pointeur vers un `blob` en C
 [source,c]
 ----
 const void *blob = sqlite3_column_blob(stmt, 0);
 int blob_size = sqlite3_column_bytes(stmt, 0);
 ----
 
-== Memory layouts et accès structuré
+== Les Memory layouts et les accès structurés
 
 Accéder à des données structurées en mémoire en ne se limitant qu'à des opérations basiques nuirait à la lisibilité et à la maintenabilité du code, et l'on tomberait dans l'un des écueils du direct `ByteBuffer`.
 FFM tente d'y remédier avec l'interface `MemoryLayout` qui permet de définir une structuration de la donnée et d'y accéder de manière simplifiée.
@@ -539,7 +533,7 @@ NOTE: La structure ainsi que les champs qui la constituent peuvent être nommés
 SequenceLayout sequence = MemoryLayout.sequenceLayout(array.length, structure);
 ----
 
-On peut obtenir des `VarHandle` permettant d'accéder directement aux champs, avec une gestion automatique de l'adresse mémoire au sein de la séquence et de la structure.
+On peut obtenir des `VarHandle` permettant d'accéder directement aux champs en mémoire, avec une gestion automatique de l'adresse mémoire au sein de la séquence et de la structure.
 
 [source,java]
 ----
