@@ -95,7 +95,7 @@ En plus, `@for` dispose également d'un raccourci pour les collections sans él�
 ----
 === La migration vers Angular 17
 
-Pour avoir cette syntaxe dans nos applications existantes, juste après l’installation d'``angular/core@17`, il suffit de lancer la commande  `ng g @angular/core:control-flow` qui permet automatiquement de mettre en place cette nouvelle syntaxe dans nos Templates.
+Pour avoir cette syntaxe dans nos applications existantes, juste après l’installation d’``angular/core@17``, il suffit de lancer la commande  `ng g @angular/core:control-flow` qui permet automatiquement de mettre en place cette nouvelle syntaxe dans nos Templates.
 
 == Le lazy loading des Templates
 
