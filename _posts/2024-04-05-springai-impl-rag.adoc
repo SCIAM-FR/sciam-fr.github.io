@@ -94,7 +94,7 @@ L'intégration d'une base de données, une révolution pour la génération de c
 *** Surveillance et optimisation du processus de génération de textes.
 *** Mise en place de mesures pour garantir la qualité et la pertinence des résultats.
 
-== Data Pipeline
+== Le Data Pipeline
 
 Pour insérer les données dans la base de données, nous allons construire un data pipeline qui va extraire, transformer et charger les données dans la base de données vectorielles.
 
