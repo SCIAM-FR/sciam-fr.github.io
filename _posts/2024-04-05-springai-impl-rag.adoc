@@ -15,7 +15,7 @@ Dans une approche simple basée sur un modèle génératif, l'IA crée des répo
 
 image::rickenbazolo/springai_impl_rag/simple_base_flow.png[image,width=70%,align="center"]
 
-** 1 - `Instruction` : Une commande ou une requête est fournie au modèle. C'est l'étape où l'utilisateur interagit avec le système en posant une question ou en donnant une instruction spécifique.
+. `Instruction` : Une commande ou une requête est fournie au modèle. C'est l'étape où l'utilisateur interagit avec le système en posant une question ou en donnant une instruction spécifique.
 ** 2 - `Génération` : Le modèle génère une réponse en fonction de l'instruction reçue. `Cette réponse est basée sur les connaissances et les données qu'il a acquises pendant la phase d'entraînement`.
 
 TIP: Le "MODEL" représente le cœur du système d'IA, où l'instruction est traitée.
