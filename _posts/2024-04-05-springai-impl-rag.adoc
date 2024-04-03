@@ -221,7 +221,7 @@ public class RagService {
 }
 ----
 
-=== Configuration de PgVector
+=== La configuration de PgVector
 Nous allons utiliser la configuration de base de PgVector avec Spring AI pour stocker les chunks et les embeddings dans la base de données vectorielles.
 
 [source,java]
