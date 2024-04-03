@@ -234,7 +234,7 @@ public PgVectorStore pgVectorStore(JdbcTemplate jdbcTemplate, EmbeddingClient em
 
 Pour plus d'informations sur la configuration de PgVector, consultez la documentation officielle https://docs.spring.io/spring-ai/reference/api/vectordbs/pgvector.html[ici^]
 
-=== Processing Data
+=== L'extraction des données (Processing Data)
 Nous allons maintenant lire un document PDF et extraire les données pour les traiter avec notre système RAG.
 
 [source,java]
