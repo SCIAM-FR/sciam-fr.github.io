@@ -53,7 +53,7 @@ Le `RETRIEVAL`, représente la phase où le système récupère des informations
 
 image::rickenbazolo/springai_impl_rag/rag.png[image,width=70%,align="center"]
 
-** 1 & 2 - `Instruction` et `Récupération du Contexte` : Le système recherche, dans une base de données externe ou un corpus de connaissances, des informations pertinentes qui correspondent ou sont similaires à l'instruction initiale. Ces informations sont utilisées pour enrichir le contexte la réponse.
+** 1 & 2 - `Instruction` et `Récupération du Contexte` : Le système recherche, dans une base de données externe ou un corpus de connaissances, des informations pertinentes qui correspondent ou sont similaires à l'instruction initiale. Ces informations sont utilisées pour enrichir le contexte de la réponse.
 ** 3 - `Génération Augmentée` : Le modèle génère une réponse en fonction de l'instruction et des informations récupérées. `Cette réponse est plus riche et plus contextuelle, car elle intègre des données externes`.
 
 TIP: Avec l'instruction et le contexte récupéré, le `MODEL` d'IA génère une réponse. Cette réponse est basée sur des informations contextuelles spécifiques qui ont été récupérées.
