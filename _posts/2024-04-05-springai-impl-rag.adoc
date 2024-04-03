@@ -100,7 +100,7 @@ Pour insérer les données dans la base de données, nous allons construire un d
 
 image::rickenbazolo/springai_impl_rag/data_pipeline.png[image,width=70%,align="center"]
 
-== Opérations spécifique au RAG
+== Les opérations spécifiques au RAG
 Notre data pipeline doit être capable d'effectuer des opérations spécifiques au RAG.
 Ces opérations incluent : la `tokenisation`, le `chunking`, `Embedding` (Encodage vectoriel) et le stockage des données dans la base de données vectorielles.
 
