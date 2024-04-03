@@ -46,7 +46,7 @@ var response = chatClient.call(
 Cependant, cette approche peut être limitée en termes de contexte et de pertinence. Pour surmonter ces limitations, l'approche RAG (Retrieval Augmented Generation) a été développée pour intégrer des connaissances externes dans le processus de génération de textes.
 
 == Qu’est-ce qu'un RAG (Retrieval Augmented Generation)
-Le RAG est une technique qui enrichit les capacités des modèles de langage génératifs en leur permettant d'exploiter des données externes. Cela signifie qu'au lieu de se baser uniquement sur ce qu'ils ont appris durant leur phase d'enrênement, les modèles peuvent chercher et intégrer des informations provenant de sources de données spécifiques pour générer des réponses plus pertinentes et contextuelles.
+Le RAG est une technique qui enrichit les capacités des modèles de langage génératifs en leur permettant d'exploiter des données externes. Cela signifie qu'au lieu de se baser uniquement sur ce qu'ils ont appris durant leur phase d'entraînement, les modèles peuvent chercher et intégrer des informations provenant de sources de données spécifiques pour générer des réponses plus pertinentes et contextuelles.
 
 == Retrieval Augmented Generation
 Le `RETRIEVAL`, représente la phase où le système récupère des informations pertinentes pour enrichir la réponse générée. Ces informations peuvent provenir de bases de données externes, de corpus de connaissances ou d'autres sources de données.
