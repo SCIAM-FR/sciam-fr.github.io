@@ -131,7 +131,7 @@ var chunks = tokenTextSplitter.apply(documents);
 ----
 
 === L'encodage vectoriel (Embedding)
-Un Embedding est un vecteur numérique dense représentant des tokens, des chunks, ou même des documents entiers, dans un espace vectoriel continu. Chaque dimension de l'embedding capte un aspect sémantique ou contextuel du contenu qu'il représente, et ce format encodé permet de traduire le texte en une forme que les algorithmes d'apprentissage automatique peuvent traiter efficacement.
+Un Embedding est un vecteur numérique dense représentant des tokens, des chunks, ou même des documents entiers, dans un espace vectoriel continu. Chaque dimension de l'embedding capte un aspect sémantique ou contextuel du contenu qu'il représente. Ce format encodé permet de traduire le texte en une forme que les algorithmes d'apprentissage automatique peuvent traiter efficacement.
 
 Nous allons générer un embedding pour chaque chunk, et le stocker dans la base de données vectorielles.
 
