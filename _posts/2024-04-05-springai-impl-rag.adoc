@@ -281,7 +281,7 @@ return vectorStore.similaritySearch(
 <3> Seuil de similarité : Spécification d'un seuil de similarité pour filtrer les résultats de la recherche. Une valeur seuil de `0,0` signifie que toute similarité est acceptée ou désactive le filtrage par seuil de similarité. Une valeur de seuil de `1,0` signifie qu'une correspondance exacte est requise.
 <4> Nombre de résultats : Spécification du nombre de résultats a renvoyé. Cela permet de limiter le nombre de résultats retournés par la recherche.
 
-=== Génération Augmentée
+=== La Génération Augmentée
 Nous allons maintenant générer une réponse en fonction de l'instruction et des informations récupérées.
 
 [source,java]
