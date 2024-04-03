@@ -6,6 +6,7 @@
 :page-tags: [Java, Spring Boot, Spring AI, RAG, IA, Mistral IA, PgVector]
 :docinfo: shared-footer
 :page-vignette: illustration_rag.png
+:page-vignette-licence: 'Image générée par l'IA'
 :page-liquid:
 :showtitle:
 
@@ -15,10 +16,10 @@ Dans une approche simple basée sur un modèle génératif, l'IA crée des répo
 
 image::rickenbazolo/springai_impl_rag/simple_base_flow.png[image,width=70%,align="center"]
 
-. `Instruction` : Une commande ou une requête est fournie au modèle. C'est l'étape où l'utilisateur interagit avec le système en posant une question ou en donnant une instruction spécifique.
-. `Génération` : Le modèle génère une réponse en fonction de l'instruction reçue. Cette réponse est basée sur les connaissances et les données qu'il a acquises pendant la phase d'entraînement.
+** `(1)` : Une commande ou une requête est fournie au modèle. C'est l'étape où l'utilisateur interagit avec le système en posant une question ou en donnant une instruction spécifique.
+** `(2)` : Le LLM génère une réponse en fonction de l'instruction reçue. Cette réponse est basée sur les connaissances et les données qu'il a acquises pendant la phase d'entraînement.
 
-TIP: Le "MODEL" représente le cœur du système d'IA, où l'instruction est traitée.
+NOTE: Les grands modèles de langage (LLM) sont de très grands modèles construits sur l'apprentissage automatique et pré-entraînés sur de grandes quantités de données, capable, entre autres tâches, de reconnaître et de générer du texte. Il représente le cœur du système d'IA, où l'instruction est traitée.
 
 Vous pouvez utiliser une implémentation de l'interface `ChatClient` fournie par le framework, pour mettre en œuvre cette approche avec Spring AI.
 
@@ -32,11 +33,13 @@ Pour utiliser Mistral AI avec Spring AI, vous devez ajouter la dépendance suiva
 </dependency>
 ----
 
+Voici un exemple de mise en œuvre avec l'implémentation `MistralAiChatClient` :
+
 [source,java]
 ----
 var response = chatClient.call(
     new Prompt(
-        "Generate the names of 5 famous pirates.",
+        "Qu'elle est l'intrigue dans le premier volet de Spider-Man",
         MistralAiChatOptions.builder()
             .withModel(MistralAiApi.ChatModel.LARGE.getValue())
         .build()
@@ -48,17 +51,18 @@ Cependant, cette approche peut être limitée en termes de contexte et de pertin
 == Qu’est-ce qu'un RAG (Retrieval Augmented Generation)
 Le RAG est une technique qui enrichit les capacités des modèles de langage génératifs en leur permettant d'exploiter des données externes. Cela signifie qu'au lieu de se baser uniquement sur ce qu'ils ont appris durant leur phase d'entraînement, les modèles peuvent chercher et intégrer des informations provenant de sources de données spécifiques pour générer des réponses plus pertinentes et contextuelles.
 
-== Retrieval Augmented Generation
-Le `RETRIEVAL`, représente la phase où le système récupère des informations pertinentes pour enrichir la réponse générée. Ces informations peuvent provenir de bases de données externes, de corpus de connaissances ou d'autres sources de données.
+=== La Récupération (Retrieval)
+
+La *Récupération*, représente la phase où le système récupère des informations pertinentes pour enrichir la réponse générée. Ces informations peuvent provenir de bases de données externes, de corpus de connaissances ou d'autres sources de données.
 
 image::rickenbazolo/springai_impl_rag/rag.png[image,width=70%,align="center"]
 
-** 1 & 2 - `Instruction` et `Récupération du Contexte` : Le système recherche, dans une base de données externe ou un corpus de connaissances, des informations pertinentes qui correspondent ou sont similaires à l'instruction initiale. Ces informations sont utilisées pour enrichir le contexte de la réponse.
-** 3 - `Génération Augmentée` : Le modèle génère une réponse en fonction de l'instruction et des informations récupérées. Cette réponse est plus riche et plus contextuelle, car elle intègre des données externes.
+** `(1)` & `(2)` - *Instruction* et *Récupération* du Contexte : Le système recherche, dans une base de données externe ou un corpus de connaissances, des informations pertinentes qui correspondent ou sont similaires à l'instruction initiale. Ces informations sont utilisées pour enrichir le contexte de la réponse.
+** `(3)` - *Génération Augmentée* : Le LLM génère une réponse en fonction de l'instruction et des informations récupérées. Cette réponse est plus riche et plus contextuelle, car elle intègre des données externes.
 
-TIP: Avec l'instruction et le contexte récupéré, le `MODEL` d'IA génère une réponse. Cette réponse est basée sur des informations contextuelles spécifiques qui ont été récupérées.
+NOTE: Avec l'instruction et le contexte récupéré, la réponse générée par le LLM est basée sur des informations contextuelles spécifiques qui ont été récupérées.
 
-Mise en œuvre du "RETRIEVAL" avec Spring AI
+=== La mise en œuvre de la "Récupération" avec Spring AI
 
 Spring AI propose une API abstraite pour interagir avec les bases de données vectorielles, telles que PgVector via l'interface `VectorStore`.
 
@@ -72,6 +76,8 @@ Pour utiliser PgVector avec Spring AI, vous devez ajouter la dépendance suivant
 </dependency>
 ----
 
+La méthode `similaritySearch` de l'interface `VectorStore` permet de rechercher des informations pertinentes qui correspondent ou sont similaires à l'instruction initiale. Vous pouvez spécifier un *seuil de similarité* de 0 à 1.0 pour filtrer les résultats de la recherche et définir le nombre de résultats a renvoyé.
+
 [source,java]
 ----
 var similarity = vectorStore.similaritySearch(
@@ -81,9 +87,7 @@ var similarity = vectorStore.similaritySearch(
                 .withTopK(5));
 ----
 
-TIP: La méthode `similaritySearch` de l'interface `VectorStore` permet de rechercher des informations pertinentes qui correspondent ou sont similaires à l'instruction initiale. Vous pouvez spécifier un seuil de similarité de 0 à 1.0 pour filtrer les résultats de la recherche et définir le nombre de résultats a renvoyé.
-
-L'intégration d'une base de données, une révolution pour la génération de contenus enrichis
+L'intégration d'une base de données, une révolution pour la génération de contenus enrichis, présente plusieurs avantages :
 
 ** Accès à l'information en temps réel :
 *** Alimentation du modèle avec des données fraîches et actualisées.
@@ -94,18 +98,18 @@ L'intégration d'une base de données, une révolution pour la génération de c
 *** Surveillance et optimisation du processus de génération de textes.
 *** Mise en place de mesures pour garantir la qualité et la pertinence des résultats.
 
-== Le Data Pipeline
+=== Le Data Pipeline
 
-Pour insérer les données dans la base de données, nous allons construire un data pipeline qui va extraire, transformer et charger les données dans la base de données vectorielles.
+Pour insérer les données dans la base de données, nous allons construire un *data pipeline* qui va extraire, transformer et charger les données dans la base de données vectorielles.
 
 image::rickenbazolo/springai_impl_rag/data_pipeline.png[image,width=70%,align="center"]
 
-== Les opérations spécifiques au RAG
+=== Les opérations spécifiques au RAG
 Notre data pipeline doit être capable d'effectuer des opérations spécifiques au RAG.
-Ces opérations incluent : la `tokenisation`, le `chunking`, l' `Embedding` (Encodage vectoriel) et le stockage des données dans la base de données vectorielles.
+Ces opérations incluent : la *tokenisation*, le *chunking*, l'*Embedding* (Encodage vectoriel) et le stockage des données dans la base de données vectorielles.
 
-=== Le Chunking
-Le `CHUNKING` est une technique qui consiste à découper les données en morceaux plus petits pour les rendre plus faciles à traiter. Ces chunks peuvent être des phrases, des paragraphes ou des sections de texte qui vont être stockés dans la base de données vectorielles.
+==== Le Chunking
+Le *Chunking* est une technique qui consiste à découper les données en morceaux plus petits pour les rendre plus faciles à traiter. Ces *chunks* peuvent être des phrases, des paragraphes ou des sections de texte qui vont être stockés dans la base de données vectorielles.
 
 image::rickenbazolo/springai_impl_rag/chunking.png[image,width=70%,align="center"]
 
@@ -113,33 +117,35 @@ Spring AI fournit la classe `TokenTextSplitter` pour effectuer le chunking des d
 
 [source,java]
 ----
-// Découper le texte en morceaux plus petits
 var textSplitter = new TokenTextSplitter();
-var chunks = tokenTextSplitter.split(texts, 2048); // taille des morceaux
+var chunks = tokenTextSplitter.split(texts, 2048); // <1>
 ----
 
-=== La Tokenisation
+<1> La méthode *split* fait le chunking, vous pouvez spécifier la taille du chunk.
+
+==== La Tokenisation
 Pour un RAG, la tokenisation joue un rôle crucial, car elle est la première étape permettant au modèle de comprendre et de manipuler le texte. Des tokens incorrectement définis peuvent mener à une récupération d'informations inefficaces et à des réponses générées qui ne sont pas pertinentes ou précises.
 
 Spring AI s'appuie sur la librairie https://jtokkit.knuddels.de/[JTokkit^] pour effectuer la tokenisation des données. Vous pouvez utiliser la classe `TokenTextSplitter` pour la tokenisation et le chunking.
 
 [source,java]
 ----
-// Découper le texte en morceaux plus petits
 var tokenTextSplitter = new TokenTextSplitter();
-var chunks = tokenTextSplitter.apply(documents);
+var chunks = tokenTextSplitter.apply(documents); // <1>
 ----
 
-=== L'encodage vectoriel (Embedding)
+<1> La méthode *apply* fait la tokenisation et le chunking.
+
+==== L'encodage vectoriel (Embedding)
 Un Embedding est un vecteur numérique dense représentant des tokens, des chunks, ou même des documents entiers, dans un espace vectoriel continu. Chaque dimension de l'embedding capte un aspect sémantique ou contextuel du contenu qu'il représente. Ce format encodé permet de traduire le texte en une forme que les algorithmes d'apprentissage automatique peuvent traiter efficacement.
 
 Nous allons générer un embedding pour chaque chunk, et le stocker dans la base de données vectorielles.
 
 image::rickenbazolo/springai_impl_rag/embeddings.png[image,width=70%,align="center"]
 
-Il est important de noter la génération de l'embedding de l'instruction initiale, qui sera utilisé pour la recherche de similarité.
+Il est important de noter la génération de l'embedding de l'instruction initiale sera utilisé pour la recherche de similarité.
 
-TIP: Pourquoi a t-on besoin d'un encodage vectoriel ? Les vecteurs numériques offrent une méthode de comparaison rapide, efficace et économique, ce qui les rend idéaux pour identifier et récupérer les segments (chunks) de texte pertinent dans notre base de données.
+NOTE: Pourquoi a t-on besoin d'un encodage vectoriel ? Les vecteurs numériques offrent une méthode de comparaison rapide, efficace et économique, ce qui les rend idéaux pour identifier et récupérer les segments (chunks) de texte pertinent dans notre base de données.
 
 Spring AI fournit une API abstraite pour générer des embeddings via l'interface `EmbeddingClient`.
 
@@ -152,6 +158,8 @@ Pour générer un embedding avec Spring AI en utilisant un modèle de Mistral AI
     <artifactId>spring-ai-mistral-ai-spring-boot-starter</artifactId>
 </dependency>
 ----
+
+Voici un exemple de mise en œuvre :
 
 [source,java]
 ----
@@ -234,13 +242,13 @@ public PgVectorStore pgVectorStore(JdbcTemplate jdbcTemplate, EmbeddingClient em
 
 Pour plus d'informations sur la configuration de PgVector, consultez la documentation officielle https://docs.spring.io/spring-ai/reference/api/vectordbs/pgvector.html[ici^]
 
-=== L'extraction des données (Processing Data)
+=== L'extraction et traitement des données
 Nous allons maintenant lire un document PDF et extraire les données pour les traiter avec notre système RAG.
 
 [source,java]
 ----
 public void processDocument(Ressource pdfDocument) {
-// <1>
+
 var documents = new PagePdfDocumentReader(pdfDocument,
         PdfDocumentReaderConfig.builder()
                 .withPageTopMargin(0)
@@ -249,26 +257,26 @@ var documents = new PagePdfDocumentReader(pdfDocument,
                                 .withNumberOfTopTextLinesToDelete(0)
                                 .build())
                 .withPagesPerDocument(1)
-                .build());
-// <2>
+                .build()); // <1>
+
 var tokenTextSplitter = new TokenTextSplitter();
-var chunks = tokenTextSplitter.apply(docs);
-// <3>
-vectoreStore.accept(chunks);
+var chunks = tokenTextSplitter.apply(docs); // <2>
+
+vectoreStore.accept(chunks); // <3>
 }
 ----
 <1> Extraction de données : Utilisation de la classe `PagePdfDocumentReader` pour extraire les données d'un document PDF.
 <2> Chunking : Utilisation de la classe `TokenTextSplitter` pour la tokenisation et découper les données en chunks.
 <3> Stockage des données : Stockage des chunks et des embeddings dans la base de données vectorielles.
 
-=== La récupération des informations pertinentes (Retrieval)
+=== La récupération des informations (Retrieval)
 Nous allons maintenant implémenter la recherche de similarité pour récupérer des informations pertinentes en fonction de l'instruction initiale.
 
 [source,java]
 ----
 public List<Documents> retrieveInformation(String instruction) {
-// <1>
-return vectorStore.similaritySearch(
+
+return vectorStore.similaritySearch( // <1>
             SearchRequest.query("")
                     .withQuery(instruction) // <2>
                     .withSimilarityThreshold(0.1) // <3>
@@ -287,9 +295,9 @@ Nous allons maintenant générer une réponse en fonction de l'instruction et de
 [source,java]
 ----
 public String generateResponse(String instruction) {
-// <1>
-var documents = retrieveInformation(instruction);
-// <2>
+
+var documents = retrieveInformation(instruction); // <1>
+
 var systemMessage = new SystemPromptTemplate(
     """
     Context information is below.
@@ -297,23 +305,26 @@ var systemMessage = new SystemPromptTemplate(
     Given the context information and not prior knowledge, answer the question in the same language.
     QUESTION: {question}
     """
-).createMessage(Map.of("question", instruction, "context", documents));
-// <3>
-var userMessage = new UserMessage(message);
-// <4>
+).createMessage(Map.of("question", instruction, "context", documents)); // <2>
+
+var userMessage = new UserMessage(message); // <3>
+
 var prompt = new Prompt(List.of(systemMessage, userMessage),
                 MistralAiChatOptions.builder()
                         .withModel(MistralAiApi.ChatModel.LARGE.getValue())
-                        .build());
-// <5>
-return chatClient.stream(prompt);
+                        .build()); // <4>
+
+return chatClient.stream(prompt); // <5>
 }
 ----
 <1> Récupération des informations : Utilisation de la méthode `retrieveInformation` pour récupérer des informations pertinentes en fonction de l'instruction initiale.
 <2> Création du message système : Création d'un message système qui contient les informations contextuelles récupérées et l'instruction initiale.
-<3> Création du message utilisateur (avec le role USER) à partir de l'instruction initiale.
+<3> Création du message utilisateur à partir de l'instruction initiale.
 <4> Création du prompt : Création d'un prompt qui contient le message système et le message utilisateur.
 <5> Génération Augmentée de la réponse : Le prompt est ensuite transmis au ChatClient pour obtenir une réponse générative qui est retournée à l'utilisateur.
+
+NOTE: *Les messages ayant le rôle d'utilisateur* proviennent de l'utilisateur final ou du développeur. Ils représentent des questions, des invites ou toute autre entrée que vous souhaitez que le générateur réponde.
+*Le message système* donne des instructions de haut niveau pour la conversation. Ce rôle fournit généralement des instructions de haut niveau pour la conversation. Par exemple, vous pouvez utiliser un message système pour demander au générateur de se comporter comme un certain personnage ou de fournir des réponses dans un format spécifique.
 
 La classe `RagService` est maintenant prête à être utilisée pour générer des réponses enrichies en fonction de l'instruction initiale.
 
@@ -355,9 +366,9 @@ public class RagService {
         var documents = retrieveInformation(instruction);
         var systemMessage = new SystemPromptTemplate(
             """
-            Context information is below.
+            Les informations contextuelles sont indiquées ci-dessous.
             CONTEXT: {context}
-            Given the context information and not prior knowledge, answer the question in the same language.
+            Compte tenu des informations contextuelles et sans connaissances préalables, répondez à la question.
             QUESTION: {question}
             """
         ).createMessage(Map.of("question", instruction, "context", documents));
