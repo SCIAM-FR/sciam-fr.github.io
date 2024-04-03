@@ -180,7 +180,7 @@ Créer un projet Spring Boot et ajouter les dépendances nécessaires à votre f
 </dependency>
 ----
 
-Cette dépendance permet d'utiliser les modèles de Mistral AI pour et créer un assistant conversationnel multilingue et générer des embeddings.
+Cette dépendance permet d'utiliser les modèles de Mistral AI pour créer un assistant conversationnel multilingue et générer des embeddings.
 
 [source,xml]
 ----
