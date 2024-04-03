@@ -139,7 +139,7 @@ image::rickenbazolo/springai_impl_rag/embeddings.png[image,width=70%,align="cent
 
 Il est important de noter la génération de l'embedding de l'instruction initiale, qui sera utilisé pour la recherche de similarité.
 
-TIP: Pourquoi on a besoin d'un encodage vectoriel ? Les vecteurs numériques offrent une méthode de comparaison rapide, efficace et économique, ce qui les rend idéaux pour identifier et récupérer les segments (chunks) de texte pertinent dans notre base de données.
+TIP: Pourquoi a t-on besoin d'un encodage vectoriel ? Les vecteurs numériques offrent une méthode de comparaison rapide, efficace et économique, ce qui les rend idéaux pour identifier et récupérer les segments (chunks) de texte pertinent dans notre base de données.
 
 Spring AI fournit une API abstraite pour générer des embeddings via l'interface `EmbeddingClient`.
 
