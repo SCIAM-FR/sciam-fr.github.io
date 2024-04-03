@@ -102,7 +102,7 @@ image::rickenbazolo/springai_impl_rag/data_pipeline.png[image,width=70%,align="c
 
 == Les opérations spécifiques au RAG
 Notre data pipeline doit être capable d'effectuer des opérations spécifiques au RAG.
-Ces opérations incluent : la `tokenisation`, le `chunking`, `Embedding` (Encodage vectoriel) et le stockage des données dans la base de données vectorielles.
+Ces opérations incluent : la `tokenisation`, le `chunking`, l' `Embedding` (Encodage vectoriel) et le stockage des données dans la base de données vectorielles.
 
 === Le Chunking
 Le `CHUNKING` est une technique qui consiste à découper les données en morceaux plus petits pour les rendre plus faciles à traiter. Ces chunks peuvent être des phrases, des paragraphes ou des sections de texte qui vont être stockés dans la base de données vectorielles.
