@@ -261,7 +261,7 @@ vectoreStore.accept(chunks);
 <2> Chunking : Utilisation de la classe `TokenTextSplitter` pour la tokenisation et découper les données en chunks.
 <3> Stockage des données : Stockage des chunks et les embeddings dans la base de données vectorielles.
 
-=== Retrieval
+=== La récupération des informations pertinentes (Retrieval)
 Nous allons maintenant implémenter la recherche de similarité pour récupérer des informations pertinentes en fonction de l'instruction initiale.
 
 [source,java]
