@@ -168,7 +168,7 @@ image::rickenbazolo/springai_impl_rag/complete_rag.png[image,width=70%,align="ce
 
 Nous allons maintenant construire un système RAG complet en utilisant https://spring.io/projects/spring-ai[Spring AI^] et https://github.com/pgvector/pgvector[PgVector^].
 
-== Implémentation du système RAG
+== L'implémentation du système RAG
 
 Créer un projet Spring Boot et ajouter les dépendances nécessaires à votre fichier `pom.xml`.
 
