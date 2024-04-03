@@ -259,7 +259,7 @@ vectoreStore.accept(chunks);
 ----
 <1> Extraction de données : Utilisation de la classe `PagePdfDocumentReader` pour extraire les données d'un document PDF.
 <2> Chunking : Utilisation de la classe `TokenTextSplitter` pour la tokenisation et découper les données en chunks.
-<3> Stockage des données : Stockage des chunks et les embeddings dans la base de données vectorielles.
+<3> Stockage des données : Stockage des chunks et des embeddings dans la base de données vectorielles.
 
 === La récupération des informations pertinentes (Retrieval)
 Nous allons maintenant implémenter la recherche de similarité pour récupérer des informations pertinentes en fonction de l'instruction initiale.
