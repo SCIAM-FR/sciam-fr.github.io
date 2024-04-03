@@ -162,7 +162,7 @@ var embeddingResponse = embeddingClient.call(
         .build()));
 ----
 
-== Architecture simplifié d'un système RAG
+== L'architecture simplifiée d'un système RAG
 
 image::rickenbazolo/springai_impl_rag/complete_rag.png[image,width=70%,align="center"]
 
