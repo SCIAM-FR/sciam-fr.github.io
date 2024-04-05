@@ -143,7 +143,7 @@ Nous allons générer un embedding pour chaque chunk, et le stocker dans la base
 
 image::rickenbazolo/springai_impl_rag/embeddings.png[image,width=70%,align="center"]
 
-Il est important de noter la génération de l'embedding de l'instruction initiale sera utilisé pour la recherche de similarité.
+Il est important de noter que la génération de l'embedding de l'instruction initiale sera utilisée pour la recherche de similarité.
 
 NOTE: Pourquoi a t-on besoin d'un encodage vectoriel ? Les vecteurs numériques offrent une méthode de comparaison rapide, efficace et économique, ce qui les rend idéaux pour identifier et récupérer les segments (chunks) de texte pertinent dans notre base de données.
 
