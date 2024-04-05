@@ -10,7 +10,7 @@
 :page-liquid:
 :showtitle:
 
-https://blog.sciam.fr/2024/01/16/springboot-et-openai.html[Spring AI^] fournit une interface simple pour intégrer des fonctionnalités d'intelligence artificielle dans vos applications Spring Boot. Nous allons explorer le framework https://docs.spring.io/spring-ai/reference/api/etl-pipeline.html[ETL^] (Extract, Transform, Load) de Spring AI et voir comment il peut être utilisé pour implémenter un système de RAG.
+link:{% post_url 2024-01-16-springboot-et-openai %}[Spring AI^] fournit une interface simple pour intégrer des fonctionnalités d'intelligence artificielle dans vos applications Spring Boot. Nous allons explorer le framework https://docs.spring.io/spring-ai/reference/api/etl-pipeline.html[ETL^] (Extract, Transform, Load) de Spring AI et voir comment il peut être utilisé pour implémenter un système de RAG.
 
 Dans une approche simple basée sur un modèle génératif, l'IA crée des réponses à partir d'un prompt donné, s'appuyant sur son corpus d'entraînement ou sur des informations préalablement connues.
 
