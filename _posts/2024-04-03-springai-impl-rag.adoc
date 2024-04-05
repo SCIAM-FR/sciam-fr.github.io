@@ -76,7 +76,7 @@ Pour utiliser PgVector avec Spring AI, vous devez ajouter la dépendance suivant
 </dependency>
 ----
 
-La méthode `similaritySearch` de l'interface `VectorStore` permet de rechercher des informations pertinentes qui correspondent ou sont similaires à l'instruction initiale. Vous pouvez spécifier un *seuil de similarité* de 0 à 1.0 pour filtrer les résultats de la recherche et définir le nombre de résultats a renvoyé.
+La méthode `similaritySearch` de l'interface `VectorStore` permet de rechercher des informations pertinentes qui correspondent ou sont similaires à l'instruction initiale. Vous pouvez spécifier un *seuil de similarité* de 0 à 1.0 pour filtrer les résultats de la recherche et définir le nombre de résultats à renvoyer.
 
 [source,java]
 ----
