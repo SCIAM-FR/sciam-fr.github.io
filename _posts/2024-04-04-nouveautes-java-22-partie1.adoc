@@ -89,7 +89,7 @@ Trois patterns sont proposés :
 * Unnamed variable : pour une variable qui peut être initialisée mais non utilisée dans :
 ** Une variable locale dans un bloc
 ** Une ressource dans un try-with-resources
-** L'en-tête d'une boucle `for` et `for améliorée
+** L'en-tête d'une boucle `for` et `for` améliorée
 ** Une exception d'un bloc `catch`
 ** Un paramètre formel d'une expression Lambda
 ** Utilisable plusieurs fois dans la même portée
@@ -479,10 +479,10 @@ L’API propose aussi deux interfaces fonctionnelles :
 
 * `Gatherer.Downstream<T>` +
 Une instance est fournie à l’integrator et au finisher. +
-Sa méthode abstraite `boolean push(T element)` permet d’envoyer éventuellement l’élément en sortie. Elle renvoie un booléen : `false` pour short cirtuiting sinon `true`
+Sa méthode abstraite `boolean push(T element)` permet d’envoyer éventuellement l’élément en sortie. Elle renvoie un booléen : `false` pour court-circuiter (short-cirtuiting) sinon `true`
 * `Gatherer.Integrator<A, T, R>` +
 Une instance est retournée par l’integrator. 
-Sa méthode `boolean integrate(A state, T element, Downstream<? super R> downstream)` traite un élément entrant et renvoie un booléen (`false` pour short cirtuiting)
+Sa méthode `boolean integrate(A state, T element, Downstream<? super R> downstream)` traite un élément entrant et renvoie un booléen (`false` pour court-circuiter)
 
 L’interface `Gatherer` propose différentes surcharges de la fabrique `of()` pour obtenir un `Gatherer` à partir de l’implémentation d’une ou plusieurs des quatre fonctions.
 
@@ -490,7 +490,7 @@ Un `Gatherer` peut être :
 
 * Exécuté en séquentiel ou parallèle
 * Stateless ou statefull
-* Short-Circuiting ou greedy
+* Short-circuiting ou greedy
 
 Exemple : un Gatherer équivalent à l’opération `map()`
 
