@@ -1,0 +1,775 @@
+:showtitle:
+:page-navtitle: Les nouveautés de Java 22 : partie 1
+:page-excerpt: Ce premier article sur les nouveautés de Java 21 détaille les fonctionnalités proposées dans la synatxe et les API notamment par les JEP des projets Amber, Loom et Panama.
+:layout: post
+:author: jeanmicheldoudoux
+:page-tags: [Java, Java 22, Projet Amber, Projet Panama, Projet Loom]
+:page-vignette: java-22.png
+:page-liquid:
+
+= Les nouveautés de Java 22 : partie 1
+
+Ce premier article est consacré aux nouveautés de Java 22 et détaille les fonctionnalités proposées dans la syntaxe et les API notamment par les projets https://openjdk.org/projects/amber/[Amber^], https://openjdk.org/projects/loom/[Loom^] et https://openjdk.org/projects/panama/[Panama^] d’OpenJDK.
+
+https://openjdk.org/projects/jdk/22/[JDK 22^] est la première release publiée depuis le JDK 21, la version LTS courante. La version GA 22 du JDK a été publiée le 19 mars 2024.
+
+Elle contient douze JEPs que l’on peut regrouper en trois catégories :
+
+* Des évolutions dans le langage
+* Des évolutions dans les API
+* Des évolutions dans la JVM
+
+Ces JEPs sont proposées en standard, en preview ou en incubation. La plupart sont issues des travaux de plusieurs projets : https://openjdk.org/projects/amber/[Amber], https://openjdk.org/projects/loom/[Loom^] et https://openjdk.org/projects/panama/[Panama^].
+
+Quatre JEPs concernent des évolutions dans la syntaxe du langage Java (projet Amber) :
+
+* JEP 456 : https://openjdk.org/jeps/456[Unnamed Variables & Patterns^]
+* JEP 463 : https://openjdk.org/jeps/463[Implicitly Declared Classes and Instance Main Methods (Second Preview)^]
+* JEP 459 : https://openjdk.org/jeps/459[String Templates (Second Preview)^]
+* JEP 447 : https://openjdk.org/jeps/447[Statements before super(...) (Preview)^]
+
+Six JEPS concernent des évolutions dans les API (notamment issues des projets Panama et Loom) :
+
+* JEP 454 : https://openjdk.org/jeps/454[Foreign Function & Memory API^]
+* JEP 460 : https://openjdk.org/jeps/460[Vector API (Seventh Incubator)^]
+* JEP 462 : https://openjdk.org/jeps/462[Structured Concurrency (Second Preview)^]
+* JEP 464 : https://openjdk.org/jeps/464[Scoped Values (Second Preview)^]
+* JEP 461 : https://openjdk.org/jeps/461[Stream Gatherers (Preview)^]
+* JEP 457 : https://openjdk.org/jeps/457[Class-File API (Preview)^]
+
+Deux JEPs concernent des évolutions dans la JVM :
+
+* JEP 423 : https://openjdk.org/jeps/423[Region Pinning for G1^]
+* JEP 458 : https://openjdk.org/jeps/458[Launch Multi-File Source-Code Programs^]
+
+Les spécifications de la version 22 de la plateforme Java SE sont définies dans la https://openjdk.org/projects/jdk/22/spec[JSR 397^].
+
+== Les fonctionnalités du projet Amber
+
+Le projet Amber propose quatre fonctionnalités dans le JDK 22, une qui devient standard et trois en preview (une nouvelle et deux qui reviennent pour une seconde preview) :
+
+* Unnamed Variables & Patterns
+* Implicitly Declared Classes and Instance Main Methods (Second Preview)
+* String Templates (Second Preview)
+* Statements before super(...) (Preview)
+
+=== Unnamed Variables & Patterns
+
+Introduite en preview dans le JDK 21 (https://openjdk.org/jeps/443[JEP 443^]), cette fonctionnalité devient standard dans le JDK 22 (https://openjdk.org/jeps/456[JEP 456^]).
+
+Le but est d’enrichir le langage d’une syntaxe pour les patterns inutilisés dans les records pattern imbriqués et les variables inutilisées qui doivent être déclarées.
+
+La mise en œuvre syntaxique se fait en utilisant le dernier mot clé réservé de Java, introduit en Java 9 : l’unique caractère `_` (underscore).
+
+Trois patterns sont proposés :
+
+* Unnamed pattern : un pattern inconditionnel, qui ne correspond à rien, utilisable dans un pattern imbriqué à la place d'un type ou record pattern
++
+[source,java]
+----
+    record Grade(String code, String designation) {}
+    record Employe(String nom, String prenom, Grade grade) {}
+    
+    Object o = new Employe("Nom1", "Prenom1", new Grade("DEV", "Développeur"));
+   
+    if (o instanceof Employe(var nom, var prenom, _)) {
+      System.out.println("Employe : " + nom + " " + prenom);
+    }
+----
+
+* Unnamed pattern variable : utilisable avec tous types de patterns
++
+[source,java]
+----
+    if (o instanceof Employe(var nom, var _, _)) {
+      System.out.println("Employe : " + nom);
+    }
+----
+
+* Unnamed variable : pour une variable qui peut être initialisée mais non utilisée dans :
+** Une variable locale dans un bloc
+** Une ressource dans un try-with-resources
+** L'en-tête d'une boucle `for` et `for` améliorée
+** Une exception d'un bloc `catch`
+** Un paramètre formel d'une expression Lambda
+** Utilisable plusieurs fois dans la même portée
++
+[source,java]
+----
+    try (var _ = ScopedContext.acquire()) {
+      var _ = service.traiter((_, _) -> System.out.printn("traiter"));
+    }  catch (Throwable _) { }
+----
+
+Le pattern « unnamed pattern variable » sera particulièrement utile dans des switchs avec des patterns sur des types scellés.
+
+[source,java]
+----
+sealed interface Forme permits Cercle, Carre, Rectangle {}
+----
+
+Il n’est pas possible d’avoir plusieurs patterns nommés dans une même clause case. Si plusieurs patterns ne sont pas utiles, il faut les définir chacun dans un `case` avec un bloc de code vide.
+
+[source,java]
+----
+void traiterFormeRonde(Forme forme) {
+    switch(forme) {
+      case Cercle c -> afficher(c);
+      case Carre c -> {}
+      case Rectangle r -> {}   
+    }
+}
+----
+
+Il est alors tentant d’utiliser une clause `default`.
+
+[source,java]
+----
+    switch(forme) {
+      case Cercle c -> afficher(c);
+      default -> {}
+    }
+----
+
+Cette approche risque d’introduire des bugs en cas d’ajout d’un nouveau type dans la hiérarchie scellée.
+
+Il sera préférable d’utiliser des unnamed pattern variables.
+
+[source,java]
+----
+    switch(forme) {
+      case Cercle c -> afficher(c);
+      case Carre _, Rectangle _ -> {}   
+    }
+----
+
+Si un nouveau type est ajouté à la hiérarchie scellée, alors le compilateur émettra une erreur à la compilation du code contenant le switch et la JVM lèvera une exception puisque l’exhaustivité des cas n’est plus prise en compte.
+
+=== Statements before super(...) (Preview)
+
+Historiquement, la première instruction d’un constructeur doit obligatoirement être l’invocation d’un constructeur de la classe ou super-classe, explicitement (`this()` ou `super()`) ou implicitement par le compilateur. Ceci afin de garantir l’initialisation des champs.
+
+C’est parfois contraignant :
+
+[source,java]
+----
+public class MonEntierPositif extends MonEntier {
+
+  public MonEntierPositif(long valeur) {
+    super(valeur);
+    if (valeur < 0) throw new IllegalArgumentException("La valeur non positive");
+  }
+}
+----
+
+Pour éviter l’invocation du super constructeur inutile si le test de la valeur échoue, il était possible d’utiliser des solutions peu élégantes.
+
+[source,java]
+----
+  public MonEntierPositif(long valeur) {
+    super(verifier(valeur));
+  }
+
+  private static long verifier(long valeur) {
+    if (valeur < 0) throw new IllegalArgumentException("La valeur non positive");
+    return valeur;
+  }
+----
+
+Le but de la https://openjdk.org/jeps/447[JEP 447^] est de permettre d’avoir dans les constructeurs des traitements qui ne font pas référence à l'instance avant l'invocation explicite du constructeur dans une portion de texte dénommée prologue dans les spécifications.
+
+Plusieurs contraintes doivent être respectées dans ce prologue :
+
+* Impossible d’utiliser `this.xxx` ou `super.xxx` explicite ou implicite
+* Impossible de référencer un champ d’une classe englobante `C.this.xxx`
+
+[source,java]
+----
+public class MonEntierPositif extends MonEntier {
+
+  public MonEntierPositif(long valeur) {
+    if (valeur < 0) throw new IllegalArgumentException("La valeur non positive");
+    super(valeur);
+  }
+}
+----
+
+Cette fonctionnalité est en preview dans le JDK 22.
+
+=== Implicitly Declared Classes and Instance Main Methods (Second Preview)
+
+Introduite en preview dans le JDK 21 (https://openjdk.org/jeps/445[JEP 445^]), cette fonctionnalité revient pour une seconde preview (https://openjdk.org/jeps/463[JEP 463^]) et change de nom pour devenir "Implicitly Declared Classes and Instance Main Methods".
+
+Les buts de la JEP sont :
+
+. Faire évoluer le langage pour simplifier les programmes simples
+. Et faciliter l’apprentissage des débutants avec le langage Java
+
+Deux évolutions sont proposées dans un fichier source unique.
+
+La méthode `main()` peut être une méthode d’instance avec ou sans tableau de chaînes de caractères en paramètre. Ainsi quatre formes sont possibles pour la méthode `main()` :
+
+* statique ou d’instance
++
+[source,java]
+----
+class HelloWorld { 
+  void main(String[] args) { 
+    System.out.println("Hello world");
+  }
+}
+----
+
+* avec ou sans paramètre selon les besoins
++
+Le tableau de chaînes de caractères contenant les arguments passés à l’application sont optionnels.
++
+[source,plain]
+----
+C:\java>type HelloWord.java
+class HelloWorld { 
+  void main() {
+    System.out.println("Hello world");
+  }
+}
+C:\java>javac --enable-preview --source=22 HelloWorld.java
+Note: HelloWord.java uses preview features of Java SE 22.
+Note: Recompile with -Xlint:preview for details.
+
+C:\java>java --enable-preview HelloWorld
+Hello world
+----
+
+La sélection, par la JVM, de la méthode `main()` à utiliser se fait en 2 étapes :
+
+* Invocation d’une méthode candidate avec un paramètre `String[]`, si elle existe
+* Sinon invocation d’une méthode candidate sans paramètres si elle existe
+* Sinon une erreur est émise
+
+Il n’y pas d’ambiguïté car une méthode statique et d’instance ne peuvent pas avoir la même signature.
+
+Il n’est pas obligatoire de définir explicitement une classe : dans ce cas, une classe implicite sera définie par le compilateur (implicit declared class) dans le package par défaut.
+
+[source,plain]
+----
+C:\java>type Hello.java
+void main() {
+  System.out.println("Hello");
+}
+
+C:\java>javac --enable-preview --source=22 Hello.java
+Note: Hello.java uses preview features of Java SE 22.
+Note: Recompile with -Xlint:preview for details.
+
+C:\java>java --enable-preview Hello
+Hello
+----
+
+NOTE: le nom du fichier est libre tant que qu’il est un identifiant Java valide.
+
+Un constructeur par défaut sera créé par le compilateur mais il n’est pas possible de définir explicitement un constructeur puisque le nom de la classe n’est pas connu.
+
+Comme le nom de la classe n’est pas connu, il n’est pas possible d’utiliser de référence de méthodes sur ses méthodes statiques.
+
+Depuis Java 11, il est aussi possible d’utiliser directement la JVM pour exécuter un unique fichier source Java qui sera compilé à la volée au lancement de la JVM.
+
+[source,plain]
+----
+C:\java>del Hello.class
+
+C:\java>type Hello.java
+void main() {
+  System.out.println("Hello");
+}
+
+C:\java>java --enable-preview --source=22 Hello.java
+Note: Hello.java uses preview features of Java SE 22.
+Note: Recompile with -Xlint:preview for details.
+Hello
+----
+
+Il est possible d’ajouter dans le code de l’unique fichier source des attributs, des méthodes ou des types.
+
+[source,plain]
+----
+C:\java>type Hello.java
+
+static String WORLD = "world";
+
+void main() {
+  System.out.print("Hello");
+  Util.afficher(" "+WORLD);
+}
+
+class Util {
+  static void afficher(String message) {
+    System.out.println(message);
+  }
+}
+C:\java>java --enable-preview --source=22 Hello.java
+Note: Hello.java uses preview features of Java SE 22.
+Note: Recompile with -Xlint:preview for details.
+Hello world 
+----
+
+Enfin, il n’est pas possible d’avoir de Javadoc.
+
+=== String Templates (Second Preview)
+
+Introduite en preview dans le JDK 21 (https://openjdk.org/jeps/430[JEP 430^]), cette fonctionnalité revient pour une seconde preview (https://openjdk.org/jeps/459[JEP 449^]).
+
+WARNING: Cette fonctionnalité va profondément changer dans la prochaine version du JDK, suite à une  annonce sur la https://mail.openjdk.org/pipermail/amber-spec-experts/2024-March/004010.html[mailing liste^] par Brian Goetz.
+
+Je ne détaille donc pas cette fonctionnalité en attendant sa prochaine mouture dans le JDK 23.
+
+== Les fonctionnalités du projet Panama
+
+Le projet Panama propose deux fonctionnalités dans le JDK 22 :
+
+* Foreign Function & Memory API
+* Vector API (Incubator)
+
+=== Foreign Function and Memory
+
+L’API Foreign Function & Memory (FFM) combine deux API introduites en incubation : l’API Foreign-Memory Access (JEP https://openjdk.org/jeps/370[370^], https://openjdk.org/jeps/383[383^] et https://openjdk.org/jeps/393[393^]) et l’API Foreign Linker (JEP 389). L’API FFM a été introduite en incubation dans le JDK 17 (https://openjdk.org/jeps/412[JEP 412^]) et dans le JDK 18 via la https://openjdk.org/jeps/419[JEP 419^] et pour la première fois en preview dans le JDK 19 (https://openjdk.org/jeps/424[JEP 424^]) avec une seconde preview en Java 21 (https://openjdk.org/jeps/434[JEP 434^] ).
+
+Cette API est enfin proposée en standard dans le JDK 22 (https://openjdk.org/jeps/454[JEP 454^]).
+
+L’article intitulé link:{% post_url 2024-03-28-ffm-java22 %}[L'API Foreign Function & Memory dans Java 22^] sur ce blog détaille cette API, maintenant standard.
+
+=== Vector
+
+L’API Vector a été proposée pour la première fois en incubation via la https://openjdk.org/jeps/338[JEP 338^] et intégrée au JDK 16. Depuis plusieurs incubations ont été proposées par la https://openjdk.org/jeps/414[JEP 414^] intégré au JDK 17, par la https://openjdk.org/jeps/417[JEP 417^] intégrée au JDK 18, par la https://openjdk.org/jeps/426[JEP 426^] intégrée au JDK 19, la https://openjdk.org/jeps/438[JEP 438^] intégrée au JDK 20 et par la https://openjdk.org/jeps/448[JEP 448^] intégrée au JDK 21.
+
+Elle revient pour une septième incubation via la https://openjdk.org/jeps/460[JEP 460^] dans le JDK 22.
+
+Elle propose quelques corrections de bugs et améliorations des performances ainsi qu’une évolution.
+
+Le support de l’accès via des `MemorySegments` dans le heap pour des tableaux de types primitifs a été ajouté : précédemment seuls les tableaux de `byte` étaient supportés.
+
+== Les fonctionnalités du projet Loom
+
+Le projet Loom propose deux fonctionnalités en incubation dans le JDK 22 :
+
+* Structured Concurrency (Incubator)
+* Scoped Values (Incubator)
+
+=== Structured Concurrency (Second preview)
+
+L’API Structured Concurrency a été proposée en incubation en Java 19 (https://openjdk.org/jeps/418[JEP 418^]) et 20 (https://openjdk.org/jeps/437[JEP 437^]). Elle est proposée en preview en Java 21 (https://openjdk.org/jeps/453[JEP 453^]) dans le package java.util.concurrent et revient pour une seconde preview dans le JDK 22 (https://openjdk.org/jeps/462[JEP 462^]).
+
+Cette nouvelle preview n’apporte aucun changement supplémentaire mais permet de prolonger la période de feedbacks.
+
+=== Scoped Values (Second preview)
+
+L’API Scoped Value a été proposée en incubation dans Java 20 (https://openjdk.org/jeps/429[JEP 429^]) et en preview dans Java 21 (https://openjdk.org/jeps/446[JEP 446^]) dans le package java.lang. Cette fonctionnalité revient pour une seconde preview dans le JDK 22 (https://openjdk.org/jeps/464[JEP 464^])
+
+Cette nouvelle preview n’apporte aucun changement supplémentaire mais permet de prolonger la période de feedbacks.
+
+== Les autres fonctionnalités dans les API
+
+De nombreuses évolutions sont proposées dans les API du JDK.
+
+=== Class-File API (Preview)
+
+L'écosystème Java dispose de plusieurs bibliothèques pour manipuler le bytecode, toutes hors du JDK et utilisées par de nombreux frameworks : ASM, BCEL, Javassist, ByteBuddy, …
+
+Le JDK utilise lui-même en interne ASM, dans une version N-1 par rapport à la version N du JDK.
+
+La https://openjdk.org/jeps/457[JEP 457^] Class-File API propose en première preview une API incluse dans le JDK pour l'analyse, la génération et la transformation des fichiers de classe Java.
+
+Cette API, dans le package `java.lang.classfile`, propose :
+
+* un accès random ou séquentiel aux éléments du .class
+* une API moderne qui repose sur l’utilisation de fabriques, de types scellés, d’immutabilité, …
+* la génération utilise des builders fournis en paramètre d’interfaces fonctionnelles
+* une modélisation des composants du .class
+
+La modélisation repose sur plusieurs types d’éléments :
+
+* `xxxModel` représentent des structures complexes, immuables telles que des classes, des méthodes, des champs, le corps d'une méthode
+* `xxxElement` représentent un élément du fichier de classe, immuables. Les Elements peuvent être des Models et un Model possède un Element correspondant
+* `xxxEntry` représentent les éléments du constant pool (`PoolEntry`, `ClassEntry`, `Utf8Entry`), également exposés sous la forme de Model et d’Element
+* `Attribute` et ses types filles représentent un attribut d’un élément majoritairement exposés sous la forme d’Element
+* Utilise les types du package `java.lang.constant` pour les informations symboliques
+
+.Exemple la génération d’une fichier .class pour une classe concernant une méthode statique
+[source,java]
+----
+import java.lang.classfile.ClassFile;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
+import java.nio.file.Path;
+import static java.lang.classfile.ClassFile.ACC_PUBLIC;
+import static java.lang.classfile.ClassFile.ACC_STATIC;
+import static java.lang.constant.ConstantDescs.CD_int;
+import static java.lang.constant.ConstantDescs.CD_long;
+
+public class TestClassFile {
+
+  public static void main(String[] args) throws java.io.IOException {
+    ClassFile.of().buildTo(Path.of("EntierUtils.class"), 
+        ClassDesc.of("EntierUtils"),
+        classBuilder -> classBuilder.withMethodBody("ajouter",
+            MethodTypeDesc.of(CD_long, CD_int, CD_int),
+            ACC_PUBLIC | ACC_STATIC,
+            codeBuilder -> codeBuilder.iload(1)
+                .i2l()
+                .iload(2)
+                .i2l()
+                .ladd()
+                .lreturn()));
+  }
+}
+----
+
+L’exécution de ce code génère un fichier EntierUtils.class.
+
+[source,plain]
+----
+C:\java\TestJava22> javap -c .\EntierUtils.class
+public class EntierUtils {
+  public static long ajouter(int, int);
+    Code:
+       0: iload_1
+       1: i2l
+       2: iload_2
+       3: i2l
+       4: ladd
+       5: lreturn
+}
+----
+
+Le code Java équivalent (sans le constructeur par défaut) est :
+
+[source,java]
+----
+public class EntierUtils {
+  public static long ajouter(int a, int b) {
+    return (long) a + b;
+  }
+}
+----
+
+L’API permet aussi :
+
+* la lecture et l’analyse des fichiers de classe avec plusieurs formes de parcours proposées
+* la transformation de fichiers de classe de plusieurs manières
+
+=== Stream Gatherers (Preview)
+
+L'API Stream fournit un ensemble complet mais fixe d'opérations intermédiaires et terminales : filtrage, transformation, réduction, tri, …
+
+Ce nombre fixe d’opérations empêche d’exprimer certains traitements complexes. Plusieurs opérations intermédiaires ont déjà été ajoutées mais ce n’est pas solution maintenable dans le temps.
+
+Le but de la https://openjdk.org/jeps/461[JEP 461^] est de proposer l’opération intermédiaire `Stream::gather` extensible qui permet d’exprimer quasiment toutes les implémentations voulues en utilisant la nouvelle API Gatherer similaire à l’API Collector pour l’opération terminale `Stream::collect`.
+
+L’opération `Stream ::gather` attend en paramètre une implémentation de l’interface `Gatherer` qui définit quatre opérations :
+
+* `default Supplier<A>initializer()` +
+Fonction d'initialisation facultative qui fournit un objet conservant un état privé pendant le traitement des éléments du flux
+* `Gatherer.Integrator<A,T,R> integrator()` +
+Intègre un nouvel élément du flux d'entrée éventuellement avec l'objet d'état privé pour émettre éventuellement des éléments vers le flux de sortie. Elle peut interrompre le traitement avant d'atteindre la fin du flux d'entrée
+* `default BinaryOperator<A> combiner()` +
+Optionnelle, utilisée pour combiner les gatherers lorsque le flux d'entrée est marqué comme parallèle
+* `default BiConsumer<A,Gatherer.Downstream<? super R>> finisher()` +
+Optionnelle, invoquée lorsqu'il n'y a plus d'éléments à traiter. Elle peut utiliser l'objet d'état privé pour éventuellement, émettre des éléments de sortie supplémentaires
+
+L’API propose aussi deux interfaces fonctionnelles :
+
+* `Gatherer.Downstream<T>` +
+Une instance est fournie à l’integrator et au finisher. +
+Sa méthode abstraite `boolean push(T element)` permet d’envoyer éventuellement l’élément en sortie. Elle renvoie un booléen : `false` pour court-circuiter (short-cirtuiting) sinon `true`
+* `Gatherer.Integrator<A, T, R>` +
+Une instance est retournée par l’integrator. 
+Sa méthode `boolean integrate(A state, T element, Downstream<? super R> downstream)` traite un élément entrant et renvoie un booléen (`false` pour court-circuiter)
+
+L’interface `Gatherer` propose différentes surcharges de la fabrique `of()` pour obtenir un `Gatherer` à partir de l’implémentation d’une ou plusieurs des quatre fonctions.
+
+Un `Gatherer` peut être :
+
+* Exécuté en séquentiel ou parallèle
+* Stateless ou statefull
+* Short-circuiting ou greedy
+
+Exemple : un Gatherer équivalent à l’opération `map()`
+
+[source,java]
+----
+public static <T, R> Gatherer<T, Void, R> mapping(Function<? super T, ? super R> mapper) {
+  return Gatherer.of( (_ , element, downstream) -> {
+        R mapped = mapper.apply(element);
+        downstream.push(mapped);
+        return true;
+      });
+}
+----
+
+La classe `Gatherers` propose des fabriques pour usages courants :
+
+* `fold(Supplier<R> initial, BiFunction<? super R,? super T,? extends R> folder)` +
+Renvoie un `Gatherer` qui construit un agrégat de manière incrémentielle et émet cet agrégat lorsqu'il n'y a plus d'éléments d'entrée
++
+[source,plain]
+----
+C:\>jshell --enable-preview
+|  Welcome to JShell -- Version 22
+|  For an introduction type: /help intro
+
+jshell> List<String> nombreStr = Stream.of(1, 2, 3, 4, 5).gather(Gatherers.fold(() -> "", (string, number) -> !string.isEmpty() ? string + ";" + number : string + number)).toList();
+nombreStr ==> [1;2;3;4;5]
+----
+
+* `scan(Supplier<R> initial, BiFunction<? super R,? super T,? extends R> scanner)` +
+Renvoie un `Gatherer` 1-1 qui applique une fonction fournie à l'état actuel et à l'élément pour produire l'élément suivant, qu'il transmet en sortie
++
+[source,plain]
+----
+C:\>jshell --enable-preview
+|  Welcome to JShell -- Version 22
+|  For an introduction type: /help intro
+
+jshell> List<String> nombreStrs = Stream.of(1, 2, 3, 4, 5).gather(Gatherers.scan(() -> "", (string, number) -> string +
+number)).toList();
+nombreStrs ==> [1, 12, 123, 1234, 12345]
+----
+
+* `mapConcurrent(int maxConc, Function<? super T,? extends R> mapper)` +
+Renvoie un `Gatherer` 1-1 qui invoque une fonction fournie sur chaque élément d'entrée en parallèle en utilisant des threads virtuels, jusqu'à une limite fournie
+* `windowFixed(int windowSize)` +
+Renvoie un `Gatherer` n-m qui regroupe les éléments d'entrée dans des listes d'une taille donnée et transmet les listes en sortie lorsqu'elles sont pleines
++
+[source,plain]
+----
+C:\>jshell --enable-preview
+|  Welcome to JShell -- Version 22
+|  For an introduction type: /help intro
+
+jshell> List<List<Integer>> windowsFixed = Stream.of(1, 2, 3, 4, 5, 6, 7, 8).gather(Gatherers.windowFixed(3)).toList();
+windowsFixed ==> [[1, 2, 3], [4, 5, 6], [7, 8]]
+----
+
+* `windowSliding(int windowSize)` +
+Renvoie un `Gatherer` n-m qui regroupe les éléments d'entrée dans des listes d'une taille fournie après la première fenêtre, chaque liste suivante est créée à partir d'une copie de la précédente en supprimant le premier élément et en ajoutant l'élément suivant à partir du flux d'entrée
++
+[source,plain]
+----
+C:\>jshell --enable-preview
+|  Welcome to JShell -- Version 22
+|  For an introduction type: /help intro
+
+jshell> List<List<Integer>> windowSlicing = Stream.of(1, 2, 3, 4, 5).gather(Gatherers.windowSliding(3)).toList();
+windowSlicing ==> [[1, 2, 3], [2, 3, 4], [3, 4, 5]]
+----
+
+* `peek(Consumer<? super TR> effect)` +
+Applique le `Consumer` sur chaque élément qui passe par ce gatherer
+* `peekOrdered(Consumer<? super TR> effect)` +
+Applique le `Consumer` sur chaque élément qui passe par ce gatherer dans l'ordre dans lequel ils apparaissent dans le flux
+
+Les gatherers supportent la composition via la méthode `andThen(Gatherer)` qui joint deux gatherers où le premier produit des éléments que le second peut consommer.
+
+Cela permet de créer des gatherers sophistiqués en composant des gatherers plus simples tout comme la composition de fonctions.
+
+Ainsi sémantiquement :
+
+[source,java]
+----
+source.gather(a).gather(b).gather(c).collect(...)
+----
+
+Est équivalent à :
+
+[source,java]
+----
+source.gather(a.andThen(b).andThen(c)).collect(...)
+----
+
+=== Locale-Dependent List Patterns (https://bugs.openjdk.org/browse/JDK-8041488[JDK-8041488^])
+
+La classe `java.text.ListFormat`, qui hérite de `java.text.Format`, formate ou analyse une liste de chaînes de caractères en tenant compte des spécificités locales, d’un type et d’un style.
+
+Le type détermine la ponctuation entre les chaînes et les mots de liaison, le cas échéant. Trois types de formatage sont proposés via l’énumération `java.text.ListFormat.Type` qui contient les valeurs :
+
+* `STANDARD` : pour une liste avec "et" (par défaut)
+* `OR` : pour une liste avec "ou"
+* `UNIT` : pour une liste unitaire soit avec "et" soit avec seulement des virgules selon la `Locale`
+
+Le style détermine la façon dont les chaînes sont abrégées ou non. Trois styles de formatage sont également proposés pour chaque type via l’énumération `java.text.ListFormat.Style` qui contient les valeurs :
+
+* `FULL` : les mots de liaison tels que "et" et "ou" sont écrits en toutes lettres (par défaut)
+* `SHORT` : les mots de liaison sont écrits en entier ou en abrégé, selon la `Locale`
+* `NARROW` : selon la langue, les mots de liaison sont écrits ou omis et les virgules peuvent également être omises
+
+La surcharge de la méthode `getInstance()` sans paramètre permet d’obtenir une instance pour la `Locale`, le type et le style par défaut.
+
+[source,plain]
+----
+jshell> import java.text.*
+
+jshell> ListFormat.getInstance().format(List.of("A", "B", "C"));
+$2 ==> "A, B et C"
+----
+
+La surcharge `getInstance(Locale locale, ListFormat.Type type, ListFormat.Style style)` permet de préciser la `Locale`, le type et le style à utiliser.
+
+[source,plain]
+----
+jshell> ListFormat.getInstance(Locale.FRANCE, ListFormat.Type.STANDARD, ListFormat.Style.FULL).format(List.of("A",
+ "B","C"));
+$3 ==> "A, B et C"
+
+jshell> ListFormat.getInstance(Locale.FRANCE, ListFormat.Type.STANDARD, ListFormat.Style.NARROW).format(List.of(
+ "A", "B", "C"));
+$4 ==> "A, B, C"
+
+jshell> ListFormat.getInstance(Locale.FRANCE, ListFormat.Type.OR, ListFormat.Style.FULL).format(List.of("A", "B",
+ "C"));
+$5 ==> "A, B ou C"
+
+jshell> ListFormat.getInstance(Locale.FRANCE, ListFormat.Type.UNIT, ListFormat.Style.NARROW).format(List.of("A",
+ "B", "C"));
+$6 ==> "A B C"
+----
+
+Le formatage dépend de et s’adapte à la `Locale` utilisée.
+
+[source,plain]
+----
+jshell> ListFormat.getInstance(Locale.US, ListFormat.Type.STANDARD, ListFormat.Style.FULL).format(List.of("A", "B",
+ "C"));
+$7 ==> "A, B, and C"
+
+jshell> ListFormat.getInstance(Locale.US, ListFormat.Type.STANDARD, ListFormat.Style.SHORT).format(List.of("A", "B"
+, "C"));
+$8 ==> "A, B, & C"
+
+jshell> ListFormat.getInstance(Locale.US, ListFormat.Type.OR, ListFormat.Style.FULL).format(List.of("A", "B", "C"));
+$9 ==> "A, B, or C"
+----
+
+La classe `ListFormat` peut aussi analyser une chaîne formatée selon la `Locale`, le type et le style fournis pour extraire une `List<String>`.
+
+[source,plain]
+----
+jshell> try {
+   ...>     List<String> elements = ListFormat.getInstance().parse("A, B et C");
+   ...>     System.out.println(elements);
+   ...> } catch (ParseException e) {
+   ...>     e.printStackTrace();
+   ...> }
+[A, B, C]
+----
+
+=== Le support d’Unicode 15.1 (https://bugs.openjdk.org/browse/JDK-8296246[JDK-8296246^])
+
+Le JDK 22 propose un support d’Unicode version 15.1 avec l’ajout de 627 caractères et un nouvel `UnicodeBlock` pour les nouveaux idéogrammes chinois.
+
+Ce support est pris en charge dans les classes `java.lang.Character`, `java.text.Bidi`, `java.text.Normalizer` et `java.util.regex`.
+
+=== Le support de CLDR version 44 (https://bugs.openjdk.org/browse/JDK-8306116[JDK-8306116^])
+
+Le JDK 22 supporte les données locales https://cldr.unicode.org/index/downloads/cldr-44[CLDR version 44] du consortium Unicode version 44, mettant à jour les `Locale` avec notamment un changement dans le formatage des dates/heures de certains pays d’Amérique Latine (https://unicode-org.atlassian.net/browse/CLDR-16358[[.underline]#CLDR-16358#]) et il n’y a plus de virgule après le jour de la semaine dans le format `FULL` pour l’Australie et le Royaume Uni (https://unicode-org.atlassian.net/browse/CLDR-16974[[.underline]#CLDR-16974#]).
+
+[source,plain]
+----
+C:\java>jshell
+|  Welcome to JShell -- Version 21
+|  For an introduction type: /help intro
+
+jshell> import java.time.*
+
+jshell> import java.time.format.*
+
+jshell> LocalDate date = LocalDate.of(2024, 3, 19);
+today ==> 2024-03-19
+
+jshell> DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Locale.UK).format(date)
+$4 ==> "Tuesday, 19 March 2024"
+
+
+C:\java>jshell
+|  Welcome to JShell -- Version 22
+|  For an introduction type: /help intro
+
+jshell> import java.time.*
+
+jshell> import java.time.format.*
+
+jshell> LocalDate date = LocalDate.of(2024, 3, 19);
+today ==> 2024-03-19
+
+jshell> DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(Locale.UK).format(date)
+$4 ==> "Tuesday 19 March 2024"
+
+jshell>
+----
+
+=== La nouvelle méthode `equidoubles()` de la classe `RandomGenerator` (https://bugs.openjdk.org/browse/JDK-8302987[JDK-8302987^])
+
+La nouvelle méthode `RandomGenerator.equiDoubles(double left, double right, boolean isLeftIncluded, boolean isRightIncluded)` de la classe `java.util.random.RandomGenerator` renvoie un Stream illimité de valeurs doubles choisies de manière pseudo-aléatoire, où chaque valeur est comprise entre la limite gauche et la limite droite spécifiées incluses ou non avec une garantit de distribution uniforme.
+
+[source,plain]
+----
+C:\java>jshell
+|  Welcome to JShell -- Version 22
+|  For an introduction type: /help intro
+
+jshell> import java.util.random.*
+
+jshell> RandomGenerator generator = RandomGenerator.getDefault();
+generator ==> jdk.random.L32X64MixRandom@6e0e048a
+
+jshell> generator.equiDoubles(0.0, 20.0, true, true).limit(5).forEach(System.out::println)
+1.0385721866619377
+19.159234630676323
+4.837364887354536
+11.29602806447005
+3.0737842523306966
+
+jshell>
+----
+
+Il renvoie un `DoubleStream` plutôt que des doubles individuels en raison des calculs initiaux légèrement coûteux. Il est préférable de les absorber en tant que coûts d'installation du flux plutôt que de les répéter pour chaque nouvelle valeur calculée.
+
+=== Des évolutions dans les classes java.util.concurrent.ForkJoinPool et ForkJoinTask (https://bugs.openjdk.org/browse/JDK-8288899[JDK-8288899^])
+
+La nouvelle méthode `invokeAllUninterruptibly(Collection)` de la classe `java.util.concurrent.ForkJoinPool` est une version ininterruptible de la méthode `invokeAll(Collection)` héritée de l’interface `ExecutorService`.
+
+La méthode `invokeAll(Collection)` de l’interface `ExecutorService` lève une exception de type `InterruptedException`. La méthode `invokeAll(Collection)` était redéfinie dans la classe `ForkJoinPool` pour ne pas ne déclarer lever d'``InterruptedException``. Dans le JDK 22, cette redéfinition a été supprimé de `ForkJoinPool`. Le code existant utilisant `ForkJoinPool::invokeAll` devra être modifié. Si le code ne souhaite pas gérer l’interruption, il pourra utiliser la méthode `invokeAllUninterruptibly()`.
+
+Deux nouvelles surcharges de la méthode `adapInterruptible()` sont ajoutées à la classe `java.util.concurrent.ForkJoinTask` : `adaptInterruptible(Runnable)` et `adaptInterruptible(Runnable, T)` pour prendre en charge l’adaptation des tâches exécutables qui peuvent lever une checked exception pour la transformer en `RuntimeException`.
+
+Dans le JDK 22, les objets de type `Future` renvoyés par `ForkJoinPool.submit(Runnable)` et `ForkJoinPool.submit(Callable)` sont modifiés pour s’aligner sur les autres implémentations d’ `ExecutorService` :
+
+* La méthode `Future.cancel(true)` interrompt le thread qui exécute la tâche s'il est annulé avant que la tâche ne soit terminée
+* La méthode `Future.get()` lève maintenant une exception de type `ExecutionException` avec l'exception comme cause si la tâche échoue. Le comportement précédent consistait à lever une exception de type `ExecutionException` avec une `RuntimeException` comme cause
+
+=== JLine est le provider par défaut pour Console (https://bugs.openjdk.org/browse/JDK-8308591[JDK-8308591^])
+
+La méthode `System::console` a été modifiée pour retourner une `Console` avec des fonctions d'édition améliorées qui améliorent l'expérience des programmes qui utilisent l'API `Console`.
+
+La méthode `System::console` renvoie désormais un objet `Console` lorsque les flux standard sont redirigés ou connectés à un terminal virtuel. Dans les versions précédentes du JDK, `System::console` retournait `null` dans ces cas.
+
+[source,plain]
+----
+jshell> Console console = System.console()
+console ==> java.io.ProxyingConsole@71bbf57e
+
+jshell> console.isTerminal()
+$5 ==> false
+----
+
+Cette modification peut avoir un impact sur le code qui utilise le retour de `System.console()` pour tester si la VM est connectée à un terminal. Si nécessaire, l'utilisation de l’option `-Djdk.console=java.base` rétablit l'ancien comportement où la console n'est renvoyée que lorsqu'elle est connectée à un terminal.
+
+== Conclusion
+
+Java 22 est la première version non-LTS après la publication de la version LTS, Java 21.
+
+Elle propose des évolutions syntaxiques et dans les API en standard (notamment L’API FFM) et en preview pour la première fois ou pour une N^eme^ preview.
+
+N’hésitez donc pas à télécharger et tester une distribution du JDK 22 auprès d’un fournisseur pour anticiper la release de la prochaine version LTS de Java.
+
+Le second article de cette série sera consacré aux autres fonctionnalités et évolutions dans le JDK 22.
+
+&nbsp;
