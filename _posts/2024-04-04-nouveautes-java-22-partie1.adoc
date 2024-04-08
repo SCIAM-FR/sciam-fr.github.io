@@ -89,7 +89,7 @@ Trois patterns sont proposés :
 * Unnamed variable : pour une variable qui peut être initialisée mais non utilisée dans :
 ** Une variable locale dans un bloc
 ** Une ressource dans un try-with-resources
-** L'en-tête d'une boucle for et for améliorée
+** L'en-tête d'une boucle `for` et `for améliorée
 ** Une exception d'un bloc `catch`
 ** Un paramètre formel d'une expression Lambda
 ** Utilisable plusieurs fois dans la même portée
@@ -108,7 +108,7 @@ Le pattern « unnamed pattern variable » sera particulièrement utile dans de
 sealed interface Forme permits Cercle, Carre, Rectangle {}
 ----
 
-Il n’est pas possible d’avoir plusieurs patterns nommés dans une même clause case. Si plusieurs patterns ne sont pas utiles, il faut les définir chacun dans un case avec un bloc de code vide.
+Il n’est pas possible d’avoir plusieurs patterns nommés dans une même clause case. Si plusieurs patterns ne sont pas utiles, il faut les définir chacun dans un `case` avec un bloc de code vide.
 
 [source,java]
 ----
@@ -143,7 +143,7 @@ Il sera préférable d’utiliser des unnamed pattern variables.
     }
 ----
 
-Si un nouveau type est ajoutée à la hiérarchie scellée, alors le compilateur émettra une erreur à la compilation du code contenant le switch et la JVM lèvera une exception puisque l’exhaustivité des cas n’est plus prise en compte.
+Si un nouveau type est ajouté à la hiérarchie scellée, alors le compilateur émettra une erreur à la compilation du code contenant le switch et la JVM lèvera une exception puisque l’exhaustivité des cas n’est plus prise en compte.
 
 === Statements before super(...) (Preview)
 
@@ -202,7 +202,6 @@ Introduite en preview dans le JDK 21 (https://openjdk.org/jeps/445[JEP 445^]), c
 
 Les buts de la JEP sont :
 
-[arabic]
 . Faire évoluer le langage pour simplifier les programmes simples
 . Et faciliter l’apprentissage des débutants avec le langage Java
 
@@ -737,7 +736,7 @@ Il renvoie un `DoubleStream` plutôt que des doubles individuels en raison des c
 
 La nouvelle méthode `invokeAllUninterruptibly(Collection)` de la classe `java.util.concurrent.ForkJoinPool` est une version ininterruptible de la méthode `invokeAll(Collection)` héritée de l’interface `ExecutorService`.
 
-La méthode `invokeAll(Collection)` de l’interface `ExecutorService` lève une exception de type `InterruptedException`. La méthode `invokeAll(Collection)` était redéfinie dans la classe `ForkJoinPool` pour ne pas ne déclarer lever d’ `InterruptedException`. Dans le JDK 22, cette redéfinition a été supprimé de `ForkJoinPool`. Le code existant utilisant `ForkJoinPool::invokeAll` devra être modifié. Si le code ne souhaite pas gérer l’interruption, il pourra utiliser la méthode `invokeAllUninterruptibly()`.
+La méthode `invokeAll(Collection)` de l’interface `ExecutorService` lève une exception de type `InterruptedException`. La méthode `invokeAll(Collection)` était redéfinie dans la classe `ForkJoinPool` pour ne pas ne déclarer lever d'``InterruptedException``. Dans le JDK 22, cette redéfinition a été supprimé de `ForkJoinPool`. Le code existant utilisant `ForkJoinPool::invokeAll` devra être modifié. Si le code ne souhaite pas gérer l’interruption, il pourra utiliser la méthode `invokeAllUninterruptibly()`.
 
 Deux nouvelles surcharges de la méthode `adapInterruptible()` sont ajoutées à la classe `java.util.concurrent.ForkJoinTask` : `adaptInterruptible(Runnable)` et `adaptInterruptible(Runnable, T)` pour prendre en charge l’adaptation des tâches exécutables qui peuvent lever une checked exception pour la transformer en `RuntimeException`.
 
@@ -767,7 +766,7 @@ Cette modification peut avoir un impact sur le code qui utilise le retour de `Sy
 
 Java 22 est la première version non-LTS après la publication de la version LTS, Java 21.
 
-Elle propose des évolutions syntaxiques et dans les API en standard, notamment L’API FFM) et en preview pour la première fois ou pour une N^eme^ preview.
+Elle propose des évolutions syntaxiques et dans les API en standard (notamment L’API FFM) et en preview pour la première fois ou pour une N^eme^ preview.
 
 N’hésitez donc pas à télécharger et tester une distribution du JDK 22 auprès d’un fournisseur pour anticiper la release de la prochaine version LTS de Java.
 
