@@ -770,6 +770,6 @@ Elle propose des évolutions syntaxiques et dans les API en standard (notamment 
 
 N’hésitez donc pas à télécharger et tester une distribution du JDK 22 auprès d’un fournisseur pour anticiper la release de la prochaine version LTS de Java.
 
-Le second article de cette série sera consacré aux autres fonctionnalités et évolutions dans le JDK 22.
+Le link:{% post_url 2024-04-22-nouveautes-java-22-partie2 %}[second article^] de cette série est consacré aux autres fonctionnalités et évolutions dans le JDK 22.
 
 &nbsp;
