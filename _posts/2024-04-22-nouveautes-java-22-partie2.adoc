@@ -69,7 +69,7 @@ Si une classe requise est dans le même fichier `.java`, elle n’est pas recher
 
 === L’épinglage de régions (Region Pinning) pour G1
 
-JNI a besoin de définir et libérer des pointeurs sur des objets Java : les traitements sont exécutés dans une section dite critique. Ces objets ne doivent pas être déplacés par le GC.
+JNI a besoin de définir et libérer des pointeurs sur des objets Java : les traitements sont alors exécutés dans une section dite critique. Ces objets ne doivent pas être déplacés par le GC.
 
 Historiquement, G1 suspend tous ses traitements lors de l’exécution de régions critiques de `JNI` pouvant impliquer un risque de bloquer les threads de l’application voir même une `OutOfMemoryError`.
 
@@ -108,7 +108,7 @@ Avec ce changement, G1 considère les régions ayant échoué à l’évacuation
 +
 Pendant la pause Remark, G1 ajuste la taille du heap pour conserver une quantité minimale et maximale de régions libres définie via les options `-XX:MinHeapFreeRatio` et `-XX:MaxHeapFreeRatio`.
 +
-Avant ce changement, G1 considérait les régions Eden comme occupées (pleines) pour ce calcul. Cela rendait la taille du heap très dépendante de l'occupation actuelle de l'Eden, même si après la prochaine collecte, ces régions seront vides.
+Avant ce changement, G1 considérait les régions Eden comme occupées (pleines) pour ce calcul. Cela rendait la taille du heap très dépendante de l'occupation actuelle de l'Eden, même si après la prochaine collecte, ces régions devraient être vides.
 +
 Avec ce changement, les régions Eden sont considérées comme vides pour les calculs de dimensionnement du heap. Cette nouvelle politique aligne également le dimensionnement du heap sur le dimensionnement du heap complet. L'effet de bord est que G1 étend désormais le heap de manière moins agressive et plus déterministe, avec des économies de mémoire correspondantes mais potentiellement en exécutant davantage de collectes.
 
