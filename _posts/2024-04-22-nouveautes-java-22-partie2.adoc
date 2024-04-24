@@ -24,9 +24,9 @@ Le JDK 22 inclus aussi plusieurs améliorations dans plusieurs ramasse-miettes.
 
 === Launch Multi-File Source-Code Programs
 
-Depuis le JDK 11, la JVM peut exécuter UN unique fichier `.java` sans avoir à le compiler en préalable ( https://openjdk.org/jeps/330[JEP 330^] ) mais    pouvant contenir plusieurs types. Une compilation en mémoire est effectuée avant l’exécution.
+Depuis le JDK 11, la JVM peut exécuter **un** unique fichier `.java` sans avoir à le compiler en préalable (https://openjdk.org/jeps/330[JEP 330^]) mais pouvant contenir plusieurs types. Une compilation en mémoire est effectuée avant l’exécution.
 
-But de la https://openjdk.org/jeps/458[JEP 458^] est de permettre l’exécution de code dans plusieurs fichiers source directement par la JVM.
+Le but de la https://openjdk.org/jeps/458[JEP 458^] est de permettre l’exécution de code dans plusieurs fichiers source directement par la JVM.
 
 .Le fichier Hello.java
 [source,java]
@@ -69,11 +69,11 @@ Si une classe requise est dans le même fichier `.java`, elle n’est pas recher
 
 === L’épinglage de régions (Region Pinning) pour G1
 
-JNI a besoin de définir et libérer des pointeurs sur des objets Java : les traitements sont lors exécutés dans une section dite critique. Ces objets ne doivent pas être déplacés par le GC.
+JNI a besoin de définir et libérer des pointeurs sur des objets Java : les traitements sont exécutés dans une section dite critique. Ces objets ne doivent pas être déplacés par le GC.
 
 Historiquement, G1 suspend tous ses traitements lors de l’exécution de régions critiques de `JNI` pouvant impliquer un risque de bloquer les threads de l’application voir même une `OutOfMemoryError`.
 
-But de la https://openjdk.org/jeps/423[JEP 423^] est de réduire la latence en permettant l'épinglage des régions par G1 contenant un objet d’une section critique de `JNI`.
+Le but de la https://openjdk.org/jeps/423[JEP 423^] est de réduire la latence en permettant l'épinglage des régions par G1 contenant un objet d’une section critique de `JNI`.
 
 Les régions sans section critique peuvent être traitées évitant de bloquer les autres threads de l’application pouvant nécessiter le GC.
 
@@ -85,11 +85,11 @@ Plusieurs évolutions dans le ramasse-miettes G1 sont intégrées dans le JDK 22
 
 * G1: parallélisation de la phase Code Root Scan (https://bugs.openjdk.org/browse/JDK-8315503[JDK-8315503^])
 +
-La phase Code Root Scan recherche les références aux objets dans le code compilé. Pour accélérer ce processus, G1 conserve un ensemble de codes compilés contenant des références dans le heap. Ainsi, chaque région contient un ensemble de code compilé qui contient des références.
+La phase Code Root Scan recherche les références aux objets dans le code compilé. Pour accélérer ce processus, G1 conserve un ensemble de codes compilés contenant des références dans le heap. Ainsi, chaque région contient un ensemble de codes compilés contenat, eux-mêmes, des références.
 +
-Si ces références sont peu nombreuses, le code utilisait un seul thread par région pour itérer sur les références d'une région particulière, ce qui constitue un goulot d'étranglement en termes d'évolutivité si la distribution de ces références est très déséquilibrée.
+Si ces références étaient peu nombreuses, le code utilisait un seul thread par région pour itérer sur les références d'une région particulière. Cette approche constituait un goulot d'étranglement dans le cas où la distribution de ces références était très déséquilibrée.
 +
-G1 utilise désormais plusieurs threads au sein des régions pour ainsi réduire ce goulot d'étranglement.
+G1 utilise désormais plusieurs threads au sein des régions pour réduire ce phénomène de goulot d'étranglement.
 
 * G1: Fast Collection of Evacuation Failed Regions (https://bugs.openjdk.org/browse/JDK-8140326[JDK-8140326^])
 +
@@ -122,21 +122,21 @@ Durant une collection mineure, le Parallel GC recherche les dirty cards dans la 
 +
 Ce changement modifie la structure de données interne pour qu'elle corresponde à celle utilisée par Serial GC et G1 GC. En conséquence, le temps de recherche des objets de départ est amélioré, ce qui peut induire une réduction des temps de pause des collections mineures notamment lorsqu’elles concernent de grands tableaux.
 
-* Parallel: Precise Parallel Scanning of Large Object Arrays for Young Collection Roots (https://bugs.openjdk.org/browse/JDK-8310031[JDK-8310031^])
+* Parallel : Precise Parallel Scanning of Large Object Arrays for Young Collection Roots (https://bugs.openjdk.org/browse/JDK-8310031[JDK-8310031^])
 +
 Lors de la collecte dans la young generation, ParallelGC partitionne la old generation en portion de 64 Ko lors de l'analyse des références dans la jeune génération. Ces portions sont attribuées aux threads workers qui effectuent l'analyse en parallèle en tant qu'unités de travail.
 [%hardbreaks]
-Avant ce changement, Parallel GC analysait toujours complètement ces portions, même si seule une petite partie était connue pour contenir des références intéressantes. De plus, chaque thread worker traitait lui-même les objets qui commencent dans cette portion, y compris ceux qui s'étendent dans d'autres portions. Ce comportement limitait le parallélisme lors du traitement d'objets volumineux : un seul objet volumineux contenant potentiellement des milliers de références avait été analysé par un seul thread uniquement et dans son intégralité, et provoquerait également une mauvaise mise à l'échelle en raison du partage de mémoire et des échecs de cache lors de la longue phase de work stealing suivante.
+Avant ce changement, Parallel GC analysait toujours complètement ces portions, même si seule une petite partie était connue pour contenir des références intéressantes. De plus, chaque thread worker traitait lui-même les objets commençant dans cette portion, y compris ceux qui s'étendant dans d'autres portions. Ce comportement limitait le parallélisme lors du traitement d'objets volumineux : un seul objet volumineux contenant potentiellement des milliers de références avait été analysé par un seul thread uniquement et dans son intégralité, provoquant également une mauvaise mise à l'échelle en raison du partage de mémoire et des échecs de cache lors de la longue phase de work stealing suivante.
 +
-Avec ce changement, les workers du Parallel GC limitent le travail à leur portion et ne traitent que les parties intéressantes des grands tableaux d'objets. Cela réduit le travail effectué par un seul thread pour une portion, améliore le parallélisme et réduit la quantité de work stealing. Les pauses du Parallel GC sont désormais comparables à celles du G1 en présence de grands tableaux d'objets, réduisant les temps de pause de 4 à 5 fois dans certains cas.
+Avec ce changement, les workers du Parallel GC limitent le travail à leur portion et ne traitent que les parties intéressantes des grands tableaux d'objets. Cela réduit le travail effectué par un seul thread pour une portion, améliore le parallélisme et réduit la quantité de work stealing. Les pauses du Parallel GC sont désormais comparables à celles du G1 en présence de grands tableaux d'objets, réduisant les temps de pause d'un facteur 4 à 5 dans certains cas.
 
 === Les évolutions dans le ramasse-miettes Serial GC
 
 Une évolution dans le ramasse-miettes Serial est intégrée dans le JDK 22 :
 
-* Serial: Better GC Throughput with Scarce Dirty Cards (https://bugs.openjdk.org/browse/JDK-8319373[JDK-8319373^])
+* Serial : Better GC Throughput with Scarce Dirty Cards (https://bugs.openjdk.org/browse/JDK-8319373[JDK-8319373^])
 +
-Durant une collection mineure, le Serial GC recherche les dirty cards dans la table des cards afin de localiser les pointeurs young-to-old. Après avoir trouvé les dirty cards, le Serial GC utilise la table décalage des blocks (block offset table) pour localiser les objets de départ pour l'analyse du heap afin de pouvoir parcourir le heap à l'intérieur de ces dirty cards.
+Durant une collection mineure, le Serial GC recherche les dirty cards dans la table des cards afin de localiser les pointeurs young-to-old. Après avoir trouvé les dirty cards, le Serial GC utilise la table de décalage des blocks (block offset table) pour localiser les objets de départ lors l'analyse du heap afin de pouvoir parcourir le heap à l'intérieur de ces dirty cards.
 +
 Cette modification améliore la recherche des objets de démarrage et la recherche de dirty cards, ce qui entraîne une réduction, parfois importante (~40 %), de la pause Young-GC notamment lorsqu’il y a des tableaux d’objets volumineux.
 
@@ -328,11 +328,11 @@ jdk.DeprecatedInvocation {
 +
 Cette restriction ne concerne que l’interpréteur et pas les compilateurs C1 et C2 du JIT.
 
-* Pour des statistiques d’utilisation des queues des compilateur du JIT ( https://bugs.openjdk.org/browse/JDK-8317562[JDK-8317562^] )
+* Pour des statistiques d’utilisation des queues des compilateur du JIT (https://bugs.openjdk.org/browse/JDK-8317562[JDK-8317562^])
 +
 Le nouvel événement `jdk.CompilerQueueUtilization`, permet d’obtenir des statistiques sur l’utilisation des queues des compilateurs du JIT. Un événement est émis pour le compilateur C1 et un autre pour le compilateur C2.
 
-* Pour le chargement d’une bibliothèque native ( https://bugs.openjdk.org/browse/JDK-8313251[JDK-8313251^] )
+* Pour le chargement d’une bibliothèque native (https://bugs.openjdk.org/browse/JDK-8313251[JDK-8313251^])
 +
 Le nouvel événement `jdk.NativeLibraryLoad`, permet d’obtenir des informations sur une opération de chargement d’une bibliothèque native.
 +
