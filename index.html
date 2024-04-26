@@ -35,6 +35,40 @@ pagination:
   }
 </style>
   
+<div class="main-content mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- Section principale avec le premier post et Twitter -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <!-- Premier post -->
+    <div class="md:col-span-2">
+      {% if paginator.posts.size > 0 %}
+        <article class="first-post mb-4">
+          <div class="panel panel-primary">
+            <div class="panel-body">
+              <div style="display: flex;">
+                      <h1 class="text-xl font-bold"><a href="{{ paginator.posts.first.url | relative_url }}">{{ paginator.posts.first.title }}</a></h1>
+                      <div>
+                        <img src="{{ '/images/vignettes/' | append: post.first.vignette | relative_url }}" style="max-width: 200px; margin-right: 20px;" />
+                      </div>
+                      <p>{{ paginator.posts.first.excerpt }}</p>
+              </div>
+            </div>
+          </div>
+        </article>
+              
+            
+      {% endif %}
+    </div>
+    <!-- Widget Twitter -->
+    <div class="col-span-1">
+      <div class="sticky top-0">
+        <a class="twitter-timeline" data-height="1000" href="https://twitter.com/your_twitter_handle?ref_src=twsrc%5Etfw">Tweets by YourHandle</a>
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      </div>
+    </div>
+  </div>
+
+
+
 <div class="row">
   <div class="col-lg-12">
     <div class="row">

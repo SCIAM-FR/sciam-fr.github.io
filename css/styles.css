@@ -1,9 +1,15 @@
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 html {
   font-size: 90%;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
+}
+
+a, a:hover, a:focus{
+  color: white;
 }
 
 p {
@@ -25,70 +31,25 @@ p {
 .thumbnail {
   height: 200px;
 }
-.nav-tabs-center > li, .nav-pills-center > li {
-  float: none;
-  display: inline-block;
-  margin-bottom: -1px;
-  *display: inline;
-  /* ie7 fix */
-  zoom: 1;
-  /* hasLayout ie7 trigger */
+
+.banner-home {
+  padding-top: 8em;
+  padding-bottom: 8em;
 }
-.nav-tabs-center, .nav-pills-center {
-  text-align: center;
-  border-bottom: 1px solid #ddd;
+
+.banner-title {
+  font-size: 4xl; /* Taille personnalisée ou Tailwind class équivalente si ajoutée directement dans le HTML */
+  font-weight: bold;
+  margin-bottom: 2em; /* Tailwind class équivalente si ajoutée directement dans le HTML */
+  color: navysciam; /* Changez la couleur selon les besoins */
 }
-.nav-tabs-center > li > a, .nav-pills-center > li > a {
-  padding-right: 12px;
-  padding-left: 12px;
-  margin-right: 2px;
-  line-height: 14px;
+
+.banner-subtitle {
+  font-size: xl; /* Taille personnalisée ou Tailwind class équivalente si ajoutée directement dans le HTML */
+  color: navysciam; /* Changez la couleur selon les besoins */
 }
-.nav-tabs-center > li > a {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  line-height: 21px;
-  border: 1px solid transparent;
-  -webkit-border-radius: 4px 4px 0 0;
-  -moz-border-radius: 4px 4px 0 0;
-  border-radius: 4px 4px 0 0;
-}
-.nav-tabs-center:before, .nav-tabs-center:after, .nav-pills-center:before, .nav-pills-center:after {
-  display: table;
-  content: "";
-  line-height: 0;
-}
-.nav-tabs-center:after, .nav-pills-center:after {
-  clear: both;
-}
-.nav-tabs-center > li > a:hover {
-  border-color: #eee #eee #ddd;
-}
-.nav-tabs-center > .active > a, .nav-tabs-center > .active > a:hover {
-  color: #777;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-bottom-color: transparent;
-  cursor: default;
-}
-.nav-pills-center > .active > a, .nav-pills-center > .active > a:hover {
-  color: white;
-  background-color: #558bc4;
-}
-.nav-tabs-center .dropdown-menu {
-  -webkit-border-radius: 0 0 6px 6px;
-  -moz-border-radius: 0 0 6px 6px;
-  border-radius: 0 0 6px 6px;
-}
-.nav-tabs-center .dropdown-toggle .caret {
-  margin-top: 8px;
-}
-.navbar {
-  margin-bottom: 30px;
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-}
-.bannerhome {
+
+/* .bannerhome {
   text-align: center;
   background: #4a5d75;
   border: 0;
@@ -99,7 +60,7 @@ p {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   height: 100px;
-}
+} */
 .maintitle {
   margin: 15px;
 }
@@ -222,42 +183,6 @@ ul.twitter-list li.nav-header {
   margin-bottom: 0.25em;
 }
 
-/* overide bootstrap styles */
-.panel {
-  margin-bottom: 20px;
-  background-color: #fff;
-  border: 1px solid transparent;
-  border-radius: 12px;
-  -webkit-box-shadow: 0 3px 3px rgb(0 0 0 / 5%);
-  box-shadow: 0 3px 3px rgb(0 0 0 / 5%); }
-
-.panel-primary {
-  border-color: rgb(207, 217, 222); }
-
-@media (min-width: 1330px) {
-  .container {
-    width: 1300px; } }
-
-.navbar-default {
-  background-color: #f8f8f8;
-  border-color: #e7e7e7;
-  color: #777;
-}
-
-.navbar-brand {
-  color: #777;
-  font-size: 18px;
-}
-
-a {
-  color: #337ab7;
-  text-decoration: none;
-}
-
-.panel-body {
-  padding: 15px;
-}
-
 .doc .listingblock>.content {
   position: relative;
 }
@@ -348,5 +273,5 @@ a {
 .doc .source-toolbox .copy-button.clicked .copy-toast {
   opacity: 1;
   transition: none;
-}
+} 
 
