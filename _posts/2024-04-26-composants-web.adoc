@@ -1,6 +1,6 @@
 :showtitle:
 :page-navtitle: Les Composants Web : Un outil puissant pour le développement web moderne
-:page-excerpt: --ToDo--
+:page-excerpt: Explorez les composants web : découvrez leur utilité et apprenez comment les intégrer efficacement dans vos projets frontend pour une expérience utilisateur fluide et une gestion de code simplifiée.
 :layout: post
 :author: kostiantynkompaniiets
 :page-tags: [JavaScript, Composants Web, Développement Web, Lit, Stencil]
