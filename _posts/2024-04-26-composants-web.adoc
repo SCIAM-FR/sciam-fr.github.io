@@ -138,7 +138,7 @@ Pour l'utiliser, il suffit d'ajouter la balise nouvellement créée :
 
 [source,html]
 ----
-<lit-component name=”Lit Composant Web”></lit-component>
+<lit-component name="Lit Composant Web"></lit-component>
 ----
 
 *https://stenciljs.com/[Stencil^]* : développé par Ionic, Stencil est un compilateur qui génère des composants web conformes aux normes en utilisant une syntaxe JSX similaire à React. L'algorithme pour créer un nouveau composant web est très similaire à ce que nous venons de voir avec Lit :
@@ -148,7 +148,7 @@ Pour l'utiliser, il suffit d'ajouter la balise nouvellement créée :
 npm install stencil
 ----
 
-[source,javascript]
+[source,jsx]
 ----
 import { Component, Prop } from '@stencil/core';
 
@@ -170,7 +170,7 @@ export class StencilComponent {
 
 [source,html]
 ----
-<stencil-component name=”Stencil Composant Web”></stencil-component>
+<stencil-component name="Stencil Composant Web"></stencil-component>
 ----
 
 https://svelte.dev/[Svelte^] : Bien que l'approche de Svelte pour la création de composants ne soit pas spécifiquement axée sur les composants web, elle est étroitement liée aux principes d'encapsulation et de réutilisation défendus par les composants web.
@@ -200,13 +200,13 @@ Cependant, les composants web ne sont pas la solution miracle qui remplacera ou 
 
 Malgré leurs avantages, les composants Web présentent également quelques inconvénients :
 
-*Outils limités :* comparés aux frameworks traditionnels, les outils et l'écosystème autour des composants web sont encore en développement et peuvent être moins matures.
+* *Outils limités :* comparés aux frameworks traditionnels, les outils et l'écosystème autour des composants web sont encore en développement et peuvent être moins matures.
 
-*Rendu côté serveur :* Cette approche devient à nouveau populaire ces jours-ci, et de nombreux frameworks traditionnels ont déjà des solutions prêtes pour prendre en charge le rendu côté serveur. Pour le rendu de composants web côté serveur, l'utilisation de bibliothèques comme Lit est nécessaire (c’est aussi possible avec https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM#declaratively_with_html[Declarative Shadow DOM^] maintenant).
+* *Rendu côté serveur :* Cette approche devient à nouveau populaire ces jours-ci, et de nombreux frameworks traditionnels ont déjà des solutions prêtes pour prendre en charge le rendu côté serveur. Pour le rendu de composants web côté serveur, l'utilisation de bibliothèques comme Lit est nécessaire (c’est aussi possible avec https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM#declaratively_with_html[Declarative Shadow DOM^] maintenant).
 
-*Support des navigateurs :* Bien que les navigateurs modernes aient une prise en charge native des composants web (https://caniuse.com/custom-elementsv1[Custom Elements^], https://caniuse.com/template[HTML templates^], https://caniuse.com/shadowdomv1[Shadow DOM^], https://caniuse.com/declarative-shadow-dom[Declarative Shadow DOM^]), le support des navigateurs obsolètes peut nécessiter des polyfills et des configurations supplémentaires.
+* *Support des navigateurs :* Bien que les navigateurs modernes aient une prise en charge native des composants web (https://caniuse.com/custom-elementsv1[Custom Elements^], https://caniuse.com/template[HTML templates^], https://caniuse.com/shadowdomv1[Shadow DOM^], https://caniuse.com/declarative-shadow-dom[Declarative Shadow DOM^]), le support des navigateurs obsolètes peut nécessiter des polyfills et des configurations supplémentaires.
 
-*Complexité :* la création de composants web complexes à partir de zéro peut être une tâche difficile, surtout sans l'aide de bibliothèques telles que Lit ou Stencil.
+* *Complexité :* la création de composants web complexes à partir de zéro peut être une tâche difficile, surtout sans l'aide de bibliothèques telles que Lit ou Stencil.
 
 Pourtant, malgré cela, les composants web restent une approche populaire pour créer des applications web, et il existe de nombreuses…
 
@@ -237,7 +237,7 @@ Les composants Web ont révolutionné le développement web en offrant une appro
 
 Les composants Web ont gagné une place importante dans la boîte à outils des développeurs web et continueront d'évoluer et de se perfectionner dans les années à venir.
 
-P.S. : Si vous pensez toujours que les composants web sont une chose qui ne mérite pas l'attention ou qui va disparaître dans un avenir proche, je vous conseille fortement de lire https://jakelazaroff.com/words/web-components-will-outlive-your-javascript-framework/[cet article^] et d'aller sur le site Web pour vérifier si https://arewebcomponentsathingyet.com/["Web Components Are A Thing Yet"^]=)
+_P.S._ : Si vous pensez toujours que les composants web sont une chose qui ne mérite pas l'attention ou qui va disparaître dans un avenir proche, je vous conseille fortement de lire *https://jakelazaroff.com/words/web-components-will-outlive-your-javascript-framework/[cet article^]* et d'aller sur le site Web pour vérifier si *https://arewebcomponentsathingyet.com/["Web Components Are A Thing Yet"^]*=)
 
 === Liens utiles
 
