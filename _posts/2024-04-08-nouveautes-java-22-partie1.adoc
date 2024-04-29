@@ -562,11 +562,6 @@ jshell> List<List<Integer>> windowSlicing = Stream.of(1, 2, 3, 4, 5).gather(Gath
 windowSlicing ==> [[1, 2, 3], [2, 3, 4], [3, 4, 5]]
 ----
 
-* `peek(Consumer<? super TR> effect)` +
-Applique le `Consumer` sur chaque élément qui passe par ce gatherer
-* `peekOrdered(Consumer<? super TR> effect)` +
-Applique le `Consumer` sur chaque élément qui passe par ce gatherer dans l'ordre dans lequel ils apparaissent dans le flux
-
 Les gatherers supportent la composition via la méthode `andThen(Gatherer)` qui joint deux gatherers où le premier produit des éléments que le second peut consommer.
 
 Cela permet de créer des gatherers sophistiqués en composant des gatherers plus simples tout comme la composition de fonctions.
