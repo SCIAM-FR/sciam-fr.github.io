@@ -25,8 +25,8 @@
   <link href="https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css" rel="stylesheet">
   
   <!-- CSS -->
-  <link rel="stylesheet" href="{{ '/css/styles.css' | relative_url }}" >
   <link rel="stylesheet" href="{{ '/dist/styles.css' | relative_url }}" >
+  <link rel="stylesheet" href="{{ '/css/styles.css' | relative_url }}" >
 
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
   {% feed_meta %}
@@ -38,19 +38,18 @@
 
 <body>
   <div style="min-height:100vh; display:flex; flex-direction:column;justify-content:space-between;">
-          <!-- Navigation -->
-          <nav class="bg-navysciam w-full">
-            <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 h-16">
-              <div class="flex justify-between items-center w-full">
-                <!-- Logo SCIAM -->
+    <!-- Navigation -->
+    <nav class="nav bg-navysciam w-full">
+            <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 items-center h-16">
+              <div class="flex align-middle justify-between items-center w-full">
+                <!-- Logos SCIAM -->
                   <div class="flex items-center space-x-2">
                     <img src=".\images\logo white.png" alt="Logo blanc" class="h-10 w-auto ">
                     <img src="..\images\logo_sciam_RVB.png" alt="Logo SCIAM" class="h-10 w-auto ml-2">
-                    <span class="text-white text-lg">/Blog</span>
+                    <span class="text-white text-lg">| Blog</span>
                   </div>
-                <div class="hidden sm:flex sm:flex-grow"></div>
                 <div class="justify-self-end flex items-center space-x-4 sm:hidden">
-                  <!-- Mobile menu button-->
+                  <!-- Mobile menu bouton-->
                   <button type="button" class="menu-button inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
                     <span class="absolute -inset-0.5"></span>
                     <span class="sr-only">Open main menu</span>
@@ -64,26 +63,22 @@
                     </svg>
                   </button>
                 </div>
-                <div class="flex items-center">
-                  <div class="hidden sm:flex space-x-4">
-                    <div class="flex space-x-4">
-                      <a href="{{ '/' | relative_url }}" class="text-white no-underline hover:text-white hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Accueil</a>
-                      <a href="{{ '/tags' | relative_url }}" class="text-white no-underline hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium">Tags</a>
-                      <a href="{{ '/authors' | relative_url }}" class="text-white no-underline hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium">Auteurs</a>
-                      <a href="#" class="text-white no-underline hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium">Contact</a>
-                    </div>
-                  </div>
+                <!-- L S M menu -->
+                <div class="hidden sm:block items-center space-x-4">
+                      <a href="{{ '/' | relative_url }}" class="no-underline hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Accueil</a>
+                      <a href="{{ '/tags' | relative_url }}" class="no-underline hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium">Tags</a>
+                      <a href="{{ '/authors' | relative_url }}" class="no-underline hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium">Auteurs</a>
+                      <a href="#" class="no-underline hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium">Contact</a>
                 </div>
               </div>
             </div>
-          
-            <!-- Mobile menu, show/hide based on menu state. -->
-            <div class="sm:hidden" id="mobile-menu">
+            <!-- Mobile menu -->
+            <div class="sm:hidden hidden" id="mobile-menu">
               <div class="space-y-1 px-2 pb-3 pt-2">
-                <a href="{{ '/' | relative_url }}" class="text-white no-underline block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Accueil</a>
-                <a href="{{ '/tags' | relative_url }}" class="text-white no-underline block rounded-md px-3 py-2 text-base font-medium">Tags</a>
-                <a href="{{ '/authors' | relative_url }}" class="text-white no-underline block rounded-md px-3 py-2 text-base font-medium">Auteurs</a>
-                <a href="#" class="text-white no-underline block rounded-md px-3 py-2 text-base font-medium">Contact</a>
+                <a href="{{ '/' | relative_url }}" class="no-underline block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Accueil</a>
+                <a href="{{ '/tags' | relative_url }}" class="no-underline block rounded-md px-3 py-2 text-base font-medium">Tags</a>
+                <a href="{{ '/authors' | relative_url }}" class="no-underline block rounded-md px-3 py-2 text-base font-medium">Auteurs</a>
+                <a href="#" class="no-underline block rounded-md px-3 py-2 text-base font-medium">Contact</a>
               </div>
             </div>   
                       <!-- <form action="https://www.google.com/search" method="get">
@@ -91,23 +86,24 @@
                         <input type="text" name="q">
                         <input type="submit" value="Rechercher">
                       </form> -->
-          </nav>
-    <div class="px-20">
-            <!-- Banniere -->
-              <div class="text-center text-navysciam banner-home py-12">
-                  <h1 class="banner-title">Blog de SCIAM</h1>
-                  <h3 class="banner-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</h3>
-              </div>  
-              <div class="col-lg-12">
-                {{ content }}
-              </div>
-    </div>   
-    <footer>
+    </nav>
+    <div class="px-10">
+      <div class="col-lg-12">
+          {{ content }}
+      </div>        
+    </div>
+    <footer class="w-full">
       <hr>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {% include social-networks-links.html %}
-      </div>
+      </div> -->
       <hr>
+      <div class="bg-navysciam mx-auto max-w-screen-xl px-4 pb-6 pt-16 sm:px-6 lg:px-8">
+        <div class="flex items-center space-x-2">
+          <span class="text-white text-lg">Newsletter</span>
+          <img src="..\images\logo_sciam_RVB.png" alt="Logo SCIAM" class="h-10 w-auto ml-2">
+        </div>
+      </div>
       <div style="text-align: center;">
         <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/"></a>Cette œuvre est mise à disposition selon les termes de la <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Licence Creative Commons Attribution - Pas d’Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0 International
           <img alt="Licence Creative Commons" style="border-width:0;margin: 5px;" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" />

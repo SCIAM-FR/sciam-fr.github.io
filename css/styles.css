@@ -2,14 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Noyh Geometric' ;
+  src:url('/fonts/NoyhGeometric-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Noyh Geometric';
+  src: url('/fonts/NoyhGeometric-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Noyh Geometric';
+  src: url('/fonts/NoyhGeometric-Italic.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+}
+
 html {
   font-size: 90%;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
 }
 
-a, a:hover, a:focus{
-  color: white;
+body {
+  font-family: 'Noyh Geometric', sans-serif;
 }
 
 p {
@@ -32,35 +53,6 @@ p {
   height: 200px;
 }
 
-.banner-home {
-  padding-top: 8em;
-  padding-bottom: 8em;
-}
-
-.banner-title {
-  font-size: 4xl; /* Taille personnalisée ou Tailwind class équivalente si ajoutée directement dans le HTML */
-  font-weight: bold;
-  margin-bottom: 2em; /* Tailwind class équivalente si ajoutée directement dans le HTML */
-  color: navysciam; /* Changez la couleur selon les besoins */
-}
-
-.banner-subtitle {
-  font-size: xl; /* Taille personnalisée ou Tailwind class équivalente si ajoutée directement dans le HTML */
-  color: navysciam; /* Changez la couleur selon les besoins */
-}
-
-/* .bannerhome {
-  text-align: center;
-  background: #4a5d75;
-  border: 0;
-  color: white;
-  display: block;
-  background: url(../images/bandeau.png) center top no-repeat;
-  background-size: cover;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  height: 100px;
-} */
 .maintitle {
   margin: 15px;
 }
@@ -74,14 +66,12 @@ p {
   width: 40px;
   height: 40px;
 }
-#main_nav {
-  position: fixed;
-  top: 40px;
-  width: 190px;
-}
+
+
 a.list-group-item {
   color: #428bca;
 }
+
 code {
   background-color: inherit;
 }
@@ -275,3 +265,34 @@ ul.twitter-list li.nav-header {
   transition: none;
 } 
 
+/* Style personnalisée */
+.nav a {
+  color: #9CA3AF;
+}
+
+.nav button, span, a:hover {
+  color: #fff;
+}
+
+#mobile-menu a {
+  color: #fff;
+} 
+
+.banner-home {
+  padding-top: 8em;
+  padding-bottom: 8em;
+  /* color: #9CA3AF; */
+  @apply text-navysciam;
+}
+
+.banner-title {
+  font-size: 4xl; /* Taille personnalisée ou Tailwind class équivalente si ajoutée directement dans le HTML */
+  font-weight: bold;
+  margin-bottom: 2em; /* Tailwind class équivalente si ajoutée directement dans le HTML */
+  color: navysciam;
+}
+
+.banner-subtitle {
+  font-size: xl; /* Taille personnalisée ou Tailwind class équivalente si ajoutée directement dans le HTML */
+  color: navysciam; /* Changez la couleur selon les besoins */
+}
