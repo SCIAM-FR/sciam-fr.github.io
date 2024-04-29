@@ -228,6 +228,20 @@ En plus de ces exemples, des entreprises comme *Github*, *AXA*, *EA*, *Netflix* 
 
 La popularité croissante des composants web parmi ces entreprises démontre leur valeur en tant qu'outils de développement web puissants et polyvalents.
 
+=== L'utilisation des composants Web dans les frameworks populaires
+
+L'un des aspects les plus intéressants et les plus importants des composants Web est leur capacité à être réutilisés, y compris dans les frameworks populaires. Voici un aperçu de l'intégration des composants Web dans les frameworks les plus courants :
+
+* *React :* React prend en charge les composants Web, mais leur rendu diffère de celui des balises natives du navigateur. https://react.dev/reference/react-dom/components#custom-html-elements[Une future version du framework^] devrait inclure une prise en charge plus complète des éléments personnalisés. En attendant, des bibliothèques comme react@experimental et react-dom@experimental ou encore @lit/react peuvent être utilisées.
+
+* *Angular :* Angular prend pleinement en charge le rendu des composants Web. Il suffit d'ajouter le schéma https://angular.io/api/core/CUSTOM_ELEMENTS_SCHEMA[CUSTOM_ELEMENTS_SCHEMA^] à votre projet ou à votre module.
+
+* *Vue.js :* Vue.js offre sa https://vuejs.org/guide/extras/web-components[propre intégration pour les composants Web^]. Vous pouvez enregistrer directement votre propre composant Web et l'utiliser dans vos modèles Vue en utilisant la syntaxe native des composants Vue.js.
+
+* *Svelte :* Svelte, comme Vue.js, https://svelte.dev/docs/custom-elements-api[prend en charge nativement les composants Web^]. Vous pouvez importer et utiliser vos composants Web directement dans vos composants Svelte, en profitant des avantages de la compilation et des performances offertes par Svelte.
+
+Vous trouverez plus de détails sur la prise en charge des composants Web dans différents frameworks sur le site Web https://custom-elements-everywhere.com/[Custom Elements Everywhere^].
+
 == Conclusion
 
 Les composants web ont révolutionné le développement web en offrant une approche normalisée pour créer des composants réutilisables. Des bibliothèques comme Lit facilitent l'utilisation des composants web, rendant le développement plus efficace et familier. En comprenant l'évolution, les avantages et les limites des composants web, les développeurs peuvent prendre des décisions éclairées quant à leur utilisation dans des projets web modernes.
