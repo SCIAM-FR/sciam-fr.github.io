@@ -35,9 +35,9 @@ En termes simples, les composants web permettent de créer ses propres balises H
 
 Ça devient un peu plus intéressant. Mais où devrait-on les utiliser de préférence et, en fait, pourquoi ? Nous verrons plus tard, mais pour l'instant, on passe au code…
 
-== Création de Composants Web
+== La création de Composants Web
 
-Pour créer un composant Web, il nous suffit de créer une nouvelle classe JS et de l'étendre de la classe native 'HTMLElement'. En plus de cela, nous pouvons implémenter des méthodes de cycle de vie ou ajouter des styles (si nécessaire). Voici un exemple de simple composant Web :
+Pour créer un composant Web, il nous suffit de créer une nouvelle classe JS et de l'étendre de la classe native ``HTMLElement``. En plus de cela, nous pouvons implémenter des méthodes de cycle de vie ou ajouter des styles (si nécessaire). Voici un exemple de simple composant Web :
 
 [source,javascript]
 ----
@@ -102,7 +102,7 @@ Après cela, il vous suffit de suivre les instructions de l'outil.
 
 Open Web Components fournissent des instruments et des recommandations pour créer des composants web avec la bibliothèque de votre choix. En parlant de bibliothèques…
 
-== Principales bibliothèques/frameworks pour travailler avec des composants web
+== Les bibliothèques/frameworks pour travailler avec des composants web
 
 *https://lit.dev/[Lit^]* : successeur de Polymer par Google, Lit abstrait une grande partie du code de modèle nécessaire à la création de composants web. Il rend le développement plus efficace et offre une manière simple, efficace et expressive d'écrire des modèles HTML à l'aide de littéraux de modèles JavaScript. 
 
@@ -196,7 +196,7 @@ Les composants web s'avèrent utiles dans divers cas de figure :
 
 Cependant, les composants web ne sont pas la solution miracle qui remplacera ou déplacera d'autres bibliothèques/frameworks web, car ils ont aussi leurs propres inconvénients.
 
-== Inconvénients des composants web
+== Les inconvénients des composants web
 
 Malgré leurs avantages, les composants web présentent également quelques inconvénients :
 
@@ -210,7 +210,7 @@ Malgré leurs avantages, les composants web présentent également quelques inco
 
 Pourtant, malgré cela, les composants web restent une approche populaire pour créer des applications web, et il existe de nombreuses…
 
-== Entreprises utilisant des composants web
+== Les entreprises utilisant des composants web
 
 De nombreuses entreprises de premier plan ont adopté les composants web pour créer des interfaces utilisateur évolutives et réutilisables. Voici quelques exemples :
 
@@ -228,19 +228,19 @@ En plus de ces exemples, des entreprises comme *Github*, *AXA*, *EA*, *Netflix* 
 
 La popularité croissante des composants web parmi ces entreprises démontre leur valeur en tant qu'outils de développement web puissants et polyvalents.
 
-=== L'utilisation des composants Web dans les frameworks populaires
+== L'utilisation des composants Web dans les frameworks populaires
 
-L'un des aspects les plus intéressants et les plus importants des composants Web est leur capacité à être réutilisés, y compris dans les frameworks populaires. Voici un aperçu de l'intégration des composants Web dans les frameworks les plus courants :
+L'un des aspects les plus intéressants et les plus importants des composants web est leur capacité à être réutilisés, y compris dans les frameworks populaires. Voici un aperçu de l'intégration des composants web dans les frameworks les plus courants :
 
-* *React :* React prend en charge les composants Web, mais leur rendu diffère de celui des balises natives du navigateur. https://react.dev/reference/react-dom/components#custom-html-elements[Une future version du framework^] devrait inclure une prise en charge plus complète des éléments personnalisés. En attendant, des bibliothèques comme react@experimental et react-dom@experimental ou encore @lit/react peuvent être utilisées.
+* *React :* React prend en charge les composants web, mais leur rendu diffère de celui des balises natives du navigateur. https://react.dev/reference/react-dom/components#custom-html-elements[Une future version du framework^] devrait inclure une prise en charge plus complète des éléments personnalisés. En attendant, des bibliothèques comme ``react@experimental`` et ``react-dom@experimental`` ou encore ``@lit/react`` peuvent être utilisées.
 
-* *Angular :* Angular prend pleinement en charge le rendu des composants Web. Il suffit d'ajouter le schéma https://angular.io/api/core/CUSTOM_ELEMENTS_SCHEMA[CUSTOM_ELEMENTS_SCHEMA^] à votre projet ou à votre module.
+* *Angular :* Angular prend pleinement en charge le rendu des composants web. Il suffit d'ajouter le schéma ``https://angular.io/api/core/CUSTOM_ELEMENTS_SCHEMA[CUSTOM_ELEMENTS_SCHEMA^]`` à votre projet ou à votre module.
 
-* *Vue.js :* Vue.js offre sa https://vuejs.org/guide/extras/web-components[propre intégration pour les composants Web^]. Vous pouvez enregistrer directement votre propre composant Web et l'utiliser dans vos modèles Vue en utilisant la syntaxe native des composants Vue.js.
+* *Vue.js :* Vue.js offre sa https://vuejs.org/guide/extras/web-components[propre intégration pour les composants web^]. Vous pouvez enregistrer directement votre propre composant web et l'utiliser dans vos modèles Vue en utilisant la syntaxe native des composants Vue.js.
 
-* *Svelte :* Svelte, comme Vue.js, https://svelte.dev/docs/custom-elements-api[prend en charge nativement les composants Web^]. Vous pouvez importer et utiliser vos composants Web directement dans vos composants Svelte, en profitant des avantages de la compilation et des performances offertes par Svelte.
+* *Svelte :* Svelte, comme Vue.js, https://svelte.dev/docs/custom-elements-api[prend en charge nativement les composants web^]. Vous pouvez importer et utiliser vos composants web directement dans vos composants Svelte, en profitant des avantages de la compilation et des performances offertes par Svelte.
 
-Vous trouverez plus de détails sur la prise en charge des composants Web dans différents frameworks sur le site Web https://custom-elements-everywhere.com/[Custom Elements Everywhere^].
+Vous trouverez plus de détails sur la prise en charge des composants web dans différents frameworks sur le site Web https://custom-elements-everywhere.com/[Custom Elements Everywhere^].
 
 == Conclusion
 
