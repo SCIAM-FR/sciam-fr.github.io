@@ -64,8 +64,8 @@
             </button>
           </div>
           <!-- L S M menu -->
-          <div class="hidden sm:block items-center space-x-4">
-                <a href="{{ '/' | relative_url }}" class="no-underline hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Accueil</a>
+          <div class="hidden sm:block flex items-center space-x-4">
+                <a href="{{ '/' | relative_url }}" class="no-underline hover:text-white hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Accueil</a>
                 <a href="{{ '/tags' | relative_url }}" class="no-underline hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium">Tags</a>
                 <a href="{{ '/authors' | relative_url }}" class="no-underline hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium">Auteurs</a>
                 <a href="#" class="no-underline hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium">Contact</a>
@@ -78,7 +78,7 @@
                 <a href="{{ '/' | relative_url }}" class="no-underline block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Accueil</a>
                 <a href="{{ '/tags' | relative_url }}" class="no-underline block rounded-md px-3 py-2 text-base font-medium">Tags</a>
                 <a href="{{ '/authors' | relative_url }}" class="no-underline block rounded-md px-3 py-2 text-base font-medium">Auteurs</a>
-                <a href="#" class="no-underline block rounded-md px-3 py-2 text-base font-medium">Contact</a>
+                <a href="https://www.sciam.fr/contact" class="no-underline block rounded-md px-3 py-2 text-base font-medium">Contact</a>
               </div>
             </div>   
                       <!-- <form action="https://www.google.com/search" method="get">
@@ -87,11 +87,9 @@
                         <input type="submit" value="Rechercher">
                       </form> -->
     </nav>
-      <div class="px-10">
-        <div class="col-lg-12">
-            {{ content }}
-        </div>        
-      </div>
+      <div class="col-lg-12">
+          {{ content }}
+      </div>    
     <footer class="w-full">
       <!-- Newsletter-->
       <div class="bg-navysciam px-4 py-8 mx-auto max-w-full text-white">
@@ -122,10 +120,11 @@
       <!-- A propos SCIAM-->
           <div class="px-4 py-4 mx-auto max-w-7xl flex flex-wrap items-center justify-between">
             <img src="..\images\logo_sciam.png" alt="Logo" class="h-10 w-auto ml-2">
-            <img src="..\images\logo_sciam_RVB.png" alt="Logo SCIAM Typo" class="h-10 w-auto">
+            <img src="..\images\logo_sciam_RVB.png" alt="Logo SCIAM Typo" class="h-10 w-auto ml-2">
             <div class="flex flex-wrap">
-              <a href="#" class="px-4 py-2 hover:underline">À propos</a>
-              <!-- Autres liens à ajouter -->
+              <a href="https://www.sciam.fr/" class="px-4 py-2 hover:underline">À propos de SCIAM</a>
+              <a href="https://www.sciam.fr/equipe" class="px-4 py-2 hover:underline">Notre équipe</a>
+              <a href="https://www.sciam.fr/recrutement" class="px-4 py-2 hover:underline"><Ri:a>Recrutement</Ri:a></a>
             </div>
           </div>
         <hr>

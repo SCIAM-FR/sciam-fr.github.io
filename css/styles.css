@@ -274,10 +274,6 @@ ul.twitter-list li.nav-header {
   color: #fff;
 }
 
-#mobile-menu a {
-  color: #fff;
-} 
-
 .banner-home {
   padding-top: 5em;
   padding-bottom: 5em;
@@ -295,3 +291,7 @@ ul.twitter-list li.nav-header {
   font-size: xl;
   font-weight: regular;
 }
+
+/* .footer a:hover {
+  color: #384a72;
+} */

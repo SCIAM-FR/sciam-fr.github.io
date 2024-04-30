@@ -35,42 +35,34 @@ pagination:
   }
 </style>
   
-<div class="mx-auto px-4 sm:px-6 lg:px-8">
+<div class="bg-lightgrey mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Banniere Accueil-->
     <div class="text-center text-navysciam banner-home py-9">
           <p class="banner-title text-navysciam text-5xl">Blog de SCIAM</p>
-          <p class="banner-subtitle text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</p>
+          <p class="banner-subtitle mt-1 text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</p>
     </div>  
     <hr>           
-  <!-- Section principale avec le premier post et Twitter -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <!-- Section principale avec le premier post et X -->
+  <div class="grid-cols-1 md:grid-cols-3 gap-4 ">
     <!-- Premier post -->
-    <div class="md:col-span-2">
-      {% if paginator.posts.size > 0 %}
-        <article class="first-post mb-4">
-          <div class="panel panel-primary">
-            <div class="panel-body">
-              <div style="display: flex;">
-                      <h1 class="text-xl font-bold"><a href="{{ paginator.posts.first.url | relative_url }}">{{ paginator.posts.first.title }}</a></h1>
-                      <div>
-                        <img src="{{ '/images/vignettes/' | append: post.first.vignette | relative_url }}" style="max-width: 200px; margin-right: 20px;" />
-                      </div>
-                      <p>{{ paginator.posts.first.excerpt }}</p>
-              </div>
-            </div>
-          </div>
-        </article>
-              
-            
-      {% endif %}
-    </div>
-    <!-- Widget Twitter -->
-    <div class="col-span-1">
-      <div class="sticky top-0">
-        <a class="twitter-timeline" data-height="1000" href="https://twitter.com/your_twitter_handle?ref_src=twsrc%5Etfw">Tweets by YourHandle</a>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <div class="md:col-span-2 bg-white p-4 rounded-md shadow-lg shadow-secondary-1 dark:bg-surface-dark ">
+      <img src="{{ '/images/vignettes/' | append: post.first.vignette | relative_url }}" alt="Image article" class="w-full h-auto mb-4 rounded-lg">
+      <div>
+          <h2 class="text-2xl font-bold mb-2"><a href="{{ paginator.posts.first.url | relative_url }}">{{ paginator.posts.first.title }}</a></h2>
+          <p class="text-sm text-gray-500 mb-4">Écrit par {{ paginator.posts.first.author | append: ', ' | append: paginator.posts.first.date | date: "%d/%m/%Y" }}</p>
+          <p class="mb-4">{{ paginator.posts.first.excerpt }}</p>
+          <a href="#" class="text-navysciam hover:yellowsciam transition">Lire la suite...</a>
       </div>
+  </div>
     </div>
+    <!-- Widget X -->
+    <div class="col-span-1">
+      <div class="sticky top-0 p-4">
+          <h3 class="font-bold text-xl mb-3">Derniers Tweets</h3>
+          <a class="twitter-timeline" data-height="1000" href="#">X</a>
+          <script async src="#" charset="utf-8"></script>
+      </div>
+  </div>
   </div>
 
 
