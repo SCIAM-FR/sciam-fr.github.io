@@ -279,20 +279,19 @@ ul.twitter-list li.nav-header {
 } 
 
 .banner-home {
-  padding-top: 8em;
-  padding-bottom: 8em;
-  /* color: #9CA3AF; */
-  @apply text-navysciam;
+  padding-top: 5em;
+  padding-bottom: 5em;
+  color: #384a72;
+  /* color: navysciam; */
 }
 
-.banner-title {
-  font-size: 4xl; /* Taille personnalisée ou Tailwind class équivalente si ajoutée directement dans le HTML */
+.banner-title > p {
+  font-size: 2rem; 
   font-weight: bold;
-  margin-bottom: 2em; /* Tailwind class équivalente si ajoutée directement dans le HTML */
-  color: navysciam;
+  margin-bottom: 2em;
 }
 
 .banner-subtitle {
-  font-size: xl; /* Taille personnalisée ou Tailwind class équivalente si ajoutée directement dans le HTML */
-  color: navysciam; /* Changez la couleur selon les besoins */
+  font-size: xl;
+  font-weight: regular;
 }

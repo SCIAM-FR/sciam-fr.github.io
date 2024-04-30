@@ -17,7 +17,8 @@ module.exports = {
         navysciam: '#384a72',
         yellowsciam: '#ffec3f',
         lightbluesciam: "#9abcc3",
-        greysciam: "#9CA3AF"
+        greysciam: "#9CA3AF",
+        white: "#fff"
         
       }, 
     extend: {
