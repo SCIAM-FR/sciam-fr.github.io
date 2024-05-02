@@ -179,7 +179,7 @@ export class StencilComponent {
 
 En outre, il convient de mentionner des instruments tels que https://hybrids.js.org/#/[Hybrids^], http://Skate.js[Skate.js^], http://Slim.js[Slim.js^], qui sont moins populaires.
 
-Il semble que nous ayons abordé cela, nous pouvons maintenant aux cas où on peut (ou if faut) utiliser des composants web.
+Maintenant que nous avons vu ce que sont les composants web et comment les créer, passons à leur cas d'utilisation.
 
 == Quand et où utiliser les composants web
 
