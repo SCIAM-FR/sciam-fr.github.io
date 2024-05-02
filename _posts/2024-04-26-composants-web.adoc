@@ -15,7 +15,7 @@ Au cours des 15 dernières années, le paysage du développement web a considér
 
 Fondamentalement, https://developer.mozilla.org/fr/docs/Web/API/Web_components[les composants web^] sont un ensemble d'API de la plateforme web qui permettent de créer des éléments HTML spéciaux pour une réutilisation ultérieure. Ils se composent de trois technologies principales : *les éléments personnalisés*, *le Shadow DOM* et *les gabarits HTML*.
 
-image::kostiantynkompaniiets/composants-web/web-components-concepts.png[image,width=100%,align="center"]
+image::kostiantynkompaniiets/composants-web/web-components-concepts.png[image,width=75%,align="center"]
 
 * *Les éléments personnalisés* permettent de créer de nouveaux éléments HTML avec des comportements et des propriétés individuelles. 
 * *Le Shadow DOM* assure l'encapsulation en isolant le style et le comportement du composant du reste du document. 
