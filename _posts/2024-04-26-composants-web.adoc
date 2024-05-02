@@ -33,7 +33,7 @@ En termes simples, les composants web permettent de créer ses propres balises H
 
 * *Productivité :* Les composants web utilisent les fonctionnalités de rendu intégrées du navigateur, ce qui peut entraîner une meilleure productivité par rapport aux frameworks virtuels basés sur le DOM. En utilisant leurs propres API, telles que le Shadow DOM et les éléments personnalisés, les composants web minimisent les frais généraux associés à la gestion du DOM virtuel ou à l'utilisation de techniques de rendu basées sur JavaScript. L'utilisation de fonctionnalités natives du navigateur contribue également à un rendu initial plus rapide et à des performances améliorées lors de l'exécution, en particulier sur les appareils avec des ressources limitées ou des connexions réseau plus lentes. De plus, les composants web permettent l'utilisation de stratégies d'optimisation détaillées, telles que le chargement différé, permettant aux développeurs de retarder le chargement de composants non critiques jusqu'à ce qu'ils soient nécessaires, améliorant ainsi le temps de chargement global de la page et la réactivité.
 
-Ça devient un peu plus intéressant. Mais où devrait-on les utiliser de préférence et, en fait, pourquoi ? Nous verrons plus tard, mais pour l'instant, on passe au code…
+Ça devient un peu plus intéressant. Mais où devrait-on les utiliser de préférence et, en fait, pourquoi ? Nous verrons plus tard, mais pour l'instant, passons au code...
 
 == La création de Composants Web
 
