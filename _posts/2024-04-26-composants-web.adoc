@@ -106,7 +106,7 @@ Open Web Components fournissent des instruments et des recommandations pour cré
 
 *https://lit.dev/[Lit^]* : successeur de Polymer par Google, Lit abstrait une grande partie du code de modèle nécessaire à la création de composants web. Il rend le développement plus efficace et offre une manière simple, efficace et expressive d'écrire des modèles HTML à l'aide de littéraux de modèles JavaScript. 
 
-On va commencer avec l’installation de Lit :
+Commençons avec l’installation de Lit :
 
 [source,shell]
 ----
