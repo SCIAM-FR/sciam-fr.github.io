@@ -21,7 +21,7 @@ image::kostiantynkompaniiets/composants-web/web-components-concepts.png[image,wi
 * *Le Shadow DOM* assure l'encapsulation en isolant le style et le comportement du composant du reste du document. 
 * *Les gabarits HTML* permettent de créer des fragments de mise en page réutilisables qui peuvent être clonés et insérés dans le DOM.
 
-En termes simples, les composants web permettent de créer ses propres balises HTML. "Mais qui en a besoin ?", pourriez-vous demander (bien que la plupart de ce que nous faisons dans les frameworks principaux consiste à créer de nouvelles balises), et la réponse à cette question sera…
+En termes simples, les composants web permettent de créer ses propres balises HTML. "Mais qui en a besoin ?", pourriez-vous demander (bien que la plupart de ce que nous faisons dans les frameworks principaux consiste à créer de nouvelles balises), pour répondre à cette question, commençons par lister leurs avantages.
 
 == Les avantages des composants web
 
