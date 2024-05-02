@@ -208,7 +208,8 @@ Malgré leurs avantages, les composants web présentent également quelques inco
 
 * *Complexité :* la création de composants web complexes à partir de zéro peut être une tâche difficile, surtout sans l'aide de bibliothèques telles que Lit ou Stencil.
 
-Pourtant, malgré cela, les composants web restent une approche populaire pour créer des applications web, et il existe de nombreuses…
+Pourtant, malgré cela, les composants web restent une approche populaire pour créer des applications web.
+La liste des acteurs les utilisant en témoigne.```
 
 == Les entreprises utilisant des composants web
 
