@@ -248,6 +248,7 @@ Vous trouverez plus de détails sur la prise en charge des composants web dans d
 Les composants web ont révolutionné le développement web en offrant une approche normalisée pour créer des composants réutilisables. Des bibliothèques comme Lit facilitent l'utilisation des composants web, rendant le développement plus efficace et familier. En comprenant l'évolution, les avantages et les limites des composants web, les développeurs peuvent prendre des décisions éclairées quant à leur utilisation dans des projets web modernes.
 
 *Remplacer les frameworks traditionnels ?* Non, les composants web ne remplacent pas les frameworks traditionnels. Ils offrent plutôt un moyen complémentaire de créer des interfaces utilisateur modulaires et réutilisables.
+
 *Vaut-il la peine de les considérer ?* Absolument, surtout pour les composants légers utilisés dans plusieurs projets.
 
 Les composants web ont gagné une place importante dans la boîte à outils des développeurs web et continueront d'évoluer et de se perfectionner dans les années à venir.
