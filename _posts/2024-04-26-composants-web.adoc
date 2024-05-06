@@ -37,7 +37,7 @@ En termes simples, les composants web permettent de créer ses propres balises H
 
 == La création de Composants Web
 
-Pour créer un composant Web, il nous suffit de créer une nouvelle classe JS et de l'étendre de la classe native `HTMLElement`. En plus de cela, nous pouvons implémenter des méthodes de cycle de vie ou ajouter des styles (si nécessaire). Voici un exemple de simple composant Web :
+Pour créer un composant Web, il nous suffit de créer une nouvelle classe JS et de l'étendre de la classe native `HTMLElement`. En plus de cela, nous pouvons implémenter des méthodes de cycle de vie ou ajouter des styles (si nécessaire). Voici un exemple d'un composant Web simple :
 
 [source,javascript]
 ----
