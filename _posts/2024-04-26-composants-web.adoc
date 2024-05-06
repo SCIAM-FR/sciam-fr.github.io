@@ -239,7 +239,7 @@ L'un des aspects les plus intéressants et les plus importants des composants we
 
 * *Vue.js :* Vue.js offre sa https://vuejs.org/guide/extras/web-components[propre intégration pour les composants web^]. Vous pouvez enregistrer directement votre propre composant web et l'utiliser dans vos modèles Vue en utilisant la syntaxe native des composants Vue.js.
 
-* *Svelte :* Svelte, comme Vue.js, https://svelte.dev/docs/custom-elements-api[prend en charge nativement les composants web^]. Vous pouvez importer et utiliser vos composants web directement dans vos composants Svelte, en profitant des avantages de la compilation et des performances offertes par Svelte.
+* *Svelte :* comme Vue.js, https://svelte.dev/docs/custom-elements-api[prend en charge nativement les composants web^]. Vous pouvez importer et utiliser vos composants web directement dans vos composants Svelte, en profitant des avantages de la compilation et des performances offertes par Svelte.
 
 Vous trouverez plus de détails sur la prise en charge des composants web dans différents frameworks sur le site Web https://custom-elements-everywhere.com/[Custom Elements Everywhere^].
 
