@@ -237,7 +237,7 @@ L'un des aspects les plus intéressants et les plus importants des composants we
 
 * *Angular :* prend pleinement en charge le rendu des composants web. Il suffit d'ajouter le schéma ``https://angular.io/api/core/CUSTOM_ELEMENTS_SCHEMA[CUSTOM_ELEMENTS_SCHEMA^]`` à votre projet ou à votre module.
 
-* *Vue.js :* Vue.js offre sa https://vuejs.org/guide/extras/web-components[propre intégration pour les composants web^]. Vous pouvez enregistrer directement votre propre composant web et l'utiliser dans vos modèles Vue en utilisant la syntaxe native des composants Vue.js.
+* *Vue.js :* offre sa https://vuejs.org/guide/extras/web-components[propre intégration pour les composants web^]. Vous pouvez enregistrer directement votre propre composant web et l'utiliser dans vos modèles Vue en utilisant la syntaxe native des composants Vue.js.
 
 * *Svelte :* comme Vue.js, https://svelte.dev/docs/custom-elements-api[prend en charge nativement les composants web^]. Vous pouvez importer et utiliser vos composants web directement dans vos composants Svelte, en profitant des avantages de la compilation et des performances offertes par Svelte.
 
