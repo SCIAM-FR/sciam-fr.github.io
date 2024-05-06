@@ -235,7 +235,7 @@ L'un des aspects les plus intéressants et les plus importants des composants we
 
 * *React :* prend en charge les composants web, mais leur rendu diffère de celui des balises natives du navigateur. https://react.dev/reference/react-dom/components#custom-html-elements[Une future version du framework^] devrait inclure une prise en charge plus complète des éléments personnalisés. En attendant, des bibliothèques comme ``react@experimental`` et ``react-dom@experimental`` ou encore ``@lit/react`` peuvent être utilisées.
 
-* *Angular :* Angular prend pleinement en charge le rendu des composants web. Il suffit d'ajouter le schéma ``https://angular.io/api/core/CUSTOM_ELEMENTS_SCHEMA[CUSTOM_ELEMENTS_SCHEMA^]`` à votre projet ou à votre module.
+* *Angular :* prend pleinement en charge le rendu des composants web. Il suffit d'ajouter le schéma ``https://angular.io/api/core/CUSTOM_ELEMENTS_SCHEMA[CUSTOM_ELEMENTS_SCHEMA^]`` à votre projet ou à votre module.
 
 * *Vue.js :* Vue.js offre sa https://vuejs.org/guide/extras/web-components[propre intégration pour les composants web^]. Vous pouvez enregistrer directement votre propre composant web et l'utiliser dans vos modèles Vue en utilisant la syntaxe native des composants Vue.js.
 
