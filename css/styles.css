@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @font-face {
   font-family: 'Noyh Geometric' ;
   src:url('/font/noyhgeometric-regular.otf') format('opentype'),
@@ -127,6 +126,7 @@ p {
   border-top-right-radius: 10px;
   height: 100px;
 }
+
 .maintitle {
   margin: 15px;
 }
@@ -140,14 +140,12 @@ p {
   width: 40px;
   height: 40px;
 }
-#main_nav {
-  position: fixed;
-  top: 40px;
-  width: 190px;
-}
+
+
 a.list-group-item {
   color: #428bca;
 }
+
 code {
   background-color: inherit;
 }
@@ -249,42 +247,6 @@ ul.twitter-list li.nav-header {
   margin-bottom: 0.25em;
 }
 
-/* overide bootstrap styles */
-.panel {
-  margin-bottom: 20px;
-  background-color: #fff;
-  border: 1px solid transparent;
-  border-radius: 12px;
-  -webkit-box-shadow: 0 3px 3px rgb(0 0 0 / 5%);
-  box-shadow: 0 3px 3px rgb(0 0 0 / 5%); }
-
-.panel-primary {
-  border-color: rgb(207, 217, 222); }
-
-@media (min-width: 1330px) {
-  .container {
-    width: 1300px; } }
-
-.navbar-default {
-  background-color: #f8f8f8;
-  border-color: #e7e7e7;
-  color: #777;
-}
-
-.navbar-brand {
-  color: #777;
-  font-size: 18px;
-}
-
-a {
-  color: #337ab7;
-  text-decoration: none;
-}
-
-.panel-body {
-  padding: 15px;
-}
-
 .doc .listingblock>.content {
   position: relative;
 }
@@ -375,5 +337,35 @@ a {
 .doc .source-toolbox .copy-button.clicked .copy-toast {
   opacity: 1;
   transition: none;
+} 
+
+/* Style personnalisée */
+.nav a {
+  color: #9CA3AF;
 }
 
+.nav button, span, a:hover {
+  color: #fff;
+}
+
+.banner-home {
+  padding-top: 5em;
+  padding-bottom: 5em;
+  color: #384a72;
+  /* color: navysciam; */
+}
+
+.banner-title > p {
+  font-size: 2rem; 
+  font-weight: bold;
+  margin-bottom: 2em;
+}
+
+.banner-subtitle {
+  font-size: xl;
+  font-weight: regular;
+}
+
+/* .footer a:hover {
+  color: #384a72;
+} */
