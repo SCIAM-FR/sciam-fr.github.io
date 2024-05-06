@@ -233,7 +233,7 @@ La popularité croissante des composants web parmi ces entreprises démontre leu
 
 L'un des aspects les plus intéressants et les plus importants des composants web est leur capacité à être réutilisés, y compris dans les frameworks populaires. Voici un aperçu de l'intégration des composants web dans les frameworks les plus courants :
 
-* *React :* React prend en charge les composants web, mais leur rendu diffère de celui des balises natives du navigateur. https://react.dev/reference/react-dom/components#custom-html-elements[Une future version du framework^] devrait inclure une prise en charge plus complète des éléments personnalisés. En attendant, des bibliothèques comme ``react@experimental`` et ``react-dom@experimental`` ou encore ``@lit/react`` peuvent être utilisées.
+* *React :* prend en charge les composants web, mais leur rendu diffère de celui des balises natives du navigateur. https://react.dev/reference/react-dom/components#custom-html-elements[Une future version du framework^] devrait inclure une prise en charge plus complète des éléments personnalisés. En attendant, des bibliothèques comme ``react@experimental`` et ``react-dom@experimental`` ou encore ``@lit/react`` peuvent être utilisées.
 
 * *Angular :* Angular prend pleinement en charge le rendu des composants web. Il suffit d'ajouter le schéma ``https://angular.io/api/core/CUSTOM_ELEMENTS_SCHEMA[CUSTOM_ELEMENTS_SCHEMA^]`` à votre projet ou à votre module.
 
