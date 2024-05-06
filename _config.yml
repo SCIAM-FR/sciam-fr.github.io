@@ -68,6 +68,10 @@ plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
   - jekyll-toc
+  - jekyll-postcss
+
+postcss:
+  cache: false
 
 pagination:
   enabled: true

@@ -1,4 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+
+@font-face {
+  font-family: 'Noyh Geometric' ;
+  src:url('/font/noyhgeometric-regular.otf') format('opentype'),
+      url('/font/noyhgeometric-regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Noyh Geometric';
+  src: url('/font/noyhgeometric-bold.otf') format('opentype'),
+       url('/font/noyhgeometric-bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Noyh Geometric';
+  src: url('/font/noyhgeometric-italic.otf') format('opentype'),
+       url('/font/noyhgeometric-italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+}
 
 html {
   font-size: 90%;
@@ -29,7 +56,7 @@ p {
   float: none;
   display: inline-block;
   margin-bottom: -1px;
-  *display: inline;
+  /* display: inline; */
   /* ie7 fix */
   zoom: 1;
   /* hasLayout ie7 trigger */
