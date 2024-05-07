@@ -221,11 +221,10 @@ De nombreuses entreprises de premier plan ont adopté les composants web pour cr
 * *https://sap.github.io/ui5-webcomponents/[SAP UI5 Web Components :^]* Une bibliothèque de composants d'interface utilisateur open source pour créer des applications d'entreprise.
 * *https://quarkus.io/guides/dev-ui#web-component-page[Quarkus Dev UI :^]* Utilise Lit pour simplifier la création de composants web.
 * *https://patternflyelements.com/[RedHat PatternFly Elements :^]* Un ensemble de composants web créés par la communauté et basés sur la conception PatternFly.
-* *YouTube :* Un des premiers services à migrer vers les composants web, et ils sont toujours présents dans le code source de la plateforme vidéo.
 * *https://developer.salesforce.com/docs/component-library/overview/components[Salesforce Lightning Web Components :^]* Un nouveau modèle de programmation pour créer des composants Lightning, exploitant les avancées des normes Web et offrant des performances inégalées.
 * *https://carbondesignsystem.com/developing/frameworks/web-components/[IBM @carbon/ibmdotcom-web-components :^]* Une bibliothèque de composants web pour les produits et plateformes IBM.
 
-En plus de ces exemples, des entreprises comme *Github*, *AXA*, *EA*, *Netflix* et *SpaceX* utilisent également des composants web dans leurs applications.
+En plus de ces exemples, des entreprises comme *YouTube*, *Github*, *AXA*, *EA*, *Netflix* et *SpaceX* utilisent également des composants web dans leurs applications.
 
 La popularité croissante des composants web parmi ces entreprises démontre leur valeur en tant qu'outils de développement web puissants et polyvalents.
 
