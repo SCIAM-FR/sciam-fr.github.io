@@ -1,0 +1,264 @@
+:showtitle:
+:page-navtitle: Les Composants Web : Un outil puissant pour le développement web moderne
+:page-excerpt: Explorez les composants web : découvrez leur utilité et apprenez comment les intégrer efficacement dans vos projets frontend pour une expérience utilisateur fluide et une gestion de code simplifiée.
+:layout: post
+:author: kostiantynkompaniiets
+:page-tags: [JavaScript, Composants Web, Développement Web, Lit, Stencil]
+:page-vignette: web-components-logo.png
+:page-liquid:
+
+= Les Composants Web : Un outil puissant pour le développement web moderne
+
+Au cours des 15 dernières années, le paysage du développement web a considérablement changé. Des frameworks tels que Angular, React et Vue.js dominent désormais le secteur, simplifiant la vie des développeurs et améliorant l'expérience utilisateur. Cependant, une technologie souvent négligée, mais qui existe depuis plus de 10 ans offre un complément intéressant : les composants web. Pourquoi devriez-vous vous y intéresser alors que les frameworks peuvent répondre à presque tous vos besoins ? Dans cet article, nous tenterons exactement de répondre à cette question mais essayons d’abord de comprendre ce que sont les composants web.
+
+== Qu'est-ce que ces composants web ?
+
+Fondamentalement, https://developer.mozilla.org/fr/docs/Web/API/Web_components[les composants web^] (ou _Web Components_ en anglais) sont un ensemble d'API de la plateforme web qui offrent https://www.w3.org/TR/components-intro/[une approche standardisée^] pour créer des éléments HTML spéciaux pour une réutilisation ultérieure. Ils se composent de trois technologies principales : *les éléments personnalisés*, *le Shadow DOM* et *les gabarits HTML*.
+
+image::kostiantynkompaniiets/composants-web/web-components-concepts.png[image,width=75%,align="center"]
+
+* *Les éléments personnalisés* permettent de créer de nouveaux éléments HTML avec des comportements et des propriétés individuelles. 
+* *Le Shadow DOM* assure l'encapsulation en isolant le style et le comportement du composant du reste du document. 
+* *Les gabarits HTML* permettent de créer des fragments de mise en page réutilisables qui peuvent être clonés et insérés dans le DOM.
+
+En termes simples, les composants web permettent de créer ses propres balises HTML. "Mais qui en a besoin ?", pourriez-vous demander (bien que la plupart de ce que nous faisons dans les frameworks principaux consiste à créer de nouvelles balises), pour répondre à cette question, commençons par lister leurs avantages.
+
+== Les avantages des composants web
+
+* *Réutilisation :* Les composants web favorisent la réutilisation du code. Une fois un composant web créé, il peut être utilisé plusieurs fois dans un programme ou même dans différents programmes. En encapsulant certaines fonctionnalités ou éléments d'interface utilisateur dans des composants réutilisables, les développeurs peuvent optimiser leurs efforts de développement, réduire la redondance et assurer la cohérence dans leurs projets. Les composants réutilisables favorisent un processus de développement plus efficace en permettant aux développeurs de se concentrer sur la création de nouvelles fonctionnalités plutôt que réinventer la roue pour des modèles d'interface utilisateur courants.
+
+* *Basés sur les standards du Web :* Les composants web sont conformes aux normes web définies par le World Wide Web Consortium (W3C), assurant ainsi la compatibilité et la pérennité. Ils utilisent des API HTML, CSS et JavaScript standard, ce qui les rend accessibles à un large éventail de développeurs et d'environnements. En respectant les normes web, les composants web privilégient l'interopérabilité entre différents frameworks et bibliothèques. Les développeurs peuvent intégrer facilement des composants web dans leurs projets, quelle que soit la pile technologique sous-jacente, promouvant la collaboration et le partage de code au sein de la communauté des développeurs web. De plus, le respect des normes contribue à la création d'un écosystème d'outils, de documentation et de meilleures pratiques solides pour les composants web, facilitant ainsi l'adoption et l'utilisation de cette technologie dans les projets.
+
+* *Encapsulation :* Les composants web offrent une encapsulation de la fonctionnalité et du style dans une seule entité. Cette encapsulation aide à éviter les conflits de noms et les modifications non intentionnelles de style, car les détails de l'implémentation interne du composant sont cachés du monde extérieur. Grâce à l'encapsulation, les développeurs peuvent créer des composants autosuffisants, plus faciles à comprendre, à analyser et à maintenir. Les modifications apportées aux composants internes d'un composant auront moins de chances d'affecter d'autres parties de l'application, ce qui entraîne une meilleure modularité du code et une meilleure évolutivité.
+
+* *Productivité :* Les composants web utilisent les fonctionnalités de rendu intégrées du navigateur, ce qui peut entraîner une meilleure productivité par rapport aux frameworks virtuels basés sur le DOM. En utilisant leurs propres API, telles que le Shadow DOM et les éléments personnalisés, les composants web minimisent les surcoûts associés à la gestion du DOM virtuel ou à l'utilisation de techniques de rendu basées sur JavaScript. L'utilisation de fonctionnalités natives du navigateur contribue également à un rendu initial plus rapide et à des performances améliorées lors de l'exécution, en particulier sur les appareils avec des ressources limitées ou des connexions réseau plus lentes. De plus, les composants web permettent l'utilisation de stratégies d'optimisation détaillées, telles que le chargement différé, permettant aux développeurs de retarder le chargement de composants non critiques jusqu'à ce qu'ils soient nécessaires, améliorant ainsi le temps de chargement global de la page et la réactivité.
+
+Ça devient un peu plus intéressant. Mais où devrait-on les utiliser de préférence et, en fait, pourquoi ? Nous verrons plus tard, mais pour l'instant, passons au code...
+
+== La création de Composants Web
+
+Pour créer un composant Web, il nous suffit de créer une nouvelle classe JS et de l'étendre de la classe native `HTMLElement`. En plus de cela, nous pouvons implémenter des méthodes de cycle de vie ou ajouter des styles (si nécessaire). Voici un exemple d'un composant Web simple :
+
+[source,javascript]
+----
+class CustomWebComponent extends HTMLElement {
+ constructor() {
+   super();
+   this.attachShadow({ mode: "open" });
+
+   // Initialize name attribute with a default value
+   this.name = this.getAttribute("name") || "World";
+ }
+
+ // Define observed attributes
+ static get observedAttributes() {
+   return ["name"];
+ }
+
+ // Handle attribute changes
+ attributeChangedCallback(name, oldValue, newValue) {
+   if (name === "name" && oldValue !== newValue) {
+     this.name = newValue;
+     this.render();
+   }
+ }
+
+ connectedCallback() {
+   this.render();
+ }
+
+ render() {
+   this.shadowRoot.innerHTML = `
+     <div>Hello ${this.name}</div>
+   `;
+ }
+}
+
+customElements.define("custom-web-component", CustomWebComponent);
+----
+
+Pour utiliser ce composant, il suffit d'ajouter une nouvelle balise à la page HTML :
+
+[source,html]
+----
+<custom-web-component></custom-web-component>
+----
+
+Il est également possible de changer la valeur de l'attribut :
+
+[source,html]
+----
+<custom-web-component name="Composant Web"></custom-web-component>
+----
+
+L'exemple ci-dessus représente une approche native de la création de composants web (je suis d'accord que ç'a l'air un peu complexe). Pour simplifier les choses, vous pouvez utiliser les guides et outils https://open-wc.org/[Open Web Components^]. Tout ce que vous avez à faire est de lancer le générateur open-wc avec npm:
+
+[source,shell]
+----
+npm init @open-wc
+----
+
+Après cela, il vous suffit de suivre les instructions de l'outil.
+
+Open Web Components fournissent des instruments et des recommandations pour créer des composants web avec la bibliothèque de votre choix. En parlant de bibliothèques…
+
+== Les bibliothèques/frameworks pour travailler avec des composants web
+
+*https://lit.dev/[Lit^]* : successeur de Polymer par Google, Lit abstrait une grande partie du code de modèle nécessaire à la création de composants web. Il rend le développement plus efficace et offre une manière simple et expressive d'écrire des modèles HTML à l'aide de littéraux de modèles JavaScript. 
+
+Commençons avec l’installation de Lit :
+
+[source,shell]
+----
+npm install lit
+----
+
+Après cela, nous pouvons créer notre composant Web :
+
+[source,javascript]
+----
+import { LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
+
+@customElement('lit-component')
+export class LitComponent extends LitElement {
+
+ @property({ type: String })
+ public name: string = "World";
+
+ render() {
+   return html`
+     <div>Hello ${this.name}</div>
+   `;
+ }
+}
+----
+
+Pour l'utiliser, il suffit d'ajouter la balise nouvellement créée :
+
+[source,html]
+----
+<lit-component name="Lit Composant Web"></lit-component>
+----
+
+*https://stenciljs.com/[Stencil^]* : développé par Ionic, Stencil est un compilateur qui génère des composants web conformes aux normes en utilisant une syntaxe JSX similaire à React. L'algorithme pour créer un nouveau composant web est très similaire à ce que nous venons de voir avec Lit :
+
+[source,shell]
+----
+npm install stencil
+----
+
+[source,jsx]
+----
+import { Component, Prop } from '@stencil/core';
+
+@Component({
+ tag: 'stencil-component',
+ styleUrl: 'stencil-component.css',
+ shadow: true
+})
+export class StencilComponent {
+ @Prop() public name: string = "World";
+
+ render() {
+   return (
+     <div>Hello {this.name}</div>
+   );
+ }
+}
+----
+
+[source,html]
+----
+<stencil-component name="Stencil Composant Web"></stencil-component>
+----
+
+*https://svelte.dev/[Svelte^] :* Bien que l'approche de Svelte pour la création de composants ne soit pas spécifiquement axée sur les composants web, elle est étroitement liée aux principes d'encapsulation et de réutilisation défendus par les composants web.
+
+*https://angular.io/guide/elements[Composants web Angular (Angular Elements)^] :* Angular, une plateforme JavaScript populaire soutenue par Google, prend également en charge la création et l'utilisation de composants web. Avec Angular Elements, les développeurs peuvent transformer les composants Angular en éléments web autonomes, ce qui leur permet de les utiliser dans des applications autres qu'Angular ou avec d'autres bibliothèques de composants web. Les outils fiables et l'écosystème Angular en font un choix attrayant pour créer des applications web complexes avec des composants web.
+
+En outre, il convient de mentionner des frameworks et bibliothèques tels que https://hybrids.js.org/#/[Hybrids^], https://skatejs.netlify.app/[Skate.js^], https://slimjs.com/[Slim.js^], qui sont moins populaires.
+
+Maintenant que nous avons vu ce que sont les composants web et comment les créer, passons à leur cas d'utilisation.
+
+== Quand et où utiliser les composants web
+
+Les composants web s'avèrent utiles dans divers cas de figure :
+
+* *Éléments d'interface utilisateur personnalisés :* Lorsque vous avez besoin d'éléments d'interface utilisateur qui ne sont pas disponibles en HTML standard, CSS ou JavaScript, vous pouvez créer des composants web personnalisés adaptés à vos besoins spécifiques en matière de conception et de fonctionnalité. Cela peut inclure des boutons personnalisés, des curseurs, des sélecteurs de date ou tout autre élément d'interface utilisateur unique au langage de conception de votre application.
+* *Compatibilité inter-frameworks :* Les composants web offrent une méthode normalisée pour créer des composants réutilisables qui fonctionnent avec différents frameworks et bibliothèques JavaScript. Cela signifie que vous pouvez utiliser le même composant web dans des projets développés avec Angular, React, Vue.js, ou tout autre framework sans vous soucier des problèmes de compatibilité.
+* *Micro Frontends :* Dans une architecture de microservices où différentes équipes travaillent sur des parties distinctes d'une application web, chaque équipe peut développer et maintenir ses propres composants web de manière indépendante. Ces composants peuvent ensuite être assemblés pour former l'interface utilisateur de l'application, favorisant la modularité du code et l'autonomie des équipes.
+* *Intégrations tierces :* Si vous construisez une plateforme ou un framework permettant aux développeurs tiers d'étendre sa fonctionnalité, les composants web offrent un moyen sécurisé et isolé d'intégrer des fonctionnalités personnalisées. Les développeurs tiers peuvent créer des composants web qui peuvent être facilement intégrés dans l'application hôte sans risquer de conflits avec le code existant.
+* *Développement de bibliothèques/frameworks d'interface utilisateur :* Si vous développez une bibliothèque ou un framework d'interface utilisateur pour un usage interne ou externe, les composants web peuvent servir de briques de construction pour créer des éléments d'interface utilisateur réutilisables. En exposant un ensemble de composants web, les développeurs peuvent aisément incorporer vos éléments d'interface utilisateur dans leurs applications sans être étroitement liés à votre framework.
+* *Intégration de code hérité :* Lorsque vous travaillez avec des bases de code héritées ou des applications construites avec des technologies plus anciennes, vous pouvez moderniser progressivement l'interface utilisateur en remplaçant les composants obsolètes par des composants web. Cela vous permet de mettre à jour graduellement l'interface utilisateur sans avoir à réécrire l'application entière.
+* *Widgets réutilisables :* Les composants web sont idéaux pour créer des widgets réutilisables ou des bibliothèques de widgets pouvant être utilisés dans plusieurs projets ou partagés avec la communauté. Qu'il s'agisse d'un widget de médias sociaux, d'un widget météo ou d'un widget de chat, les composants web offrent une méthode normalisée pour empaqueter et distribuer ces composants pour une intégration facile.
+* *Langage de conception cohérent :* Si vous travaillez sur un projet nécessitant une cohérence dans le langage de conception à travers plusieurs applications ou équipes, les composants web peuvent aider à imposer un modèle d'interface utilisateur/UX cohérent. En définissant un ensemble de composants web réutilisables conformes aux directives de conception, vous pouvez garantir une expérience utilisateur cohérente dans l'ensemble de l'écosystème.
+
+Cependant, les composants web ne sont pas la solution miracle qui remplacera ou déplacera d'autres bibliothèques/frameworks web, car ils ont aussi leurs propres inconvénients.
+
+== Les inconvénients des composants web
+
+Malgré leurs avantages, les composants web présentent également quelques inconvénients :
+
+* *Outils limités :* comparés aux frameworks traditionnels, les outils et l'écosystème autour des composants web sont encore en développement et peuvent être moins matures.
+
+* *Rendu côté serveur :* Cette approche devient à nouveau populaire ces jours-ci, et de nombreux frameworks traditionnels ont déjà des solutions prêtes pour prendre en charge le rendu côté serveur. Pour le rendu de composants web côté serveur, l'utilisation de bibliothèques comme Lit est nécessaire (c’est aussi possible avec https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM#declaratively_with_html[Declarative Shadow DOM^] maintenant).
+
+* *Support des navigateurs :* Bien que les navigateurs modernes aient une prise en charge native des composants web (https://caniuse.com/custom-elementsv1[Custom Elements^], https://caniuse.com/template[HTML templates^], https://caniuse.com/shadowdomv1[Shadow DOM^], https://caniuse.com/declarative-shadow-dom[Declarative Shadow DOM^]), le support des navigateurs obsolètes peut nécessiter des polyfills et des configurations supplémentaires.
+
+* *Complexité :* la création de composants web complexes à partir de zéro peut être une tâche difficile, surtout sans l'aide de bibliothèques telles que Lit ou Stencil.
+
+Pourtant, malgré cela, les composants web restent une approche populaire pour créer des applications web.
+La liste des acteurs les utilisant en témoigne.
+
+== Les entreprises utilisant des composants web
+
+De nombreuses entreprises de premier plan ont adopté les composants web pour créer des interfaces utilisateur évolutives et réutilisables. Voici quelques exemples :
+
+* *https://opensource.adobe.com/spectrum-web-components/[Adobe Spectrum Web Components :^]* Une implémentation du système de conception Spectrum d'Adobe, conçue pour fonctionner avec n'importe quel framework Web ou même en standalone.
+* *https://www.npmjs.com/package/@fluentui/web-components[Microsoft Fluent UI Web Components :^]* Une bibliothèque de composants web basée sur les composants web et le système de conception https://www.fast.design/[FAST^] de Microsoft.
+* *https://github.com/momentum-design/momentum-ui/tree/master/web-components[Cisco Momentum UI Web Components :^]* Une bibliothèque de composants web flexible et basée sur les composants, offrant un ensemble de composants et d'utilitaires d'interface utilisateur basés sur Momentum Design.
+* *https://sap.github.io/ui5-webcomponents/[SAP UI5 Web Components :^]* Une bibliothèque de composants d'interface utilisateur open source pour créer des applications d'entreprise.
+* *https://quarkus.io/guides/dev-ui#web-component-page[Quarkus Dev UI :^]* Utilise Lit pour simplifier la création de composants web.
+* *https://patternflyelements.com/[RedHat PatternFly Elements :^]* Un ensemble de composants web créés par la communauté et basés sur la conception PatternFly.
+* *https://developer.salesforce.com/docs/component-library/overview/components[Salesforce Lightning Web Components :^]* Un nouveau modèle de programmation pour créer des composants Lightning, exploitant les avancées des normes Web et offrant des performances inégalées.
+* *https://carbondesignsystem.com/developing/frameworks/web-components/[IBM @carbon/ibmdotcom-web-components :^]* Une bibliothèque de composants web pour les produits et plateformes IBM.
+
+En plus de ces exemples, des entreprises comme *YouTube*, *Github*, *AXA*, *EA*, *Netflix* et *SpaceX* utilisent également des composants web dans leurs applications.
+
+La popularité croissante des composants web parmi ces entreprises démontre leur valeur en tant qu'outils de développement web puissants et polyvalents.
+
+== L'utilisation des composants Web dans les frameworks populaires
+
+L'un des aspects les plus intéressants et les plus importants des composants web est leur capacité à être réutilisés, y compris dans les frameworks populaires. Voici un aperçu de l'intégration des composants web dans les frameworks les plus courants :
+
+* *React :* prend en charge les composants web, mais leur rendu diffère de celui des balises natives du navigateur. https://react.dev/reference/react-dom/components#custom-html-elements[Une future version du framework^] devrait inclure une prise en charge plus complète des éléments personnalisés. En attendant, des bibliothèques comme ``react@experimental`` et ``react-dom@experimental`` ou encore ``@lit/react`` peuvent être utilisées.
+
+* *Angular :* prend pleinement en charge le rendu des composants web. Il suffit d'ajouter le schéma ``https://angular.io/api/core/CUSTOM_ELEMENTS_SCHEMA[CUSTOM_ELEMENTS_SCHEMA^]`` à votre projet ou à votre module.
+
+* *Vue.js :* offre sa https://vuejs.org/guide/extras/web-components[propre intégration pour les composants web^]. Vous pouvez enregistrer directement votre propre composant web et l'utiliser dans vos modèles Vue en utilisant la syntaxe native des composants Vue.js.
+
+* *Svelte :* comme Vue.js, https://svelte.dev/docs/custom-elements-api[prend en charge nativement les composants web^]. Vous pouvez importer et utiliser vos composants web directement dans vos composants Svelte, en profitant des avantages de la compilation et des performances offertes par Svelte.
+
+Vous trouverez plus de détails sur la prise en charge des composants web dans différents frameworks sur le site Web https://custom-elements-everywhere.com/[Custom Elements Everywhere^].
+
+== Conclusion
+
+Les composants web ont révolutionné le développement web en offrant une approche normalisée pour créer des composants réutilisables. Des bibliothèques comme Lit facilitent l'utilisation des composants web, rendant le développement plus efficace et familier. En comprenant l'évolution, les avantages et les limites des composants web, les développeurs peuvent prendre des décisions éclairées quant à leur utilisation dans des projets web modernes.
+
+*Remplacer les frameworks traditionnels ?* Non, les composants web ne remplacent pas les frameworks traditionnels. Ils offrent plutôt un moyen complémentaire de créer des interfaces utilisateur modulaires et réutilisables.
+
+*Vaut-il la peine de les considérer ?* Absolument, surtout pour les composants légers utilisés dans plusieurs projets.
+
+Les composants web ont gagné une place importante dans la boîte à outils des développeurs web et continueront d'évoluer et de se perfectionner dans les années à venir.
+
+_P.S._ : Si vous pensez toujours que les composants web sont une chose qui ne mérite pas l'attention ou qui va disparaître dans un avenir proche, je vous conseille fortement de lire *https://jakelazaroff.com/words/web-components-will-outlive-your-javascript-framework/[cet article^]* et d'aller sur le site Web pour vérifier si *https://arewebcomponentsathingyet.com/["Web Components Are A Thing Yet"^]*=)
+
+=== Liens utiles
+
+* https://developer.mozilla.org/fr/docs/Web/API/Web_components[window=_blank] - Documentation officielle de composants web API
+* https://open-wc.org/[window=_blank] - Guides, outils et bibliothèques pour développer des composants web
+* https://www.webcomponents.org/[window=_blank] - La collection de composants web open source
+* https://lit.dev/[window=_blank] - Documentation officielle de Lit
+* https://stenciljs.com/[window=_blank] - Documentation officielle de Stencil.js
+* https://github.com/web-padawan/awesome-web-components[window=_blank] - Une liste organisée de ressources impressionnantes sur les composants web
