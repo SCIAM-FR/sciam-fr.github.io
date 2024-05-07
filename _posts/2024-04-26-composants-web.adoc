@@ -9,7 +9,7 @@
 
 = Les Composants Web : Un outil puissant pour le développement web moderne
 
-Au cours des 15 dernières années, le paysage du développement web a considérablement changé. Des frameworks tels que Angular, React et Vue.js dominent désormais le secteur, simplifiant la vie des développeurs et améliorant l'expérience utilisateur. Cependant, une technologie souvent négligée, mais qui existe depuis plus de 10 ans offre une alternative intéressante : les composants web. Pourquoi devriez-vous vous y intéresser alors que les frameworks peuvent répondre à presque tous vos besoins ? Dans cet article, nous tenterons exactement de répondre à cette question mais essayons d’abord de comprendre ce que sont les composants web.
+Au cours des 15 dernières années, le paysage du développement web a considérablement changé. Des frameworks tels que Angular, React et Vue.js dominent désormais le secteur, simplifiant la vie des développeurs et améliorant l'expérience utilisateur. Cependant, une technologie souvent négligée, mais qui existe depuis plus de 10 ans offre un complément intéressant : les composants web. Pourquoi devriez-vous vous y intéresser alors que les frameworks peuvent répondre à presque tous vos besoins ? Dans cet article, nous tenterons exactement de répondre à cette question mais essayons d’abord de comprendre ce que sont les composants web.
 
 == Qu'est-ce que ces composants web ?
 
@@ -104,7 +104,7 @@ Open Web Components fournissent des instruments et des recommandations pour cré
 
 == Les bibliothèques/frameworks pour travailler avec des composants web
 
-*https://lit.dev/[Lit^]* : successeur de Polymer par Google, Lit abstrait une grande partie du code de modèle nécessaire à la création de composants web. Il rend le développement plus efficace et offre une manière simple, efficace et expressive d'écrire des modèles HTML à l'aide de littéraux de modèles JavaScript. 
+*https://lit.dev/[Lit^]* : successeur de Polymer par Google, Lit abstrait une grande partie du code de modèle nécessaire à la création de composants web. Il rend le développement plus efficace et offre une manière simple et expressive d'écrire des modèles HTML à l'aide de littéraux de modèles JavaScript. 
 
 Commençons avec l’installation de Lit :
 
@@ -177,7 +177,7 @@ export class StencilComponent {
 
 *https://angular.io/guide/elements[Composants web Angular (Angular Elements)^] :* Angular, une plateforme JavaScript populaire soutenue par Google, prend également en charge la création et l'utilisation de composants web. Avec Angular Elements, les développeurs peuvent transformer les composants Angular en éléments web autonomes, ce qui leur permet de les utiliser dans des applications autres qu'Angular ou avec d'autres bibliothèques de composants web. Les outils fiables et l'écosystème Angular en font un choix attrayant pour créer des applications web complexes avec des composants web.
 
-En outre, il convient de mentionner des instruments tels que https://hybrids.js.org/#/[Hybrids^], http://Skate.js[Skate.js^], http://Slim.js[Slim.js^], qui sont moins populaires.
+En outre, il convient de mentionner des frameworks et bibliothèques tels que https://hybrids.js.org/#/[Hybrids^], https://skatejs.netlify.app/[Skate.js^], https://slimjs.com/[Slim.js^], qui sont moins populaires.
 
 Maintenant que nous avons vu ce que sont les composants web et comment les créer, passons à leur cas d'utilisation.
 
@@ -223,7 +223,7 @@ De nombreuses entreprises de premier plan ont adopté les composants web pour cr
 * *https://patternflyelements.com/[RedHat PatternFly Elements :^]* Un ensemble de composants web créés par la communauté et basés sur la conception PatternFly.
 * *YouTube :* Un des premiers services à migrer vers les composants web, et ils sont toujours présents dans le code source de la plateforme vidéo.
 * *https://developer.salesforce.com/docs/component-library/overview/components[Salesforce Lightning Web Components :^]* Un nouveau modèle de programmation pour créer des composants Lightning, exploitant les avancées des normes Web et offrant des performances inégalées.
-* *http://@carbon/ibmdotcom-web-components[IBM @carbon/ibmdotcom-web-components :^]* Une bibliothèque de composants web pour les produits et plateformes IBM.
+* *https://carbondesignsystem.com/developing/frameworks/web-components/[IBM @carbon/ibmdotcom-web-components :^]* Une bibliothèque de composants web pour les produits et plateformes IBM.
 
 En plus de ces exemples, des entreprises comme *Github*, *AXA*, *EA*, *Netflix* et *SpaceX* utilisent également des composants web dans leurs applications.
 
