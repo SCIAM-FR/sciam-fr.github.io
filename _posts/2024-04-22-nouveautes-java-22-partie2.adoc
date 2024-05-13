@@ -1,0 +1,736 @@
+:showtitle:
+:page-navtitle: Les nouveautés de Java 22 : partie 2
+:page-excerpt: Ce second article sur les nouveautés de Java 22 est consacré aux autres améliorations, que ce soit les évolutions dans les outils, les API et dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
+:layout: post
+:author: jeanmicheldoudoux
+:page-tags: [Java, Java 22, Projet Amber, Projet Panama, Projet Loom]
+:page-vignette: java-22.png
+:page-liquid:
+
+= Les nouveautés de Java 22 : partie 2
+
+Le link:{% post_url 2024-04-08-nouveautes-java-22-partie1 %}[premier article^] de cette série a détaillé les fonctionnalités proposées dans la syntaxe et les API dans le JDK 22. Comme pour les précédentes versions de Java, cette version 22 inclut des JEPs, mais aussi, et surtout, des évolutions et des améliorations sur la fiabilité (corrections de nombreux bugs), la performance et la sécurité.
+
+Ce second article est consacré aux autres améliorations, que ce soient les évolutions dans les outils, les API et dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
+
+== Les autres fonctionnalités dans la JVM
+
+Deux JEPs concernent des évolutions dans la JVM HotSpot :
+
+* Region Pinning for G1
+* Launch Multi-File Source-Code Programs
+
+Le JDK 22 inclus aussi plusieurs améliorations dans plusieurs ramasse-miettes.
+
+=== Launch Multi-File Source-Code Programs
+
+Depuis le JDK 11, la JVM peut exécuter **un** unique fichier `.java` sans avoir à le compiler en préalable (https://openjdk.org/jeps/330[JEP 330^]) mais pouvant contenir plusieurs types. Une compilation en mémoire est effectuée avant l’exécution.
+
+Le but de la https://openjdk.org/jeps/458[JEP 458^] est de permettre l’exécution de code dans plusieurs fichiers source directement par la JVM.
+
+.Le fichier Hello.java
+[source,java]
+----
+public class Hello {
+
+  public static void main(String[] args) {
+    Utils.saluer(); 
+  }
+}
+----
+
+.Le fichier Utils.java
+[source,java]
+----
+public interface Utils {
+  static void saluer() { 
+    System.out.println("Hello"); 
+  }
+}
+----
+
+[source,plain]
+----
+C:\java>java Hello.java
+Hello
+
+C:\java>dir /W
+[.]                        [..]
+Hello.java          Utils.java
+----
+
+Seuls les `.java` dont les types sont utilisés par l’application sont compilés : les autres fichiers `.java` dans l’arborescence ne seront pas compilés.
+
+Il n'est pas possible d'avoir un même type déclaré dans plusieurs fichiers source.
+
+Il n’y a pas de garantie d’ordre ou de temporalité pour la compilation des fichiers `.java` : la compilation peut être à la volée ou lazy.
+
+Si une classe requise est dans le même fichier `.java`, elle n’est pas recherchée et est compilée et utilisée.
+
+=== L’épinglage de régions (Region Pinning) pour G1
+
+JNI a besoin de définir et libérer des pointeurs sur des objets Java : les traitements sont alors exécutés dans une section dite critique. Ces objets ne doivent pas être déplacés par le GC.
+
+Historiquement, G1 suspend tous ses traitements lors de l’exécution de régions critiques de `JNI` pouvant impliquer un risque de bloquer les threads de l’application voir même une `OutOfMemoryError`.
+
+Le but de la https://openjdk.org/jeps/423[JEP 423^] est de réduire la latence en permettant l'épinglage des régions par G1 contenant un objet d’une section critique de `JNI`.
+
+Les régions sans section critique peuvent être traitées évitant de bloquer les autres threads de l’application pouvant nécessiter le GC.
+
+Cela améliore les performances et réduit les risques avec `JNI`.
+
+=== Les autres évolutions dans le ramasse-miettes G1
+
+Plusieurs évolutions dans le ramasse-miettes G1 sont intégrées dans le JDK 22 :
+
+* G1: parallélisation de la phase Code Root Scan (https://bugs.openjdk.org/browse/JDK-8315503[JDK-8315503^])
++
+La phase Code Root Scan recherche les références aux objets dans le code compilé. Pour accélérer ce processus, G1 conserve un ensemble de codes compilés contenant des références dans le heap. Ainsi, chaque région contient un ensemble de codes compilés contenat, eux-mêmes, des références.
++
+Si ces références étaient peu nombreuses, le code utilisait un seul thread par région pour itérer sur les références d'une région particulière. Cette approche constituait un goulot d'étranglement dans le cas où la distribution de ces références était très déséquilibrée.
++
+G1 utilise désormais plusieurs threads au sein des régions pour réduire ce phénomène de goulot d'étranglement.
+
+* G1: Fast Collection of Evacuation Failed Regions (https://bugs.openjdk.org/browse/JDK-8140326[JDK-8140326^])
++
+G1 récupère désormais les régions dont l'évacuation a échoué lors de la prochaine collecte.
++
+Lorsqu'il n'y a pas assez d'espace pour déplacer des objets Java de l'ensemble de la collecte, G1 considère que l’évacuation de la région a échoué. Par exemple :
++
+** des objets des régions de la young generation vers une zone de destination trop petite
+** ou que la région a été épinglée car elle contient des objets Java non déplaçable (cf https://openjdk.org/jeps/423[JEP 423^])
+
++
+Auparavant, ces régions étaient déplacées vers la old generation en tant que régions complètement pleines et restaient en attente pour un réexamen jusqu'à ce que la prochaine analyse complète du heap où le marquage révèle qu'elles étaient récupérables lors de la prochaine phase de récupération. Très souvent, ces régions sont faiblement remplies car très peu d’objets ne pouvaient pas être déplacés ou étaient réellement épinglés. +
+Avec ce changement, G1 considère les régions ayant échoué à l’évacuation comme récupérables à partir de toute récupération ultérieure. Si le temps de pause le permet, G1 les évacuera dans la collecte suivante. Cela peut réduire considérablement le temps de récupération de ces régions pour la plupart faiblement remplies, réduisant ainsi la pression du heap et la nécessité d'une activité de collecte en présence de régions ayant échoué à l'évacuation.
+
+* G1: More Deterministic Heap Resize at Remark (https://bugs.openjdk.org/browse/JDK-8314573[JDK-8314573^])
++
+Pendant la pause Remark, G1 ajuste la taille du heap pour conserver une quantité minimale et maximale de régions libres définie via les options `-XX:MinHeapFreeRatio` et `-XX:MaxHeapFreeRatio`.
++
+Avant ce changement, G1 considérait les régions Eden comme occupées (pleines) pour ce calcul. Cela rendait la taille du heap très dépendante de l'occupation actuelle de l'Eden, même si après la prochaine collecte, ces régions devraient être vides.
++
+Avec ce changement, les régions Eden sont considérées comme vides pour les calculs de dimensionnement du heap. Cette nouvelle politique aligne également le dimensionnement du heap sur le dimensionnement du heap complet. L'effet de bord est que G1 étend désormais le heap de manière moins agressive et plus déterministe, avec des économies de mémoire correspondantes mais potentiellement en exécutant davantage de collectes.
+
+=== Les évolutions dans le ramasse-miettes Parallel GC
+
+Plusieurs évolutions dans le ramasse-miettes Parallel GC sont intégrées dans le JDK 22 :
+
+* Parallel GC : amélioration du throughput avec des grands tableaux (https://bugs.openjdk.org/browse/JDK-8321013[JDK-8321013^])
++
+Durant une collection mineure, le Parallel GC recherche les dirty cards dans la table des cards afin de localiser les pointeurs young-to-old. Après avoir trouvé les dirty cards, le Parallel GC utilise des structures de données internes pour localiser les objets de départ pour l'analyse du heap afin de pouvoir parcourir le heap à l'intérieur de ces dirty cards.
++
+Ce changement modifie la structure de données interne pour qu'elle corresponde à celle utilisée par Serial GC et G1 GC. En conséquence, le temps de recherche des objets de départ est amélioré, ce qui peut induire une réduction des temps de pause des collections mineures notamment lorsqu’elles concernent de grands tableaux.
+
+* Parallel : Precise Parallel Scanning of Large Object Arrays for Young Collection Roots (https://bugs.openjdk.org/browse/JDK-8310031[JDK-8310031^])
++
+Lors de la collecte dans la young generation, ParallelGC partitionne la old generation en portion de 64 Ko lors de l'analyse des références dans la jeune génération. Ces portions sont attribuées aux threads workers qui effectuent l'analyse en parallèle en tant qu'unités de travail.
+[%hardbreaks]
+Avant ce changement, Parallel GC analysait toujours complètement ces portions, même si seule une petite partie était connue pour contenir des références intéressantes. De plus, chaque thread worker traitait lui-même les objets commençant dans cette portion, y compris ceux qui s'étendant dans d'autres portions. Ce comportement limitait le parallélisme lors du traitement d'objets volumineux : un seul objet volumineux contenant potentiellement des milliers de références avait été analysé par un seul thread uniquement et dans son intégralité, provoquant également une mauvaise mise à l'échelle en raison du partage de mémoire et des échecs de cache lors de la longue phase de work stealing suivante.
++
+Avec ce changement, les workers du Parallel GC limitent le travail à leur portion et ne traitent que les parties intéressantes des grands tableaux d'objets. Cela réduit le travail effectué par un seul thread pour une portion, améliore le parallélisme et réduit la quantité de work stealing. Les pauses du Parallel GC sont désormais comparables à celles du G1 en présence de grands tableaux d'objets, réduisant les temps de pause d'un facteur 4 à 5 dans certains cas.
+
+=== Les évolutions dans le ramasse-miettes Serial GC
+
+Une évolution dans le ramasse-miettes Serial est intégrée dans le JDK 22 :
+
+* Serial : Better GC Throughput with Scarce Dirty Cards (https://bugs.openjdk.org/browse/JDK-8319373[JDK-8319373^])
++
+Durant une collection mineure, le Serial GC recherche les dirty cards dans la table des cards afin de localiser les pointeurs young-to-old. Après avoir trouvé les dirty cards, le Serial GC utilise la table de décalage des blocks (block offset table) pour localiser les objets de départ lors l'analyse du heap afin de pouvoir parcourir le heap à l'intérieur de ces dirty cards.
++
+Cette modification améliore la recherche des objets de démarrage et la recherche de dirty cards, ce qui entraîne une réduction, parfois importante (~40 %), de la pause Young-GC notamment lorsqu’il y a des tableaux d’objets volumineux.
+
+=== L'utilisation du JIT pendant la création d’une archive CDS (https://bugs.openjdk.org/browse/JDK-8305753[JDK-8305753^])
+
+Par défaut, lorsque l'option `-Xshare:dump` est utilisée, le compilateur JIT est désactivé. Cela est nécessaire pour créer des archives CDS avec un contenu déterministe (voir https://bugs.openjdk.org/browse/JDK-8241071[JDK-8241071^]).
+
+Lors de la création d'une archive CDS avec une très grande liste de classes, et lorsque le contenu déterministe n'est pas nécessaire, il est possible d’utiliser l'option `-Xmixed` avec `-Xshare:dump` pour activer le compilateur JIT, ce qui accélérera la création de l'archive.
+
+== Les autres fonctionnalités
+
+Les principales nouveautés d’un JDK sont définies dans des JEPs, mais une nouvelle version du JDK contient de nombreuses autres évolutions et corrections de bugs.
+
+=== Les fonctionnalités concernant la sécurité
+
+Il y a plusieurs mises à jour des certificats racines dans le truststore `cacerts` de différents fournisseurs (eMudhra Technologies Limited, DigiCert Inc, Let's Encrypt, Telia). Certaines fonctionnalités renforcent la sécurité sur des points précis.
+
+==== La nouvelle catégorie security pour l’option -XshowSettings (https://bugs.openjdk.org/browse/JDK-8281658[JDK-8281658^])
+
+L’option `-XshowSettings` de la JVM affiche une nouvelle catégorie `security`.
+
+Les paramètres des propriétés de sécurité, des fournisseurs et des paramètres liés à TLS sont affichés avec cette option.
+
+Une sous-catégorie `security` peut être passée en tant qu’argument de catégorie comme indiqué par l’aide en ligne :
+
+[source,plain]
+----
+C:\java>java -X
+...
+    -XshowSettings:security
+                      show all security settings and continue
+    -XshowSettings:security:all
+                      show all security settings and continue
+    -XshowSettings:security:properties
+                      show security properties and continue
+    -XshowSettings:security:providers
+                      show static security provider settings and continue
+    -XshowSettings:security:tls
+                      show TLS related security settings and continue
+...
+
+----
+
+Les informations relatives aux fournisseurs de sécurité tiers sont affichées s’ils sont inclus dans le classpath ou le module path de l’application et que ces fournisseurs sont configurés dans le fichier `java.security`.
+
+==== Le support de `HSS/LMS` par les outils `keytool` et `jarsigner` (https://bugs.openjdk.org/browse/JDK-8302233[JDK-8302233^])
+
+Les outils `jarsigner` et `keytool` ont été mis à jour pour prendre en charge l’algorithme de signature `HSS/LMS` (Hierarchical Signature System/Leighton-Micali Signature). `jarsigner` prend en charge la signature de fichiers JAR avec `HSS/LMS` et la vérification des fichiers JAR signés avec `HSS/LMS`, tandis que `keytool` prend en charge la génération de paires de clés `HSS/LMS`.
+
+Le JDK inclut une implémentation qui prend uniquement en charge la vérification des signatures `HSS/LMS`. Pour utiliser les fonctionnalités de génération de paires de clés et de signature de `keytool` et `jarsigner`, un fournisseur tiers qui prend en charge la génération de paires de clés et de signatures `HSS/LMS`, ainsi qu’une implémentation d’un `keystore` capable de stocker des clés `HSS/LMS` sont nécessaires.
+
+==== `KEM.getInstance()` vérifie que le jar du fournisseur tiers est signé (https://bugs.openjdk.org/browse/JDK-8322971[JDK-8322971^])
+
+Pour être cohérent avec d’autres classes de services de JCA (`Cipher`, `Mac`, `KeyAgreement`, …), lors de l’instanciation d’une classe d’implémentation d’un algorithme `KEM` par un fournisseur tiers, le framework détermine le fichier jar du fournisseur et vérifie sa signature. `JCA` authentifie le fournisseur et s’assure que seuls les fournisseurs signés par une entité de confiance peuvent être utilisés par `JCA`.
+
+==== L'ajout de deux propriétés système pour définir la longueur maximale autorisée de la chaîne de certificats acceptée par le client ou le serveur (https://bugs.openjdk.org/browse/JDK-8311596[JDK-8311596^])
+
+Deux nouvelles propriétés système, `jdk.tls.server.maxInboundCertificateChainLength` et `jdk.tls.client.maxInboundCertificateChainLength`, ont été ajoutées pour définir la longueur maximale autorisée de la chaîne de certificats acceptée par le client ou le serveur lors du handshake `TLS/DTLS`.
+
+Lorsque l’application agit en tant que serveur, il applique une longueur maximale de chaîne de certificats acceptée par les clients. Lorsque l’application agit en tant que client, il applique une longueur maximale de chaîne de certificats acceptée par les serveurs.
+
+Ces propriétés, si elles sont définies, remplacent la propriété système `jdk.tls.maxCertificateChainLength` existante. Les propriétés peuvent fonctionner ensemble selon les règles suivantes :
+
+* Si la propriété système `jdk.tls.server.maxInboundCertificateChainLength` est définie et que sa valeur est supérieure ou égale à 0, cette valeur est utilisée pour appliquer la longueur maximale d’une chaîne de certificats client acceptée par un serveur. Dans le cas contraire, si la propriété système `jdk.tls.maxCertificateChainLength` est définie et que sa valeur est supérieure ou égale à 0, cette valeur sera utilisée pour l’appliquer. Si aucune des deux propriétés n’est définie, la valeur par défaut 8 sera utilisée pour l’application.
+
+* Si la propriété système `jdk.tls.client.maxInboundCertificateChainLength` est définie et que sa valeur est supérieure ou égale à 0, cette valeur est utilisée pour appliquer la longueur maximale d’une chaîne de certificats de serveur acceptée par un client. Dans le cas contraire, si la propriété système `jdk.tls.maxCertificateChainLength` est définie et que sa valeur est supérieure ou égale à 0, cette valeur sera utilisée pour l’appliquer. Si aucune des deux propriétés n’est définie, la valeur par défaut de 10 est utilisée pour l’application.
+
+=== Les fonctionnalités concernant les outils
+
+Les outils du JDK présentent aussi plusieurs évolutions.
+
+==== Les nouveaux événements JFR
+
+Plusieurs événements JFR sont ajoutés :
+
+* Pour détecter l’utilisation de méthodes dépréciées du JDK (https://bugs.openjdk.org/browse/JDK-8211238[JDK-8211238^])
++
+Le nouvel événement `jdk.DeprecatedInvocation`, permet de détecter l’utilisation de méthodes dépréciées du JDK.
++
+Par défaut, seules les méthodes dépréciées `forRemoval` lèvent un événement car la propriété `level` vaut `forRemoval`. Pour lever un événement pour toutes les méthodes dépréciées, il faut configurer la propriété `level` de l’événement avec la valeur `all`.
++
+[source,xml]
+----
+    <event name="jdk.DeprecatedInvocation">
+      <setting name="enabled">true</setting>
+      <setting name="stackTrace">true</setting>
+      <setting name="level">all</setting>
+    </event>
+----
++
+Exemple
++
+[source,java]
+----
+import java.util.Date;
+
+public class Deprecated {
+
+    public static void main(String[] args) {
+        Date date = new Date(10,10,10);
+    }
+}
+----
++
+[source,plain]
+----
+C:\java>javac -Xlint:deprecation Deprecated.java
+Deprecated.java:6: warning: [deprecation] Date(int,int,int) in Date has been deprecated
+        Date date = new Date(10,10,10);
+                    ^
+1 warning
+
+C:\java>java -XX:StartFlightRecording=duration=20s,filename=deprecated.jfr Deprecated
+[0.533s][info][jfr,startup] Started recording 1. The result will be written to:
+[0.533s][info][jfr,startup]
+[0.533s][info][jfr,startup] C:\java\deprecated.jfr
+
+C:\java>jfr print --events "jdk.DeprecatedInvocation" deprecated.jfr
+jdk.DeprecatedInvocation {
+  startTime = 22:12:57.754 (2024-03-28)
+  method = java.util.Date.<init>(int, int, int)
+  invocationTime = 22:12:57.710 (2024-03-28)
+  forRemoval = false
+  stackTrace = [
+    Deprecated.main(String[]) line: 6
+    ...
+  ]
+}
+----
++
+Comme on peut le constater dans l’exemple ci-dessus, la stacktrace est limitée à la ligne invoquant la méthode dépréciée.
++
+Actuellement, seules les invocations de méthodes dépréciées du JDK par du code en dehors du JDK émettent cet événement. L’invocation de méthodes dépréciées en dehors du JDK n’émettent pas d’événements.
++
+Il existe une autre restriction dans la notification des invocations réalisés par l'interpréteur. Dans le cas où deux méthodes sont membres de la même classe, et qu'elles invoquent la même méthode dépréciée, par exemple :
++
+[source,java]
+----
+import java.util.Date;
+
+public class Deprecated {
+
+    public static void main(String[] args) {
+        traiter1();
+        traiter2();
+    }
+
+    static void traiter1() {
+        Date date = new Date(10,10,10);
+    }
+
+    static void traiter2() {
+        Date date = new Date(10,10,10);
+    }
+
+}
+----
++
+Ce code utilise, dans deux méthodes, le même constructeur de la classe Date déprécié.
++
+[source,plain]
+----
+C:\java>javac -Xlint:deprecation Deprecated.java
+Deprecated.java:11: warning: [deprecation] Date(int,int,int) in Date has been deprecated
+        Date date = new Date(10,10,10);
+                    ^
+Deprecated.java:15: warning: [deprecation] Date(int,int,int) in Date has been deprecated
+        Date date = new Date(10,10,10);
+                    ^
+2 warnings 
+
+C:\java>java -XX:StartFlightRecording=duration=20s,filename=deprecated.jfr Deprecated
+[0.584s][info][jfr,startup] Started recording 1. The result will be written to:
+[0.584s][info][jfr,startup]
+[0.584s][info][jfr,startup] C:\java\deprecated.jfr
+
+C:\java>jfr print --events "jdk.DeprecatedInvocation" deprecated.jfr
+jdk.DeprecatedInvocation {
+  startTime = 22:23.12.257 (2024-03-28)
+  method = java.util.Date.<init>(int, int, int)
+  invocationTime = 22:23:12.257 (2024-03-28)
+  forRemoval = false
+  stackTrace = [
+    Deprecated.traiter1() line: 11
+    ...
+  ]
+}
+----
++
+Cette restriction ne concerne que l’interpréteur et pas les compilateurs C1 et C2 du JIT.
+
+* Pour des statistiques d’utilisation des queues des compilateur du JIT (https://bugs.openjdk.org/browse/JDK-8317562[JDK-8317562^])
++
+Le nouvel événement `jdk.CompilerQueueUtilization`, permet d’obtenir des statistiques sur l’utilisation des queues des compilateurs du JIT. Un événement est émis pour le compilateur C1 et un autre pour le compilateur C2.
+
+* Pour le chargement d’une bibliothèque native (https://bugs.openjdk.org/browse/JDK-8313251[JDK-8313251^])
++
+Le nouvel événement `jdk.NativeLibraryLoad`, permet d’obtenir des informations sur une opération de chargement d’une bibliothèque native.
++
+[source,plain]
+----
+C:\java>jfr print --events "jdk.NativeLibraryLoad" libraryload.jfr
+jdk.NativeLibraryLoad {
+  startTime = 22:43.49.542 (2024-03-28)
+  duration = 0,0571 ms
+  name = "C:\Windows\System32\user32.dll"
+  success = true
+  errorMessage = N/A
+  eventThread = "main" (javaThreadId = 1)
+  stackTrace = [
+    jdk.internal.loader.NativeLibraries.load(NativeLibraries$NativeLibraryImpl, String, boolean, boolean)
+    jdk.internal.loader.NativeLibraries$NativeLibraryImpl.open() line: 331
+    jdk.internal.loader.NativeLibraries.loadLibrary(Class, String, boolean) line: 197
+    jdk.internal.loader.NativeLibraries.loadLibrary(Class, File) line: 139
+    jdk.internal.loader.NativeLibraries.findFromPaths(String[], Class, String) line: 259
+    ...
+  ]
+}
+----
+
+* Pour le déchargement d’une bibliothèque native (https://bugs.openjdk.org/browse/JDK-8314211[JDK-8314211^])
++
+Le nouvel événement `jdk.NativeLibraryUnLoad`, permet d’obtenir des informations sur une opération de déchargement d’une bibliothèque native.
+
+==== La segmentation en deux phases d’un Heap Dump (https://bugs.openjdk.org/browse/JDK-8306441[JDK-8306441^])
+
+Historiquement, durant la génération d’un heap dump, la JVM arrête ses traitements durant l’intégralité de la génération du fichier avec un stop-the-world.
+
+Cette amélioration a pour but de réduire autant que possible le temps de pause de l'application en divisant un heap dump en deux phases :
+
+* Phase 1 : des threads concurrents écrivent directement les données dans des fichiers de heap segmentés avec l'application en pause.
+* Phase 2 : les multiples fichiers sont fusionnés en un fichier de vidage de tas complet avec l'application de nouveau en cours d’exécution.
+
+Cela réduit le temps de pause de l'application, mais il est important de noter que le temps total requis pour le heap dump lui-même reste inchangé. Cette optimisation vise uniquement à minimiser l'impact sur le temps de pause de l'application.
+
+La VM sélectionne automatiquement un nombre de threads concurrents utilisés lors du heap dump en fonction du type de ramasse-miettes, du nombre de processeurs, de la taille du heap et du degré de sa fragmentation. Elle tentera d'effectuer le heap dump en parallèle chaque fois que possible, et reviendra à l'utilisation d'un seul thread lorsqu'un heap dump en parallèle n'est pas possible. Dans ce cas, le comportement du vidage du tas est le même qu'auparavant, et les détails du heap dump peuvent être observés en utilisant l'option `-Xlog:heapdump`.
+
+==== Le compilateur `javac` n’accepte plus les références de méthode privées avec comme récepteur une variable de type (https://bugs.openjdk.org/browse/JDK-8318160[JDK-8318160^])
+
+Avant le JDK 22, le compilateur `javac` acceptait les références de méthode privées avec comme récepteur une variable de type.
+
+[source,java]
+----
+import java.util.function.*;
+
+class Fonction {
+    private String asString() {
+        return "test";
+    }
+
+    static <T extends Fonction> Function<T, String> get() {
+        return T::asString;
+    }
+}
+----
+
+[source,plain]
+----
+C:\java>javac -version
+javac 21
+
+C:\java>javac Fonction.java
+
+C:\java>
+----
+
+À partir du JDK 22, les références de méthode privées avec une variable de type comme receveur provoquent une erreur par le compilateur `javac`.
+
+[source,plain]
+----
+C:\java>javac -version
+javac 22
+
+C:\java>javac Fonction.java
+Fonction.java:9: error: asString() has private access in Fonction
+        return T::asString;
+               ^
+1 error
+
+C:\java>
+----
+
+==== L'alignement de `javac` sur la spécification du langage Java en rejetant `final` dans les record patterns (https://bugs.openjdk.org/browse/JDK-8317300[JDK-8317300^])
+
+Le compilateur `javac` permettait l’utilisation du mot clé `final` au début d’un record pattern dans le `case` d’un `switch` utilisant du pattern matching.
+
+[source,java]
+----
+record Pays (String nom) {
+
+  public static void main ( String [] args ) {
+    Object o = new Pays("France");
+    switch ( o ) {
+      case final Pays(var n) -> {}
+      default -> {}
+    }
+  } 
+}
+----
+
+[source,plain]
+----
+C:\java>javac -version
+javac 21
+
+C:\java>javac Pays.java
+
+C:\java>
+----
+
+Mais cela n’est pas permis par les spécifications du langage Java. Avec le JDK 22, `javac` émet maintenant une erreur dans ce cas.
+
+[source,plain]
+----
+C:\java>javac -version
+javac 22
+
+C:\java>javac Pays.java
+Pays.java:6: error: modifier final not allowed here
+      case final Pays(var n) -> {}
+           ^
+1 error
+----
+
+La correction est facile : il suffit de retirer le mot clé `final`.
+
+==== Le nouveau lint de `javac` concernant les invocations de méthodes restreintes (https://bugs.openjdk.org/browse/JDK-8316971[JDK-8316971^])
+
+Certaines méthodes de l'API Foreign Function & Memory ne sont pas sûres. Lorsqu'elles sont utilisées de manière inappropriée, ces méthodes peuvent entraîner des risques sur les données en mémoire, pouvant induire une corruption silencieuse de la mémoire voir même provoquer un crash de la JVM.
+
+En conséquence, ces méthodes non sûres de l'API FFM sont restreintes. Cela signifie que leur utilisation est possible, mais qu'elle entraîne par défaut l'émission d'un avertissement au moment de l'exécution.
+
+Pour indiquer où les avertissements à l'exécution peuvent se produire, une nouvelle option lint de `javac`, `-Xlint:restricted`, provoque l'émission d'avertissements à la compilation si des méthodes restreintes sont invoquées dans le code source.
+
+Ces avertissements à la compilation peuvent être supprimés en utilisant :
+
+[source,java]
+----
+@SuppressWarnings("restricted")
+----
+
+==== Le nouveau comportement de l’option `-XshowSettings` (https://bugs.openjdk.org/browse/JDK-8311653[JDK-8311653^])
+
+Les options de la JVM `-XshowSettings:all` et `-XshowSettings` ont désormais un comportement différent par rapport aux versions précédentes du JDK.
+
+L'option `-XshowSettings` affiche un résumé des catégories `locale` et `security`, ainsi que toutes les informations relatives aux autres catégories.
+
+L'option `-XshowSettings:all` continue d'afficher toutes les informations disponibles sur les paramètres.
+
+Jusqu’au JDK 21 inclus, la JVM acceptait n’importe quelle valeur pour l’option `-XshowSettings`.  
+
+[source,plain]
+----
+C:\Java>jdk21
+Definition de JAVA_HOME
+Definition de PATH PATH
+Version de Java
+openjdk version "21" 2023-09-19
+OpenJDK Runtime Environment (build 21+35-2513)
+OpenJDK 64-Bit Server VM (build 21+35-2513, mixed mode, sharing)
+
+C:\Java>java -XshowSettings:test -version
+VM settings:
+    Max. Heap Size (Estimated): 7.92G
+    Using VM: OpenJDK 64-Bit Server VM
+
+Property settings:
+    file.encoding = UTF-8
+    file.separator = \
+    java.class.path =
+    java.class.version = 65.0
+...
+----
+
+La JVM du JDK 22 s’arrête avec une erreur si la valeur fournie n’est pas supportée.
+
+[source,plain]
+----
+C:\Java>jdk22
+Definition de JAVA_HOME
+Definition de PATH PATH
+Version de Java
+openjdk version "22" 2024-03-19
+OpenJDK Runtime Environment (build 22+36-2370)
+OpenJDK 64-Bit Server VM (build 22+36-2370, mixed mode, sharing)
+
+C:\Java>java -XshowSettings:test
+
+Unrecognized showSettings option: test
+Valid values are "all", "locale", "properties", "security", "system"(Linux only), "vm"
+Valid "security" suboption values are "all", "properties", "providers", "tls"
+See "java -X"
+----
+
+Il est possible d’obtenir la liste des valeurs valides de l’option `-XshowSettings` en utilisant l’option `-X` de la JVM.
+
+==== Les informations sur les Locales disponibles ne sont désormais affichées qu’avec l’option `-XshowSettings:locale` (https://bugs.openjdk.org/browse/JDK-8310201[JDK-8310201^])
+
+L’option `-XshowSettings` n’affiche plus les informations sur les Locales disponibles par défaut, lorsque l’option est utilisée. Cela réduit les informations affichées par défaut.
+
+Pour les afficher, il faut utiliser l’option `-XshowSettings:locale` qui affiche toujours tous les paramètres liés aux paramètres régionaux disponibles.
+
+[source,plain]
+----
+C:\java>java -XshowSettings:locale -version
+Locale settings:
+    default locale = français (France)
+    default display locale = français (France)
+    default format locale = français (France)
+    tzdata version = 2023d
+    available locales = , af, af_NA, af_ZA, af_ZA_#Latn, agq, agq_CM, agq_CM_#Latn,
+        ak, ak_GH, ak_GH_#Latn, am, am_ET, am_ET_#Ethi, ann, ann_NG,
+        ann_NG_#Latn, ar, ar_001, ar_AE, ar_BH, ar_DJ, ar_DZ, ar_EG,
+        ar_EG_#Arab, ar_EH, ar_ER, ar_IL, ar_IQ, ar_JO, ar_KM, ar_KW,
+        ar_LB, ar_LY, ar_MA, ar_MR, ar_OM, ar_PS, ar_QA, ar_SA,
+        ar_SD, ar_SO, ar_SS, ar_SY, ar_TD, ar_TN, ar_YE, as,
+...
+        zh_SG, zh_SG_#Hans, zh_TW, zh_TW_#Hant, zh__#Hans, zh__#Hant, zu, zu_ZA,
+        zu_ZA_#Latn
+
+openjdk version "22" 2024-03-19
+OpenJDK Runtime Environment (build 22+36-2370)
+OpenJDK 64-Bit Server VM (build 22+36-2370, mixed mode, sharing)
+----
+
+==== La modification du tag `inheritDoc` du doclet standard (https://bugs.openjdk.org/browse/JDK-8285368[JDK-8285368^])
+
+Un paramètre facultatif a été ajouté au tag `\{@inheritDoc}` du doclet standard de la JavaDoc afin que l’on puisse préciser le supertype à partir duquel rechercher la documentation héritée.
+
+De plus, l’algorithme de recherche de la documentation héritée a été modifié pour mieux s’aligner sur l’héritage et la redéfinition d’une méthode de la spécification du langage Java.
+
+Plus de détails peuvent être obtenus dans la documentation du tag https://docs.oracle.com/en/java/javase/22/docs/specs/javadoc/doc-comment-spec.html#inheritdoc[\{@inheritDoc}^].
+
+==== Le module `jdk.internal.vm.compiler` est renommé en `jdk.graal.compiler` (https://bugs.openjdk.org/browse/JDK-8318027[JDK-8318027^])
+
+En préparation du projet Galahad (dont le but est d’intégrer des fonctionnalités de GraalVM dans OpenJDK), le module `jdk.internal.vm.compiler` a été renommé `jdk.graal.compiler`. Comme c’est un module interne au JDK, cela devrait être transparent pour la plupart des utilisateurs de Java.
+
+==== NMT affiche les valeurs maximales (https://bugs.openjdk.org/browse/JDK-8317772[JDK-8317772^])
+
+Les rapports NMT (Native Memory Tracking) affichent maintenant les valeurs maximales pour toutes les catégories. Les valeurs maximales (peak values) contiennent la valeur la plus élevée de la mémoire allouée dans une catégorie NMT donnée au cours de la durée de vie de l’application dans la JVM.
+
+Si la mémoire allouée pour une catégorie est actuellement au maximum, NMT affiche `at peak`` sinon, il imprime la valeur maximale.
+
+[source,plain]
+----
+C:\java> java -XX:NativeMemoryTracking=summary -Xmx2g MainApp
+
+C:\java\jcmd 28936 VM.native_memory
+28936:
+
+Native Memory Tracking:
+
+(Omitting categories weighting less than 1KB)
+
+Total: reserved=3634081KB, committed=1152161KB
+       malloc: 33881KB #29899
+       mmap:   reserved=3600200KB, committed=1118280KB
+
+-                 Java Heap (reserved=2097152KB, committed=1040384KB)
+                            (mmap: reserved=2097152KB, committed=1040384KB, at peak)
+
+-                     Class (reserved=1048709KB, committed=261KB)
+                            (classes #1048)
+                            (  instance classes #911, array classes #137)
+                            (malloc=133KB #2631) (at peak)
+                            (mmap: reserved=1048576KB, committed=128KB, at peak)
+                            (  Metadata:   )
+                            (    reserved=65536KB, committed=704KB)
+                            (    used=602KB)
+                            (    waste=102KB =14.44%)
+                            (  Class space:)
+                            (    reserved=1048576KB, committed=128KB)
+                            (    used=47KB)
+                            (    waste=81KB =62.98%)
+
+-                    Thread (reserved=50311KB, committed=2471KB)
+                            (threads #49)
+                            (stack: reserved=50176KB, committed=2336KB, peak=2336KB)
+                            (malloc=79KB #300) (peak=96KB #328)
+                            (arena=56KB #96) (peak=266KB #77)
+
+-                      Code (reserved=247852KB, committed=8236KB)
+                            (malloc=108KB #1558) (peak=108KB #1559)
+                            (mmap: reserved=247744KB, committed=8128KB, at peak)
+                            (arena=0KB #0) (peak=1KB #1)
+
+-                        GC (reserved=104854KB, committed=84214KB)
+                            (malloc=30294KB #6740) (peak=30352KB #6875)
+                            (mmap: reserved=74560KB, committed=53920KB, at peak)
+
+-                 GCCardSet (reserved=230KB, committed=230KB)
+                            (malloc=230KB #3051) (at peak)
+
+...
+----
+
+==== La nouvelle option `-XX:UserThreadWaitAttemptsAtExit=<number_of_waits>` (https://bugs.openjdk.org/browse/JDK-8314243[JDK-8314243])
+
+Une nouvelle option, `-XX:UserThreadWaitAttemptsAtExit=<number_of_waits>`, a été ajoutée à la JVM. Cette option permet de spécifier le nombre de fois que la JVM attend que les threads de l’application cessent d’exécuter du code natif lors d’une sortie de la JVM. Chaque attente dure 10 millisecondes.
+
+Le nombre maximum d’attentes est de 1000, pour attendre au maximum 10 secondes. La valeur par défaut de `UserThreadWaitAttemptsAtExit` est 30, de sorte que la JVM peut attendre jusqu’à 300 millisecondes pour que les threads de l’application cessent d’exécuter du code natif lorsque la JVM se ferme. Cette valeur par défaut correspond au comportement existant. Selon les besoins, il est possible de configurer le nombre de fois que la JVM doit attendre et donc modifier le délai d’attente.
+
+== Les fonctionnalités retirées
+
+Plusieurs méthodes et fonctionnalités sont retirées du JDK 22.
+
+=== Les méthodes `shouldBeInitialized()` et `ensureClassInitialized()` de la classe sun.misc.Unsafe sont supprimées (https://bugs.openjdk.org/browse/JDK-8316160[JDK-8316160^])
+
+Les méthodes `shouldBeInitialized(Class)` et `ensureClassInitialized(Class)` ont été supprimées de la classe `sun.misc.Unsafe`. Ces méthodes ont été dépréciées `forRemoval` depuis le JDK 15.
+
+Il faut utiliser la méthode `ensureInitialized(Class)` de la classe `java.lang.invoke.MethodHandles.Lookup` comme fonctionnalité standard pour s'assurer qu'une classe accessible est initialisée.
+
+=== La méthode Thread::countStackFrames est supprimée (https://bugs.openjdk.org/browse/JDK-8309196[JDK-8309196^])
+
+La méthode `java.lang.Thread::countStackFrames` a été supprimée. Cette méthode date du JDK 1.0 en tant qu'API permettant de compter les frames de la pile d'un thread suspendu. La méthode a été dépréciée dans le JDK 1.2 (1998), dépréciée `forRemoval` dans Java 9, et re-spécifiée dans Java 14 pour lever inconditionnellement une exception de type `UnsupportedOperationException`.
+
+L’API `java.lang.StackWalker`, ajoutéee à Java 9, est à utiliser en remplacement pour parcourir la pile du thread en cours.
+
+=== Les options `-profile` et `-P` de `jdeps` sont retirées (https://bugs.openjdk.org/browse/JDK-8310460[JDK-8310460^])
+
+Les options `-profile` et `-P` de `jdeps` sont dépréciées `forRemoval` dans le JDK 21.
+
+[source,plain]
+----
+C:\java>jdeps -P -version
+21
+Warning: -profile option is deprecated and may be removed in a future release.
+----
+
+Elles sont retirées dans le JDK22.
+
+[source,plain]
+----
+C:\java>jdeps -version
+22
+
+C:\java>jdeps -P -version
+Error: unknown option: -P
+Usage: jdeps <options> <path ...>]
+use --help for a list of possible options
+----
+
+== Les fonctionnalités dépréciées
+
+Plusieurs fonctionnalités sont dépréciées ou dépréciées `forRemoval`.
+
+=== Le module `jdk.crypto.ec` est déprécié (https://bugs.openjdk.org/browse/JDK-8308398[JDK-8308398^])
+
+Le module `jdk.crypto.ec` est déprécié avec l’intention de le supprimer. Un module vide existe en tant que transition permettant aux développeurs de corriger les applications ou les commandes `jlink` avec des dépendances codées en dur avant la suppression.
+
+Le fournisseur JCE `SunEC`, qui fournit la cryptographie à courbe elliptique, se trouve désormais dans le module `java.base`. Il ne devrait y avoir aucune différence dans la fonctionnalité cryptographique avec cette dépréciation.
+
+=== Les méthodes `park()`, `unpark()`, `getLoadAverage()`, et `xxxFence()` de la classe `sun.misc.Unsafe` sont dépréciées `forRemoval` (https://bugs.openjdk.org/browse/JDK-8315938[#JDK-8315938^])
+
+Des fonctionnalités standard de remplacement existent et doivent être utilisées :
+
+* `java.util.concurrent.LockSupport.park/unpark` (depuis Java 5)
+* `java.lang.management.OperatingSystemMXBean.getSystemLoadAverage` (depuis Java 6)
+* `java.lang.invoke.VarHandle.xxxFence` (depuis Java 9)
+
+=== L’option `-Xnoagent` de la JVM est dépréciée `forRemoval` (https://bugs.openjdk.org/browse/JDK-8312072[JDK-8312072^])
+
+Cette option est ignorée depuis plusieurs versions du JDK. Elle génère désormais un avertissement de dépréciation lorsqu'elle est utilisée.
+
+[source,plain]
+----
+C:\java>java -Xnoagent -version
+OpenJDK 64-Bit Server VM warning: Option -Xnoagent was deprecated in JDK 22 and will likely be removed in a future release.
+openjdk version "22" 2024-03-19
+OpenJDK Runtime Environment (build 22+36-2370)
+OpenJDK 64-Bit Server VM (build 22+36-2370, mixed mode, sharing)
+----
+
+=== Les options `-Xdebug` et `-debug` de la JVM sont dépréciées `forRemoval` (https://bugs.openjdk.org/browse/JDK-8227229[JDK-8227229^])
+
+Ces options sont ignorées depuis plusieurs versions du JDK. Elles génèrent désormais un avertissement de dépréciation lorsqu'elles sont utilisées.
+
+[source,plain]
+----
+C:\java>java -debug -version
+Warning: -debug option is deprecated and may be removed in a future release.
+openjdk version "22" 2024-03-19
+OpenJDK Runtime Environment (build 22+36-2370)
+OpenJDK 64-Bit Server VM (build 22+36-2370, mixed mode, sharing)
+----
+
+== Conclusion
+
+Java poursuit son évolution avec ce JDK 22 qui propose beaucoup de nouveautés et d’améliorations qui vont permettre à Java de rester pertinent aujourd’hui et demain.
+
+Java 22 est la première version non-LTS après la publication de la version LTS, Java 21.
+
+Toutes les évolutions proposées dans le JDK 22 sont détaillées dans les https://jdk.java.net/22/release-notes[releases notes^].
+
+N’hésitez donc pas à télécharger et tester une distribution du JDK 22 auprès d’un fournisseur pour anticiper la release de la prochaine version LTS de Java.
+
+&nbsp;

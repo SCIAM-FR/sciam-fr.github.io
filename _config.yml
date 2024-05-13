@@ -69,6 +69,10 @@ plugins:
   - jekyll-seo-tag
   - jekyll-toc
   # - jekyll-json
+  - jekyll-postcss
+
+postcss:
+  cache: false
 
 pagination:
   enabled: true

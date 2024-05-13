@@ -21,14 +21,15 @@
   <link rel="shortcut icon" type="image/x-icon" href="{{ '/images/favicon.ico' | relative_url }}">
   <link rel="icon" type="image/x-icon" href="{{ '/images/favicon.ico' | relative_url }}">
   <link rel="apple-touch-icon" href="{{ '/images/apple-touch-icon.png' | relative_url }}" />
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css" rel="stylesheet">
-  
-  <!-- CSS -->
-  <link rel="stylesheet" href="{{ '/dist/styles.css' | relative_url }}" >
-  <link rel="stylesheet" href="{{ '/css/styles.css' | relative_url }}" >
-
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css"
+    rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <link href="{{ './css/styles.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ './css/output.css' | relative_url }}" rel="stylesheet">
+
   {% feed_meta %}
   {% seo %}
   {% if jekyll.environment == 'production' %}
@@ -37,165 +38,133 @@
 </head>
 
 <body>
-  <div style="min-height:100vh; display:flex; flex-direction:column;justify-content:space-between;">
-    <!-- Navigation -->
-    <nav class="nav bg-navysciam w-full">
-      <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 h-16 flex items-center">
-        <div class="flex align-middle justify-between w-full">
-          <!-- Logos SCIAM -->
-            <div class="flex items-center space-x-2">
-              <img src=".\images\logo_sciam_blanc.png" alt="Logo blanc" class="h-10 w-auto">
-              <img src="..\images\logo_typo_sciam_bla.png" alt="Logo SCIAM" class="h-10 w-auto">
-              <span class="text-white text-lg whitespace-nowrap">| Blog</span>
-            </div>
-          <div class="justify-self-end flex items-center space-x-4 sm:hidden">
-            <!-- Mobile menu bouton-->
-            <button type="button" class="menu-button inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
-              <span class="absolute -inset-0.5"></span>
-              <span class="sr-only">Open main menu</span>
-              <!--Icon menu fermé -->
-              <svg class="menu-close-icon block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-              </svg>
-              <!--Icon menu ouvert -->
-              <svg class="menu-open-icon hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+  <div class="flex flex-col justify-between bg-zinc-50">
+    <nav class="sticky top-0 bg-navysciam w-full py-4 px-8">
+      <div class="mx-auto flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <img src="../images/logo/logo_sciam_blanc.png" alt="Logo blanc" class="h-10 w-10">
+            <img src="../images/logo/logo_sciam_white.svg" alt="Logo SCIAM" class="w-20 font-bold">
+            <span class="mt-1.5"> <p class="text-white text-xl">| Blog </p></span>
+          </div>
+          <div class="hidden sm:block items-center space-x-4">
+            <ul class="flex flex-row">
+              {% for item in site.data.navigation %}
+              {% assign current_url = page.url | remove: 'index.html' | append: '/' %}
+              {% assign item_url = item.url | append: '/' %}
+              <li>
+                <a href="{{ item.url | relative_url }}" class="no-underline hover:text-white hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-xl font-medium 
+                  {% if current_url == item_url %}text-white{% else %}text-gray-500{% endif %}">
+                  {{ item.title }}
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="flex justify-end items-center space-x-4 sm:hidden">
+            <button type="button"
+              class="menu-button p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              aria-controls="mobile-menu" aria-expanded="false" onclick="toggleMenu(this)">
+              <span class="sr-only">Toggle menu</span>
+              <svg viewBox="0 0 24 24" stroke="white" fill="none" stroke-width="1.5" class="h-6 w-6">
+                <path class="menu-open-icon" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"
+                  style="display: none;"></path>
+                <path class="menu-close-icon" stroke-linecap="round" stroke-linejoin="round"
+                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
               </svg>
             </button>
           </div>
-          <!-- L S M menu -->
-          <div class="hidden sm:block flex items-center space-x-4">
-                <a href="{{ '/' | relative_url }}" class="no-underline hover:text-white hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Accueil</a>
-                <a href="{{ '/tags' | relative_url }}" class="no-underline hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium">Tags</a>
-                <a href="{{ '/authors' | relative_url }}" class="no-underline hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium">Auteurs</a>
-                <a href="#" class="no-underline hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-sm font-medium">Contact</a>
-          </div>
+      </div>
+      <div class="sm:hidden hidden w-full" id="mobile-menu">
+        <div class="flex flex-col space-y-1 px-2 pb-3 pt-2 items-end">
+          {% for item in site.data.navigation %}
+          {% assign item_url = item.url | relative_url %}
+          <a href="{{ item_url }}" class="no-underline block rounded-md px-3 py-2 text-base font-medium {% if
+            page.url==item_url %}aria-current=page {% endif %}">
+            {{ item.title }}
+          </a>
+          {% endfor %}
         </div>
       </div>
-            <!-- Mobile menu -->
-            <div class="sm:hidden hidden" id="mobile-menu">
-              <div class="space-y-1 px-2 pb-3 pt-2">
-                <a href="{{ '/' | relative_url }}" class="no-underline block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Accueil</a>
-                <a href="{{ '/tags' | relative_url }}" class="no-underline block rounded-md px-3 py-2 text-base font-medium">Tags</a>
-                <a href="{{ '/authors' | relative_url }}" class="no-underline block rounded-md px-3 py-2 text-base font-medium">Auteurs</a>
-                <a href="https://www.sciam.fr/contact" class="no-underline block rounded-md px-3 py-2 text-base font-medium">Contact</a>
-              </div>
-            </div>   
-                      <!-- <form action="https://www.google.com/search" method="get">
-                        <input type="hidden" name="sitesearch" value="blog.sciam.fr">
-                        <input type="text" name="q">
-                        <input type="submit" value="Rechercher">
-                      </form> -->
     </nav>
-      <div class="col-lg-12">
-          {{ content }}
-      </div>    
+  
+
+    <div>
+      {{ content }}
+    </div>
+
     <footer class="w-full">
-      <!-- Newsletter-->
-      <div class="bg-navysciam px-4 py-8 mx-auto max-w-full text-white">
-        <div class="flex flex-wrap justify-between items-center max-w-7xl mx-auto">
-          <div class="w-full md:w-1/2 mb-4 md:mb-0">
-                <span class="text-white text-lg">Newsletter SCIAM</span>
-          </div>
-          <form class="w-full md:w-1/2 flex flex-col sm:flex-row justify-end items-center space-y-2 sm:space-y-0 sm:space-x-2">
+        <div class="bg-navysciam px-8 py-8 mx-auto max-w-full text-white">
+          <div class="flex flex-wrap justify-between items-center mx-auto">
+            <div class="w-full md:w-1/2 mb-4 md:mb-0">
+              <span class="text-white text-lg">Newsletter SCIAM</span>
+            </div>
+            <form
+              class="w-full md:w-1/2 flex flex-col sm:flex-row justify-end items-center space-y-2 sm:space-y-0 sm:space-x-2">
               <label for="email" class="sr-only">Email</label>
-              <input
-                class="rounded-md px-6 py-3 shadow-sm"
-                type="email"
-                placeholder="Votre adresse email"
-              />
+              <input class="rounded-md px-6 py-3 shadow-sm" type="email" placeholder="Votre adresse email" />
               <button
                 class="block rounded-md bg-navysciam border border-white px-8 py-3 font-medium text-white transition hover:border-yellowsciam"
-                type="submit"
-              >
+                type="submit">
                 Souscrire
               </button>
-            </div>
-          </form>
-        </div>
-      </div> 
-      
-      <hr>
-
-      <!-- A propos SCIAM-->
-          <div class="px-4 py-4 mx-auto max-w-7xl flex flex-wrap items-center justify-between">
-            <img src="..\images\logo_sciam.png" alt="Logo" class="h-10 w-auto ml-2">
-            <img src="..\images\logo_sciam_RVB.png" alt="Logo SCIAM Typo" class="h-10 w-auto ml-2">
-            <div class="flex flex-wrap">
-              <a href="https://www.sciam.fr/" class="px-4 py-2 hover:underline">À propos de SCIAM</a>
-              <a href="https://www.sciam.fr/equipe" class="px-4 py-2 hover:underline">Notre équipe</a>
-              <a href="https://www.sciam.fr/recrutement" class="px-4 py-2 hover:underline"><Ri:a>Recrutement</Ri:a></a>
-            </div>
+            </form>
           </div>
+        </div>
+  
         <hr>
-        <!-- Séparateur horizontal -->
-        <div class="w-full bg-gray-200" style="height: 1px;"></div>
-        <!-- Mentions légales-->  
-        <div class="px-4 py-4 mx-auto max-w-7xl flex flex-wrap justify-between items-center">
+  
+        <div class="py-4 px-4 mx-auto flex flex-wrap items-center justify-between">
+          <img src="../images/logo/logo_sciam.png" alt="Logo" class="h-10 w-auto ml-2">
+          <img src="../images/logo/logo_sciam_CMJN.svg" alt="Logo SCIAM Typo" class="h-10 w-auto ml-2">
+          <div class="flex flex-wrap">
+            <a href="https://www.sciam.fr/" class=" py-2 hover:underline">À propos de SCIAM</a>
+            <a href="https://www.sciam.fr/equipe" class=" py-2 hover:underline">Notre équipe</a>
+            <a href="https://www.sciam.fr/recrutement" class=" py-2 hover:underline">Recrutement</a>
+          </div>
+        </div>
+  
+        <hr>
+  
+        <div class="w-full bg-gray-200"></div>
+        <div class="px-4 py-4 mx-auto  flex flex-wrap justify-between items-center">
           <p class="text-sm text-gray-500 sm:text-left">
             &copy; 2022 SCIAM. All rights reserved.
           </p>
           <ul class="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start">
             <li>
-              <a
-                href="#"
-                rel="noreferrer"
-                target="_blank"
-                class="text-teal-700 transition hover:text-teal-700/75"
-              >
+              <a href="#" rel="noreferrer" target="_blank" class="text-teal-700 transition hover:text-teal-700/75">
                 <span class="sr-only">X</span>
                 <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path
-                    d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"
-                  />
+                    d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
                 </svg>
               </a>
             </li>
-    
             <li>
-              <a
-                href="#"
-                rel="noreferrer"
-                target="_blank"
-                class="text-teal-700 transition hover:text-teal-700/75"
-              >
+              <a href="#" rel="noreferrer" target="_blank" class="text-teal-700 transition hover:text-teal-700/75">
                 <span class="sr-only">GitHub</span>
                 <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path
-                    fill-rule="evenodd"
+                  <path fill-rule="evenodd"
                     d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                    clip-rule="evenodd"
-                  />
+                    clip-rule="evenodd" />
                 </svg>
               </a>
             </li>
-    
+  
             <li>
-              <a
-                href="#"
-                rel="noreferrer"
-                target="_blank"
-                class="text-teal-700 transition hover:text-teal-700/75"
-              >
+              <a href="#" rel="noreferrer" target="_blank" class="text-teal-700 transition hover:text-teal-700/75">
                 <span class="sr-only">Linkedin</span>
                 <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path
-                    fill-rule="evenodd"
+                  <path fill-rule="evenodd"
                     d="M28.778 1.004h-25.56c-0.008-0-0.017-0-0.027-0-1.199 0-2.172 0.964-2.186 2.159v25.672c0.014 1.196 0.987 2.161 2.186 2.161 0.010 0 0.019-0 0.029-0h25.555c0.008 0 0.018 0 0.028 0 1.2 0 2.175-0.963 2.194-2.159l0-0.002v-25.67c-0.019-1.197-0.994-2.161-2.195-2.161-0.010 0-0.019 0-0.029 0h0.001zM9.9 26.562h-4.454v-14.311h4.454zM7.674 10.293c-1.425 0-2.579-1.155-2.579-2.579s1.155-2.579 2.579-2.579c1.424 0 2.579 1.154 2.579 2.578v0c0 0.001 0 0.002 0 0.004 0 1.423-1.154 2.577-2.577 2.577-0.001 0-0.002 0-0.003 0h0zM26.556 26.562h-4.441v-6.959c0-1.66-0.034-3.795-2.314-3.795-2.316 0-2.669 1.806-2.669 3.673v7.082h-4.441v-14.311h4.266v1.951h0.058c0.828-1.395 2.326-2.315 4.039-2.315 0.061 0 0.121 0.001 0.181 0.003l-0.009-0c4.5 0 5.332 2.962 5.332 6.817v7.855z"
-                    clip-rule="evenodd"
-                  />
+                    clip-rule="evenodd" />
                 </svg>
               </a>
             </li>
           </ul>
         </div>
-        <!-- <div style="text-align: center;">
-          <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/"></a>Cette œuvre est mise à disposition selon les termes de la <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Licence Creative Commons Attribution - Pas d’Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0 International
-            <img alt="Licence Creative Commons" style="border-width:0;margin: 5px;" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" />
-          </a>
-        </div> -->
-    </div>
     </footer>
+  </div>
   </div>
   <script src="{{ 'js/nav.js' | relative_url }}"></script>
   <script src="{{ 'js/copy-to-clipboard.js' | relative_url }}"></script>

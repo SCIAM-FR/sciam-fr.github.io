@@ -1,0 +1,8 @@
+- title: Accueil
+  url: '/'
+- title: Tags
+  url: '/tags/'
+- title: Auteurs
+  url: '/authors/'
+- title: Contact
+  url: 'https://www.sciam.fr/contact'

@@ -3,155 +3,180 @@ layout: default
 pagination: 
   enabled: true
 ---
-<style>
-  .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 3rem;
-  }
-  .pagination a,
-  .pagination span {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 40px;
-      height: 40px;
-      border: 1px solid #efefef;
-      border-left: 0;
-      border-radius: 12px;
-      margin: 5px;
-  }
-  .pagination .active {
-      background: #f3f3f3;
-      pointer-events: none;
-  }
-  .pagination .active svg {
-      opacity: .3;
-  }
-  .pagination a:hover {
-      background: #f3f3f3;
-      cursor: pointer;
-  }
-</style>
-  
-<div class="bg-lightgrey mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Banniere Accueil-->
-    <div class="text-center text-navysciam banner-home py-9">
-          <p class="banner-title text-navysciam text-5xl">Blog de SCIAM</p>
-          <p class="banner-subtitle mt-1 text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</p>
-    </div>  
-    <hr>           
-  <!-- Section principale avec le premier post et X -->
-  <div class="grid-cols-1 md:grid-cols-3 gap-4 ">
-    <!-- Premier post -->
-    <div class="md:col-span-2 bg-white p-4 rounded-md shadow-lg shadow-secondary-1 dark:bg-surface-dark ">
-      <img src="{{ '/images/vignettes/' | append: post.first.vignette | relative_url }}" alt="Image article" class="w-full h-auto mb-4 rounded-lg">
-      <div>
-          <h2 class="text-2xl font-bold mb-2"><a href="{{ paginator.posts.first.url | relative_url }}">{{ paginator.posts.first.title }}</a></h2>
+
+<div class="grid grid-cols-12 gap-4">
+  <div class="col-span-12 sm:col-span-12 flex flex-col items-center justify-center rounded-lg p-20">
+    <p class="text-5xl font-bold text-navysciam">Blog de SCIAM</p>
+    <p class="mt-1 text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</p>
+  </div>
+</div>
+
+<div class="grid grid-cols-12 gap-4 py-4 ">
+  <div class="col-span-12 sm:col-span-8 flex items-center justify-center rounded-lg pr-2 pl-28">
+    <div class="bg-white rounded overflow-hidden shadow-lg">
+      <img src="{{ '/images/vignettes/angular17.png' | relative_url }}" class="w-full h-auto mb-4 rounded-lg" alt="Image article">
+      <div class="px-6 py-4">
+        <div class="text-2xl font-bold mb-2"><a href="{{ paginator.posts.first.url | relative_url }}">{{ paginator.posts.first.title }}</a></div>
           <p class="text-sm text-gray-500 mb-4">Écrit par {{ paginator.posts.first.author | append: ', ' | append: paginator.posts.first.date | date: "%d/%m/%Y" }}</p>
           <p class="mb-4">{{ paginator.posts.first.excerpt }}</p>
-          <a href="#" class="text-navysciam hover:yellowsciam transition">Lire la suite...</a>
+          <a href="#" class="text-navysciam hover:text-yellowsciam transition">Lire la suite...</a>
       </div>
-  </div>
+      <div class="px-6 pt-4 pb-2">
+        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
+        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
+        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
+      </div>
     </div>
-    <!-- Widget X -->
-    <div class="col-span-1">
-      <div class="sticky top-0 p-4">
-          <h3 class="font-bold text-xl mb-3">Derniers Tweets</h3>
-          <a class="twitter-timeline" data-height="1000" href="#">X</a>
-          <script async src="#" charset="utf-8"></script>
+  </div>
+
+  <div class="col-span-12 sm:col-span-4 rounded-lg pr-28 pl-2">
+    <div class="bg-white rounded overflow-hidden shadow-lg">
+      <div class="follow-scroll hidden-xs">
+        <a class="twitter-timeline" data-height="510" href="https://twitter.com/{{ site.social-network-links.twitter }}?ref_src=twsrc%5Etfw">Tweets by SCIAM</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
       </div>
+    </div>
   </div>
-  </div>
+</div>
 
 
+<div class="grid grid-cols-12 gap-4">
+  <div class="col-span-12 sm:col-span-12 rounded-lg px-28">
+    <div class="container">
+      <div class="w-full">
+          <div class="mb-6">
+            <hr class="my-28 bg-slate-200"/>
 
-<div class="row">
-  <div class="col-lg-12">
-    <div class="row">
-      <div class="col-lg-9">
-        <div class="posts">
-        
-          <ul class="post-list">
-            <!-- 
-                Affichage de la page courante 
-            -->
-            {% for post in paginator.posts %}
-            <article class="post">
-              <div class="panel panel-primary">
-                <div class="panel-body">
-                  <h1 class="liste_article"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h1>
-                  <div style="display: flex;">
-                    {% if post.vignette %}
-                    <div>
-                      <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}" style="max-width: 200px; margin-right: 20px;" />
-                    </div>
-                    {% endif %}    
-
-                    <div style="display: flex;flex-direction: column;">
-                      {% if post.auteurs.size > 1 %}
-                      <div class="meta"><strong>Ecrit par 
-                        {% for auteur in post.auteurs %}
-                          {% assign author = site.data.authors[auteur] %}
-                          {% if author.name %}
-                            {% if forloop.first %}
-                            {% elsif forloop.last %}
-                            et
-                            {% else %}
-                            , 
-                            {% endif %}
-                            <span class="authors"><a href="{{ '/author/' | append: auteur | append: '/index.html' | relative_url }}">{{ author.name }}</a></span>
-                          {% endif %}
-                        {% endfor %}
-                        </strong></div>
-
-                      {% else %}
-                        {% assign author = site.data.authors[post.author] %}
-                        {% if author.name %}
-                        <div class="meta"><strong>Ecrit par 
-                          <span class="authors"><a href="{{ '/author/' | append: post.author | append: '/index.html' | relative_url }}">{{ author.name }}</a></span>
-                        </strong></div>
-                        {% endif %}
-                      {% endif %}
-
-                      <div class="meta">le <span class="date">{{ post.date | date: "%d/%m/%Y"}}</span></div>
-                      <div class="content">
-                        {{ post.excerpt }}
-                      </div>
-                    </div>
+            <div class="mb-20">
+              <div class="relative inline-block text-left">
+                <div class="flex items-center flex-nowrap">
+                  <span class="text-sm font-medium text-gray-700 mr-2">Tags:</span>
+                  <button type="button" class="inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-navysciam" id="menu-button" aria-expanded="false" aria-haspopup="true">
+                    Tous les tags
+                    <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+            
+                <div class="hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                  <div class="py-1" role="none">
+                    {% assign tagsTries = site.tags | sort %}
+                    {% for tag in tagsTries %}
+                      {% assign tagName = tag | first %} 
+                      {% assign tagNameRaw = tagName | downcase | slugify: "raw" %} 
+                      {% assign postsCount = tag | last | size %} 
+                      <a href="{{ '/tag/' | relative_url }}{{ tagNameRaw }}/" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">
+                        {{ tagName }} ({{ postsCount }})
+                      </a>
+                    {% endfor %}
                   </div>
                 </div>
               </div>
-            </article>
-            {% endfor %}
-          </ul>
+            </div>
+             
+            <!-- All Articles Section -->
+            <div class="flex">
+              <div>
+                <div class="flex items-center mb-5">
+                  <p class="text-3xl font-bold mr-5">Tous les articles</p>
+                  <button class="bg-transparent text-navysciam hover:bg-navysciam font-semibold hover:text-white py-2 px-4 border border-navysciam hover:border-transparent rounded">
+                    Voir tous
+                  </button>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                  {% for post in paginator.posts limit:3 %}
+                  <div class="bg-white rounded overflow-hidden shadow-lg">
+                    <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}" class="object-cover w-full h-48 border-slate-100 rounded-t-lg" alt="Image article">
+                    <div class="p-6">
+                      <h3 class="text-xl font-bold mb-2"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+                      <p class="text-sm text-gray-500 mb-4">Écrit par {{ post.author | append: ', ' | append: post.date | date: "%d/%m/%Y" }}</p>
+                      <p class="truncate">{{ post.excerpt }}</p>
+                      <a href="{{ post.url | relative_url }}" class="text-navysciam hover:text-yellowsciam transition duration-300 ease-in-out">Lire la suite...</a>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
 
-          <!-- 
-            Boutons de pagination
-          -->
-          {% if paginator.total_pages > 1 %}
+            <hr class="my-28 bg-slate-200"/>
+            <!-- Last Articles -->
+            <div class="mt-28 mb-28">
+              <div class="flex items-center mb-5">
+                <p class="text-3xl font-bold mr-5">Derniers Articles</p>
+                <button class="bg-transparent text-navysciam hover:bg-navysciam font-semibold hover:text-white py-2 px-4 border border-navysciam hover:border-transparent rounded">
+                  Voir tous
+                </button>
+              </div>
+              <div class="grid grid-cols-4 gap-4">
+                {% assign posts = paginator.posts | slice: 3, 4 %}
+                {% for post in posts %}
+                <div class="bg-white rounded overflow-hidden shadow-lg">
+                  <div class="h-48 flex items-center justify-center overflow-hidden">
+                    <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}" class="object-contain max-w-full max-h-full" alt="Image of {{ post.title }}">
+                  </div>
+                  <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2 truncate"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+                    <p class="text-sm text-gray-500 mb-4 truncate">Written by {{ post.author | append: ', ' | append: post.date | date: "%d/%m/%Y" }}"></p>
+                    <p class="truncate">{{ post.excerpt }}</p>
+                    <a href="{{ post.url | relative_url }}" class="text-navysciam hover:text-yellowsciam transition duration-300 ease-in-out">Read more...</a>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            
+            <hr class="my-28 bg-slate-200"/>
+            <!-- Sciam's choice -->
+            <div class="mt-28 mb-28">
+              <div class="flex items-center mb-5">
+                <p class="text-3xl font-bold mr-5">Le choix de SCIAM</p>
+                <button class="bg-transparent text-navysciam hover:bg-navysciam font-semibold hover:text-white py-2 px-4 border border-navysciam hover:border-transparent rounded">
+                  Voir tous
+                </button>
+              </div>
+              <div class="grid grid-cols-3 gap-4">
+                {% assign posts = paginator.posts | slice: 6, 3 %} 
+                {% for post in posts %}
+                <div class="bg-white rounded overflow-hidden shadow-lg">
+                  <div class="h-48 flex items-center justify-center overflow-hidden">
+                    <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}" class="object-contain max-w-full max-h-full" alt="Image of {{ post.title }}">
+                  </div>
+                  <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2 truncate"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+                    <p class="text-sm text-gray-500 mb-4 truncate">Written by {{ post.author | append: ', ' | append: post.date | date: "%d/%m/%Y" }}"></p>
+                    <p class="truncate">{{ post.excerpt }}</p>
+                    <a href="{{ post.url | relative_url }}" class="text-navysciam hover:text-yellowsciam transition duration-300 ease-in-out">Read more...</a>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- 
+              Boutons de pagination
+            -->
+            {% if paginator.total_pages > 1 %}
           <div class="pager">
-
-            <div class="pagination">
+            <div class="flex justify-center items-center mb-12">
               {% if paginator.previous_page %}
-                <a style="width:180px;" href="{{ paginator.previous_page_path | relative_url | replace: '//', '/' }}">&larr; Articles précédents</a>
+                <a class="flex justify-center items-center w-45 h-10 border border-gray-200 bg-gray-100 hover:bg-gray-200 cursor-pointer" href="{{ paginator.previous_page_path | relative_url | replace: '//', '/' }}">&larr; Articles précédents</a>
             {% endif %}
 
             {% assign first_page_path = paginator.first_page_path | default: site.paginate_path | replace: 'page:num', '' | replace: '//', '/' | relative_url %}
               
               {% comment %} First page {% endcomment %}
               {% if paginator.page == 1 %}
-                <a href="#" class="disabled current">1</a>
+                <a href="#" class="disabled current flex justify-center items-center w-10 h-10 border border-gray-200 bg-gray-100 text-gray-500 pointer-events-none">1</a>
               {% else %}
-                <a href="{{ first_page_path }}">1</a>
+                <a href="{{ first_page_path }}" class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">1</a>
               {% endif %}
               
               {% assign page_start = 2 %}
               {% if paginator.page > 4 %}
                 {% assign page_start = paginator.page | minus: 2 %}
                 {% comment %} Ellipsis for truncated links {% endcomment %}
-                <a href="#" class="disabled">&hellip;</a>
+                <a href="#" class="disabled flex justify-center items-center w-10 h-10 border border-gray-200 text-gray-500 pointer-events-none">&hellip;</a>
               {% endif %}
               
               {% assign page_end = paginator.total_pages | minus: 1 %}
@@ -162,7 +187,7 @@ pagination:
           
               {% for index in (page_start..page_end) %}
                 {% if index == paginator.page %}
-                <a href="{{ site.paginate_path | replace: ':num', index | replace: '//', '/' | relative_url }}" class="disabled active">{{ index }}</a>
+                <a href="{{ site.paginate_path | replace: ':num', index | replace: '//', '/' | relative_url }}" class="disabled active flex justify-center items-center w-10 h-10 border border-gray-200 bg-gray-100 text-gray-500 pointer-events-none">{{ index }}</a>
                 {% else %}
                   {% comment %} Distance from current page and this link {% endcomment %}
                   {% assign dist = paginator.page | minus: index %}
@@ -170,34 +195,31 @@ pagination:
                     {% comment %} Distance must be a positive value {% endcomment %}
                     {% assign dist = 0 | minus: dist %}
                   {% endif %}
-                  <a href="{{ site.paginate_path | replace: ':num', index | relative_url }}">{{ index }}</a>
+                  <a href="{{ site.paginate_path | replace: ':num', index | relative_url }}" class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">{{ index }}</a>
                 {% endif %}
               {% endfor %}
           
               {% comment %} Ellipsis for truncated links {% endcomment %}
               {% if pages_to_end > 3 %}
-                <span>&hellip;</span>
+                <span class="flex justify-center items-center w-10 h-10 border border-gray-200 text-gray-500 pointer-events-none">&hellip;</span>
               {% endif %}
           
               {% if paginator.page == paginator.total_pages %}
-                <a href="#" class="disabled current">{{ paginator.page }}</a>
+                <a href="#" class="disabled current flex justify-center items-center w-10 h-10 border border-gray-200 bg-gray-100 text-gray-500 pointer-events-none">{{ paginator.page }}</a>
               {% else %}
-                <a href="{{ site.paginate_path | replace: ':num', paginator.total_pages | replace: '//', '/' | relative_url }}">{{ paginator.total_pages }}</a>
+                <a href="{{ site.paginate_path | replace: ':num', paginator.total_pages | replace: '//', '/' | relative_url }}" class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">{{ paginator.total_pages }}</a>
               {% endif %}
           
 
               {% if paginator.next_page %}
-                  <a style="width:180px;" href="{{ paginator.next_page_path | relative_url | replace: '//', '/' }}">Articles suivants &rarr;</a>
+                  <a href="{{ paginator.next_page_path | relative_url | replace: '//', '/' }}"  class="flex justify-center items-center w-45 h-10 border border-gray-200 bg-gray-100 hover:bg-gray-200 cursor-pointer">Articles suivants &rarr;</a>
               {% endif %}
             </div>
+            </div>
+            {% endif %}
           </div>
-          {% endif %}
-        </div>
       </div>
-      <!-- <div class="col-lg-3">
-        <div class="follow-scroll hidden-xs">
-          <a class="twitter-timeline" data-height="1200" href="https://twitter.com/{{ site.social-network-links.twitter }}?ref_src=twsrc%5Etfw">Tweets by SCIAM</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
-        </div>
-      </div> -->
     </div>
   </div>
+</div>
+
