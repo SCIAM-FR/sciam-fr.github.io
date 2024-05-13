@@ -32,6 +32,10 @@ html {
   -ms-text-size-adjust: 100%;
 }
 
+body {
+  @apply font-sans;
+}
+
 p {
   font-size: 1.15em;
   line-height: 1.6;
