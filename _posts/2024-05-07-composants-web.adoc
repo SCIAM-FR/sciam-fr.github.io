@@ -242,6 +242,8 @@ L'un des aspects les plus intéressants et les plus importants des composants we
 
 Vous trouverez plus de détails sur la prise en charge des composants web dans différents frameworks sur le site Web https://custom-elements-everywhere.com/[Custom Elements Everywhere^].
 
+Si vous souhaitez consulter les exemples d'intégration facile des composants web créés avec Stencil dans des frameworks majeurs tels que React, Angular et Vue, vous pouvez consulter https://github.com/kompike/stencil-wc-demo[ce projet^] sur GitHub.
+
 == Conclusion
 
 Les composants web ont révolutionné le développement web en offrant une approche normalisée pour créer des composants réutilisables. Des bibliothèques comme Lit facilitent l'utilisation des composants web, rendant le développement plus efficace et familier. En comprenant l'évolution, les avantages et les limites des composants web, les développeurs peuvent prendre des décisions éclairées quant à leur utilisation dans des projets web modernes.
