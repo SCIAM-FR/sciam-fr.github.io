@@ -68,9 +68,8 @@ plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
   - jekyll-toc
-  # - jekyll-json
   - jekyll-postcss
-
+  
 postcss:
   cache: false
 

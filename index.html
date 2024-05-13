@@ -12,9 +12,10 @@ pagination:
 </div>
 
 <div class="grid grid-cols-12 gap-4 py-4 ">
+  <!-- First Article Section -->
   <div class="col-span-12 sm:col-span-8 flex items-center justify-center rounded-lg pr-2 pl-28">
     <div class="bg-white rounded overflow-hidden shadow-lg">
-      <img src="{{ '/images/vignettes/angular17.png' | relative_url }}" class="w-full h-auto mb-4 rounded-lg" alt="Image article">
+      <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}" class="w-full h-auto mb-4 rounded-lg" alt="Image article">
       <div class="px-6 py-4">
         <div class="text-2xl font-bold mb-2"><a href="{{ paginator.posts.first.url | relative_url }}">{{ paginator.posts.first.title }}</a></div>
           <p class="text-sm text-gray-500 mb-4">Écrit par {{ paginator.posts.first.author | append: ', ' | append: paginator.posts.first.date | date: "%d/%m/%Y" }}</p>
