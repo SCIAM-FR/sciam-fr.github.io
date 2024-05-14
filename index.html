@@ -111,19 +111,19 @@ pagination:
                 <div class="flex items-center mb-5">
                   <p class="text-3xl font-bold mr-5">Tous les articles</p>
                   <button class="bg-transparent text-navysciam hover:bg-navysciam font-semibold hover:text-white py-2 px-4 border border-navysciam hover:border-transparent rounded">
-                    <a href="{{ posts.url | relative_url }}" class="bg-transparent text-navysciam hover:bg-navysciam font-semibold hover:text-white py-2 px-4 border border-navysciam hover:border-transparent rounded">
+                    <a href="{{ posts.url | relative_url }}">
                       Voir tous
                     </a>
                   </button>
                 </div>
                 <div class="grid grid-cols-3 gap-4">
                   {% for post in paginator.posts limit:3 %}
-                  <div class="bg-white rounded overflow-hidden shadow-lg">
+                  <div class="bg-white rounded overflow-hidden shadow-lg flex flex-col">
                     <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}" class="object-cover w-full h-48 border-slate-100 rounded-t-lg" alt="Image article">
-                    <div class="p-6">
+                    <div class="p-6 flex flex-col">
                       <h3 class="text-xl font-bold mb-2"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
                       <p class="text-sm text-gray-500 mb-4">Écrit par {{ post.author | append: ', ' | append: post.date | date: "%d/%m/%Y" }}</p>
-                      <p>{{ post.excerpt }}</p>
+                      <p class="flex-grow overflow-hidden text-ellipsis mb-4" style="max-height: 3rem; overflow-y: hidden;">{{ post.excerpt }}</p>
                       <a href="{{ post.url | relative_url }}" class="text-navysciam hover:text-yellowsciam transition duration-300 ease-in-out">Lire la suite...</a>
                     </div>
                     <div class="px-6 pt-4 pb-2">
