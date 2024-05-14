@@ -5,40 +5,61 @@ pagination:
 ---
 
 <div class="grid grid-cols-12 gap-4">
-  <div class="col-span-12 sm:col-span-12 flex flex-col items-center justify-center rounded-lg p-20">
+  <div class="col-span-12 sm:col-span-12 flex flex-col items-center justify-center rounded-lg pt-0 pb-5 px-20">
     <p class="text-5xl font-bold text-navysciam">Blog de SCIAM</p>
     <p class="mt-1 text-xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</p>
   </div>
 </div>
 
-<div class="grid grid-cols-12 gap-4 py-4 ">
+<div class="grid grid-cols-12 gap-4 py-5">
   <!-- First Article Section -->
   <div class="col-span-12 sm:col-span-8 flex items-center justify-center rounded-lg pr-2 pl-28">
     <div class="bg-white rounded overflow-hidden shadow-lg">
-      <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}" class="w-full h-auto mb-4 rounded-lg" alt="Image article">
+      {% for post in paginator.posts limit:1 %}
+      <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}" class="w-full h-5/6 mb-4 rounded-lg" alt="Image article">
       <div class="px-6 py-4">
-        <div class="text-2xl font-bold mb-2"><a href="{{ paginator.posts.first.url | relative_url }}">{{ paginator.posts.first.title }}</a></div>
+        <div class="text-2xl font-bold mb-2"><a href="{{ paginator.posts.first.url | relative_url }}" class="hover:text-navysciam hover:decoration-yellowsciam">{{ paginator.posts.first.title }}</a></div>
           <p class="text-sm text-gray-500 mb-4">Écrit par {{ paginator.posts.first.author | append: ', ' | append: paginator.posts.first.date | date: "%d/%m/%Y" }}</p>
           <p class="mb-4">{{ paginator.posts.first.excerpt }}</p>
-          <a href="#" class="text-navysciam hover:text-yellowsciam transition">Lire la suite...</a>
+          <a href="{{ post.url | relative_url }} class="text-navysciam hover:text-yellowsciam transition">Lire la suite...</a>
       </div>
       <div class="px-6 pt-4 pb-2">
-        {% if paginator.posts.first.tags %}
-        {% for tag in paginator.posts.first.tags %}
-        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ tag }}</span>
+        {% for tag in post.tags %}
+        {% assign tagSlug = tag | downcase | slugify: "raw" %}
+        <a href="{{ '/tag/' | relative_url }}{{ tagSlug }}/" 
+           class="inline-block rounded-full border-{{ tagSlug }}-border bg-{{ tagSlug }}-bg text-{{ tagSlug }}-text px-3 py-1 text-sm font-semibold mr-2 mb-2">
+           #{{ tag }}
+        </a>
         {% endfor %}
-        {% endif %}
       </div>
+      {% endfor %}
     </div>
   </div>
 
-  <div class="col-span-12 sm:col-span-4 rounded-lg pr-28 pl-2">
+  <div class="col-span-12 sm:col-span-4 flex flex-wrap items-center justify-start rounded-md shadow-lg mr-28 px-5">
+    <p class="text-2xl font-bold text-navysciam">Tags:</p>
+    <div class="relative inline-block text-left">
+      {% assign tagsTries = site.tags | sort %}
+      {% for tag in tagsTries limit: 35 %}
+        {% assign tagName = tag | first %} 
+        {% assign tagNameRaw = tagName | downcase | slugify: "raw" %}
+        <a href="{{ '/tag/' | relative_url }}{{ tagNameRaw }}/" class="m-1">
+          <button id="categoryBtn" 
+                class="rounded-full px-3 my-2 min-w-[100px] transition-colors duration-300 border-{{ tagNameRaw }}-border bg-{{ tagNameRaw }}-bg text-{{ tagNameRaw }}-text">
+          {{ tagName }}
+          </button>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- <div class="col-span-12 sm:col-span-4 rounded-lg pr-28 pl-2">
     <div class="bg-white rounded overflow-hidden shadow-lg">
       <div class="follow-scroll hidden-xs">
         <a class="twitter-timeline" data-height="510" href="https://twitter.com/{{ site.social-network-links.twitter }}?ref_src=twsrc%5Etfw">Tweets by SCIAM</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
 
 
@@ -47,6 +68,7 @@ pagination:
     <div class="container">
       <div class="w-full">
           <div class="mb-6">
+            
             <hr class="my-28 bg-slate-200"/>
 
             <div class="mb-20">
@@ -99,8 +121,17 @@ pagination:
                     <div class="p-6">
                       <h3 class="text-xl font-bold mb-2"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
                       <p class="text-sm text-gray-500 mb-4">Écrit par {{ post.author | append: ', ' | append: post.date | date: "%d/%m/%Y" }}</p>
-                      <p class="truncate">{{ post.excerpt }}</p>
+                      <p>{{ post.excerpt }}</p>
                       <a href="{{ post.url | relative_url }}" class="text-navysciam hover:text-yellowsciam transition duration-300 ease-in-out">Lire la suite...</a>
+                    </div>
+                    <div class="px-6 pt-4 pb-2">
+                      {% for tag in post.tags %}
+                      {% assign tagSlug = tag | downcase | slugify: "raw" %}
+                      <a href="{{ '/tag/' | relative_url }}{{ tagSlug }}/" 
+                         class="inline-block rounded-full border-{{ tagSlug }}-border bg-{{ tagSlug }}-bg text-{{ tagSlug }}-text px-3 py-1 text-sm font-semibold mr-2 mb-2">
+                         #{{ tag }}
+                      </a>
+                      {% endfor %}
                     </div>
                   </div>
                   {% endfor %}
@@ -130,6 +161,15 @@ pagination:
                     <p class="truncate">{{ post.excerpt }}</p>
                     <a href="{{ post.url | relative_url }}" class="text-navysciam hover:text-yellowsciam transition duration-300 ease-in-out">Read more...</a>
                   </div>
+                  <div class="px-6 pt-4 pb-2">
+                    {% for tag in post.tags %}
+                    {% assign tagSlug = tag | downcase | slugify: "raw" %}
+                    <a href="{{ '/tag/' | relative_url }}{{ tagSlug }}/" 
+                       class="inline-block rounded-full border-{{ tagSlug }}-border bg-{{ tagSlug }}-bg text-{{ tagSlug }}-text px-3 py-1 text-sm font-semibold mr-2 mb-2">
+                       #{{ tag }}
+                    </a>
+                    {% endfor %}
+                  </div>
                 </div>
                 {% endfor %}
               </div>
@@ -157,14 +197,21 @@ pagination:
                     <p class="truncate">{{ post.excerpt }}</p>
                     <a href="{{ post.url | relative_url }}" class="text-navysciam hover:text-yellowsciam transition duration-300 ease-in-out">Read more...</a>
                   </div>
+                  <div class="px-6 pt-4 pb-2">
+                    {% for tag in post.tags %}
+                    {% assign tagSlug = tag | downcase | slugify: "raw" %}
+                    <a href="{{ '/tag/' | relative_url }}{{ tagSlug }}/" 
+                       class="inline-block rounded-full border-{{ tagSlug }}-border bg-{{ tagSlug }}-bg text-{{ tagSlug }}-text px-3 py-1 text-sm font-semibold mr-2 mb-2">
+                       #{{ tag }}
+                    </a>
+                    {% endfor %}
+                  </div>
                 </div>
                 {% endfor %}
               </div>
             </div>
 
-            <!-- 
-              Boutons de pagination
-            -->
+            <!-- Boutons de pagination -->
             {% if paginator.total_pages > 1 %}
           <div class="pager">
             <div class="flex justify-center items-center mb-12">
