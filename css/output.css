@@ -941,6 +941,10 @@ video {
   border-width: 1px;
 }
 
+.border-b {
+  border-bottom-width: 1px;
+}
+
 .border-gray-200 {
   --tw-border-opacity: 1;
   border-color: rgb(229 231 235 / var(--tw-border-opacity));
@@ -1662,6 +1666,11 @@ ul.twitter-list li.nav-header {
   font-size: xl;
   font-weight: regular;
 }
+
+/* #tag-menu {
+  max-height: 140px;
+  overflow-y: auto;
+} */
 
 /* .footer a:hover {
   color: #384a72;

@@ -370,6 +370,11 @@ ul.twitter-list li.nav-header {
   font-weight: regular;
 }
 
+#tag-menu {
+  max-height: 140px;
+  overflow-y: auto;
+}
+
 /* .footer a:hover {
   color: #384a72;
 } */
