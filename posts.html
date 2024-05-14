@@ -1,0 +1,30 @@
+---
+layout: default
+title: "Tous les articles"
+---
+
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-bold mb-5">Tous les articles</h1>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {% for post in site.posts %}
+        <div class="bg-white rounded overflow-hidden shadow-lg">
+            <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}" class="object-cover w-full h-48 border-slate-100 rounded-t-lg" alt="Image article">
+            <div class="p-6">
+                <h3 class="text-xl font-bold mb-2"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+                <p class="text-sm text-gray-500 mb-4">Écrit par {{ post.author | append: ', ' | append: post.date | date: "%d/%m/%Y" }}</p>
+                <p>{{ post.excerpt }}</p>
+                <a href="{{ post.url | relative_url }}" class="text-navysciam hover:text-yellowsciam transition duration-300 ease-in-out">Lire la suite...</a>
+            </div>
+            <div class="px-6 pt-4 pb-2">
+              {% for tag in post.tags %}
+              {% assign tagSlug = tag | downcase | slugify: "raw" %}
+              <a href="{{ '/tag/' | relative_url }}{{ tagSlug }}/" 
+                 class="inline-block rounded-full border-{{ tagSlug }}-border bg-{{ tagSlug }}-bg text-{{ tagSlug }}-text px-3 py-1 text-sm font-semibold mr-2 mb-2">
+                 #{{ tag }}
+              </a>
+              {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

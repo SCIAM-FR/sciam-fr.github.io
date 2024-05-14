@@ -21,7 +21,7 @@ pagination:
         <div class="text-2xl font-bold mb-2"><a href="{{ paginator.posts.first.url | relative_url }}" class="hover:text-navysciam hover:decoration-yellowsciam">{{ paginator.posts.first.title }}</a></div>
           <p class="text-sm text-gray-500 mb-4">Écrit par {{ paginator.posts.first.author | append: ', ' | append: paginator.posts.first.date | date: "%d/%m/%Y" }}</p>
           <p class="mb-4">{{ paginator.posts.first.excerpt }}</p>
-          <a href="{{ post.url | relative_url }} class="text-navysciam hover:text-yellowsciam transition">Lire la suite...</a>
+          <a href="{{ paginator.posts.first.url | relative_url }} class="text-navysciam hover:text-yellowsciam transition">Lire la suite...</a>
       </div>
       <div class="px-6 pt-4 pb-2">
         {% for tag in post.tags %}
@@ -76,7 +76,7 @@ pagination:
                 <div class="flex items-center flex-nowrap">
                   <span class="text-sm font-medium text-gray-700 mr-2">Tags:</span>
                   <button class="select-button inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-navysciam" aria-controls="tag-menu" id="menu-button" aria-expanded="false" aria-haspopup="true">
-                    Tous les tags
+                    Voir tous
                     <svg class="icon-open hidden h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                       <path d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -111,7 +111,9 @@ pagination:
                 <div class="flex items-center mb-5">
                   <p class="text-3xl font-bold mr-5">Tous les articles</p>
                   <button class="bg-transparent text-navysciam hover:bg-navysciam font-semibold hover:text-white py-2 px-4 border border-navysciam hover:border-transparent rounded">
-                    Voir tous
+                    <a href="{{ posts.url | relative_url }}" class="bg-transparent text-navysciam hover:bg-navysciam font-semibold hover:text-white py-2 px-4 border border-navysciam hover:border-transparent rounded">
+                      Voir tous
+                    </a>
                   </button>
                 </div>
                 <div class="grid grid-cols-3 gap-4">
@@ -157,9 +159,9 @@ pagination:
                   </div>
                   <div class="p-6">
                     <h3 class="text-xl font-bold mb-2 truncate"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
-                    <p class="text-sm text-gray-500 mb-4 truncate">Written by {{ post.author | append: ', ' | append: post.date | date: "%d/%m/%Y" }}"></p>
+                    <p class="text-sm text-gray-500 mb-4 truncate">Ecrit par {{ post.author | append: ', ' | append: post.date | date: "%d/%m/%Y" }}"></p>
                     <p class="truncate">{{ post.excerpt }}</p>
-                    <a href="{{ post.url | relative_url }}" class="text-navysciam hover:text-yellowsciam transition duration-300 ease-in-out">Read more...</a>
+                    <a href="{{ post.url | relative_url }}" class="text-navysciam hover:text-yellowsciam transition duration-300 ease-in-out">Lire la suite...</a>
                   </div>
                   <div class="px-6 pt-4 pb-2">
                     {% for tag in post.tags %}
@@ -193,7 +195,7 @@ pagination:
                   </div>
                   <div class="p-6">
                     <h3 class="text-xl font-bold mb-2 truncate"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
-                    <p class="text-sm text-gray-500 mb-4 truncate">Written by {{ post.author | append: ', ' | append: post.date | date: "%d/%m/%Y" }}"></p>
+                    <p class="text-sm text-gray-500 mb-4 truncate">Ecrit par {{ post.author | append: ', ' | append: post.date | date: "%d/%m/%Y" }}"></p>
                     <p class="truncate">{{ post.excerpt }}</p>
                     <a href="{{ post.url | relative_url }}" class="text-navysciam hover:text-yellowsciam transition duration-300 ease-in-out">Read more...</a>
                   </div>
