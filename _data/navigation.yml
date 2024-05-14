@@ -1,7 +1,7 @@
 - title: Accueil
   url: '/'
-- title: Tags
-  url: '/tags/'
+- title: Sujets
+  url: '/sujets/'
 - title: Auteurs
   url: '/authors/'
 - title: Contact
