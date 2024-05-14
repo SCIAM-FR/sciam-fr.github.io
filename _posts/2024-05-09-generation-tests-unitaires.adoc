@@ -1,0 +1,149 @@
+:showtitle:
+:page-navtitle: La génération de tests unitaires en Java avec Randoop
+:page-excerpt: Découvrez comment générer automatiquement des tests unitaires avec l'outil Randoop
+:layout: post
+:author: ericdiallo
+:page-tags: [Tutoriel, Java, Tests]
+:page-vignette: randoop-logo.png
+
+= La génération de Tests Unitaires en Java avec Randoop
+L'intégration de tests unitaires dans le développement logiciel est cruciale pour garantir la fiabilité et la robustesse des applications. Toutefois, la création manuelle de ces tests peut être une tâche laborieuse et sujette à des erreurs, notamment sur un grand volume de code existant. Heureusement, il existe des outils comme Randoop, conçu pour automatiser ce processus fastidieux.
+
+== Randoop, un outil de génération de tests unitaires Java
+Randoop est un outil open-source développé par des chercheurs de l'Université du Maryland. Son objectif principal est de générer automatiquement des suites de tests unitaires pour les applications Java. Il utilise une approche basée sur la génération aléatoire pour explorer le comportement des classes Java et produire des suites de tests exhaustives au format JUnit.
+
+== Fonctionnement de Randoop
+Le fonctionnement de Randoop repose sur plusieurs étapes :
+
+1. **Instrumentation du code** : Randoop analyse les classes Java cibles et les modifie pour surveiller leur comportement lors de l'exécution des tests.
+2. **Génération de séquences d'appels** : À l'aide d'une approche basée sur la recherche aléatoire, Randoop génère des séquences d'appels de méthodes pour chaque classe cible.
+3. **Exécution des tests :** Les séquences d'appels générées sont exécutées sur la classe cible, et les résultats de chaque appel sont enregistrés.
+4. **Élimination des redondances** : Randoop élimine les tests redondants et les assertions inutiles afin de produire une suite de tests concise mais efficace.
+5. **Génération de code de test :** Enfin, Randoop génère du code de test Java prêt à être intégré dans le projet.
+
+== Cas d'utilisation: Génération de tests unitaires sur les classes Calculator et UserResource
+L'utilisation de Randoop est assez simple. Nous testerons ici la génération de tests unitaires sur les classes suivantes: 
+
+[source, java]
+    package com.voted;
+    public class Calculator {
+        public int add(int a, int b) {
+            return a + b;
+        }
+        public int substract(int a, int b) {
+            return a - b;
+        }
+        public int multiply(int a, int b) {
+            return a * b;
+        }
+        public int divide(int a, int b) {
+            if (b == 0) {
+                throw new IllegalArgumentException("b = 0");
+            }
+            return a / b;
+        }
+    }
+
+[source, java]
+    package com.voted;
+    import jakarta.transaction.Transactional;
+    import jakarta.ws.rs.*;
+    import jakarta.ws.rs.core.MediaType;
+    import jakarta.ws.rs.core.Response;
+    import java.util.List;
+    /**
+    * REST API for Elector (Users of the application)
+    */
+    @Path("/user")
+    public class UserResource {
+        /**
+        * Returns a list of all electors
+        * @return List of all electors
+        */
+        @GET
+        @Produces(MediaType.APPLICATION_JSON)
+        public List<Elector> electors() {
+            return Elector.listAll();
+        }
+        /**
+        * Get an elector by email
+        */
+        @GET
+        @Path("/{email}")
+        @Produces(MediaType.APPLICATION_JSON)
+        public Elector findByEmail(String email) {
+            return Elector.findByEmail(email);
+        }
+        /**
+        * Register a new elector.
+        * @param elector - Elector to register
+        * @return The new elector.
+        */
+        @POST
+        @Produces(MediaType.APPLICATION_JSON)
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Transactional
+        public Response saveElector(Elector elector) {
+            elector.persist();
+            return Response.status(Response.Status.CREATED).entity(elector).build();
+        }
+    }
+
+=== Étape 1 : Installation
+La dernière version de Randoop se trouve https://randoop.github.io/randoop/[ici]. Il est distribué sous la forme d'un fichier JAR exécutable, ce qui le rend facile à utiliser sans configuration supplémentaire.
+
+=== Étape 2 : Configuration
+Randoop peut être configuré pour générer des tests selon des besoins spécifiques. On peut spécifier les packages à inclure ou exclure, définir des limites sur le nombre de tests à générer, et même contrôler la complexité des tests produits.
+(Expliciter quelques options de configuration)
+
+=== Étape 3 : Exécution
+Pour exécuter Randoop sur ces classes, on utilise la commande suivante
+
+[source]
+java -classpath ${RANDOOP_JAR} randoop.main.Main gentests --classlist=myclasses.txt --output-limit=20
+
+Le fichier myclasses.txt contient les classes à tester:
+
+[source]
+com.voted.UserResource
+com.voted.Calculator
+
+Randoop générera alors deux types de tests unitaires écrits dans deux fichiers distincts au format JUnit :
+
+    * Les tests qui révèlent des erreurs: ils échouent lorsqu'ils sont exécutés et indiquent des erreurs potentielles dans le code (ErrorTestX.java)
+
+    * Les tests de non régression: qui passent lorsqu'ils sont exécutés et qui peuvent être ensuite intégrés à une suite de tests de non régression (RegressionTestX.java).
+
+(Sortie des tests générés pour ces classes)
+
+
+=== Étape 4 : Évaluation des Tests
+Enfin, on peut exécuter les tests JUnit générés par Randoop et analyser les résultats pour détecter d'éventuels problèmes de comportement ou de performance.
+
+
+== Avantages
+Cet outil présente plusieurs avantages :
+
+* **Couverture étendue des tests** :
+Randoop est capable de générer une grande variété de tests, ce qui augmente la couverture du code. Cela peut aider à identifier des cas d'utilisation non envisagés lors de la conception initiale.
+
+* **Découverte de bugs** :
+En explorant différents chemins d'exécution du code, Randoop peut révéler des bugs qui n'auraient pas été détectés par des tests manuels. Cela permet une détection précoce et une correction rapide des erreurs.
+
+* **Gain de temps** :
+La génération automatisée de tests avec Randoop permet d'économiser du temps et des efforts, notamment dans le cas d'un projet contenant beaucoup de code legacy. En effetn dans ce cas la création manuelle de tests peut être fastidieuse et sujette à des erreurs humaines.
+
+== Quelques conseils 
+Bien que Randoop soit un outil puissant, son efficacité dépend en partie de la manière dont il est utilisé. Voici quelques conseils pour tirer le meilleur parti de Randoop :
+
+- **Limiter la portée des tests** : Ne tester que les classes pertinentes pour votre application. Tester des classes inutiles peut entraîner une génération excessive de tests et ralentir le processus.
+- **Analyser les résultats** : Examiner attentivement les résultats produits par Randoop. S'assurer de comprendre les cas de test générés et de les intégrer à votre suite de tests existante.
+- **Utiliser des options de configuration** : Randoop offre de nombreuses options de configuration (gentests, minimize, nondeterminism ...) pour personnaliser son comportement.
+- **Intégrer Randoop dans votre processus CI/CD**: Intégrer Randoop dans un pipeline de développement continu peut aider à identifier rapidement les problèmes de régression et à garantir la qualité du code.
+
+== Conclusion
+La génération automatique de tests unitaires avec Randoop offre un moyen efficace d'améliorer la qualité et la fiabilité du code Java. En utilisant cet outil de manière judicieuse et en comprenant ses résultats, il est possible d'accélérer le processus de test tout en garantissant une couverture complète et rigoureuse du code.
+
+== Liens utiles
+* https://homes.cs.washington.edu/~mernst/pubs/maintainable-tests-ase2011.pdf[Scaling Up Automated Test Generation: Automatically Generating Maintainable Regression Unit Tests for Programs]
+* https://randoop.github.io/randoop/manual/index.html[Randoop Manual]
