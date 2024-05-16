@@ -609,8 +609,9 @@ module.exports = {
         sans: ['Noyh Geometric', 'open-sans', 'sans-serif']
       },
       lineClamp: {
-        // Truncate text after 3 lines
+        '1': '1',
         '2': '2',
+        '3': '3',
       },
     },
   },
