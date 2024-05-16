@@ -10,5 +10,8 @@
   },
   "scripts": {
     "build:css": "npx tailwindcss -i ./css/styles.css -o ./css/output.css --watch"
+  },
+  "dependencies": {
+    "lunr": "^2.3.9"
   }
 }

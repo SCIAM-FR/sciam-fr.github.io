@@ -60,17 +60,23 @@
                   {{ item.title }}
                 </a>
               </li>
-              {% endfor %}
-               <!-- <button id="searchButton" type="button" class="p-2 flex flex-row" onclick="toggleSearchPopup()">
+              {% endfor %}  
+              <!-- {% include search.html %} -->
+              <!-- <button id="searchButton" type="button" class="p-2 flex flex-row" onclick="toggleSearchPopup()">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </button> -->
-            </ul>
-              <!-- <div id="searchPopup" class="hidden absolute center-full right-0 mt-2 w-full sm:w-96 bg-white shadow-lg p-4">
-    <input type="text" class="w-full p-2 border border-gray-300 rounded" placeholder="Rechercher..." autofocus>
-  </div>    
-  {% include search-lunr.html %} -->
+            </ul> 
+            <!-- <div id="searchPopup" class="hidden absolute center-full right-0 mt-2 w-full sm:w-96 bg-white shadow-lg p-4">
+                <form action="/_layouts/search.html" method="get">
+                <input type="text" id="search-box" class="w-full p-2 border border-gray-300 rounded" placeholder="Rechercher..." autofocus>
+                <input type="submit" value="search">
+                </form>
+            </div>
+            <ul id="search-result"></ul> -->
+          </div>    
+
           </div>
           <div class="flex justify-end items-center space-x-4 sm:hidden">
             <button type="button"
@@ -180,6 +186,8 @@
   </div>
   <script src="{{ 'js/nav.js' | relative_url }}"></script>
   <script src="{{ 'js/copy-to-clipboard.js' | relative_url }}"></script>
+  <script src="{{ 'js/search.js' | relative_url }}"></script>
+  <script src="{{ 'js/lunr.js' | relative_url }}"></script>
   {% include mathjax.html %}
 </body>
 
