@@ -15,6 +15,44 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   });
 
+// Gestion barre de recherche
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchButton = document.getElementById('searchButton');
+    const searchPopup = document.getElementById('searchPopup');
+  
+    // Fonction pour basculer la visibilité de la barre de recherche
+    function toggleSearchPopup() {
+      searchPopup.classList.toggle('hidden');
+      document.body.classList.toggle('backdrop-blur-md'); 
+    }
+  
+    // Écouteur d'événement pour le bouton de recherche
+    searchButton.addEventListener('click', (event) => {
+      event.stopPropagation(); // Empêche l'événement de cliquer sur le document
+      toggleSearchPopup();
+    });
+  
+    // Ferme la barre de recherche si l'utilisateur clique en dehors
+    document.addEventListener('click', (event) => {
+      if (!searchPopup.contains(event.target) && !searchButton.contains(event.target)) {
+        if (!searchPopup.classList.contains('hidden')) {
+          toggleSearchPopup();
+        }
+      }
+    });
+  
+    // Fermer avec la touche Esc
+    document.addEventListener('keydown', (event) => {
+      if (event.key === "Escape") {
+        if (!searchPopup.classList.contains('hidden')) {
+          toggleSearchPopup();
+        }
+      }
+    });
+  });
+
+
+
   // Ouverture et fermeture bouton menu générique
   document.addEventListener("DOMContentLoaded", function() {
     const selectButtons = document.querySelectorAll('.select-button');

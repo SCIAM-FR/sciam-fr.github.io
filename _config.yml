@@ -61,7 +61,6 @@ plugins:
   - jekyll-paginate-v2
   - jekyll-auto-authors
   - jekyll-asciidoc
-  # - jekyll-postcss
   - asciidoctor-diagram
   - liquid_reading_time
   - liquid_pluralize
@@ -70,10 +69,6 @@ plugins:
   - jekyll-seo-tag
   - jekyll-toc
  
-  
-# postcss:
-#   cache: false
-
 pagination:
   enabled: true
   per_page: 9

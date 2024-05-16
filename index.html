@@ -110,11 +110,11 @@ pagination:
               <div>
                 <div class="flex items-center mb-5">
                   <p class="text-3xl font-bold mr-5">Tous les articles</p>
-                  <button class="bg-transparent text-navysciam hover:bg-navysciam font-semibold hover:text-white py-2 px-4 border border-navysciam hover:border-transparent rounded">
-                    <a href="{{ posts.url | relative_url }}">
+                  <a href="/posts/">
+                    <button class="bg-transparent text-navysciam hover:bg-navysciam font-semibold hover:text-white py-2 px-4 border border-navysciam hover:border-transparent rounded">
                       Voir tous
-                    </a>
-                  </button>
+                    </button>
+                  </a>
                 </div>
                 <div class="grid grid-cols-3 gap-4">
                   {% for post in paginator.posts limit:3 %}

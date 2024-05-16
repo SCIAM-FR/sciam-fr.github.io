@@ -2,8 +2,6 @@
   url: '/'
 - title: Sujets
   url: '/sujets/'
-- title: Posts
-  url: '/posts/'
 - title: Auteurs
   url: '/authors/'
 - title: Contact

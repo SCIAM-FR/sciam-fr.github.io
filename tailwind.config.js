@@ -603,7 +603,7 @@ module.exports = {
           bg: '#FFCCFF',
           border: '#FF99FF',
           text: '#CC00CC',
-  },
+        },
       },
       fontFamily: {
         sans: ['Noyh Geometric', 'open-sans', 'sans-serif']
@@ -612,9 +612,8 @@ module.exports = {
         // Truncate text after 3 lines
         '2': '2',
       },
+
     },
   },
-  plugins: [
-    require('@tailwindcss/line-clamp'),
-  ]
+  plugins: [],
 }
