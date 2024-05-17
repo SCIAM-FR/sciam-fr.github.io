@@ -77,15 +77,15 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   // Filter et rechercher dans le bouton menu générique
-  document.addEventListener('DOMContentLoaded', function() {
-    const tagFilter = document.querySelector('.tag-filter');
-    const tagLinks = document.querySelectorAll('#tag-menu a');
+  // document.addEventListener('DOMContentLoaded', function() {
+  //   const tagFilter = document.querySelector('.tag-filter');
+  //   const tagLinks = document.querySelectorAll('#tag-menu a');
 
-    tagFilter.addEventListener('input', function() {
-      const search = tagFilter.value.toLowerCase();
-      tagLinks.forEach(link => {
-        const tagText = link.textContent.toLowerCase();
-        link.style.display = tagText.includes(search) ? '' : 'none';
-      });
-    });
-  });
+  //   tagFilter.addEventListener('input', function() {
+  //     const search = tagFilter.value.toLowerCase();
+  //     tagLinks.forEach(link => {
+  //       const tagText = link.textContent.toLowerCase();
+  //       link.style.display = tagText.includes(search) ? '' : 'none';
+  //     });
+  //   });
+  // });
