@@ -50,7 +50,30 @@ La dernière version de Randoop se trouve https://randoop.github.io/randoop/[ici
 
 === Étape 2 : Configuration
 Randoop peut être configuré pour générer des tests selon des besoins spécifiques. On peut spécifier les packages à inclure ou exclure, définir des limites sur le nombre de tests à générer, et même contrôler la complexité des tests produits.
-(Expliciter quelques options de configuration)
+Randoop dispose de plusieurs options de fonctionnement. Les plus couramment utilisées sont :
+
+*  **--time-limit <seconds>**  
+   Spécifie la durée maximale pendant laquelle Randoop doit générer des tests, en secondes. Par exemple, `--time-limit 300` signifie que Randoop générera des tests pendant 5 minutes.
+
+* **--output-limit <count>**  
+   Définit le nombre maximal de tests que Randoop doit générer. Par exemple, `--output-limit 100` arrêtera la génération des tests après avoir créé 100 tests.
+
+* **--junit-output-dir <directory>**  
+   Indique le répertoire où Randoop doit écrire les tests JUnit générés. Par exemple, `--junit-output-dir ./tests` écrira les tests dans le répertoire `tests`.
+
+* **--test-package <package>**  
+   Spécifie le package pour les classes de test générées. Par exemple, `--test-package com.example.tests` générera des tests dans le package `com.example.tests`.
+
+* **--classlist <file>**  
+   Indique le fichier contenant la liste des classes à tester. Chaque ligne du fichier doit être le nom complet d'une classe. Par exemple, `--classlist classes_to_test.txt` utilisera les classes listées dans `classes_to_test.txt`.
+
+* **--omit-methods <pattern>**
+Indique à Randoop de ne pas prendre en compte les méthodes qui correspondent au pattern.
+
+* **--nondeterminism**
+indique à Randoop de prêter attention aux comportements non déterministes lors de la génération des tests.
+
+
 
 === Étape 3 : Exécution
 Pour exécuter Randoop sur ces classes, on utilise la commande suivante
