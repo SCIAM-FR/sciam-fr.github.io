@@ -3500,9 +3500,9 @@ ul.twitter-list li.nav-header {
   color: #9CA3AF;
 }
 
-.nav button, span, a:hover {
+/* .nav button, span, a:hover {
   color: #fff;
-}
+} */
 
 .banner-home {
   padding-top: 5em;
@@ -3529,6 +3529,32 @@ ul.twitter-list li.nav-header {
 
 /* .footer a:hover {
   color: #384a72;
+} */
+
+.backdrop-blur {
+  position: fixed;
+  inset: 0;
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  z-index: 40;
+  display: none;
+}
+
+.backdrop-blur-md {
+  -webkit-backdrop-filter: blur(12px);
+          backdrop-filter: blur(12px);
+}
+
+/* #searchPopup {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  z-index: 50;
+  display: none;
 } */
 
 .hover\:border-transparent:hover {

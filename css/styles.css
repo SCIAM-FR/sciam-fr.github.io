@@ -3531,6 +3531,30 @@ ul.twitter-list li.nav-header {
   color: #384a72;
 } */
 
+/* .backdrop-blur {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(8px);
+  z-index: 40;
+  display: none;
+}
+
+.backdrop-blur-md {
+  backdrop-filter: blur(12px);
+} */
+
+/* #searchPopup {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  z-index: 50;
+  display: none;
+} */
+
 .hover\:border-transparent:hover {
   border-color: transparent;
 }

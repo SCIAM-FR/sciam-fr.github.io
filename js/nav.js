@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
   document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('searchButton');
     const searchPopup = document.getElementById('searchPopup');
+
   
     // Fonction pour basculer la visibilité de la barre de recherche
     function toggleSearchPopup() {
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
     // Écouteur d'événement pour le bouton de recherche
     searchButton.addEventListener('click', (event) => {
-      event.stopPropagation(); // Empêche l'événement de cliquer sur le document
+      event.stopPropagation();
       toggleSearchPopup();
     });
   
