@@ -38,18 +38,15 @@
 </head>
 
 <body>
-  <!-- <div id="backdrop" class="backdrop-blur-md"></div> -->
   <div class="flex flex-col justify-between bg-bodyBackground">
-      <nav class="sticky top-0 bg-navysciam w-full py-4 pr-28 pl-28 z-50">
-      <div class="mx-auto flex items-center justify-between">
-          <a href="/">
-            <div class="flex items-center space-x-2">
-              <img src="/images/logo/logo_sciam_blanc.png" alt="Logo blanc" class="h-10 w-10">
-              <img src="/images/logo/logo_sciam_white.svg" alt="Logo SCIAM" class="w-20 font-bold">
-              <span class="mt-1.5"> <p class="text-white text-xl">| Blog </p></span>
-            </div>
+    <nav class="bg-navysciam w-full fixed w-full py-4 px-7 sm:px-28 z-50">
+      <div class="flex items-center justify-between">
+          <a href="/" class="flex items-center space-x-2">
+            <img src="/images/logo/logo_sciam_blanc.png" alt="Logo blanc" class="h-10 w-10">
+            <img src="/images/logo/logo_sciam_white.svg" alt="Logo SCIAM" class="w-20 font-bold">
+            <span class="mt-1.5"> <p class="text-white text-xl">| Blog </p></span>
           </a>
-          <div class="hidden sm:block items-center space-x-4">
+          <div class="hidden sm:flex items-center space-x-4">
             <ul class="flex flex-row">
               {% for item in site.data.navigation %}
               {% assign current_url = page.url | remove: 'index.html' | append: '/' %}
@@ -59,13 +56,11 @@
                   class="text-greysciam no-underline hover:text-white hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md 
                   {% if item.title == 'Sciam' %}px-0 py-0{% else %}px-3 py-2{% endif %} text-xl font-medium 
                   {% if current_url == item_url %}text-white{% else %}text-gray-500{% endif %}">
-
                   {% if item.title == 'Sciam' %}
                     <img src="/images/icons/www-icon.svg" alt="www-icon" class="align-middle">
                   {% else %}
                     {{ item.title }}
                   {% endif %}
-
                 </a>
               </li>
               {% endfor %} 
@@ -78,45 +73,50 @@
               </li>
             </ul> 
           </div>    
-          
-          </div>
-          <div class="flex justify-end items-center space-x-4 sm:hidden">
+          <!-- version toggle mobile -->
+          <div class="sm:hidden">
             <button type="button"
-              class="menu-button p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              class="menu-button inline-flex items-center p-2 w-10 h-10 justify-center text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
               aria-controls="mobile-menu" aria-expanded="false" onclick="toggleMenu(this)">
               <span class="sr-only">Toggle menu</span>
               <svg viewBox="0 0 24 24" stroke="white" fill="none" stroke-width="1.5" class="h-6 w-6">
-                <path class="menu-open-icon" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"
-                  style="display: none;"></path>
+                <path class="menu-open-icon hidden" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                 <path class="menu-close-icon" stroke-linecap="round" stroke-linejoin="round"
                   d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
               </svg>
             </button>
           </div>
       </div>
+      <!-- version menu déroulant mobile -->
       <div class="sm:hidden hidden w-full" id="mobile-menu">
-        <div class="flex flex-col space-y-1 px-2 pb-3 pt-2 items-end">
+        <div class="flex flex-col space-y-1 px-2 pb-3 pt-2">
           {% for item in site.data.navigation %}
           {% assign item_url = item.url | relative_url %}
-          <a href="{{ item_url }}" class="no-underline block rounded-md px-3 py-2 text-base font-medium {% if
-            page.url==item_url %}aria-current=page {% endif %}">
+          <a href="{{ item_url }}" class="no-underline text-white block rounded-md px-3 py-2 text-base font-medium {% if page.url==item_url %}aria-current=page {% endif %}">
             {{ item.title }}
           </a>
           {% endfor %}
+          <button id="mobileSearchButton" type="button" class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white" onclick="toggleSearchPopup()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
         </div>
       </div>
     </nav>
-          <div id="searchPopup" class="hidden absolute center-full right-0 mt-2 w-full sm:w-96 bg-white shadow-lg p-4">
-            <form action="/search.html" method="get">
-            <input type="text" id="search-box" class="w-full p-2 border border-gray-300 rounded" name="query" placeholder="Rechercher..." autofocus>
-            <input type="submit" value="Rechercher">
+          <div id="searchPopup" class="hidden absolute center-full right-0 mt-2 w-full rounded-lg sm:w-96 bg-white shadow-lg p-4">
+            <form action="/search.html" method="get" class="relative">
+            <input type="text" id="search-box" class="w-full pl-4 pr-10 py-2 rounded-lg text-xl border border-navysciam" name="query" placeholder="Rechercher...">
+            <button  type="submit" class="absolute inset-y-0 right-0 px-3 flex items-center bg-navysciam rounded-r-lg text-white">
+              <svg class="h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
             </form>
           </div>
-
-    <div>
+    <div class="content" id="mainContent">
       {{ content }}
     </div>
-
     <footer>
       <div>
         {% include social-networks-links.html %}
@@ -124,6 +124,7 @@
     </footer>
   </div>
   </div>
+  
   <script src="{{ 'js/nav.js' | relative_url }}"></script>
   <script src="{{ 'js/copy-to-clipboard.js' | relative_url }}"></script>
   <script src="{{ 'js/color-code.js '| relative_url}}"></script>

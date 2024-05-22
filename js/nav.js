@@ -6,7 +6,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const openIcon = toggleButton.querySelector('.menu-open-icon'); 
     const closeIcon = toggleButton.querySelector('.menu-close-icon'); 
   
-    toggleButton.addEventListener('click', () => {
+    toggleButton.addEventListener('click', (event) => {
+      event.stopPropagation();
       const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
       toggleButton.setAttribute('aria-expanded', !isExpanded);
       mobileMenu.classList.toggle('hidden');
@@ -18,38 +19,38 @@ document.addEventListener("DOMContentLoaded", function() {
 // Gestion barre de recherche
   document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('searchButton');
+    const mobileSearchButton = document.getElementById('mobileSearchButton');
     const searchPopup = document.getElementById('searchPopup');
-
+    const mainContent = document.getElementById('mainContent');
+    const mobileMenu = document.getElementById('mobile-menu');
   
     // Fonction pour basculer la visibilité de la barre de recherche
     function toggleSearchPopup() {
       searchPopup.classList.toggle('hidden');
-      document.body.classList.toggle('backdrop-blur-md'); 
+      mainContent.classList.toggle('blur-effect');
+      if (!searchPopup.classList.contains('hidden') && mobileMenu) {
+        mobileMenu.classList.add('hidden'); // Ferme le menu mobile si la recherche est ouverte
+      }
     }
-  
     // Écouteur d'événement pour le bouton de recherche
-    searchButton.addEventListener('click', (event) => {
-      event.stopPropagation();
-      toggleSearchPopup();
+    [searchButton, mobileSearchButton].forEach(button => {
+      button.addEventListener('click', (event) => {
+        event.stopPropagation(); // Empêche le clic de se propager
+        toggleSearchPopup();
+      });
     });
-  
-    // Ferme la barre de recherche si l'utilisateur clique en dehors
+    // Fermer si l'utilisateur clique en dehors
     document.addEventListener('click', (event) => {
-      if (!searchPopup.contains(event.target) && !searchButton.contains(event.target)) {
-        if (!searchPopup.classList.contains('hidden')) {
-          toggleSearchPopup();
-        }
+      if (!searchPopup.contains(event.target) && !searchButton.contains(event.target) && !mobileSearchButton.contains(event.target) && !searchPopup.classList.contains('hidden')) {
+        toggleSearchPopup();
       }
     });
-  
     // Fermer avec la touche Esc
     document.addEventListener('keydown', (event) => {
-      if (event.key === "Escape") {
-        if (!searchPopup.classList.contains('hidden')) {
-          toggleSearchPopup();
-        }
-      }
-    });
+    if (event.key === "Escape" && !searchPopup.classList.contains('hidden')) {
+      toggleSearchPopup();
+    }
+  });
   });
 
 
