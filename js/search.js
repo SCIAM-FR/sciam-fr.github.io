@@ -8,18 +8,28 @@
 
         for (var i = 0; i < results.length; i++) {
           var item = store[results[i].ref];
+          console.log(item); 
+          if (!item.url) {
+            console.error('URL is undefined for:', item.url);
+          }
           appendString += 
-          `<div class= "gap-4">
-            <li><div class="bg-white rounded overflow-hidden shadow-lg">
-          <a href="${item.url}"><h3 class="text-xl font-bold mb-2">${item.title}</h3></a>
-          <p class="text-sm text-gray-500 mb-4">${item.author}</p>
-          <p>${item.content.substring(0, 150)}...</p></li>
-          </div>`;
+          `<li class="mb-4">
+            <div class="bg-white rounded-lg overflow-hidden shadow-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+              <div class="p-2">
+                
+                  <a href=${item.url}><h3 class="text-xl font-bold mb-2">${item.title}</h3></a>
+                
+                <p class="text-sm text-gray-500 mb-4">Ecrit par ${item.author}</p>
+               <p>${item.content.substring(0, 150)}...</p>  
+              </div>
+            </div>
+          </li>`;
         }
-  
+        
+         
         searchResults.innerHTML = appendString;
       } else {
-        searchResults.innerHTML = '<li>Pas de résultat trouvé</li>';
+        searchResults.innerHTML = '<div>Pas de résultat trouvé</div>';
       }
     }
   
@@ -57,9 +67,6 @@
         }   
         });
         var results = idx.search(searchTerm);
-        displaySearchResults(results, window.store); 
-     console.log("results", results);  
-  
-      
+        displaySearchResults(results, window.store);
     }
   })();
