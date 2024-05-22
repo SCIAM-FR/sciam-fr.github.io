@@ -36,6 +36,19 @@ body {
   @apply font-sans;
 }
 
+.scale-110158 {
+  transform: scale(1.10158);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animation-fade-in {
+  animation: fadeIn 3s ease-in-out infinite alternate;
+}
+
 p {
   font-size: 1.15em;
   line-height: 1.6;

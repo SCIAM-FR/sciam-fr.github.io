@@ -1,8 +1,10 @@
-- title: Accueil
+- title: IT
   url: '/'
-- title: Sujets
-  url: '/sujets/'
-- title: Auteurs
-  url: '/authors/'
+- title: Data
+  url: '/'
+- title: Cybersécurité
+  url: '/'
 - title: Contact
   url: 'https://www.sciam.fr/contact'
+- title: Sciam
+  url: 'https://www.sciam.fr'  
