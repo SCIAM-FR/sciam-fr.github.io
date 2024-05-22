@@ -18,14 +18,13 @@
               <div class="p-2">
                 
                   <a href=${item.url}><h3 class="text-xl font-bold mb-2">${item.title}</h3></a>
-                
-                <p class="text-sm text-gray-500 mb-4">Ecrit par ${item.author}</p>
-               <p>${item.content.substring(0, 150)}...</p>  
+                  <p class="text-sm text-gray-500 mb-4">Ecrit par ${item.author}</p>
+             
               </div>
             </div>
           </li>`;
         }
-        
+         //  <p>${item.content.substring(0, 150)}...</p>  
          
         searchResults.innerHTML = appendString;
       } else {
@@ -55,14 +54,14 @@
         this.ref('id');
         this.field('title');
         this.field('author');
-        this.field('content');
+        // this.field('content');
 
       for (var key in window.store) {
         this.add({
           'id': key,
           'title': window.store[key].title,
           'author': window.store[key].author,
-          'content': window.store[key].content,
+          // 'content': window.store[key].content,
         });
         }   
         });
