@@ -1,6 +1,27 @@
 document.addEventListener("DOMContentLoaded", function() {
     // The list of elements (tags)
+    // const elements = [
+    //     "Java", "Java 14", "Java 19", "Java 20", "Java 21", "Java 22", "JavaFX", "Quarkus",
+    //     "Algorithme", "Angular", "Angular16", "Angular17", "Application WEB", 
+    //     "Architecture Hexagonale", "BehavioralScience",
+    //     "Blockchain", "Chatbot", "Collections", "Cybercrime", "Cybersecurite", "Cybersecurity",
+    //     "Domain Driven Design", "EJB", "Economie", "FFM", "Finance", 
+    //     "Garbage collector", "Heuristique", "Hooks", "Hydratation", "Hydratation par défaut", 
+    //     "IA", "IHM", "IllusionDesSeries", "IntelligenceCollective", "Interfaces", "JDK", "JDKMon", 
+    //     "Jakarta EE", "Jakarta MVC", "Jakarta RESTful Web Service", "LRA", "Machine learning", "MachineLearning", "MicroProfile", 
+    //     "Mindset", "Misc", "Mistral IA", "Neuroscience","Nudge",
+    //     "Pattern matching", "PgVector", "Prediction", "Projet Amber", "Projet Loom", 
+    //     "Projet Panama", "Psychologie", , "RAG", "Racisme", "Raison", "ResearchReports", "Reseaux", 
+    //     "Router", "Rxjs", "Réseau neuronal artificiel", "SAGA", 
+    //     "SCC", "SPI", "Science", "SciencesCognitives", "SciencesComportementales", 
+    //     "Securite", "Signal", "Sludge", "Sous-RFC", "Spring AI", "Spring Boot", "Startup", "Switch expressions", 
+    //     "Threads virtuels", "UI", "WebRTC", "ZGC", "ai", "control Flow", "genAI", 
+    //     "lazy loading blocs", "le signal Input()", "misc", "openai", "spring boot"
+    // ];
+
+    // TBD: Curate the list of tags
     const elements = [
+        "Java", "Java 14", "Java 19", "Java 20", "Java 21", "Java 22", "JavaFX", "Quarkus",
         "Administration", "Alea", "Algorithme", "Angular", "Angular16", "Angular17", "Application WEB", 
         "Architecture Hexagonale", "Banking", "Bayes", "Beans", "BehavioralScience", "BiaisCognitif", 
         "Blockchain", "CDI", "Cerveau", "Chatbot", "Collections", "Communication", "Concurrence structurée", 
@@ -8,17 +29,17 @@ document.addEventListener("DOMContentLoaded", function() {
         "Domain Driven Design", "EJB", "Economie", "Education", "Ethique", "Extension", "FFM", "Finance", 
         "Garbage collector", "Heuristique", "Hooks", "HumanFactor", "Hydratation", "Hydratation par défaut", 
         "IA", "IHM", "IllusionDesSeries", "IntelligenceCollective", "Interfaces", "JDK", "JDKMon", 
-        "Jakarta EE", "Jakarta MVC", "Jakarta RESTful Web Service", "Java", "Java 14", "Java 19", "Java 20", 
-        "Java 21", "Java 22", "JavaFX", "LRA", "Machine learning", "MachineLearning", "MicroProfile", 
+        "Jakarta EE", "Jakarta MVC", "Jakarta RESTful Web Service", "LRA", "Machine learning", "MachineLearning", "MicroProfile", 
         "Mindset", "Misc", "Mistral IA", "Neuroscience", "NewletterSCC", "Nudge", "Outillage", 
         "Pattern matching", "PgVector", "Philosophie", "Police", "Prediction", "Projet Amber", "Projet Loom", 
-        "Projet Panama", "Psychologie", "Quarkus", "RAG", "Racisme", "Raison", "ResearchReports", "Reseaux", 
+        "Projet Panama", "Psychologie", , "RAG", "Racisme", "Raison", "ResearchReports", "Reseaux", 
         "RessourcesHumaines", "RiskManagement", "Router", "Rxjs", "Réseau neuronal artificiel", "SAGA", 
         "SCC", "SPI", "SagesseDesFoules", "Science", "SciencesCognitives", "SciencesComportementales", 
         "Securite", "Signal", "Sludge", "Sous-RFC", "Spring AI", "Spring Boot", "Startup", "Switch expressions", 
-        "Threads virtuels", "UI", "Violence", "WebRTC", "ZGC", "ai", "control Flow", "genAI", "java", 
+        "Threads virtuels", "UI", "Violence", "WebRTC", "ZGC", "ai", "control Flow", "genAI", 
         "lazy loading blocs", "le signal Input()", "misc", "openai", "spring boot"
     ];
+
 
     // Number of color hues available is 360
     // Creating an array of hues that are evenly distributed.
@@ -57,5 +78,4 @@ document.addEventListener("DOMContentLoaded", function() {
         styleSheet.insertRule(`.border-${className}-200 { border-color: ${colors.border} !important; }`, styleSheet.cssRules.length);
         styleSheet.insertRule(`.text-${className}-500 { color: ${colors.text} !important; }`, styleSheet.cssRules.length);
     }
-
 });

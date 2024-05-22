@@ -7,7 +7,8 @@ module.exports = {
     "./_site/**/*.html",
     "./_posts/*.md",
     "./*.md",
-    "./*.html"
+    "./*.html",
+    "./css/**/*.css",
   ],
   safelist: [
     {
@@ -40,6 +41,7 @@ module.exports = {
       },
       height: {
         '23': '23rem',
+        '36': '36rem'
       },
       fontFamily: {
         sans: ['Noyh Geometric', 'open-sans', 'sans-serif']
@@ -48,6 +50,9 @@ module.exports = {
         '1': '1',
         '2': '2',
         '3': '3',
+      },
+      backgroundImage: {
+        'custom-image': "url('/images/image_processing.png')",
       },
     },
   },

@@ -52,9 +52,17 @@
               {% assign current_url = page.url | remove: 'index.html' | append: '/' %}
               {% assign item_url = item.url | append: '/' %}
               <li>
-                <a href="{{ item.url | relative_url }}" class="no-underline hover:text-white hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md px-3 py-2 text-xl font-medium 
+                <a href="{{ item.url | relative_url }}"
+                  class="no-underline hover:text-white hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md 
+                  {% if item.title == 'Sciam' %}px-0 py-0{% else %}px-3 py-2{% endif %} text-xl font-medium 
                   {% if current_url == item_url %}text-white{% else %}text-gray-500{% endif %}">
-                  {{ item.title }}
+
+                  {% if item.title == 'Sciam' %}
+                    <img src="/images/icons/www-icon.svg" alt="www-icon" class="align-middle">
+                  {% else %}
+                    {{ item.title }}
+                  {% endif %}
+
                 </a>
               </li>
               {% endfor %}
@@ -88,7 +96,7 @@
     </nav>
   
 
-    <div class="pt-16">
+    <div class="pt-10">
       {{ content }}
     </div>
 
@@ -102,6 +110,7 @@
   <script src="{{ 'js/nav.js' | relative_url }}"></script>
   <script src="{{ 'js/copy-to-clipboard.js' | relative_url }}"></script>
   <script src="{{ 'js/color-code.js '| relative_url}}"></script>
+  <script src="{{ 'js/scroll.js '| relative_url}}"></script>
   {% include mathjax.html %}
 </body>
 
