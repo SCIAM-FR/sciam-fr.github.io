@@ -42,11 +42,13 @@
   <div class="flex flex-col justify-between bg-bodyBackground">
       <nav class="sticky top-0 bg-navysciam w-full py-4 pr-28 pl-28 z-50">
       <div class="mx-auto flex items-center justify-between">
-          <div class="flex items-center space-x-2">
-            <img src="/images/logo/logo_sciam_blanc.png" alt="Logo blanc" class="h-10 w-10">
-            <img src="/images/logo/logo_sciam_white.svg" alt="Logo SCIAM" class="w-20 font-bold">
-            <span class="mt-1.5"> <p class="text-white text-xl">| Blog </p></span>
-          </div>
+          <a href="/">
+            <div class="flex items-center space-x-2">
+              <img src="/images/logo/logo_sciam_blanc.png" alt="Logo blanc" class="h-10 w-10">
+              <img src="/images/logo/logo_sciam_white.svg" alt="Logo SCIAM" class="w-20 font-bold">
+              <span class="mt-1.5"> <p class="text-white text-xl">| Blog </p></span>
+            </div>
+          </a>
           <div class="hidden sm:block items-center space-x-4">
             <ul class="flex flex-row">
               {% for item in site.data.navigation %}
