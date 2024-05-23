@@ -207,25 +207,25 @@
 
 </ul> -->
 
-<div class="bg-navysciam px-28 py-8 mx-auto max-w-full text-white">
-  <div class="flex items-center justify-end mx-auto">
+<div class="bg-navysciam px-4 sm:px-28 py-8 flex flex-col md:flex-row justify-between items-center text-white">
     <span class="text-white text-lg pr-2">Newsletter SCIAM</span>
     <form
-      class="flex flex-col sm:flex-row justify-end items-center space-y-2 sm:space-y-0 sm:space-x-2">
+      class="mt-4 md:mt-0 flex flex-col sm:flex-row items-center space-y-2 sm:space-x-2">
       <label for="email" class="sr-only">Email</label>
-      <input class="rounded-md px-6 py-3 shadow-sm" type="email" placeholder="Votre adresse email" />
+      <input class="rounded-md px-6 py-3 shadow-sm text-navysciam" type="email" placeholder="Votre adresse email" />
       <button
-        class="block rounded-md bg-navysciam border border-white px-8 py-3 font-medium text-white transition hover:border-yellowsciam"
+        class="rounded-md bg-navysciam border border-white px-8 py-3 font-medium text-white transition hover:border-yellowsciam"
         type="submit">
         Souscrire
       </button>
     </form>
-  </div>
 </div>
 
-<div class="px-28 py-4 mx-auto flex flex-wrap items-center justify-between">
-  <img src="/images/logo/logo_sciam.png" alt="Logo" class="h-10 w-auto ml-2">
-  <img src="/images/logo/logo_sciam_CMJN.svg" alt="Logo SCIAM Typo" class="h-10 w-auto ml-2">
+<div class="px-4 sm:px-28 py-4 flex flex-col md:flex-row items-center justify-between">
+  <div class="flex space-x-2 mb-4 md:mb-0">
+    <img src="/images/logo/logo_sciam.png" alt="Logo" class="h-10">
+    <img src="/images/logo/logo_sciam_CMJN.svg" alt="Logo SCIAM Typo" class="h-10">
+  </div>
   <div class="flex flex-wrap">
     <a href="https://www.sciam.fr/" class="px-2 py-2 hover:underline">À propos de SCIAM</a>
     <a href="https://www.sciam.fr/equipe" class="px-2 py-2 hover:underline">Notre équipe</a>
@@ -233,48 +233,39 @@
   </div>
 </div>
 <hr>
-<div class="px-28 py-4 mx-auto flex flex-wrap justify-between items-center">
-  <p class="text-sm text-gray-500 sm:text-left">
-    &copy; 2022 SCIAM. All rights reserved.
-  </p>
-
-  <ul class="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start">
-
+<div class="px-4 sm:px-28 py-4 flex flex-col sm:flex-row justify-between items-center">
+  <div class="flex space-x-6">
     {% if site.social-network-links.twitter %}
-    <li class="list-inline-item">
       <a href="https://twitter.com/{{ site.social-network-links.twitter }}" class="transition hover:text-greysciam"
         title="X (Twitter)" target="_blank">
         <span aria-hidden="true">
-          <img src="/images/icons/x-icon.svg" alt="x-logo">
+          <img src="/images/icons/x-icon.svg" alt="x-logo" class="h-6 w-6">
         </span>
         <span class="sr-only">X (Twitter)</span>
       </a>
-    </li>
     {% endif %}
 
-
     {% if site.social-network-links.github %}
-    <li class="list-inline-item">
       <a href="https://github.com/{{ site.social-network-links.github }}" class="transition hover:text-greysciam"
         title="GitHub" target="_blank">
         <span aria-hidden="true">
-          <img src="/images/icons/github.svg" alt="github-logo">
+          <img src="/images/icons/github.svg" alt="github-logo" class="h-6 w-6">
         </span>
         <span class="sr-only">GitHub</span>
       </a>
-    </li>
     {% endif %}
 
     {% if site.social-network-links.linkedin %}
-    <li class="list-inline-item">
       <a href="https://www.linkedin.com/company/{{ site.social-network-links.linkedin }}" title="LinkedIn"
         target="_blank">
         <span class="fa-stack fa-lg" aria-hidden="true">
-          <img src="/images/icons/linkedin.svg" alt="linkedin-logo">
+          <img src="/images/icons/linkedin.svg" alt="linkedin-logo" class="h-6 w-6">
         </span>
         <span class="sr-only">LinkedIn</span>
       </a>
-    </li>
     {% endif %}
-  </ul>
+  </div>
+  <p>
+    &copy; 2022 SCIAM. All rights reserved.
+  </p>  
 </div>
