@@ -27,7 +27,7 @@ pagination:
           <div class="relative">
             <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}"
               class="w-full h-23 object-cover rounded-lg" alt="Image article">
-            <div class="top-4 right-4 bg-yellowsciam text-gray-700 font-bold px-2 py-1 m-2 rounded-md absolute">Nouvel article</div>
+            <div class="top-4 right-4 bg-navysciam text-white font-bold px-2 py-1 m-2 rounded-md absolute">Nouvel article</div>
           </div>
 
           <hr class="bg-zince-50 my-8 opacity-50"/>
@@ -36,7 +36,7 @@ pagination:
             <div class="flex flex-col justify-between h-full px-12 py-6">
               <div>
                 <div class="text-xl font-bold mb-2 line-clamp-1">
-                  <a href="{{ post.url | relative_url }}" class="text-3xl font-black mb-2 hover:text-navysciam hover:decoration-yellowsciam">{{ post.title }}</a>
+                  <a href="{{ post.url | relative_url }}" class="text-3xl text-navysciam font-black mb-2 hover:text-navysciam hover:decoration-yellowsciam">{{ post.title }}</a>
                 </div>
                 <div>
                   {% if post.auteurs and post.auteurs.size > 1 %}
@@ -117,7 +117,7 @@ pagination:
 
 <div class="grid grid-cols-12 gap-4">
   <div class="col-span-12 sm:col-span-12 rounded-xl px-28">
-    <div class="container">
+    <div>
       <div class="w-full">
           <div class="mb-6">
             <hr class="my-20 bg-zinc-200"/>
