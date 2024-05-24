@@ -12,6 +12,7 @@
     "build:css": "npx tailwindcss -i ./css/styles.css -o ./css/output.css --watch"
   },
   "dependencies": {
-    "lunr": "^2.3.9"
+    "lunr": "^2.3.9",
+    "swiper": "^11.1.3"
   }
 }

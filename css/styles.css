@@ -401,3 +401,14 @@ ul.twitter-list li.nav-header {
   z-index: 50;
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
+
+
+.swiper-slide {
+  @apply w-full flex-shrink-0;
+}
+
+@media (min-width: 768px) {
+  .swiper-slide {
+    @apply w-1/3; 
+  }
+}
