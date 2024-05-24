@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: 'Noyh Geometric' ;
-  src:url('/font/noyhgeometrirounded-t-lgc-regular.otf') format('opentype'),
+  src:url('/font/noyhgeometric-regular.otf') format('opentype'),
       url('/font/noyhgeometric-regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
@@ -26,15 +26,41 @@
   font-style: italic;
 }
 
+h1,
+#content h1>a.link, h2>a.link, h3>a.link, 
+#toctitle>a.link, .sidebarblock>.content>.title>a.link, h4>a.link, h5>a.link, h6>a.link {
+  @apply text-navysciam no-underline hover:text-gray-600;
+}
+
+
 html {
   font-size: 90%;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
 }
 
-body {
+/* body {
+  @apply font-sans;
+} */
+body:not(.font-asciidoc) {
   @apply font-sans;
 }
+
+/* Style for h1 and specific linked titles within h1 */
+h1 {
+  @apply text-3xl font-bold;
+}
+
+/* Styles for h2 */
+h2, #content h2>a.link {
+  @apply text-2xl font-medium text-navysciam no-underline hover:text-gray-600;
+}
+
+/* Styles for h3 */
+h3, #content h3>a.link {
+  @apply text-xl font-medium text-navysciam no-underline hover:text-gray-600;
+}
+
 
 .scale-110158 {
   transform: scale(1.10158);
@@ -50,9 +76,13 @@ body {
 }
 
 p {
+  @apply text-base leading-6 text-gray-700;
+}
+
+/* p {
   font-size: 1.15em;
   line-height: 1.6;
-}
+} */
 .centered {
   text-align: center;
 }
@@ -215,12 +245,12 @@ ul.twitter-list li.nav-header {
   margin-top: 0px;
   border-bottom: 0px;
 }
-.posts .post {
+/* .posts .post {
   margin-bottom: 40px;
 }
 .post h1 > a {
   margin-right: 15px;
-}
+} */
 .post h1, .post .footer {
   border-bottom: 1px solid #ddd;
   margin-bottom: 10px;
