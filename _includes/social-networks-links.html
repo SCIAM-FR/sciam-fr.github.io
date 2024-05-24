@@ -207,18 +207,21 @@
 
 </ul> -->
 
-<div class="bg-navysciam px-4 sm:px-28 py-8 flex flex-col md:flex-row justify-between items-center text-white">
-    <span class="text-white text-lg pr-2">Newsletter SCIAM</span>
+<div class="bg-navysciam px-4 sm:px-28 py-8 mx-auto flex flex-col md:flex-row justify-between items-center text-white w-full">
+  <!-- <div class="flex-grow mb-4 md:mb-0">  -->
+    <span class="sm:ml-0 text-white text-lg flex-shrink-0">Newsletter SCIAM</span>
     <form
-      class="mt-4 md:mt-0 flex flex-col sm:flex-row items-center space-y-2 sm:space-x-2">
+      class="flex-grow md:flex-grow-0 mt-4 md:mt-0 md:ml-4 flex flex-col md:flex-row items-center justify-end w-full">
       <label for="email" class="sr-only">Email</label>
-      <input class="rounded-md px-6 py-3 shadow-sm text-navysciam" type="email" placeholder="Votre adresse email" />
+      <input id="email" class="flex-grow md:flex-grow-0 rounded-md px-6 py-3 shadow-sm text-sm w-full md:w-auto text-navysciam" type="email" placeholder="Votre adresse email" autocomplete/>
       <button
-        class="rounded-md bg-navysciam border border-white px-8 py-3 font-medium text-white transition hover:border-yellowsciam"
+        id="btn_newsletter" 
+        class="mt-2 md:mt-0 md:ml-4 rounded-md bg-navysciam border border-white px-8 py-3 text-sm w-full md:w-auto font-medium text-white transition hover:border-yellowsciam"
         type="submit">
         Souscrire
       </button>
     </form>
+  <!-- </div> -->
 </div>
 
 <div class="px-4 sm:px-28 py-4 flex flex-col md:flex-row items-center justify-between">
@@ -226,14 +229,17 @@
     <img src="/images/logo/logo_sciam.png" alt="Logo" class="h-10">
     <img src="/images/logo/logo_sciam_CMJN.svg" alt="Logo SCIAM Typo" class="h-10">
   </div>
-  <div class="flex flex-wrap">
+  <div class="flex flex-wrap justify-center md:justify-start space-x-2">
     <a href="https://www.sciam.fr/" class="px-2 py-2 hover:underline">À propos de SCIAM</a>
     <a href="https://www.sciam.fr/equipe" class="px-2 py-2 hover:underline">Notre équipe</a>
     <a href="https://www.sciam.fr/recrutement" class="px-2 py-2 hover:underline">Recrutement</a>
   </div>
 </div>
-<hr>
-<div class="px-4 sm:px-28 py-4 flex flex-col sm:flex-row justify-between items-center">
+<hr class="my-4 mx-4 sm:mx-28"/>
+<div class="px-4 sm:px-28 py-4 flex flex-col md:flex-row justify-between items-center">
+  <p class="mb-4 md:mb-0">
+    &copy; 2022 SCIAM. All rights reserved.
+  </p>  
   <div class="flex space-x-6">
     {% if site.social-network-links.twitter %}
       <a href="https://twitter.com/{{ site.social-network-links.twitter }}" class="transition hover:text-greysciam"
@@ -265,7 +271,5 @@
       </a>
     {% endif %}
   </div>
-  <p>
-    &copy; 2022 SCIAM. All rights reserved.
-  </p>  
+
 </div>
