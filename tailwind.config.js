@@ -29,6 +29,7 @@ module.exports = {
       colors: {
         bodyBackground: '#F9FAFE',
         backgroundsciam: "#cbd5e1",
+        grayBg: '#f2f1ed',
         navysciam: '#384a72',
         yellowsciam: '#ffec3f',
         lightbluesciam: "#9abcc3",
@@ -39,12 +40,22 @@ module.exports = {
       borderWidth: {
         '0.5': '0.5px',
       },
+      width: {
+        'custom-width': '702px'  // Custom width
+      },
       height: {
         '23': '23rem',
-        '36': '36rem'
+        '36': '36rem',
+        'custom-height': '474px'
       },
       fontFamily: {
-        sans: ['Noyh Geometric', 'open-sans', 'sans-serif']
+        sans: ['Noyh Geometric', 'open-sans', 'sans-serif'],
+        asciidoc: ['Open Sans', 'Noto Serif', 'Ubuntu Mono', 'sans-serif'],
+      },
+      fontSize: {
+        '1.15': '1.15rem',
+        '1.5': '1.5rem',
+
       },
       lineClamp: {
         '1': '1',
@@ -52,10 +63,81 @@ module.exports = {
         '3': '3',
       },
       backgroundImage: {
-        'custom-image': "url('/images/image_processing.png')",
+        'hero-image': "url('/images/visuals/grids.jpg')"
       },
-
+      borderRadius: {
+        '2.5': '2.5rem'
+      },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            'h2 a': { 
+              color: `${theme('colors.navysciam')} !important`,
+              '&:hover': {
+                color: `${theme('colors.lightbluesciam')} !important`,
+              },
+              textDecoration: 'none !important',
+              fontSize: '1.25rem', 
+              fontFamily: '"Noyh Geometric" sans-serif !important',
+              fontWeight: 'bold !important',
+            },
+            'h3 a': { 
+              color: `${theme('colors.navysciam')} !important`,
+              '&:hover': {
+                color: `${theme('colors.lightbluesciam')} !important`,
+              },
+              textDecoration: 'none !important',
+              fontSize: '1.25rem', 
+              fontFamily: '"Noyh Geometric" sans-serif !important',
+              fontWeight: 'bold !important',
+            },
+            'h4 a': { 
+              color: `${theme('colors.navysciam')} !important`,
+              '&:hover': {
+                color: `${theme('colors.lightbluesciam')} !important`,
+              },
+              textDecoration: 'none !important',
+              fontSize: '1.25rem',
+              fontFamily: '"Noyh Geometric" sans-serif !important',
+              fontWeight: 'bold !important',
+            },
+            'h2 code, h3 code, h4 code': { 
+              color: `${theme('colors.navysciam')} !important`,
+              fontFamily: '"Ubuntu Mono", sans-serif',
+              fontSize: ' 0.875rem', 
+              fontWeight: 'light !important'
+            },
+            'h2 a code, h3 a code, h4 a code': { 
+              color: `${theme('colors.navysciam')} !important`,
+              fontFamily: '"Ubuntu Mono", sans-serif',
+              fontSize: ' 0.875rem', 
+              fontWeight: 'light !important'
+            },
+            'p code': {  
+              fontFamily: '"Ubuntu Mono" sans-serif !important',
+              fontSize: ' 0.875rem !important', 
+              fontWeight: 'light !important'
+            },
+            'code' : {
+              color: `${theme('colors.navysciam')} !important`,
+              fontFamily: '"Ubuntu Mono" sans-serif !important',
+              fontSize: ' 0.875rem', 
+              fontWeight: 'light !important',
+            },
+            'listingblock title' : {
+              fontSize: '0.875rem !important',
+              fontWeight: `${theme('fontWeight.semibold')} !important`,
+              color: `${theme('colors.navysciam')} !important`,
+              padding: `${theme('padding.2')} !important`,
+            }
+            
+            
+          },
+        },
+      }),
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }
