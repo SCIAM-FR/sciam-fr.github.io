@@ -12,16 +12,16 @@
 
 @font-face {
   font-family: 'Noyh Geometric';
-  src: url('/font/noyh_geometric/noyhgeometric-bold.otf') format('opentype'),
-       url('/font/noyh_geometric/noyhgeometric-bold.woff') format('woff');
+  src: url('/font/noyhgeometric-bold.otf') format('opentype'),
+       url('/font/noyhgeometric-bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Noyh Geometric';
-  src: url('/font/noyh_geometric/noyhgeometric-italic.otf') format('opentype'),
-       url('/font/noyh_geometric/noyhgeometric-italic.woff') format('woff');
+  src: url('/font/noyhgeometric-italic.otf') format('opentype'),
+       url('/font/noyhgeometric-italic.woff') format('woff');
   font-weight: normal;
   font-style: italic;
 }
