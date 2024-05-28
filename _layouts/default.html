@@ -54,11 +54,11 @@
               {% assign item_url = item.url | append: '/' %}
               <li class="flex items-center">
                 <a href="{{ item.url | relative_url }}"
-                  class="text-greysciam no-underline hover:text-white hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md 
+                  class="text-white no-underline hover:text-white hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md 
                   {% if item.title == 'Sciam' %}px-0 py-0{% else %}px-3 py-2{% endif %} text-xl font-medium 
                   {% if current_url == item_url %}text-white{% else %}text-gray-500{% endif %}">
                   {% if item.title == 'Sciam' %}
-                    <img src="/images/icons/www-icon.svg" alt="www-icon" class="align-middle">
+                    <img src="/images/icons/www-icon.svg" alt="www-icon" class="align-middle decoration-greysciam hover: decoration-white">
                   {% else %}
                     {{ item.title }}
                   {% endif %}
@@ -105,8 +105,8 @@
         </div>
       </div>
     </nav>
-          <div id="searchPopup" class="hidden absolute center-full right-0 mt-2 w-full rounded-lg sm:w-96 bg-white shadow-lg p-4">
-            <form action="/search.html" method="get" class="relative">
+          <div id="searchPopup" class="hidden fixed inset-0 flex items-center justify-center p-4 z-50">
+            <form action="/search.html" method="get" class="w-full max-w-md bg-white rounded-lg shadow-lg p-4 relative">
             <input type="text" id="search-box" class="w-full pl-4 pr-10 py-2 rounded-lg text-xl border border-navysciam" name="query" placeholder="Rechercher...">
             <button  type="submit" class="absolute inset-y-0 right-0 px-3 flex items-center bg-navysciam rounded-r-lg text-white">
               <svg class="h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -129,7 +129,7 @@
   <script src="{{ 'js/nav.js' | relative_url }}"></script>
   <script src="{{ 'js/copy-to-clipboard.js' | relative_url }}"></script>
   <script src="{{ 'js/color-code.js '| relative_url}}"></script>
-  <script src="{{ 'js/scroll.js '| relative_url}}"></script>
+  <!-- <script src="{{ 'js/scroll.js '| relative_url}}"></script> -->
   <script src="{{ 'js/search.js'}}"></script>
   <script src="{{ 'js/lunr.js'}}"></script>
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
