@@ -7,8 +7,18 @@ pagination:
 <div class="relative min-h-screen px-4 md:px-28 bg-grayBg overflow-y-visible">
     <!-- Hero Section -->
     <div class="flex flex-col md:flex-row items-center min-h-1/2 py-16">
+      <!-- Image Block -->
+      <div class="order-1 pb-5 md:order-2 md:pb-0 flex justify-center items-center md:w-custom-width md:h-custom-height">
+        <div
+          class="w-full h-full bg-hero-image md:custom-width md:custom-height bg-center bg-no-repeat bg-cover flex justify-center items-center rounded-xl bg-opacity-85">
+          <div class="w-full h-full overflow-hidden flex justify-center items-center bg-navysciam bg-opacity-60 rounded-xl">
+            <img src="{{ '/images/vignettes/' | append: page.vignette | relative_url }}" alt="Post Image"
+              class="max-w-full max-h-full p-6 rounded-2.5">
+          </div>
+        </div>
+      </div>
       <!-- Text Block -->
-      <div class="text-navysciam md:w-1/2 p-8">
+      <div class="order-2 md:order-1 text-navysciam md:w-1/2 p-8">
         <p class="text-4xl font-bold mb-4">{{ page.title }}</p>
         <div class="text-greysciam mb-4">
           <div class="p-4">
@@ -51,16 +61,7 @@ pagination:
           {% endif %}
         </div>
       </div>
-      <!-- Image Block -->
-      <div class="flex justify-center items-center w-custom-width h-custom-height">
-        <div
-          class="w-full h-full bg-hero-image custom-width custom-height bg-center bg-no-repeat bg-cover flex justify-center items-center rounded-xl bg-opacity-85">
-          <div class="w-full h-full overflow-hidden flex justify-center items-center bg-navysciam bg-opacity-60 rounded-xl">
-            <img src="{{ '/images/vignettes/' | append: page.vignette | relative_url }}" alt="Post Image"
-              class="max-w-full max-h-full p-6 rounded-2.5">
-          </div>
-        </div>
-      </div>
+      
     </div>
   
     <!-- Main Content and Sidebar -->
@@ -88,7 +89,7 @@ pagination:
       <!-- Sidebar for Table of Contents and Related Posts-->
       <div class="md:col-span-1 space-y-4">
         <div class="sticky top-10">
-          <div class="bg-white rounded-xl p-12 shadow-lg relative
+          <div class="hidden md:block bg-white rounded-xl p-12 shadow-lg relative
           prose-li:font-sans
           prose-li:pb-2
           prose-li:text-lg
