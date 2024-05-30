@@ -62,14 +62,11 @@ module.exports = {
         '2': '2',
         '3': '3',
       },
+      blur: {
+        xl: '24px',
+      },
       backdropBlur: {
-        none: '0',
-        sm: '4px',
-        DEFAULT: '8px',
-        lg: '16px',
         xl: '20px',
-        '2xl': '25px',
-        '3xl': '30px',
       },
       backgroundImage: {
         'hero-image': "url('/images/visuals/grids.jpg')"
@@ -145,6 +142,11 @@ module.exports = {
         },
       }),
     },
+  },
+  variants: {
+    extend: {
+      backdropBlur: ['responsive', 'hover', 'focus'],
+    }
   },
   plugins: [
     require('@tailwindcss/typography', 'tailwindcss-filters'),

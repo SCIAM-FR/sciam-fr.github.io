@@ -105,6 +105,7 @@
         </div>
       </div>
     </nav>
+        
           <div id="searchPopup" class="hidden fixed inset-0 flex items-center justify-center p-4 z-50">
             <form action="/search.html" method="get" class="w-full max-w-md bg-white rounded-lg shadow-lg p-4 relative">
               <div class="relative">
@@ -115,8 +116,12 @@
                   </svg>
                 </button> 
               </div>  
+              <button type="button" id="closeSearchPopupButton" class="absolute top-2 right-2 pl-3 pb-2 text-lg font-semibold text-gray-500 rounded-full hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-navysciam">
+                &times;
+              </button>
             </form>
           </div>
+    <!-- <div id="blur" class="fixed inset-0 backdrop-blur-xl hidden"></div>       -->
     <div class="content relative" id="mainContent">
       {{ content }}
     </div>

@@ -376,9 +376,9 @@ ul.twitter-list li.nav-header {
 } */
 
 
-/* .blur-effect {
+.blur-effect {
   filter: blur(20px);
-} */
+}
 
 /* .swiper-slide {
   @apply h-full w-full flex-shrink-0;
