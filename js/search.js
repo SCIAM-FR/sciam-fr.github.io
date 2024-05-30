@@ -14,7 +14,7 @@
           }
           appendString += 
           `<li class="mb-4">
-            <div class="bg-white rounded-lg overflow-hidden shadow-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+            <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-lg transition-shadow duration-300">
               <div class="p-2">
                 
                   <a href=${item.url}><h3 class="text-xl font-bold mb-2">${item.title}</h3></a>
