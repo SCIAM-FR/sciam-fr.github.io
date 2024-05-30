@@ -37,6 +37,9 @@ module.exports = {
         lightgrey: "#F5F5F7",
         white: "#fff",
       },
+      boxShadow: {
+        'custom-bottom-shadow': '0 10px 6px -9px lightgrey',
+      },
       borderWidth: {
         '0.5': '0.5px',
       },
@@ -136,6 +139,11 @@ module.exports = {
               fontWeight: `${theme('fontWeight.semibold')} !important`,
               color: `${theme('colors.navysciam')} !important`,
               padding: `${theme('padding.2')} !important`,
+            },
+            img: {
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              display: 'block',
             },
           },
         },
