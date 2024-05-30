@@ -41,12 +41,16 @@ module.exports = {
         '0.5': '0.5px',
       },
       width: {
-        'custom-width': '702px'  // Custom width
+        'custom-width': '702px'
       },
       height: {
         '23': '23rem',
         '36': '36rem',
-        'custom-height': '474px'
+        'custom-height': '474px',
+        'custom-sidebar-height': 'calc(100vh - 2.5rem)',
+      },
+      maxHeight: {
+        'custom-max-height': 'calc(100vh - 4rem)'
       },
       fontFamily: {
         sans: ['Noyh Geometric', 'open-sans', 'sans-serif'],
@@ -55,7 +59,6 @@ module.exports = {
       fontSize: {
         '1.15': '1.15rem',
         '1.5': '1.5rem',
-
       },
       lineClamp: {
         '1': '1',
@@ -70,7 +73,7 @@ module.exports = {
       },
       typography: (theme) => ({
         DEFAULT: {
-          css: {
+          css: { // Override asciidoc default styles
             'h2 a': { 
               color: `${theme('colors.navysciam')} !important`,
               '&:hover': {
@@ -101,6 +104,10 @@ module.exports = {
               fontFamily: '"Noyh Geometric" sans-serif !important',
               fontWeight: 'bold !important',
             },
+            '#preamble > .sectionbody > .paragraph:first-of-type > p': {
+              fontSize: '1.25rem !important',
+              color: `${theme('colors.navysciam')} !important`,
+            },
             'h2 code, h3 code, h4 code': { 
               color: `${theme('colors.navysciam')} !important`,
               fontFamily: '"Ubuntu Mono", sans-serif',
@@ -129,9 +136,7 @@ module.exports = {
               fontWeight: `${theme('fontWeight.semibold')} !important`,
               color: `${theme('colors.navysciam')} !important`,
               padding: `${theme('padding.2')} !important`,
-            }
-            
-            
+            },
           },
         },
       }),
@@ -139,5 +144,18 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/typography'),
+    function({ addBase, theme }) { // Override asciidoc style
+      addBase({
+        '#toc': {
+          borderBottom: 'none',
+          paddingBottom: theme('spacing.2'),
+        },
+        'code': {
+          fontFamily: '"Ubuntu Mono" sans-serif !important',
+          fontSize: ' 0.875rem !important', 
+          fontWeight: 'light !important'
+        }
+      });
+    },
   ],
 }
