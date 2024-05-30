@@ -349,16 +349,16 @@ ul.twitter-list li.nav-header {
 } 
 
 /* Style personnalisée */
-.nav a {
+/* .nav a {
   color: #9CA3AF;
 }
 
 .banner-home {
   padding-top: 5em;
   padding-bottom: 5em;
-  color: #384a72;
+  color: #384a72; */
   /* color: navysciam; */
-}
+/* }
 
 .banner-title > p {
   font-size: 2rem; 
@@ -369,21 +369,20 @@ ul.twitter-list li.nav-header {
 .banner-subtitle {
   font-size: xl;
   font-weight: regular;
-}
+} */
 
 /* .footer a:hover {
   color: #384a72;
 } */
 
 
-.blur-effect {
+/* .blur-effect {
   filter: blur(20px);
-}
+} */
 
-
-.swiper-slide {
-  @apply w-full flex-shrink-0;
-}
+/* .swiper-slide {
+  @apply h-full w-full flex-shrink-0;
+} */
 
 @media (min-width: 768px) {
   .swiper-slide {

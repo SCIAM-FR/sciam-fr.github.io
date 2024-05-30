@@ -62,6 +62,15 @@ module.exports = {
         '2': '2',
         '3': '3',
       },
+      backdropBlur: {
+        none: '0',
+        sm: '4px',
+        DEFAULT: '8px',
+        lg: '16px',
+        xl: '20px',
+        '2xl': '25px',
+        '3xl': '30px',
+      },
       backgroundImage: {
         'hero-image': "url('/images/visuals/grids.jpg')"
       },
@@ -138,6 +147,6 @@ module.exports = {
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),
+    require('@tailwindcss/typography', 'tailwindcss-filters'),
   ],
 }
