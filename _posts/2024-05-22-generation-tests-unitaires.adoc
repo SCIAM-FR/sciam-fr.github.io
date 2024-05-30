@@ -1,13 +1,13 @@
 :showtitle:
 :page-navtitle: La génération de tests unitaires en Java avec Randoop
-:page-excerpt: Découvrez comment générer automatiquement des tests unitaires avec l'outil Randoop
+:page-excerpt: Découvrez comment générer automatiquement des tests unitaires avec l'outil Randoop afin de détecter des erreurs potentielles de manière précoce et d'améliorer la couverture de code.
 :layout: post
 :author: ericdiallo
 :page-tags: [Tutoriel, Java, Tests]
 :page-vignette: randoop-logo.png
 
 = La génération de Tests Unitaires en Java avec Randoop
-L'intégration de tests unitaires dans le développement logiciel est cruciale pour garantir la fiabilité et la robustesse des applications. Toutefois, la création manuelle de ces tests peut être laborieuse et sujette à des erreurs, notamment sur un grand volume de code existant. Heureusement, il existe des outils comme Randoop, conçu pour automatiser ce processus fastidieux.
+L'intégration de tests unitaires dans le développement logiciel est cruciale pour garantir la fiabilité et la robustesse des applications. Toutefois, la création manuelle de ces tests peut être laborieuse et sujette à des erreurs, notamment sur un grand volume de code existant. Heureusement, il existe des outils comme https://randoop.github.io/randoop/[Randoop^], conçu pour automatiser ce processus fastidieux.
 
 == Randoop, un outil de génération automatique de tests unitaires Java
 Randoop est un outil open-source développé par des chercheurs de l'Université du Maryland. Son objectif principal est de générer automatiquement des suites de tests unitaires pour les applications Java. Il utilise une approche basée sur la génération aléatoire pour explorer le comportement des classes Java et produire des suites de tests exhaustives au format JUnit.
@@ -15,31 +15,38 @@ Randoop est un outil open-source développé par des chercheurs de l'Université
 == Fonctionnement de Randoop
 Le fonctionnement de Randoop repose sur plusieurs étapes :
 
-1. **Instrumentation du code** : Randoop analyse les classes Java cibles et les modifie pour surveiller leur comportement lors de l'exécution des tests.
-2. **Génération de séquences d'appels** : Randoop génère ensuite des séquences d'appels de méthodes pour chaque classe cible en explorant leur comportement de manière aléatoire.
-3. **Exécution des tests :** Les séquences d'appels générées sont par la suite exécutées sur la classe cible, et les résultats de chaque appel sont enregistrés.
-4. **Élimination des redondances** : Randoop élimine les tests redondants et les assertions inutiles afin de produire une suite de tests concise mais efficace.
-5. **Génération de code de test :** Enfin, Randoop génère du code de test Java prêt à être intégré dans le projet.
+. **Instrumentation du code** : Randoop analyse les classes Java cibles et les modifie pour surveiller leur comportement lors de l'exécution des tests.
+. **Génération de séquences d'appels** : Randoop génère ensuite des séquences d'appels de méthodes pour chaque classe cible en explorant leur comportement de manière aléatoire.
+. **Exécution des tests :** Les séquences d'appels générées sont par la suite exécutées sur la classe cible, et les résultats de chaque appel sont enregistrés.
+. **Élimination des redondances** : Randoop élimine les tests redondants et les assertions inutiles afin de produire une suite de tests concise mais efficace.
+. **Génération de code de test :** Enfin, Randoop génère du code de test Java prêt à être intégré dans le projet.
 
 == Cas d'utilisation: Génération de tests unitaires sur la classe Calculator
 L'utilisation de Randoop est assez simple. Nous testerons ici la génération de tests unitaires sur la classe suivante: 
 
 [source, java]
+----
     package com.voted;
+
     public class Calculator {
         private final String name;
+
         public Calculator(String name) {
             this.name = name;
         }
+
         public int add(int a, int b) {
             return a + b;
         }
+
         public int substract(int a, int b) {
             return a - b;
         }
+
         public int multiply(int a, int b) {
             return a * b;
         }
+
         public int divide(int a, int b) {
             if (b == 0) {
                 throw new IllegalArgumentException("b = 0");
@@ -47,10 +54,10 @@ L'utilisation de Randoop est assez simple. Nous testerons ici la génération de
             return a / b;
         }
     }
-
+----
 
 === Étape 1 : Installation
-La dernière version de Randoop se trouve https://randoop.github.io/randoop/[ici]. Il est distribué sous la forme d'un fichier JAR exécutable, ce qui le rend facile à utiliser sans configuration supplémentaire.
+La dernière version de Randoop se trouve https://randoop.github.io/randoop/[ici^]. Il est distribué sous la forme d'un fichier JAR exécutable, ce qui le rend facile à utiliser sans configuration supplémentaire.
 
 === Étape 2 : Configuration
 Randoop peut être configuré pour générer des tests selon des besoins spécifiques. On peut spécifier les packages à inclure ou exclure, définir des limites sur le nombre de tests à générer, et même contrôler la complexité des tests produits.
@@ -71,24 +78,26 @@ Randoop dispose de plusieurs options de fonctionnement. Les plus couramment util
 * **--classlist <file>**  
    Indique le fichier contenant la liste des classes à tester. Chaque ligne du fichier doit être le nom complet d'une classe. Par exemple, `--classlist classes_to_test.txt` utilisera les classes listées dans `classes_to_test.txt`.
 
-* **--omit-methods <pattern>**
-Indique à Randoop de ne pas prendre en compte les méthodes qui correspondent au pattern.
+* **--omit-methods <regex>**
+Indique à Randoop de ne pas prendre en compte les méthodes qui correspondent a l'expression régulière.
 
 * **--nondeterminism**
-indique à Randoop de prêter attention aux comportements non déterministes () lors de la génération des tests.
+indique à Randoop de prêter attention aux comportements non déterministes (lorsque la sortie d'une fonction ne produit pas forcément la même sortie avec des paramètres identiques) lors de la génération des tests.
 
 
 === Étape 3 : Exécution
 Pour exécuter Randoop sur ces classes, on utilise la commande suivante
 
-[source]
+[source,shell]
+----
 java -classpath ${RANDOOP_JAR} randoop.main.Main gentests --classlist=myclasses.txt --output-limit=20
-
+----
 Le fichier myclasses.txt contient les classes à tester:
 
-[source]
+[source,shell]
+----
 com.voted.Calculator
-
+----
 Randoop générera alors deux types de tests unitaires écrits dans deux fichiers distincts au format JUnit :
 
     * Les tests qui révèlent des erreurs: ils échouent lorsqu'ils sont exécutés et indiquent des erreurs potentielles dans le code (ErrorTestX.java)
@@ -100,6 +109,7 @@ Enfin, on peut exécuter les tests JUnit générés par Randoop et analyser les 
 
 Pour cet exemple, Randoop ne détecte pas d'erreur. Mais en ajoutant la méthode suivante à la classe Calculator :
 [source, java]
+----
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Calculator) {
@@ -108,37 +118,46 @@ Pour cet exemple, Randoop ne détecte pas d'erreur. Mais en ajoutant la méthode
         }
         return false;
     }
-
+----
 Randoop génère plusieurs tests révélant des erreurs, car la méthode hashCode n'a pas été définie. Voici un exemple:
 
 [source, java]
+----
     @Test
     public void test01() throws Throwable {
-        if (debug)
+        if (debug) {
             System.out.format("%n%s%n", "ErrorTest0.test01");
+        }
         com.voted.Calculator calculator1 = new com.voted.Calculator("hi!");
         boolean boolean3 = calculator1.equals((java.lang.Object) 10.0f);
         boolean boolean5 = calculator1.equals((java.lang.Object) false);
+
         int int8 = calculator1.multiply((int) (byte) 10, (int) (short) 10);
         int int11 = calculator1.substract((int) '4', 1);
         int int14 = calculator1.divide(100, 200);
+
         com.voted.Calculator calculator16 = new com.voted.Calculator("hi!");
         boolean boolean18 = calculator16.equals((java.lang.Object) 10.0f);
+
         java.lang.Class<?> wildcardClass19 = calculator16.getClass();
         boolean boolean20 = calculator1.equals((java.lang.Object) calculator16);
         org.junit.Assert.assertTrue("Contract failed: equals-hashcode on calculator1 and calculator16", calculator1.equals(calculator16) ? calculator1.hashCode() == calculator16.hashCode() : true);
     }
+----
 
 Il génère également une suite de tests de non régression, dont voici quelques exemples :
 
 [source, java]
+----
     @Test
     public void test02() throws Throwable {
-        if (debug)
+        if (debug) {
             System.out.format("%n%s%n", "RegressionTest0.test02");
+        }
         com.voted.Calculator calculator0 = new com.voted.Calculator();
         int int3 = calculator0.multiply((int) (byte) 1, (int) (short) 100);
         int int6 = calculator0.add(0, 0);
+
         // The following exception was thrown during execution in test generation
         try {
             int int9 = calculator0.divide(1, 0);
@@ -146,25 +165,26 @@ Il génère également une suite de tests de non régression, dont voici quelque
         } catch (java.lang.IllegalArgumentException e) {
             // Expected exception.
         }
+
         org.junit.Assert.assertTrue("'" + int3 + "' != '" + 100 + "'", int3 == 100);
         org.junit.Assert.assertTrue("'" + int6 + "' != '" + 0 + "'", int6 == 0);
     }
 
-
-[source, java]
     @Test
     public void test08() throws Throwable {
-        if (debug)
+        if (debug) {
             System.out.format("%n%s%n", "RegressionTest0.test08");
+        }
         com.voted.Calculator calculator0 = new com.voted.Calculator();
         int int3 = calculator0.multiply((int) (byte) 1, (int) (short) 100);
         int int6 = calculator0.add(33, 98);
         int int9 = calculator0.divide((-68), (int) (byte) 100);
+
         org.junit.Assert.assertTrue("'" + int3 + "' != '" + 100 + "'", int3 == 100);
         org.junit.Assert.assertTrue("'" + int6 + "' != '" + 131 + "'", int6 == 131);
         org.junit.Assert.assertTrue("'" + int9 + "' != '" + 0 + "'", int9 == 0);
     }
-
+----
 
 
 == Avantages
@@ -185,7 +205,6 @@ Bien que Randoop soit un outil puissant, son efficacité dépend en partie de la
 - **Limiter la portée des tests** : Ne tester que les classes pertinentes pour votre application. En effet, tester des classes inutiles peut entraîner une génération excessive de tests et ralentir le processus.
 - **Analyser les résultats** : Examiner attentivement les résultats produits par Randoop. Il faut également s'assurer de comprendre les cas de test générés avant de les intégrer à votre suite de tests existante.
 - **Utiliser des options de configuration** : Randoop offre de nombreuses options de configuration (gentests, minimize, nondeterminism ...) pour personnaliser son comportement.
-- **Intégrer Randoop dans votre processus CI/CD**: Intégrer Randoop dans un pipeline de développement continu peut aider à identifier rapidement les problèmes de régression et à garantir la qualité du code.
 
 == Conclusion
 La génération automatique de tests unitaires avec Randoop offre un moyen efficace d'améliorer la qualité et la fiabilité du code Java. En utilisant cet outil de manière judicieuse et en comprenant ses résultats, il est possible d'accélérer le processus de test tout en garantissant une couverture complète et rigoureuse du code.
