@@ -13,16 +13,14 @@
             console.error('URL is undefined for:', item.url);
           }
           appendString += 
-          `<li class="mb-4">
-            <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-lg transition-shadow duration-300">
-              <div class="p-2">
-                
-                  <a href=${item.url}><h3 class="text-xl font-bold mb-2">${item.title}</h3></a>
-                  <p class="text-sm text-gray-500 mb-4">Ecrit par ${item.author}</p>
-             
-              </div>
-            </div>
-          </li>`;
+            `<li class="p-4 w-1/4">
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-lg transition-shadow duration-300">
+                  <div class="p-2">
+                    <a href="${item.url}"><h3 class="text-xl text-navysciam font-sans font-bold mb-2">${item.title}</h3></a>
+                    <p class="text-base text-gray-500 mb-4">Ecrit par ${item.author}</p>
+                  </div>
+                </div>
+            </li>`;
         }
          //  <p>${item.content.substring(0, 150)}...</p>  
          
@@ -54,14 +52,12 @@
         this.ref('id');
         this.field('title');
         this.field('author');
-        // this.field('content');
 
       for (var key in window.store) {
         this.add({
           'id': key,
           'title': window.store[key].title,
           'author': window.store[key].author,
-          // 'content': window.store[key].content,
         });
         }   
         });
