@@ -54,11 +54,24 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Generate the CSS classes and add them to the style element
     for (const element of Object.keys(colorSet)) {
-        // const className = element.toLowerCase().replace(/\s+/g, '-');
         const className = sanitizeClassName(element);
         const colors = colorSet[element];
         styleSheet.insertRule(`.bg-${className}-100 { background-color: ${colors.background} !important; }`, styleSheet.cssRules.length);
         styleSheet.insertRule(`.border-${className}-200 { border-color: ${colors.border} !important; }`, styleSheet.cssRules.length);
         styleSheet.insertRule(`.text-${className}-500 { color: ${colors.text} !important; }`, styleSheet.cssRules.length);
+    }
+
+    const tags = document.querySelectorAll('[data-tag-name]');
+    tags.forEach(tag => {
+        const tagName = tag.getAttribute('data-tag-name');
+        const className = sanitizeClassName(tagName);
+        tag.classList.add(`text-${className}-500`);
+        tag.classList.add(`bg-${className}-100`);
+        tag.classList.add(`border-${className}-200`);
+    });
+
+    const articlesContainer = document.getElementById('articles-container');
+    if (articlesContainer) {
+            articlesContainer.classList.add(`border-${className}-200`);
     }
 });
