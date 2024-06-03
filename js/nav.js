@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const mainContent = document.getElementById('mainContent');
     const searchPopup = document.getElementById('searchPopup');  
     const searchButtons = [document.getElementById('searchButton'), document.getElementById('mobileSearchButton')];
-    const blur = document.getElementById('blur');
+    // const blur = document.getElementById('blur');
     const closeButton = document.getElementById('closeSearchPopupButton');
 
   // Ouverture bouton de menu de navigation
@@ -86,8 +86,6 @@ document.addEventListener("DOMContentLoaded", function() {
   // Gestion swiper des articles de l'accueil
   document.addEventListener('DOMContentLoaded', function () {
     new Swiper('.mySwiper', {
-      autoHeight: true,
-      direction: 'horizontal',
       slidesPerView: 1,
       spaceBetween: 10,
       pagination: {

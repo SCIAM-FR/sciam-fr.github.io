@@ -380,16 +380,16 @@ ul.twitter-list li.nav-header {
   filter: blur(20px);
 }
 
-.swiper-wrapper {
+/* .swiper-wrapper {
   align-items: stretch;
 }
-/* .swiper-slide {
+.swiper-slide {
   @apply h-full w-full;
-}*/
+} */
 
 .swiper-slide {
-  display: flex;
-  flex-direction: column;
+  /* display: flex;
+  flex-direction: column; */
   height: 100%;
 }
 /* .swiper-content {
