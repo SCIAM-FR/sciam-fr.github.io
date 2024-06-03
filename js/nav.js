@@ -7,8 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const mainContent = document.getElementById('mainContent');
     const searchPopup = document.getElementById('searchPopup');  
     const searchButtons = [document.getElementById('searchButton'), document.getElementById('mobileSearchButton')];
-    const blur = document.getElementById('blur'); 
-  // const mobileSearchButton = document.getElementById('mobileSearchButton');
+    const blur = document.getElementById('blur');
     const closeButton = document.getElementById('closeSearchPopupButton');
 
   // Ouverture bouton de menu de navigation
@@ -20,8 +19,6 @@ document.addEventListener("DOMContentLoaded", function() {
       mobileMenu.classList.toggle('hidden');
       openIcon.classList.toggle('hidden');
       closeIcon.classList.toggle('hidden');
-      // if (!mobileMenu.classList.contains('hidden')) {
-      //   closeSearchPopup();
       closeButton.addEventListener('click', toggleSearchPopup);
     });
   
@@ -54,13 +51,6 @@ document.addEventListener("DOMContentLoaded", function() {
     // }
     // });
 
-    // document.addEventListener('click', this.closeWhenClickedOutside);
-    // closeWhenClickedOutside(event) {
-    //   if ( !event.target.closest('.searchPopup') ) {
-    //     this.open = false;
-    //     document.removeEventListener('click', this.closeWhenClickedOutside);
-    //   }
-    // };
 
     // Fermer avec la touche Esc
     document.addEventListener('keydown', (event) => {
@@ -96,6 +86,8 @@ document.addEventListener("DOMContentLoaded", function() {
   // Gestion swiper des articles de l'accueil
   document.addEventListener('DOMContentLoaded', function () {
     new Swiper('.mySwiper', {
+      autoHeight: true,
+      direction: 'horizontal',
       slidesPerView: 1,
       spaceBetween: 10,
       pagination: {
