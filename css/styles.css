@@ -267,14 +267,11 @@ ul.twitter-list li.nav-header {
   @apply h-full w-full;
 } */
 
-.swiper-slide {
-  /* display: flex;
-  flex-direction: column; */
+/* .swiper-slide {
+  display: flex;
+  flex-direction: column;
   height: 100%;
-}
-/* .swiper-content {
-  height: 100% !important
-  } */
+} */
 
 @media (min-width: 768px) {
   .swiper-slide {
