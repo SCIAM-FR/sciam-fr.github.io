@@ -4,6 +4,7 @@
 :page-excerpt: La semaine dernière, la France est entrée en confinement sur décision du président de la République après consultation d’un groupe d’experts. Cette situation exceptionnelle et inédite nous invite à nous pencher sur la question suivante{nbsp}: est-ce qu’un choix rationnel produit toujours un résultat rationnel{nbsp}?
 :layout: post
 :author: mohamednajib
+:categories: Sciences CO
 :page-tags: ['Science','IntelligenceCollective']
 :page-vignette: noswiming_300x300.png
 //:post-vignette:

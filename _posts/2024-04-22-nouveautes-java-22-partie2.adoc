@@ -3,6 +3,7 @@
 :page-excerpt: Ce second article sur les nouveautés de Java 22 est consacré aux autres améliorations, que ce soit les évolutions dans les outils, les API et dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
 :layout: post
 :author: jeanmicheldoudoux
+:categories: [Dev, News]
 :page-tags: [Java, Java 22, Projet Amber, Projet Panama, Projet Loom]
 :page-vignette: java-22.png
 :page-liquid:

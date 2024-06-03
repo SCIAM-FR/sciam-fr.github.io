@@ -104,7 +104,8 @@ autopages:
       cased: true # if true, the uppercase letters in slug will be converted to lowercase ones.
 
   categories:
-    enabled: false
+    output: true # generate HTML page
+    permalink: pretty
 
   collections:
       enabled: false
