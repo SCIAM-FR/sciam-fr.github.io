@@ -1,7 +1,7 @@
 ---
 layout: default
 pagination:
-  enabled: true
+enabled: true
 ---
 
 <div class="relative min-h-screen px-4 md:px-28 bg-grayBg overflow-y-visible">
@@ -66,11 +66,11 @@ pagination:
   
     <!-- Main Content and Sidebar -->
     <div class="md:grid md:grid-cols-3 md:gap-4 mt-4">
-      <div class="bg-white md:col-span-2 p-4 rounded-xl shadow-lg">
-        <div class="w-full pl-7 prose 
-        lg:prose-lg 
-        prose-headings:text-3xl 
-        prose-headings:pt-5
+      <div class="bg-white md:col-span-2 p-8 rounded-xl shadow-lg overflow-hidden
+        prose lg:prose-2xl
+
+        prose-headings:text-2xl 
+        prose-headings:pt-1
         prose-headings:font-black 
         prose-headings:font-sans
         prose-headings:text-navysciam
@@ -81,29 +81,63 @@ pagination:
         prose-code:text-sm
         prose-pre:text-base
         prose-blockquote:text-sm
-        prose-blockquote:text-navysciam">
+        prose-blockquote:text-navysciam
+        prose-img:rounded-xl">
           {{ content }}
-        </div>
       </div>
 
-      <!-- Sidebar for Table of Contents and Related Posts-->
-      <div class="md:col-span-1 space-y-4">
-        <div class="sticky top-10">
-          <div class="hidden md:block bg-white rounded-xl p-12 shadow-lg relative
-          prose-li:font-sans
-          prose-li:pb-2
-          prose-li:text-lg
-          prose-ul:text-md
-          prose-li:text-navysciam">
-            <div id="tocProgress" class="absolute top-0 bottom-0 left-0 w-1 bg-yellowsciam transition-height duration-200 ease-out"></div>
-            {% if page.toc %}
-            <p class="text-xl text-navysciam font-bold">Sommaire :</p>
-            <hr class="my-6 bg-zinc-200"/>
-            {% toc %}
-            {% endif %}
-          </div>
-          <div class="bg-white p-4 rounded-xl shadow-lg">Related Posts</div>
-        </div>
+    <div class="md:col-span-1">
+      <div class="hidden md:block sticky bg-white top-10 max-h-screen overflow-auto p-4 rounded-xl shadow-lg">
+        {% if page.toc %}
+        <p class="text-xl text-navysciam font-bold">Table of Contents:</p>
+        <hr class="my-4 bg-zinc-200" />
+        <nav id="toc" class="toc
+            prose-pre:font-sans
+            prose-table:font-sans
+            prose-table:text-base
+            prose-thead:font-sans
+            prose-td:font-sans
+            prose-li:font-sans
+            prose-li:pb-3
+            prose-li:text-lg
+            prose-ul:text-md
+            prose-li:text-navysciam">
+          {{ content | toc_only }}
+        </nav>
+        {% endif %}
       </div>
     </div>
+  </div>
+
+  <div class="flex flex-wrap -mx-3 mb-6 mt-10">
+    <!-- 
+      Pagination Buttons 
+    -->
+    <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
+      {% if page.previous.url %}
+      <a href="{{ page.previous.url | relative_url }}" title="{{ page.previous.title | strip_html | xml_escape }}"
+        class="inline-block bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded">
+        &larr; Article précédent
+      </a>
+      {% endif %}
+    </div>
+    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0 text-center">
+    </div>
+    <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0 text-right">
+      {% if page.next.url %}
+      <a href="{{ page.next.url | relative_url }}" title="{{ page.next.title | strip_html | xml_escape }}"
+        class="inline-block bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded">
+        Article suivant &rarr;
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="mx-auto shadow-custom-bottom-shadow">
+    <script src="https://giscus.app/client.js" data-repo="SCIAM-FR/sciam-fr.github.io" data-repo-id="R_kgDOJnEX-w"
+      data-category="General" data-category-id="DIC_kwDOJnEX-84Cbj8_" data-mapping="pathname" data-strict="0"
+      data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="fr"
+      crossorigin="anonymous" async>
+      </script>
+  </div>
 </div>

@@ -1,25 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // The list of elements (tags)
-    // const elements = [
-    //     "Java", "Java 14", "Java 19", "Java 20", "Java 21", "Java 22", "JavaFX", "Quarkus",
-    //     "Algorithme", "Angular", "Angular16", "Angular17", "Application WEB", 
-    //     "Architecture Hexagonale", "BehavioralScience",
-    //     "Blockchain", "Chatbot", "Collections", "Cybercrime", "Cybersecurite", "Cybersecurity",
-    //     "Domain Driven Design", "EJB", "Economie", "FFM", "Finance", 
-    //     "Garbage collector", "Heuristique", "Hooks", "Hydratation", "Hydratation par défaut", 
-    //     "IA", "IHM", "IllusionDesSeries", "IntelligenceCollective", "Interfaces", "JDK", "JDKMon", 
-    //     "Jakarta EE", "Jakarta MVC", "Jakarta RESTful Web Service", "LRA", "Machine learning", "MachineLearning", "MicroProfile", 
-    //     "Mindset", "Misc", "Mistral IA", "Neuroscience","Nudge",
-    //     "Pattern matching", "PgVector", "Prediction", "Projet Amber", "Projet Loom", 
-    //     "Projet Panama", "Psychologie", , "RAG", "Racisme", "Raison", "ResearchReports", "Reseaux", 
-    //     "Router", "Rxjs", "Réseau neuronal artificiel", "SAGA", 
-    //     "SCC", "SPI", "Science", "SciencesCognitives", "SciencesComportementales", 
-    //     "Securite", "Signal", "Sludge", "Sous-RFC", "Spring AI", "Spring Boot", "Startup", "Switch expressions", 
-    //     "Threads virtuels", "UI", "WebRTC", "ZGC", "ai", "control Flow", "genAI", 
-    //     "lazy loading blocs", "le signal Input()", "misc", "openai", "spring boot"
-    // ];
-
-    // TBD: Curate the list of tags
     const elements = [
         "Java", "Java 14", "Java 19", "Java 20", "Java 21", "Java 22", "JavaFX", "Quarkus",
         "Administration", "Alea", "Algorithme", "Angular", "Angular16", "Angular17", "Application WEB", 
@@ -39,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function() {
         "Threads virtuels", "UI", "Violence", "WebRTC", "ZGC", "ai", "control Flow", "genAI", 
         "lazy loading blocs", "le signal Input()", "misc", "openai", "spring boot"
     ];
-
 
     // Number of color hues available is 360
     // Creating an array of hues that are evenly distributed.
@@ -70,12 +48,30 @@ document.addEventListener("DOMContentLoaded", function() {
     document.head.appendChild(styleElement);
     const styleSheet = styleElement.sheet;
 
+    function sanitizeClassName(className) {
+        return className.toLowerCase().replace(/[\s+()]/g, '-').replace(/[^a-z0-9-_]/g, '');
+    }
+
     // Generate the CSS classes and add them to the style element
     for (const element of Object.keys(colorSet)) {
-        const className = element.toLowerCase().replace(/\s+/g, '-');
+        const className = sanitizeClassName(element);
         const colors = colorSet[element];
         styleSheet.insertRule(`.bg-${className}-100 { background-color: ${colors.background} !important; }`, styleSheet.cssRules.length);
         styleSheet.insertRule(`.border-${className}-200 { border-color: ${colors.border} !important; }`, styleSheet.cssRules.length);
         styleSheet.insertRule(`.text-${className}-500 { color: ${colors.text} !important; }`, styleSheet.cssRules.length);
+    }
+
+    const tags = document.querySelectorAll('[data-tag-name]');
+    tags.forEach(tag => {
+        const tagName = tag.getAttribute('data-tag-name');
+        const className = sanitizeClassName(tagName);
+        tag.classList.add(`text-${className}-500`);
+        tag.classList.add(`bg-${className}-100`);
+        tag.classList.add(`border-${className}-200`);
+    });
+
+    const articlesContainer = document.getElementById('articles-container');
+    if (articlesContainer) {
+            articlesContainer.classList.add(`border-${className}-200`);
     }
 });

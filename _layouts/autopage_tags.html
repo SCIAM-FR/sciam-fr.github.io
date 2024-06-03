@@ -1,51 +1,59 @@
 ---
 layout: default
 ---
-<!-- Style des boutons de pagination -->
-<style>
-  ul.pager { text-align: center; list-style: none; }
-  ul.pager li {display: inline;border: 0px solid black; padding: 10px; margin: 5px;}
-</style>
-  
-<div class="home">
 
-  <h1 class="page-heading">Articles associés au tag {% if page.autopages %}{{page.autopages.display_name}}{% endif %}</h1>
-  <p>Page {{page.pagination_info.curr_page}} de {{page.pagination_info.total_pages}}</p>
-  
-  <ul class="post-list">
-    {% for post in paginator.posts %}
-      <li>
-        <h2>
-          <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title }}</a>
-        </h2>
-        {% assign author = site.data.authors[post.author] %}
-        <div class="meta"><strong>Ecrit par <span
-            class="authors"><a href="{{ '/author/' | append: post.author | append: '/index.html' | relative_url }}">{{ author.name }}</a></span>, le <span
-            class="date">{{ post.date | date: "%d/%m/%Y"}}</span>
-        </strong></div>
-        <div class="content">
-          {{ post.excerpt }}
-        </div>
-      </li>
-    {% endfor %}
-  </ul>
-  
-  <!-- 
-    Boutons de pagination
-  -->
-  {% if paginator.total_pages > 1 %}
-  <ul class="pager">
+<div class="p-8 bg-grayBg">
+  <div class="bg-white py-10 px-14 rounded-lg shadow-md">
+    <h1 class="text-2xl font-sans text-navysciam font-bold my-4">
+      Articles associés au tag
+      {% if page.autopages %}
+      <span class="rounded-lg border-0.5 px-4 py-2 ml-2"
+        data-tag-name="{% if page.autopages %}{{ page.autopages.display_name }}{% endif %}">
+        {{ page.autopages.display_name }}
+      </span>
+      {% endif %}
+    </h1>
+    <p>Page {{page.pagination_info.curr_page}} de {{page.pagination_info.total_pages}}</p>
+
+    <ul>
+      {% for post in paginator.posts %}
+      <div class="flex flex-col md:flex-row mt-6 mb-16 p-8 border-0.5 border-lightbluesciam rounded-lg shadow-md">
+        <li class="mb-4">
+          <h2 class="text-xl">
+            <a class="text-navysciam hover:text-white hover:bg-navysciam hover:px-1 font-sans font-bold"
+              href="{{ post.url | relative_url }}">{{ post.title }}</a>
+          </h2>
+          {% assign author = site.data.authors[post.author] %}
+          <div><strong>Ecrit par <span>
+                <a class="text-navysciam"
+                  href="{{ '/author/' | append: post.author | append: '/index.html' | relative_url }}">
+                  {{ author.name }}
+                </a></span>, le
+              <span>{{ post.date | date: "%d/%m/%Y"}}</span>
+            </strong></div>
+          <div class="mt-2">
+            {{ post.excerpt }}
+          </div>
+        </li>
+      </div>
+      {% endfor %}
+    </ul>
+
+    {% if paginator.total_pages > 1 %}
+    <ul class="flex justify-center list-none mt-6">
       {% if paginator.previous_page %}
-      <li class="previous">
-          <a href="{{ paginator.previous_page_path | relative_url | replace: '//', '/' }}">&larr; Articles pr&eacute;&eacute;dents</a>
+      <li class="mx-2">
+        <a class="bg-gray-200 hover:bg-gray-300 text-black py-2 px-4 rounded"
+          href="{{ paginator.previous_page_path | relative_url | replace: '//', '/' }}">&larr; Articles précédents</a>
       </li>
       {% endif %}
       {% if paginator.next_page %}
-      <li class="next">
-          <a href="{{ paginator.next_page_path | relative_url | replace: '//', '/' }}">Articles suivants &rarr;</a>
+      <li class="mx-2">
+        <a class="bg-gray-200 hover:bg-gray-300 text-black py-2 px-4 rounded"
+          href="{{ paginator.next_page_path | relative_url | replace: '//', '/' }}">Articles suivants &rarr;</a>
       </li>
       {% endif %}
-  </ul>
-  {% endif %}
-
+    </ul>
+    {% endif %}
+  </div>
 </div>

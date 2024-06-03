@@ -3,25 +3,29 @@ layout: default
 title: 'Auteurs du Blog Tech de SCIAM'
 ---
 
-<h1>Tous les auteurs</h1>
-<p>&nbsp;</p>
-<div class="all-tags">
-
-  {% assign authors = site.data.authors | sort %}
-  {% for author_data in authors %}
-    {% assign author = author_data[1] %}
-    {% if author.picture %}
-  <img class="rounded-full w-10 h-10" width="80px" height="80px" src="{{ '/images/authors/' | append: author.picture | relative_url }}" style="float:left;margin-right:15px;" />
-    {% endif %}
-  <h1 class="text-navysciam font-sans font-black text-base"><a href="{{ '/author/' | append: author_data[0] | append: '/index.html' | relative_url }}">{{ author.name }}</a></h1>
-  <p><b>{{ author.job }}</b></p>
-  <p>{{ author.bio }}</p>
-  <p>&nbsp;</p>
-  <hr>
-  {% endfor %}
+<div class="p-8 bg-grayBg">
+  <div class="bg-white py-10 px-14 rounded-lg shadow-md">
+    <h1 class="text-2xl font-sans text-navysciam font-bold my-4">Tous les auteurs</h1>
+    <div class="space-y-6">
+      {% assign authors = site.data.authors | sort %}
+      {% for author_data in authors %}
+      {% assign author = author_data[1] %}
+      <div class="flex flex-col md:flex-row mt-6 mb-16 p-8 border-0.5 border-lightbluesciam rounded-lg shadow-md">
+        {% if author.picture %}
+        <img class="rounded-full w-20 h-20 mr-4" src="{{ '/images/authors/' | append: author.picture | relative_url }}"
+          alt="{{ author.name }}">
+        {% endif %}
+        <div>
+          <h2 class="text-navysciam font-sans font-bold text-lg">
+            <a href="{{ '/author/' | append: author_data[0] | append: '/index.html' | relative_url }}">{{ author.name
+              }}</a>
+          </h2>
+          <p class="font-semibold">{{ author.job }}</p>
+          <p>{{ author.bio }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-
-
 

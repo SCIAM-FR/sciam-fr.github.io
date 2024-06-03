@@ -28,24 +28,24 @@
     rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
   <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet"/>
-  <link href="{{ './css/styles.css' | relative_url }}" rel="stylesheet">
   <link href="{{ './css/output.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ './css/styles.css' | relative_url }}" rel="stylesheet">
 
   {% feed_meta %}
   {% seo %}
   {% if jekyll.environment == 'production' %}
-  {% include analytics.html %} 
+  {% include analytics.html %}
   {% endif %}
 </head>
 
-<body>
-  <div class="flex flex-col justify-between bg-bodyBackground">
-    <nav class="bg-navysciam w-full sticky top-0 w-full py-4 px-7 sm:px-28 z-50">
+<body class="bg-grayBg scroll-smooth">
+  <div class="flex flex-col justify-between">
+    <nav class="bg-navysciam w-full sticky top-0 py-4 px-7 sm:px-28 z-50">
       <div class="flex items-center justify-between">
-          <a href="/" class="flex items-center space-x-2">
+          <a href="{{ '/' | relative_url }}" class="flex items-center space-x-2">
             <img src="/images/logo/logo_sciam_blanc.png" alt="Logo blanc" class="h-10 w-10">
             <img src="/images/logo/logo_sciam_white.svg" alt="Logo SCIAM" class="w-20 font-bold">
-            <span class="mt-1.5"> <p class="text-white text-xl">| Blog </p></span>
+            <span class="mt-1.5"> <p class="text-white font-extralight text-2xl"> | Blog </p></span>
           </a>
           <div class="hidden sm:flex items-center space-x-4">
             <ul class="flex flex-row">
@@ -55,45 +55,42 @@
               <li class="flex items-center">
                 <a href="{{ item.url | relative_url }}"
                   class="text-white no-underline hover:text-white hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md 
-                  {% if item.title == 'Sciam' %}px-0 py-0{% else %}px-3 py-2{% endif %} text-xl font-medium 
+                  {% if item.title == 'Sciam' %}px-3 py-0{% else %}px-3 py-2{% endif %} text-xl font-medium 
                   {% if current_url == item_url %}text-white{% else %}text-gray-500{% endif %}">
-                  {% if item.title == 'Sciam' %}
-                    <img src="/images/icons/www-icon.svg" alt="www-icon" class="align-middle decoration-greysciam hover: decoration-white">
-                  {% else %}
-                    {{ item.title }}
-                  {% endif %}
-                </a>
-              </li>
-              {% endfor %} 
-              <li class="flex items-center"> 
-                <button id="searchButton" type="button" class="p-2 flex flex-row">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-greysciam hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                </button>
-              </li>
-            </ul> 
-          </div>    
-          <!-- version toggle mobile -->
-          <div class="sm:hidden">
-            <button type="button"
-              class="menu-button inline-flex items-center p-2 w-10 h-10 justify-center text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-              aria-controls="mobile-menu" aria-expanded="false">
-              <span class="sr-only">Toggle menu</span>
-              <svg viewBox="0 0 24 24" stroke="white" fill="none" stroke-width="1.5" class="h-6 w-6">
-                <path class="menu-open-icon hidden" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-                <path class="menu-close-icon" stroke-linecap="round" stroke-linejoin="round"
-                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-              </svg>
-            </button>
-          </div>
+                {% if item.title == 'Sciam' %}
+                  <img src="/images/icons/www-icon.svg" alt="www-icon" class="align-middle decoration-greysciam hover: decoration-white">
+                {% else %}
+                {{ item.title }}
+                {% endif %}
+              </a>
+            </li>
+            {% endfor %}
+            <li class="flex items-center">
+              <button id="searchButton" type="button" class="p-2 flex flex-row">
+                <img src="/images/icons/search-icon.svg" class="h-6 w-6 align-middle text-greysciam hover:text-white" alt="Search Icon">
+              </button>
+            </li>
+          </ul>
+        </div>
+      
+        <!-- version toggle mobile -->
+        <div class="sm:hidden">
+          <button type="button"
+            class="menu-button inline-flex items-center p-2 w-10 h-10 justify-center text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+            aria-controls="mobile-menu" aria-expanded="false">
+            <span class="sr-only">Toggle menu</span>
+            <img src="/images/icons/menu-open-icon.svg" class="menu-open-icon h-6 w-6 hidden">
+            <img src="/images/icons/menu-close-icon.svg" class="menu-close-icon h-6 w-6">
+          </button>
+        </div>
       </div>
-      <!-- version menu déroulant mobile -->
+        <!-- version menu déroulant mobile -->
       <div class="sm:hidden hidden w-full" id="mobile-menu">
         <div class="flex flex-col space-y-1 px-2 pb-3 pt-2">
           {% for item in site.data.navigation %}
           {% assign item_url = item.url | relative_url %}
-          <a href="{{ item_url }}" class="no-underline text-white hover:text-white block rounded-md px-3 py-2 text-base font-medium {% if page.url==item_url %}aria-current=page {% endif %}">
+          <a href="{{ item_url }}" class="no-underline text-white hover:text-white block rounded-md px-3 py-2 text-base font-medium 
+          {% if page.url==item_url %}aria-current=page {% endif %}">
             {{ item.title }}
           </a>
           {% endfor %}
@@ -105,31 +102,29 @@
         </div>
       </div>
     </nav>
-        
-          <div id="searchPopup" class="hidden fixed inset-0 flex items-center justify-center p-4 z-50">
-            <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-4 relative">                
-              <button id="closeSearchPopupButton" type="button" class="right-0 pb-3 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-2 h-2 ms-auto flex items-end dark:hover:bg-gray-600 dark:hover:text-white">
-                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                  </svg>
-                  <span class="sr-only">Fermer recherche</span>
-              </button>  
-              <form action="/search.html" method="get" >
-                <div class="relative">
-                <input type="text" id="search-box" class="relative w-full pl-4 pr-10 py-2 rounded-lg text-xl border border-navysciam" name="query" placeholder="Rechercher...">
-                  <button  type="submit" class="absolute inset-y-0 right-0 px-3 flex items-center bg-navysciam rounded-r-lg text-white">
-                    <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </button> 
-                </div>
-              </form>
+      <div id="searchPopup" class="hidden fixed inset-0 flex items-center justify-center p-4 z-50">
+        <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-4 relative">                
+          <button id="closeSearchPopupButton" type="button" class="right-0 pb-3 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-2 h-2 ms-auto flex items-end dark:hover:bg-gray-600 dark:hover:text-white">
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              </svg>
+              <span class="sr-only">Fermer recherche</span>
+          </button>  
+          <form action="/search.html" method="get" >
+            <div class="relative">
+            <input type="text" id="search-box" class="relative w-full pl-4 pr-10 py-2 rounded-lg text-xl border border-navysciam" name="query" placeholder="Rechercher...">
+              <button  type="submit" class="absolute inset-y-0 right-0 px-3 flex items-center bg-navysciam rounded-r-lg text-white">
+                <img src="/images/icons/search-icon.svg" class="h-6 w-6 align-middle text-greysciam hover:text-white" alt="Search Icon">
+              </button> 
             </div>
-          </div>
-    <!-- <div id="blur" class="fixed inset-0 backdrop-blur-xl hidden"></div>       -->
+          </form>
+        </div>
+      </div>
+     <!-- <div id="blur" class="fixed inset-0 backdrop-blur-xl hidden"></div>       -->     
     <div class="content relative" id="mainContent">
       {{ content }}
     </div>
+
     <footer>
       <div>
         {% include social-networks-links.html %}
@@ -143,7 +138,7 @@
   <script src="{{ 'js/color-code.js'| relative_url}}"></script>
   <script src="{{ 'js/search.js'| relative_url}}"></script>
   <script src="{{ 'js/lunr.js'| relative_url}}"></script>
-  <script src="{{ 'js/progress-bar.js'| relative_url}}"></script>
+  <script src="{{ 'js/toc-scroll.js'| relative_url}}"></script>
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
   {% include mathjax.html %}
 </body>
