@@ -32,11 +32,16 @@ module.exports = {
         backgroundsciam: "#cbd5e1",
         grayBg: '#f2f1ed',
         navysciam: '#384a72',
+        navysciamlight: '#505f8c',
+        navysciamdark: '#2e3a56',
         yellowsciam: '#ffec3f',
         lightbluesciam: "#9abcc3",
         greysciam: "#9CA3AF",
         lightgrey: "#F5F5F7",
         white: "#fff",
+      },
+      gradients: {
+        'custom-gradient': ['navysciamdark', 'navysciam', 'navysciamlight']
       },
       boxShadow: {
         'custom-bottom-shadow': '0 10px 6px -9px lightgrey',
