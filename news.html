@@ -6,8 +6,8 @@ title: "News"
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-24">
     <h1 class="text-3xl font-sans text-navysciam font-bold mb-5">Tous les articles d'actualité</h1>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {% assign posts = site.posts %}
-        {% for post in posts %}
+        {% assign news_posts = site.posts | where_exp: "post", "post.categories contains 'News'" %}
+        {% for post in news_posts %}
         <div class="bg-white rounded-xl overflow-hidden shadow-lg">
             {% if post.vignette %}
             <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}"

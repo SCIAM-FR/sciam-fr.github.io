@@ -219,8 +219,8 @@ pagination:
           </div>
           <div class="swiper mySwiper">
             <div class="swiper-wrapper">
-              {% assign posts = paginator.posts | slice: 7, 6 %}
-              {% for post in posts %}
+              {% assign news_posts = paginator.posts | where: "categories", "News" | limit: 6%}
+              {% for post in news_posts %}
               <div class="swiper-slide bg-white rounded-xl overflow-hidden shadow-lg mb-6 h-auto flex flex-col min-h-[500px] md:min-h-[620px] lg:min-h-[400px]">
                 {% if post.vignette %}
                 <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}" class="object-cover w-full h-48 border-slate-100 rounded-t-xl" alt="Image article">

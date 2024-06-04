@@ -6,6 +6,7 @@
 :page-tags: [Java, Java 22, Projet Amber, Projet Panama, Projet Loom]
 :page-vignette: java-22.png
 :page-liquid:
+:page-categories: [Developpement, News]
 
 = Les nouveautés de Java 22 : partie 2
 
