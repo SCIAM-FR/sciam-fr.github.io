@@ -228,53 +228,11 @@ ul.twitter-list li.nav-header {
   transition: none;
 } 
 
-/* Style personnalisée */
-/* .nav a {
-  color: #9CA3AF;
-}
-
-.banner-home {
-  padding-top: 5em;
-  padding-bottom: 5em;
-  color: #384a72; */
-  /* color: navysciam; */
-/* }
-
-.banner-title > p {
-  font-size: 2rem; 
-  font-weight: bold;
-  margin-bottom: 2em;
-}
-
-.banner-subtitle {
-  font-size: xl;
-  font-weight: regular;
-} */
-
-/* .footer a:hover {
-  color: #384a72;
-} */
-
 
 .blur-effect {
   filter: blur(20px);
 }
 
-/* .swiper-wrapper {
-  align-items: stretch;
-}
-.swiper-slide {
-  @apply h-full w-full;
-} */
-
-.swiper-slide {
-  /* display: flex;
-  flex-direction: column; */
-  height: 100%;
-}
-/* .swiper-content {
-  height: 100% !important
-  } */
 
 @media (min-width: 768px) {
   .swiper-slide {
