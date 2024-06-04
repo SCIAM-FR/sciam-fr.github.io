@@ -8,4 +8,6 @@ Gemfile.lock
 .jekyll-cache/
 .jekyll-metadata
 /node_modules
-.DS_Store
+.DS_Storeoutput.css
+package-lock.json
+output.css
