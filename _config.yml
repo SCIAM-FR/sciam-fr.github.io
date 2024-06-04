@@ -109,12 +109,6 @@ autopages:
 
   collections:
       enabled: false
-    # _posts: 
-    #   output: true
-    #   permalink: ''
-    # _authors:
-    #   output: true
-    #   permalink: '/author/:author/'
 
 feed:
   excerpt_only: true
