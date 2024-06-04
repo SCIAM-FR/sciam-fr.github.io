@@ -135,7 +135,6 @@ pagination:
             {% assign posts = paginator.posts | slice: 1, 6 %}
             {% for post in posts %}
               <div class="swiper-slide bg-white rounded-xl overflow-hidden shadow-lg mb-6 h-auto flex flex-col min-h-[500px] md:min-h-[620px] lg:min-h-[400px]">
-                <!-- <div class="> -->
                   {% if post.vignette %}
                   <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}" class="object-cover w-full h-48 border-slate-100 rounded-t-xl" alt="Image article">
                   <hr class="bg-zinc-50 opacity-50"/>
