@@ -227,3 +227,15 @@ ul.twitter-list li.nav-header {
   opacity: 1;
   transition: none;
 } 
+
+
+.blur-effect {
+  filter: blur(20px);
+}
+
+
+@media (min-width: 768px) {
+  .swiper-slide {
+    @apply w-1/3; 
+  }
+}

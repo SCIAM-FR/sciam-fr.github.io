@@ -6,6 +6,7 @@ module.exports = {
     "./_includes/**/*.html",
     "./_site/**/*.html",
     "./_posts/*.md",
+    "./_news/*.md",
     "./*.md",
     "./*.html",
     "./css/**/*.css",
@@ -67,6 +68,12 @@ module.exports = {
         '1': '1',
         '2': '2',
         '3': '3',
+      },
+      blur: {
+        xl: '24px',
+      },
+      backdropBlur: {
+        xl: '20px',
       },
       backgroundImage: {
         'hero-image': "url('/images/visuals/grids.jpg')"
@@ -151,8 +158,13 @@ module.exports = {
       }),
     },
   },
+  variants: {
+    extend: {
+      backdropBlur: ['responsive', 'hover', 'focus'],
+    }
+  },
   plugins: [
-    require('@tailwindcss/typography'),
+    require('@tailwindcss/typography', 'tailwindcss-filters'),
     function({ addBase, theme }) { // Override asciidoc style
       addBase({
         '#toc': {

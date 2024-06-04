@@ -3,6 +3,7 @@ description: Ce blog contient des articles techniques issus de la communeauté d
 domain: sciam-fr.github.io       # if you want to force HTTPS, specify the domain without the http at the start, e.g. example.com
 url: https://sciam-fr.github.io  # the base hostname and protocol for your site, e.g. http://example.com
 locale: fr_FR
+permalink: pretty
 #baseurl: "/"
 twitter:
   username: SCIAM_FR
@@ -71,7 +72,7 @@ plugins:
  
 pagination:
   enabled: true
-  per_page: 9
+  per_page: 7
   paginate_path: '/page/:num/'
   title: ':title - page :num'
   sort_field: 'date'
@@ -104,16 +105,10 @@ autopages:
       cased: true # if true, the uppercase letters in slug will be converted to lowercase ones.
 
   categories:
-    enabled: false
+    enabled: true
 
   collections:
       enabled: false
-    # _posts: 
-    #   output: true
-    #   permalink: ''
-    # _authors:
-    #   output: true
-    #   permalink: '/author/:author/'
 
 feed:
   excerpt_only: true
