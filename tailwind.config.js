@@ -77,6 +77,7 @@ module.exports = {
       typography: (theme) => ({
         DEFAULT: {
           css: { // Override asciidoc default styles
+            maxWidth: '2000px',
             'h2 a': { 
               color: `${theme('colors.navysciam')} !important`,
               '&:hover': {
