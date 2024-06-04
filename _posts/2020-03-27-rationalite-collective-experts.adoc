@@ -4,12 +4,12 @@
 :page-excerpt: La semaine dernière, la France est entrée en confinement sur décision du président de la République après consultation d’un groupe d’experts. Cette situation exceptionnelle et inédite nous invite à nous pencher sur la question suivante{nbsp}: est-ce qu’un choix rationnel produit toujours un résultat rationnel{nbsp}?
 :layout: post
 :author: mohamednajib
-:categories: Sciences CO
 :page-tags: ['Science','IntelligenceCollective']
 :page-vignette: noswiming_300x300.png
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/cdd20-1193381' target='_blank'>CDD20</a>.
 :page-liquid:
+:page-categories: Sciences CO
 
 .Illustration par https://pixabay.com/fr/users/geralt-9301[Gerd Altmann^]
 image::{{'/images/mohamednajib/experts1.png' | relative_url}}[image,width=80%,align="center"]

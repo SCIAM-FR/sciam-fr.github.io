@@ -8,6 +8,7 @@
 :page-vignette: spring_openai.png
 :page-liquid:
 :showtitle:
+:page-category: News
 
 
 Spring Boot, un Framework très utilisé pour le développement d'applications Java modernes et évolutives, se rencontre avec OpenAI, une entreprise de recherche en intelligence artificielle axée sur la promotion et le développement de l'intelligence artificielle responsable. Bien que ces deux technologies opèrent dans des domaines d'expertise distincts, il est envisageable de les fusionner pour créer des applications captivantes.

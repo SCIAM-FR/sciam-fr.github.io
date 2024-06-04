@@ -8,7 +8,7 @@
 :page-vignette: ffm-java22.jpg
 :page-liquid:
 :showtitle:
-:page-category: Developpement
+:page-category: News
 
 == Un peu d'histoire
 
