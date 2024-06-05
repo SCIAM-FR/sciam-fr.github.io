@@ -10,7 +10,7 @@ title: 'Auteurs du Blog Tech de SCIAM'
       {% assign authors = site.data.authors | sort %}
       {% for author_data in authors %}
       {% assign author = author_data[1] %}
-      <div class="flex flex-col md:flex-row mt-6 mb-16 p-8 border-0.5 border-lightbluesciam rounded-lg shadow-md">
+      <div class="flex flex-col md:flex-row mt-6 p-8 border-0.5 border-lightbluesciam rounded-lg shadow-md">
         {% if author.picture %}
         <img class="rounded-full w-20 h-20 mr-4" src="{{ '/images/authors/' | append: author.picture | relative_url }}"
           alt="{{ author.name }}">

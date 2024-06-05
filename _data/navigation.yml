@@ -4,6 +4,8 @@
   url: '/'
 - title: Cybersécurité
   url: '/'
+- title: Auteurs
+  url: '/authors' 
 - title: Contact
   url: 'https://www.sciam.fr/contact'
 - title: Sciam
