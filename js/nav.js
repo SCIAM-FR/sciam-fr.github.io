@@ -19,19 +19,17 @@ document.addEventListener("DOMContentLoaded", function() {
       mobileMenu.classList.toggle('hidden');
       openIcon.classList.toggle('hidden');
       closeIcon.classList.toggle('hidden');
-      closeButton.addEventListener('click', toggleSearchPopup);
     });
-  
+
   // Gestion barre de recherche
-      // Fonction pour basculer la visibilité de la barre de recherche
     function toggleSearchPopup() {
       searchPopup.classList.toggle('hidden');
       mainContent.classList.toggle('blur-effect');
       // if (!searchPopup.classList.contains('hidden')&& mobileMenu) {
       //   mobileMenu.classList.add('hidden');
-      // }
+      // }  
     }
-
+    closeButton.addEventListener('click', toggleSearchPopup);
     // Écouteur d'événement pour le bouton de recherche
       searchButtons.forEach(button => {
       button.addEventListener('click', (event) => {
