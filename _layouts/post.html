@@ -4,92 +4,83 @@ pagination:
 enabled: true
 ---
 
-<div class="relative min-h-screen px-4 md:px-28 bg-grayBg overflow-y-visible">
-    <!-- Hero Section -->
-    <div class="flex flex-col md:flex-row items-center min-h-1/2 py-16">
-      <!-- Image Block -->
-      <div class="order-1 pb-5 md:order-2 md:pb-0 flex justify-center items-center md:w-custom-width md:h-custom-height">
-        <div
-          class="w-full h-full bg-hero-image md:custom-width md:custom-height bg-center bg-no-repeat bg-cover flex justify-center items-center rounded-xl bg-opacity-85">
-          <div class="w-full h-full overflow-hidden flex justify-center items-center bg-navysciam bg-opacity-60 rounded-xl">
-            <img src="{{ '/images/vignettes/' | append: page.vignette | relative_url }}" alt="Post Image"
-              class="max-w-full max-h-full p-6 rounded-2.5">
-          </div>
-        </div>
-      </div>
-      <!-- Text Block -->
-      <div class="order-2 md:order-1 text-navysciam md:w-1/2 p-8">
-        <p class="text-4xl font-bold mb-4">{{ page.title }}</p>
-        <div class="text-greysciam mb-4">
-          <div class="p-4">
-            <!-- Authors information -->
-            {% if page.auteurs.size > 1 %}
-              <p class="font-semibold">Auteurs:</p>
-              {% for auteur in page.auteurs %}
-                {% assign author = site.data.authors[auteur] %}
-                {% if author.name %}
-                  <a href="{{ '/author/' | append: auteur | append: '/index.html' | relative_url }}" class="hover:text-teal-200">
-                    {% include author_bio.html %}
-                  </a>
-                {% endif %}
-              {% endfor %}
-            {% else %}
-              {% assign author = site.data.authors[page.author] %}
-              {% if author.name %}
-                <a href="{{ '/author/' | append: page.author | append: '/index.html' | relative_url }}" class="hover:text-teal-200">
-                  {% include author_bio.html %}
-                </a>
-              {% endif %}
-            {% endif %}
-          </div>
-        </div>
-        <div class="text-gray-400 mb-4">
-          <span class="mr-2">Publié le {{ page.date | date: "%d/%m/%Y" }}</span> • 
-          <span class="ml-2">Temps de lecture : {{ content | reading_time | pluralize: "minute" }}</span>
-        </div>
-        <p class="text-xl">{{ page.excerpt | strip_html }}</p>
-        
-        <div class="pt-4 pb-2">
-          {% if page.tags.size > 0 %}
-          {% for tag in page.tags %}
-          {% assign tagSlug = tag | downcase | slugify: "raw" %}
-          <a href="{{ '/tag/' | relative_url }}{{ tagSlug }}/" 
-             class="inline-block rounded-full border-0.5 bg-{{ tagSlug }}-100 border-{{ tagSlug }}-200 text-{{ tagSlug }}-500 px-3 py-1 text-sm font-semibold mr-2 mb-2">
-             #{{ tag }}
-          </a>
-          {% endfor %}
-          {% endif %}
-        </div>
+<div class="relative min-h-screen mb-10 lg:px-28 md:px-28 bg-grayBg overflow-visible">
+  <div class="grid grid-cols-12 gap-6 py-16">
+    <!-- Information Block -->
+    <div class="col-span-12 md:col-span-6 text-navysciam p-8 flex flex-col justify-between">
+      <div>
+        <p class="text-3xl font-extrabold mb-4">{{ page.title }}</p>
+        <!-- list authors -->
+        {% if page.auteurs.size > 1 %}
+        {% for auteur in page.auteurs %}
+        {% assign author = site.data.authors[auteur] %}
+        {% if author.name %}
+        <a href="{{ '/author/' | append: auteur | append: '/index.html' | relative_url }}">
+          {% include author_bio.html %}
+        </a>
+        {% endif %}
+        {% endfor %}
+        {% else %}
+        {% assign author = site.data.authors[page.author] %}
+        {% if author.name %}
+        <a href="{{ '/author/' | append: page.author | append: '/index.html' | relative_url }}">
+          {% include author_bio.html %}
+        </a>
+        {% endif %}
+        {% endif %}
       </div>
       
-    </div>
-  
-    <!-- Main Content and Sidebar -->
-    <div class="md:grid md:grid-cols-3 md:gap-4 mt-4">
-      <div class="bg-white md:col-span-2 p-8 rounded-xl shadow-lg overflow-hidden
-        prose lg:prose-2xl
-
-        prose-headings:text-2xl 
-        prose-headings:pt-1
-        prose-headings:font-black 
-        prose-headings:font-sans
-        prose-headings:text-navysciam
-        prose-p:text-lg
-        prose-p:text-navysciam
-        prose-a:text-blue-600 
-        hover:prose-a:text-yellow-500
-        prose-code:text-sm
-        prose-pre:text-base
-        prose-blockquote:text-sm
-        prose-blockquote:text-navysciam
-        prose-img:rounded-xl">
-          {{ content }}
+      <div class="text-gray-400 mb-2">
+        <span class="mr-2">Publié le {{ page.date | date: "%d/%m/%Y" }}</span> •
+        <span class="ml-2">Temps de lecture : {{ content | reading_time | pluralize: "minute" }}</span>
+      </div>
+      
+      <div>
+        {% if page.tags.size > 0 %}
+        {% for tag in page.tags %}
+        {% assign tagSlug = tag | downcase | slugify: "raw" %}
+        <a href="{{ '/tag/' | relative_url }}{{ tagSlug }}/"
+          class="inline-block rounded-full border-0.5 bg-{{ tagSlug }}-100 border-{{ tagSlug }}-200 text-{{ tagSlug }}-500 px-3 py-1 text-sm font-semibold mr-2 mb-2">
+          #{{ tag }}
+        </a>
+        {% endfor %}
+        {% endif %}
       </div>
 
-    <div class="md:col-span-1">
-      <div class="hidden md:block sticky bg-white top-10 max-h-screen overflow-auto p-4 rounded-xl shadow-lg">
+    </div>
+  
+    <!-- Image Block -->
+    <div class="col-span-12 md:col-span-6 flex justify-center items-center rounded-lg shadow-md">
+        <img src="{{ '/images/vignettes/' | append: page.vignette | relative_url }}" alt="Post Image"
+          class="w-full h-80 object-cover rounded-lg">
+    </div>
+  </div>
+  
+  <!-- Main Content and Sidebar -->
+  <div class="grid grid-cols-12 gap-4 mt-4">
+    <div class="bg-white col-span-12 md:col-span-9 p-8 rounded-xl shadow-lg overflow-hidden
+            prose xl:prose-2xl
+            prose-headings:text-2xl 
+            prose-headings:pt-1
+            prose-headings:font-black 
+            prose-headings:font-sans
+            prose-headings:text-navysciam
+            prose-p:text-lg
+            prose-p:text-navysciam
+            prose-a:text-blue-600 
+            hover:prose-a:text-yellow-500
+            prose-code:text-sm
+            prose-pre:text-base
+            prose-blockquote:text-sm
+            prose-blockquote:text-navysciam
+            prose-img:rounded-xl">
+      {{ content }}
+    </div>
+
+    <div class="col-span-12 sm:col-span-3">
+      <div class="sticky bg-white top-10 max-h-screen overflow-auto p-4 rounded-xl shadow-lg">
         {% if page.toc %}
-        <p class="text-xl text-navysciam font-bold">Table of Contents:</p>
+        <p class="text-xl text-navysciam font-bold">Sommaire :</p>
         <hr class="my-4 bg-zinc-200" />
         <nav id="toc" class="toc
             prose-pre:font-sans
@@ -98,8 +89,7 @@ enabled: true
             prose-thead:font-sans
             prose-td:font-sans
             prose-li:font-sans
-            prose-li:pb-3
-            prose-li:text-lg
+            prose-li:text-base
             prose-ul:text-md
             prose-li:text-navysciam">
           {{ content | toc_only }}

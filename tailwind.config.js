@@ -32,11 +32,16 @@ module.exports = {
         backgroundsciam: "#cbd5e1",
         grayBg: '#f2f1ed',
         navysciam: '#384a72',
+        navysciamlight: '#505f8c',
+        navysciamdark: '#2e3a56',
         yellowsciam: '#ffec3f',
         lightbluesciam: "#9abcc3",
         greysciam: "#9CA3AF",
         lightgrey: "#F5F5F7",
         white: "#fff",
+      },
+      gradients: {
+        'custom-gradient': ['navysciamdark', 'navysciam', 'navysciamlight']
       },
       boxShadow: {
         'custom-bottom-shadow': '0 10px 6px -9px lightgrey',
@@ -52,6 +57,9 @@ module.exports = {
         '36': '36rem',
         'custom-height': '474px',
         'custom-sidebar-height': 'calc(100vh - 2.5rem)',
+      },
+      minHeight: {
+        '400': '400px',
       },
       maxHeight: {
         'custom-max-height': 'calc(100vh - 4rem)'
@@ -84,6 +92,7 @@ module.exports = {
       typography: (theme) => ({
         DEFAULT: {
           css: { // Override asciidoc default styles
+            maxWidth: '2000px',
             'h2 a': { 
               color: `${theme('colors.navysciam')} !important`,
               '&:hover': {

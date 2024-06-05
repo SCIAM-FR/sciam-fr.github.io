@@ -3,8 +3,25 @@ layout: default
 title: "News"
 ---
 
-<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-24">
-    <h1 class="text-3xl font-sans text-navysciam font-bold mb-5">Tous les articles d'actualité</h1>
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <nav aria-label="Breadcrumb" class="py-5">
+        <ol class="list-none flex">
+            <li class="text-navysciam text-xl font-medium ">
+                <a href="/" class="hover:underline">Home</a>
+            </li>
+            <li class="text-navysciam mx-2 text-xl font-medium">
+                <span aria-hidden="true">/</span>
+            </li>
+            <li class="text-lightbluesciam text-xl font-medium">
+               News
+            </li>
+        </ol>
+    </nav>
+
+    <div class="bg-gradient-to-r from-navysciamdark via-navysciam to-navysciamlight py-14 md:py-14 px-8 md:px-8 text-left mb-10 rounded-lg">
+        <h1 class="text-white text-4xl font-sans font-bold">Tous les articles d'actualité</h1>
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         {% assign news_posts = site.posts | where_exp: "post", "post.categories contains 'News'" %}
         {% for post in news_posts %}
