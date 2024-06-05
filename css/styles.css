@@ -46,6 +46,25 @@ body:not(.font-asciidoc) {
   animation: fadeIn 3s ease-in-out infinite alternate;
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeInUp1 {
+  animation: fadeInUp 1s ease-out forwards;
+}
+
+.fadeInUp2 {
+  animation: fadeInUp 1.5s ease-out 0.5s forwards;
+}
+
 .centered {
   text-align: center;
 }

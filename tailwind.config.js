@@ -58,6 +58,9 @@ module.exports = {
         'custom-height': '474px',
         'custom-sidebar-height': 'calc(100vh - 2.5rem)',
       },
+      minHeight: {
+        '400': '400px',
+      },
       maxHeight: {
         'custom-max-height': 'calc(100vh - 4rem)'
       },
