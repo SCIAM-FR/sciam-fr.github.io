@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const closeButton = document.getElementById('closeSearchPopupButton');
 
   // Ouverture bouton de menu de navigation
-
     toggleButton.addEventListener('click', (event) => {
       event.stopPropagation();
       const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
@@ -99,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function() {
           slidesPerView: 1,
           spaceBetween: 20,
         },
-        768: {
+        850: {
           slidesPerView: 3,
           spaceBetween: 30,
         },
