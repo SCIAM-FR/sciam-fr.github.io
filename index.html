@@ -122,10 +122,10 @@ pagination:
       <div class="mb-auto">
       <hr class="my-20 bg-zinc-200"/>
       <!-- All Articles Section -->
-        <div class="w-full flex justify-between items-center mb-5">
-          <p class="text-3xl font-bold">Tous les articles</p>
+        <div class="w-full flex justify-between items-center lg:justify-start lg:flex-grow mb-5">
+          <p class="text-3xl font-bold mr-5">Tous les articles</p>
           <a href="/posts/">
-            <button class="bg-transparent text-navysciam hover:bg-navysciam font-semibold hover:text-white py-2 px-4 border border-navysciam hover:border-transparent rounded">
+            <button class="bg-transparent text-navysciam hover:bg-navysciam font-semibold hover:text-white py-2 px-4 lg:ml-2 border border-navysciam hover:border-transparent rounded">
               Voir tous
             </button>
           </a>
@@ -202,17 +202,19 @@ pagination:
           </div>
           <div class="swiper-button-prev decoration-navysciam"></div>
           <div class="swiper-button-next decoration-navysciam"></div>
-          <div class="swiper-pagination decoration-navysciam"></div>  
+          <div class="pt-10">
+            <div class="swiper-pagination decoration-navysciam pt-10"></div>
+          </div> 
 
         </div>
 
         <hr class="my-20 bg-zince-200"/>
         <!-- Sciam's choice -->
         <div class="mb-28">
-          <div class="w-full flex justify-between items-center mb-5">
+          <div class="w-full flex justify-between items-center lg:justify-start lg:flex-grow mb-5">
             <p class="text-3xl font-bold mr-5">Sujets d'actualité</p>
             <a href="/news/">
-              <button class="bg-transparent text-navysciam hover:bg-navysciam font-semibold hover:text-white py-2 px-4 border border-navysciam hover:border-transparent rounded">
+              <button class="bg-transparent text-navysciam hover:bg-navysciam font-semibold hover:text-white py-2 px-4 lg:ml-2 border border-navysciam hover:border-transparent rounded">
                 Voir tous
               </button>
             </a>
@@ -288,9 +290,11 @@ pagination:
               </div>
               {% endfor %}
             </div>
-            <div class="swiper-pagination decoration-navysciam top-0"></div>   
             <div class="swiper-button-prev decoration-navysciam"></div>
             <div class="swiper-button-next decoration-navysciam"></div>
+            <div class="pt-10">
+              <div class="swiper-pagination decoration-navysciam pt-10"></div>
+            </div>
           </div>
         </div>
 
