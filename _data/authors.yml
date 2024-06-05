@@ -172,3 +172,12 @@ kostiantynkompaniiets:
   socials:
     linkedin: "kompike"
     github: "kompike"
+
+ericdiallo:
+  name: "Eric Diallo"
+  bio: "Diplômé d'un master en Informatique spécialité Logiciels obtenu en 2017 à l'université Paris Est Marne La Vallée.  Eric a principalement travaillé sur un projet dans le secteur de la défense aérienne dans lequel il a acquis une expérience professionnelle au cours de ces 7 dernières années. Il aime avant tout découvrir de nouveaux projets chez SCIAM."
+  job: "Senior Backend Engineer"
+  pagesciam: "https://www.sciam.fr/equipe/eric-diallo"
+  picture: ericdiallo.jpg
+  socials:
+    linkedin: "eric-diallo-52b41b103"
