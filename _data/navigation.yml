@@ -1,9 +1,9 @@
 - title: IT
   url: '/category/Developpement'
 - title: Data
-  url: '/'
-- title: Science Co
-  url: '/'
+  url: '/category/Data'
+- title: Sciences co
+  url: '/category/SciencesCo'  
 - title: Auteurs
   url: '/authors' 
 - title: Contact

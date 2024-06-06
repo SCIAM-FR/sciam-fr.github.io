@@ -42,21 +42,21 @@
   <div class="flex flex-col justify-between">
     <nav class="bg-navysciam w-full sticky top-0 py-4 px-7 sm:px-28 z-50">
       <div class="flex items-center justify-between">
-          <a href="{{ '/' | relative_url }}" class="flex items-center space-x-2">
-            <img src="/images/logo/logo_sciam_blanc.png" alt="Logo blanc" class="h-10 w-10">
-            <img src="/images/logo/logo_sciam_white.svg" alt="Logo SCIAM" class="w-20 font-bold">
-            <span class="mt-1.5"> <p class="text-white font-extralight text-2xl"> | Blog </p></span>
-          </a>
-          <div class="hidden sm:flex items-center space-x-4">
-            <ul class="flex flex-row">
-              {% for item in site.data.navigation %}
-              {% assign current_url = page.url | remove: 'index.html' | append: '/' %}
-              {% assign item_url = item.url | append: '/' %}
-              <li class="flex items-center">
-                <a href="{{ item.url | relative_url }}"
-                  class="text-white no-underline hover:text-white hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md 
-                  {% if item.title == 'Sciam' %}px-3 py-0{% else %}px-3 py-2{% endif %} text-xl font-medium 
-                  {% if current_url == item_url %}text-white{% else %}text-gray-500{% endif %}">
+        <a href="{{ '/' | relative_url }}" class="flex items-center space-x-2">
+          <img src="/images/logo/logo_sciam_blanc.png" alt="Logo blanc" class="h-10 w-10">
+          <img src="/images/logo/logo_sciam_white.svg" alt="Logo SCIAM" class="w-20 font-bold">
+          <span class="mt-1.5"> <p class="text-white font-extralight text-2xl"> | Blog </p></span>
+        </a>
+        <div class="hidden sm:flex items-center space-x-4">
+          <ul class="flex flex-row">
+            {% for item in site.data.navigation %}
+            {% assign current_url = page.url | remove: 'index.html' | append: '/' %}
+            {% assign item_url = item.url | append: '/' %}
+            <li class="flex items-center">
+              <a href="{{ item.url | relative_url }}"
+                class="text-white no-underline hover:text-white hover:underline hover:underline-offset-2 hover:decoration-yellowsciam rounded-md 
+                {% if item.title == 'Sciam' %}px-3 py-0{% else %}px-3 py-2{% endif %} text-xl font-medium 
+                {% if current_url == item_url %}text-white{% else %}text-gray-500{% endif %}">
                 {% if item.title == 'Sciam' %}
                   <img src="/images/icons/www-icon.svg" alt="www-icon" class="align-middle decoration-greysciam hover:decoration-white">
                 {% else %}
@@ -95,9 +95,7 @@
           </a>
           {% endfor %}
           <button id="mobileSearchButton" type="button" class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+            <img src="/images/icons/search-icon.svg" class="h-6 w-6 align-middle text-greysciam text-white" alt="Search Icon">
           </button>
         </div>
       </div>
@@ -105,9 +103,7 @@
       <div id="searchPopup" class="hidden fixed inset-0 flex items-center justify-center p-4 z-50">
         <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-4 relative">                
           <button id="closeSearchPopupButton" type="button" class="right-0 pb-3 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-2 h-2 ms-auto flex items-end dark:hover:bg-gray-600 dark:hover:text-white">
-              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-              </svg>
+            <img src="/images/icons/close-icon.svg" alt="Close Icon">
               <span class="sr-only">Fermer recherche</span>
           </button>  
           <form action="/search.html" method="get" >

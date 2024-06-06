@@ -10,4 +10,4 @@ Gemfile.lock
 /node_modules
 .DS_Storeoutput.css
 package-lock.json
-/css/.output.css
+/css/output.css

@@ -4,6 +4,7 @@ domain: sciam-fr.github.io       # if you want to force HTTPS, specify the domai
 url: https://sciam-fr.github.io  # the base hostname and protocol for your site, e.g. http://example.com
 locale: fr_FR
 permalink: pretty
+# permalink: /:year/:month/:day/:title:output_ext
 #baseurl: "/"
 twitter:
   username: SCIAM_FR
