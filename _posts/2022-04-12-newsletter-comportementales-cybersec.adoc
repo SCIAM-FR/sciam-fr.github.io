@@ -9,6 +9,7 @@
 //:post-vignette: SoCo.png
 :page-vignette-licence: Illustration par <a href="https://www.istockphoto.com/fr/portfolio/CrailsheimStudio" target="_blank">CrailsheimStudio</a>.
 :page-liquid:
+:page-categories: SciencesCO
 
 == Le meilleur des sciences comportementales & cognitives sélectionné par vos experts SCIAM
 

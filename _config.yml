@@ -13,8 +13,10 @@ highlighter: rouge
 
 defaults:
   - scope:
-      path: ""
+      path: "_posts"
+      type: "posts"
     values:
+      permalink: /:year/:month/:day/:title:output_ext
       toc: true
       
 social-network-links:
