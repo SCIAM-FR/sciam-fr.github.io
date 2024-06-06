@@ -9,7 +9,6 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/cdd20-1193381' target='_blank'>CDD20</a>.
 :page-liquid:
-:page-categories: Sciences CO
 
 .Illustration par https://pixabay.com/fr/users/geralt-9301[Gerd Altmann^]
 image::{{'/images/mohamednajib/experts1.png' | relative_url}}[image,width=80%,align="center"]

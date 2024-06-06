@@ -9,6 +9,7 @@
 :post-vignette: direct-feedback-alignement-001.png
 :page-vignette-licence: 'Image par <a href="https://pixabay.com/fr/users/gdj-1086657/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=3816319">Gordon Johnson</a> de Pixabay'
 :page-liquid:
+:page-categories: [Data]
 
 Lorsqu’on a besoin d’entraîner un https://medium.com/sciam-fr/alphafold2-le-repliement-des-prot%C3%A9ines-selon-deepmind-5689ceb70fef[réseau de neurones], nous pensons tous à l’algorithme de **https://www.nature.com/articles/323533a0[back-propagation]** (BP). Pour chaque passe arrière, cet algorithme se base sur le théorème de dérivation en chaîne d’une fonction composée afin d’ajuster séquentiellement les poids du modèle, en fonction de leur contribution à la fonction de coût (en suivant la descente du gradient de cette fonction). Or, cet aspect **séquentiel** du calcul *limite les possibilités de paralléliser la phase d’entraînement*, ce qui devient un réel problème lorsqu’on considère la profondeur des réseaux à l’état-de-l’art. C’est pourquoi nous devons penser différemment, ce que propose une nouvelle approche : le Direct Feedback Alignement (DFA). L’intérêt majeur de la DFA réside dans le fait qu‘elle permet de paralléliser la passe arrière. De plus, il est à noter que la DFA définit une approche biologiquement plausible contrairement à la BP (cf.weight transport problem).
 

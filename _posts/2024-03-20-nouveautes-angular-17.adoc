@@ -5,7 +5,7 @@
 :author: khaoulamrabet
 :page-tags: [Angular, Angular17, control Flow, lazy loading blocs, Signal, Hydratation par défaut, Hooks, le signal Input()]
 :page-vignette: angular17.png
-:page-categories: [Developpement, News]
+:page-categories: [News]
 
 = Les nouveautés d'Angular 17
 

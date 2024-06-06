@@ -9,6 +9,7 @@
 :post-vignette: ordinateur-quantique-001.jpeg
 :page-vignette-licence: 'Zoom sur le processeur Sycamore (Crédit : <a href="https://www.nature.com/articles/s41586-019-1666-5">F. Arute, et al</a>)'
 :page-liquid:
+:page-categories: [Data]
 
 Le 23 octobre 2019, des chercheurs de Google annoncent dans un article de la prestigieuse revue scientifique britannique Nature, la réalisation d’un véritable saut technologique : la construction d’un processeur quantique capable d’effectuer certaines tâches beaucoup plus rapidement que n’importe quel superordinateur existant (https://www.nature.com/articles/s41586-019-1666-5[F. Arute&#44; et al].) **La suprématie quantique** serait atteinte !
 
