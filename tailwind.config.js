@@ -84,7 +84,8 @@ module.exports = {
         xl: '20px',
       },
       backgroundImage: {
-        'hero-image': "url('/images/visuals/grids.jpg')"
+        'hero-image': "url('/images/visuals/hero-bg.png')",
+        'hero-bg': "url('/images/visuals/bg.png')"
       },
       borderRadius: {
         '2.5': '2.5rem'
