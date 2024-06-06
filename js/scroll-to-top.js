@@ -1,22 +1,28 @@
-function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+document.addEventListener("DOMContentLoaded", function() {
+  const backToTopBtn = document.getElementById('scrollToTopButton');
+  const footer = document.getElementById("footer-area");
 
-function scrollFunction() {
-  let backToTopBtn = document.getElementById("back-to-top-btn");
-  let footer = document.getElementById("footer-area");
-
-  let viewportHeight = window.innerHeight;
-  let footerRect = footer.getBoundingClientRect();
-
-  // Hide the button when the footer is near the bottom of the viewport
-  if (footerRect.top < viewportHeight) {
-    backToTopBtn.classList.add('hidden');
-  } else if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-    backToTopBtn.classList.remove('hidden');
-  } else {
-    backToTopBtn.classList.add('hidden');
+  if (!backToTopBtn || !footer) {
+        return;
   }
-}
 
-window.onscroll = function() { scrollFunction() };
+  function toggleButtonVisibility() {
+    const viewportHeight = window.innerHeight;
+    const footerRect = footer.getBoundingClientRect();
+
+    // Check if the footer is visible within the viewport
+    if (footerRect.top < viewportHeight) {
+        backToTopBtn.classList.add('hidden');
+    } else if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        backToTopBtn.classList.remove('hidden');
+    } else {
+        backToTopBtn.classList.add('hidden');
+    }
+  }
+
+  window.addEventListener('scroll', toggleButtonVisibility);
+
+  backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({top: 0, behavior: 'smooth'});
+  });
+});
