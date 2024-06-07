@@ -162,3 +162,22 @@ pcheucle:
   picture: pcheucle.jpg
   socials:
     linkedin: "pierre-cheucle"
+    
+kostiantynkompaniiets:
+  name: "Kostiantyn Kompaniiets"
+  bio: "Diplômé d'un master en Économie Internationale de l'Université nationale d'économie Simon Kuznets de Kharkiv, en Ukraine, en 2014. Il a lancé sa carrière en tant qu'ingénieur logiciel en 2016. Au fil des huit dernières années, il a perfectionné ses compétences en développement Java et JavaScript/TypeScript, intervenant dans divers secteurs tels que les sciences de la vie, la pharmacie, la bio-informatique, ainsi que dans la manipulation de vastes ensembles de données complexes. Forte d'un mélange d'excellence technique et d'une passion pour l'innovation, il est confiant dans sa capacité à contribuer de manière significative aux projets clients de SCIAM."
+  job: "Ingénieur Backend Senior"
+  pagesciam: "https://sciam.fr/equipe/kostiantyn-kompaniiets"
+  picture: kostiantynkompaniiets.png
+  socials:
+    linkedin: "kompike"
+    github: "kompike"
+
+ericdiallo:
+  name: "Eric Diallo"
+  bio: "Diplômé d'un master en Informatique spécialité Logiciels obtenu en 2017 à l'université Paris Est Marne La Vallée.  Eric a principalement travaillé sur un projet dans le secteur de la défense aérienne dans lequel il a acquis une expérience professionnelle au cours de ces 7 dernières années. Il aime avant tout découvrir de nouveaux projets chez SCIAM."
+  job: "Senior Backend Engineer"
+  pagesciam: "https://www.sciam.fr/equipe/eric-diallo"
+  picture: ericdiallo.jpg
+  socials:
+    linkedin: "eric-diallo-52b41b103"

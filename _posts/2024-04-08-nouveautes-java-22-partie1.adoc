@@ -98,7 +98,7 @@ Trois patterns sont proposés :
 [source,java]
 ----
     try (var _ = ScopedContext.acquire()) {
-      var _ = service.traiter((_, _) -> System.out.printn("traiter"));
+      var _ = service.traiter((_, _) -> System.out.println("traiter"));
     }  catch (Throwable _) { }
 ----
 
@@ -167,7 +167,7 @@ Pour éviter l’invocation du super constructeur inutile si le test de la valeu
 
 [source,java]
 ----
-  public MonEntierPositif(long valeur) {
+  public MonEntierPositif(long valeur)  extends MonEntier {
     super(verifier(valeur));
   }
 
@@ -179,10 +179,7 @@ Pour éviter l’invocation du super constructeur inutile si le test de la valeu
 
 Le but de la https://openjdk.org/jeps/447[JEP 447^] est de permettre d’avoir dans les constructeurs des traitements qui ne font pas référence à l'instance avant l'invocation explicite du constructeur dans une portion de texte dénommée prologue dans les spécifications.
 
-Plusieurs contraintes doivent être respectées dans ce prologue :
-
-* Impossible d’utiliser `this.xxx` ou `super.xxx` explicite ou implicite
-* Impossible de référencer un champ d’une classe englobante `C.this.xxx`
+Il n’est évidemment pas possible d’utiliser de références à un membre de l’instance ou de sa super classe : il est donc impossible d’utiliser `this.xxx` ou `super.xxx` explicitement ou implicitement.
 
 [source,java]
 ----

@@ -112,7 +112,9 @@ body:not(.font-asciidoc) {
   border-color: #818b30;
   color: #fff;
 }
+
 /* p :not(.tableblock) {
+p:not(.tableblock) {
   text-align: justify;
 } */
 .ribbon {
