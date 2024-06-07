@@ -16,10 +16,12 @@ enabled: true
 
 <div class="p-8 bg-grayBg">
   <div class="bg-white py-10 px-14 text-navysciam rounded-lg shadow-md">
+    
     {% if author.picture %}
     <img class="rounded-full w-20 h-20 mr-4 float-left"
       src="{{ '/images/authors/' | append: author.picture | relative_url }}" alt="{{ author.name }}'s picture" />
     {% endif %}
+    
     <div class="mt-6">
       <h1 class="text-2xl font-sans text-navysciam font-bold">{{ author.name }}</h1>
       <p class="font-semibold">{{ author.job }}</p>
@@ -30,17 +32,16 @@ enabled: true
 
     <div class="flex space-x-3 py-4">
       {% if author.twitter %}
-      <a href="https://twitter.com/{{ author.twitter }}" class="text-gray-900 hover:text-gray-600"
-        title="{{ author.name }} on Twitter" target="_blank">
+      <a href="https://twitter.com/{{ author.twitter }}" title="X (Twitter)" target="_blank">
         <span aria-hidden="true">
           <img src="/images/icons/x-icon.svg" alt="x-logo">
         </span>
         <span class="sr-only">X (Twitter)</span>
       </a>
       {% endif %}
-
+    
       {% assign links = author.socials %}
-
+    
       {% if links.linkedin %}
       <a href="https://www.linkedin.com/in/{{ links.linkedin }}" title="LinkedIn" target="_blank">
         <span aria-hidden="true">
@@ -49,7 +50,7 @@ enabled: true
         <span class="sr-only">LinkedIn</span>
       </a>
       {% endif %}
-
+    
       {% if links.mastodon %}
       <a href="https://{{ links.mastodon }}" class="text-gray-900 hover:text-gray-600" title="Mastodon" target="_blank">
         <span aria-hidden="true">
@@ -58,7 +59,7 @@ enabled: true
         <span class="sr-only">Mastodon</span>
       </a>
       {% endif %}
-
+    
       {% if author.website %}
       <a href="{{ author.website }}" class="text-gray-900 hover:text-gray-600" title="Website" target="_blank">
         <span aria-hidden="true">
@@ -67,7 +68,17 @@ enabled: true
         <span class="sr-only">Website</span>
       </a>
       {% endif %}
-
+    
+      {% if links.github %}
+      <a href="https://gitlab.com/{{ links.github }}" class="text-gray-900 hover:text-gray-600" title="GitLab"
+        target="_blank">
+        <span aria-hidden="true">
+          <img src="/images/icons/github.svg" alt="github-logo">
+        </span>
+        <span class="sr-only">GitHub</span>
+      </a>
+      {% endif %}
+    
       {% if links.gitlab %}
       <a href="https://gitlab.com/{{ links.gitlab }}" class="text-gray-900 hover:text-gray-600" title="GitLab"
         target="_blank">
@@ -77,17 +88,6 @@ enabled: true
         <span class="sr-only">GitLab</span>
       </a>
       {% endif %}
-
-      {% if links.gitlab %}
-      <a href="https://gitlab.com/{{ links.gitlab }}" class="text-gray-900 hover:text-gray-600" title="GitLab"
-        target="_blank">
-        <span aria-hidden="true">
-          <img src="/images/icons/gitlab-icon.svg" alt="github-logo">
-        </span>
-        <span class="sr-only">GitLab</span>
-      </a>
-      {% endif %}
-
       {% if author.pagesciam %}
       <a href="{{ author.pagesciam }}" class="text-gray-900 hover:text-gray-600" title="Equipier Sciam" target="_blank">
         <span aria-hidden="true">
@@ -100,15 +100,14 @@ enabled: true
   </div>
 
   <p>&nbsp;</p>
-
   <div class="bg-white py-10 px-14 rounded-lg shadow-md">
-    <h2 class="text-2xl font-sans text-navysciam font-bold my-4">Articles publiés</h2>
+    <h2 class="text-2xl font-sans text-navysciam font-bold my-4">Articles publi&eacute;s</h2>
     <div class="py-10">
       {% for post in paginator.posts %}
-      {% if author_username == post.author or post.auteurs contains author_username %}
-      {% include postbox.html %}
-      <div class="my-4"></div>
-      {% endif %}
+        {% if author_username == post.author or post.auteurs contains author_username %}
+          {% include postbox.html %}
+          <br>
+        {% endif %}
       {% endfor %}
     </div>
   </div>
