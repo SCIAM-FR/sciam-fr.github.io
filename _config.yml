@@ -75,7 +75,7 @@ plugins:
  
 pagination:
   enabled: true
-  per_page: 12
+  per_page: 50
   paginate_path: '/page/:num/'
   title: ':title - page :num'
   sort_field: 'date'
