@@ -13,8 +13,10 @@ highlighter: rouge
 
 defaults:
   - scope:
-      path: ""
+      path: "_posts"
+      type: "posts"
     values:
+      permalink: /:year/:month/:day/:title:output_ext
       toc: true
       
 social-network-links:
@@ -73,7 +75,7 @@ plugins:
  
 pagination:
   enabled: true
-  per_page: 7
+  per_page: 12
   paginate_path: '/page/:num/'
   title: ':title - page :num'
   sort_field: 'date'
