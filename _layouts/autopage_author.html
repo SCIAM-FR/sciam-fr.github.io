@@ -1,7 +1,5 @@
 ---
 layout: default
-pagination:
-  enabled: true
 ---
 
 <!-- This has the username of author. The one that you set with "author: name" in front-matter-->
@@ -103,7 +101,7 @@ pagination:
   <div class="bg-white py-10 px-14 rounded-lg shadow-md">
     <h2 class="text-2xl font-sans text-navysciam font-bold my-4">Articles publi&eacute;s</h2>
     <div class="py-10">
-      {% for post in paginator.posts %}
+      {% for post in site.posts %}
         {% if author_username == post.author or post.auteurs contains author_username %}
           {% include postbox.html %}
           <br>

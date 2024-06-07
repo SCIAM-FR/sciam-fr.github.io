@@ -1,9 +1,5 @@
 ---
 layout: default
-pagination: 
-  enabled: true
-  per_page: 13
-permalink: /
 ---
 
 <div class="relative grid grid-cols-12 gap-6 pt-16 h-auto min-h-[30vh] p-10">
@@ -24,7 +20,7 @@ permalink: /
   <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
     <div class="lg:col-span-3 flex flex-col h-full rounded-xl overflow-hidden shadow-xl bg-white">
       <div class="flex flex-col h-full bg-white py-3">
-        {% for post in paginator.posts limit:1 %}
+        {% for post in site.posts limit:1 %}
         <div class="flex flex-col h-full">
           <div class="relative">
             <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}"
@@ -139,7 +135,7 @@ permalink: /
         </div>
         <div class="swiper mySwiper">
           <div class="swiper-wrapper">
-            {% assign posts = paginator.posts | slice: 1, 6 %}
+            {% assign posts = site.posts | slice: 1, 6 %}
             {% for post in posts %}
             <div
               class="swiper-slide bg-white rounded-xl overflow-hidden shadow-lg mb-6 h-auto flex flex-col min-h-[500px] md:min-h-[620px] lg:min-h-[400px]">
@@ -237,7 +233,7 @@ permalink: /
           </div>
           <div class="swiper mySwiper">
             <div class="swiper-wrapper">
-              {% assign news_posts = paginator.posts | where: "categories", "News" | limit: 6%}
+              {% assign news_posts = site.posts | where: "categories", "News" | limit: 6%}
               {% for post in news_posts %}
               <div
                 class="swiper-slide bg-white rounded-xl overflow-hidden shadow-lg mb-6 h-auto flex flex-col min-h-[500px] md:min-h-[620px] lg:min-h-[400px]">
