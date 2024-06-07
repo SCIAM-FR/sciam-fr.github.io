@@ -1,8 +1,5 @@
 ---
 layout: default
-pagination:
-  enabled: true
-permalink: '/author/:author/'
 ---
 
 <!-- This has the username of author. The one that you set with "author: name" in front-matter-->
@@ -104,7 +101,7 @@ permalink: '/author/:author/'
   <div class="bg-white py-10 px-14 rounded-lg shadow-md">
     <h2 class="text-2xl font-sans text-navysciam font-bold my-4">Articles publiés</h2>
     <div class="py-10">
-      {% for post in paginator.posts %}
+      {% for post in site.posts %}
         {% if author_username == post.author or post.auteurs contains author_username %}
           {% include postbox.html %}
           <div class="my-4"></div>
