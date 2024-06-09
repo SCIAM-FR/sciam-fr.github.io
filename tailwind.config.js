@@ -107,7 +107,7 @@ module.exports = {
                 color: `${theme('colors.lightbluesciam')} !important`,
               },
               textDecoration: 'none !important',
-              fontSize: '1.25rem', 
+              fontSize: '36px', 
               fontFamily: '"Noyh Geometric" sans-serif !important',
               fontWeight: 'bold !important',
             },
@@ -117,7 +117,7 @@ module.exports = {
                 color: `${theme('colors.lightbluesciam')} !important`,
               },
               textDecoration: 'none !important',
-              fontSize: '1.25rem', 
+              fontSize: '30px', 
               fontFamily: '"Noyh Geometric" sans-serif !important',
               fontWeight: 'bold !important',
             },
@@ -127,7 +127,7 @@ module.exports = {
                 color: `${theme('colors.lightbluesciam')} !important`,
               },
               textDecoration: 'none !important',
-              fontSize: '1.25rem',
+              fontSize: '24px',
               fontFamily: '"Noyh Geometric" sans-serif !important',
               fontWeight: 'bold !important',
             },
@@ -135,34 +135,60 @@ module.exports = {
               fontSize: '1.25rem !important',
               color: `${theme('colors.navysciam')} !important`,
             },
+            'p': {
+              marginTop: '0.3rem !important',
+              marginBottom:'0.3rem !important',
+            },
+
             'h2 code, h3 code, h4 code': { 
               color: `${theme('colors.navysciam')} !important`,
               fontFamily: '"Ubuntu Mono", sans-serif',
-              fontSize: ' 0.875rem', 
+              // fontSize: ' 0.875rem', 
               fontWeight: 'light !important'
             },
             'h2 a code, h3 a code, h4 a code': { 
               color: `${theme('colors.navysciam')} !important`,
               fontFamily: '"Ubuntu Mono", sans-serif',
-              fontSize: ' 0.875rem', 
+              // fontSize: ' 0.875rem', 
               fontWeight: 'light !important'
             },
+            'sect3 h2 a code, sect3 h3 a code, sect3 h4 a code': { 
+              color: `${theme('colors.navysciam')} !important`,
+              fontFamily: '"Ubuntu Mono", sans-serif',
+              // fontSize: ' 0.875rem !important', 
+              fontWeight: 'light !important'
+            },
+
             'p code': {  
               fontFamily: '"Ubuntu Mono" sans-serif !important',
-              fontSize: ' 0.875rem !important', 
+              // fontSize: ' 0.875rem !important', 
+              fontWeight: 'light !important'
+            },
+            'paragraph p code': {  
+              fontFamily: '"Ubuntu Mono" sans-serif !important',
+              // fontSize: ' 0.875rem !important', 
               fontWeight: 'light !important'
             },
             'code' : {
               color: `${theme('colors.navysciam')} !important`,
               fontFamily: '"Ubuntu Mono" sans-serif !important',
-              fontSize: ' 0.875rem', 
+              // fontSize: ' 0.875rem', 
               fontWeight: 'light !important',
             },
-            'listingblock title' : {
-              fontSize: '0.875rem !important',
-              fontWeight: `${theme('fontWeight.semibold')} !important`,
-              color: `${theme('colors.navysciam')} !important`,
-              padding: `${theme('padding.2')} !important`,
+            'p code::before': {
+              content: 'none',
+            },
+            'p code::after': {
+              content: 'none',
+            },
+            'h2 code::before, h3 code::before, h4 code::before': {
+              content: 'none',
+            },
+            'h2 code::after, h3 code::after, h4 code::after': {
+              content: 'none',
+            },
+            'listingblock' : {
+              marginTop: '0.5rem !important',
             },
             img: {
               marginLeft: 'auto',
