@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     const elements = [
-        "Java", "Java 14", "Java 19", "Java 20", "Java 21", "Java 22", "JavaFX", "Quarkus",
+        "Tutoriel", "Tests", "JavaScript", "Composants Web", 
+        "Developpement Web", "Lit", "Stencil", "Java", "Java 14", "Java 19", "Java 20", "Java 21", "Java 22", "JavaFX", "Quarkus",
         "Administration", "Alea", "Algorithme", "Angular", "Angular16", "Angular17", "Application WEB", 
         "Architecture Hexagonale", "Banking", "Bayes", "Beans", "BehavioralScience", "BiaisCognitif", 
         "Blockchain", "CDI", "Cerveau", "Chatbot", "Collections", "Communication", "Concurrence structurée", 
@@ -16,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function() {
         "SCC", "SPI", "SagesseDesFoules", "Science", "SciencesCognitives", "SciencesComportementales", 
         "Securite", "Signal", "Sludge", "Sous-RFC", "Spring AI", "Spring Boot", "Startup", "Switch expressions", 
         "Threads virtuels", "UI", "Violence", "WebRTC", "ZGC", "ai", "control Flow", "genAI", 
-        "lazy loading blocs", "le signal Input()", "misc", "openai", "spring boot"
+        "lazy loading blocs", "le signal Input()", "misc", "openai", "spring boot", 
     ];
 
     // Number of color hues available is 360
