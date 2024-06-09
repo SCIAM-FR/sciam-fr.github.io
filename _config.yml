@@ -1,3 +1,4 @@
+
 title: Blog Sciam
 description: Ce blog contient des articles techniques issus de la communeauté des salariés de SCIAM
 domain: sciam-fr.github.io       # if you want to force HTTPS, specify the domain without the http at the start, e.g. example.com
@@ -75,14 +76,23 @@ plugins:
  
 pagination:
   enabled: true
-  per_page: 12
-  paginate_path: '/posts/page/:num/'
+  per_page: 7
+  paginate_path: '/page/:num/'
   title: ':title - page :num'
   sort_field: 'date'
   sort_reverse: true
 
 autopages:
   enabled: true
+  categories:
+    enabled: true
+    layouts:
+       - 'list.html'
+    title: 'Articles in :category'
+    silent: false
+    slugify:
+      mode: 'default'
+      cased: true
 
   # Other autopage configs stay the same
 
@@ -106,12 +116,6 @@ autopages:
     slugify:
       mode: 'default' # choose from [raw, default, pretty, ascii or latin]
       cased: true # if true, the uppercase letters in slug will be converted to lowercase ones.
-
-  categories:
-    enabled: true
-    layouts: 
-      - 'autopage_category.html'
-    title: 'Catégorie'
 
   collections:
       enabled: false
