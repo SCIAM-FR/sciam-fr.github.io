@@ -15,7 +15,7 @@ enabled: true
     {% assign category_segments = page.url | split: '/' %}
     {% assign category_index = category_segments.size | minus: 2 %}
     {% assign category_name = category_segments[category_index] %}
-    {% assign posts = site.posts | where: "categories", category_name %}
+    {% assign posts = site.posts | where_exp: "post", "post.categories contains category_name" %}
   {% endif %}
 
 
@@ -43,7 +43,7 @@ enabled: true
   <div>
     {% if posts and posts.size > 0 %}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {% for post in paginator.posts %}
+      {% for post in posts %}
       <div class="bg-white rounded-xl overflow-hidden shadow-lg">
         {% if post.vignette %}
         <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}"
@@ -112,6 +112,7 @@ enabled: true
       {% else %}
       {% endif %}
     </div>
+    {% unless page.title == "Tous les articles" or page.title == "Sujets d'actualité" %}
     <div  class="grid grid-cols-1 md:grid-cols-3 gap-4">
       {% assign posts = site.posts %}
       {% for post in paginator.posts %}
@@ -182,5 +183,6 @@ enabled: true
       </div>
       {% endfor %}
     </div>
+    {% endunless %}
   </div>
 </div>
