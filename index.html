@@ -5,11 +5,6 @@ layout: default
 <div class="relative grid grid-cols-12 gap-6 pt-16 h-auto min-h-[30vh] p-10">
   <div class="absolute inset-0 bg-hero-bg bg-cover bg-center bg-no-repeat"></div>
   <div class="absolute inset-0 bg-gradient-to-b from-transparent to-grayBg"></div>
-  <!-- <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-[-1] desaturate-video">
-    <source src="{{ '/images/video/test.mp4' | relative_url }}" type="video/mp4">
-    Your browser does not support HTML5 video.
-  </video> -->
-
   <div class="col-span-12 sm:col-span-12 flex flex-col items-center justify-center rounded-lg pt-0 pb-5 px-20">
     <p class="text-6xl font-black text-navysciam fadeInUp1">Blog de SCIAM</p>
     <p class="mt-1 text-2xl font-bold text-navysciam fadeInUp2">Tendances Tech, Insights et Innovations</p>
@@ -19,15 +14,15 @@ layout: default
 <div class="px-3 lg:px-28 mt-6">
   <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
     <div class="lg:col-span-3 flex flex-col h-full rounded-xl overflow-hidden shadow-xl bg-white">
-      <div class="flex flex-col h-full bg-white py-3">
+      <div class="flex flex-col h-full bg-white">
         {% for post in site.posts limit:1 %}
         <div class="flex flex-col h-full">
-          <div class="relative">
+          <div>
             <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}"
               class="w-full h-23 object-cover rounded-lg" alt="Image article">
           </div>
 
-          <hr class="bg-zince-50 my-8 opacity-50" />
+          <hr class="bg-zince-50 opacity-50" />
 
           <div class="rounded-b overflow-hidden flex-grow">
             <div class="flex flex-col justify-between h-full px-12 py-6">
