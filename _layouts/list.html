@@ -46,13 +46,12 @@ enabled: true
       {% for post in posts %}
       <div class="bg-white rounded-xl overflow-hidden shadow-lg">
         {% if post.vignette %}
-        <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}"
-          class="object-cover w-full h-48 border-slate-100 rounded-t-xl" alt="Image article">
-        <hr />
+        {% assign bg_url = '/images/vignettes/' | append: post.vignette | relative_url %}
+        <div class="h-60 w-full pb-[33.33%] bg-contain bg-no-repeat bg-center"
+        style="background-image: url('{{ bg_url }}');"></div>
+        <hr class="bg-stone-50 opacity-50" />
         {% endif %}
         <div class="p-6">
-          <div class="text-xl font-bold mb-2 line-clamp-1"><a href="{{ post.url | relative_url }}"
-              class="hover:text-navysciam hover:decoration-yellowsciam">{{ post.title }}</a></div>
           {% if post.auteurs and post.auteurs.size > 1 %}
           <div>
             <strong>
@@ -65,8 +64,7 @@ enabled: true
               {% else %}
               ,
               {% endif %}
-              <span><a href="{{ '/author/' | append: auteur | append: '/index.html' | relative_url }}">{{ author.name
-                  }}</a></span>
+              <span><a href="{{ '/author/' | append: auteur | append: '/index.html' | relative_url }}">{{ author.name }}</a></span>
               {% endif %}
               {% endfor %}
             </strong>
@@ -92,7 +90,8 @@ enabled: true
           </div>
           {% endif %}
           {% endif %}
-  
+          <div class="text-xl font-bold mb-2 line-clamp-1"><a href="{{ post.url | relative_url }}"
+            class="hover:text-navysciam hover:decoration-yellowsciam">{{ post.title }}</a></div>
           <p class="line-clamp-3">{{ post.excerpt | strip_html }}</p>
           <a href="{{ post.url | relative_url }}"
             class="text-navysciam hover:text-yellowsciam transition duration-300 ease-in-out">Lire la
@@ -112,19 +111,19 @@ enabled: true
       {% else %}
       {% endif %}
     </div>
+    
     {% unless page.title == "Tous les articles" or page.title == "Sujets d'actualité" %}
     <div  class="grid grid-cols-1 md:grid-cols-3 gap-4">
       {% assign posts = site.posts %}
       {% for post in paginator.posts %}
       <div class="bg-white rounded-xl overflow-hidden shadow-lg">
         {% if post.vignette %}
-        <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}"
-          class="object-cover w-full h-48 border-slate-100 rounded-t-xl" alt="Image article">
-        <hr />
+        {% assign bg_url = '/images/vignettes/' | append: post.vignette | relative_url %}
+        <div class="h-60 w-full pb-[33.33%] bg-contain bg-no-repeat bg-center"
+        style="background-image: url('{{ bg_url }}');"></div>
+        <hr class="bg-stone-50 opacity-50" />
         {% endif %}
         <div class="p-6">
-          <div class="text-xl font-bold mb-2 line-clamp-1"><a href="{{ post.url | relative_url }}"
-              class="hover:text-navysciam hover:decoration-yellowsciam">{{ post.title }}</a></div>
           {% if post.auteurs and post.auteurs.size > 1 %}
           <div>
             <strong>
@@ -164,7 +163,8 @@ enabled: true
           </div>
           {% endif %}
           {% endif %}
-  
+          <div class="text-xl font-bold mb-2 line-clamp-1"><a href="{{ post.url | relative_url }}"
+            class="hover:text-navysciam hover:decoration-yellowsciam">{{ post.title }}</a></div>
           <p class="line-clamp-3">{{ post.excerpt | strip_html }}</p>
           <a href="{{ post.url | relative_url }}"
             class="text-navysciam hover:text-yellowsciam transition duration-300 ease-in-out">Lire la
