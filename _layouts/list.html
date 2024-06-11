@@ -1,7 +1,7 @@
 ---
 layout: default
 pagination:
-enabled: true
+ enabled: true
 ---
 
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -43,7 +43,7 @@ enabled: true
   <div>
     {% if posts and posts.size > 0 %}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {% for post in posts %}
+      {% for post in paginator.posts %}
       <div class="bg-white rounded-xl overflow-hidden shadow-lg">
         {% if post.vignette %}
         <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}"
@@ -184,5 +184,77 @@ enabled: true
       {% endfor %}
     </div>
     {% endunless %}
+  </div>
+  <!-- Pagination -->
+  <div class="flex justify-center items-center my-12">
+    {% if paginator.total_pages > 1 %}   
+      {% if paginator.previous_page %}
+      <a class="flex justify-center items-center w-45 h-10 border border-gray-200 bg-gray-100 hover:bg-gray-200 cursor-pointer"
+        href="{{ paginator.previous_page_path | relative_url }}">&larr; Articles précédents</a>
+      {% endif %}
+
+      {% assign first_page_path = '/posts/' %}
+
+      <!-- {% comment %} First page {% endcomment %} -->
+      {% if paginator.page == 1 %}
+      <a href="#"
+        class="disabled current flex justify-center items-center w-10 h-10 border border-gray-200 bg-gray-100 text-gray-500 pointer-events-none">1</a>
+      {% else %}
+      <a href="{{ first_page_path | relative_url  }}"
+        class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">1</a>
+      {% endif %}
+
+      {% assign page_start = 2 %}
+      {% if paginator.page > 4 %}
+      {% assign page_start = paginator.page | minus: 2 %}
+      <!-- {% comment %} Ellipsis for truncated links {% endcomment %} -->
+      <a href="#"
+        class="disabled flex justify-center items-center w-10 h-10 border border-gray-200 text-gray-500 pointer-events-none">&hellip;</a>
+      {% endif %}
+
+      {% assign page_end = paginator.total_pages | minus: 1 %}
+      {% assign pages_to_end = paginator.total_pages | minus: paginator.page %}
+      {% if pages_to_end > 4 %}
+        {% assign page_end = paginator.page | plus: 2 %}
+      {% endif %}
+
+      {% for index in (page_start..page_end) %}
+        {% if index == paginator.page %}
+        <a href="#"
+          class="disabled active flex justify-center items-center w-10 h-10 border border-gray-200 bg-gray-100 text-gray-500 pointer-events-none">{{
+          index }}</a>
+        {% else %}
+        <!-- {% comment %} Distance from current page and this link {% endcomment %}
+        {% assign dist = paginator.page | minus: index %}
+        {% if dist < 0 %} {% comment %} Distance must be a positive value {% endcomment %} {% assign dist=0 | minus: dist %}
+          {% endif %}  -->
+          <a href="{{  '/posts/page'  | append: index | relative_url }}"
+          class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">{{ index }}</a>
+          {% endif %}
+        {% endfor %}
+
+        <!-- {% comment %} Ellipsis for truncated links {% endcomment %} -->
+        {% if pages_to_end > 3 %}
+        <span
+          class="flex justify-center items-center w-10 h-10 border border-gray-200 text-gray-500 pointer-events-none">&hellip;</span>
+        {% endif %}
+
+        {% if paginator.page == paginator.total_pages %}
+        <a href="#"
+          class="disabled current flex justify-center items-center w-10 h-10 border border-gray-200 bg-gray-100 text-gray-500 pointer-events-none">{{
+          paginator.page }}</a>
+        {% else %}
+        <a href="{{ '/posts/page'  | append: paginator.total_pages | relative_url }}"
+          class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">{{
+          paginator.total_pages }}</a>
+        {% endif %}
+
+
+        {% if paginator.next_page %}
+        <a href="{{ paginator.next_page_path | relative_url }}"
+          class="flex justify-center items-center w-45 h-10 border border-gray-200 bg-gray-100 hover:bg-gray-200 cursor-pointer">Articles
+          suivants &rarr;</a>
+        {% endif %}
+    {% endif %}
   </div>
 </div>
