@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://pixabay.com/users/8385-8385' target='_blank'>Reimund Bertrams</a>.
 :page-liquid:
+:page-categories: sciencesco
 
 .Illustration par https://pixabay.com/users/8385-8385[Reimund Bertrams^]
 image::{{'/images/hugotrad/infinity.png' | relative_url}}[image,width=80%,align="center"]

@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href="https://unsplash.com/@zayyerrn" target="_blank">Ahmed Zayan</a>.
 :page-liquid:
+:page-categories: sciencesco
 
 La réalité vécue est faite d’une somme d’informations qui vont simplement au-delà de nos capacités de traitement. Une bonne partie de ces informations est simplement ignorée par notre cerveau, une autre partie est traitée de façon automatique et inconsciente, et enfin une dernière partie est traitée de façon consciente. Ce traitement est une interprétation d’une réalité simplifiée. L’état d’esprit constitue en quelque sorte le noyau de ce modèle d’interprétation sur lequel nous nous appuyons pour anticiper, simplifier et interpréter rapidement un ensemble complexe d’informations que nous recevons. Nous adoptons des états d’esprit sur des pans entiers de la vie sociale{nbsp}: les capacités intellectuelles, les capacités physiques, notre rapport à la nourriture, aux médicaments (avec l’effet placebo) ou encore notre rapport au stress. L’état d’esprit a non seulement un effet sur les comportements que nous adoptons mais également sur la manière dont notre corps réagit physiologiquement.
 

@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href="https://unsplash.com/@wocintechchat" target="_blank">Christina</a>.
 :page-liquid:
+:page-categories: sciencesco
 
 .Illustration par https://unsplash.com/@wocintechchat[Christina^]
 image::{{'/images/oliviersavrimoutoo/diversity.png' | relative_url}}[image,width=80%,align="center"]

@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://unsplash.com/@cbarbalis' target='_blank'>Chris Barbalis</a>.
 :page-liquid:
+:page-categories: sciencesco
 
 Nous vous proposons une note de synthèse de l’article suivant{nbsp}:
 

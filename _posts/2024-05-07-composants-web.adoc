@@ -6,6 +6,7 @@
 :page-tags: [JavaScript, Composants Web, Développement Web, Lit, Stencil]
 :page-vignette: web-components-logo.png
 :page-liquid:
+:page-categories: software
 
 = Les Composants Web : Un outil puissant pour le développement web moderne
 

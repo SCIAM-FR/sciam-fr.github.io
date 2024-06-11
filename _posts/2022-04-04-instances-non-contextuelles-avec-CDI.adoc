@@ -9,6 +9,7 @@
 :post-vignette: fishbowl.png
 :page-vignette-licence: 'Source Shutterstock'
 :page-liquid:
+:page-categories: software
 
 Les principaux composants dans CDI sont les beans (consultez cet link:{% post_url 2021-01-14-cinquante-nuances-de-beans-CDI %}[article^] pour connaître tous les types de beans existants).
 Avec CDI, un bean est géré de A à Z par le conteneur, qui contrôle le cycle de vie de son instance et y ajoute toute la magie CDI (injection, interception, etc).

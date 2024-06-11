@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/TheDigitalArtist-202249' target='_blank'>Pete Linforth</a>.
 :page-liquid:
+:page-categories: sciencesco
 
 //.Illustration par https://pixabay.com/fr/users/TheDigitalArtist-202249[Pete Linforth^]
 //image::{{'/images/mohamednajib/comportement1.png' | relative_url}}[image,width=80%,align="center"]

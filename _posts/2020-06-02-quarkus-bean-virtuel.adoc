@@ -9,8 +9,8 @@
 :post-vignette: quarkus-bean-virtuel.jpeg
 :page-vignette-licence: 'Image par <a href="https://pixabay.com/fr/users/TheDigitalArtist-202249/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=4246668">Pete Linforth</a> de Pixabay'
 :page-liquid:
+:page-categories: software
 
-&nbsp;
 
 J’ai eu l’occasion de m’intéresser récemment au framework Quarkus qui est une implémentation *JEE Microprofile* pour *faciliter le développement de* https://fr.wikipedia.org/wiki/Microservices[*micro-services*].
 

@@ -9,7 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par https://pixabay.com/fr/users/pexels-2286921[Pexels^].
 :page-liquid:
-:page-categories: SciencesCO
+:page-categories: sciencesco
 
 .Illustration par https://pixabay.com/fr/users/pexels-2286921[Pexels^]
 image::{{'/images/oliviersavrimoutoo/falling.png' | relative_url}}[image,width=80%,align="center"]
