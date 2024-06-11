@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/openclipart-vectors-30363/' target='_blank'>OpenClipart-Vectors</a>.
 :page-liquid:
+:page-categories: autres
 
 La mort de George Floyd causée par un policier révèle que les minorités visibles sont plus à même de subir deux formes de fléaux que sont le racisme et les violences policières. Ce sont deux fléaux distincts qui convergent dans le cas des minorités. La question débattue n’est pas de savoir si ces fléaux sont présents au sein de l’institution policière de manière générale (police et gendarmerie). Très peu de personnes nient encore l’existence de ces fléaux au sein des forces de l’ordre. #La question est de savoir s’il existe une responsabilité institutionnelle dans la présence de ces fléaux au sein de la Police#. La réponse du gouvernement par le biais du ministre de l’intérieur consiste à dire qu’il s’agit là de problèmes graves mais d’ordre individuels et non de problèmes institutionnels. Je propose de montrer qu’il s’agit bien d’un problème institutionnel d’une certaine manière.
 

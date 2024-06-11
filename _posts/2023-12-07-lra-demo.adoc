@@ -9,7 +9,7 @@
 :page-vignette-licence: Sources: MicroProfile, Quarkus
 :showtitle:
 :page-liquid:
-:page-categories: Developpement
+:page-categories: software
 
 Il est fréquent de devoir modifier des données dans plusieurs microservices lors d’une opération métier.
 Par exemple, supprimer un client dans un microservice Client et clôturer ses comptes bancaires dans un microservice Account.

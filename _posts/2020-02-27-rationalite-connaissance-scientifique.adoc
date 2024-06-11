@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/morhamedufmg-1003717/' target='_blank'>morhamedufmg</a>.
 :page-liquid:
+:page-categories: sciencesco
 
 La semaine dernière un fervent «{nbsp}platiste{nbsp}», https://www.francetvinfo.fr/monde/usa/il-veut-prouver-que-la-terre-est-plate-et-meurt-dans-le-crash-de-sa-fusee-artisanale_3838247.html[Mike Hughes^], a fait l’expérience, maheureusement au prix de sa vie, que la maîtrise des lois de la physique nécessitait davantage que de l’improvisation. Ce platiste, adepte de l’hypothèse selon laquelle la Terre serait plate, a voulu démontrer que la Terre n’est pas ronde. Il a construit seul une fusée (en se basant par ailleurs sur des technologies existantes) pour observer notre planète de suffisamment haut en espérant être ainsi capable de prouver son hypothèse. La suite, nous la connaissons{nbsp}: un engin qui explose à quelques mètres d’altitude conduisant au décès de cet homme et causant un chagrin terrible à ses proches.
 

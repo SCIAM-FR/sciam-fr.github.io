@@ -9,6 +9,7 @@
 :post-vignette: algo-ml-peu-conventionel-001.jpeg
 :page-vignette-licence: 'Image par ElisaRiva de Pixabay'
 :page-liquid:
+:page-categories: llm
 
 Dans le cadre de mes recherches, j’ai été amené à étudier des solutions utilisant des systèmes multi-agents et du machine learning. J’ai notamment essayé de reproduire les résultats d’un article qui avait attiré mon attention : "https://arxiv.org/abs/1905.04835[Multi-Agent Image Classification via Reinforcement Learning]".
 

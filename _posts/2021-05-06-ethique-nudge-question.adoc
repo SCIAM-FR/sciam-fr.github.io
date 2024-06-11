@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/qimono-1962238' target='_blank'>qimono</a>.
 :page-liquid:
+:page-categories: sciencesco
 
 «_{nbsp}Nudge{nbsp}: “Le gouvernement est tenté d’orienter nos comportements dans la gestion de la crise_” » (https://www.marianne.net/agora/tribunes-libres/nudge-le-gouvernement-est-tente-dorienter-nos-comportements-dans-la-gestion-de-la-crise[Marianne^]){nbsp}; «_{nbsp}Le “nudge”, manipulation douce par temps de crise{nbsp}_» (https://www.marianne.net/agora/tribunes-libres/nudge-le-gouvernement-est-tente-dorienter-nos-comportements-dans-la-gestion-de-la-crise[France Info^]){nbsp}; «_{nbsp}Le “Nudge”{nbsp}: incitation ou manipulation{nbsp}?{nbsp}_» (https://information.tv5monde.com/video/le-nudge-incitation-ou-manipulation[TV5 monde^]). Ce sont là quelques titres médiatiques du mois d’avril 2021 autour d’une pratique qui trouve ses fondements dans les sciences comportementales{nbsp}: le _nudge_.
 

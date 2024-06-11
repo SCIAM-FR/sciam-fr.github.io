@@ -9,6 +9,7 @@
 //:post-vignette:
 //:page-vignette-licence:
 :page-liquid:
+:page-categories: sciencesco
 
 Le meilleur des sciences comportementales & cognitives sélectionné par vos experts SCIAM
 

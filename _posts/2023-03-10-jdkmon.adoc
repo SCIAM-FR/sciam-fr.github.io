@@ -6,6 +6,7 @@
 :page-tags: [JDK, Java, JDKMon, Outillage]
 :page-vignette: jdkmon.png
 :page-liquid:
+:page-categories: software
 
 = Faciliter la mise à jour de JDKs avec JDKMon
 

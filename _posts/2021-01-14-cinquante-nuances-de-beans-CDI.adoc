@@ -9,6 +9,7 @@
 :post-vignette: Coffee-Beans-Black-and-White.jpg
 :page-vignette-licence: 'Source racebaitr'
 :page-liquid:
+:page-categories: software
 
 
 Dans CDI, les Beans sont un concept central.

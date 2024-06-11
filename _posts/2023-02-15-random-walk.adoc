@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par l'auteur.
 :page-liquid:
+:page-categories: autres
 
 Au milieu du XIXe siècle, Jules Regnault (1834-1894) était courtier à la Bourse de Paris et désespérait comme beaucoup d’autre d’arriver à prévoir les mouvements du titre star de l’époque{nbsp}: la fameuse rente française 3%{nbsp}footnote:[C’était une obligation d’État perpétuelle (c’est-à-dire qu’elle versait 3% d’intérêt par an mais qu’il n’y avait aucune date de remboursement du capital prévue). Elle a été émise pour la première fois en 1825 et il faudra attendre 1982 pour que cet instrument de financement de l’État disparaisse définitivement.].
 Constatant qu’il était incapable de deviner si le cours de cette obligation monterait ou baisserait le lendemain — et encore moins à horizon d’un an — il a eu une idée absolument géniale{nbsp}: faire «{nbsp}comme si{nbsp}» les cours de bourses étaient des processus stochastiques{nbsp}footnote:[On attribue souvent l’invention du concept de marche aléatoire au biostatisticien britannique Karl Pearson en 1905. C’est une erreur : c’est bien Regnault, dans Calcul des Chances et Philosophie de la Bourse (1863), qui en a été le découvreur.].

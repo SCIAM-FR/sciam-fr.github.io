@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/mohamed_hassan-5229782' target='_blank'>Mohamed Hassan</a>.
 :page-liquid:
+:page-categories: autres
 
 Récemment illustré par la campagne de vaccination contre le Covid-19, il existe sur de nombreux sujets un fossé entre des consensus scientifiques et l’opinion publique — en témoignent les débats sur l’utilisation des organismes génétiquement modifiés (OGMs) ou la réalité du changement climatique –, et ce malgré la mise en place de campagnes d’informations destinées à communiquer les résultats scientifiques auprès de la population générale.
 

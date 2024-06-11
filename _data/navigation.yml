@@ -1,9 +1,11 @@
-- title: IT
-  url: '/category/developpement'
-- title: Data
-  url: '/category/data'
-- title: Sciences co
+- title: Software Engineering
+  url: '/category/software'
+- title: Data, IA & LLM
+  url: '/category/llm'
+- title: Sciences co & Cyber
   url: '/category/sciencesco'
+- title: Autres
+  url: '/category/autres'
 - title: Auteurs
   url: '/authors' 
 - title: Contact

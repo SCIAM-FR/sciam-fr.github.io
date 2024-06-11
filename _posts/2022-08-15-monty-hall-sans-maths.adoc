@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href="https://unsplash.com/@filipkominik" target="_blank">Filip Kominik</a>.
 :page-liquid:
+:page-categories: autres
 
 Jouons à un jeu, voulez-vous{nbsp}? Le maître du jeu dispose devant vous 3 boîtes parfaitement opaques dans l’une desquelles il a lui-même placé une pièce d’or de grande valeur{nbsp}footnote:[Nous jouons en l'occurence avec une pièce portugaise de type _Cruzado_ frappée sous Manuel I^er^ (1495-1521){nbsp}; laquelle se négocie, si mes informations sont exactes, à quelque chose comme €{nbsp}5'000. Crédit photo{nbsp}: Wikipédia.] (i.e. les deux autres sont désespérément vides). Votre objectif, évidemment, est trouver la boîte qui contient la pièce. Jusque-là, le jeu que je vous propose ressemble à une variante du bonneteau mais la suite et tout à fait différente.
 

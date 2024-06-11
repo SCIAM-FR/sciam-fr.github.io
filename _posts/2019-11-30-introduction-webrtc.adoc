@@ -9,6 +9,7 @@
 :post-vignette: introduction-webrtc-001.jpeg
 :page-vignette-licence: 'Image par Joshua Sortino'
 :page-liquid:
+:page-categories: autres
 
 {% comment %}
 image::{{'/images/introduction-webrtc-001.jpeg' | relative_url}}[Image par Joshua Sortino,width=604,height=404]

@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/openclipart-vectors-30363/' target='_blank'>OpenClipart-Vectors</a>.
 :page-liquid:
+:page-categories: llm
 
 Notre représentation du monde est globalement le résultat de deux éléments{nbsp}:
 

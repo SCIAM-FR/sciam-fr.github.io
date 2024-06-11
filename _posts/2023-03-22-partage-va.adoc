@@ -9,6 +9,7 @@
 :post-vignette: buildings.png
 :page-vignette-licence: Photo de <a href="https://unsplash.com/@matosem?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Kevin Matos</a> sur <a href="https://unsplash.com/fr/photos/Nl_FMFpXo2g?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 :page-liquid:
+:page-categories: autres
 
 Nos lecteurs sont en principe convaincus de la nécessité de disposer de données et de métadonnées d’excellente qualité pour développer leurs affaires. Reste que, même quand c’est le cas, l’interprétation (erronée) de ces données peut amener l’utilisateur à commettre des erreurs de jugement dramatiques : démonstration par la comptabilité nationale et, plus précisément, la notion de _partage de la valeur ajoutée_.
 

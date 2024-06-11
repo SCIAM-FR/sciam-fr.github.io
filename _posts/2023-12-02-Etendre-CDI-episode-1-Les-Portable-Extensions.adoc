@@ -8,6 +8,7 @@
 :page-vignette: rainbow_lego.jpg
 :page-vignette-licence: 'Source Legomania'
 :page-liquid:
+:page-categories: software
 
 Depuis sa version 1.0, sortie en 2009, CDI inclut le mécanisme de _Portable Extension_ qui permet aux développeurs d'ajouter des fonctionnalités au modèle de programmation CDI.
 L'année dernière, CDI a introduit la notion de _Build Time Compatible Extension_ permettant d'étendre CDI d'une façon compatible avec la compilation statique (utilisée par des frameworks comme Quarkus).
