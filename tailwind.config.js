@@ -38,6 +38,7 @@ module.exports = {
         bodyBackground: '#F9FAFE',
         backgroundsciam: "#cbd5e1",
         grayBg: '#f2f1ed',
+        grayBgSciam: '#f9fafe',
         navysciam: '#384a72',
         navysciamlight: '#505f8c',
         navysciamdark: '#2e3a56',

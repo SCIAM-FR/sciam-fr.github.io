@@ -4,7 +4,7 @@ layout: default
 
 <div class="relative grid grid-cols-12 gap-6 pt-16 h-auto min-h-[30vh] p-10">
   <div class="absolute inset-0 bg-hero-bg bg-cover bg-center bg-no-repeat"></div>
-  <div class="absolute inset-0 bg-gradient-to-b from-transparent to-grayBg"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent to-grayBgSciam"></div>
   <div class="col-span-12 sm:col-span-12 flex flex-col items-center justify-center rounded-lg pt-0 pb-5 px-20">
     <p class="text-6xl font-black text-navysciam fadeInUp1">Blog de SCIAM</p>
     <p class="mt-1 text-2xl font-bold text-navysciam fadeInUp2">Tendances Tech, Insights et Innovations</p>
@@ -25,7 +25,6 @@ layout: default
           <div class="rounded-b overflow-hidden flex-grow">
             <div class="flex flex-col justify-between h-full px-12 py-6">
               <div>
-
                 <div>
                   {% if post.auteurs and post.auteurs.size > 1 %}
                   <div class="text-sm text-gray-500 mb-4">
@@ -100,21 +99,14 @@ layout: default
         {% endfor %}
       </div>
     </div>
-
-    <div
-      class="sm:block md:col-span-2 lg:col-span-2 flex flex-wrap items-center justify-center rounded-xl shadow-lg bg-white">
-      <div class="w-full bg-transparent overflow-hidden rounded-xl">
-        <a class="twitter-timeline" data-width="500" data-height="700" data-tweet-limit="5"
-          href="https://twitter.com/{{ site.social-network-links.twitter }}?ref_src=twsrc%5Etfw">Tweets by SCIAM</a>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-      </div>
+    <div class="sm:block md:col-span-2 lg:col-span-2 pt-0 pb-0 flex flex-wrap items-center justify-center rounded-xl shadow-lg bg-white">
+      {% include x_post.html %}
     </div>
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
     <div class="col-span-12 sm:col-span-12 flex flex-col h-full rounded-xl">
       <div class="mb-auto">
-
         <hr class="my-20 bg-zince-200" />
         <!-- Sciam's choice -->
         <div class="md:mb-20">
@@ -167,8 +159,7 @@ layout: default
                         src="{{ '/images/authors/' | append: author.picture | relative_url }}" alt="{{ author.name }}">
                       {% endif %}
                       <span class="text-base text-navysciam">
-                        <a href="{{ '/author/' | append: auteur | append: '/index.html' | relative_url }}">{{
-                          author.name }}</a>
+                        <a href="{{ '/author/' | append: auteur | append: '/index.html' | relative_url }}">{{ author.name }}</a>
                       </span>
                       {% endif %}
                       {% endfor %}
@@ -182,13 +173,11 @@ layout: default
                           alt="{{ author.name }}">
                         {% endif %}
                         <div class="flex flex-col pl-4">
-                          <span class="text-base font-bold text-navysciam"><a
-                              href="{{ '/author/' | append: post.author | append: '/index.html' | relative_url }}">{{
-                              author.name }}</a></span>
+                          <span class="text-base font-bold text-navysciam">
+                            <a href="{{ '/author/' | append: post.author | append: '/index.html' | relative_url }}">{{ author.name }}</a></span>
                           <div class="flex">
                             <span class="text-base font-normal text-navysciam">{{ post.date | date: "%d/%m/%Y" }}</span>
-                            <p class="text-navysciam pl-2">• {{ post.content | reading_time | pluralize: "min" }} de
-                              lecture</p>
+                            <p class="text-navysciam pl-2">• {{ post.content | reading_time | pluralize: "min" }} de lecture</p>
                           </div>
                         </div>
                       </div>
@@ -288,8 +277,7 @@ layout: default
                               author.name }}</a></span>
                           <div class="flex">
                             <span class="text-base font-normal text-navysciam">{{ post.date | date: "%d/%m/%Y" }}</span>
-                            <p class="text-navysciam pl-2">• {{ post.content | reading_time | pluralize: "min" }} de
-                              lecture</p>
+                            <p class="text-navysciam pl-2">• {{ post.content | reading_time | pluralize: "min" }} de lecture</p>
                           </div>
                         </div>
                       </div>
@@ -302,8 +290,7 @@ layout: default
                   </div>
                   <p class="line-clamp-3 mb-4">{{ post.excerpt | strip_html }}</p>
                   <a href="{{ post.url | relative_url }}"
-                    class="text-navysciam hover:font-extrabold  transition duration-300 ease-in-out">Lire la
-                    suite...</a>
+                    class="text-navysciam hover:font-extrabold  transition duration-300 ease-in-out">Lire la suite...</a>
                   <div class="mt-auto">
                     <div class="pt-4 pb-2">
                       {% for tag in post.tags %}
@@ -336,7 +323,6 @@ layout: default
             <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
           </div>
         </div>
-
       </div>
     </div>
   </div>

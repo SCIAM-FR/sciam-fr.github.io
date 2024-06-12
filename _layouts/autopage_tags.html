@@ -2,29 +2,40 @@
 layout: default
 ---
 
-<div class="p-8 bg-grayBg">
-  <div class="bg-white py-10 px-14 rounded-lg shadow-md">
-    <h1 class="text-2xl font-sans text-navysciam font-bold my-4">
-      Articles associés au tag
-      {% if page.autopages %}
-      <span class="rounded-lg border-0.5 px-4 py-2 ml-2"
-        data-tag-name="{% if page.autopages %}{{ page.autopages.display_name }}{% endif %}">
+<div class="px-20 bg-grayBgSciam">
+
+  <nav aria-label="Breadcrumb" class="py-5 mb-4">
+    <ol class="list-none flex">
+      <li class="text-navysciam text-xl font-medium">
+        <a href="/" class="hover:underline">Accueil</a>
+      </li>
+      <li class="text-navysciam mx-2 text-xl font-medium">
+        <span aria-hidden="true">/</span>
+      </li>
+      <li class="text-lightbluesciam text-xl font-medium">
         {{ page.autopages.display_name }}
-      </span>
-      {% endif %}
-    </h1>
+      </li>
+    </ol>
+  </nav>
 
-    <div>
+  <!-- Dynamic Banner -->
+  <div class="rounded-lg py-6 flex items-center justify-between border-0.5 mb-8"
+    data-tag-name="{% if page.autopages %}{{ page.autopages.display_name }}{% endif %}">
+    <h1 class="text-6xl font-extrabold text-navysciam font-sans my-4 pl-10"># {{ page.autopages.display_name }} </h1>
+  </div>
+
+  <div class="py-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for post in paginator.posts %}
-      <div class="my-8 flex flex-col md:flex-row border border-lightbluesciam rounded-lg">
-        <div class="w-56 md:mr-5 md:mb-0 flex md:flex-col justify-center items-center border-r-0.5 border-zinc-200">
-          {% if post.vignette %}
-          <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}"
-            class="h-auto rounded-l-lg" />
-          {% endif %}
-        </div>
+      <div class=" bg-white rounded-lg shadow-lg overflow-hidden">
+        {% if post.vignette %}
+        {% assign bg_url = '/images/vignettes/' | append: post.vignette | relative_url %}
+        <div class="h-60 w-full pb-[33.33%] bg-contain bg-no-repeat bg-center rounded-xl"
+          style="background-image: url('{{ bg_url }}');"></div>
+        <hr class="bg-stone-50 opacity-50" />
+        {% endif %}
 
-        <div class="flex flex-col justify-center py-10">
+        <div class="px-12 py-6 flex flex-col justify-center">
           <h3 class="text-xl font-sans text-navysciam font-bold mb-2"><a href="{{ post.url | relative_url }}">{{
               post.title
               }}</a></h3>

@@ -4,7 +4,7 @@ pagination:
   enabled: true
 ---
 
-<div class="relative min-h-screen mb-10 px-3 lg:px-28 md:px-28 bg-grayBg overflow-visible">
+<div class="relative min-h-screen mb-10 px-3 lg:px-28 md:px-28 bg-grayBgSciam overflow-visible">
   <div class="grid grid-cols-12 gap-6 py-16 md:py-10">
     <!-- Information Block -->
     <div class="order-2 md:order-1 col-span-12 md:col-span-6 text-navysciam p-8 flex flex-col justify-between">
@@ -48,11 +48,6 @@ pagination:
     </div>
   
     <!-- Image Block -->
-    <!-- <div class="order-1 md:order-2 col-span-12 md:col-span-6 flex justify-center items-center rounded-lg shadow-md bg-white">
-      {% assign bg_url = '/images/vignettes/' | append: page.vignette | relative_url %}
-      <div class="h-64 w-full pb-[33.33%] bg-contain bg-no-repeat bg-center"
-      style="background-image: url('{{ bg_url }}');"></div>
-    </div> -->
     <div class="order-1 md:order-2 col-span-12 md:col-span-6 flex justify-center items-center rounded-lg shadow-md bg-white">
       <div class="h-72 flex items-center justify-center">
           <img src="{{ '/images/vignettes/' | append: page.vignette | relative_url }}" alt="Description" class="object-cover max-h-full">

@@ -69,6 +69,11 @@ document.addEventListener("DOMContentLoaded", function() {
         tag.classList.add(`text-${className}-500`);
         tag.classList.add(`bg-${className}-100`);
         tag.classList.add(`border-${className}-200`);
+
+        const h1 = document.querySelector('h1.text-6xl');
+        if (h1 && h1.textContent.includes(tagName)) {
+            h1.classList.add(`text-${className}-500`);
+        }
     });
 
     const articlesContainer = document.getElementById('articles-container');
