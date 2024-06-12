@@ -6,8 +6,8 @@ pagination:
 
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
   {% assign posts = site.posts %}
-  {% assign category_name = "Tous les articles" %}
-  
+  {% assign category_name = page.category | default:"Tous les articles" %}
+    
   {% if page.title == "Sujets d'actualité" %}
     {% assign posts = site.posts | where: "categories", "News" %}
     {% assign category_name = "Sujets d'actualité" %}
