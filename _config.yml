@@ -77,6 +77,7 @@ plugins:
 pagination:
   enabled: true
   per_page: 12
+  permalink: '/:num/'
   title: ':title - page :num'
   sort_field: 'date'
   sort_reverse: true

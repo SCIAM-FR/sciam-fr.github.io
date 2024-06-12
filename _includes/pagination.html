@@ -1,0 +1,67 @@
+  <!-- Pagination -->
+  <div class="flex justify-center items-center my-12">
+    {% if paginator.total_pages > 1 %}   
+      {% if paginator.previous_page %}
+      <a class="flex justify-center items-center w-45 h-10 border border-gray-200 bg-gray-100 hover:bg-gray-200 cursor-pointer"
+        href="{{ paginator.previous_page_path | prepend: site.baseurl }}">&larr; Précédents</a>
+      {% endif %}
+
+
+      {% if paginator.page == 1 %}
+      <a href="#"
+        class="disabled current flex justify-center items-center w-10 h-10 border border-gray-200 bg-gray-100 text-gray-500 pointer-events-none">1</a>
+      {% else %}
+      <a href="{{ first_page_path | prepend: site.baseurl }}"
+        class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">1</a>
+      {% endif %}
+
+      {% assign page_start = 2 %}
+      {% if paginator.page > 4 %}
+      {% assign page_start = paginator.page | minus: 2 %}
+      <a href="#"
+        class="disabled flex justify-center items-center w-10 h-10 border border-gray-200 text-gray-500 pointer-events-none">&hellip;</a>
+      {% endif %}
+
+      {% assign page_end = paginator.total_pages | minus: 1 %}
+      {% assign pages_to_end = paginator.total_pages | minus: paginator.page %}
+      {% if pages_to_end > 4 %}
+        {% assign page_end = paginator.page | plus: 2 %}
+      {% endif %}
+
+      {% for index in (page_start..page_end) %}
+        {% if index == paginator.page %}
+        <a href="#"
+          class="disabled active flex justify-center items-center w-10 h-10 border border-gray-200 bg-gray-100 text-gray-500 pointer-events-none">{{
+          index }}</a>
+        {% else %}
+        <!-- {% comment %} Distance from current page and this link {% endcomment %}
+        {% assign dist = paginator.page | minus: index %}
+        {% if dist < 0 %} {% comment %} Distance must be a positive value {% endcomment %} {% assign dist=0 | minus: dist %}
+          {% endif %}  -->
+          <a href="{{ paginate_path | replace: ':num', index | prepend: site.baseurl }}"
+          class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">{{ index }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if pages_to_end > 3 %}
+        <span
+          class="flex justify-center items-center w-10 h-10 border border-gray-200 text-gray-500 pointer-events-none">&hellip;</span>
+        {% endif %}
+
+        {% if paginator.page == paginator.total_pages %}
+        <a href="#"
+          class="disabled current flex justify-center items-center w-10 h-10 border border-gray-200 bg-gray-100 text-gray-500 pointer-events-none">{{
+          paginator.page }}</a>
+        {% else %}
+        <a href="{{ paginate_path | replace: ':num', paginator.total_pages | prepend: site.baseurl }}"
+          class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">{{
+          paginator.total_pages }}</a>
+        {% endif %}
+
+
+        {% if paginator.next_page %}
+        <a href="{{ paginator.next_page_path |  prepend: site.baseurl }}"
+          class="flex justify-center items-center w-45 h-10 border border-gray-200 bg-gray-100 hover:bg-gray-200 cursor-pointer">Suivants &rarr;</a>
+        {% endif %}
+    {% endif %}
+  </div>

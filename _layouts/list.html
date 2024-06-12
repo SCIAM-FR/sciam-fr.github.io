@@ -6,18 +6,23 @@ pagination:
 
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
   {% assign posts = site.posts %}
-  {% assign category_name = page.category | default:"Tous les articles" %}
-    
+  {% assign category_name = "Tous les articles" %} 
+
   {% if page.title == "Sujets d'actualité" %}
     {% assign posts = site.posts | where: "categories", "News" %}
     {% assign category_name = "Sujets d'actualité" %}
   {% elsif page.url contains '/category/' %}
     {% assign category_segments = page.url | split: '/' %}
-    {% assign category_index = category_segments.size | minus: 2 %}
-    {% assign category_name = category_segments[category_index] %}
+    {% if category_segments.size > 2 %}
+    {% assign category_name = category_segments[2] %}
     {% assign posts = site.posts | where_exp: "post", "post.categories contains category_name" %}
+    {% assign paginate_path = '/category/' | append: category_name | append: '/:num/' %}
+    {% assign first_page_path = '/category/' | append: category_name %}
+  {% else %}  
+    {% assign paginate_path = '/posts/:num/' %}
+    {% assign first_page_path = '/posts/' %}  
+    {% endif %}
   {% endif %}
-
 
   <nav aria-label="Breadcrumb" class="py-5">
     <ol class="list-none flex">
@@ -112,76 +117,5 @@ pagination:
       {% endif %}
     </div>
   </div>
-  <!-- Pagination -->
-  <div class="flex justify-center items-center my-12">
-    {% if paginator.total_pages > 1 %}   
-      {% if paginator.previous_page %}
-      <a class="flex justify-center items-center w-45 h-10 border border-gray-200 bg-gray-100 hover:bg-gray-200 cursor-pointer"
-        href="{{ paginator.previous_page_path | relative_url }}">&larr; Articles précédents</a>
-      {% endif %}
-
-      {% assign first_page_path = '/posts/' %}
-
-      <!-- {% comment %} First page {% endcomment %} -->
-      {% if paginator.page == 1 %}
-      <a href="#"
-        class="disabled current flex justify-center items-center w-10 h-10 border border-gray-200 bg-gray-100 text-gray-500 pointer-events-none">1</a>
-      {% else %}
-      <a href="{{ first_page_path | relative_url  }}"
-        class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">1</a>
-      {% endif %}
-
-      {% assign page_start = 2 %}
-      {% if paginator.page > 4 %}
-      {% assign page_start = paginator.page | minus: 2 %}
-      <!-- {% comment %} Ellipsis for truncated links {% endcomment %} -->
-      <a href="#"
-        class="disabled flex justify-center items-center w-10 h-10 border border-gray-200 text-gray-500 pointer-events-none">&hellip;</a>
-      {% endif %}
-
-      {% assign page_end = paginator.total_pages | minus: 1 %}
-      {% assign pages_to_end = paginator.total_pages | minus: paginator.page %}
-      {% if pages_to_end > 4 %}
-        {% assign page_end = paginator.page | plus: 2 %}
-      {% endif %}
-
-      {% for index in (page_start..page_end) %}
-        {% if index == paginator.page %}
-        <a href="#"
-          class="disabled active flex justify-center items-center w-10 h-10 border border-gray-200 bg-gray-100 text-gray-500 pointer-events-none">{{
-          index }}</a>
-        {% else %}
-        <!-- {% comment %} Distance from current page and this link {% endcomment %}
-        {% assign dist = paginator.page | minus: index %}
-        {% if dist < 0 %} {% comment %} Distance must be a positive value {% endcomment %} {% assign dist=0 | minus: dist %}
-          {% endif %}  -->
-          <a href="{{  '/posts/page'  | append: index | relative_url }}"
-          class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">{{ index }}</a>
-          {% endif %}
-        {% endfor %}
-
-        <!-- {% comment %} Ellipsis for truncated links {% endcomment %} -->
-        {% if pages_to_end > 3 %}
-        <span
-          class="flex justify-center items-center w-10 h-10 border border-gray-200 text-gray-500 pointer-events-none">&hellip;</span>
-        {% endif %}
-
-        {% if paginator.page == paginator.total_pages %}
-        <a href="#"
-          class="disabled current flex justify-center items-center w-10 h-10 border border-gray-200 bg-gray-100 text-gray-500 pointer-events-none">{{
-          paginator.page }}</a>
-        {% else %}
-        <a href="{{ '/posts/page'  | append: paginator.total_pages | relative_url }}"
-          class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">{{
-          paginator.total_pages }}</a>
-        {% endif %}
-
-
-        {% if paginator.next_page %}
-        <a href="{{ paginator.next_page_path | relative_url }}"
-          class="flex justify-center items-center w-45 h-10 border border-gray-200 bg-gray-100 hover:bg-gray-200 cursor-pointer">Articles
-          suivants &rarr;</a>
-        {% endif %}
-    {% endif %}
-  </div>
+  {% include pagination.html %}
 </div>
