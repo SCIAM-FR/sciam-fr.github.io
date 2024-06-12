@@ -25,7 +25,6 @@ layout: default
           <div class="rounded-b overflow-hidden flex-grow">
             <div class="flex flex-col justify-between h-full px-12 py-6">
               <div>
-
                 <div>
                   {% if post.auteurs and post.auteurs.size > 1 %}
                   <div class="text-sm text-gray-500 mb-4">
@@ -100,13 +99,8 @@ layout: default
         {% endfor %}
       </div>
     </div>
-    <div
-      class="sm:block md:col-span-2 lg:col-span-2 flex flex-wrap items-center justify-center rounded-xl shadow-lg bg-white">
-      <div class="w-full bg-transparent overflow-hidden rounded-xl">
-        <a class="twitter-timeline" data-width="500" data-height="700" data-tweet-limit="5"
-          href="https://twitter.com/{{ site.social-network-links.twitter }}?ref_src=twsrc%5Etfw">Tweets by SCIAM</a>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-      </div>
+    <div class="sm:block md:col-span-2 lg:col-span-2 pt-0 pb-0 flex flex-wrap items-center justify-center rounded-xl shadow-lg bg-white">
+      {% include x_post.html %}
     </div>
   </div>
 
