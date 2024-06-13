@@ -1,25 +1,45 @@
-  <!-- Pagination -->
-  <div class="flex justify-center items-center my-12">
+  <div class="flex justify-center items-center gap-4 my-12">
     {% if paginator.total_pages > 1 %}   
       {% if paginator.previous_page %}
-      <a class="flex justify-center items-center w-45 h-10 border border-gray-200 bg-gray-100 hover:bg-gray-200 cursor-pointer"
-        href="{{ paginator.previous_page_path | prepend: site.baseurl }}">&larr; Précédents</a>
-      {% endif %}
-
-
+      <a class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-greysciam hover:text-white active:bg-navysciam cursor-pointer"
+        href="{{ paginator.previous_page_path | prepend: site.baseurl }}">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"></path>
+        </svg>Précédents
+      </a>
+    {% else %}
+    <button disabled
+    class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+    type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+        aria-hidden="true" class="w-4 h-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"></path>
+      </svg>Précédents
+    </button>
+    {% endif %}
+    <div class="flex items-center gap-2">
       {% if paginator.page == 1 %}
-      <a href="#"
-        class="disabled current flex justify-center items-center w-10 h-10 border border-gray-200 bg-gray-100 text-gray-500 pointer-events-none">1</a>
+      <button disabled class="pagination-btn text-white bg-navysciam" type="button">
+        <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+          1
+        </span>
+      </button>
       {% else %}
-      <a href="{{ first_page_path | prepend: site.baseurl }}"
-        class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">1</a>
+      <a href="{{ first_page_path | prepend: site.baseurl }}" class="pagination-btn hover:bg-gray-900/10">
+        <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+          1
+        </span>
+      </a>
       {% endif %}
 
       {% assign page_start = 2 %}
       {% if paginator.page > 4 %}
       {% assign page_start = paginator.page | minus: 2 %}
-      <a href="#"
-        class="disabled flex justify-center items-center w-10 h-10 border border-gray-200 text-gray-500 pointer-events-none">&hellip;</a>
+      <button disabled class="text-navysciam pagination-btn" type="button">
+        <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+          &hellip;
+        </span>
+      </button>
       {% endif %}
 
       {% assign page_end = paginator.total_pages | minus: 1 %}
@@ -28,40 +48,63 @@
         {% assign page_end = paginator.page | plus: 2 %}
       {% endif %}
 
+      
       {% for index in (page_start..page_end) %}
         {% if index == paginator.page %}
-        <a href="#"
-          class="disabled active flex justify-center items-center w-10 h-10 border border-gray-200 bg-gray-100 text-gray-500 pointer-events-none">{{
-          index }}</a>
+        <button disabled class="pagination-btn text-white bg-navysciam" type="button">
+          <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+            {{ index }}
+          </span>
+        </button>
         {% else %}
-        <!-- {% comment %} Distance from current page and this link {% endcomment %}
-        {% assign dist = paginator.page | minus: index %}
-        {% if dist < 0 %} {% comment %} Distance must be a positive value {% endcomment %} {% assign dist=0 | minus: dist %}
-          {% endif %}  -->
-          <a href="{{ site.baseurl }}{{ paginate_path | replace: ':num', index }}"
-          class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">{{ index }}</a>
+          <a href="{{ site.baseurl }}{{ paginate_path | replace: ':num', index }}" class="pagination-btn hover:bg-gray-900/10">
+            <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+              {{ index }}
+            </span>
+          </a>
           {% endif %}
         {% endfor %}
 
         {% if pages_to_end > 3 %}
-        <span
-          class="flex justify-center items-center w-10 h-10 border border-gray-200 text-gray-500 pointer-events-none">&hellip;</span>
+        <button disabled class="text-navysciam pagination-btn" type="button">
+        <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">&hellip;</span>
+        </button>
         {% endif %}
 
         {% if paginator.page == paginator.total_pages %}
-        <a href="#"
-          class="disabled current flex justify-center items-center w-10 h-10 border border-gray-200 bg-gray-100 text-gray-500 pointer-events-none">{{
-          paginator.page }}</a>
+        <button disabled class="pagination-btn text-white bg-navysciam" type="button">
+          <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+            {{ paginator.page }}
+          </span>
+        </button>
         {% else %}
-        <a href="{{ paginate_path | replace: ':num', paginator.total_pages | prepend: site.baseurl }}"
-          class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">{{
-          paginator.total_pages }}</a>
+        <a href="{{ paginate_path | replace: ':num', paginator.total_pages | prepend: site.baseurl }}" class="pagination-btn hover:bg-gray-900/10">
+          <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+            {{ paginator.total_pages }}
+          </span>
+        </a>
         {% endif %}
-
+    </div>
 
         {% if paginator.next_page %}
         <a href="{{ paginator.next_page_path |  prepend: site.baseurl }}"
-          class="flex justify-center items-center w-45 h-10 border border-gray-200 bg-gray-100 hover:bg-gray-200 cursor-pointer">Suivants &rarr;</a>
+          class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-greysciam hover:text-white active:bg-gray-900/20 cursor-pointer">
+          Suivants
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+            aria-hidden="true" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+            </svg>
+        </a>
+        {% else %}
+        <button disabled
+          class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+          type="button">
+          Suivants
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+            aria-hidden="true" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+          </svg>
+        </button>
         {% endif %}
     {% endif %}
   </div>

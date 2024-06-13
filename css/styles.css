@@ -254,9 +254,12 @@ ul.twitter-list li.nav-header {
   filter: blur(20px);
 }
 
-
 @media (min-width: 768px) {
   .swiper-slide {
     @apply w-1/3; 
   }
+}
+.pagination-btn {
+  @apply relative h-10 w-10 max-h-[40px] max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase 
+  transition-all;
 }
