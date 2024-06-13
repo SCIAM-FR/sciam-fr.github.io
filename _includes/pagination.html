@@ -38,7 +38,7 @@
         {% assign dist = paginator.page | minus: index %}
         {% if dist < 0 %} {% comment %} Distance must be a positive value {% endcomment %} {% assign dist=0 | minus: dist %}
           {% endif %}  -->
-          <a href="{{ paginate_path | replace: ':num', index | prepend: site.baseurl }}"
+          <a href="{{ site.baseurl }}{{ paginate_path | replace: ':num', index }}"
           class="flex justify-center items-center w-10 h-10 border border-gray-200 hover:bg-gray-200">{{ index }}</a>
           {% endif %}
         {% endfor %}

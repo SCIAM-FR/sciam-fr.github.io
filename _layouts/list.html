@@ -22,6 +22,9 @@ pagination:
     {% assign paginate_path = '/posts/:num/' %}
     {% assign first_page_path = '/posts/' %}  
     {% endif %}
+  {% else %}
+    {% assign paginate_path = '/posts/:num' %}
+    {% assign first_page_path = '/posts/' %}
   {% endif %}
 
   <nav aria-label="Breadcrumb" class="py-5">
