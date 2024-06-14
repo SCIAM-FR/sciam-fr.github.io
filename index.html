@@ -2,12 +2,16 @@
 layout: default
 ---
 
-<div class="relative grid grid-cols-12 gap-6 pt-16 h-auto min-h-[30vh] p-10">
-  <div class="absolute inset-0 bg-hero-bg bg-cover bg-center bg-no-repeat"></div>
-  <div class="absolute inset-0 bg-gradient-to-b from-transparent to-grayBgSciam"></div>
-  <div class="col-span-12 sm:col-span-12 flex flex-col items-center justify-center rounded-lg pt-0 pb-5 px-20">
-    <p class="text-6xl font-black text-navysciam fadeInUp1">Blog de SCIAM</p>
-    <p class="mt-1 text-2xl font-bold text-navysciam fadeInUp2">Tendances Tech, Insights et Innovations</p>
+<div class="grid grid-cols-12 gap-6 pt-16 h-auto min-h-[30vh] p-10">
+  <div class="col-span-12 sm:col-span-12 flex flex-row items-center justify-center rounded-lg pt-0 pb-5 px-20">
+    <div class="mr-5">
+      <dotlottie-player class="w-[200px] height-[200px]" src="{{ "/images/animation/logo-animation.json" | relative_url
+        }}" background="transparent" speed="1" direction="1" playMode="normal" loop autoplay></dotlottie-player>
+    </div>
+    <button class="btn-1 cursor-default"><span class="btn-span">
+      <p class="text-6xl font-black text-navysciam fadeInUp1">Blog de SCIAM</p>
+      <p class="mt-1 text-2xl font-bold text-navysciam fadeInUp2">Tendances Tech, Insights et Innovations</p>
+    </span></button>
   </div>
 </div>
 
@@ -99,7 +103,7 @@ layout: default
         {% endfor %}
       </div>
     </div>
-    <div class="sm:block md:col-span-2 lg:col-span-2 pt-0 pb-0 flex flex-wrap items-center justify-center rounded-xl shadow-lg bg-white">
+    <div class="sm:block md:col-span-2 lg:col-span-2 pt-0 pb-0 flex flex-wrap items-stretch justify-center rounded-xl shadow-lg bg-white">
       {% include x_post.html %}
     </div>
   </div>
