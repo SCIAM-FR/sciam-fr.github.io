@@ -3,12 +3,13 @@
 :layout: post
 :page-excerpt: La spécification MicroProfile LRA propose un modèle de transaction permettant de garantir la cohérence des données lors d'opérations métiers impliquant plusieurs microservices. À l’aide d’un exemple concret, nous allons voir dans cet article comment mettre en œuvre MicroProfile LRA dans une application Quarkus.
 :page-navtitle: LRA Quarkus demo
-:page-tags: [MicroProfile,SAGA,Quarkus,Java,LRA]
+:page-tags: [MicroProfile ,SAGA ,Quarkus ,Java ,LRA ]
 :post-vignette: quarkus-microprofile.jpg
 :page-vignette: quarkus-microprofile.jpg
 :page-vignette-licence: Sources: MicroProfile, Quarkus
 :showtitle:
 :page-liquid:
+:page-categories: software
 
 Il est fréquent de devoir modifier des données dans plusieurs microservices lors d’une opération métier.
 Par exemple, supprimer un client dans un microservice Client et clôturer ses comptes bancaires dans un microservice Account.

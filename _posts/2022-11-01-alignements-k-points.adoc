@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href="https://unsplash.com/@designedbyflores" target="_blank">Omar Flores</a>.
 :page-liquid:
+:page-categories: autres
 
 Dans le graphique ci-dessous, j’ai placé 30 points de façon (pseudo-)aléatoire — en l’occurrence, les coordonnées (stem:[x] et stem:[y]) suivent une loi uniforme continue entre 0 et 1. Question{nbsp}: à votre avis, combien d'alignements de 3 points peut-on trouver là-dedans{nbsp}?
 

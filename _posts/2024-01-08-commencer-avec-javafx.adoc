@@ -9,6 +9,7 @@
 :page-vignette-licence: Source Oracle
 :page-liquid:
 :showtitle:
+:page-categories: software news
 
 JavaFX est un Toolkit graphique pour la création d'applications de type "client riche". +
 Né de la volonté de moderniser les interfaces utilisateur en Java, JavaFX offre une alternative élégante à Swing, le framework historique de Java pour les interfaces graphiques.

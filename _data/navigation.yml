@@ -1,0 +1,14 @@
+- title: Software Engineering
+  url: '/category/software'
+- title: Data, IA & LLM
+  url: '/category/llm'
+- title: Sciences co & Cyber
+  url: '/category/sciencesco'
+- title: Autres
+  url: '/category/autres'
+- title: Auteurs
+  url: '/authors' 
+- title: Contact
+  url: 'https://www.sciam.fr/contact'
+- title: Sciam
+  url: 'https://www.sciam.fr'  

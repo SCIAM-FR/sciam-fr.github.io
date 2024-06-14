@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/gdj-1086657' target='_blank'>Gordon Johnson</a>.
 :page-liquid:
+:page-categories: sciencesco
 
 .Illustration par https://pixabay.com/fr/users/qimono-1962238[Arek Socha^]
 image::{{'/images/hugotrad/labyrinth.png' | relative_url}}[image,width=80%,align="center"]

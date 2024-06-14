@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par Jon Berkeley pour <a href="https://www.economist.com/" target="_blank">The Economist</a>.
 :page-liquid:
+:page-categories: autres
 
 *Par son titre “_The trust machine_” en Octobre 2015, The Economist marque le démarrage de la hype de la blockchain pour les institutions financières. Quelle place dans ce contexte pour les start-ups expertes de la technologie{nbsp}? En 3 articles, le retour d’expérience d’Alexis Mévellec, business lead chez SCIAM et associé de 2016 à 2018 dans l’entreprise Utocat.*
 

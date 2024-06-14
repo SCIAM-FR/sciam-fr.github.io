@@ -1,0 +1,19 @@
+{
+  "devDependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "@tailwindcss/typography": "^0.5.13",
+    "autoprefixer": "^10.4.19",
+    "cssnano": "^7.0.1",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.14",
+    "tailwindcss": "^3.4.3"
+  },
+  "scripts": {
+    "build:css": "npx tailwindcss -i ./css/styles.css -o ./css/output.css --watch"
+  },
+  "dependencies": {
+    "@lottiefiles/dotlottie-web": "^0.23.2",
+    "lunr": "^2.3.9",
+    "swiper": "^11.1.3"
+  }
+}

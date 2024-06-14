@@ -1,7 +1,5 @@
 ---
 layout: default
-pagination: 
-  enabled: true
 ---
 
 <!-- This has the username of author. The one that you set with "author: name" in front-matter-->
@@ -14,95 +12,101 @@ pagination:
   It has all the data as defined inside _data/authors.yml for the current username.
 -->
 
-{% if author.picture %}
-<img class="rounded-full w-10 h-10" width="80px" height="80px" src="{{ '/images/authors/' | append: author.picture | relative_url }}" style="float:left;margin-right:15px;" />
-{% endif %}
-    <h1>{{ author.name }}</h1>
-    <p><b>{{ author.job }}</b></p>
-    <p>{{ author.bio }}</p>
+<div class="p-8 bg-grayBgSciam">
+  <div class="bg-white py-10 px-14 text-navysciam rounded-lg shadow-md">
     
-    <p>
+    {% if author.picture %}
+    <img class="rounded-full w-20 h-20 mr-4 float-left"
+      src="{{ '/images/authors/' | append: author.picture | relative_url }}" alt="{{ author.name }}'s picture" />
+    {% endif %}
+    
+    <div class="mt-6">
+      <h1 class="text-2xl font-sans text-navysciam font-bold">{{ author.name }}</h1>
+      <p class="font-semibold">{{ author.job }}</p>
+      <div class="mt-6">
+        <p>{{ author.bio }}</p>
+      </div>
+    </div>
+
+    <div class="flex space-x-3 py-4">
       {% if author.twitter %}
       <a href="https://twitter.com/{{ author.twitter }}" title="X (Twitter)" target="_blank">
-        <span class="fa-stack fa-lg" aria-hidden="true">
-          <i class="fas fa-circle fa-stack-2x"></i>
-          <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
+        <span aria-hidden="true">
+          <img src="/images/icons/x-icon.svg" alt="x-logo">
         </span>
         <span class="sr-only">X (Twitter)</span>
       </a>
       {% endif %}
-  
-    {% assign links = author.socials %}
     
-    {% if links.linkedin %}
-    <a href="https://www.linkedin.com/in/{{ links.linkedin }}" title="LinkedIn" target="_blank">
-      <span class="fa-stack fa-lg" aria-hidden="true">
-        <i class="fas fa-circle fa-stack-2x"></i>
-        <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-      </span>
-      <span class="sr-only">LinkedIn</span>
-   </a>
-   {% endif %}
-
-   {% if links.mastodon %}
-   <a href="https://{{ links.mastodon }}" title="Mastodon" target="_blank">
-    <span class="fa-stack fa-lg" aria-hidden="true">
-      <i class="fas fa-circle fa-stack-2x"></i>
-      <i class="fab fa-mastodon fa-stack-1x fa-inverse"></i>
-    </span>
-    <span class="sr-only">Mastodon</span>
-   </a>
-   {% endif %}
-
-   {% if author.website %}
-   <a href="{{ author.website }}" title="Site web" target="_blank">
-    <span class="fa-stack fa-lg" aria-hidden="true">
-      <i class="fas fa-circle fa-stack-2x"></i>
-      <i class="fas fa-link fa-stack-1x fa-inverse"></i>
-    </span>
-    <span class="sr-only">Site web</span>
-   </a>
-   {% endif %}
-
-
-   {% if links.github %}
-      <a href="https://github.com/{{ links.github }}" title="GitHub" target="_blank">
-        <span class="fa-stack fa-lg" aria-hidden="true">
-          <i class="fas fa-circle fa-stack-2x"></i>
-          <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+      {% assign links = author.socials %}
+    
+      {% if links.linkedin %}
+      <a href="https://www.linkedin.com/in/{{ links.linkedin }}" title="LinkedIn" target="_blank">
+        <span aria-hidden="true">
+          <img src="/images/icons/linkedin.svg" alt="linkedin-logo">
+        </span>
+        <span class="sr-only">LinkedIn</span>
+      </a>
+      {% endif %}
+    
+      {% if links.mastodon %}
+      <a href="https://{{ links.mastodon }}" class="text-gray-900 hover:text-gray-600" title="Mastodon" target="_blank">
+        <span aria-hidden="true">
+          <img src="/images/icons/mastodon-icon.svg" alt="linkedin-logo">
+        </span>
+        <span class="sr-only">Mastodon</span>
+      </a>
+      {% endif %}
+    
+      {% if author.website %}
+      <a href="{{ author.website }}" class="text-gray-900 hover:text-gray-600" title="Website" target="_blank">
+        <span aria-hidden="true">
+          <img src="/images/icons/website-link.svg" alt="linkedin-logo">
+        </span>
+        <span class="sr-only">Website</span>
+      </a>
+      {% endif %}
+    
+      {% if links.github %}
+      <a href="https://gitlab.com/{{ links.github }}" class="text-gray-900 hover:text-gray-600" title="GitLab"
+        target="_blank">
+        <span aria-hidden="true">
+          <img src="/images/icons/github.svg" alt="github-logo">
         </span>
         <span class="sr-only">GitHub</span>
-     </a>
-     {% endif %}
-
-   {% if links.gitlab %}
-    <a href="https://gitlab.com/{{ links.gitlab }}" title="GitLab" target="_blank">
-      <span class="fa-stack fa-lg" aria-hidden="true">
-        <i class="fas fa-circle fa-stack-2x"></i>
-        <i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-      </span>
-      <span class="sr-only">Gitlab</span>
-   </a>
-   {% endif %}
-
-   {% if author.pagesciam %}
-   <a href="{{ author.pagesciam }}" title="Equipier Sciam" target="_blank">
-    <span class="fa-stack fa-lg" aria-hidden="true">
-      <i class="fas fa-circle fa-stack-2x"></i>
-      <i class="fas fa-circle-user fa-stack-1x fa-inverse"></i>
-    </span>
-    <span class="sr-only">Bio Sciam</span>
-   </a>
-   {% endif %}
-
-  </p>
+      </a>
+      {% endif %}
+    
+      {% if links.gitlab %}
+      <a href="https://gitlab.com/{{ links.gitlab }}" class="text-gray-900 hover:text-gray-600" title="GitLab"
+        target="_blank">
+        <span aria-hidden="true">
+          <img src="/images/icons/gitlab-icon.svg" alt="github-logo">
+        </span>
+        <span class="sr-only">GitLab</span>
+      </a>
+      {% endif %}
+      {% if author.pagesciam %}
+      <a href="{{ author.pagesciam }}" class="text-gray-900 hover:text-gray-600" title="Equipier Sciam" target="_blank">
+        <span aria-hidden="true">
+          <img src="/images/icons/user-icon.svg" alt="github-logo">
+        </span>
+        <span class="sr-only">Bio Sciam</span>
+      </a>
+      {% endif %}
+    </div>
+  </div>
 
   <p>&nbsp;</p>
-  <hr>
-  <h2>Articles publi&eacute;s</h2>
-  {% for post in paginator.posts %}
-    {% if author_username == post.author or post.auteurs contains author_username  %}
-      {% include postbox.html %}
-      <br>
-    {% endif %}
-  {% endfor %}
+  <div class="bg-white py-10 px-14 rounded-lg shadow-md">
+    <h2 class="text-2xl font-sans text-navysciam font-bold my-4">Articles publi&eacute;s</h2>
+    <div>
+      {% for post in site.posts %}
+        {% if author_username == post.author or post.auteurs contains author_username %}
+          {% include postbox.html %}
+          <br>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>

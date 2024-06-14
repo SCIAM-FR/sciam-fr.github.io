@@ -1,8 +1,11 @@
-title: Blog Tech Sciam
+
+title: Blog Sciam
 description: Ce blog contient des articles techniques issus de la communeauté des salariés de SCIAM
 domain: sciam-fr.github.io       # if you want to force HTTPS, specify the domain without the http at the start, e.g. example.com
 url: https://sciam-fr.github.io  # the base hostname and protocol for your site, e.g. http://example.com
 locale: fr_FR
+permalink: pretty
+# permalink: /:year/:month/:day/:title:output_ext
 #baseurl: "/"
 twitter:
   username: SCIAM_FR
@@ -11,8 +14,10 @@ highlighter: rouge
 
 defaults:
   - scope:
-      path: ""
+      path: "_posts"
+      type: "posts"
     values:
+      permalink: /:year/:month/:day/:title:output_ext
       toc: true
       
 social-network-links:
@@ -68,17 +73,26 @@ plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
   - jekyll-toc
-
+ 
 pagination:
   enabled: true
-  per_page: 9
-  paginate_path: '/page/:num/'
+  per_page: 12
+  permalink: '/:num/'
   title: ':title - page :num'
   sort_field: 'date'
   sort_reverse: true
 
 autopages:
   enabled: true
+  categories:
+    enabled: true
+    layouts:
+       - 'list.html'
+    title: 'Articles in :category'
+    silent: false
+    slugify:
+      mode: 'default'
+      cased: true
 
   # Other autopage configs stay the same
 
@@ -103,15 +117,19 @@ autopages:
       mode: 'default' # choose from [raw, default, pretty, ascii or latin]
       cased: true # if true, the uppercase letters in slug will be converted to lowercase ones.
 
-  categories:
-    enabled: false
-
   collections:
-    enabled: false
+      enabled: false
 
 feed:
   excerpt_only: true
 
 toc:
   min_level: 2
-  max_level: 4
+  max_level: 6
+  ordered_list: false
+  no_toc_section_class: no_toc_section
+  list_id: toc
+  list_class: section-nav
+  sublist_class: ''
+  item_class: toc-entry
+  item_prefix: toc-

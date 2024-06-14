@@ -6,6 +6,7 @@
 :page-tags: [Java, Java 19, Projet Loom, Threads virtuels, Concurrence structurée]
 :page-vignette: java-19.png
 :page-liquid:
+:page-categories: software
 
 = Les nouveautés de Java 19 : partie 2
 

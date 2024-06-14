@@ -6,6 +6,7 @@
 :page-tags: [Angular, Angular16, Signal, Hydratation, Router, Sous-RFC, Rxjs]
 :page-vignette: angular-16.png
 :page-liquid:
+:page-categories: software
 
 = Les nouveautés d'Angular 16
 

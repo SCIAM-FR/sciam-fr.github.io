@@ -1,33 +1,17 @@
 ---
 layout: default
 pagination:
-enabled: true
+  enabled: true
 ---
-<style>
-  ul#toc {
-    list-style: none;
-    margin-left: 0px;
-  }
 
-  h1 {
-    margin-top: 0.5em;
-    margin-bottom: 0.75em;
-  }
-
-  h2, h3, h4, h5, h6 {
-    margin-top: 2em;
-    margin-bottom: 0.75em;
-  }
-
-</style>
-
-<div class="row">
-  <div class="col-lg-12">
-    <div class="row">
-      <div class="col-lg-3">
-
+<div class="relative min-h-screen mb-10 px-3 lg:px-28 md:px-28 bg-grayBgSciam overflow-visible">
+  <div class="grid grid-cols-12 gap-6 py-16 md:py-10">
+    <!-- Information Block -->
+    <div class="order-2 md:order-1 col-span-12 md:col-span-6 text-navysciam p-8 flex flex-col justify-between">
+      <div>
+        <p class="text-3xl font-extrabold mb-4">{{ page.title }}</p>
+        <!-- list authors -->
         {% if page.auteurs.size > 1 %}
-        <p style="margin-top:1em;">Auteurs : </p>
         {% for auteur in page.auteurs %}
         {% assign author = site.data.authors[auteur] %}
         {% if author.name %}
@@ -37,7 +21,6 @@ enabled: true
         {% endif %}
         {% endfor %}
         {% else %}
-        <p style="margin-top:1em;">Auteur : </p>
         {% assign author = site.data.authors[page.author] %}
         {% if author.name %}
         <a href="{{ '/author/' | append: page.author | append: '/index.html' | relative_url }}">
@@ -45,100 +28,112 @@ enabled: true
         </a>
         {% endif %}
         {% endif %}
-
-        <hr>
-
-        <p class="date">Publi&eacute; le {{ page.date | date: "%d/%m/%Y"}} </p>
-
-        <p>Temps de lecture : {{ content | reading_time | pluralize: "minute" }} </p>
-
-        {% if page.toc %}
-        <hr>
-
-        <p>Sommaire :</p>
-
-        {% toc %}
-
-        {% endif %}
-        <hr>
-
-        {% if page.tags.size > 0 %}
-        <div class="blog-tags">
-          <span>Tags:</span>
-          {% for tag in page.tags %}
-
-          <a href="{{ '/tag/' | relative_url }}{{ tag | slugify }}">{{ tag }}</a>{% unless
-          forloop.last %}, {% endunless %}
-          {% endfor %}
-        </div>
-        {% endif %}
-
-        {% if page.vignette %}
-        <hr>
-
-        <img src="{{ '/images/vignettes/' | append: page.vignette | relative_url }}"
-             style="max-width: 100%;"/>
-
-        {% if page.vignette-licence %}
-        <span style="font-size: small;">{{ page.vignette-licence | replace: "&lt;", "<" | replace: "&gt;", ">" }}</span>
-        {% endif %}
-
-        {% endif %}
-
-        <hr>
       </div>
-      <div class="col-lg-9">
-        <div class="row">
-          <div class="doc">
-            {{ content }}
-          </div>
-        </div>
-
-        <div class="row">
-          <!--
-            Boutons de pagination
-          -->
-          <div class="col-lg-3">
-            {% if page.previous.url %}
-            <p class="btn btn-outline-primary">
-              <a href="{{ page.previous.url | relative_url }}"
-                 title="{{page.previous.title | strip_html | xml_escape}}">&larr; Article
-                précédent</a>
-            </p>
-          </div>
-          {% endif %}
-          <div class="col-lg-6">
-            &nbsp;
-          </div>
-          <div class="col-lg-3 d-md-flex justify-content-md-end">
-            {% if page.next.url %}
-            <p class="btn btn-outline-primary">
-              <a href="{{ page.next.url | relative_url }}"
-                 title="{{page.next.title | strip_html | xml_escape}}">Article
-                suivant &rarr;</a>
-            </p>
-            {% endif %}
-          </div>
-        </div>
-        <div class="row">
-
-          <script src="https://giscus.app/client.js"
-                  data-repo="SCIAM-FR/sciam-fr.github.io"
-                  data-repo-id="R_kgDOJnEX-w"
-                  data-category="General"
-                  data-category-id="DIC_kwDOJnEX-84Cbj8_"
-                  data-mapping="pathname"
-                  data-strict="0"
-                  data-reactions-enabled="1"
-                  data-emit-metadata="0"
-                  data-input-position="top"
-                  data-theme="light"
-                  data-lang="fr"
-                  crossorigin="anonymous"
-                  async>
-          </script>
-        </div>
+      <div class="text-gray-400 mb-2">
+        <span class="mr-2">Publié le {{ page.date | date: "%d/%m/%Y" }}</span> •
+        <span class="ml-2">Temps de lecture : {{ content | reading_time | pluralize: "minute" }}</span>
+      </div>
+      
+      <div>
+        {% if page.tags.size > 0 %}
+        {% for tag in page.tags %}
+        {% assign tagSlug = tag | downcase | slugify: "raw" %}
+        <a href="{{ '/tag/' | relative_url }}{{ tagSlug }}/"
+          class="inline-block rounded-full border-0.5 bg-{{ tagSlug }}-100 border-{{ tagSlug }}-200 text-{{ tagSlug }}-500 px-3 py-1 text-sm font-semibold mr-2 mb-2">
+          #{{ tag }}
+        </a>
+        {% endfor %}
+        {% endif %}
       </div>
     </div>
+  
+    <!-- Image Block -->
+    <div class="order-1 md:order-2 col-span-12 md:col-span-6 flex justify-center items-center rounded-lg shadow-md bg-white">
+      <div class="h-72 flex items-center justify-center">
+          <img src="{{ '/images/vignettes/' | append: page.vignette | relative_url }}" alt="Description" class="object-cover max-h-full">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Main Content and Sidebar -->
+  <div class="grid grid-cols-12 gap-4 mt-4">
+    <div class="bg-white col-span-12 md:col-span-9 p-8 rounded-xl shadow-lg overflow-hidden
+            prose xl:prose-2xl
+            prose-headings:text-2xl 
+            prose-headings:pt-1
+            prose-headings:font-black 
+            prose-headings:font-sans
+            prose-headings:text-navysciam
+            prose-p:text-lg
+            prose-p:text-navysciam
+            prose-a:text-blue-600 
+            hover:prose-a:text-yellow-500
+            prose-pre:text-base
+            prose-blockquote:text-sm
+            prose-blockquote:text-navysciam
+            prose-img:rounded-xl">
+      {{ content }}
+    </div>
+
+    <div class="col-span-12 sm:col-span-3">
+      <div class="hidden md:block sticky bg-white top-10 max-h-screen overflow-auto p-4 rounded-xl shadow-lg">
+        {% if page.toc %}
+        <p class="text-xl text-navysciam font-bold">Sommaire :</p>
+        <hr class="my-4 bg-zinc-200" />
+        <nav id="toc" class="toc  
+            prose-pre:font-sans
+            prose-table:font-sans
+            prose-table:text-base
+            prose-thead:font-sans
+            prose-td:font-sans
+            prose-li:font-sans
+            prose-li:text-base
+            prose-ul:text-md
+            prose-li:text-navysciam">
+          {{ content | toc_only }}
+        </nav>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+    <!-- 
+      Pagination Buttons 
+    -->
+  <div class="flex flex-wrap -mx-3 mb-6 mt-10 justify-between">
+    <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0 flex justify-start">
+      {% if page.previous.url %}
+      <a href="{{ page.previous.url | relative_url }}" title="{{ page.previous.title | strip_html | xml_escape }}"
+        class="inline-block bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded">
+        &larr; Article précédent
+      </a>
+      {% else %}
+      <button disabled
+      class="inline-block bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+      type="button">&larr; Article précédent
+      </button>
+      {% endif %}
+    </div>
+    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0 text-center">
+    </div>
+    <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0 flex justify-end">
+      {% if page.next.url %}
+      <a href="{{ page.next.url | relative_url }}" title="{{ page.next.title | strip_html | xml_escape }}"
+        class="inline-block bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded">
+        Article suivant &rarr;
+      </a>
+      {% else %}
+      <button disabled
+      class="inline-block bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+      type="button">Article suivant &rarr;
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="mx-auto shadow-custom-bottom-shadow">
+    <script src="https://giscus.app/client.js" data-repo="SCIAM-FR/sciam-fr.github.io" data-repo-id="R_kgDOJnEX-w"
+      data-category="General" data-category-id="DIC_kwDOJnEX-84Cbj8_" data-mapping="pathname" data-strict="0"
+      data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="fr"
+      crossorigin="anonymous" async>
+      </script>
   </div>
 </div>

@@ -9,7 +9,7 @@
 :post-vignette: legobricks.jpg
 :page-vignette-licence: 'Source Legomania'
 :page-liquid:
-
+:page-categories: software
 
 Certains développeurs se demandent pourquoi ils devraient adopter CDI et arrêter d'utiliser leur framework ou pratiques actuelles.
 La réponse à cette question est en grande partie dans les fonctionnalités CDI avancés : le mécanisme d'extension et la SPI CDI.

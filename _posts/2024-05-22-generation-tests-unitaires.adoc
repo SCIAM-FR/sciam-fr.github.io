@@ -4,7 +4,8 @@
 :layout: post
 :author: ericdiallo
 :page-tags: [Tutoriel, Java, Tests]
-:page-vignette: randoop-logo.png
+:page-vignette: randoop.jpg
+:page-categories: software
 
 = La génération de Tests Unitaires en Java avec Randoop
 L'intégration de tests unitaires dans le développement logiciel est cruciale pour garantir la fiabilité et la robustesse des applications. Toutefois, la création manuelle de ces tests peut être laborieuse et sujette à des erreurs, notamment sur un grand volume de code existant. Heureusement, il existe des outils comme https://randoop.github.io/randoop/[Randoop^], conçu pour automatiser ce processus fastidieux.

@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href="https://pixabay.com/fr/users/tumisu-148124" target="_blank">Tumisu</a>.
 :page-liquid:
+:page-categories: sciencesco
 
 .Illustration par https://pixabay.com/fr/users/tumisu-148124[Tumisu^]
 image::{{'/images/oliviersavrimoutoo/recruit.png' | relative_url}}[image,width=80%,align="center"]

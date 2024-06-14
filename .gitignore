@@ -7,3 +7,7 @@ Gemfile.lock
 .idea/
 .jekyll-cache/
 .jekyll-metadata
+/node_modules
+.DS_Store
+package-lock.json
+/css/output.css

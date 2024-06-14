@@ -9,6 +9,7 @@
 //:post-vignette:
 :page-vignette-licence: Illustration par <a href='https://pixabay.com/fr/users/openclipart-vectors-30363/' target='_blank'>OpenClipart-Vectors</a>.
 :page-liquid:
+:page-categories: sciencesco
 
 Dans son livre https://www.seuil.com/ouvrage/misbehaving-richard-h-thaler/9782021393972[_Misbehaving_^], le prix Nobel d’économie Richard Thaler avance que nous effectuons les choix les plus structurants de notre vie (religion, mariage, profession, lieu d’habitation, école…) dans une ignorance quasi-absolue. Alors que paradoxalement nous prenons les décisions moins déterminantes en nous appuyant sur une certaine expertise. Selon le prix Nobel, il semble donc que{nbsp}: #plus un choix est important, plus sa fréquence est faible#. Par conséquent, moins nous avons l’occasion d’acquérir de l’expertise individuelle face à un choix spécifique, plus nous sommes ignorants face à ce choix.
 

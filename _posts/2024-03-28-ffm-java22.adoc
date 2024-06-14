@@ -8,6 +8,7 @@
 :page-vignette: ffm-java22.jpg
 :page-liquid:
 :showtitle:
+:page-categories: software news
 
 == Un peu d'histoire
 

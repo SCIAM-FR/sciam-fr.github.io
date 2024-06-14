@@ -9,6 +9,7 @@
 :page-vignette-licence: 'Image générée par l'IA'
 :page-liquid:
 :showtitle:
+:page-categories: software llm news
 
 link:{% post_url 2024-01-16-springboot-et-openai %}[Spring AI^] fournit une interface simple pour intégrer des fonctionnalités d'intelligence artificielle dans vos applications Spring Boot. Nous allons explorer le framework https://docs.spring.io/spring-ai/reference/api/etl-pipeline.html[ETL^] (Extract, Transform, Load) de Spring AI et voir comment il peut être utilisé pour implémenter un système de RAG.
 

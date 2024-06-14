@@ -2,9 +2,9 @@
       {% if author.picture %}
       <img class="rounded-full w-10 h-10" width="80px" height="80px" src="{{ '/images/authors/' | append: author.picture | relative_url }}" style="float:left;margin-right:15px;" />
       {% endif %}
-      <h4>{{ author.name }}</h4>
+      <h4 class="text-navysciam font-sans font-black text-base">{{ author.name }}</h4>
       {% if author.job %}
-      <b>{{ author.job }}</b><br>
+      <p class="text-navysciam font-sans font-normal text-base">{{ author.job }}</p>
       {% endif %}
    </div>
    <br>

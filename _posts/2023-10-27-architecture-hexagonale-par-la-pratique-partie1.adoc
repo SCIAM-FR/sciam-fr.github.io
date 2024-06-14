@@ -7,6 +7,7 @@
 :docinfo: shared-footer
 :page-vignette: diagram_archi_hexagonal.png
 :page-liquid:
+:page-categories: software
 
 = Architecture Hexagonale par la pratique : partie 1
 

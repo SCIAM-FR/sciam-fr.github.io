@@ -6,6 +6,7 @@
 :page-tags: [Java, Java 21, Collections]
 :page-vignette: java-21.png
 :page-liquid:
+:page-categories: software
 
 
 = Les collections séquencées (sequenced collections)

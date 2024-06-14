@@ -6,6 +6,7 @@
 :page-tags: [Java, Java 21, Projet Amber, Projet Panama, Projet Loom]
 :page-vignette: java-21.png
 :page-liquid:
+:page-categories: software
 
 = Les nouveautés de Java 21 : partie 1
 
