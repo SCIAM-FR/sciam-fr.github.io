@@ -53,7 +53,7 @@ module.exports = {
         'custom-gradient': ['navysciamdark', 'navysciam', 'navysciamlight']
       },
       opacity: {
-        7: '0.7'
+        7: '0.6'
       },
       boxShadow: {
         'custom-bottom-shadow': '0 10px 6px -9px lightgrey',
@@ -106,6 +106,7 @@ module.exports = {
       },
       scale: {
         '104.5': '1.045',
+        '104': '1.04',
       },
       spacing: {
         '0.3': '0.075rem',
