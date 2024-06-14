@@ -101,11 +101,11 @@ document.addEventListener("DOMContentLoaded", function() {
       breakpoints: {
         640: {
           slidesPerView: 1,
-          spaceBetween: 20,
+          spaceBetween: 25,
         },
         850: {
           slidesPerView: 3,
-          spaceBetween: 30,
+          spaceBetween: 35,
         },
       }
     });
@@ -124,11 +124,11 @@ document.addEventListener("DOMContentLoaded", function() {
       breakpoints: {
         640: {
           slidesPerView: 1,
-          spaceBetween: 20,
+          spaceBetween: 25,
         },
         850: {
           slidesPerView: 3,
-          spaceBetween: 30,
+          spaceBetween: 35,
         },
       }
     });
