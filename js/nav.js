@@ -82,14 +82,37 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Gestion swiper des articles de l'accueil
   document.addEventListener('DOMContentLoaded', function () {
-    new Swiper('.mySwiper', {
+    var swiperAuto = new Swiper('.swiperAuto', {
       slidesPerView: 1,
       spaceBetween: 10,
       loop: true,
       autoplay: {
-        delay: 2000,
+        delay: 3000,
         disableOnInteraction: false,
       },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 1,
+          spaceBetween: 20,
+        },
+        850: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
+      }
+    });
+
+    var swiperManu = new Swiper('.swiperManu', {
+      slidesPerView: 1,
+      spaceBetween: 10,
       pagination: {
         el: '.swiper-pagination',
         clickable: true,

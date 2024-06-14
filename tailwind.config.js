@@ -199,6 +199,9 @@ module.exports = {
           },
         },
       }),
+      scale: {
+        '105': '1.05',
+      }
     },
   },
   variants: {

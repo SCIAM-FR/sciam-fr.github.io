@@ -119,8 +119,8 @@ layout: default
               </button>
             </a>
           </div>
-          <div class="swiper mySwiper">
-            <div class="swiper-wrapper">
+          <div class="swiper swiperAuto">
+            <div class="swiper-wrapper pt-5">
               {% assign news_posts = site.posts | where_exp: "post", "post.categories contains 'news'" %}
               {% assign filtered_news_posts = "" | split: "" %}
 
@@ -217,7 +217,7 @@ layout: default
         <hr class="my-20 bg-zinc-200" />
         <!-- All Articles Section -->
         <div class="md:mb-28">
-          <div class="w-full flex justify-between items-center lg:justify-start lg:flex-grow mb-8">
+          <div class="w-full flex justify-between items-center lg:justify-start lg:flex-grow mb-5">
             <p class="text-3xl font-bold mr-5">Tous les articles</p>
             <a href="/posts/">
               <button
@@ -227,12 +227,12 @@ layout: default
             </a>
           </div>
 
-          <div class="swiper mySwiper">
-            <div class="swiper-wrapper">
+          <div class="swiper swiperManu">
+            <div class="swiper-wrapper pt-5">
               {% assign posts = site.posts | slice: 1, 6 %}
               {% for post in posts %}
               <div
-                class="swiper-slide bg-white rounded-xl overflow-hidden shadow-lg mb-6 h-auto flex flex-col min-h-[500px] md:min-h-[620px] lg:min-h-[400px]">
+                class="swiper-slide bg-white rounded-xl overflow-hidden transition-transform duration-300 ease-in-out shadow-lg mb-6 h-auto flex flex-col min-h-[500px] md:min-h-[620px] lg:min-h-[400px] hover:scale-105">
                 {% if post.vignette %}
                 {% assign bg_url = '/images/vignettes/' | append: post.vignette | relative_url %}
                 <div class="h-60 w-full pb-[33.33%] bg-contain bg-no-repeat bg-center rounded-xl"
