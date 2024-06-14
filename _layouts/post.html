@@ -96,27 +96,35 @@ pagination:
       </div>
     </div>
   </div>
-
-  <div class="flex flex-wrap -mx-3 mb-6 mt-10">
     <!-- 
       Pagination Buttons 
     -->
-    <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
+  <div class="flex flex-wrap -mx-3 mb-6 mt-10 justify-between">
+    <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0 flex justify-start">
       {% if page.previous.url %}
       <a href="{{ page.previous.url | relative_url }}" title="{{ page.previous.title | strip_html | xml_escape }}"
         class="inline-block bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded">
         &larr; Article précédent
       </a>
+      {% else %}
+      <button disabled
+      class="inline-block bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+      type="button">&larr; Article précédent
+      </button>
       {% endif %}
     </div>
     <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0 text-center">
     </div>
-    <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0 text-right">
+    <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0 flex justify-end">
       {% if page.next.url %}
       <a href="{{ page.next.url | relative_url }}" title="{{ page.next.title | strip_html | xml_escape }}"
         class="inline-block bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded">
         Article suivant &rarr;
       </a>
+      {% else %}
+      <button disabled
+      class="inline-block bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+      type="button">Article suivant &rarr;
       {% endif %}
     </div>
   </div>

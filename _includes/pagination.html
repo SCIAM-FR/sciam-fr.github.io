@@ -1,20 +1,20 @@
   <div class="flex justify-center items-center gap-4 my-12">
     {% if paginator.total_pages > 1 %}   
       {% if paginator.previous_page %}
-      <a class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-greysciam hover:text-white active:bg-navysciam cursor-pointer"
+      <a class="flex items-center gap-2 px-3 sm:px-6 py-2 sm:py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-greysciam hover:text-white active:bg-navysciam cursor-pointer"
         href="{{ paginator.previous_page_path | prepend: site.baseurl }}">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true" class="w-4 h-4">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"></path>
-        </svg>Précédents
+        </svg>Précédente
       </a>
     {% else %}
     <button disabled
-    class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+    class="flex items-center gap-2 px-3 sm:px-6 py-2 sm:py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
     type="button">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
         aria-hidden="true" class="w-4 h-4">
         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"></path>
-      </svg>Précédents
+      </svg>Précédente
     </button>
     {% endif %}
     <div class="flex items-center gap-2">
@@ -88,8 +88,8 @@
 
         {% if paginator.next_page %}
         <a href="{{ paginator.next_page_path |  prepend: site.baseurl }}"
-          class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-greysciam hover:text-white active:bg-gray-900/20 cursor-pointer">
-          Suivants
+          class="flex items-center gap-2 px-3 sm:px-6 py-2 sm:py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-greysciam hover:text-white active:bg-gray-900/20 cursor-pointer">
+          Suivante
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             aria-hidden="true" class="w-4 h-4">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
@@ -97,9 +97,9 @@
         </a>
         {% else %}
         <button disabled
-          class="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+          class="flex items-center gap-2 px-3 sm:px-6 py-2 sm:py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           type="button">
-          Suivants
+          Suivante
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
             aria-hidden="true" class="w-4 h-4">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
