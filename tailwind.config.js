@@ -98,6 +98,9 @@ module.exports = {
       borderRadius: {
         '2.5': '2.5rem'
       },
+      scale: {
+        '104.5': '1.045',
+      },
       typography: (theme) => ({
         DEFAULT: {
           css: { // Override asciidoc default styles
@@ -211,7 +214,7 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/typography', 'tailwindcss-filters'),
-    function({ addBase, theme }) { // Override asciidoc style
+    function({ addBase, theme, addComponents }) { 
       addBase({
         '#toc': {
           borderBottom: 'none',
@@ -223,6 +226,66 @@ module.exports = {
           fontWeight: 'light !important'
         }
       });
+
+      const buttons = {
+        '.btn-1': {
+          display: 'inline-block',
+          position: 'relative',
+          border: 'none',
+          color: '#fff',
+          fontSize: '18px',
+          margin: '20px',
+          '&::before, &::after': {
+            content: '""',
+            position: 'absolute',
+            width: '0',
+            height: '1px',
+            background: '#ffec3f',
+            transition: 'width 0.2s linear',
+            transitionDelay: '0.2s',
+          },
+          '&::before': {
+            right: 0,
+            top: 0,
+          },
+          '&::after': {
+            left: 0,
+            bottom: 0,
+          },
+          '&:hover::before, &:hover::after': {
+            width: '100%',
+            transitionDelay: '0s',
+          },
+          '& .btn-span': {
+            display: 'block',
+            padding: '25px 25px',
+            position: 'relative',
+            '&::before, &::after': {
+              content: '""',
+              position: 'absolute',
+              width: '1px',
+              height: '0',
+              background: '#ffec3f',
+              transition: 'height 0.2s linear',
+              transitionDelay: '0s',
+            },
+            '&::before': {
+              left: 0,
+              top: 0,
+            },
+            '&::after': {
+              right: 0,
+              bottom: 0,
+            },
+            '&:hover::before, &:hover::after': {
+              height: '100%',
+              transitionDelay: '0.2s',
+            }
+          }
+        }
+      };
+
+      addComponents(buttons);
     },
   ],
 }

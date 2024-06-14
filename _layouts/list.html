@@ -6,7 +6,8 @@ pagination:
 
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
   {% assign posts = site.posts %}
-  {% assign category_name = "Tous les articles" %} 
+  {% assign category_name = "Tous les articles" %}
+  {% assign navigation = site.data.navigation %}
 
   {% if page.title == "Sujets d'actualité" %}
     {% assign posts = site.posts | where: "categories", "News" %}
@@ -14,11 +15,16 @@ pagination:
   {% elsif page.url contains '/category/' %}
     {% assign category_segments = page.url | split: '/' %}
     {% if category_segments.size > 2 %}
-    {% assign category_name = category_segments[2] %}
-    {% assign posts = site.posts | where_exp: "post", "post.categories contains category_name" %}
-    {% assign paginate_path = '/category/' | append: category_name | append: '/:num/' %}
-    {% assign first_page_path = '/category/' | append: category_name %}
-  {% else %}  
+      {% assign category_id = category_segments[2] %}
+      {% for nav_item in navigation %}
+        {% if nav_item.url contains category_id %}
+          {% assign category_name = nav_item.title %}
+        {% endif %}
+      {% endfor %}
+      {% assign posts = site.posts | where_exp: "post", "post.categories contains category_id" %}
+      {% assign paginate_path = '/category/' | append: category_name | append: '/:num/' %}
+      {% assign first_page_path = '/category/' | append: category_name %}
+      {% else %}  
     {% assign paginate_path = '/posts/:num/' %}
     {% assign first_page_path = '/posts/' %}  
     {% endif %}
@@ -26,7 +32,7 @@ pagination:
     {% assign paginate_path = '/posts/:num' %}
     {% assign first_page_path = '/posts/' %}
   {% endif %}
-
+  
   <nav aria-label="Breadcrumb" class="py-5">
     <ol class="list-none flex">
       <li class="text-navysciam text-xl font-medium">
@@ -36,7 +42,7 @@ pagination:
         <span aria-hidden="true">/</span>
       </li>
       <li class="text-lightbluesciam text-xl font-medium">
-        {{ category_name | capitalize }}
+        {{ category_name }}
       </li>
     </ol>
   </nav>
@@ -44,15 +50,15 @@ pagination:
   <div
     class="bg-gradient-to-r from-navysciamdark via-navysciam to-navysciamlight py-14 md:py-14 px-8 md:px-8 text-left mb-10 rounded-lg">
     <h1 class="text-white text-4xl font-sans font-bold">
-      {{ category_name | capitalize }}
+      {{ category_name }}
     </h1>
   </div>
 
   <div>
     {% if posts and posts.size > 0 %}
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       {% for post in paginator.posts %}
-      <div class="bg-white rounded-xl overflow-hidden shadow-lg">
+      <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl hover:scale-104.5 transition-all duration-300 ease-in-out">
         {% if post.vignette %}
         {% assign bg_url = '/images/vignettes/' | append: post.vignette | relative_url %}
         <div class="h-60 w-full pb-[33.33%] bg-contain bg-no-repeat bg-center"
