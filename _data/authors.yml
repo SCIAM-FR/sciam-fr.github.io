@@ -181,3 +181,14 @@ ericdiallo:
   picture: ericdiallo.jpg
   socials:
     linkedin: "eric-diallo-52b41b103"
+
+
+sebastienblanc:
+  name: "Sébastien Blanc"
+  bio: "Sébastien est Staff Developer Advocate à Aiven et un Javachampion. Il se considère comme un Passion-Driven-Developer avec comme objectif principal de partager au maximum sa passion en donnant des conférences. Avant d'être Developer Advocate, Sébastien a passé 15 ans dans l'ingénierie logicielle, essentiellement orienté autour ce Java EE. Durant son temps libre, il aime apprendre le code aux enfants et pratique le Kobudo, un viell Art Martial laponais"
+  job: "Staff Developer Advocate"
+  picture: sebastienblanc.png
+  twitter: sebi2706
+  socials:
+    linkedin: "sébastien-blanc-08a73b1"
+
