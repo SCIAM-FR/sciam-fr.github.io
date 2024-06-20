@@ -1,5 +1,16 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+      const keyframes = {
+        '@keyframes animateLine': {
+          '0%, 100%': { width: '0' },
+          '50%': { width: '100%' },
+        },
+        '@keyframes animateLineHeight': {
+          '0%, 100%': { height: '0' },
+          '50%': { height: '100%' },
+        },
+      };
+      
+      module.exports = {
   content: [
     "./_drafts/*.html",
     "./_layouts/**.html",
@@ -34,6 +45,7 @@ module.exports = {
       '2xl': '1536px',
     },
     extend: {
+      keyframes,
       colors: {
         bodyBackground: '#F9FAFE',
         backgroundsciam: "#cbd5e1",
@@ -249,8 +261,7 @@ module.exports = {
             width: '0',
             height: '1px',
             background: '#ffec3f',
-            transition: 'width 0.2s linear',
-            transitionDelay: '0.2s',
+            animation: 'animateLine 2s linear infinite',
           },
           '&::before': {
             right: 0,
@@ -259,10 +270,6 @@ module.exports = {
           '&::after': {
             left: 0,
             bottom: 0,
-          },
-          '&:hover::before, &:hover::after': {
-            width: '100%',
-            transitionDelay: '0s',
           },
           '& .btn-span': {
             display: 'block',
@@ -274,8 +281,7 @@ module.exports = {
               width: '1px',
               height: '0',
               background: '#ffec3f',
-              transition: 'height 0.2s linear',
-              transitionDelay: '0s',
+              animation: 'animateLineHeight 2s linear infinite',
             },
             '&::before': {
               left: 0,
@@ -285,12 +291,8 @@ module.exports = {
               right: 0,
               bottom: 0,
             },
-            '&:hover::before, &:hover::after': {
-              height: '100%',
-              transitionDelay: '0.2s',
-            }
-          }
-        }
+          },
+        },
       };
 
       addComponents(buttons);

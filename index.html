@@ -2,21 +2,16 @@
 layout: default
 ---
 
-<div class="hero-section grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-6 pt-16 h-auto min-h-[30vh] p-10">
+<div class="grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-6 pt-16 h-auto min-h-[30vh] p-10">
   <div class="col-span-12 flex flex-col sm:flex-row items-center justify-center rounded-lg pt-0 pb-2 sm:pb-5 gap-4 sm:gap-8">
     <div class="w-full sm:w-auto flex justify-center">
       <dotlottie-player class="h-auto w-[50%] sm:w-[200px] sm:height-[200px]" src="{{ "/images/animation/logo-animation.json" | relative_url
         }}" background="transparent" speed="1" direction="1" playMode="normal" loop autoplay></dotlottie-player>
     </div>
-    <div class="relative h-full flex justify-center items-center">
-      <div class="relative">
-        <p class="hover-this transition-all duration-300 ease-in-out">
-          <span class="inline-block text-[#384a72] text-4xl transition-transform duration-100">Blog de SCIAM</span>
-        </p>
-        <p class="mt-2 sm:mt-1 text-2xl font-bold text-navysciam fadeInUp2">Tendances Tech, Insights et Innovations</p>
-        <div class="cursor fixed bg-cursorBg opacity-7 w-12 h-12 rounded-full pointer-events-none transform transition-transform duration-100 ease z-50"></div>
-      </div>
-    </div>
+    <button class="btn-1 cursor-default"><span class="btn-span">
+      <p class="text-6xl font-black text-navysciam fadeInUp1">Blog de SCIAM</p>
+      <p class="mt-1 text-2xl font-bold text-navysciam fadeInUp2">Tendances Tech, Insights et Innovations</p>
+    </span></button>
   </div>
 </div>
 
