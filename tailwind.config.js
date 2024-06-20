@@ -47,9 +47,13 @@ module.exports = {
         greysciam: "#9CA3AF",
         lightgrey: "#F5F5F7",
         white: "#fff",
+        cursorBg: '#ffec3f',
       },
       gradients: {
         'custom-gradient': ['navysciamdark', 'navysciam', 'navysciamlight']
+      },
+      opacity: {
+        7: '0.6'
       },
       boxShadow: {
         'custom-bottom-shadow': '0 10px 6px -9px lightgrey',
@@ -79,6 +83,7 @@ module.exports = {
       fontSize: {
         '1.15': '1.15rem',
         '1.5': '1.5rem',
+        '6xl': ['3.75rem', { lineHeight: '1' }], // Custom font-size with line-height
       },
       lineClamp: {
         '1': '1',
@@ -96,10 +101,16 @@ module.exports = {
         'hero-bg': "url('/images/visuals/bg.png')"
       },
       borderRadius: {
-        '2.5': '2.5rem'
+        '2.5': '2.5rem',
+          full: '50px'
       },
       scale: {
         '104.5': '1.045',
+        '104': '1.04',
+      },
+      spacing: {
+        '0.3': '0.075rem',
+        12: '50px'
       },
       typography: (theme) => ({
         DEFAULT: {
@@ -202,9 +213,6 @@ module.exports = {
           },
         },
       }),
-      scale: {
-        '104': '1.04',
-      }
     },
   },
   variants: {
