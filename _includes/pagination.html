@@ -1,4 +1,4 @@
-  <div class="flex justify-center items-center gap-4 my-12">
+  <div class="flex justify-between items-center gap-4 my-12">
     {% if paginator.total_pages > 1 %}   
       {% if paginator.previous_page %}
       <a class="flex items-center gap-2 px-3 sm:px-6 py-2 sm:py-3 font-sans text-xs font-bold text-center text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-greysciam hover:text-white active:bg-navysciam cursor-pointer"
@@ -33,8 +33,8 @@
       {% endif %}
 
       {% assign page_start = 2 %}
-      {% if paginator.page > 4 %}
-      {% assign page_start = paginator.page | minus: 2 %}
+      {% if paginator.page > 3 %}
+      {% assign page_start = paginator.page | minus: 1 %}
       <button disabled class="text-navysciam pagination-btn" type="button">
         <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
           &hellip;
@@ -44,7 +44,7 @@
 
       {% assign page_end = paginator.total_pages | minus: 1 %}
       {% assign pages_to_end = paginator.total_pages | minus: paginator.page %}
-      {% if pages_to_end > 4 %}
+      {% if pages_to_end > 2 %}
         {% assign page_end = paginator.page | plus: 2 %}
       {% endif %}
 

@@ -5,25 +5,33 @@ pagination:
 ---
 
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  {% assign navigation = site.data.navigation %}
   {% assign posts = site.posts %}
   {% assign category_name = "Tous les articles" %}
-  {% assign navigation = site.data.navigation %}
+  {% assign category_display_name = "Tous les articles" %}
+  <!-- {% if page.title == "Sujets d'actualité" %}
+    {% assign category_display_name = "Sujets d'actualité" %}
+  {% else %}
+    {% assign category_display_name = "Tous les articles" %}
+  {% endif %} -->
 
-  {% if page.title == "Sujets d'actualité" %}
+  {% if page.url == "/news/" %}
     {% assign posts = site.posts | where: "categories", "News" %}
-    {% assign category_name = "Sujets d'actualité" %}
+    {% assign category_name = "News" %}
+    {% assign category_display_name = "Sujets d'actualité" %}
   {% elsif page.url contains '/category/' %}
     {% assign category_segments = page.url | split: '/' %}
     {% if category_segments.size > 2 %}
       {% assign category_id = category_segments[2] %}
+      {% assign category_display_name = "Tous les articles" %}
       {% for nav_item in navigation %}
         {% if nav_item.url contains category_id %}
-          {% assign category_name = nav_item.title %}
+          {% assign category_display_name = nav_item.title %}
         {% endif %}
       {% endfor %}
       {% assign posts = site.posts | where_exp: "post", "post.categories contains category_id" %}
-      {% assign paginate_path = '/category/' | append: category_name | append: '/:num/' %}
-      {% assign first_page_path = '/category/' | append: category_name %}
+      {% assign paginate_path = '/category/' | append: category_id | append: '/:num/' %}
+      {% assign first_page_path = '/category/' | append: category_id %}
       {% else %}  
     {% assign paginate_path = '/posts/:num/' %}
     {% assign first_page_path = '/posts/' %}  
@@ -33,6 +41,12 @@ pagination:
     {% assign first_page_path = '/posts/' %}
   {% endif %}
   
+  <!-- {% if page.title == "Sujets d'actualité" and page.url != "/news/" %}
+    {% assign category_display_name = "Sujets d'actualité" %}
+  {% else %}
+    {% assign category_display_name = category_display_name %}
+  {% endif %} -->
+
   <nav aria-label="Breadcrumb" class="py-5">
     <ol class="list-none flex">
       <li class="text-navysciam text-xl font-medium">
@@ -42,7 +56,7 @@ pagination:
         <span aria-hidden="true">/</span>
       </li>
       <li class="text-lightbluesciam text-xl font-medium">
-        {{ category_name }}
+        {{ category_display_name }}
       </li>
     </ol>
   </nav>
@@ -50,7 +64,7 @@ pagination:
   <div
     class="bg-gradient-to-r from-navysciamdark via-navysciam to-navysciamlight py-14 md:py-14 px-8 md:px-8 text-left mb-10 rounded-lg">
     <h1 class="text-white text-4xl font-sans font-bold">
-      {{ category_name }}
+      {{ category_display_name }}
     </h1>
   </div>
 
