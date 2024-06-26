@@ -1,7 +1,9 @@
 /** @type {import('tailwindcss').Config} */
+const typographyPreset = require('./typography-preset.js');
+
 module.exports = {
   presets: [
-    require('./typography-preset.js')
+    typographyPreset,
   ],
   content: [
     "./_drafts/*.html",
