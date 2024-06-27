@@ -47,7 +47,7 @@
           <img src="/images/logo/logo_sciam_white.svg" alt="Logo SCIAM" class="w-20 font-bold">
           <span class="mt-1.5"> <p class="text-white font-extralight text-2xl"> | Blog </p></span>
         </a>
-        <div class="hidden md:flex items-center space-x-4">
+        <div class="hidden nav:flex items-center space-x-4">
           <ul class="flex flex-row">
             {% for item in site.data.navigation %}
             {% assign current_url = page.url | remove: 'index.html' | append: '/' %}
@@ -74,7 +74,7 @@
         </div>
       
         <!-- version toggle mobile -->
-        <div class="md:hidden">
+        <div class="nav:hidden">
           <button type="button"
             class="menu-button inline-flex items-center p-2 w-10 h-10 justify-center text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
             aria-controls="mobile-menu" aria-expanded="false">
@@ -85,7 +85,7 @@
         </div>
       </div>
         <!-- version menu déroulant mobile -->
-      <div class="md:hidden hidden w-full" id="mobile-menu">
+      <div class="nav:hidden hidden w-full" id="mobile-menu">
         <div class="flex flex-col space-y-1 px-2 pb-3 pt-2">
           {% for item in site.data.navigation %}
           {% assign item_url = item.url | relative_url %}
