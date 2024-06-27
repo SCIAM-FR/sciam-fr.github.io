@@ -1,7 +1,7 @@
 ---
 layout: default
 pagination:
- enabled: true
+  enabled: true
 ---
 
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -9,9 +9,9 @@ pagination:
   {% assign posts = site.posts %}
   {% assign category_name = "Tous les articles" %}
   {% assign navigation = site.data.navigation %}
- 
-  {% if page.url contains '/category/news/' %}
-    {% assign posts = site.posts | where_exp: "post", "post.categories contains 'news'" %}
+
+  {% if page.title == "Sujets d'actualité" %}
+    {% assign posts = site.posts | where: "categories", "News" %}
     {% assign category_name = "Sujets d'actualité" %}
   {% elsif page.url contains '/category/' %}
     {% assign category_segments = page.url | split: '/' %}
@@ -23,17 +23,17 @@ pagination:
         {% endif %}
       {% endfor %}
       {% assign posts = site.posts | where_exp: "post", "post.categories contains category_id" %}
-      {% assign paginate_path = '/category/' | append: category_id | append: '/:num/' %}
-      {% assign first_page_path = '/category/' | append: category_id %}
+      {% assign paginate_path = '/category/' | append: category_name | append: '/:num/' %}
+      {% assign first_page_path = '/category/' | append: category_name %}
       {% else %}  
-      {% assign paginate_path = '/posts/:num/' %}
-      {% assign first_page_path = '/posts/' %}  
-      {% endif %}
-    {% else %}
-      {% assign paginate_path = '/posts/:num' %}
-      {% assign first_page_path = '/posts/' %}
+    {% assign paginate_path = '/posts/:num/' %}
+    {% assign first_page_path = '/posts/' %}  
     {% endif %}
-
+  {% else %}
+    {% assign paginate_path = '/posts/:num' %}
+    {% assign first_page_path = '/posts/' %}
+  {% endif %}
+  
   <nav aria-label="Breadcrumb" class="py-5">
     <ol class="list-none flex">
       <li class="text-navysciam text-xl font-medium">
