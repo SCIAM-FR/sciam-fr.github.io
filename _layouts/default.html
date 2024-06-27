@@ -95,7 +95,7 @@
           </a>
           {% endfor %}
           <button id="mobileSearchButton" type="button" class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white">
-            <img src="/images/icons/search-icon.svg" class="h-6 w-6 align-middle text-greysciam text-white" alt="Search Icon">
+            <img src="/images/icons/search-icon.svg" class="h-6 w-6 align-middle text-white" alt="Search Icon">
           </button>
         </div>
       </div>
@@ -116,7 +116,6 @@
           </form>
         </div>
       </div>
-     <!-- <div id="blur" class="fixed inset-0 backdrop-blur-xl hidden"></div>       -->     
     <div class="content relative" id="mainContent">
       {{ content }}
     </div>
@@ -136,7 +135,6 @@
   <script src="{{ 'js/lunr.js'| relative_url}}"></script>
   <script src="{{ 'js/toc-scroll.js'| relative_url}}"></script>
   <script src="{{ 'js/scroll-to-top.js'| relative_url}}"></script>
-  <script src="{{ 'js/hover-effect.js'| relative_url}}"></script>
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
   <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
     {% include mathjax.html %}
