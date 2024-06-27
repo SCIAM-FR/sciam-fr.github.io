@@ -33,8 +33,10 @@ module.exports = {
   theme: {
     screens: {
       'sm': '640px',
-      'md': '1128px',
-      'lg': '1280px',
+      'nav': '1150px',
+      'tablet': {'max': '1024px', 'min': '820px'},
+      'md': '820px',
+      'lg': '1128px',
       'xl': '1280px',
       '2xl': '1536px'
     },
