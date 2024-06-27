@@ -244,15 +244,20 @@ module.exports = {
 
                 '.paragraph> p code': {  
                   fontFamily: '"Droid Sans Mono" monospace !important',
-                  fontSize: '1rem !important',
+                  fontSize: '0.9rem !important',
                   fontWeight: 'normal !important'
                 },
                 'code' : {
                   color: `${theme('colors.navysciam')} !important`,
                   fontFamily: '"Droid Sans Mono" monospace !important',
-                  fontSize: '1.1rem',
+                  fontSize: '1rem',
                   fontWeight: 'normal !important',
                 },
+
+                'p code': {
+                  fontSize: '0.9rem !important',
+                },
+
                 'p code::before': {
                   content: 'none',
                 },
@@ -282,7 +287,7 @@ module.exports = {
 
                 '.ulist p code': {
                   fontFamily: '"Droid Sans Mono" monospace !important',
-                  fontSize: '1rem !important',
+                  fontSize: '0.9rem !important',
                   lineHeight: '1.75rem !important', 
                   fontWeight: 'normal !important'
                 },
@@ -300,7 +305,7 @@ module.exports = {
 
                 '.listingblock > .content > pre:not(.highlight)': {
                   color: `${theme('colors.navysciam')} !important`,
-                  fontSize: '0.875rem !important',
+                  fontSize: '0.9rem !important',
                 },
 
                 '.literalblock pre, .listingblock > .content > pre': {
@@ -315,16 +320,16 @@ module.exports = {
                 },
 
                 'admonitionblock note td.content > .title code': {
-                  fontSize: '0.875rem !important',  
+                  fontSize: '0.9rem !important',  
                   fontFamily: '"Droid Sans Mono" monospace !important',
                 },
 
                 '.listingblock> .title code': {
-                  fontSize: '0.875rem !important',
+                  fontSize: '0.9rem !important',
                 },
 
                 'table > tbody > tr > td code': {
-                  fontSize: '0.875rem !important',
+                  fontSize: '0.9rem !important',
                 },
 
                 'table > thead > tr > th': {
@@ -348,6 +353,10 @@ module.exports = {
                   fontFamily: '"Droid Sans Mono" monospace !important',
                 },
 
+                '.highlight> pre': {
+                    backgrounColor: `${theme('colors.lightgrey')} !important`,
+                },
+
                 'td code::before': {
                   content: 'none',
                 },
@@ -359,7 +368,7 @@ module.exports = {
                   fontSize: '1.125rem !important',
                 },
                 'td.content code': {
-                  fontSize: '1rem !important',
+                  fontSize: '0.9rem !important',
                 },
 
                 img: {
