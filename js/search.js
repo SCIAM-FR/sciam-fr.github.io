@@ -49,11 +49,15 @@
          
         searchResults.innerHTML = appendString;
       } else {
-        searchResults.innerHTML = '<div>Pas de résultat trouvé</div>';
+        searchResults.innerHTML = `
+        <div class="flex items-center justify-center col-span-3"">
+          <div class="text-center">
+            <img class="mx-auto mb-6" src="/images/visuals/not-found.png" style="width: 200px; height: 150px;" alt="No results found">
+            <p class="text-2xl font-bold text-navysciam">Pas de résultat trouvé</p>
+          </div>
+        </div>`;
       }
     }
-
-
   
     function getQueryVariable(variable) {
       var query = window.location.search.substring(1);
