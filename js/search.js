@@ -17,7 +17,7 @@
             console.error('URL is undefined for:', item.url);
           }
           appendString += 
-            `<div class="bg-white rounded-xl overflow-hidden shadow-sm">
+            `<div class="bg-white rounded-xl overflow-hidden shadow-lg">
             <div class="h-60 w-full pb-[33.33%] bg-contain bg-no-repeat bg-center rounded-xl"
                  style="background-image: url('${item.image}');"></div>
             <hr class="bg-zinc-200"/>     
