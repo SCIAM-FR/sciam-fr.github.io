@@ -1,6 +1,12 @@
 (function() {
     function displaySearchResults(results, store) {
       
+      function decodeHtmlEntities(str) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = str;
+        return txt.value;
+      }
+      
       var searchResults = document.getElementById('search-results');
 
       if (results.length) { 
@@ -12,10 +18,12 @@
           }
           appendString += 
             `<div class="bg-white rounded-xl overflow-hidden shadow-sm">
-            <img src="${item.image}" alt="${item.title}" class="object-cover w-full h-48">
+            <div class="h-60 w-full pb-[33.33%] bg-contain bg-no-repeat bg-center rounded-xl"
+                 style="background-image: url('${item.image}');"></div>
+            <hr class="bg-zinc-200"/>     
             <div class="p-6">
                 <div class="text-xl font-bold mb-2 truncate">
-                    <a href="${item.url}" class="hover:text-navysciam">${item.title}</a>
+                    <a href="${item.url}" class="hover:text-navysciam">${decodeHtmlEntities(item.title)}</a>
                 </div>
                 <div class="flex items-center text-sm text-gray-500 mb-4">
                     <img class="rounded-full w-11 h-11"
@@ -32,13 +40,12 @@
                         </div>
                     </div>
                 </div>
-                <p class="line-clamp-3">${item.excerpt}</p>
+                <p class="line-clamp-3">${decodeHtmlEntities(item.excerpt)}</p>
                 <a href="${item.url}" class="text-navysciam hover:text-yellowsciam transition duration-300 ease-in-out">Read more...</a>
             </div>
         </div>
             `;
         }
-         //  <p>${item.content.substring(0, 150)}...</p>  
          
         searchResults.innerHTML = appendString;
       } else {
