@@ -41,7 +41,6 @@ module.exports = {
       '2xl': '1536px'
     },
     extend: {
-      keyframes,
       colors: {
         bodyBackground: '#F9FAFE',
         backgroundsciam: "#cbd5e1",
