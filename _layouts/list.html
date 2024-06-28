@@ -5,13 +5,12 @@ pagination:
 ---
 
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-  
-  {% assign posts = site.posts %}
+  {% assign posts = paginator.posts %}
   {% assign category_name = "Tous les articles" %}
   {% assign navigation = site.data.navigation %}
-
-  {% if page.title == "Sujets d'actualité" %}
-    {% assign posts = site.posts | where: "categories", "News" %}
+ 
+  {% if page.url contains '/category/news/' %}
+    {% assign posts = paginator.posts | where_exp: "post", "post.categories contains 'news'" %}
     {% assign category_name = "Sujets d'actualité" %}
   {% elsif page.url contains '/category/' %}
     {% assign category_segments = page.url | split: '/' %}
@@ -22,9 +21,9 @@ pagination:
           {% assign category_name = nav_item.title %}
         {% endif %}
       {% endfor %}
-      {% assign posts = site.posts | where_exp: "post", "post.categories contains category_id" %}
-      {% assign paginate_path = '/category/' | append: category_name | append: '/:num/' %}
-      {% assign first_page_path = '/category/' | append: category_name %}
+      {% assign posts = paginator.posts | where_exp: "post", "post.categories contains category_id" %}
+      {% assign paginate_path = '/category/' | append: category_id | append: '/:num/' %}
+      {% assign first_page_path = '/category/' | append: category_id %}
       {% else %}  
     {% assign paginate_path = '/posts/:num/' %}
     {% assign first_page_path = '/posts/' %}  
