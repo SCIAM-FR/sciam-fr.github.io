@@ -5,11 +5,11 @@ pagination:
 ---
 
 <div class="relative min-h-screen mb-10 px-3 lg:px-28 md:px-28 bg-grayBgSciam overflow-visible">
-  <div class="grid grid-cols-12 gap-6 py-16 md:py-10">
+  <div class="grid grid-cols-12 gap-4 py-16 md:py-10">
     <!-- Information Block -->
     <div class="order-2 md:order-1 col-span-12 md:col-span-6 text-navysciam p-8 flex flex-col justify-between">
       <div>
-        <p class="text-3xl font-extrabold mb-4">{{ page.title }}</p>
+        <p class="text-5xl font-extrabold mb-4">{{ page.title }}</p>
         <!-- list authors -->
         {% if page.auteurs.size > 1 %}
         {% for auteur in page.auteurs %}
@@ -33,7 +33,7 @@ pagination:
         <span class="mr-2">Publié le {{ page.date | date: "%d/%m/%Y" }}</span> •
         <span class="ml-2">Temps de lecture : {{ content | reading_time | pluralize: "minute" }}</span>
       </div>
-      
+  
       <div>
         {% if page.tags.size > 0 %}
         {% for tag in page.tags %}
@@ -48,48 +48,44 @@ pagination:
     </div>
   
     <!-- Image Block -->
-    <div class="order-1 md:order-2 col-span-12 md:col-span-6 flex justify-center items-center rounded-lg shadow-md bg-white">
+    <div
+      class="order-1 md:order-2 col-span-12 md:col-span-6 flex justify-center items-center rounded-lg shadow-md bg-white">
       <div class="h-72 flex items-center justify-center">
-          <img src="{{ '/images/vignettes/' | append: page.vignette | relative_url }}" alt="Description" class="object-cover max-h-full">
+        <img src="{{ '/images/vignettes/' | append: page.vignette | relative_url }}" alt="Description"
+          class="object-cover max-h-full">
       </div>
     </div>
   </div>
   
   <!-- Main Content and Sidebar -->
   <div class="grid grid-cols-12 gap-4 mt-4">
-    <div class="bg-white col-span-12 md:col-span-9 p-8 rounded-xl shadow-lg overflow-hidden
-            prose xl:prose-2xl
-            prose-headings:text-2xl 
-            prose-headings:pt-1
-            prose-headings:font-black 
-            prose-headings:font-sans
-            prose-headings:text-navysciam
-            prose-p:text-lg
-            prose-p:text-navysciam
-            prose-a:text-blue-600 
-            hover:prose-a:text-yellow-500
-            prose-pre:text-base
-            prose-blockquote:text-sm
-            prose-blockquote:text-navysciam
-            prose-img:rounded-xl">
-      {{ content }}
+    <div class="bg-white col-span-12 md:col-span-9 p-8 rounded-xl shadow-lg overflow-hidden 
+                prose lg:prose-lg
+                prose-table:text-lg
+                prose-tr:text-lg
+                prose-td:pr-2
+                prose-td:pl-2
+                prose-td:text-lg">
+      {{content}}
     </div>
-
+  
     <div class="col-span-12 sm:col-span-3">
       <div class="hidden md:block sticky bg-white top-10 max-h-screen overflow-auto p-4 rounded-xl shadow-lg">
         {% if page.toc %}
         <p class="text-xl text-navysciam font-bold">Sommaire :</p>
         <hr class="my-4 bg-zinc-200" />
         <nav id="toc" class="toc  
-            prose-pre:font-sans
-            prose-table:font-sans
-            prose-table:text-base
-            prose-thead:font-sans
-            prose-td:font-sans
-            prose-li:font-sans
-            prose-li:text-base
-            prose-ul:text-md
-            prose-li:text-navysciam">
+                    prose-pre:font-sans
+                    prose-table:font-sans
+                    prose-table:text-lg
+                    prose-thead:font-sans
+                    prose-td:font-sans
+                    prose-td:text-lg
+                    prose-td:p-2
+                    prose-li:font-sans
+                    prose-li:text-lg
+                    prose-ul:text-md
+                    prose-li:text-navysciam">
           {{ content | toc_only }}
         </nav>
         {% endif %}
@@ -99,31 +95,30 @@ pagination:
     <!-- 
       Pagination Buttons 
     -->
-  <div class="flex flex-wrap -mx-3 mb-6 mt-10 justify-between">
-    <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0 flex justify-start">
+  <div class="flex items-center mx-3 mb-6 mt-10 justify-between">
+    <div class="px-3 flex justify-start">
       {% if page.previous.url %}
       <a href="{{ page.previous.url | relative_url }}" title="{{ page.previous.title | strip_html | xml_escape }}"
-        class="inline-block bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded">
+        class="flex items-center bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded">
         &larr; Article précédent
       </a>
       {% else %}
       <button disabled
-      class="inline-block bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+      class="flex items-center bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
       type="button">&larr; Article précédent
       </button>
       {% endif %}
     </div>
-    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0 text-center">
-    </div>
-    <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0 flex justify-end">
+    
+    <div class="px-3 flex justify-end">
       {% if page.next.url %}
       <a href="{{ page.next.url | relative_url }}" title="{{ page.next.title | strip_html | xml_escape }}"
-        class="inline-block bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded">
+        class="flex items-center bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded">
         Article suivant &rarr;
       </a>
       {% else %}
       <button disabled
-      class="inline-block bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+      class="flex items-center bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
       type="button">Article suivant &rarr;
       {% endif %}
     </div>

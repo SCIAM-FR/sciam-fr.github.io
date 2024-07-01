@@ -47,7 +47,7 @@
           <img src="/images/logo/logo_sciam_white.svg" alt="Logo SCIAM" class="w-20 font-bold">
           <span class="mt-1.5"> <p class="text-white font-extralight text-2xl"> | Blog </p></span>
         </a>
-        <div class="hidden md:flex items-center space-x-4">
+        <div class="hidden nav:flex items-center space-x-4">
           <ul class="flex flex-row">
             {% for item in site.data.navigation %}
             {% assign current_url = page.url | remove: 'index.html' | append: '/' %}
@@ -74,7 +74,7 @@
         </div>
       
         <!-- version toggle mobile -->
-        <div class="md:hidden">
+        <div class="nav:hidden">
           <button type="button"
             class="menu-button inline-flex items-center p-2 w-10 h-10 justify-center text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
             aria-controls="mobile-menu" aria-expanded="false">
@@ -85,7 +85,7 @@
         </div>
       </div>
         <!-- version menu déroulant mobile -->
-      <div class="md:hidden hidden w-full" id="mobile-menu">
+      <div class="nav:hidden hidden w-full" id="mobile-menu">
         <div class="flex flex-col space-y-1 px-2 pb-3 pt-2">
           {% for item in site.data.navigation %}
           {% assign item_url = item.url | relative_url %}
@@ -95,7 +95,7 @@
           </a>
           {% endfor %}
           <button id="mobileSearchButton" type="button" class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white">
-            <img src="/images/icons/search-icon.svg" class="h-6 w-6 align-middle text-greysciam text-white" alt="Search Icon">
+            <img src="/images/icons/search-icon.svg" class="h-6 w-6 align-middle text-white" alt="Search Icon">
           </button>
         </div>
       </div>
@@ -116,7 +116,6 @@
           </form>
         </div>
       </div>
-     <!-- <div id="blur" class="fixed inset-0 backdrop-blur-xl hidden"></div>       -->     
     <div class="content relative" id="mainContent">
       {{ content }}
     </div>
@@ -136,7 +135,6 @@
   <script src="{{ 'js/lunr.js'| relative_url}}"></script>
   <script src="{{ 'js/toc-scroll.js'| relative_url}}"></script>
   <script src="{{ 'js/scroll-to-top.js'| relative_url}}"></script>
-  <script src="{{ 'js/hover-effect.js'| relative_url}}"></script>
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
   <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
     {% include mathjax.html %}

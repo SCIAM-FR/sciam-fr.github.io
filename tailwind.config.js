@@ -1,5 +1,10 @@
 /** @type {import('tailwindcss').Config} */
+const typographyPreset = require('./typography-preset.js');
+
 module.exports = {
+  presets: [
+    typographyPreset,
+  ],
   content: [
     "./_drafts/*.html",
     "./_layouts/**.html",
@@ -27,11 +32,13 @@ module.exports = {
   ],
   theme: {
     screens: {
-      'sm': '902px',
-      'md': '952px',
-      'lg': '1024px',
+      'sm': '640px',
+      'nav': '1150px',
+      'tablet': {'max': '1024px', 'min': '820px'},
+      'md': '820px',
+      'lg': '1128px',
       'xl': '1280px',
-      '2xl': '1536px',
+      '2xl': '1536px'
     },
     extend: {
       colors: {
@@ -78,7 +85,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Noyh Geometric', 'open-sans', 'sans-serif'],
-        asciidoc: ['Open Sans', 'Noto Serif', 'Ubuntu Mono', 'sans-serif'],
+        asciidoc: ["Droid Sans Mono", "DejaVu Sans Mono"],
       },
       fontSize: {
         '1.15': '1.15rem',
@@ -112,107 +119,6 @@ module.exports = {
         '0.3': '0.075rem',
         12: '50px'
       },
-      typography: (theme) => ({
-        DEFAULT: {
-          css: { // Override asciidoc default styles
-            maxWidth: '2000px',
-            'h2 a': { 
-              color: `${theme('colors.navysciam')} !important`,
-              '&:hover': {
-                color: `${theme('colors.lightbluesciam')} !important`,
-              },
-              textDecoration: 'none !important',
-              fontSize: '36px', 
-              fontFamily: '"Noyh Geometric" sans-serif !important',
-              fontWeight: 'bold !important',
-            },
-            'h3 a': { 
-              color: `${theme('colors.navysciam')} !important`,
-              '&:hover': {
-                color: `${theme('colors.lightbluesciam')} !important`,
-              },
-              textDecoration: 'none !important',
-              fontSize: '30px', 
-              fontFamily: '"Noyh Geometric" sans-serif !important',
-              fontWeight: 'bold !important',
-            },
-            'h4 a': { 
-              color: `${theme('colors.navysciam')} !important`,
-              '&:hover': {
-                color: `${theme('colors.lightbluesciam')} !important`,
-              },
-              textDecoration: 'none !important',
-              fontSize: '24px',
-              fontFamily: '"Noyh Geometric" sans-serif !important',
-              fontWeight: 'bold !important',
-            },
-            '#preamble > .sectionbody > .paragraph:first-of-type > p': {
-              fontSize: '1.25rem !important',
-              color: `${theme('colors.navysciam')} !important`,
-            },
-            'p': {
-              marginTop: '0.3rem !important',
-              marginBottom:'0.3rem !important',
-            },
-
-            'h2 code, h3 code, h4 code': { 
-              color: `${theme('colors.navysciam')} !important`,
-              fontFamily: '"Ubuntu Mono", sans-serif',
-              // fontSize: ' 0.875rem', 
-              fontWeight: 'light !important'
-            },
-            'h2 a code, h3 a code, h4 a code': { 
-              color: `${theme('colors.navysciam')} !important`,
-              fontFamily: '"Ubuntu Mono", sans-serif',
-              // fontSize: ' 0.875rem', 
-              fontWeight: 'light !important'
-            },
-            'sect3 h2 a code, sect3 h3 a code, sect3 h4 a code': { 
-              color: `${theme('colors.navysciam')} !important`,
-              fontFamily: '"Ubuntu Mono", sans-serif',
-              // fontSize: ' 0.875rem !important', 
-              fontWeight: 'light !important'
-            },
-
-            'p code': {  
-              fontFamily: '"Ubuntu Mono" sans-serif !important',
-              // fontSize: ' 0.875rem !important', 
-              fontWeight: 'light !important'
-            },
-            'paragraph p code': {  
-              fontFamily: '"Ubuntu Mono" sans-serif !important',
-              // fontSize: ' 0.875rem !important', 
-              fontWeight: 'light !important'
-            },
-            'code' : {
-              color: `${theme('colors.navysciam')} !important`,
-              fontFamily: '"Ubuntu Mono" sans-serif !important',
-              // fontSize: ' 0.875rem', 
-              fontWeight: 'light !important',
-            },
-            'p code::before': {
-              content: 'none',
-            },
-            'p code::after': {
-              content: 'none',
-            },
-            'h2 code::before, h3 code::before, h4 code::before': {
-              content: 'none',
-            },
-            'h2 code::after, h3 code::after, h4 code::after': {
-              content: 'none',
-            },
-            'listingblock' : {
-              marginTop: '0.5rem !important',
-            },
-            img: {
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              display: 'block',
-            },
-          },
-        },
-      }),
     },
   },
   variants: {
@@ -221,79 +127,6 @@ module.exports = {
     }
   },
   plugins: [
-    require('@tailwindcss/typography', 'tailwindcss-filters'),
-    function({ addBase, theme, addComponents }) { 
-      addBase({
-        '#toc': {
-          borderBottom: 'none',
-          paddingBottom: theme('spacing.2'),
-        },
-        'code': {
-          fontFamily: '"Ubuntu Mono" sans-serif !important',
-          fontSize: ' 0.875rem !important', 
-          fontWeight: 'light !important'
-        }
-      });
-
-      const buttons = {
-        '.btn-1': {
-          display: 'inline-block',
-          position: 'relative',
-          border: 'none',
-          color: '#fff',
-          fontSize: '18px',
-          margin: '20px',
-          '&::before, &::after': {
-            content: '""',
-            position: 'absolute',
-            width: '0',
-            height: '1px',
-            background: '#ffec3f',
-            transition: 'width 0.2s linear',
-            transitionDelay: '0.2s',
-          },
-          '&::before': {
-            right: 0,
-            top: 0,
-          },
-          '&::after': {
-            left: 0,
-            bottom: 0,
-          },
-          '&:hover::before, &:hover::after': {
-            width: '100%',
-            transitionDelay: '0s',
-          },
-          '& .btn-span': {
-            display: 'block',
-            padding: '25px 25px',
-            position: 'relative',
-            '&::before, &::after': {
-              content: '""',
-              position: 'absolute',
-              width: '1px',
-              height: '0',
-              background: '#ffec3f',
-              transition: 'height 0.2s linear',
-              transitionDelay: '0s',
-            },
-            '&::before': {
-              left: 0,
-              top: 0,
-            },
-            '&::after': {
-              right: 0,
-              bottom: 0,
-            },
-            '&:hover::before, &:hover::after': {
-              height: '100%',
-              transitionDelay: '0.2s',
-            }
-          }
-        }
-      };
-
-      addComponents(buttons);
-    },
+    require('@tailwindcss/typography'),
   ],
 }

@@ -2,7 +2,7 @@
 layout: default
 ---
 
-<div class="hero-section grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-6 pt-16 h-auto min-h-[30vh] p-10">
+<div class="grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-6 pt-16 h-auto min-h-[30vh] p-10">
   <div class="col-span-12 flex flex-col sm:flex-row items-center justify-center rounded-lg pt-0 pb-2 sm:pb-5 gap-4 sm:gap-8">
     <div class="w-full sm:w-auto flex justify-center">
       <dotlottie-player class="h-auto w-[50%] sm:w-[200px] sm:height-[200px]" src="{{ "/images/animation/logo-animation.json" | relative_url
@@ -10,26 +10,24 @@ layout: default
     </div>
     <div class="relative h-full flex justify-center items-center">
       <div class="relative">
-        <p class="hover-this transition-all duration-300 ease-in-out">
-          <span class="inline-block text-[#384a72] text-4xl transition-transform duration-100">Blog de SCIAM</span>
+          <span class="inline-block text-[#384a72] font-black text-4xl transition-transform duration-100">Blog de SCIAM</span>
         </p>
         <p class="mt-2 sm:mt-1 text-2xl font-bold text-navysciam fadeInUp2">Tendances Tech, Insights et Innovations</p>
-        <div class="cursor fixed bg-cursorBg opacity-7 w-12 h-12 rounded-full pointer-events-none transform transition-transform duration-100 ease z-50"></div>
       </div>
     </div>
   </div>
 </div>
 
 <div class="px-3 lg:px-28 mt-6">
-  <div class="grid grid-cols-1 lg:grid-cols-6 gap-6">
-    <div class="lg:col-span-4 flex flex-col h-full rounded-xl overflow-hidden shadow-xl bg-white">
+  <div class="grid grid-cols-1 tablet:grid-cols-6 lg:grid-cols-6 md:gap-4 gap-6">
+    <div class="col-span-1 md:col-span-4 tablet:col-span-4 lg:col-span-4 flex flex-col h-full rounded-xl overflow-hidden shadow-xl bg-white">
       <div class="flex flex-col h-full bg-white">
         {% for post in site.posts limit:1 %}
         <div class="flex flex-col h-full">
-          <div>
-            <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}"
-              class="w-full h-23 object-cover rounded-lg" alt="Image article">
-          </div>
+            <div class="relative pb-9/16">
+              <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}"
+                class="w-full h-23 object-cover rounded-lg" alt="Image article">
+            </div>
           <hr class="bg-zince-50 opacity-50" />
           <div class="rounded-b overflow-hidden flex-grow">
             <div class="flex flex-col justify-between h-full px-12 py-6">
@@ -108,13 +106,13 @@ layout: default
         {% endfor %}
       </div>
     </div>
-    <div class="hidden sm:block md:col-span-2 lg:col-span-2 pt-0 pb-0 flex flex-wrap items-stretch justify-center rounded-xl shadow-lg bg-white">
+    <div class="hidden md:block tablet:block md:col-span-2 tablet:col-span-2 lg:col-span-2 flex pt-0 pb-0 flex-wrap items-stretch justify-center rounded-xl shadow-lg bg-white">
       {% include x_post.html %}
     </div>
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-    <div class="col-span-12 sm:col-span-12 flex flex-col h-full rounded-xl">
+    <div class="col-span-12 lg:col-span-4 flex flex-col h-full rounded-xl">
       <div class="mb-auto">
         <hr class="my-20 bg-zince-200" />
         <!-- Sciam's choice -->
@@ -215,10 +213,10 @@ layout: default
               </div>
               {% endfor %}
             </div>
-            <div class="swiper-button-prev decoration-navysciam ml-4 lg:ml-6"></div>
-            <div class="swiper-button-next decoration-navysciam mr-4 lg:mr-6"></div>
+            <div class="swiper-button-prev text-navysciamlight ml-4 lg:ml-6"></div>
+            <div class="swiper-button-next text-navysciamlight mr-4 lg:mr-6"></div>
             <div class="pt-10">
-              <div class="swiper-pagination decoration-navysciam pt-10"></div>
+              <div class="swiper-pagination text-navysciamlight pt-10"></div>
             </div>
           </div>
         </div>
@@ -315,17 +313,17 @@ layout: default
               </div>
               {% endfor %}
             </div>
-            <div class="swiper-button-prev decoration-navysciam ml-4 lg:ml-6"></div>
-            <div class="swiper-button-next decoration-navysciam mr-4 lg:mr-6"></div>
+            <div class="swiper-button-prev text-navysciamlight ml-4 lg:ml-6"></div>
+            <div class="swiper-button-next text-navysciamlight mr-4 lg:mr-6"></div>
             <div class="pt-10">
-              <div class="swiper-pagination decoration-navysciam pt-10"></div>
+              <div class="swiper-pagination text-navysciamlight pt-10"></div>
             </div>
           </div>
         </div>
 
         <hr class="md:hidden bg-zinc-200 my-20" />
 
-        <div class="sm:hidden w-full mb-8 items-stretch justify-center rounded-xl shadow-lg bg-white">
+        <div class="md:hidden w-full mb-8 items-stretch justify-center rounded-xl shadow-lg bg-white">
           {% include x_post.html %}
         </div>
       </div>
