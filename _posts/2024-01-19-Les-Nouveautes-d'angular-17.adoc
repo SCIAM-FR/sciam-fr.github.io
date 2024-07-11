@@ -1,0 +1,13 @@
+= Video - Techreview - Les Nouveautés d'Angular 17
+:page-excerpt: La sortie d’Angular 17 marque également l’introduction d'un nouveau flux de contrôle, le chargement différé des parties de page et un meilleur support pour le rendu côté client. Découvrez ce que vous réserve cette nouvelle version.
+:page-layout: post
+:author: khaoulamrabet
+:page-tags: [javascript, front, Techreview, Angular]
+:page-vignette: 2024/nouveautes-angular-17.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: software video
+:page-vimeo-id: 917431448
+
+La sortie d’Angular 17 marque également l’introduction d'un nouveau flux de contrôle, le chargement différé des parties de page et un meilleur support pour le rendu côté client. Découvrez ce que vous réserve cette nouvelle version.
+
