@@ -47,11 +47,14 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5.0.0
+      - name: Generate Tailwind CSS
+        uses: ZoeyVid/tailwindcss-update@v1.4.0
+        with:
+          input: ./css/styles.css
+          output: ./css/output.css
       - name: Build with Jekyll
         # Outputs to the './_site' directory by default
-        run: |
-          npm update
-          npx tailwindcss -i ./css/styles.css -o ./css/output.css
+        run: 
           bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
