@@ -183,6 +183,24 @@ ericdiallo:
     linkedin: "eric-diallo-52b41b103"
 
 
+christophesejourne:
+  name: "Christophe Sejourne"
+  bio: "Depuis 20 ans, Christophe relève des défis métiers en exploitant les technologies et la donnée. Il a étudié les mathématiques appliquées à Dauphine et à l’ENSAE. Ses expériences combinées de data-scientist, directeur e-commerce, consultant en innovation et trader exotique lui permettent d'aborder les sujets avec pragmatisme et de concevoir des solutions adaptées.Christophe a rejoint Sciam au début de l'aventure pour piloter la communauté Intelligence Artificielle & Machine Learning.Dans une autre vie, il aurait été musicien (pianiste ou batteur) et photographe."
+  job: "Data Scientist Leader"
+  pagesciam: "https://www.sciam.fr/equipe/christophe-sejourne"
+  picture: christophesejourne.jpg
+  socials:
+    linkedin: "christophesejourne"
+
+pierrelepagnol:
+  name: "Pierre Lepagnol"
+  bio: "PhD Student in CS @LISN/Paris-Saclay University & Data Scientist"
+  job: "Data Scientist"
+  pagesciam: "https://www.sciam.fr/equipe/pierre-lepagnol"
+  picture: pierrelepagnol.jpg
+  socials:
+    linkedin: "pierre-lepagnol"
+
 sebastienblanc:
   name: "Sébastien Blanc"
   bio: "Sébastien est Staff Developer Advocate à Aiven et un Javachampion. Il se considère comme un Passion-Driven-Developer avec comme objectif principal de partager au maximum sa passion en donnant des conférences. Avant d'être Developer Advocate, Sébastien a passé 15 ans dans l'ingénierie logicielle, essentiellement orienté autour ce Java EE. Durant son temps libre, il aime apprendre le code aux enfants et pratique le Kobudo, un viell Art Martial laponais"
@@ -192,3 +210,31 @@ sebastienblanc:
   socials:
     linkedin: "sébastien-blanc-08a73b1"
 
+charlinebarbelette:
+  name: "Charline Barbelette"
+  bio: "Diplômée d’un master Chef de produit Textile, puis en Développement Web Javascript et Java, Charline est passionnée par la programmation, ses nouvelles technologies et par l'entreprenariat.
+  Son expérience de 4 ans en Inde lui a permis de découvrir une partie de l’Asie du Sud mais surtout de développer sa faculté d’adaptation en y créant un bureau de toxicologie cuir et textile.
+  Elle est de retour en France en 2018 pour développer sa créativité avec sa marque de bijoux et créer sa plateforme e-shop B2B et B2C.
+  Toujours à la recherche de nouveaux chalenges, elle a poursuivi son parcours en réalisant des formations de développement web dans le but de créer de nouvelles plateformes performantes.
+  Curieuse de tout, et amatrice de sensations fortes, elle aime les trails et courses à pied."
+  job: "Fullstack Engineer Junior"
+  pagesciam: "https://www.sciam.fr/equipe/charline-barbelette"
+  picture: charlinebarbelette.jpg
+  socials:
+    linkedin: "charlinebarbelette"
+
+axelbarrault:
+  name: "Axel Barrault"
+  bio: "Axel est docteur en Sciences du Langage et est aussi diplômé d’un master de Sciences Cognitives de l’École Normale Supérieure (Paris).  
+  Une expérience militaire de cinq ans a attisé chez lui une passion pour la complexe interaction de facteurs qui influence le comportement humain et son environnement. Il a choisi le cadre exigeant des Sciences Cognitives pour son caractère intégratif et interdisciplinaire. Ses travaux de recherche axés sur le Langage et la Communication ont notamment porté sur l’acquisition du langage ou encore sur l’exploitation de l’information intonative pour la transmission et l'interprétation du sens.
+  
+  Au travers de son parcours d’enseignant-chercheur, il a enseigné près de 580 heures dans des disciplines telles que la Psychologie Cognitive, la Psychologie du Développement, la Psychologie Différentielle et les sous-disciplines des Sciences du Langage. Attaché aux valeurs de la Science Ouverte, il s'est mobilisé pour faire comprendre les contraintes et le rythme d’une démarche scientifique cohérente, ainsi que la nécessité de la rigueur des principes de la méthode expérimentale.
+  
+  Convaincu que la Science doit servir l'humain, il a rejoint SCIAM en tant que consultant en Sciences du Comportement pour aider l'entreprise à innover et relever les défis de demain.
+  
+  Axel nourrit par ailleurs un intérêt pour les études géopolitiques et la place de la Science dans la société. Il aime rencontrer des cultures comme se perdre dans les grands espaces."
+  job: "Science Lead"
+  pagesciam: "https://www.sciam.fr/equipe/axel-barrault"
+  picture: axelbarrault.jpg
+  socials:
+    linkedin: "axel-barrault-phd-a2165a187"

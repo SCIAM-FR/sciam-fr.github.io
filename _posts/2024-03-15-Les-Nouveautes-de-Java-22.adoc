@@ -1,0 +1,12 @@
+= Video - Techreview - Les Nouveautés de Java 22
+:page-excerpt: Découvrez les nouveautés de Java 22.
+:page-layout: post
+:author: jeanmicheldoudoux
+:page-tags: [Java, Techreview]
+:page-vignette: 2024/techreview-java22.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: software video
+:page-vimeo-id: 928780246
+
+Découvrez les nouveautés de Java 22.

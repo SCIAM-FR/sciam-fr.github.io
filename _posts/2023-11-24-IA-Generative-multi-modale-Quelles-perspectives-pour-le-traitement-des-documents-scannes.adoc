@@ -1,0 +1,19 @@
+= Video - Techreview - IA Générative multi-modale Quelles perspectives pour le traitement des documents scannés ?
+:page-excerpt: Le domaine d’application de l’IA Générative s’étend chaque jour un peu plus.Les approches traditionnelles d’analyse d’images (photo, document scanné, lettre manuscrite…) sont à leur tour challengées.
+:page-layout: post
+:author: christophesejourne
+:page-tags: [ChatGPT, LLM, IA, Techreview]
+:page-vignette: 2023/ia-multimodale.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: llm video
+:page-vimeo-id: 914730306
+
+Le domaine d’application de l’IA Générative s’étend chaque jour un peu plus.
+Les approches traditionnelles d’analyse d’images (photo, document scanné, lettre manuscrite…) sont à leur tour challengées.
+Nous présenterons :
+
+* les cas d’usages concernés par ces nouvelles approches
+* le fonctionnement des modèles sous-jacents
+* l’utilisation concrète et les perspectives offertes
+

@@ -1,0 +1,17 @@
+= Video - Science co Review - les fondements psychologiques du fardeau administratif
+:page-excerpt: Les travailleurs, citoyens et décideurs publics sont souvent confrontés à l’absurdité ou à la lourdeur de certaines démarches administratives. Bien que certaines procédures soient inévitables, elles comportent très souvent du sludge, c'est-à-dire des frictions excessives qui engendrent des coûts temporels, monétaires et psychologiques importants pour les usagers et organisations. Dès lors, comment expliquer l'existence de tels systèmes sous-optimaux ?
+:page-layout: post
+:author: hugotrad
+:page-tags: [Science co Review]
+:page-vignette: 2023/fardeau-administratif.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: sciencesco video
+:page-vimeo-id: 917430764
+
+Les travailleurs, citoyens et décideurs publics sont souvent confrontés à l’absurdité ou à la lourdeur de certaines démarches administratives. Bien que certaines procédures soient inévitables, elles comportent très souvent du sludge, c'est-à-dire des frictions excessives qui engendrent des coûts temporels, monétaires et psychologiques importants pour les usagers et organisations. Dès lors, comment expliquer l'existence de tels systèmes sous-optimaux ?
+
+Au-delà des besoins organisationnels, de nombreux mécanismes psychologiques peuvent sous-tendre la complexité administrative. L'un de ces mécanismes potentiels est le biais d'additivité : lorsque nous cherchons à améliorer un objet, une situation ou à résoudre un problème, nous avons tendance à ajouter des propriétés ou des éléments plutôt qu'à en retirer, et ceci même quand cela est sous-optimal.
+
+Durant cette ScienceCo Review, nous aborderons les résultats de premières expérimentations visant à déterminer dans quelle mesure ce biais peut expliquer l'implémentation de systèmes administratifs sous-optimaux, ainsi que la façon dont les gens pondèrent les coûts et les avantages associés à ces systèmes.
+
