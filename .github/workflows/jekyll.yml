@@ -52,6 +52,7 @@ jobs:
         with:
           input: ./css/styles.css
           output: ./css/output.css
+          params: "--minify"
       - name: Build with Jekyll
         # Outputs to the './_site' directory by default
         run: 
