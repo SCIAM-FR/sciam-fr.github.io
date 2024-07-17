@@ -1,0 +1,13 @@
+= Video - Un tour d'horizon de JavaFX
+:page-excerpt: Une présentation des fonctionnalités clés de JavaFX et de ses cas d'usage avec quelques exemples de réalisations.
+:page-layout: post
+:author: clementdetastes
+:page-tags: [Techreview, JavaFX, Java, UI]
+:page-vignette: 2023/tour-dhorizon-javafx.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: software video
+:page-vimeo-id: 917429818
+
+
+Une présentation des fonctionnalités clés de JavaFX et de ses cas d'usage avec quelques exemples de réalisations.

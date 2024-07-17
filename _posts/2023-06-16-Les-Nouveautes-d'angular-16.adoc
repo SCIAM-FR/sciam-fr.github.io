@@ -1,0 +1,13 @@
+= Video - Techreview - Les Nouveautés d'Angular 16
+:page-excerpt: La nouvelle version Angular est un grand changement sur la façon de programmer avec les modules ajoutés dans la version 16. Une Révolution assez intéressante pour améliorer la performance de nos applications. Venez découvrir les nouveautés d’Angular.
+:page-layout: post
+:author: khaoulamrabet
+:page-tags: [javascript, front, Techreview, Angular]
+:page-vignette: 2023/nouveautes-angular-16.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: software video
+:page-vimeo-id: 917431296
+
+La nouvelle version Angular est un grand changement sur la façon de programmer avec les modules ajoutés dans la version 16. Une Révolution assez intéressante pour améliorer la performance de nos applications. Venez découvrir les nouveautés d’Angular.
+

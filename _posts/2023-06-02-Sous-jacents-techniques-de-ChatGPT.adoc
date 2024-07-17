@@ -1,0 +1,13 @@
+= Video - Techreview - Sous-jacents techniques de ChatGPT
+:page-excerpt: les composants/concepts mis en oeuvre afin de percevoir la valeur de ces techno, au delà du produit commercialisé par OpenAI.
+:page-layout: post
+:author: pierrelepagnol
+:page-tags: [ChatGPT, LLM, IA, Techreview]
+:page-vignette: 2023/sous-jacent-chatgpt.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: llm video
+:page-vimeo-id: 917428826
+
+les composants/concepts mis en oeuvre afin de percevoir la valeur de ces techno, au delà du produit commercialisé par OpenAI.
+

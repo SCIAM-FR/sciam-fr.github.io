@@ -1,0 +1,21 @@
+= Video - Assurez la cohérence de vos données dans Quarkus grâce à MicroProfile LRA (Long Running Action)
+:page-excerpt: Garantir la cohérence des données dans une architecture microservices représente un défi important pour nous les développeurs.Parmi les solutions existantes pour mener à bien cette tâche, Eclipse MicroProfile LRA (Long Running Actions) propose une approche élégante et standard puisque basée sur les travaux de l’OASIS Web Services comitee.Lors de cette présentation, je vous montrerai comment mettre en œuvre LRA dans une application Quarkus à travers différents scenarii et exemples de code.Nous testerons notamment la résilience de notre application en simulant un incident impactant la cohérence des données, et nous visualiserons en direct comment LRA gère l’événement pour préserver l’intégrité de nos données. A l’issue du talk, vous repartirez avec une solution standard permettant de garantir la cohérence des données dans vos transactions métiers.
+:page-layout: post
+:author: pcheucle
+:page-tags: [LRA, MicroProfile, Techreview, Quarkus]
+:page-vignette: 2023/techreview-LRA.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: software video
+:page-vimeo-id: 917431640
+
+
+Garantir la cohérence des données dans une architecture microservices représente un défi important pour nous les développeurs.
+
+Parmi les solutions existantes pour mener à bien cette tâche, Eclipse MicroProfile LRA (Long Running Actions) propose une approche élégante et standard puisque basée sur les travaux de l’OASIS Web Services comitee.
+
+Lors de cette présentation, je vous montrerai comment mettre en œuvre LRA dans une application Quarkus à travers différents scenarii et exemples de code.
+
+Nous testerons notamment la résilience de notre application en simulant un incident impactant la cohérence des données, et nous visualiserons en direct comment LRA gère l’événement pour préserver l’intégrité de nos données.
+
+A l’issue du talk, vous repartirez avec une solution standard permettant de garantir la cohérence des données dans vos transactions métiers.

@@ -1,0 +1,20 @@
+= Video - Techreview - La guerre éternelle entre J2EE et Spring a-t-elle pris fin ?
+:page-excerpt: Notre industrie est plutôt amnésique. Aujourd'hui, la plupart des jeunes développeurs Java ignorent la suite d'événements du début des années 2000 qui ont donné naissance aux frameworks et outils que nous utilisons aujourd'hui. C'est dommage car cette connaissance les aiderait à devenir de meilleurs développeurs en comprenant le long et tortueux chemin que notre industrie a parcouru au cours de ces 20 dernières années.
+:page-layout: post
+:author: antoinesabotdurand
+:page-tags: [java, Jakarta EE, Spring, Techreview]
+:page-vignette: 2023/guerre-j2ee-spring.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: software video
+:page-vimeo-id: 917428346
+
+Notre industrie est plutôt amnésique. Aujourd'hui, la plupart des jeunes développeurs Java ignorent la suite d'événements du début des années 2000 qui ont donné naissance aux frameworks et outils que nous utilisons aujourd'hui.
+C'est dommage car cette connaissance les aiderait à devenir de meilleurs développeurs en comprenant le long et tortueux chemin que notre industrie a parcouru au cours de ces 20 dernières années.
+
+Dans cette session, je reviendrai sur les événements majeurs de cette histoire avec un niveau de trolling réglé au minimum possible.
+
+Nous voyagerons dans le temps pour comprendre la malédiction des EJB et voir la naissance de Spring 1.0. Ensuite, nous assisterons à la réinvention des EJB avec leur version 3.0, l'apparition de CDI et le lancement de Spring Boot.
+La fin temporaire de cette histoire nous amènera à parler de MicroProfile, de Quarkus et de Spring Native.
+
+À la fin de cette présentation, vous devriez avoir une meilleure vue d'ensemble de l'écosystème Java d'entreprise et comprendre pourquoi vous devriez retirer J2EE ou Java EE (et bien sûr JEE) de votre CV si vous êtes un expert Spring.

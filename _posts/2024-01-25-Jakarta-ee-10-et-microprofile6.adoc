@@ -1,0 +1,13 @@
+= Video - Quoi de Neuf dans Jarkata EE 10 and Microprofile 6.1
+:page-excerpt: Les dernières moutures de Jakarta EE et MicroProfile sont sorties en fin d’année dernière. Avec la fin de la migration Java EE vers Jakarta EE, ces nouvelles éditions apportent de réelles nouveautés utilisables telles quelles ou dans votre Framework préférée comme Quarkus, Hélidon ou même Spring (!). Dans  cette présentation nous referons une rapide mise en contexte de Jakarta EE et MicoProfile et de leur histoire récente et passerons en revues les principales nouveautés de ces stacks. Nous finirons avec un focus sur les implications pour les principales implémentations de ces 2 spécifications`.
+:page-layout: post
+:author: antoinesabotdurand
+:page-tags: [Jakarta EE, MicroProfile, Conférence]
+:page-vignette: 2024/Jakarta10Microprofile6.jpeg
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: software video
+:page-vimeo-id: 913311931
+
+
+Les dernières moutures de Jakarta EE et MicroProfile sont sorties en fin d’année dernière. Avec la fin de la migration Java EE vers Jakarta EE, ces nouvelles éditions apportent de réelles nouveautés utilisables telles quelles ou dans votre Framework préféré comme Quarkus, Hélidon ou même Spring (!). Dans  cette présentation nous referons une rapide mise en contexte de Jakarta EE et MicoProfile et de leur histoire récente et passerons en revues les principales nouveautés de ces stacks. Nous finirons avec un focus sur les implications pour les principales implémentations de ces 2 spécifications.

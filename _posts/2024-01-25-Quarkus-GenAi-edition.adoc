@@ -1,0 +1,17 @@
+= Video - Quarkus - GenAl edition
+:page-excerpt: Quand on parle d'IA générative on pense évidemment immédiatement à chatGPT, à GH Co-Pilot. Mais depuis quelques temps on voit apparaître des librairies qui permettent d'utiliser la puissance de l'IA générative au sein de son code métier. Parmi ces librairies, la plus en vogue est Langchain, il existe un portage pour Java, Langchain4j et cerise sur le gâteau Quarkus dispose d'une extension Langchain4j. Venez découvrir avec moi comment la stack java la plus puissante du monde combinée à l'IA générative permet de créer des applications d'un nouveau genre tout en conservant l'expérience développeur excellente qu'offre Quarkus.
+:page-layout: post
+:author: sebastienblanc
+:page-tags: [Quarkus,IA,Conférence]
+:page-vignette: 2024/Quarkus-Genai.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: software LLM video
+:page-vimeo-id: 913803646
+
+
+Quand on parle d'IA générative, on pense évidemment immédiatement à chatGPT, à github Co-Pilot. Mais depuis quelque temps, on voit apparaître des librairies qui permettent d'utiliser la puissance de l'IA générative au sein de son code métier. Parmi ces librairies, la plus en vogue est Langchain, il existe un portage pour Java, Langchain4j et cerise sur le gâteau Quarkus dispose d'une extension Langchain4j.
+
+Venez découvrir avec moi comment la stack java la plus puissante du monde combinée à l'IA générative permet de créer des applications d'un nouveau genre tout en conservant l'expérience développeur excellente qu'offre Quarkus.
+
+Peu de slides, beaucoup de live coding.

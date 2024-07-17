@@ -1,0 +1,20 @@
+= Video - Techreview - Quoi de neuf dans CDI 4.0 ?
+:page-excerpt: Jakarta Contexts and Dependency Injection est probablement la spécification la plus sous-estimée de Jakarta EE. Et pourtant, elle constitue la pierre angulaire de Jakarta EE et de MicroProfile en fournissant un modèle de programmation standardisé et une manière puissante d'intégrer des technologie tierces de manière transparente.
+:page-layout: post
+:author: antoinesabotdurand
+:page-tags: [Jakarta EE, CDI, Techreview]
+:page-vignette: 2023/quoi-de-neuf-cdi4.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: software video
+:page-vimeo-id: 917427908
+
+Jakarta Contexts and Dependency Injection est probablement la spécification la plus sous-estimée de Jakarta EE. Et pourtant, elle constitue la pierre angulaire de Jakarta EE et de MicroProfile en fournissant un modèle de programmation standardisé et une manière puissante d'intégrer des technologie tierces de manière transparente.
+
+La version 4 de CDI est au cœur de Jakarta EE 10 et MicroProfile 6.0 qui sont sorties fin 2022. Il parait donc intéressant d’explorer les nouveautés de la spécification pour voir ce qu’elle apporte à ces 2 stacks
+
+Dans cette présentation, nous passerons donc, en revue toutes les nouvelles fonctionnalités de la spécification et nous nous concentrerons sur CDI lite qui a permis de créer un nouveau profil Jakarta EE (le Core Profile) et prend en charge les approches d’injection de dépendance au build time comme le font Quarkus ou Micronaut.
+
+Nous passerons en revue la nouvelle API d'extension et verrons comment elle diffère des Portable Extensions historiques.
+
+A l’issue de ce talk vous serez en mesure de commencer le développement d’une extension CDI Lite pour votre framework préféré et vous préparer aux futures versions de Quarkus et Micronaut.

@@ -1,0 +1,18 @@
+= Video - Techreview - Les Nouveautés de Java 21
+:page-excerpt: Cette présentation brosse une revue détaillée des nouveautés qui sont proposées en standard, en preview et en incubation dans la version 21 LTS du JDK issues des projets d’OpenJDK
+:page-layout: post
+:author: jeanmicheldoudoux
+:page-tags: [Java, Techreview]
+:page-vignette: 2023/techreview-java21.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: software video
+:page-vimeo-id: 917431064
+
+Cette présentation brosse une revue détaillée des nouveautés qui sont proposées en standard, en preview et en incubation dans la version 21 LTS du JDK issues des projets d’OpenJDK :
+
+* Amber : Record Patterns, Pattern Matching for switch, String Templates, Unnamed Patterns and Variables, Unnamed Classes and Instance Main Methods
+* Loom : Virtual Threads, Structured Concurrency, Scoped Values
+* et Panama : Foreign Function & Memory API, Vector API
+
+mais aussi de fonctionnalités dans les API de Java Core qui ne font pas l'objet de JEP et dans la JVM HotSpot..

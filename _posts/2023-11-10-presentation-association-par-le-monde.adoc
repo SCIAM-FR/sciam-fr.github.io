@@ -1,0 +1,12 @@
+= Video - Techreview - Présentation association par le monde
+:page-excerpt: Presentation de l’association Par Le Monde, le projet 1village et ce que SCIAM a pu apporter sans rentrer dans les détails du code.
+:page-layout: post
+:author: charlinebarbelette
+:page-tags: [association, javascript, Techreview]
+:page-vignette: 2023/par-le-monde.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: autres video
+:page-vimeo-id: 917428605
+
+Presentation de l’association Par Le Monde, le projet 1village et ce que SCIAM a pu apporter sans rentrer dans les détails du code.
