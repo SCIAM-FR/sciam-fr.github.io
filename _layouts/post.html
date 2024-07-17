@@ -1,151 +1,144 @@
 ---
 layout: default
 pagination:
-    enabled: true
+  enabled: true
 ---
 
 <div class="relative min-h-screen mb-10 px-3 lg:px-28 md:px-28 bg-grayBgSciam overflow-visible">
-    <div class="grid grid-cols-12 gap-4 py-16 md:py-10">
-        <!-- Information Block -->
-        <div class="order-2 md:order-1 col-span-12 md:col-span-6 text-navysciam p-8 flex flex-col justify-between">
-            <div>
-                <p class="text-5xl font-extrabold mb-4">{{ page.title }}</p>
-                <!-- list authors -->
-                {% if page.auteurs.size > 1 %} {% for auteur in page.auteurs %} {% assign author =
-                site.data.authors[auteur] %} {% if author.name %}
-                <a href="{{ '/author/' | append: auteur | append: '/index.html' | relative_url }}">
-                    {% include author_bio.html %}
-                </a>
-                {% endif %} {% endfor %} {% else %} {% assign author = site.data.authors[page.author] %} {% if
-                author.name %}
-                <a href="{{ '/author/' | append: page.author | append: '/index.html' | relative_url }}">
-                    {% include author_bio.html %}
-                </a>
-                {% endif %} {% endif %}
-            </div>
-            <div class="text-gray-400 mb-2">
-                <span class="mr-2">Publié le {{ page.date | date: "%d/%m/%Y" }}</span>
-                {% if page.vimeo-id %} {% else %} •<span class="ml-2"
-                    >Temps de lecture : {{ content | reading_time | pluralize: "minute" }}</span
-                >
-                {% endif %}
-            </div>
-
-            <div>
-                {% if page.tags.size > 0 %} {% for tag in page.tags %} {% assign tagSlug = tag | downcase | slugify:
-                "raw" %}
-                <a
-                    href="{{ '/tag/' | relative_url }}{{ tagSlug }}/"
-                    class="inline-block rounded-full border-0.5 bg-{{ tagSlug }}-100 border-{{ tagSlug }}-200 text-{{ tagSlug }}-500 px-3 py-1 text-sm font-semibold mr-2 mb-2"
-                >
-                    #{{ tag }}
-                </a>
-                {% endfor %} {% endif %}
-            </div>
-        </div>
-
-        <!-- Image Block -->
-        <div
-            class="order-1 md:order-2 col-span-12 md:col-span-6 flex justify-center items-center rounded-lg shadow-md bg-white"
-        >
-            <div class="h-72 flex items-center justify-center">
-                <img
-                    src="{{ '/images/vignettes/' | append: page.vignette | relative_url }}"
-                    alt="Description"
-                    class="object-cover max-h-full"
-                />
-            </div>
-        </div>
+  <div class="grid grid-cols-12 gap-4 py-16 md:py-10">
+    <!-- Information Block -->
+    <div class="order-2 md:order-1 col-span-12 md:col-span-6 text-navysciam p-8 flex flex-col justify-between">
+      <div>
+        <p class="text-5xl font-extrabold mb-4">{{ page.title }}</p>
+        <!-- list authors -->
+        {% if page.auteurs.size > 1 %}
+        {% for auteur in page.auteurs %}
+        {% assign author = site.data.authors[auteur] %}
+        {% if author.name %}
+        <a href="{{ '/author/' | append: auteur | append: '/index.html' | relative_url }}">
+          {% include author_bio.html %}
+        </a>
+        {% endif %}
+        {% endfor %}
+        {% else %}
+        {% assign author = site.data.authors[page.author] %}
+        {% if author.name %}
+        <a href="{{ '/author/' | append: page.author | append: '/index.html' | relative_url }}">
+          {% include author_bio.html %}
+        </a>
+        {% endif %}
+        {% endif %}
+      </div>
+      <div class="text-gray-400 mb-2">
+        <span class="mr-2">Publié le {{ page.date | date: "%d/%m/%Y" }}</span>
+	{% if page.vimeo-id %}
+	{% else %}
+	•<span class="ml-2">Temps de lecture : {{ content | reading_time | pluralize: "minute" }}</span>
+        {% endif %}
+      </div>
+  
+      <div>
+        {% if page.tags.size > 0 %}
+        {% for tag in page.tags %}
+        {% assign tagSlug = tag | downcase | slugify: "raw" %}
+        <a href="{{ '/tag/' | relative_url }}{{ tagSlug }}/"
+          class="inline-block rounded-full border-0.5 bg-{{ tagSlug }}-100 border-{{ tagSlug }}-200 text-{{ tagSlug }}-500 px-3 py-1 text-sm font-semibold mr-2 mb-2">
+          #{{ tag }}
+        </a>
+        {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  
+    <!-- Image Block -->
+    <div
+      class="order-1 md:order-2 col-span-12 md:col-span-6 flex justify-center items-center rounded-lg shadow-md bg-white">
+      <div class="h-72 flex items-center justify-center">
+        <img src="{{ '/images/vignettes/' | append: page.vignette | relative_url }}" alt="Description"
+          class="object-cover max-h-full">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Main Content and Sidebar -->
+  <div class="grid grid-cols-{% if page.categories contains 'video' %}15{% else %}12{% endif %} gap-4 mt-4">
+   <div class="bg-white col-span-12 md:col-span-9 p-8 rounded-xl shadow-lg overflow-hidden
+                prose lg:prose-lg
+                prose-table:text-lg
+                prose-tr:text-lg
+                prose-td:pr-2
+                prose-td:pl-2
+                prose-td:text-lg">
+      {{content}}
+      {% if page.vimeo-id %}
+      {{page.vimeo-id | prepend: 'video::' | append: '[vimeo,640,480]' | asciidocify}}
+      {% endif %}
     </div>
 
-    <!-- Main Content and Sidebar -->
-    <div class="grid grid-cols-{% if page.categories contains 'video' %}15{% else %}12{% endif %} gap-4 mt-4">
-        <div
-            class="bg-white col-span-12 md:col-span-9 p-8 rounded-xl shadow-lg overflow-hidden prose lg:prose-lg prose-table:text-lg prose-tr:text-lg prose-td:pr-2 prose-td:pl-2 prose-td:text-lg"
-        >
-            {{content}} {% if page.vimeo-id %} {{page.vimeo-id | prepend: 'video::' | append: '[vimeo,640,480]' |
-            asciidocify}} {% endif %}
-        </div>
-
-        <!-- Table of Content -->
-        {% unless page.categories contains 'video' %}
-        <div class="col-span-12 sm:col-span-3">
-            <div class="hidden md:block sticky bg-white top-10 max-h-screen overflow-auto p-4 rounded-xl shadow-lg">
-                {% if page.toc %}
-                <p class="text-xl text-navysciam font-bold">Sommaire :</p>
-                <hr class="my-4 bg-zinc-200" />
-                <nav
-                    id="toc"
-                    class="toc prose-pre:font-sans prose-table:font-sans prose-table:text-lg prose-thead:font-sans prose-td:font-sans prose-td:text-lg prose-td:p-2 prose-li:font-sans prose-li:text-lg prose-ul:text-md prose-li:text-navysciam"
-                >
-                    {{ content | toc_only }}
-                </nav>
-                {% endif %}
-            </div>
-        </div>
-        {% endunless %}
+    <!-- Table of Content -->
+    {% unless page.categories contains 'video' %}
+    <div class="col-span-12 sm:col-span-3">
+      <div class="hidden md:block sticky bg-white top-10 max-h-screen overflow-auto p-4 rounded-xl shadow-lg">
+        {% if page.toc %}
+        <p class="text-xl text-navysciam font-bold">Sommaire :</p>
+        <hr class="my-4 bg-zinc-200" />
+        <nav id="toc" class="toc  
+                    prose-pre:font-sans
+                    prose-table:font-sans
+                    prose-table:text-lg
+                    prose-thead:font-sans
+                    prose-td:font-sans
+                    prose-td:text-lg
+                    prose-td:p-2
+                    prose-li:font-sans
+                    prose-li:text-lg
+                    prose-ul:text-md
+                    prose-li:text-navysciam">
+          {{ content | toc_only }}
+        </nav>
+        {% endif %}
+      </div>
     </div>
+    {% endunless %}
+  </div>
     <!-- 
       Pagination Buttons 
     -->
-    <div class="flex items-center mx-3 mb-6 mt-10 justify-between">
-        <div class="px-3 flex justify-start">
-            {% if page.previous.url %}
-            <a
-                href="{{ page.previous.url | relative_url }}"
-                title="{{ page.previous.title | strip_html | xml_escape }}"
-                class="flex items-center bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded"
-            >
-                &larr; Article précédent
-            </a>
-            {% else %}
-            <button
-                disabled
-                class="flex items-center bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                type="button"
-            >
-                &larr; Article précédent
-            </button>
-            {% endif %}
-        </div>
-
-        <div class="px-3 flex justify-end">
-            {% if page.next.url %}
-            <a
-                href="{{ page.next.url | relative_url }}"
-                title="{{ page.next.title | strip_html | xml_escape }}"
-                class="flex items-center bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded"
-            >
-                Article suivant &rarr;
-            </a>
-            {% else %}
-            <button
-                disabled
-                class="flex items-center bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                type="button"
-            >
-                Article suivant &rarr;
-            </button>
-            {% endif %}
-        </div>
+  <div class="flex items-center mx-3 mb-6 mt-10 justify-between">
+    <div class="px-3 flex justify-start">
+      {% if page.previous.url %}
+      <a href="{{ page.previous.url | relative_url }}" title="{{ page.previous.title | strip_html | xml_escape }}"
+        class="flex items-center bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded">
+        &larr; Article précédent
+      </a>
+      {% else %}
+      <button disabled
+      class="flex items-center bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+      type="button">&larr; Article précédent
+      </button>
+      {% endif %}
     </div>
-
-    <div class="mx-auto shadow-custom-bottom-shadow">
-        <script
-            src="https://giscus.app/client.js"
-            data-repo="SCIAM-FR/sciam-fr.github.io"
-            data-repo-id="R_kgDOJnEX-w"
-            data-category="General"
-            data-category-id="DIC_kwDOJnEX-84Cbj8_"
-            data-mapping="pathname"
-            data-strict="0"
-            data-reactions-enabled="1"
-            data-emit-metadata="0"
-            data-input-position="top"
-            data-theme="light"
-            data-lang="fr"
-            crossorigin="anonymous"
-            async
-        ></script>
+    
+    <div class="px-3 flex justify-end">
+      {% if page.next.url %}
+      <a href="{{ page.next.url | relative_url }}" title="{{ page.next.title | strip_html | xml_escape }}"
+        class="flex items-center bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded">
+        Article suivant &rarr;
+      </a>
+      {% else %}
+      <button disabled
+      class="flex items-center bg-transparent border border-navysciam text-navysciam hover:bg-navysciam hover:text-white text-center py-2 px-4 rounded disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+       type="button">Article suivant &rarr;
+      </button>
+      {% endif %}
     </div>
+  </div>
+
+  <div class="mx-auto shadow-custom-bottom-shadow">
+    <script src="https://giscus.app/client.js" data-repo="SCIAM-FR/sciam-fr.github.io" data-repo-id="R_kgDOJnEX-w"
+      data-category="General" data-category-id="DIC_kwDOJnEX-84Cbj8_" data-mapping="pathname" data-strict="0"
+      data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="fr"
+      crossorigin="anonymous" async>
+      </script>
+  </div>
 </div>
