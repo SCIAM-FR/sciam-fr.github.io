@@ -48,11 +48,9 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5.0.0
       - name: Generate Tailwind CSS
-        uses: ZoeyVid/tailwindcss-update@v1.4.0
-        with:
-          input: ./css/styles.css
-          output: ./css/output.css
-          params: "--minify"
+        run: |
+          npm update
+          npx tailwindcss -i ./css/styles.css -o ./css/output.css --minify
       - name: Build with Jekyll
         # Outputs to the './_site' directory by default
         run: 
