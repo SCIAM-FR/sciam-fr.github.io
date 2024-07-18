@@ -30,8 +30,10 @@ pagination:
         {% endif %}
       </div>
       <div class="text-gray-400 mb-2">
-        <span class="mr-2">Publié le {{ page.date | date: "%d/%m/%Y" }}</span> •
-        <span class="ml-2">Temps de lecture : {{ content | reading_time | pluralize: "minute" }}</span>
+        <span class="mr-2">Publié le {{ page.date | date: "%d/%m/%Y" }}</span>
+	{% unless page.vimeo-id %}
+	•<span class="ml-2">Temps de lecture : {{ content | reading_time | pluralize: "minute" }}</span>
+        {% endunless %}
       </div>
   
       <div>
