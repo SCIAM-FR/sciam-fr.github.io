@@ -52,7 +52,6 @@ jobs:
           npm update
           npx tailwindcss -i ./css/styles.css -o ./css/output.css --minify
       - name: Build with Jekyll
-        # Outputs to the './_site' directory by default
         run: 
           bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:

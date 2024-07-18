@@ -18,6 +18,7 @@ group :jekyll_plugins do
   gem 'jekyll-seo-tag'
   gem 'jekyll-toc'
   gem 'kramdown-parser-gfm'
+  gem 'jekyll-postcss-v2'
 end
 
 gem "webrick", "~> 1.8"
