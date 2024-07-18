@@ -1,3 +1,4 @@
 #!/bin/sh
-bundle exec jekyll serve -i -o
+npm install
+bundle exec jekyll serve -l -o
 
