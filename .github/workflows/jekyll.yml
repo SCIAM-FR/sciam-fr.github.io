@@ -47,10 +47,9 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5.0.0
-      - name: Generate Tailwind CSS
-        run: |
-          npm update
-          npx tailwindcss -i ./css/styles.css -o ./css/output.css --minify
+      - name: install node packages
+        run:
+          npm install
       - name: Build with Jekyll
         run: 
           bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
