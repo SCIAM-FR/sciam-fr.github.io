@@ -1,4 +1,5 @@
 #!/bin/sh
 npm install
-bundle exec jekyll serve -l -o
+bundle install
+bundle exec jekyll serve --incremental --trace --livereload --open-url --drafts
 
