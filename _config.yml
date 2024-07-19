@@ -2,7 +2,7 @@
 title: Blog Sciam
 description: Ce blog contient des articles techniques issus de la communeauté des salariés de SCIAM
 domain: sciam-fr.github.io       # if you want to force HTTPS, specify the domain without the http at the start, e.g. example.com
-url: https://sciam-fr.github.io  # the base hostname and protocol for your site, e.g. http://example.com
+url: https://blog.sciam.fr  # the base hostname and protocol for your site, e.g. http://example.com
 locale: fr_FR
 permalink: pretty
 #baseurl: "/"
