@@ -19,7 +19,7 @@ christopheblondeau:
 antoinesabotdurand:
   name: "Antoine Sabot-Durand"
   bio: 'Passionné par Java et le développement, Antoine est un Java Champion expert sur Jakarta EE et CDI. Il a été Specification Leader sur CDI 2.0 et a participé à CDI 4.0. Membre du Working Group Microprofile, il a  aussi dirigé les specification MicroProfile Fault Tolerance et MicroProfile Health. Chez Sciam, il a le rôle de Tech Lead et participe a la capitalisation des savoirs faire de l''entreprise'
-  job: "Senior Tech Lead"
+  job: "Directeur IT"
   pagesciam: "https://www.sciam.fr/equipe/antoine-sabot-durand"
   website: "https://next-presso.com"
   picture: antoinesabotdurand.png
@@ -40,7 +40,7 @@ jeanmicheldoudoux:
   name: "Jean-Michel Doudoux"
   bio: "Passionné par le développement de logiciels depuis ses débuts, adolescent avec un Commodore 64, et par la veille technologique, Jean-Michel possède une longue expérience, en SSII/ESN et personnelle, dans l’écriture d’applications avec différents langages.<br>
 Il utilise Java depuis sa version 1.0 et aime partager sa passion pour cette plateforme et son écosystème notamment en se consacrant, depuis plus d’une vingtaine d’années, à la rédaction d’un tutoriel intitulé &quot;Développons en Java&quot;, diffusé sous licence GNU FDL. Ce travail et son implication dans la communauté lui a permis d’être nommé Java Champion."
-  job: "Senior Tech Lead"
+  job: "Directeur technique"
   pagesciam: "https://www.sciam.fr/equipe/jean-michel-doudoux"
   website: "https://www.jmdoudoux.fr"
   picture: jeanmicheldoudoux.png
@@ -184,9 +184,9 @@ ericdiallo:
 
 
 christophesejourne:
-  name: "Christophe Sejourne"
+  name: "Christophe Sejourné"
   bio: "Depuis 20 ans, Christophe relève des défis métiers en exploitant les technologies et la donnée. Il a étudié les mathématiques appliquées à Dauphine et à l’ENSAE. Ses expériences combinées de data-scientist, directeur e-commerce, consultant en innovation et trader exotique lui permettent d'aborder les sujets avec pragmatisme et de concevoir des solutions adaptées.Christophe a rejoint Sciam au début de l'aventure pour piloter la communauté Intelligence Artificielle & Machine Learning.Dans une autre vie, il aurait été musicien (pianiste ou batteur) et photographe."
-  job: "Data Scientist Leader"
+  job: "Directeur pôle Data/IA"
   pagesciam: "https://www.sciam.fr/equipe/christophe-sejourne"
   picture: christophesejourne.jpg
   socials:
