@@ -17,7 +17,7 @@ L’IA générative et les modèles de langage de grande taille (*LLM*) sont au 
 Dans ce premier article, nous nous pencherons sur le concept de Function Calling, une fonctionnalité innovante qui permet à un LLM d'interagir directement avec des fonctions spécifiques au sein d'une application.
 
 == Qu'est-ce que le Function Calling ?
-Le *Function Calling* permet aux modèles de langage (LLM) de déclencher des actions spécifiques, comme accéder à une base de données ou utiliser des outils externes, en fonction du contexte ou des données reçues.
+Le *Function Calling* permet aux modèles de langage de grande taille (LLM) de déclencher des actions spécifiques, comme accéder à une base de données ou utiliser des outils externes, en fonction du contexte ou des données reçues.
 Cela permet au modèle d'interagir directement avec des systèmes ou des API pour effectuer des tâches précises.
 
 NOTE: Les modèles comme GPT-3.5; GPT-4; la suite Mistral Smal, Large, Nemo et Mixtral 8x22B, pour ne citer que cela, supportent le Function Calling
@@ -107,6 +107,9 @@ Le Function Calling représente un lien essentiel entre les capacités conversat
 Ce mécanisme permet aux LLM de dépasser leur rôle traditionnel de simples générateurs de texte pour devenir de véritables *Agents IA*, _des entités capables de comprendre une intention, de mobiliser le bon outil, et d'exécuter une action précise pour atteindre un résultat optimal._
 
 Les tools désignent des outils spécialisés (comme des APIs, des bases de données ou des scripts) que les LLM peuvent appeler pour effectuer des actions spécifiques en fonction du contexte ou des données reçues.
+
+NOTE: Lorsqu'un LLM devient un agent IA, il dépasse la simple génération de texte, il analyse la situation, sélectionne l'outil le plus adapté et l'utilise pour fournir une réponse ou accomplir une action précise.
+Grâce à cette intégration, les LLM se transforment en assistants intelligents proactifs, capables de comprendre des intentions complexes et d'interagir avec divers systèmes pour résoudre des problèmes de manière autonome.
 
 
 == Conclusion
