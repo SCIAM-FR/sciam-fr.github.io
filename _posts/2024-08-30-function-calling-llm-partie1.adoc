@@ -20,7 +20,7 @@ Dans ce premier article, nous nous pencherons sur le concept de Function Calling
 Le *Function Calling* permet aux modèles de langage de grande taille (LLM) de déclencher des actions spécifiques, comme accéder à une base de données ou utiliser des outils externes, en fonction du contexte ou des données reçues.
 Cela permet au modèle d'interagir directement avec des systèmes ou des API pour effectuer des tâches précises.
 
-NOTE: Les modèles comme GPT-3.5; GPT-4; la suite Mistral Smal, Large, Nemo et Mixtral 8x22B, pour ne citer que cela, supportent le Function Calling
+NOTE: Les modèles comme GPT-3.5, GPT-4, la suite Mistral Small, Large, Nemo et Mixtral 8x22B, pour ne citer que ceux-là, supportent le Function Calling
 
 == Pourquoi est-ce important ?
 
