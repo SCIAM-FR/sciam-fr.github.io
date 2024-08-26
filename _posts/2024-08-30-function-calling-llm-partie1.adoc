@@ -114,4 +114,7 @@ Grâce à cette intégration, les LLM se transforment en assistants intelligents
 
 == Conclusion
 
-Le Function Calling relie les LLM (Large Language Models) au concept des agents IA en leur permettant de devenir plus autonomes et actifs dans les systèmes. Grâce à cette fonctionnalité, les LLM ne se contentent plus de comprendre et répondre les demandes des utilisateurs, mais peuvent aussi exécuter des actions en appelant des fonctions spécifiques. Cela les transforme en véritables agents intelligents, capables de gérer des tâches complexes, de s'adapter aux contextes variés, et de mieux interagir avec les systèmes informatiques. Cette autonomie, tout en restant sous le contrôle des développeurs, fait des LLM avec Function Calling un outil puissant pour créer des agents IA avancés. *Dans le second article, nous explorerons comment intégrer le Function Calling dans une application Java avec Spring AI.*
+Le Function Calling relie les LLM (Large Language Models) au concept des agents IA en leur permettant de devenir plus autonomes et actifs dans les systèmes.
+Grâce à cette fonctionnalité, les LLM ne se contentent plus de comprendre et répondre les demandes des utilisateurs, mais peuvent aussi exécuter des actions en appelant des fonctions spécifiques. Cela les transforme en véritables agents intelligents, capables de gérer des tâches complexes, de s'adapter aux contextes variés, et de mieux interagir avec les systèmes informatiques.
+Cette autonomie, tout en restant sous le contrôle des développeurs, fait des LLM avec Function Calling un outil puissant pour créer des agents IA avancés.
+*Dans le second article, nous explorerons comment intégrer le Function Calling dans une application Java avec Spring AI.*
