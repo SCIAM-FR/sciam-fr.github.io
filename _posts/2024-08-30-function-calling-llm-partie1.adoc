@@ -61,7 +61,7 @@ Cette fonction récupère en temps réel les données liées au produit Z, comme
 
 `*Assistant virtuel*` : Le produit Z est actuellement en cours de préparation. La livraison est prévue pour le 31 août. Vous serez notifié dès que l’expédition sera effectuée.
 
-Voici un shémas qui illustre le fonctionnement du *Function Calling* dans un contexte conversationnel :
+Voici un schéma qui illustre le fonctionnement du *Function Calling* dans un contexte conversationnel :
 
 image::rickenbazolo/function_calling_llm/function_calling_conversation.png[image,width=70%,align="center"]
 
