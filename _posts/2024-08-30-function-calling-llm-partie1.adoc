@@ -75,7 +75,7 @@ Les LLM traditionnels génèrent uniquement du texte, tandis que le Function Cal
 Cela élargit les possibilités d'automatisation et d'intégration dans les systèmes existants, rendant les LLM plus interactifs et adaptés aux processus métiers complexes.
 Les entreprises peuvent ainsi mieux contrôler et superviser ces actions, facilitant leur intégration dans leurs processus.
 
-== Cas d'usage Théoriques
+== Des cas d'usage théoriques
 
 Le Function Calling peut transformer divers secteurs en automatisant des processus critiques :
 
