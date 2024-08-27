@@ -89,7 +89,7 @@ Le Function Calling peut transformer divers secteurs en automatisant des process
 
 Ces cas d'usage illustrent comment le Function Calling peut être appliqué pour améliorer l'efficacité, la réactivité et la précision dans divers secteurs, rendant les opérations plus fluides et les expériences utilisateur plus agréables.
 
-== Fuction Calling, Tools et Agents IA
+== Le Fuction Calling, les Tools et les Agents IA
 
 Le Function Calling représente un lien essentiel entre les capacités conversationnelles des modèles de langage de grande taille (LLM) et l'accès à des fonctionnalités techniques spécialisées via des outils (*Tools*) externes.
 Ce mécanisme permet aux LLM de dépasser leur rôle traditionnel de simples générateurs de texte pour devenir de véritables *Agents IA*, _des entités capables de comprendre une intention, de mobiliser le bon outil, et d'exécuter une action précise pour atteindre un résultat optimal._
