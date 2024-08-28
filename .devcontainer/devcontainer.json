@@ -1,7 +1,7 @@
 {
   "image": "mcr.microsoft.com/devcontainers/universal:2",
-  "postCreateCommand": ".devcontainer/postCreateCommand.sh",
-  "postStartCommand": ".devcontainer/runServer.sh",
+  "postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
+  "postStartCommand": "bash .devcontainer/runServer.sh",
   "customizations": {
     "vscode": {
       "extensions": [
