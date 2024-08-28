@@ -1,0 +1,108 @@
+= Du Concept à l'Action : Le Function Calling des LLM et son Utilisation avec Spring AI - Partie 1
+:page-navtitle:Du Concept à l'Action : Le Function Calling des LLM et son Utilisation avec Spring AI - Partie 1
+:page-excerpt: Ce premier article introduit le concept de Function Calling dans les LLM, expliquant comment il permet à ces modèles d'exécuter des actions concrètes en appelant des fonctions spécifiques.
+:layout: post
+:author: rickenbazolo
+:page-tags: [IA, LLM, FunctionCalling, agentAI, tools]
+:docinfo: shared-footer
+:page-vignette: function_calling_llm_partie1.jpg
+:page-vignette-licence: 'Image générée par l'IA'
+:page-liquid:
+:showtitle:
+:page-categories: software llm news
+
+L’IA générative et les modèles de langage de grande taille (*LLM*) sont au cœur de l'évolution actuelle de l'intelligence artificielle, jouant un rôle déterminant dans l'innovation technologique et ayant un impact croissant sur l'industrie et la société.
+
+Dans ce premier article, nous nous pencherons sur le concept de Function Calling, une fonctionnalité innovante qui permet à un LLM d'interagir directement avec des fonctions spécifiques au sein d'une application.
+
+== Qu'est-ce que le Function Calling ?
+
+Le *Function Calling* permet aux modèles de langage de grande taille (LLM) de déclencher des actions spécifiques, comme accéder à une base de données ou utiliser des outils externes, en fonction du contexte ou des données reçues.
+Cela permet au modèle d'interagir directement avec des systèmes ou des API pour effectuer des tâches précises.
+
+NOTE: Les modèles comme GPT-3.5, GPT-4, la suite Mistral Small, Large, Nemo et Mixtral 8x22B, pour ne citer que ceux-là, supportent le Function Calling
+
+== Pourquoi est-ce important ?
+
+Cette fonctionnalité permet aux modèles de langage (LLM) d'agir de manière autonome en interagissant avec des outils externes.
+
+Pour les développeurs et les entreprises, cela signifie créer des applications plus pertinentes et riches où le modèle peut non seulement répondre, mais aussi effectuer des actions en temps réel, comme des appels API ou des requêtes de base de données, rendant les systèmes plus efficaces et interactifs.
+
+== Comment fonctionne le function calling dans les LLM ?
+
+Lorsqu'un utilisateur interagit avec un LLM supportant la fonctionnalité *Function Calling*, le modèle détecte des mots-clés ou contextes dans le prompt pour activer des fonctions spécifiques.
+
+Par exemple, une question sur le prix d'un produit peut déclencher une fonction qui interroge directement une base de données pour obtenir cette information.
+
+Ces fonctions sont préalablement définies par les développeurs pour permettre cette interaction.
+
+Voici un schéma qui illustre le flux d'interaction entre *votre code* et le *LLM*.
+Les flèches indiquent le sens des communications entre ces deux parties, montrant un processus itératif d'échange d'informations et d'exécution de fonctions.
+
+image::rickenbazolo/function_calling_llm/function_calling.png[image,width=70%,align="center"]
+
+** `(1)` Votre application envoie une requête au LLM contenant votre prompt ainsi que les définitions des fonctions que le LLM peut appeler.
+** `(2)` Le LLM évalue si une réponse directe est nécessaire ou si une ou plusieurs fonctions devraient être invoquées.
+** `(3)` Le LLM indique à votre application quelle fonction exécuter et quels arguments utiliser.
+** `(4)` Votre application exécute la fonction en utilisant les arguments fournis.
+** `(5)` Enfin, votre application transmet au LLM le résultat de l'exécution pour qu'il puisse poursuivre le traitement ou formuler une réponse.
+
+NOTE: Le LLM n'exécute pas directement les fonctions. À l'étape `(3)`, il se contente de fournir les paramètres nécessaires pour que votre application puisse appeler la fonction. Votre code reste en contrôle total et décide d'exécuter ou non la fonction indiquée.
+
+Dans un contexte conversationnel, le modèle passe d'une simple réponse textuelle à une interaction active, où il peut appeler automatiquement des fonctions spécifiques, comme obtenir et interpréter des données pour fournir une réponse précise.
+Par exemple dans le cadre de la gestion du statut d’un produit, voici une interaction utilisant le Function Calling :
+
+`*Utilisateur*` : Quel est le statut de la commande du produit Z ?
+
+`*Assistant virtuel*` : Je vais vérifier ça pour vous.
+
+_À ce moment-là, au lieu de simplement répondre par une estimation ou une réponse générique, l’assistant appelle automatiquement une fonction connectée à votre système de gestion des commandes.
+Cette fonction récupère en temps réel les données liées au produit Z, comme l’état actuel de l’expédition, la date estimée de livraison, et toute autre information pertinente._
+
+`*Assistant virtuel*` : Le produit Z est actuellement en cours de préparation. La livraison est prévue pour le 31 août. Vous serez notifié dès que l’expédition sera effectuée.
+
+Voici un schéma qui illustre le fonctionnement du *Function Calling* dans un contexte conversationnel :
+
+image::rickenbazolo/function_calling_llm/function_calling_conversation.png[image,width=70%,align="center"]
+
+== Les avantages du Function Calling
+
+Nous pouvons décrire les avantages du Function Calling de manière simple : il permet aux entreprises d'automatiser efficacement des tâches complexes tout en offrant aux développeurs une intégration flexible et un contrôle précis sur les actions exécutées par les modèles.
+
+NOTE: Les développeurs peuvent intégrer des modèles de langage dans leurs applications avec des fonctions prédéfinies, ce qui simplifie le développement d’applications complexes.
+
+Les LLM traditionnels génèrent uniquement du texte, tandis que le Function Calling permet à ces modèles de déclencher des actions spécifiques.
+Cela élargit les possibilités d'automatisation et d'intégration dans les systèmes existants, rendant les LLM plus interactifs et adaptés aux processus métiers complexes.
+Les entreprises peuvent ainsi mieux contrôler et superviser ces actions, facilitant leur intégration dans leurs processus.
+
+== Des cas d'usage théoriques
+
+Le Function Calling peut transformer divers secteurs en automatisant des processus critiques :
+
+*Test applicatif* : Automatisation des scénarios de test et exécution conditionnelle des tests en fonction des résultats, optimisant les cycles de développement.
+
+*Banque et finance* : Traitement rapide des demandes de prêt et détection en temps réel des fraudes, améliorant la sécurité et l'efficacité.
+
+*Service client, suivi des commandes* : En réponse aux requêtes des clients, le LLM peut appeler des fonctions pour vérifier l'état des commandes, mettre à jour les informations d'expédition ou annuler une commande, améliorant ainsi l'efficacité du support client.
+
+*Santé, planification de rendez-vous médicaux* : Le LLM peut gérer les rendez-vous en vérifiant la disponibilité des médecins, en réservant des créneaux, et en envoyant des confirmations aux patients, réduisant ainsi la charge du secrétariat.
+
+Ces cas d'usage illustrent comment le Function Calling peut être appliqué pour améliorer l'efficacité, la réactivité et la précision dans divers secteurs, rendant les opérations plus fluides et les expériences utilisateur plus agréables.
+
+== Le Fuction Calling, les Tools et les Agents IA
+
+Le Function Calling représente un lien essentiel entre les capacités conversationnelles des modèles de langage de grande taille (LLM) et l'accès à des fonctionnalités techniques spécialisées via des outils (*Tools*) externes.
+Ce mécanisme permet aux LLM de dépasser leur rôle traditionnel de simples générateurs de texte pour devenir de véritables *Agents IA*, des entités capables de comprendre une intention, de mobiliser le bon outil, et d'exécuter une action précise pour atteindre un résultat optimal.
+
+Les tools désignent des outils spécialisés (comme des APIs, des bases de données ou des scripts) que les LLM peuvent appeler pour effectuer des actions spécifiques en fonction du contexte ou des données reçues.
+
+NOTE: Lorsqu'un LLM devient un agent IA, il dépasse la simple génération de texte, il analyse la situation, sélectionne l'outil le plus adapté et l'utilise pour fournir une réponse ou accomplir une action précise.
+Grâce à cette intégration, les LLM se transforment en assistants intelligents proactifs, capables de comprendre des intentions complexes et d'interagir avec divers systèmes pour résoudre des problèmes de manière autonome.
+
+== Conclusion
+
+Le Function Calling relie les LLM (Large Language Models) au concept des agents IA en leur permettant de devenir plus autonomes et actifs dans les systèmes.
+Grâce à cette fonctionnalité, les LLM ne se contentent plus de comprendre et répondre les demandes des utilisateurs, mais peuvent aussi exécuter des actions en appelant des fonctions spécifiques.
+Cela les transforme en véritables agents intelligents, capables de gérer des tâches complexes, de s'adapter aux contextes variés, et de mieux interagir avec les systèmes informatiques.
+Cette autonomie, tout en restant sous le contrôle des développeurs, fait des LLM avec Function Calling un outil puissant pour créer des agents IA avancés.
+Dans le second article, nous explorerons comment intégrer le Function Calling dans une application Java avec Spring AI.
