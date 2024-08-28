@@ -1,5 +1,5 @@
 #!/bin/sh
 npm install
 bundle install
-bundle exec jekyll serve --incremental --trace --livereload --open-url --drafts
+bundle exec jekyll serve --incremental --livereload --open-url --drafts --livereload_port 4321
 
