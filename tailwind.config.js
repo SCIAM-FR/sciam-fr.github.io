@@ -6,29 +6,9 @@ module.exports = {
     typographyPreset,
   ],
   content: [
-    "./_drafts/*.html",
     "./_layouts/**.html",
     "./_includes/**/*.html",
-    "./_site/**/*.html",
-    "./_posts/*.md",
-    "./_news/*.md",
-    "./*.md",
-    "./*.html",
-    "./css/**/*.css",
-  ],
-  safelist: [
-    {
-      pattern: /^(bg|border|text)-/, // Keep any classes that start with bg-, border-, or text-
-    },
-    {
-      pattern: /-100$/, // Keep classes that end with -100
-    },
-    {
-      pattern: /-200$/, // Keep classes that end with -200
-    },
-    {
-      pattern: /-500$/, // Keep classes that end with -500
-    },
+    "./*.html"
   ],
   theme: {
     screens: {
