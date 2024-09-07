@@ -3,7 +3,7 @@
 :page-excerpt: Ce second article se concentre  sur l'implémentation pratique du Function Calling avec Spring AI dans une application Java
 :layout: post
 :author: rickenbazolo
-:page-tags: [IA, LLM, FunctionCalling, agentAI, tools]
+:page-tags: [Java, Spring Boot, Spring AI, IA, LLM, Function Calling, Agent AI, Tools]
 :docinfo: shared-footer
 :page-vignette: function_calling_llm_partie1.jpg
 :page-vignette-licence: 'Image générée par l'IA'
