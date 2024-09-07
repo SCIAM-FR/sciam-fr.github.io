@@ -1,6 +1,6 @@
-= Du Concept à l'Action : Le Function Calling des LLM et son Utilisation avec Spring AI - Partie 1
-:page-navtitle:Du Concept à l'Action : Le Function Calling des LLM et son Utilisation avec Spring AI - Partie 1
-:page-excerpt: Ce premier article introduit le concept de Function Calling dans les LLM, expliquant comment il permet à ces modèles d'exécuter des actions concrètes en appelant des fonctions spécifiques.
+= Du Concept à l'Action : Le Function Calling des LLM et son Utilisation avec Spring AI - Partie 2
+:page-navtitle:Du Concept à l'Action : Le Function Calling des LLM et son Utilisation avec Spring AI - Partie 2
+:page-excerpt: Ce second article se concentre  sur l'implémentation pratique du Function Calling avec Spring AI dans une application Java
 :layout: post
 :author: rickenbazolo
 :page-tags: [IA, LLM, FunctionCalling, agentAI, tools]
@@ -11,93 +11,122 @@
 :showtitle:
 :page-categories: software llm news
 
-L’IA générative et les modèles de langage de grande taille (*LLM*) sont au cœur de l'évolution actuelle de l'intelligence artificielle, jouant un rôle déterminant dans l'innovation technologique et ayant un impact croissant sur l'industrie et la société.
+Le Function Calling introduit une capacité clé pour les LLM link:{% post_url 2024-08-28-function-calling-llm-partie1 %}[(Partie 1)^], leur permettant d'interagir directement avec les données et les systèmes d'entreprise. 
+Grâce à cette fonctionnalité, les développeurs peuvent créer des applications plus interactives et fonctionnelles. 
+En intégrant les LLM aux systèmes et API externes, ceux-ci deviennent de véritables agents IA, capables de réaliser une large gamme de tâches de manière autonome et efficace, transformant ainsi les applications en systèmes intelligents et proactifs.
 
-Dans ce premier article, nous nous pencherons sur le concept de Function Calling, une fonctionnalité innovante qui permet à un LLM d'interagir directement avec des fonctions spécifiques au sein d'une application.
+Ce second article se concentre sur l'implémentation pratique du *Function Calling* avec https://spring.io/projects/spring-ai[Spring AI^] dans une application Spring Boot. 
+Nous y expliquerons étape par étape comment configurer et intégrer cette fonctionnalité pour permettre à votre application de tirer pleinement parti des capacités des LLM, en déclenchant des actions concrètes et automatisées en réponse à des interactions utilisateur. 
+Cette partie mettra en lumière les aspects techniques pour illustrer l'utilisation du Function Calling dans un environnement Spring.
 
-== Qu'est-ce que le Function Calling ?
+== L’intégration du Function Calling avec Spring AI
 
-Le *Function Calling* permet aux modèles de langage de grande taille (LLM) de déclencher des actions spécifiques, comme accéder à une base de données ou utiliser des outils externes, en fonction du contexte ou des données reçues.
-Cela permet au modèle d'interagir directement avec des systèmes ou des API pour effectuer des tâches précises.
+*Spring AI* prend en charge les principaux fournisseurs de modèles tels que https://platform.openai.com/docs/overview[OpenAI^], https://docs.mistral.ai[Mistral AI^], https://www.anthropic.com[Anthropic^] qui ont des versions de LLM qui supportent le Function Calling.
 
-NOTE: Les modèles comme GPT-3.5, GPT-4, la suite Mistral Small, Large, Nemo et Mixtral 8x22B, pour ne citer que ceux-là, supportent le Function Calling
+Pour exploiter les capacités des LLM dans votre application Spring Boot, il est nécessaire d'ajouter une ou plusieurs dépendances spécifiques.
 
-== Pourquoi est-ce important ?
+== Les dépendances
 
-Cette fonctionnalité permet aux modèles de langage (LLM) d'agir de manière autonome en interagissant avec des outils externes.
+À la date de rédaction de cet article, le projet Spring AI est actuellement en https://docs.spring.io/spring-ai/reference/1.0/index.html[version 1.0.0-M2^], avec des artefacts disponibles dans les dépôts Spring Milestone et Snapshot.
+Pour y accéder, vous devez ajouter les références aux référentiels Spring Milestone dans votre fichier pom.xml.
 
-Pour les développeurs et les entreprises, cela signifie créer des applications plus pertinentes et riches où le modèle peut non seulement répondre, mais aussi effectuer des actions en temps réel, comme des appels API ou des requêtes de base de données, rendant les systèmes plus efficaces et interactifs.
+[source,xml]
+----
+<repositories>
+    <repository>
+        <id>spring-milestones</id>
+        <name>Spring milestones</name>
+        <url>https://repo.spring.io/milestone</url>
+    </repository>
+</repositories>
+----
 
-== Comment fonctionne le function calling dans les LLM ?
+Maintenant, ajoutons la dépendance pour l’intégration du Function Calling Mistral :
 
-Lorsqu'un utilisateur interagit avec un LLM supportant la fonctionnalité *Function Calling*, le modèle détecte des mots-clés ou contextes dans le prompt pour activer des fonctions spécifiques.
+[source,xml]
+----
+<dependency>
+      <groupId>org.springframework.ai</groupId>
+      <artifactId>spring-ai-mistral-ai-spring-boot-starter</artifactId>
+</dependency>
+----
 
-Par exemple, une question sur le prix d'un produit peut déclencher une fonction qui interroge directement une base de données pour obtenir cette information.
+== La configuration de l’application
 
-Ces fonctions sont préalablement définies par les développeurs pour permettre cette interaction.
+Spring AI offre une auto-configuration pour l’ensemble de LLM supporté.
 
-Voici un schéma qui illustre le flux d'interaction entre *votre code* et le *LLM*.
-Les flèches indiquent le sens des communications entre ces deux parties, montrant un processus itératif d'échange d'informations et d'exécution de fonctions.
+Nous avons besoin d’une clé API que vous pouvez créer sur la https://console.mistral.ai/api-keys[console Mistral^] pour utiliser le LLM avec Spring AI.
 
-image::rickenbazolo/function_calling_llm/function_calling.png[image,width=70%,align="center"]
+[source,yml]
+----
+spring:
+  ai:
+    mistralai:
+      api-key: ${MISTRAL_AI_API_KEY} <1>
+      chat:
+        options:
+          model: mistral-small-latest <2>
+----
 
-** `(1)` Votre application envoie une requête au LLM contenant votre prompt ainsi que les définitions des fonctions que le LLM peut appeler.
-** `(2)` Le LLM évalue si une réponse directe est nécessaire ou si une ou plusieurs fonctions devraient être invoquées.
-** `(3)` Le LLM indique à votre application quelle fonction exécuter et quels arguments utiliser.
-** `(4)` Votre application exécute la fonction en utilisant les arguments fournis.
-** `(5)` Enfin, votre application transmet au LLM le résultat de l'exécution pour qu'il puisse poursuivre le traitement ou formuler une réponse.
+** `1` Configuration de la clé API pour utiliser le modèle Mistral 
+** `2` Définition du nom du modèle à utiliser
 
-NOTE: Le LLM n'exécute pas directement les fonctions. À l'étape `(3)`, il se contente de fournir les paramètres nécessaires pour que votre application puisse appeler la fonction. Votre code reste en contrôle total et décide d'exécuter ou non la fonction indiquée.
+NOTE: Actuellement, il n'est pas possible d'utiliser plusieurs modèles avec l'auto-configuration dans une même application. Si vous souhaitez utiliser la configuration par défaut, vous devez spécifier lequel activer en désactivant les autres via les propriétés appropriées, par exemple en mettant `spring.ai.mistralai.chat.enabled=false` ou `spring.ai.azure.openai.chat.enabled=false` si vous avez configuré à la fois Mistral et Azure OpenAI dans votre application.
 
-Dans un contexte conversationnel, le modèle passe d'une simple réponse textuelle à une interaction active, où il peut appeler automatiquement des fonctions spécifiques, comme obtenir et interpréter des données pour fournir une réponse précise.
-Par exemple dans le cadre de la gestion du statut d’un produit, voici une interaction utilisant le Function Calling :
+Cette configuration de base permet à notre application d'utiliser le Function Calling de Mistral avec le modèle *mistral-small-latest*.
 
-`*Utilisateur*` : Quel est le statut de la commande du produit Z ?
+NOTE: Actuellement pour Mistral, le Function Calling est disponible pour les modèles suivants : `Mistral Small`; `Mistral Large`; `Mixstral 8x22B`; `Mistral Nemo`
 
-`*Assistant virtuel*` : Je vais vérifier ça pour vous.
+Dans notre cas d'utilisation, nous allons développer une fonction qui renvoie le statut d'une commande en utilisant son numéro de commande.
 
-_À ce moment-là, au lieu de simplement répondre par une estimation ou une réponse générique, l’assistant appelle automatiquement une fonction connectée à votre système de gestion des commandes.
-Cette fonction récupère en temps réel les données liées au produit Z, comme l’état actuel de l’expédition, la date estimée de livraison, et toute autre information pertinente._
+== La mise en place du ChatClient
 
-`*Assistant virtuel*` : Le produit Z est actuellement en cours de préparation. La livraison est prévue pour le 31 août. Vous serez notifié dès que l’expédition sera effectuée.
+Le https://docs.spring.io/spring-ai/reference/1.0/api/chatclient.html[ChatClient^] fournit une API pour interagir avec un LLM, prenant en charge à la fois des programmations synchrones et réactives. 
+Cette API permet de créer des invites, constituées de messages, qui sont envoyées au modèle pour guider sa réponse et son comportement.
 
-Voici un schéma qui illustre le fonctionnement du *Function Calling* dans un contexte conversationnel :
+Nous allons mettre en place un contrôleur REST pour configurer notre *ChatClient*.
 
-image::rickenbazolo/function_calling_llm/function_calling_conversation.png[image,width=70%,align="center"]
+[source,java]
+----
+@RestController
+public class DemoController {
 
-== Les avantages du Function Calling
+    private final ChatClient chatClient;
 
-Nous pouvons décrire les avantages du Function Calling de manière simple : il permet aux entreprises d'automatiser efficacement des tâches complexes tout en offrant aux développeurs une intégration flexible et un contrôle précis sur les actions exécutées par les modèles.
+    public DemoController(ChatClient.Builder chatClient) {
+        this.chatClient = chatClient.build();
+    }
+}
+----
 
-NOTE: Les développeurs peuvent intégrer des modèles de langage dans leurs applications avec des fonctions prédéfinies, ce qui simplifie le développement d’applications complexes.
+Ensuite, nous allons définir un message système par défaut pour attribuer un rôle à notre IA.
 
-Les LLM traditionnels génèrent uniquement du texte, tandis que le Function Calling permet à ces modèles de déclencher des actions spécifiques.
-Cela élargit les possibilités d'automatisation et d'intégration dans les systèmes existants, rendant les LLM plus interactifs et adaptés aux processus métiers complexes.
-Les entreprises peuvent ainsi mieux contrôler et superviser ces actions, facilitant leur intégration dans leurs processus.
+[source,java]
+----
+public DemoController(ChatClient.Builder chatClient) {
+        this.chatClient = chatClient
+                .defaultSystem("Vous êtes un assistant qui donne l'état des commandes en fonction du numéro de commande. ")
+                .build();
+}
+----
 
-== Des cas d'usage théoriques
+Pour tester notre client de chat, nous allons créer une méthode *askOrderStatus* qui recevra un numéro de commande en paramètre et utilisera le ChatClient pour construire l'invite à envoyer au LLM.
 
-Le Function Calling peut transformer divers secteurs en automatisant des processus critiques :
+[source,java]
+----
+@GetMapping(value = "/statut")
+public String askOrderStatus(String numeroCommande) {
+    return chatClient.prompt()
+            .user("Quel est le statut de la commande " + numeroCommande + "?")
+            .call()
+            .content();
+}
+----
 
-*Test applicatif* : Automatisation des scénarios de test et exécution conditionnelle des tests en fonction des résultats, optimisant les cycles de développement.
+Après avoir démarré notre application, testons notre API en accédant à ce lien :
 
-*Banque et finance* : Traitement rapide des demandes de prêt et détection en temps réel des fraudes, améliorant la sécurité et l'efficacité.
+http://localhost:8080/statut?numeroCommande=0010
 
-*Service client, suivi des commandes* : En réponse aux requêtes des clients, le LLM peut appeler des fonctions pour vérifier l'état des commandes, mettre à jour les informations d'expédition ou annuler une commande, améliorant ainsi l'efficacité du support client.
-
-*Santé, planification de rendez-vous médicaux* : Le LLM peut gérer les rendez-vous en vérifiant la disponibilité des médecins, en réservant des créneaux, et en envoyant des confirmations aux patients, réduisant ainsi la charge du secrétariat.
-
-Ces cas d'usage illustrent comment le Function Calling peut être appliqué pour améliorer l'efficacité, la réactivité et la précision dans divers secteurs, rendant les opérations plus fluides et les expériences utilisateur plus agréables.
-
-== Le Fuction Calling, les Tools et les Agents IA
-
-Le Function Calling représente un lien essentiel entre les capacités conversationnelles des modèles de langage de grande taille (LLM) et l'accès à des fonctionnalités techniques spécialisées via des outils (*Tools*) externes.
-Ce mécanisme permet aux LLM de dépasser leur rôle traditionnel de simples générateurs de texte pour devenir de véritables *Agents IA*, des entités capables de comprendre une intention, de mobiliser le bon outil, et d'exécuter une action précise pour atteindre un résultat optimal.
-
-Les tools désignent des outils spécialisés (comme des APIs, des bases de données ou des scripts) que les LLM peuvent appeler pour effectuer des actions spécifiques en fonction du contexte ou des données reçues.
-
-NOTE: Lorsqu'un LLM devient un agent IA, il dépasse la simple génération de texte, il analyse la situation, sélectionne l'outil le plus adapté et l'utilise pour fournir une réponse ou accomplir une action précise.
-Grâce à cette intégration, les LLM se transforment en assistants intelligents proactifs, capables de comprendre des intentions complexes et d'interagir avec divers systèmes pour résoudre des problèmes de manière autonome.
 
 == Conclusion
 
