@@ -178,7 +178,7 @@ Spring AI simplifie l'invocation de fonctions en vous permettant d'enregistrer u
 
 NOTE: Les modèles (LLM) sont formés pour détecter quand appeler une fonction et répondre avec un `JSON` conforme à la signature de la fonction définie.
 
-== Envoyer la fonction au LLM
+== L'envoie de la fonction au LLM
 
 Pour envoyer une ou plusieurs fonctions dans le prompt, Spring AI simplifie le processus en permettant de définir un @Bean qui retourne une `java.util.Function`, comme nous l'avons fait pour notre fonction `obtenirStatutCommande`. Il suffit ensuite de fournir le nom du bean défini dans le contexte de l'application en option via *defaultFunctions* ou *functions* lors de l'appel au ChatClient.
 
