@@ -180,7 +180,7 @@ NOTE: Les modèles (LLM) sont formés pour détecter quand appeler une fonction 
 
 == L'envoie de la fonction au LLM
 
-Pour envoyer une ou plusieurs fonctions dans le prompt, Spring AI simplifie le processus en permettant de définir un @Bean qui retourne une `java.util.Function`, comme nous l'avons fait pour notre fonction `obtenirStatutCommande`. Il suffit ensuite de fournir le nom du bean défini dans le contexte de l'application en option via *defaultFunctions* ou *functions* lors de l'appel au ChatClient.
+Pour envoyer une ou plusieurs fonctions dans le prompt, Spring AI simplifie le processus en permettant de définir une méthode annotée `@Bean` qui retourne une `java.util.Function`, comme nous l'avons fait pour notre fonction `obtenirStatutCommande`. Il suffit ensuite de fournir le nom du bean défini dans le contexte de l'application en option via `defaultFunctions()` ou `functions()` lors de l'appel au ChatClient.
 
 Au niveau ChatClient.Builder, vous pouvez spécifier le prompt par défaut. https://docs.spring.io/spring-ai/reference/1.0/api/chatclient.html#_other_defaults[consulter les valeurs par défaut^] du prompt.
 
