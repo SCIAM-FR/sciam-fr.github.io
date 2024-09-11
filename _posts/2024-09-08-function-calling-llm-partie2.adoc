@@ -170,7 +170,7 @@ public class FunctionConfiguration {
 ----
 
 <1> Annotée avec *@Bean*, cette méthode définit un bean Spring.
-<2> Cette fonction est décrite par l'annotation *@Description*. 
+<2> Cette fonction est décrite par l'annotation `@Description`. 
 Importante pour le LLM, la description explique l'objectif de la fonction et aide le modèle à choisir la bonne fonction pour obtenir une réponse précise.
 <3> La méthode *obtenirStatutCommande* renvoi une `java.util.Function` qui prend en entrée un objet *Commande* et renvoie un objet *Statut*.
 
