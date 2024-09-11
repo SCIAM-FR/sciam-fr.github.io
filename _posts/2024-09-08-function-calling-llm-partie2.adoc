@@ -110,7 +110,7 @@ public DemoController(ChatClient.Builder chatClient) {
 }
 ----
 
-Pour tester notre client de chat, nous allons créer une méthode *askOrderStatus* qui recevra un numéro de commande en paramètre et utilisera le ChatClient pour construire le prompt à envoyer au LLM.
+Pour tester notre client de chat, nous allons créer une méthode `askOrderStatus()` qui recevra un numéro de commande en paramètre et utilisera le `ChatClient` pour construire le prompt à envoyer au LLM.
 
 [source,java]
 ----
