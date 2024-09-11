@@ -229,7 +229,7 @@ Il représente des questions ou toute autre forme d'entrée à laquelle le LLM d
 <4> Appel au LLM
 <5> Récupération de la réponse au format texte
 
-NOTE: La méthode `functions` ou `defaultFunctions` accepte une liste de noms de fonctions.
+NOTE: La méthode `functions()` ou `defaultFunctions()` accepte une liste de noms de fonctions.
 
 Après avoir redémarré notre application, testons notre API en accédant à ce lien :
 
