@@ -143,7 +143,7 @@ NOTE: Les aspects sécurité et confidentialité de données ne sont pas pris en
 
 La création de fonctions ou services spécifiques, désignés ici comme des outils (*Tools*), sont des fonctions que le LLM peut utiliser pour accomplir des tâches spécifiques.
 
-Dans notre exemple, nous allons configurer une fonction spécifique pour effectuer une action précise : *récupérer le statut de la commande dans un `DATASET`.*
+Dans notre exemple, nous allons configurer une fonction spécifique pour effectuer une action précise : récupérer le statut de la commande dans un `DATASET`.
 
 [source,java]
 ----
