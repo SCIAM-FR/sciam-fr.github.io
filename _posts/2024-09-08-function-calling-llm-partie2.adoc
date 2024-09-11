@@ -139,7 +139,7 @@ Nous allons tirer parti de la fonctionnalité *Function Calling* pour permettre 
 
 NOTE: Les aspects sécurité et confidentialité de données ne sont pas pris en charge, pour garder l’exemple simple.
 
-== Créer une fonction avec Spring AI
+== La création d'une fonction avec Spring AI
 
 La création de fonctions ou services spécifiques, désignés ici comme des outils (*Tools*), sont des fonctions que le LLM peut utiliser pour accomplir des tâches spécifiques.
 
