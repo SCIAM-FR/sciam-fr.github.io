@@ -82,7 +82,7 @@ Dans notre cas d'utilisation, nous allons développer une fonction qui renvoie l
 == La mise en place du ChatClient
 
 Le https://docs.spring.io/spring-ai/reference/1.0/api/chatclient.html[ChatClient^] fournit une API pour interagir avec un LLM, prenant en charge à la fois des programmations synchrones et réactives. 
-Cette API permet de créer des prompts, constituées de messages, qui sont envoyées au modèle pour guider sa réponse et son comportement.
+Cette API permet de créer des prompts, constitués de messages, qui sont envoyés au modèle pour guider sa réponse et son comportement.
 
 Nous allons mettre en place un contrôleur REST pour configurer notre *ChatClient*.
 
