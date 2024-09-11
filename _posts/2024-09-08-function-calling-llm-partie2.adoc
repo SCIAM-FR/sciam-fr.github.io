@@ -53,7 +53,7 @@ Maintenant, ajoutons la dépendance pour l’intégration du Function Calling av
 
 == La configuration de l’application
 
-Spring AI offre une auto-configuration pour l’ensemble de LLM supporté.
+Spring AI offre une auto-configuration pour l’ensemble des LLM supportés.
 
 Nous avons besoin d’une clé API que vous pouvez créer sur la https://console.mistral.ai/api-keys[console Mistral^] pour utiliser le LLM avec Spring AI.
 
