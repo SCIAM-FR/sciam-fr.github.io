@@ -137,7 +137,7 @@ Merci de votre compréhension.`
 
 Nous allons tirer parti de la fonctionnalité *Function Calling* pour permettre au LLM d'accéder aux données du système et obtenir le statut de la commande.
 
-NOTE: Les aspects sécurité et confidentialité de données ne sont pas prise en charge, pour garder l’exemple simple.
+NOTE: Les aspects sécurité et confidentialité de données ne sont pas pris en charge, pour garder l’exemple simple.
 
 == Créer une fonction avec Spring AI
 
