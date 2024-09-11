@@ -133,7 +133,7 @@ _Réponse du LLM :_
 Veuillez contacter le service client ou vérifier le statut sur le site web de votre fournisseur. 
 Merci de votre compréhension.`
 
-*Ici, nous constatons que le LLM nous informe clairement qu'il n'a pas accès aux informations de la commande.*
+Ici, nous constatons que le LLM nous informe clairement qu'il n'a pas accès aux informations de la commande.
 
 Nous allons tirer parti de la fonctionnalité *Function Calling* pour permettre au LLM d'accéder aux données du système et obtenir le statut de la commande.
 
