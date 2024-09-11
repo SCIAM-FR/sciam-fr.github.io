@@ -176,7 +176,7 @@ Importante pour le LLM, la description explique l'objectif de la fonction et aid
 
 Spring AI simplifie l'invocation de fonctions en vous permettant d'enregistrer une https://docs.oracle.com/javase/8/docs/api/?java/util/function/Function.html[Java Function^] en tant que `@Bean` et de définir sa description avec `@Description`. Il gère l'invocation pour vous, vous n'avez qu'à fournir la définition de la fonction et le nom du bean dans vos options de prompt.
 
-NOTE: Les modèles (LLM) sont formé pour détecter quand appeler une fonction et répondre avec un `JSON` conforme à la signature de la fonction définie.
+NOTE: Les modèles (LLM) sont formés pour détecter quand appeler une fonction et répondre avec un `JSON` conforme à la signature de la fonction définie.
 
 == Envoyer la fonction au LLM
 
