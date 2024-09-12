@@ -1,0 +1,247 @@
+= Du Concept à l'Action : Le Function Calling des LLM et son Utilisation avec Spring AI - Partie 2
+:page-navtitle:Du Concept à l'Action : Le Function Calling des LLM et son Utilisation avec Spring AI - Partie 2
+:page-excerpt: Ce second article se concentre  sur l'implémentation pratique du Function Calling avec Spring AI dans une application Java
+:layout: post
+:author: rickenbazolo
+:page-tags: [Java, Spring Boot, Spring AI, IA, LLM, Function Calling, Agent AI, Tools]
+:docinfo: shared-footer
+:page-vignette: function_calling_llm_partie2.png
+:page-vignette-licence: 'Image générée par l'IA'
+:page-liquid:
+:showtitle:
+:page-categories: software llm news
+
+Le Function Calling introduit une capacité clé pour les LLM link:{% post_url 2024-08-28-function-calling-llm-partie1 %}[(Partie 1)^], leur permettant d'interagir directement avec les données et les systèmes d'entreprise. 
+Grâce à cette fonctionnalité, les développeurs peuvent créer des applications plus interactives et fonctionnelles. 
+En intégrant les LLM aux systèmes et API externes, ceux-ci deviennent de véritables agents IA, capables de réaliser une large gamme de tâches de manière autonome et efficace, transformant ainsi les applications en systèmes intelligents et proactifs.
+
+Ce second article se concentre sur l'implémentation pratique du *Function Calling* avec https://spring.io/projects/spring-ai[Spring AI^] dans une application Spring Boot. 
+Nous y expliquerons étape par étape comment configurer et intégrer cette fonctionnalité pour permettre à votre application de tirer pleinement parti des capacités des LLM, en déclenchant des actions concrètes et automatisées en réponse à des interactions utilisateur. 
+Cette partie mettra en lumière les aspects techniques pour illustrer l'utilisation du Function Calling dans un environnement Spring.
+
+== L’intégration du Function Calling avec Spring AI
+
+*Spring AI* prend en charge les principaux fournisseurs de modèles tels que https://platform.openai.com/docs/overview[OpenAI^], https://docs.mistral.ai[Mistral AI^], https://www.anthropic.com[Anthropic^] qui ont des versions de LLM qui supportent le Function Calling.
+
+Pour exploiter les capacités des LLM dans votre application Spring Boot, il est nécessaire d'ajouter une ou plusieurs dépendances spécifiques.
+
+== Les dépendances
+
+À la date de rédaction de cet article, le projet Spring AI est actuellement en https://docs.spring.io/spring-ai/reference/1.0/index.html[version 1.0.0-M2^], avec des artefacts disponibles dans les dépôts Spring Milestone et Snapshot.
+Pour y accéder, vous devez ajouter les références aux référentiels Spring Milestone dans votre fichier pom.xml.
+
+[source,xml]
+----
+<repositories>
+    <repository>
+        <id>spring-milestones</id>
+        <name>Spring milestones</name>
+        <url>https://repo.spring.io/milestone</url>
+    </repository>
+</repositories>
+----
+
+Maintenant, ajoutons la dépendance pour l’intégration du Function Calling avec Mistral AI :
+
+[source,xml]
+----
+<dependency>
+      <groupId>org.springframework.ai</groupId>
+      <artifactId>spring-ai-mistral-ai-spring-boot-starter</artifactId>
+</dependency>
+----
+
+== La configuration de l’application
+
+Spring AI offre une auto-configuration pour l’ensemble des LLM supportés.
+
+Nous avons besoin d’une clé API que vous pouvez créer sur la https://console.mistral.ai/api-keys[console Mistral^] pour utiliser le LLM avec Spring AI.
+
+[source,yml]
+----
+spring:
+  ai:
+    mistralai:
+      api-key: ${MISTRAL_AI_API_KEY} <1>
+      chat:
+        options:
+          model: mistral-small-latest <2>
+----
+
+<1> Configuration de la clé API pour utiliser le modèle Mistral 
+<2> Définition du nom du modèle à utiliser
+
+NOTE: Actuellement, il n'est pas possible d'utiliser plusieurs modèles avec l'auto-configuration dans une même application. Si vous souhaitez utiliser la configuration par défaut, vous devez spécifier lequel activer en désactivant les autres via les propriétés appropriées, par exemple en mettant `spring.ai.mistralai.chat.enabled=false` ou `spring.ai.azure.openai.chat.enabled=false` si vous avez configuré à la fois Mistral et Azure OpenAI dans votre application.
+
+Cette configuration de base permet à notre application d'utiliser le Function Calling de Mistral avec le modèle *mistral-small-latest*.
+
+NOTE: Actuellement pour Mistral, le Function Calling est disponible pour les modèles suivants : `Mistral Small`; `Mistral Large`; `Mixstral 8x22B`; `Mistral Nemo`
+
+Dans notre cas d'utilisation, nous allons développer une fonction qui renvoie le statut d'une commande en utilisant son numéro de commande.
+
+== La mise en place du ChatClient
+
+Le https://docs.spring.io/spring-ai/reference/1.0/api/chatclient.html[ChatClient^] fournit une API pour interagir avec un LLM, prenant en charge à la fois des programmations synchrones et réactives. 
+Cette API permet de créer des prompts, constitués de messages, qui sont envoyés au modèle pour guider sa réponse et son comportement.
+
+Nous allons mettre en place un contrôleur REST pour configurer notre `ChatClient`.
+
+[source,java]
+----
+@RestController
+public class DemoController {
+
+    private final ChatClient chatClient;
+
+    public DemoController(ChatClient.Builder chatClient) {
+        this.chatClient = chatClient.build();
+    }
+}
+----
+
+Ensuite, nous allons définir un message système par défaut pour attribuer un rôle à notre IA.
+
+[source,java]
+----
+public DemoController(ChatClient.Builder chatClient) {
+        this.chatClient = chatClient
+                .defaultSystem("Vous êtes un assistant qui donne l'état des commandes en fonction du numéro de commande.")
+                .build();
+}
+----
+
+Pour tester notre client de chat, nous allons créer une méthode `askOrderStatus()` qui recevra un numéro de commande en paramètre et utilisera le `ChatClient` pour construire le prompt à envoyer au LLM.
+
+[source,java]
+----
+@GetMapping(value = "/statut")
+public String askOrderStatus(String numeroCommande) {
+    return chatClient.prompt()
+            .user("Quel est le statut de la commande" + numeroCommande + "?")
+            .call()
+            .content();
+}
+----
+
+Après avoir démarré notre application, testons notre API en accédant à ce lien :
+
+http://localhost:8080/statut?numeroCommande=0010
+
+_Réponse du LLM :_ 
+
+`Je n'ai pas accès aux informations de commande en temps réel. 
+Veuillez contacter le service client ou vérifier le statut sur le site web de votre fournisseur. 
+Merci de votre compréhension.`
+
+Ici, nous constatons que le LLM nous informe clairement qu'il n'a pas accès aux informations de la commande.
+
+Nous allons tirer parti de la fonctionnalité *Function Calling* pour permettre au LLM d'accéder aux données du système et obtenir le statut de la commande.
+
+NOTE: Les aspects sécurité et confidentialité de données ne sont pas pris en charge, pour garder l’exemple simple.
+
+== La création d'une fonction avec Spring AI
+
+La création de fonctions ou services spécifiques, désignés ici comme des outils (*Tools*), sont des fonctions que le LLM peut utiliser pour accomplir des tâches spécifiques.
+
+Dans notre exemple, nous allons configurer une fonction spécifique pour effectuer une action précise : récupérer le statut de la commande dans un `DATASET`.
+
+[source,java]
+----
+@Configuration
+public class FunctionConfiguration {
+
+    public record Statut(String statut) {}
+
+    public record Commande(String numero) {}
+
+    private final Map<Commande, Statut> DATASET = Map.of(
+        new Commande("0010"), new Statut("en cours"),
+        new Commande("0011"), new Statut("terminée"),
+        new Commande("0012"), new Statut("en cours"),
+        new Commande("0013"), new Statut("terminée")
+    );
+
+    @Bean <1>
+    @Description("Obtenir le statut de la commande") <2>
+    public Function<Commande, Statut> obtenirStatutCommande() { <3>
+        return (o) -> DATASET.getOrDefault(o, new Statut("non trouvé"));
+    }
+}
+----
+
+<1> Annotée avec `@Bean`, cette méthode définit un bean Spring.
+<2> Cette fonction est décrite par l'annotation `@Description`. 
+Importante pour le LLM, la description explique l'objectif de la fonction et aide le modèle à choisir la bonne fonction pour obtenir une réponse précise.
+<3> La méthode `obtenirStatutCommande()` renvoi une `java.util.Function` qui prend en entrée un objet `Commande` et renvoie un objet `Statut`.
+
+Spring AI simplifie l'invocation de fonctions en vous permettant d'enregistrer une https://docs.oracle.com/javase/8/docs/api/?java/util/function/Function.html[Java Function^] en tant que `@Bean` et de définir sa description avec `@Description`. Il gère l'invocation pour vous, vous n'avez qu'à fournir la définition de la fonction et le nom du bean dans vos options de prompt.
+
+NOTE: Les modèles (LLM) sont formés pour détecter quand appeler une fonction et répondre avec un `JSON` conforme à la signature de la fonction définie.
+
+== L'envoi de la fonction au LLM
+
+Pour envoyer une ou plusieurs fonctions dans le prompt, Spring AI simplifie le processus en permettant de définir une méthode annotée `@Bean` qui retourne une `java.util.Function`, comme nous l'avons fait pour notre fonction `obtenirStatutCommande`. Il suffit ensuite de fournir le nom du bean défini dans le contexte de l'application en option via `defaultFunctions()` ou `functions()` lors de l'appel au ChatClient.
+
+Au niveau ChatClient.Builder, vous pouvez spécifier le prompt par défaut. https://docs.spring.io/spring-ai/reference/1.0/api/chatclient.html#_other_defaults[consulter les valeurs par défaut^] du prompt.
+
+[source,java]
+----
+public DemoController(ChatClient.Builder chatClient) {
+        this.chatClient = chatClient
+                .defaultSystem("Vous êtes un assistant qui donne l'état des commandes en fonction du numéro de commande.")
+                .defaultFunctions("obtenirStatutCommande")
+                .build();
+}
+----
+
+Récupération de la réponse 
+
+[source,java]
+----
+@GetMapping(value = "/statut")
+public String askOrderStatus(String numeroCommande) {
+    return chatClient.prompt()
+            .user("Quel est le statut de la commande " + numeroCommande+ "?")
+            .call()
+            .content();
+}
+----
+
+Pour une configuration spécifique, nous pouvons utiliser ce modèle sans passer par une configuration par défaut.
+
+[source,java]
+----
+@GetMapping(value = "/statut")
+public String askOrderStatus(String numeroCommande) {
+    return chatClient.prompt()
+            .system("Vous êtes un assistant qui donne l'état des commandes en fonction du numéro de commande.") <1>
+            .user("Quel est le statut de la commande " + numeroCommande+ "?") <2>
+            .functions("obtenirStatutCommande") <3>
+            .call() <4>
+            .content(); <5>
+}
+----
+
+<1> Le message de type `SYSTEM` est transmis en entrée et fournit des instructions de haut niveau pour guider la conversation avec le LLM. Par exemple, il peut être utilisé pour attribuer un rôle au LLM, lui demander de se comporter comme un certain personnage, ou de fournir des réponses dans un format spécifique.
+<2> Le message de type `USER`, qui est transmis en tant qu'entrée, provient de l'utilisateur final ou du développeur. 
+Il représente des questions ou toute autre forme d'entrée à laquelle le LLM doit répondre.
+<3> Enregistre le nom de la fonction à envoyer au LLM
+<4> Appel au LLM
+<5> Récupération de la réponse au format texte
+
+NOTE: La méthode `functions()` ou `defaultFunctions()` accepte une liste de noms de fonctions.
+
+Après avoir redémarré notre application, testons notre API en accédant à ce lien :
+
+http://localhost:8080/statut?numeroCommande=0010
+
+_Réponse du LLM :_ 
+
+`Le statut de la commande 0010 est en cours.`
+
+== Conclusion
+
+Ce second article explique comment intégrer le Function Calling avec *Spring AI* dans une application Spring Boot.
+L'article détaille l'ajout des dépendances nécessaires, la configuration des modèles LLM, et la création de fonctions spécifiques que le modèle peut appeler pour interagir avec des données.
+Un exemple est donné avec une API REST capable de retourner le statut d'une commande, illustrant ainsi l'utilisation pratique de cette technologie pour rendre les applications plus dynamiques et réactives.
+En utilisant cette fonctionnalité, les développeurs peuvent transformer leurs applications en agents intelligents capables d'exécuter des actions automatisées en réponse aux interactions des utilisateurs.
