@@ -28,33 +28,27 @@ Les Protocol Buffers (ou simplement Protobuf) sont un mécanisme de sérialisati
 
 Examinons de plus près la syntaxe de Protobuf :
 
-[width="100%",cols="100%",options="header",]
-|===
-a|
-*syntax = "proto3";*
+[source,protobuf]
+----
+syntax = "proto3";
 
-*package com.test.user; +
- +
-message User \{ +
-int32 id = 1; +
-string name = 2; +
-string email = 3; +
-Role role = 4; +
-bool is_blocked = 5; +
-}*
+package com.test.user;
 
-*enum Role \{*
+message User {
+ int32 id = 1;
+ string name = 2;
+ string email = 3;
+ Role role = 4;
+ bool is_blocked = 5;
+}
 
-*ROLE_UNSPECIFIED = 0;*
-
-*USER = 1;*
-
-*SUPER_USER = 2;*
-
-*ADMIN = 3; +
-}*
-
-|===
+enum Role {
+ ROLE_UNSPECIFIED = 0;
+ USER = 1;
+ SUPER_USER = 2;
+ ADMIN = 3;
+}
+----
 
 Donc, ce qu’on voit :
 
@@ -70,29 +64,27 @@ Ce sont essentiellement tous les détails de la syntaxe Protobuf. Ensuite, je pr
 
 Pour utiliser gRPC, il est d’abord nécessaire de créer un service et les méthodes requises (évidemment, à l'aide de Protobuf). Voyons tout de suite un exemple de ce type de service :
 
-[width="100%",cols="100%",options="header",]
-|===
-a|
-*syntax = "proto3";*
+[source,protobuf]
+----
+syntax = "proto3";
 
-*package com.test.service;*
+package com.test.service;
 
-*import "user.proto"; +
- +
-service UserService \{ +
-rpc GetUserById (UserId) returns (com.test.user.User); +
-rpc GetAllUsers () returns (UserList); +
-} +
- +
-message UserId \{ +
-int32 id = 1; +
-} +
- +
-message UserList \{ +
-repeated com.test.user.User users = 1; +
-}*
+import "user.proto";
 
-|===
+service UserService {
+ rpc GetUserById (UserId) returns (com.test.user.User);
+ rpc GetAllUsers () returns (UserList);
+}
+
+message UserId {
+ int32 id = 1;
+}
+
+message UserList {
+ repeated com.test.user.User users = 1;
+}
+----
 
 Comme dans l'exemple précédent, on commence par la définition de la version de la syntaxe et du package, puis on voit une nouveauté : nous importons le modèle d’utilisateur créé précédemment à partir d’un autre fichier à l’aide du mot-clé “import” pour utiliser le modèle correspondant dans le fichier actuel.
 
@@ -180,27 +172,29 @@ Bien sûr, l'ajout de Protobuf à la place de JSON présente également quelques
 
 Pour transmettre Protobuf sur le réseau, il faut spécifier "application/protobuf" ou "application/x-protobuf" comme type de média (MediaType). Par exemple, dans Quarkus, cela se présenterait ainsi :
 
-[width="100%",cols="100%",options="header",]
-|===
-|@Produces("application/protobuf")
-|===
+[source,java]
+----
+@Produces("application/protobuf")
+----
 
 Dans Spring, un peu plus de code est nécessaire, vous devez ajouter un nouveau convertisseur à votre service :
 
-[width="100%",cols="100%",options="header",]
-|===
-|@Bean +
-ProtobufHttpMessageConverter protobufHttpMessageConverter() \{ +
-return new ProtobufHttpMessageConverter(); +
+
+[source,java]
+----
+@Bean
+ProtobufHttpMessageConverter protobufHttpMessageConverter() {
+    return new ProtobufHttpMessageConverter();
 }
-|===
+----
 
 Et pour travailler avec JavaScript/TypeScript, il faut modifier le "responseType" de chaque requête HTTP en "arraybuffer" (probablement en utilisant un intercepteur) :
 
-[width="100%",cols="100%",options="header",]
-|===
-|responseType: "arraybuffer"
-|===
+
+[source,javascript]
+----
+responseType: "arraybuffer"
+----
 
 == Conclusion
 
