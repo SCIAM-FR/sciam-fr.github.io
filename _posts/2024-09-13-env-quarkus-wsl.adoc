@@ -11,13 +11,13 @@
 :page-liquid:
 :page-categories: software
 
-Développer avec Quarkus sous Linux offre certains avantages comme le fait de bénéficier d’un système de fichiers sensible à la casse par défaut, de pouvoir installer plus facilement les prérequis à la compilation native ou encore de pouvoir compiler un exécutable natif de façon statique. 
+Développer avec Quarkus sous Linux offre certains avantages comme le fait de bénéficier d’un système de fichiers sensible à la casse par défaut, de pouvoir installer plus facilement les prérequis à la compilation native ou encore de pouvoir compiler un exécutable natif sous Linux de façon statique. 
 
 Certains développeurs apprécieront également le fait de pouvoir développer dans un environnement proche voir identique à l’environnement d’exécution qui, dans la plupart des cas, est un conteneur Linux. 
 
 Les développeurs travaillant sous Windows peuvent également bénéficier d’un environnement Linux sur leur machine, et cela n’a jamais été aussi simple depuis l’arrivée de Windows Subsystem for Linux (WSL).
 
-Dans ce guide, nous allons voir comment configurer un environnement de développement Quarkus prêt à l'emploi avec WSL.
+Dans ce guide, nous allons voir comment configurer un environnement de développement Quarkus prêt à l'emploi avec WSL. Nous utiliserons la version 2 de WSL, qui est la version utilisée par défaut dans Windows 11.
 
 
 == L'installation d'Ubuntu dans WSL
@@ -31,7 +31,7 @@ Dans un terminal Windows, nous exécutons la commande suivante :
 wsl --install
 ----
 
-La distribution Linux installée par défaut est Ubuntu, mais il est possible de spécifier une autre distribution Linux.
+La distribution Linux installée par défaut est Ubuntu, mais il est possible de spécifier une autre distribution Linux parmi celles proposées Microsoft.
 
 À la fin de l'installation, après avoir entré un nom d'utilisateur ainsi qu'un mot de passe, nous sommes redirigés vers le shell Bash d'Ubuntu.
 
@@ -110,16 +110,18 @@ cd projects
 quarkus create app
 ----
 
-Enfin, nous naviguons dans le répertoire du projet :
+L'application est alors générée dans un répertoire nommé *code-with-quarkus*.
+
+Enfin, nous naviguons dans ce répertoire :
 
 [source,shell]
 ----
 cd code-with-quarkus
 ----
 
-== La build d'un projet Quarkus avec Quarkus CLI
+== Le build d'un projet Quarkus avec Quarkus CLI
 
-Pour lancer la build du projet, nous exécutons la commande suivante :
+Pour lancer le build du projet, nous exécutons la commande suivante :
 
 [source,shell]
 ----
@@ -134,14 +136,14 @@ Nous pouvons alors démarrer l'application :
 java -jar target/quarkus-app/quarkus-run.jar
 ----
 
-Puis, nous vérifions le bon fonctionnement de l'application en allant sur http://localhost:8080/hello.
+Puis, nous vérifions le bon fonctionnement de l'application en allant sur http://localhost:8080/hello depuis Windows.
 
 La page doit afficher le message suivant : Hello from Quarkus REST.
 
 Nous pouvons maintenant quitter l'application (CTRL+C).
 
 
-== La build native d'un projet Quarkus avec Quarkus CLI
+== Le build natif d'un projet Quarkus avec Quarkus CLI
 
 Un des principaux avantages de Quarkus est de pouvoir compiler nativement une application afin que celle-ci démarre plus rapidement et soit moins consommatrice en ressources CPU et RAM.
 
@@ -151,27 +153,27 @@ Afin de pouvoir compiler nativement l'application, nous devons au préalable ins
 sudo apt-get -y install build-essential libz-dev zlib1g-dev
 ----
 
-Nous pouvons alors exécuter la build native du projet avec Quarkus CLI :
+Nous pouvons alors exécuter le build natif du projet avec Quarkus CLI :
 
 [source,shell]
 ----
 quarkus build --native
 ----
 
-Une fois la build terminée, nous pouvons démarrer l'application avec la commande suivante :
+Une fois le build terminée, nous pouvons démarrer l'application avec la commande suivante :
 
 [source,shell]
 ----
 ./target/code-with-quarkus-1.0.0-SNAPSHOT-runner
 ----
 
-On notera que le démarrage de l'application est plus rapide que dans le cas d'un compilation classique.
+On notera que le démarrage de l'application est plus rapide que dans le cas de l'exécution dans une JVM.
 
-== La build d'une image container avec Quarkus CLI
+== Le build d'une image avec Quarkus CLI
 
-Il est très frequent d'avoir à construire une image container en vue de la déployer dans une infrastructure type Kubernetes.
+Il est très fréquent d'avoir à construire une image en vue de la déployer dans une infrastructure type Kubernetes.
 
-Afin de pouvoir générer une image container, nous avons besoin d'un environnement d'exécution tel que Podman.
+Afin de pouvoir générer une image, nous avons besoin d'un environnement d'exécution tel que Podman.
 
 Nous installons Podman avec la commande suivante :
 
@@ -181,26 +183,28 @@ sudo apt-get -y install podman
 ----
 
 Nous ajoutons l'extension container-image-podman à notre projet Quarkus.
-Cette dernière permet la génération d'images container via Podman.
+Cette dernière permet la génération d'images via Podman.
 
 [source,shell]
 ----
 quarkus extension add container-image-podman
 ----
 
-Nous pouvons alors exécuter la build de l'image container :
+Nous pouvons alors exécuter le build de l'image :
 
 [source,shell]
 ----
 quarkus image build podman --native -Dquarkus.native.container-build=true
 ----
 
-Une fois la phase de build terminée, nous pouvons démarrer l'image container dans Podman :
+Une fois la phase de build terminée, nous pouvons démarrer l'image dans Podman :
 
 [source,shell]
 ----
-podman run localhost/user/code-with-quarkus:1.0.0-SNAPSHOT
+podman run -p 8080:8080 localhost/user/code-with-quarkus:1.0.0-SNAPSHOT
 ----
+
+Comme dans les exemples précédents, nous pouvons accéder à l'application en allant sur http://localhost:8080/hello depuis Windows.
 
 == L'installation de Visual Studio Code pour développer en remote depuis WSL
 
@@ -236,5 +240,5 @@ Une fois la partie serveur installée, le projet Quarkus s'ouvre dans l'éditeur
 == Conclusion
 
 Nous avons vu dans ce guide à quel point il était simple et rapide de configurer un environnement Quarkus prêt à l'emploi avec WSL.
-Les outils nécessaires pour pouvoir développer avec Quarkus sont installés de manière transparente, sans impacter la machine Windows.
-Et grâce au mode remote de Visual Studio Code, il est également possible de développer dans WSL depuis Windows.
+L'environnement Linux ainsi que les outils nécessaires pour pouvoir développer avec Quarkus sont installés de manière transparente, sans nécessiter l'installation d'une machine virtuelle traditionnelle ou la mise en place d'un dual-boot.
+Enfin, développer dans WSL depuis Windows de façon productive est rendu possible grâce au mode remote de Visual Studio Code.
