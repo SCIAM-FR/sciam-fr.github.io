@@ -197,14 +197,14 @@ Comparons maintenant gRPC et REST en nous basant sur tout ce qui a été mention
 En résumé, nous pouvons dire que gRPC est excellent pour les systèmes exigeant des performances et une vitesse élevées, les architectures de microservices et les applications en temps réel nécessitant un flux bidirectionnel.
 En revanche, REST reste une solution simple et universelle pour les API publiques et les bibliothèques, les applications web et les projets pour lesquels la simplicité de mise en œuvre et de maintenance est primordiale.
 
-En tenant compte de tout cela, essayons de répondre à la question : dois-je utiliser gRPC ?
-Si vous travaillez sur un projet sur lequel l'interaction avec l'utilisateur se fait directement via un navigateur ou si vous créez une API publique (y compris pour interagir avec d'autres microservices qui n'ont pas été écrits et maintenus par vous), ma réponse est non.
-Cependant, si vous travaillez sur un projet où la communication se fait directement entre les services ou nécessite une connexion bidirectionnelle et de hautes performances (et il y en a beaucoup dans le secteur d'entreprise), alors la réponse est plutôt oui — à condition que ce ne soit pas un projet legacy et que vous disposiez du temps nécessaire pour la configuration.
+== Quarkus et gRPC
+
+
+
+== Solution hybride
 
 Oui, je suis d'accord, gRPC ne semble pas être une solution miracle et peut être rebutant en raison de sa complexité de configuration potentielle.
 Cependant, ne fermez pas cet article trop rapidement, j'ai une dernière section pour [line-through]#vous attirer du côté obscur de la force# vous intéresser davantage.
-
-== Solution hybride
 
 Étant donné que gRPC peut être trop complexe à mettre en œuvre et présente des limitations en termes de fonctionnement dans les navigateurs, je souhaiterais proposer une solution hybride : l'utilisation de REST avec Protobuf.
 Cette option peut sembler étrange (pourquoi changer quelque chose qui fonctionne déjà bien, comme JSON), mais examinons les avantages potentiels de cette solution :
@@ -252,5 +252,9 @@ gRPC est un protocole réseau assez intéressant et en même temps un peu inhabi
 Bien sûr, il ne peut en aucun cas remplacer REST, mais il n'est pas conçu pour cela non plus.
 gRPC est une excellente alternative à l'approche standard et vise principalement à exploiter toute la puissance du standard HTTP/2, ce qui en fait un outil très puissant en termes de performances, de compacité et de flux de données bidirectionnels.
 
-Je voudrais également souligner Protobuf.
-Cette technologie n'est pas seulement à la base du framework gRPC, mais peut aussi être utilisée indépendamment (y compris dans les projets web), offrant une alternative très intéressante à l'approche standard basée sur JSON.
+=== Liens utiles
+
+* https://grpc.io/[window=_blank] - Le site officiel de gRPC
+* https://github.com/grpc[window=_blank] - Le compte GitHub du framework gRPC et des projets associés
+* https://protobuf.dev/[window=_blank] - Le site officiel des Protocol Buffers
+* https://quarkus.io/extensions/io.quarkus/quarkus-grpc/[window=_blank] - Une extension Quarkus pour gRPC
