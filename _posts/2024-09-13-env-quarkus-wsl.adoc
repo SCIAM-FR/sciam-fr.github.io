@@ -49,7 +49,7 @@ Nous devons au préalable installer les dépendances requises par SDKMan! :
 
 [source,shell]
 ----
-sudo apt-get install zip unzip
+sudo apt install zip unzip
 ----
 
 Puis nous installons SDKMan! :
@@ -84,7 +84,7 @@ sdk install java 23.1.4.r21-mandrel
 
 Quarkus CLI est un outil permettant de créer des projets Quarkus, de gérer les extensions et de faciliter les tâches de développement et de build.
 
-Pour installer Quarkus CLI avec SDKMan!, nous exécutons la commande suivante:
+Pour installer Quarkus CLI avec SDKMan!, nous exécutons la commande suivante :
 
 [source,shell]
 ----
@@ -150,7 +150,7 @@ Un des principaux avantages de Quarkus est de pouvoir compiler nativement une ap
 Afin de pouvoir compiler nativement l'application, nous devons au préalable installer quelques dépendances :
 [source,shell]
 ----
-sudo apt-get -y install build-essential libz-dev zlib1g-dev
+sudo apt -y install build-essential libz-dev zlib1g-dev
 ----
 
 Nous pouvons alors exécuter le build natif du projet avec Quarkus CLI :
@@ -160,7 +160,7 @@ Nous pouvons alors exécuter le build natif du projet avec Quarkus CLI :
 quarkus build --native
 ----
 
-Une fois le build terminée, nous pouvons démarrer l'application avec la commande suivante :
+Une fois le build terminé, nous pouvons démarrer l'application avec la commande suivante :
 
 [source,shell]
 ----
@@ -179,7 +179,7 @@ Nous installons Podman avec la commande suivante :
 
 [source,shell]
 ----
-sudo apt-get -y install podman
+sudo apt -y install podman
 ----
 
 Nous ajoutons l'extension container-image-podman à notre projet Quarkus.
@@ -214,11 +214,11 @@ Visual Studio Code (VS Code), avec son extension WSL, permet d'éditer du code d
 
 VS Code est disponible depuis https://code.visualstudio.com/.
 
-Lors de l'installation, il est important de cocher l'option *Add to PATH*. Le PATH étant partagé entre Windows et Ubuntu, nous pourrons alors lancer VS Code directement depuis notre Shell Bash Ubuntu.
+Lors de l'installation, il est important de cocher l'option *Add to PATH*. Le `PATH` étant partagé entre Windows et Ubuntu, nous pourrons alors lancer VS Code directement depuis notre Shell Bash Ubuntu.
 
 Une fois VS Code démarré, nous installons l'extension WSL depuis la vue *Extensions*.
 
-Enfin, nous fermons puis relançons notre terminal Windows afin que la modification du PATH soit prise en compte, et que VS Code soit accessible depuis WSL. 
+Enfin, nous fermons puis relançons notre terminal Windows afin que la modification du `PATH` soit prise en compte, et que VS Code soit accessible depuis WSL. 
 
 Une fois le terminal Windows rouvert, nous accédons au Shell Bash d'Ubuntu en exécutant la commande suivante :
 
@@ -227,7 +227,7 @@ Une fois le terminal Windows rouvert, nous accédons au Shell Bash d'Ubuntu en e
 wsl
 ----
 
-Puis nous ouvrons notre projet Quarkus dans Visual Studio Code :
+Puis, nous ouvrons notre projet Quarkus dans Visual Studio Code :
 
 [source,shell]
 ----
