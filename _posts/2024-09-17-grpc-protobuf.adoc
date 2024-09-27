@@ -27,7 +27,7 @@ C’est à cette question que nous allons essayer de répondre ci-dessous.
 Selon https://grpc.io/[le site Web officiel^], gRPC est un framework RPC moderne, performant et open-source, capable de fonctionner dans n’importe quel environnement.
 Le concept de RPC (Remote Procedure Call) n’est pas nouveau dans le domaine de la programmation.
 Ce protocole, qui permet à un programme sur un service/serveur d’appeler des fonctions sur un autre service/serveur, existe depuis le début des années 80.
-En 2016, Google a lancé un framework basé sur ce protocole et l’a nommé gRPC (comme vous l’aurez deviné, le “g” dans le nom du framework représente “Google”).
+En 2016, Google a lancé un framework basé sur ce protocole et l’a nommé gRPC (cela peut vous surprendre, mais le "g" ne représente pas "Google". En réalité, il a différentes significations selon https://github.com/grpc/grpc/blob/master/doc/g_stands_for.md[les versions du framework^]).
 
 Tout d'abord, il faut noter que gRPC est basé sur HTTP/2, la version du protocole de transfert de données HTTP, successeur de HTTP/1.1, qui a été adoptée comme standard un an avant le lancement du framework.
 Il utilise Protocol Buffers (Protobuf) comme langage de description d’interfaces.
@@ -101,6 +101,25 @@ Le code généré comprend des fichiers Java distincts pour chaque message, ains
 Ces classes (qui sont assez longues, souvent plus de 100 lignes) respectent généralement les conventions JavaBeans, fournissant des getters et setters standard pour chaque champ.
 De plus, des champs et méthodes spécifiques à Protobuf, tels que ceux pour la validation ou la sérialisation des messages, sont générés automatiquement.
 
+== Caractéristiques de gRPC
+
+Avant de passer aux fonctionnalités de gRPC, examinons brièvement ce qu'est RPC et comment cela fonctionne. 
+RPC (Remote Procedure Call) permet à un ou plusieurs services (clients) d’appeler une procédure (fonction) sur un autre service (serveur). 
+Le client envoie une requête au serveur avec le nom de la procédure et ses paramètres, le serveur traite la requête et renvoie le résultat au client. 
+Visuellement, cela ressemble à un appel à un service local, tout en masquant la complexité des communications réseau.
+
+Maintenant, examinons de plus près ce que gRPC peut nous proposer :
+
+* Comme nous l’avons vu précédemment, gRPC fonctionne sur HTTP/2 ou des versions plus récentes, offrant ainsi toutes les fonctionnalités proposées par ces protocoles : multiplexage de plusieurs requêtes sur une seule connexion TCP, compression des en-têtes (HTTP headers), push côté serveur, utilisation du protocole binaire.
+* Le framework propose plusieurs types de connexions entre client et serveur, notamment :
+** *RPC unidirectionnel* : le type de connexion le plus simple, où le client envoie une requête et reçoit une seule réponse du serveur.
+** *Streaming côté serveur* : le client envoie une seule requête mais peut recevoir un flux (stream) de messages en réponse.
+** *Streaming côté client* : ce cas est l'inverse du précédent, où le client envoie un flux (stream) de messages et reçoit une seule réponse du serveur.
+** *Streaming bidirectionnel* : le cas où le client et le serveur utilisent tous deux le streaming pour l'échange de données.
+* Il est possible de terminer l'appel de la fonction grâce à la fonctionnalité d'annulation RPC.
+* gRPC permet d'envoyer des métadonnées personnalisées (détails spécifiques à la requête) sous forme de paires clé-valeur.
+* Le framework prend également en charge l’utilisation d’intercepteurs et l’équilibrage de charge (load balancing).
+
 Ensuite, je propose d’examiner la création de services gRPC.
 
 == Syntaxe d'un service gRPC
@@ -133,6 +152,9 @@ service UserService { <3>
 Pour cela, il suffit de créer une nouvelle entité avec le nom souhaité (``UserService``) et de la marquer avec le mot-clé ``service``. 
 <4> Ensuite, la création des méthodes commence : la méthode est définie à l’aide du mot-clé ``rpc``, suivie du nom de la méthode (``GetUserById``), des types de ses paramètres (``UserId``) ainsi que du type de valeur de retour.
 Visuellement, cela ressemble beaucoup à une interface en Java, n’est-ce pas ?
+
+Pour générer le code à partir de ces messages, il est plus facile d'utiliser des bibliothèques et des plugins spécifiques à chaque langage (par exemple, ``quarkus-grpc`` ou ``protobuf-maven-plugin``). 
+Le code généré vous fournira plusieurs classes, notamment un client gRPC et l'interface pour implémenter un serveur gRPC.
 
 Voilà donc tout ce qu’il faut savoir pour créer un service gRPC.
 Ensuite, je propose de découvrir les avantages de cette approche et de la comparer au standard largement reconnu qu’est REST.
@@ -186,6 +208,8 @@ Comparons maintenant gRPC et REST en nous basant sur tout ce qui a été mention
 |Protocole de transport |HTTP/2 et HTTP/3 |HTTP/1.1, HTTP/2 et HTTP/3
 |Format de données |Protocol Buffers (format binaire) |Différents formats, JSON est le plus souvent utilisé
 |Performance |Plus élevée (latence inférieure, sérialisation plus rapide) |Plus faible (latence supérieure, sérialisation plus lente)
+|Contrats d'API |Appels de procédures à distance (RPC) |Basé sur les conventions HTTP (GET, POST, PUT, DELETE) et les ressources
+|Mode de communication |Requêtes-réponses, streaming |Requêtes-réponses
 |Prise en charge des langages |Supporte de nombreux langages grâce à Protobuf et protoc |Supporté dans tous les langages grâce à HTTP et JSON
 |Flux |Supporte le flux bidirectionnel |Ne supporte pas le flux de données
 |Complexité de configuration |Plus élevée (nécessité de définir des fichiers proto, génération de code) |Plus faible (configuration simple, fonctionne avec HTTP et JSON)
