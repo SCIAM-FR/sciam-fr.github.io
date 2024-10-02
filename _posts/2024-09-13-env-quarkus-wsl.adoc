@@ -1,0 +1,252 @@
+= Créez votre environnement de développement Quarkus en 10 minutes avec WSL
+:author: pcheucle
+:layout: post
+:page-excerpt: Un guide pas à pas pour configurer un environnement de développement Quarkus prêt à l'emploi avec WSL.
+:page-navtitle: Environnement Quarkus avec WSL
+:page-tags: [WSL ,Windows Subsystem for Linux ,Ubuntu ,Java ,Quarkus, Visual Studio Code]
+:post-vignette: wsl.png
+:page-vignette: wsl.png
+:page-vignette-licence: Sources: WSL, Quarkus
+:showtitle:
+:page-liquid:
+:page-categories: software
+
+Développer avec Quarkus sous Linux offre certains avantages comme le fait de bénéficier d’un système de fichiers sensible à la casse par défaut, de pouvoir installer plus facilement les prérequis à la compilation native ou encore de pouvoir compiler un exécutable natif sous Linux de façon statique. 
+
+Certains développeurs apprécieront également le fait de pouvoir développer dans un environnement proche voir identique à l’environnement d’exécution qui, dans la plupart des cas, est un conteneur Linux. 
+
+Les développeurs travaillant sous Windows peuvent également bénéficier d’un environnement Linux sur leur machine, et cela n’a jamais été aussi simple depuis l’arrivée de Windows Subsystem for Linux (WSL).
+
+Dans ce guide, nous allons voir comment configurer un environnement de développement Quarkus prêt à l'emploi avec WSL. Nous utiliserons la version 2 de WSL, qui est la version utilisée par défaut dans Windows 11.
+
+
+== L'installation d'Ubuntu dans WSL
+
+La première étape de notre guide consiste à installer une distribution Linux dans WSL.
+
+Dans un terminal Windows, nous exécutons la commande suivante : 
+
+[source,shell]
+----
+wsl --install
+----
+
+La distribution Linux installée par défaut est Ubuntu, mais il est possible de spécifier une autre distribution Linux parmi celles proposées Microsoft.
+
+À la fin de l'installation, après avoir entré un nom d'utilisateur ainsi qu'un mot de passe, nous sommes redirigés vers le shell Bash d'Ubuntu.
+
+Nous terminons cette étape par la mise à jour du système Ubuntu :
+[source,shell]
+----
+sudo apt update && sudo apt -y upgrade
+----
+
+== L'installation de SDKMan!
+
+SDKMan! est un outil facilitant l'installation et la gestion de SDKs (Java, Scala, Maven, Quarkus, etc.) sur les environnements de type Unix.
+
+Nous devons au préalable installer les dépendances requises par SDKMan! :
+
+[source,shell]
+----
+sudo apt install zip unzip
+----
+
+Puis nous installons SDKMan! :
+
+[source,shell]
+----
+curl -s "https://get.sdkman.io" | bash
+----
+
+Enfin, nous exécutons la commande suivante pour rendre SDKMan! utilisable dans notre terminal :
+
+[source,shell]
+----
+source "/home/user/.sdkman/bin/sdkman-init.sh"
+----
+
+== L'installation du JDK avec SDKMan!
+
+SDKMan! permet d'installer différentes distributions du JDK.
+
+Ici, nous installons Mandrel, une distribution dérivée de GraalVM Community Edition.
+Cette distribution se comporte comme un JDK classique, mais permet également de compiler nativement des applications Quarkus, comme nous le verrons plus loin dans ce guide.
+
+Pour installer Mandrel avec SDKMan!, nous exécutons la commande suivante :
+
+[source,shell]
+----
+sdk install java 23.1.4.r21-mandrel
+----
+
+== L'installation de Quarkus CLI avec SDKMan!
+
+Quarkus CLI est un outil permettant de créer des projets Quarkus, de gérer les extensions et de faciliter les tâches de développement et de build.
+
+Pour installer Quarkus CLI avec SDKMan!, nous exécutons la commande suivante :
+
+[source,shell]
+----
+sdk install quarkus
+----
+
+== La création d'un projet Quarkus avec Quarkus CLI
+
+Nous allons maintenant créer un projet Quarkus de démonstration, qui nous sera utile pour les étapes suivantes de ce guide.
+
+Nous créons au préalable un répertoire pour nos projets :
+
+[source,shell]
+----
+mkdir projects
+----
+
+Puis, dans ce répertoire, nous créons notre projet Quarkus :
+
+[source,shell]
+----
+cd projects
+quarkus create app
+----
+
+L'application est alors générée dans un répertoire nommé *code-with-quarkus*.
+
+Enfin, nous naviguons dans ce répertoire :
+
+[source,shell]
+----
+cd code-with-quarkus
+----
+
+== Le build d'un projet Quarkus avec Quarkus CLI
+
+Pour lancer le build du projet, nous exécutons la commande suivante :
+
+[source,shell]
+----
+quarkus build
+----
+Une fois la phase de build terminée, nous obtenons un fichier Jar exécutable.
+
+Nous pouvons alors démarrer l'application :
+
+[source,shell]
+----
+java -jar target/quarkus-app/quarkus-run.jar
+----
+
+WSL permet d'accéder à l'application s'exécutant dans la distribution Linux depuis Windows, en utilisant `localhost`. 
+
+Nous pouvons alors vérifier le bon fonctionnement de l'application en allant sur http://localhost:8080/hello.
+
+La page doit afficher le message suivant : Hello from Quarkus REST.
+
+Nous pouvons maintenant quitter l'application (CTRL+C).
+
+
+== Le build natif d'un projet Quarkus avec Quarkus CLI
+
+Un des principaux avantages de Quarkus est de pouvoir compiler nativement une application afin que celle-ci démarre plus rapidement et soit moins consommatrice en ressources CPU et RAM.
+
+Avant de pouvoir compiler nativement l'application, nous devons installer les packages supplémentaires dont dépend Mandrel pour produire un exécutable natif.
+On retrouve le package `build-essential` qui contient notamment le compilateur et les bibliothèques de développement C, et `zlib1g-dev` qui contient la bibliothèque de compression zlib :
+
+[source,shell]
+----
+sudo apt -y install build-essential zlib1g-dev
+----
+
+Nous pouvons alors exécuter le build natif du projet avec Quarkus CLI :
+
+[source,shell]
+----
+quarkus build --native
+----
+
+Une fois le build terminé, nous pouvons démarrer l'application avec la commande suivante :
+
+[source,shell]
+----
+./target/code-with-quarkus-1.0.0-SNAPSHOT-runner
+----
+
+On notera que le démarrage de l'application est plus rapide que dans le cas de l'exécution dans une JVM.
+
+== Le build d'une image avec Quarkus CLI
+
+Il est très fréquent d'avoir à construire une image en vue de la déployer dans une infrastructure type Kubernetes.
+
+Afin de pouvoir générer une image, nous avons besoin d'un environnement d'exécution tel que Podman.
+
+Nous installons Podman avec la commande suivante :
+
+[source,shell]
+----
+sudo apt -y install podman
+----
+
+Nous ajoutons l'extension container-image-podman à notre projet Quarkus.
+Cette dernière permet la génération d'images via Podman.
+
+[source,shell]
+----
+quarkus extension add container-image-podman
+----
+
+Nous pouvons alors exécuter le build de l'image :
+
+[source,shell]
+----
+quarkus image build podman --native -Dquarkus.native.container-build=true
+----
+
+NOTE: L'option `-Dquarkus.native.container-build=true` permet d'effectuer le build natif directement dans Podman, sans utiliser le JDK Mandrel installé précédemment dans la distribution Ubuntu. Il est d'ailleurs tout à fait envisageable de remplacer Mandrel par un JDK classique dans la distribution Ubuntu, et d'effectuer les builds natifs uniquement avec Podman.
+
+Une fois la phase de build terminée, nous pouvons démarrer l'image dans Podman :
+
+[source,shell]
+----
+podman run -p 8080:8080 localhost/user/code-with-quarkus:1.0.0-SNAPSHOT
+----
+
+Comme dans les exemples précédents, nous pouvons accéder à l'application en allant sur http://localhost:8080/hello depuis Windows.
+
+== L'installation de Visual Studio Code pour développer en remote depuis WSL
+
+Nous terminons ce guide par l'installation d'un éditeur de code qui nous permettra d'effectuer des changements dans notre projet Quarkus.
+
+Visual Studio Code (VS Code), avec son extension WSL, permet d'éditer du code dans un environnement Linux depuis Windows, en mode *client-serveur*.
+
+NOTE: Le développement en remote avec WSL est également disponible dans la version Ultimate d'IntelliJ IDEA. Le mode remote n'est pas disponible dans Eclipse, mais il est toutefois possible de démarrer l'IDE dans WSL et d'accéder à son interface graphique dans Windows (cela est supporté nativement dans Windows 11).
+
+VS Code est disponible depuis https://code.visualstudio.com/.
+
+Lors de l'installation, il est important de cocher l'option *Add to PATH*. Le `PATH` étant partagé entre Windows et Ubuntu, nous pourrons alors lancer VS Code directement depuis notre Shell Bash Ubuntu.
+
+Une fois VS Code démarré, nous installons l'extension WSL depuis la vue *Extensions*.
+
+Enfin, nous fermons puis relançons notre terminal Windows afin que la modification du `PATH` soit prise en compte, et que VS Code soit accessible depuis WSL. 
+
+Une fois le terminal Windows rouvert, nous accédons au Shell Bash d'Ubuntu en exécutant la commande suivante :
+
+[source,shell]
+----
+wsl
+----
+
+Puis, nous ouvrons notre projet Quarkus dans Visual Studio Code :
+
+[source,shell]
+----
+code /home/user/projects/code-with-quarkus/
+----
+
+VS Code démarre alors dans Windows puis installe la partie serveur sur notre environnement Ubuntu.
+Une fois la partie serveur installée, le projet Quarkus s'ouvre dans l'éditeur.
+
+== Conclusion
+
+Nous avons vu dans ce guide à quel point il était simple et rapide de configurer un environnement Quarkus prêt à l'emploi avec WSL.
+L'environnement Linux ainsi que les outils nécessaires pour pouvoir développer avec Quarkus sont installés de manière transparente, sans nécessiter l'installation d'une machine virtuelle traditionnelle ou la mise en place d'un dual-boot.
+Enfin, développer dans WSL depuis Windows de façon productive est rendu possible grâce au mode remote de Visual Studio Code.
