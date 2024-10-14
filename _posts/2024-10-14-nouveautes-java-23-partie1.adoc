@@ -1,0 +1,832 @@
+= Les nouveautés de Java 23 : Partie 1
+:showtitle:
+:page-navtitle: Les nouveautés de Java 23 : partie 1
+:page-excerpt: Ce premier article sur les nouveautés de Java 23 détaille les fonctionnalités proposées via des JEPs dans la syntaxe et les API notamment par les projets Amber, Loom et Panama.
+:layout: post
+:author: jeanmicheldoudoux
+:page-tags: [Java, Java 23, Projet Amber, Projet Panama, Projet Loom]
+:page-vignette: java-23.png
+:page-liquid:
+:page-categories: software news
+
+Ce premier article est consacré aux nouveautés de Java 23 et détaille les fonctionnalités proposées via des JEPs dans la syntaxe et les API notamment par les projets https://openjdk.org/projects/amber/[Amber], https://openjdk.org/projects/loom/[Loom] et https://openjdk.org/projects/panama/[Panama] d’OpenJDK.
+
+https://openjdk.org/projects/jdk/23/[JDK 23] est la seconde release publiée depuis le JDK 21, la version LTS courante. La version GA 23 du JDK a été publiée le 17 septembre 2024.
+
+Elle contient douze JEPs que l’on peut regrouper en trois catégories :
+
+* Des évolutions dans le langage
+* Des évolutions dans les API
+* Des évolutions dans la JVM
+
+Ces JEPs sont proposées en standard, en preview ou en incubation.
+
+== https://blog.sciam.fr/2024/04/08/nouveautes-java-22-partie1.html#les_fonctionnalités_du_projet_amber[Les JEPs relatives] à la syntaxe
+
+Cinq fonctionnalités dans le JDK 23 concernent la syntaxe du langage Java, une standard, deux en première preview et deux pour une nouvelle preview :
+
+
+* JEP 455 : https://openjdk.org/jeps/455[Primitive Types in Patterns&#44; instanceof&#44; and switch (Preview)]
+* JEP 467 : https://openjdk.org/jeps/467[Markdown Documentation Comments]
+* JEP 476 : https://openjdk.org/jeps/476[Module Import Declarations (Preview)]
+* JEP 477 : https://openjdk.org/jeps/477[Implicitly Declared Classes and Instance Main Methods (Third Preview)]
+* JEP 482 : https://openjdk.org/jeps/482[Flexible Constructor Bodies (Second Preview)]
+
+=== Primitive Types in Patterns, instanceof, and switch (Preview)
+
+Cette fonctionnalité en preview étend les capacités des patterns, de l’opérateur `instanceof` et de l’instruction `switch` pour fonctionner avec tous les types primitifs, ce qui permet une exploitation plus uniforme des données et rend le code qui doit gérer différents types plus lisible et moins sujet aux erreurs.
+
+La https://openjdk.org/jeps/455[JEP 455] introduit deux fonctionnalités :
+
+* Primitive type patterns : pour utiliser tous les types primitifs dans le pattern matching. Cela élimine le besoin d’autoboxing et d’unboxing inutiles des valeurs
+* Tous les types primitifs peuvent maintenant être utilisés dans l’opérateur `instanceof` et les expressions et les instructions `switch`, y compris `long`, `float`, `double` et `boolean`
+
+==== L’utilisation avec l’opérateur instanceof
+
+Avant cette JEP, l’opérateur `instanceof` était limité aux types référence et ne pouvait pas utiliser de types primitifs. Cette limitation impliquait qu’il fallait fréquemment réaliser des vérifications manuelles et des conversions de type. 
+Par exemple avant le JDK 23, vérifier si une variable de type `int` pouvait tenir dans un type plus petit nécessitait un casting manuel et une logique supplémentaire, ce qui rendait le code plus complexe et moins lisible.
+
+Cette amélioration permet notamment d’utiliser `instanceof` pour vérifier si une valeur primitive correspond à un certain type (par exemple, vérifier si une valeur de type `int` correspond à un type `byte`). 
+Cela rend la vérification de type plus précise et réduit le risque d’erreurs associées au casting explicite.
+
+.le fichier DemoJEP455Instanceof.java
+[source,java]
+----
+public class DemoJEP455Instanceof {
+    public static void main(String[] args) {
+        afficher(27);
+        afficher(256);
+        afficher(123_456);
+    }
+    
+    static void afficher(int nombre) {
+        if (nombre instanceof byte) {
+            byte b = (byte) nombre;
+            System.out.println("Nombre rentre dans un byte  : " + b);
+        } else if (nombre instanceof short s) {
+            System.out.println("Nombre rentre dans un short : " + s);
+        } else {
+            System.out.println("Nombre rentre dans un int   : " + nombre);
+        }
+    }
+}
+----
+
+Ce code peut être compilé et exécuté avec l’activation des fonctionnalités en preview :
+
+[source,plain]
+----
+C:\java>javac --enable-preview --source 23 DemoJEP455Instanceof.java
+Note: DemoJEP455Instanceof.java uses preview features of Java SE 23.
+Note: Recompile with -Xlint:preview for details.
+
+C:\java>java --enable-preview DemoJEP455Instanceof
+Nombre rentre dans un byte  : 27
+Nombre rentre dans un short : 256
+Nombre rentre dans un int   : 123456
+----
+
+==== L’évolution de l’instruction `switch`
+
+Avant le JDK 23, les instructions `switch` étaient limitées dans les types qu’elles pouvaient gérer : elles ne pouvaient utiliser que des types `int`, `char`, `enum` (Java 5) et `String` (Java 7), mais ne supportaient pas les types primitifs comme `long`, `float`, `double` et `boolean` directement dans les clauses `case`.
+Cette limitation nécessitait souvent des solutions de contournement ou un code moins lisible lorsqu’il s’agissait de ces types.
+
+La JEP 455 propose de permettre d’utiliser tous les types primitifs, y compris `long`, `float`, `double` et `boolean` dans l’instruction `switch`. 
+Cette amélioration permet d’écrire des instructions `switch` plus propres et plus expressives qui gèrent directement les types primitifs.
+
+[source,java]
+----
+public class DemoJEP455Switch {
+    public static void main(String[] args) {
+        afficher(0f);
+        afficher(1.618f);
+        afficher(100f);
+        afficher(-126f);
+    }
+
+    static void afficher(float valeur) {
+        switch (valeur) {
+            case 0f -> System.out.println("Zero");
+            case 1.618f -> System.out.println("Le nombre d'or");
+            case float f when f < 0 -> System.out.println("Flottant négatif : " + f);
+            case float f -> System.out.println("Flottant positif : " + f);
+        }
+    }
+}
+----
+
+Ce code peut être compilé et exécuté avec l’activation des fonctionnalités en preview :
+
+[source,plain]
+----
+C:\java>javac --enable-preview --source 23 DemoJEP455Switch.java
+Note: DemoJEP455Switch.java uses preview features of Java SE 23.
+Note: Recompile with -Xlint:preview for details.
+
+C:\java>java --enable-preview DemoJEP455Switch
+Zero
+Le nombre d'or
+Flottant positif : 100.0
+Flottant négatif : -126.0
+----
+
+Comme pour toutes les nouvelles fonctionnalités de l’instruction `switch` utilisant l’opérateur arrow, elle doit être exhaustive et donc couvrir tous les cas possibles.
+
+Cette évolution a nécessité l’implémentation de règles de conversion dans le pattern matching, de sorte qu’un type primitif puisse correspondre si possible à un autre type primitif.
+Les conversions impossibles ne correspondent pas.
+Le détail des règles de conversion est fourni dans la description de la https://openjdk.org/jeps/455[JEP 455].
+
+=== Markdown Documentation Comments
+
+La possibilité de documenter du code Java avec des commentaires exploités par l’outil `javadoc` pour générer une documentation en HTML est présente depuis Java 1.0. 
+Le JDK lui-même propose une documentation générée avec Javadoc.
+
+Les fonctionnalités proposées ont évolué au fur et à mesure de certaines versions de Java, mais le langage de markup utilisé pour le formatage a toujours été HTML.
+
+Les commentaires de documentation utilisent des délimiteurs particuliers : ils débutent par `/\**` et finissent par `*/`.
+
+Ces commentaires peuvent historiquement contenir :
+
+* Du texte
+* Des tags HTML pour formatter le contenu
+* Des tags Javadoc pour fournir des méta-données sous la forme @xxx, exemple `@param`, `@return`, `@throws`, `@since`, `@author`, …
+
+.le fichier DemoJEP467.java
+[source,java]
+----
+package fr.sciam;
+
+/**
+ * Pour tester la JEP 467
+ * <table>
+ * <caption>Avec un exemple de tableau</caption>
+ * <tr>
+ * <th>Colonne 1</th>
+ * <th>Colonne 2</th>
+ * </tr>
+ * <tr>
+ * <td>A1</td>
+ * <td>A2</td>
+ * </tr>
+ * <tr>
+ * <td>B1</td>
+ * <td>B2</td>
+ * </tr>
+ * </table>
+ * <p>Fin de la description avec du test en <b>gras</b> et en <i>italique</i> pour démonstration</p>
+ * @see java.lang.System#out
+ * @author Jean-Michel
+ * @since 23
+ */
+public interface DemoJEP467 {
+
+  /**
+   * Afficher un message de salutation
+   * <p>
+   * Selon la valeur fournie, elle affiche : 
+   * <ul>
+   * <li>Juste &quot;Bonjour&quot; si le prénom est null</li>
+   * <li>Sinon &quot;Bonjour&quot; et le prénom en majusucle en utilisant {@link java.lang.String#toUpperCase()}</li>
+   * </ul>
+   * <p>
+   * Exemple d'utilisation : {@code saluer("Jean-Michel") }
+   * <p>Exemple complet :</p>
+   * <pre>
+   * {@code
+   *     String prenom="Jean-Michel";
+   *     saluer(prenom);
+   * }
+   * </pre>
+   * 
+   * @param prenom le prénom à utiliser
+   * @throws Exception en cas de soucis
+   */
+  public static void saluer(String prenom) throws Exception {
+    if (prenom == null) {
+      System.out.println("Bonjour");
+    } else {
+      System.out.println("Bonjour "+ prenom.toUpperCase());
+    }
+  }
+}
+
+----
+
+L’exemple ci-dessus contient des marques de paragraphe (`<p>`), un tableau (`<table>`, `<tr>`, `<td>`), une liste à puces (`<ul>`, `<li>`), un lien (`<a>`), du code formaté (`<pre>`) et des informations spécifiques à JavaDoc, telles que les tags Javadoc `@param` et `@throws`.
+
+L’outil `javadoc` est utilisé pour générer la documentation à partie du code source.
+
+[source,plain]
+----
+C:\java>javadoc -d .\doc -sourcepath . -subpackages fr.sciam -author
+Loading source files for package fr.sciam...
+Constructing Javadoc information...
+Building index for all the packages and classes...
+Standard Doclet version 23+37-2369
+Building tree for all the packages and classes...
+Generating .\doc\fr\sciam\DemoJEP467.html...
+Generating .\doc\fr\sciam\package-summary.html...
+Generating .\doc\fr\sciam\package-tree.html...
+Generating .\doc\overview-tree.html...
+Generating .\doc\allclasses-index.html...
+Building index for all classes...
+Generating .\doc\allpackages-index.html...
+Generating .\doc\index-all.html...
+Generating .\doc\search.html...
+Generating .\doc\index.html...
+Generating .\doc\help-doc.html...
+----
+
+image:nouveautes-java-23-partie1-001.png[la oage html générée,width=476,height=708]
+
+C’était sans aucun doute un bon choix en 1995 d’utiliser HTML, mais de nos jours, Markdown est beaucoup plus populaire que HTML pour la rédaction de documentation.
+
+De nombreux autres langages utilisent Markdown (ou une variante simplifiée de Markdown) comme syntaxe de balisage par défaut pour les commentaires, notamment https://kotlinlang.org/docs/kotlin-doc.html#inline-markup[Kotlin KDocs], https://tip.golang.org/doc/comment[Golang Godocs] et https://doc.rust-lang.org/rust-by-example/meta/doc.html[Rust Doc Comments]. 
+La prise en charge de Markdown va aider à moderniser Java dans la rédaction de documentation.
+
+Le but de la https://openjdk.org/jeps/467[JEP 467] est de permettre aux commentaires de la documentation JavaDoc d’être écrits en Markdown plutôt qu’uniquement dans un mélange de HTML et de tags @xxx JavaDoc.
+
+Cela facilite la lecture et la rédaction des commentaires de documentation du code et améliore l’expérience des développeurs Java dans ces tâches.
+Mais cette fonctionnalité ne vise pas à remplacer les balises HTML et JavaDoc, mais plutôt à permettre de mixer leur utilisation dans un même fichier en imposant que les commentaires d’un élément documentés soit tout en HTML ou tout en Markdown.
+
+Markdown est un langage de balisage léger largement utilisé pour la création de documents texte formatés. Il propose une syntaxe simple pour la mise en forme de texte, y compris les listes, les liens, les images, le code, ...
+
+La syntaxe Markdown utilisée est la variante https://commonmark.org/[CommonMark], avec des améliorations pour prendre en charge la liaison avec des éléments de programme et des tableaux simplifiés avec pipes de https://github.github.com/gfm/[GFM] (GitHub Flavored Markdown). 
+Les balises JavaDoc peuvent toujours être utilisées dans les commentaires de documentation en Markdown, ce qui garantit que les fonctionnalités JavaDoc existantes sont toujours utilisables surtout lorsqu’elles n’ont pas d’équivalent en Markdown.
+
+Pour maintenir la compatibilité avec la forme historique, l’utilisation de Markdown requière que chaque ligne de commentaire de documentation débute par un triple slash `///` et soit placé à un endroit où un commentaire Javadoc historique serait pris en charge, donc en tant que prologue d’un élément à documenter.
+
+Le même commentaire que l’exemple précédent en Markdown est illustré dans l’exemple ci-dessous :
+
+.le fichier DemoJEP467.java
+[source,java]
+----
+package fr.sciam;
+
+/// Pour tester la JEP 467   <1>
+///   <2>
+/// Avec un exemple de tableau
+///
+/// | Colonne 1 | Colonne 2 |
+/// |-----------|-----------|
+/// | A1        | A2        |
+/// | B1        | B2        |
+///
+/// Fin de la description avec du test en **gras** et en _italique_ pour démonstration  <3>
+/// @see java.lang.System#out  <7>
+/// @author Jean-Michel
+/// @since 23
+public interface DemoJEP467 {
+
+  /// Afficher un message de salutation
+  ///
+  /// Selon la valeur fournie, elle affiche : 
+  /// - juste &quot;Bonjour&quot; si le prénom est null  <4>
+  /// - Sinon &quot;Bonjour&quot; et le prénom en majuscule en utilisant [java.lang.String#toUpperCase()]  <5>
+  /// 
+  /// Exemple: `saluer("Jean-Michel")`
+  ///
+  /// Exemple complet :
+  /// ```  <6>
+  ///    String prenom="Jean-Michel";
+  ///    saluer(prenom);
+  /// ```
+  /// @param prenom le prénom à utiliser  <7>
+  /// @throws Exception en cas de soucis  
+  public static void saluer(String prenom) throws Exception { }
+    if (prenom == null) {
+      System.out.println("Bonjour");
+    } else {
+      System.out.println("Bonjour "+ prenom.toUpperCase());
+    }
+  }
+}
+----
+
+L’utilisation de Markdown rend l’écriture et la lecture des commentaires de documentation Javadoc plus facile comme le montre l’exemple ci-dessus :
+
+<1> Le code source est marqué par une paire de ` au lieu de \{@code ...}
+<2> Le tag HTML de paragraphe HTML est remplacé par une ligne blanche
+<3> Le formatage du texte utilise la syntaxe Markdown
+<4> Les éléments d’énumération avec puces sont définis avec des traits d’union
+<5> Les liens sont définis avec [...] au lieu de \{@link ...},
+<6> Les blocs de code sont démarqués avec une paire de ```ou ~~~
+<7> Les tags spécifiques de JavaDoc, tels que @param et @return restent inchangés
+
+Les balises JavaDoc, telles que `@param`, `@throws`, etc., ne sont pas évaluées si elles sont utilisées dans du code ou des blocs de code.
+
+Le résultat généré par l’outil `javadoc` est très similaire à version précédente utilisant la syntaxe historique de Javadoc.
+
+=== Module Import Declarations (Preview)
+
+En Java, il est possible d’importer des types :
+
+* Tous les types d’un package avec l’instruction `import` suivi du nom du package et de « `.*` » +
++
+[source,java]
+----
+import java.util.*;
+----
+* Un seul type avec l’instruction `import` suivi du nom pleinement qualifié du type +
++
+[source,java]
+----
+import java.util.List;
+----
+
+Depuis Java 5, il est possible d’utiliser des imports de membres `static`
+
+* Toutes les méthodes et variables statiques d’une classe avec l’instruction `import static` suivi du nom pleinement qualifié du type et de « `.*` » +
++
+[source,java]
+----
+import static org.junit.jupiter.api.Assertions.*;
+----
+* Une seule méthode ou variable statique avec l’instruction `import static` suivi du nom pleinement qualifié du type suivi d’un « `.` » et du nom du membre +
++
+[source,java]
+----
+import static org.junit.jupiter.api.Assertions.assertTrue;
+----
+
+La https://openjdk.org/jeps/476[JEP 476] propose d’améliorer le langage Java avec la possibilité d’importer tous les types publics des packages exportés par un module en une seule instruction au lieu d’importer explicitement les types utilisés.
+
+Par exemple, au lieu de :
+
+.le fichier DemoJEP476.java
+[source,java]
+----
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.*;
+import java.util.stream.Collectors;
+
+public class DemoJEP476 {
+
+    public static void main(String[] args) {
+      List<Integer> nombres = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10); 
+      List<Integer> nombresPairesAuCarres = nombres.stream().filter(n -> n % 2 == 0)
+                         .map(n -> n * n).collect(Collectors.toList());
+      System.out.println(nombresPairesAuCarres);
+    }
+}
+----
+
+Ce code peut être compilé et exécuté :
+
+[source,plain]
+----
+C:\java>javac DemoJEP476.java
+
+C:\java>java DemoJEP476
+[4, 16, 36, 64, 100]
+----
+
+Il est possible de simplifier le code :
+
+.le fichier DemoJEP476.java
+[source,java]
+----
+import module java.base;
+
+public class DemoJEP476 {
+
+    public static void main(String[] args) {
+      List<Integer> nombres = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10); 
+      List<Integer> nombresPairesAuCarres = nombres.stream().filter(n -> n % 2 == 0)
+                         .map(n -> n * n).collect(Collectors.toList());
+      System.out.println(nombresPairesAuCarres);
+    }
+}
+----
+
+Ce code peut être compilé et exécuté avec l’activation des fonctionnalités en preview :
+
+[source,plain]
+----
+C:\java>javac --enable-preview --release 23 DemoJEP476.java
+Note: DemoJEP476.java uses preview features of Java SE 23.
+Note: Recompile with -Xlint:preview for details.
+
+C:\java>java --enable-preview DemoJEP476
+[4, 16, 36, 64, 100]
+----
+
+==== La mise en œuvre
+
+La syntaxe de la déclaration de l’import d’un module est de la forme :
+
+`import module nom_module;`
+
+Cette instruction importe tous les types publics de premier niveau dans :
+
+* les packages exportés par le module nom_module vers le module courant
+* et les packages exportés par les modules qui sont lus par le module courant en raison de la lecture du module nom_module
+
+La deuxième clause permet à un programme d’utiliser l’API d’un module, qui peut faire référence à des types d’autres modules grâce aux dépendances transitives, sans avoir à importer tous ces autres modules.
+
+Par exemple :
+
+* `import module java.base` en une seule instruction importe toutes les classes de tous les packages exportés à partir du module `java.base`, ainsi que celles des modules requis transitivement par `java.base`. Cela a donc le même effet que 54 importations de packages, une pour chacun des packages exportés par le module `java.base`. C’est comme si le fichier source contenait `import java.util.\*` et `import java.io.\*`, …
+* `import module java.sql` a le même effet que `import java.sql.\*` et `import javax.sql.\*` plus les importations des packages des exportées par les dépendances transitives du module `java.sql` (`java.logging`, `java.xml`, `java.transaction.xa`)
+
+Cela simplifie la réutilisation des bibliothèques modulaires, mais n’exige pas que le code d’importation se trouve dans un module lui-même. Pour utiliser l’importation de module, la classe elle-même n’a pas besoin d’être explicitement dans un module.
+
+La clause `import module` est suivie d’un nom de module, il n’est donc pas possible d’importer des packages à partir d’un unnamed module, donc provenant du classpath. Cela s’aligne sur les clauses `requires` dans les déclarations de module dans les fichiers `module-info.java`, qui prennent des noms de module et ne peuvent pas exprimer une dépendance vers un unnamed module.
+
+La clause `import module` peut être utilisée dans n’importe quel fichier source. Le fichier source n’a pas besoin d’être associé à un module explicite. Par exemple, `java.base` et `java.sql` font partie du JDK et peuvent être importés par dans des classes qui ne sont pas elles-mêmes définies dans un module.
+
+Il est parfois utile d’importer un module qui n’exporte aucun package, car le module nécessite transitivement d’autres modules qui exportent des packages. Par exemple, le module `java.se` n’exporte aucun package, mais il requiert 19 autres modules de manière transitive, de sorte que l’effet de l’instruction `import module java.se` est d’importer les packages exportés par ces modules, et ainsi de suite, de manière récursive - en particulier, les 123 packages répertoriés comme exportations indirectes du module `java.se`.
+
+WARNING: l’importation du module `java.se` n’est possible que dans une unité de compilation d’un module nommé qui requière le module `java.se` dans ses dépendances. Dans une unité de compilation d’un unnamed module, telle qu’une unité qui déclare implicitement une classe, il n’est pas possible d’utiliser l’importation du module `java.se`.
+
+.le fichier DemoJEP476.java
+[source,java]
+----
+import module java.se;
+
+public class DemoJEP476 {
+
+    public static void main(String[] args) {
+    }
+}
+----
+
+Ce code peut être compilé et exécuté avec l’activation des fonctionnalités en preview :
+
+[source,plain]
+----
+C:\java>javac --enable-preview --release 23 DemoJEP476.java
+DemoJEP476.java:1: error: unnamed module does not read: java.se
+import module java.se;
+^
+Note: DemoJEP476.java uses preview features of Java SE 23.
+Note: Recompile with -Xlint:preview for details.
+1 error
+----
+
+==== Les imports ambigus
+
+Comme l’importation d’un module peut avoir pour effet d’importer plusieurs packages, il est possible d’avoir des collisions de noms de classe et d’importer des classes avec le même nom simple de différents packages. Le nom simple est alors ambigu, donc son utilisation provoquera une erreur de compilation.
+
+Par exemple, dans ce fichier source, le nom de classe `List` est ambigu :
+
+.le fichier DemoJEP476.java
+[source,java]
+----
+import module java.base;
+import module java.desktop;
+
+public class DemoJEP476 {
+
+    public static void main(String[] args) {
+        List liste = null;         // Erreur car le nom du type est ambigu
+    }
+}
+----
+
+Ce code peut être compilé et exécuté avec l’activation des fonctionnalités en preview :
+
+[source,plain]
+----
+C:\java>javac --enable-preview --release 23 DemoJEP476.java
+DemoJEP476.java:7: error: reference to List is ambiguous
+        List liste = null;         // Erreur car le nom est ambigu
+        ^
+  both class java.awt.List in java.awt and interface java.util.List in java.util match
+Note: DemoJEP476.java uses preview features of Java SE 23.
+Note: Recompile with -Xlint:preview for details.
+1 error
+----
+
+Le module `java.base` exporte le package `java.util` qui contient l’interface publique `List`.
+
+Le module `java.desktop` exporte le package `java.awt` qui contient la classe publique `List`.
+
+Pour résoudre les ambiguïtés, il suffit d’utiliser une déclaration d’importation de type unique. Par exemple, pour résoudre le type `List` ambigu de l’exemple précédent :
+
+[source,java]
+----
+import module java.base;
+import module java.desktop;
+import java.util.List;
+
+public class DemoJEP476 {
+
+  public static void main(String[] args) {
+    List liste = null;         // Le type List utilisé est java.util.List
+  }
+}
+----
+
+==== Les classes déclarées implicitement
+
+Cette JEP est co-développée avec la JEP 477 : Implicitly Declared Classes and Instance main Methods, qui spécifie que toutes les classes et interfaces publiques de niveau supérieur dans tous les packages exportés par le module `java.base` sont automatiquement importées dans les classes implicitement déclarées. 
+Donc c’est comme si `import module java.base` apparaissait au début de chaque classe de ce type, par opposition à `import java.lang.*` au début de chaque classe ordinaire.
+
+.le fichier DemoJEP476.java
+[source,java]
+----
+void main() {
+  List<Integer> nombres = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10); 
+  List<Integer> nombresPairesAuCarres = nombres.stream().filter(n -> n % 2 == 0)
+      .map(n -> n * n).collect(Collectors.toList());
+      System.out.println(nombresPairesAuCarres);
+}
+----
+
+Ce code peut être compilé et exécuté avec l’activation des fonctionnalités en preview :
+
+[source,plain]
+----
+C:\java>java --enable-preview DemoJEP476.java
+[4, 16, 36, 64, 100]
+
+C:\java>
+----
+
+=== Implicitly Declared Classes and Instance Main Methods (Third Preview)
+
+Cette fonctionnalité a été proposée pour la première fois en tant que fonctionnalité en preview via la https://openjdk.org/jeps/445[JEP 445], délivrée dans le JDK 21 sous la dénomination « Unnamed Classes and Instance Main Methods ». Elle a été à nouveau proposée pour une seconde preview via la https://openjdk.org/jeps/463[JEP 463], délivrée dans le JDK 22 avec des modifications basées sur les retours et nouvelle dénomination « Implicitly declared classes and instance main ».
+
+Elle propose de simplifier l’écriture de programme Java simple notamment en simplifiant son point d’entrée.
+
+La méthode `main()` n’a plus l’obligatoirement d’être `static` et `public` ni même d’avoir un paramètre `String[]` s’il n’est pas nécessaire. Ainsi, avec les JDK 22 et 23, un « HelloWorld » pour être écrit plus simplement :
+
+.le fichier DemoJEP477.java
+[source,java]
+----
+class DemoJEP477 {
+    void main() {
+        System.out.println("Hello World");
+    }
+}
+----
+
+Ce code peut être compilé et exécuté avec l’activation des fonctionnalités en preview :
+
+[source,plain]
+----
+C:\java>java --enable-preview DemoJEP477.java
+Hello World
+----
+
+Il n’est plus obligatoire non plus de déclarer explicitement une classe : dans ce cas une classe sera déclarée implicitement par le compilateur avec un constructeur sans paramètre par défaut, résident dans un package sans nom. Évidemment dans ce cas, il n’est pas possible de référencer la classe par son nom dans le code. Chaque classe implicite doit contenir une méthode principale et représente un programme autonome. Ainsi, avec les JDK 22 et 23, un « HelloWorld » pour être écrit encore plus simplement :
+
+.le fichier DemoJEP477HelloWorld.java
+[source,java]
+----
+void main() {
+  System.out.println("Hello World");
+}
+----
+
+Ce code peut être compilé et exécuté avec l’activation des fonctionnalités en preview :
+
+[source,plain]
+----
+C:\java>java --enable-preview DemoJEP477HelloWorld.java
+Hello World
+----
+
+La https://openjdk.org/jeps/477[JEP 477] propose une troisième preview de la fonctionnalité avec deux améliorations majeures :
+
+* Les classes déclarées implicitement importent automatiquement trois méthodes statiques pour des E/S textuelles simples avec la console. Ces méthodes sont déclarées dans la nouvelle classe `java.io.IO`
+* Les classes implicitement déclarées importent automatiquement, toutes les classes et interfaces publiques des packages exportés par le module `java.base`
+
+La nouvelle classe `java.io.IO` contient trois méthodes statiques pour faciliter les interactions d’affichage et de saisie de données dans la console :
+
+* `public static void println(Object obj)`
+* `public static void print(Object obj)`
+* `public static String readln(String prompt)`
+
+Chaque classe déclarée implicitement importe automatiquement ces méthodes statiques, correspondant à la déclaration ci-dessous :
+
+[source,java]
+----
+import static java.io.IO.*;
+----
+
+.le fichier DemoJEP477HelloPrenom.java
+[source,java]
+----
+void main() {
+  String prenom = readln("Entrez votre prénom : ");
+  print("Bienvenue, ");
+  println(prenom);
+}
+----
+
+Ce code peut être compilé et exécuté avec l’activation des fonctionnalités en preview :
+
+[source,plain]
+----
+C:\java>java --enable-preview DemoJEP477HelloPrenom.java
+Entrez votre prénom : Jean-Michel
+Bienvenue, Jean-Michel
+----
+Chaque classe déclarée implicitement importe automatiquement le module `java.base` telle que proposé par la https://openjdk.org/jeps/476[JEP 476], correspondant à la déclaration ci-dessous :
+
+[source,plain]
+----
+import module java.base;
+----
+
+L’importation automatique du module `java.base` facilite l’utilisation d’API des packages couramment utilisés sans avoir à les importer explicitement.
+
+.le fichier DemoJEP477Stream.java
+[source,java]
+----
+void main() {
+  var langages = List.of("Java", "PHP", "Assembleur", "Javascript", "C#", "Python");
+  var commencantParJ = langages.stream().filter( s -> s.startsWith("J")).sorted().toList();
+  commencantParJ.forEach(IO::println);
+}
+----
+
+Ce code peut être compilé et exécuté avec l’activation des fonctionnalités en preview :
+
+[source,plain]
+----
+C:\java>java --enable-preview DemoJEP477Stream.java
+Java
+Javascript
+----
+
+=== Flexible Constructor Bodies (Second Preview)
+
+Cette fonctionnalité a été introduite dans le JDK 22 via la https://openjdk.org/jeps/477[JEP 447] sous le nom : « Instructions before super(...) ».
+
+Son objectif est de réduire la verbosité et la complexité du code en permettant aux développeurs de placer des instructions avant l’appel explicite d’un constructeur.
+
+Le but est d’autoriser dans les constructeurs des instructions à apparaître avant un appel explicite du constructeur, en utilisant `super(...)` ou `this(...)`. 
+Ces instructions ne peuvent pas référencer l’instance en cours d’initialisation, mais elles peuvent initialiser ses champs. 
+L’initialisation des champs avant d’invoquer un autre constructeur rend une classe plus fiable lorsque les méthodes sont réimplémentées.
+
+Cette fonctionnalité ne change pas l’ordre descendant d’initialisation des types parents.
+
+La https://openjdk.org/jeps/482[JEP 482] introduit cette fonctionnalité pour une seconde preview avec un nouveau nom « Flexible Constructor Bodies » et un changement substantiel : les traitements d’un constructeur peuvent désormais initialiser des champs de la même classe avant d’invoquer explicitement un constructeur.
+
+Historiquement, un constructeur d’une superclasse ne pouvait pas exécuter du code qui voit la valeur de champ par défaut dans la sous-classe. 
+Cela peut se produire lorsque, en raison d’une surcharge, le constructeur de la superclasse appelle une méthode redéfinie dans la sous-classe qui utilise le champ.
+
+.le fichier DemoJEP482.java
+[source,java]
+----
+public class DemoJEP482 {
+
+    public static void main(String[] args) {
+        new ClasseFille(100);
+    }
+}
+
+class ClasseMere {
+
+    ClasseMere() { afficher(); }
+
+    void afficher() { System.out.println("ClasseMere"); }
+}
+
+class ClasseFille extends ClasseMere {
+
+    final int taille;
+
+    ClasseFille(int taille) {
+        super();
+        this.taille = taille;
+    }
+
+    @Override
+    void afficher() { System.out.println("ClasseFille " + taille); }
+}
+----
+
+La classe peut être compilée et exécutée.
+
+[source,plain]
+----
+C:\java>javac DemoJEP482.java
+
+C:\java>java DemoJEP482
+ClasseFille 0
+----
+
+Le résultat peut paraître surprenant, mais il respecte les spécifications.
+
+Avec la nouvelle JEP, il est possible d’initialiser la valeur d’un champ de la classe avant l’invocation explicite d’un constructeur de la classe mère ou de la classe elle-même. 
+Cela permet à un constructeur d’une sous-classe de s’assurer qu’un constructeur d’une superclasse accède à la valeur initialisée plutôt que de voir la valeur par défaut d’un champ de la sous-classe (par exemple, `0`, `false` ou `null`).
+
+[source,java]
+----
+class ClasseFille extends ClasseMere {
+
+    final int taille;
+
+    ClasseFille(int taille) {
+        this.taille = taille;
+        super();
+    }
+
+    @Override
+    void afficher() { System.out.println("ClasseFille " + taille); }
+}
+----
+
+[source,plain]
+----
+C:\java>javac --enable-preview --release 23 DemoJEP482.java
+Note: DemoJEP482.java uses preview features of Java SE 23.
+Note: Recompile with -Xlint:preview for details.
+
+C:\java>java --enable-preview DemoJEP482
+ClasseFille 100
+----
+
+== Les JEPs relatives aux APIs
+
+Six JEPS concernent des évolutions dans les API, certaines issues des projets Panama et Loom :
+
+* JEP 473 : https://openjdk.org/jeps/473[Stream Gatherers (Second Preview)]
+* JEP 471 : https://openjdk.org/jeps/471[Deprecate the Memory-Access Methods in sun.misc.Unsafe for Removal]
+* JEP 466 : https://openjdk.org/jeps/466[Class-File API (Second Preview)]
+* JEP 469 : https://openjdk.org/jeps/469[Vector API (Eighth Incubator)]
+* JEP 480 : https://openjdk.org/jeps/480[Structured Concurrency (Third Preview)]
+* JEP 481 : https://openjdk.org/jeps/481[Scoped Values (Third Preview)]
+
+=== Stream Gatherers (Second Preview)
+
+Initialement les Stream Gatherers ont été introduits en première preview via la https://openjdk.org/jeps/461[JEP 461] dans le JDK 22.
+
+Le but est d’enrichir l’API Stream pour prendre en charge des opérations intermédiaires personnalisées en utilisant l’opération intermédiaire `Stream::Gather(Gatherer)`. 
+Cela permet aux pipelines d’opérations de transformer les données d’une manière qui n’est pas facilement réalisable avec les opérations intermédiaires intégrées existantes.
+
+Cette fonctionnalité est reproposée pour une seconde preview via la https://openjdk.org/jeps/473[JEP 473] dans le JDK 23, sans aucun changement pour permettre d’obtenir plus de feedback.
+
+=== Class-File API (Second Preview)
+
+L’API Class-File a été introduite dans le JDK 22 via la https://openjdk.org/jeps/457[JEP 457] en tant que fonctionnalité en preview. 
+L’objectif est de fournir dans le JDK une API standard pour l’analyse, la génération et la transformation des fichiers de classe.
+
+Cette API pourra évoluer en même temps que le format class-file et permettra aux composants de la plate-forme Java de s’appuyer sur cette API au lieu de bibliothèques tierces. 
+Elle pourra aussi être utilisée par toute application Java.
+
+La https://openjdk.org/jeps/466[JEP 466] propose une seconde preview de la fonctionnalité avec quelques améliorations dans les API basées sur les retours de la première preview :
+
+* La classe `java.lang.classfile.CodeBuilder` est refactorée. Cette classe dispose de trois types de méthodes de fabrique pour les instructions en bytecode : les fabriques de bas niveau, les fabriques de niveau intermédiaire et les builders de haut niveau pour les blocs de base. Les méthodes de niveau intermédiaire qui dupliquaient les méthodes de niveau inférieur ou qui étaient rarement utilisées ont été supprimées, et les méthodes de niveau intermédiaire restantes ont été refactorée pour améliorer l’utilisabilité
+* La classe `java.lang.classfile.ClassSignature` est améliorée pour modéliser plus précisément les signatures génériques des superclasses et des superinterfaces
+* Dans la classe `java.lang.classfile.Attributes`, différentes constantes sont remplacées par des méthodes
+
+=== Vector API (Eighth Incubator)
+
+L’API Vector, introduite en incubation pour la première fois dans le JDK 16, est proposée pour une huitième incubation dans le JDK 23, sans modification de l’API et sans modifications substantielles de l’implémentation par rapport au JDK 22.
+
+L’API Vector restera en incubation jusqu’à ce que les fonctionnalités nécessaires du projet Valhalla soient disponibles en tant que fonctionnalités en preview. 
+À ce moment-là, l’implémentation de l’API Vector pourra les utiliser, et elle pourra être promue d’incubation à preview.
+
+=== Structured Concurrency (Third Preview)
+
+La concurrence structurée (Structured Concurrency) a été proposée via la https://openjdk.org/jeps/428[JEP 428] livrée dans le JDK 19 en tant qu’API en incubation. 
+Elle a été réincubée via la https://openjdk.org/jeps/437[JEP 437] dans le JDK 20 avec une mise à jour mineure pour que les threads utilisés héritent des Scoped values (JEP 429). 
+Elle a été proposée pour une première preview via la https://openjdk.org/jeps/453[JEP 453] dans le JDK 21 avec la méthode `StructuredTaskScope::fork` modifiée pour renvoyer une `SubTask` plutôt qu’une `Future`. Elle a été proposée pour une seconde preview via la https://openjdk.org/jeps/462[JEP 462] dans JDK 22, sans modification.
+
+Cette fonctionnalité est reproposée pour une troisième preview via la https://openjdk.org/jeps/480[JEP 480] dans le JDK 23, sans modification, afin d'obtenir plus de retours.
+
+=== Scoped Values (Third Preview)
+
+Les Scoped Values, proposées en preview dans les JDK 21 via la https://openjdk.org/jeps/464[JEP 464] et JDK 22 via la https://openjdk.org/jeps/446[JEP 446], permettent de partager des données immuables à la fois dans le thread et des threads enfants. 
+Les Scoped Values sont plus sûres à utiliser que les `ThreadLocal` et elles requièrent moins de ressources, en particulier lorsqu’elles sont utilisées avec des threads virtuels et la concurrence structurée.
+
+La troisième preview via la https://openjdk.org/jeps/481[JEP 481] dans le JDK 23 propose une modification par rapport aux previews précédentes : une nouvelle interface fonctionnelle ScopedValue. 
+`CallableOp` a été introduite pour fournir les traitements à exécuter qui permet au compilateur Java de déduire si une checked exception peut être levée et si c’est le cas alors laquelle. 
+Cela permet de traiter l’exception précise plutôt qu’une exception générique.
+
+Ce nouveau type est utilisé pour le paramètre opération des méthodes `ScopedValue::callWhere` et `ScopedValue.Carrier::call`.
+
+Avec cette modification, les méthodes `ScopeValue::getWhere` et `ScopedValue.Carrier::get` ne sont plus nécessaires et ont été supprimées.
+
+== Conclusion
+
+Java 23 est la seconde version non-LTS après la publication de la version LTS, Java 21. Il n’y aura donc du support que durant 6 mois, jusqu’à la prochaine version de Java.
+
+Elle propose des évolutions syntaxiques et dans les API en standard ou en preview pour la première fois ou pour une Neme preview.
+
+JDK 23 introduit plusieurs nouvelles fonctionnalités en standard ou en preview :
+
+* des commentaires de documentation en Markdown
+* une première preview des types primitifs dans les patterns et de leur support dans l’instruction instanceof et l’instruction switch
+* une première preview de l’importation de module
+* dépréciation des méthodes d’accès à la mémoire de `sun.misc.UnSafe`
+
+Certaines fonctionnalités restent en preview ou en incubation avec ou sans évolutions :
+
+* une troisième preview des Scoped values, de la concurrence structurée (structured concurrency), des classes et des méthodes d’instance implicitement déclarées
+* une seconde preview de flexible constructor bodies, des Streams Gatherer et de l’ API Class-File
+* une huitième incubation de l’API Vector
+
+Bien que les fonctionnalités en preview ne soient pas encore prêtes pour une utilisation en production, elles permettent d’avoir un aperçu de l’avenir de Java et offrent aux développeurs la possibilité de les expérimenter et de donner leur avis.
+
+Il est à noter qu’une fonctionnalité en preview dans le JDK 22 est absente du JDK 23 : les String templates. Ce point et de nombreux autres seront détaillés dans la seconde partie de cet article qui traitera des évolutions dans le JDK qui ne sont pas incluses dans une JEP concernant la syntaxe, les API et la JVM.
+
+N’hésitez donc pas à télécharger une distribution du JDK 23 auprès d’un fournisseur et à tester les fonctionnalités détaillées dans les deux articles de cette série pour anticiper la release de la prochaine version LTS de Java, disponible en septembre 2025.
+
+&nbsp;
