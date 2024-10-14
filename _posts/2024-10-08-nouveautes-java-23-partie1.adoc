@@ -23,7 +23,8 @@ Ces JEPs sont proposées en standard, en preview ou en incubation.
 
 == https://blog.sciam.fr/2024/04/08/nouveautes-java-22-partie1.html#les_fonctionnalités_du_projet_amber[Les JEPs relatives] à la syntaxe
 
-Cinq fonctionnalités dans le JDK 23 concerne la syntaxe du langage Java, une standard, deux en première preview et deux pour une nouvelle preview :
+Cinq fonctionnalités dans le JDK 23 concernent la syntaxe du langage Java, une standard, deux en première preview et deux pour une nouvelle preview :
+
 
 * JEP 455 : https://openjdk.org/jeps/455[Primitive Types in Patterns&#44; instanceof&#44; and switch (Preview)]
 * JEP 467 : https://openjdk.org/jeps/467[Markdown Documentation Comments]
@@ -90,7 +91,7 @@ Nombre rentre dans un int   : 123456
 Avant le JDK 23, les instructions `switch` étaient limitées dans les types qu’elles pouvaient gérer : elles ne pouvaient utiliser que des types `int`, `char`, `enum` (Java 5) et `String` (Java 7), mais ne supportaient pas les types primitifs comme `long`, `float`, `double` et `boolean` directement dans les clauses `case`.
 Cette limitation nécessitait souvent des solutions de contournement ou un code moins lisible lorsqu’il s’agissait de ces types.
 
-La JEP 455 propose de permettre d’utiliser tous les tous les types primitifs, y compris `long`, `float`, `double` et `boolean` dans l’instruction `switch`. 
+La JEP 455 propose de permettre d’utiliser tous les types primitifs, y compris `long`, `float`, `double` et `boolean` dans l’instruction `switch`. 
 Cette amélioration permet d’écrire des instructions `switch` plus propres et plus expressives qui gèrent directement les types primitifs.
 
 [source,java]
@@ -140,7 +141,7 @@ Le détail des règles de conversion est fourni dans la description de la https:
 La possibilité de documenter du code Java avec des commentaires exploités par l’outil `javadoc` pour générer une documentation en HTML est présente depuis Java 1.0. 
 Le JDK lui-même propose une documentation générée avec Javadoc.
 
-Les fonctionnalités proposées ont évolué au fur et à mesure de certaines versions de Java mais le langage de markup utilisé pour le formatage a toujours été HTML.
+Les fonctionnalités proposées ont évolué au fur et à mesure de certaines versions de Java, mais le langage de markup utilisé pour le formatage a toujours été HTML.
 
 Les commentaires de documentation utilisent des délimiteurs particuliers : ils débutent par `/\**` et finissent par `*/`.
 
@@ -417,7 +418,7 @@ La syntaxe de la déclaration de l’import d’un module est de la forme :
 
 `import module nom_module;`
 
-Cette instruction importe tous les types publiques de premier niveau dans :
+Cette instruction importe tous les types publics de premier niveau dans :
 
 * les packages exportés par le module nom_module vers le module courant
 * et les packages exportés par les modules qui sont lus par le module courant en raison de la lecture du module nom_module
@@ -427,7 +428,7 @@ La deuxième clause permet à un programme d’utiliser l’API d’un module, q
 Par exemple :
 
 * `import module java.base` en une seule instruction importe toutes les classes de tous les packages exportés à partir du module `java.base`, ainsi que celles des modules requis transitivement par `java.base`. Cela a donc le même effet que 54 importations de packages, une pour chacun des packages exportés par le module `java.base`. C’est comme si le fichier source contenait `import java.util.\*` et `import java.io.\*`, …
-* import `module java.sql` a le même effet que import `java.sql.\*` et import `javax.sql.\*` plus les importations des packages des exportées par les dépendances transitives du module `java.sql` (`java.logging`, `java.xml`, `java.transaction.xa`)
+* `import module java.sql` a le même effet que `import java.sql.\*` et `import javax.sql.\*` plus les importations des packages des exportées par les dépendances transitives du module `java.sql` (`java.logging`, `java.xml`, `java.transaction.xa`)
 
 Cela simplifie la réutilisation des bibliothèques modulaires, mais n’exige pas que le code d’importation se trouve dans un module lui-même. Pour utiliser l’importation de module, la classe elle-même n’a pas besoin d’être explicitement dans un module.
 
@@ -435,7 +436,7 @@ La clause `import module` est suivie d’un nom de module, il n’est donc pas p
 
 La clause `import module` peut être utilisée dans n’importe quel fichier source. Le fichier source n’a pas besoin d’être associé à un module explicite. Par exemple, `java.base` et `java.sql` font partie du JDK et peuvent être importés par dans des classes qui ne sont pas elles-mêmes définies dans un module.
 
-Il est parfois utile d’importer un module qui n’exporte aucun package, car le module nécessite transitivement d’autres modules qui exportent des packages. Par exemple, le module `java.se` n’exporte aucun package, mais il requière 19 autres modules de manière transitive, de sorte que l’effet de l’instruction import module java.se est d’importer les packages exportés par ces modules, et ainsi de suite, de manière récursive - en particulier, les 123 packages répertoriés comme exportations indirectes du module `java.se`.
+Il est parfois utile d’importer un module qui n’exporte aucun package, car le module nécessite transitivement d’autres modules qui exportent des packages. Par exemple, le module `java.se` n’exporte aucun package, mais il requiert 19 autres modules de manière transitive, de sorte que l’effet de l’instruction `import module java.se` est d’importer les packages exportés par ces modules, et ainsi de suite, de manière récursive - en particulier, les 123 packages répertoriés comme exportations indirectes du module `java.se`.
 
 WARNING: l’importation du module `java.se` n’est possible que dans une unité de compilation d’un module nommé qui requière le module `java.se` dans ses dépendances. Dans une unité de compilation d’un unnamed module, telle qu’une unité qui déclare implicitement une classe, il n’est pas possible d’utiliser l’importation du module `java.se`.
 
@@ -546,7 +547,7 @@ C:\java>
 
 === Implicitly Declared Classes and Instance Main Methods (Third Preview)
 
-Cette fonctionnalité a été proposée pour la première fois en tant que fonctionnalité en preview via la https://openjdk.org/jeps/445[JEP 445], délivrée dans le JDK 21 sous la dénomination «Unnamed Classes and Instance Main Methods ». Elle a été à nouveau proposée pour une seconde preview via la https://openjdk.org/jeps/463[JEP 463], délivrée dans le JDK 22 avec des modifications basées sur les retours et nouvelle dénomination «Implicitly declared classes and instance main ».
+Cette fonctionnalité a été proposée pour la première fois en tant que fonctionnalité en preview via la https://openjdk.org/jeps/445[JEP 445], délivrée dans le JDK 21 sous la dénomination « Unnamed Classes and Instance Main Methods ». Elle a été à nouveau proposée pour une seconde preview via la https://openjdk.org/jeps/463[JEP 463], délivrée dans le JDK 22 avec des modifications basées sur les retours et nouvelle dénomination « Implicitly declared classes and instance main ».
 
 Elle propose de simplifier l’écriture de programme Java simple notamment en simplifiant son point d’entrée.
 
@@ -654,7 +655,7 @@ Javascript
 
 === Flexible Constructor Bodies (Second Preview)
 
-Cette fonctionnalité a été introduite dans le JDK 22 via la https://openjdk.org/jeps/477[JEP 447] sous le nom : «Instructions before super(...)».
+Cette fonctionnalité a été introduite dans le JDK 22 via la https://openjdk.org/jeps/477[JEP 447] sous le nom : « Instructions before super(...) ».
 
 Son objectif est de réduire la verbosité et la complexité du code en permettant aux développeurs de placer des instructions avant l’appel explicite d’un constructeur.
 
@@ -710,7 +711,7 @@ C:\java>java DemoJEP482
 ClasseFille 0
 ----
 
-Le résultat peut paraître surprenant mais il respecte les spécifications.
+Le résultat peut paraître surprenant, mais il respecte les spécifications.
 
 Avec la nouvelle JEP, il est possible d’initialiser la valeur d’un champ de la classe avant l’invocation explicite d’un constructeur de la classe mère ou de la classe elle-même. 
 Cela permet à un constructeur d’une sous-classe de s’assurer qu’un constructeur d’une superclasse accède à la valeur initialisée plutôt que de voir la valeur par défaut d’un champ de la sous-classe (par exemple, `0`, `false` ou `null`).
@@ -813,8 +814,8 @@ JDK 23 introduit plusieurs nouvelles fonctionnalités en standard ou en preview�
 
 * des commentaires de documentation en Markdown
 * une première preview des types primitifs dans les patterns et de leur support dans l’instruction instanceof et l’instruction switch
-* une première preview de l’importations de module
-* dépréciation des méthodes d’accès à la mémoire de sun.misc.UnSafe
+* une première preview de l’importation de module
+* dépréciation des méthodes d’accès à la mémoire de `sun.misc.UnSafe`
 
 Certaines fonctionnalités restent en preview ou en incubation avec ou sans évolutions :
 
@@ -824,7 +825,7 @@ Certaines fonctionnalités restent en preview ou en incubation avec ou sans évo
 
 Bien que les fonctionnalités en preview ne soient pas encore prêtes pour une utilisation en production, elles permettent d’avoir un aperçu de l’avenir de Java et offrent aux développeurs la possibilité de les expérimenter et de donner leur avis.
 
-Il est à noter qu’une fonctionnalité en preview dans le JDK 22 est absente du JDK 23 : les String templates. Ce point et de nombreux autres seront détaillés dans la seconde partie de cette article qui traitera des évolutions dans le JDK qui ne sont pas incluses dans une JEP concernant la syntaxe, les API et la JVM.
+Il est à noter qu’une fonctionnalité en preview dans le JDK 22 est absente du JDK 23 : les String templates. Ce point et de nombreux autres seront détaillés dans la seconde partie de cet article qui traitera des évolutions dans le JDK qui ne sont pas incluses dans une JEP concernant la syntaxe, les API et la JVM.
 
 N’hésitez donc pas à télécharger une distribution du JDK 23 auprès d’un fournisseur et à tester les fonctionnalités détaillées dans les deux articles de cette série pour anticiper la release de la prochaine version LTS de Java, disponible en septembre 2025.
 
