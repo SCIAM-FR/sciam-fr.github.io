@@ -101,12 +101,27 @@ layout: default
   <div class="bg-white py-10 px-14 rounded-lg shadow-md">
     <h2 class="text-2xl font-sans text-navysciam font-bold my-4">Articles publi&eacute;s</h2>
     <div>
-      {% for post in site.posts %}
-        {% if author_username == post.author or post.auteurs contains author_username %}
-          {% include postbox.html %}
-          <br>
-        {% endif %}
+      {% for post in paginator.posts %}
+        {% include postbox.html %}
+        <br>
       {% endfor %}
     </div>
   </div>
+
+  {% if paginator.total_pages > 1 %}
+  <ul class="flex justify-center list-none mt-6">
+    {% if paginator.previous_page %}
+    <li class="mx-2">
+      <a class="bg-gray-200 hover:bg-gray-300 text-black py-2 px-4 rounded"
+        href="{{ paginator.previous_page_path | relative_url | replace: '//', '/' }}">&larr; Articles précédents</a>
+    </li>
+    {% endif %}
+    {% if paginator.next_page %}
+    <li class="mx-2">
+      <a class="bg-gray-200 hover:bg-gray-300 text-black py-2 px-4 rounded"
+        href="{{ paginator.next_page_path | relative_url | replace: '//', '/' }}">Articles suivants &rarr;</a>
+    </li>
+    {% endif %}
+  </ul>
+  {% endif %}
 </div>
