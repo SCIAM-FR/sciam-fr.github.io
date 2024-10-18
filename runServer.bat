@@ -1,4 +1,4 @@
 @echo off
-npm install
-bundle install
-bundle exec jekyll serve --incremental --trace --livereload --open-url --drafts
+call npm install
+call bundle install
+call bundle exec jekyll serve --incremental --trace --livereload --open-url --drafts
