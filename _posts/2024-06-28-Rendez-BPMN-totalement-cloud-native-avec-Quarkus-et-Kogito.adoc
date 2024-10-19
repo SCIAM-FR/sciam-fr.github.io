@@ -1,0 +1,22 @@
+= Video - Rendez BPMN totalement cloud-native avec Quarkus et Kogito
+:page-excerpt: A la découverte de Kogito, le moteur de workflow cloud-native de Red Hat, et de son intégration avec Quarkus.
+:page-layout: post
+:author: chakerfezai
+:page-tags: [Kogito,Quarkus,BPMN,TechReview]
+:page-vignette: 2024/techreview-kogito.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: software video
+:page-vimeo-id: 1015630514
+
+Avec l’essor des architectures Cloud-native, les frameworks historiques de Java doivent évoluer et se réinventer pour migrer vers le cloud. La gestion des processus métier (BPM) n’échappe pas à cette règle.
+
+Lorsqu'il s'agit de créer un workflow BPM en Java, les moteurs jBPM et Drools sont les premières solutions qui viennent à l'esprit de la plupart des développeurs. Ils sont open source, faciles à configurer et très complets. Cependant, ils n'ont pas été construits pour le cloud.
+
+Ne paniquez pas ! Kogito est là pour résoudre cette limitation.
+
+Kogito est un projet open source de Red Hat. Son objectif est d'amener l’automatisation des processus métier de bout en bout dans le cloud.
+
+Cette Tech Review commencera par une brève introduction de BPMN et jBMN e, qui permet aux business analyst de concevoir graphiquement leur workflow.
+
+Ensuite, nous montrerons, en live-coding, comment créer un workflow cloud-native avec Quarkus et Kogito et le déployer sur Kubernetes).
