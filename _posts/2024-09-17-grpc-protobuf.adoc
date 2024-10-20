@@ -3,8 +3,8 @@
 :page-excerpt: Découvrez comment gRPC et Protocol Buffers peuvent révolutionner votre façon de concevoir et de développer des API. Apprenez à tirer parti du typage fort, de la sérialisation efficace et du streaming bidirectionnel pour créer des applications réactives à haute performance.
 :layout: post
 :author: kostiantynkompaniiets
-:page-tags: [Java, Quarkus, REST, API, gRPC, Protobuf]
-:page-vignette: grpc-protobuf.png
+:page-tags: [Java, Quarkus, REST, API, RPC, gRPC, Protobuf]
+:page-vignette: gRPC_article_logo.png
 :page-liquid:
 :page-categories: software
 
@@ -29,6 +29,12 @@ Le concept de RPC (Remote Procedure Call) n’est pas nouveau dans le domaine de
 Ce protocole, qui permet à un programme sur un service/serveur d’appeler des fonctions sur un autre service/serveur, existe depuis le début des années 1980.
 En 2016, Google a lancé un framework basé sur ce protocole et l’a nommé gRPC (cela peut vous surprendre, mais le ``g`` ne représente pas ``Google``. En réalité, il a différentes significations selon https://github.com/grpc/grpc/blob/master/doc/g_stands_for.md[les versions du framework^]).
 
+Avec gRPC, l'application cliente peut effectuer l'appel à la méthode ou à la fonction sur le côté serveur de l'application comme si elle appelait la méthode dans une autre classe de la même application (cliente).
+En s'appuyant sur les concepts RPC, gRPC nécessite la définition de l'API de service partagée avec toutes les méthodes requises (y compris les paramètres avec leurs types définis et le type de la réponse).
+Cette définition peut ensuite être transformée en serveurs et clients (ou stubs) dans différents langages qui peuvent interagir facilement entre eux.
+
+image::kostiantynkompaniiets/grpc-protobuf/gRPC_schema.png[image,width=60%,align="center"]
+
 Tout d'abord, il faut noter que gRPC est basé sur HTTP/2, la version du protocole de transfert de données HTTP, successeur de HTTP/1.1, qui a été adoptée comme standard un an avant le lancement du framework.
 Il utilise Protocol Buffers (Protobuf) comme langage de description d’interfaces.
 C’est ce point que je propose d'examiner à l'étape suivante.
@@ -39,7 +45,7 @@ https://protobuf.dev/[Les Protocol Buffers^] (ou simplement Protobuf) sont un m�
 Ils sont indépendants des langages et des plateformes, ce qui permet de transmettre et de stocker des données de manière efficace.
 Protobuf définit la structure de vos données et génère, grâce au compilateur Protoc, du code pour la sérialisation et la désérialisation selon le langage de programmation choisi.
 Les données de ce format sont sérialisées et transmises sous forme binaire, ce qui garantit une vitesse de transport supplémentaire.
-Protobuf prend en charge la génération de code pour des langages de programmation tels que C++, C#, Dart, Go, Java, Kotlin, Objective-C, Python et Ruby (la dernière version, ``proto3``, fonctionne également avec PHP).
+Protobuf prend en charge la génération de code pour des langages de programmation tels que C++, C#, Dart, Go, Java, Kotlin, Objective-C, Swift, Python et Ruby (la dernière version, ``proto3``, fonctionne également avec PHP).
 De plus, une intégration avec JavaScript est en cours (bien qu’il existe déjà des implémentations non officielles pour JavaScript, TypeScript et Node.js).
 
 Examinons de plus près la syntaxe de Protobuf :
@@ -101,21 +107,50 @@ Le code généré comprend des fichiers Java distincts pour chaque message, ains
 Ces classes (qui sont assez longues, souvent plus de 100 lignes) respectent généralement les conventions JavaBeans, fournissant des getters et setters standard pour chaque champ.
 De plus, des champs et méthodes spécifiques à Protobuf, tels que ceux pour la validation ou la sérialisation des messages, sont générés automatiquement.
 
-== Caractéristiques de gRPC
+== Présentation générale de gRPC
 
-Avant de passer aux fonctionnalités de gRPC, examinons brièvement ce qu'est RPC et comment cela fonctionne. 
+=== RPC : définition et utilisations
+
+Avant de passer aux fonctionnalités de gRPC, examinons brièvement ce qu'est RPC et comment cela fonctionne.
+
 RPC (Remote Procedure Call) permet à un ou plusieurs services (clients) d’appeler une procédure (fonction) sur un autre service (serveur). 
 Le client envoie une requête au serveur avec le nom de la procédure et ses paramètres, le serveur traite la requête et renvoie le résultat au client. 
 Visuellement, cela ressemble à un appel à un service local, tout en masquant la complexité des communications réseau.
+
+RPC peut être utilisé dans les systèmes distribués et les architectures microservices, où plusieurs services doivent communiquer entre eux de manière efficace.
+Cela comprend les systèmes financiers, les applications de télécommunications, les systèmes de messagerie ou les jeux en ligne.
+Étant une solution à la fois assez simple et complexe, RPC présente un certain nombre d'avantages et d'inconvénients :
+
+[width="100%",cols="50%,50%",options="header",align="center"]
+|===
+|*Avantages* |*Inconvénients*
+|Simplifie les appels de fonctions distantes en cachant les complexités réseau |Compatibilité limitée avec certaines technologies ou plateformes comparé à REST
+|Fournit de hautes performances et une faible latence |La gestion des erreurs et des exceptions en cas de problèmes réseau peut être difficile
+|Flexible et adaptable à divers cas d'utilisation |Scalabilité plus complexe à gérer dans des environnements distribués
+|===
+
+=== Caractéristiques de gRPC
 
 Maintenant, examinons de plus près ce que gRPC peut nous proposer :
 
 * Comme nous l’avons vu précédemment, gRPC fonctionne sur HTTP/2 ou des versions plus récentes, offrant ainsi toutes les fonctionnalités proposées par ces protocoles : multiplexage de plusieurs requêtes sur une seule connexion TCP, compression des en-têtes (HTTP headers), push côté serveur, utilisation du protocole binaire.
 * Le framework propose plusieurs types de connexions entre client et serveur, notamment :
 ** *RPC unidirectionnel* : le type de connexion le plus simple, où le client envoie une requête et reçoit une seule réponse du serveur.
++
+image::kostiantynkompaniiets/grpc-protobuf/gRPC_flux-1.png[image,width=50%,align="center"]
+
 ** *Streaming côté serveur* : le client envoie une seule requête mais peut recevoir un flux (stream) de messages en réponse.
++
+image::kostiantynkompaniiets/grpc-protobuf/gRPC_flux-2.png[image,width=50%,align="center"]
+
 ** *Streaming côté client* : ce cas est l'inverse du précédent, où le client envoie un flux (stream) de messages et reçoit une seule réponse du serveur.
++
+image::kostiantynkompaniiets/grpc-protobuf/gRPC_flux-3.png[image,width=50%,align="center"]
+
 ** *Streaming bidirectionnel* : le cas où le client et le serveur utilisent tous deux le streaming pour l'échange de données.
++
+image::kostiantynkompaniiets/grpc-protobuf/gRPC_flux-4.png[image,width=50%,align="center"]
+
 * Il est possible de terminer l'appel de la fonction grâce à la fonctionnalité d'annulation RPC.
 * gRPC permet d'envoyer des métadonnées personnalisées (détails spécifiques à la requête) sous forme de paires clé-valeur.
 * Le framework prend également en charge l’utilisation d’intercepteurs et l’équilibrage de charge (load balancing).
@@ -275,17 +310,11 @@ Il vous suffit de l'utiliser dans votre code en l'annotant avec ``@GrpcClient`` 
 
 [source,java]
 ----
-@Path("/hello")
-public class ExampleResource {
+@Path("/users")
+public class UserResource {
 
     @GrpcClient("user")
     public UserService userServiceClient;
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return "Hello from Quarkus gRPC Client!";
-    }
 
     @GET
     @Path("/{id}")
