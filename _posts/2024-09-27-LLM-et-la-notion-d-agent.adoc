@@ -1,0 +1,13 @@
+= Video - Techreview - LLM & la notion d'agent
+:page-excerpt: Au delà du RAG, l'IA générative permet également de proposer un moyen de s'intégrer à des appels de méthode classiquess. C'est la notion d'agent.
+:page-layout: post
+:author: christophesejourne
+:page-tags: [LLM, IA, Techreview]
+:page-vignette: 2024/llm-et-agents.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: llm video
+:page-vimeo-id: 1015631234
+
+La sortie de ChatGPT, fin 2022, a focalisé l'attention sur une nouvelle "révolution technologique" propulsée par les LLMs. Lors de cette présentation, nous analyserons quelques applications de l'IA Générative ainsi que les ruptures induites. Nous nous intéresserons ensuite aux concepts/outils sous-jacents et en particulier à l'approche RAG (Retrieval Augmented Generation) utilisée dans de nombreux cas d'usage. Nous conclurons en partageant nos convictions sur les tendances à venir et les perspectives offertes en étant agnostiques des différents vendeurs.
+

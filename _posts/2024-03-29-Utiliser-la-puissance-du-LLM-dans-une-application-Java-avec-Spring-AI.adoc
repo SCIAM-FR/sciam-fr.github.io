@@ -1,0 +1,12 @@
+= Video - Techreview - Utiliser la puissance du LLM dans une application Java avec Spring AI
+:page-excerpt: Démonstrtion de la simplicité de Srping AI pour l'exloitation des LLM dans une application Java.
+:page-layout: post
+:author: rickenbazolo
+:page-tags: [SpringAI, LLM, IA, Techreview]
+:page-vignette: 2024/techreview-springai.png
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: llm video
+:page-vimeo-id: 1018218393
+
+Dans le paysage technologique en évolution rapide d'aujourd'hui, l'intégration de l'intelligence artificielle et des modèles de langage (LLM) dans les applications devient une nécessité pour rester compétitif. Cette présentation explore les nouvelles possibilités qu’apporte la combinaison de la puissance des LLM avec la robustesse et la flexibilité de Spring Boot, en se concentrant sur le nouveau module Spring AI. Ce dernier est conçu pour faciliter l'utilisation des capacités d'IA, y compris les LLM, dans vos applications Spring Boot et fournit un Framework ETL servant de backbone dans le cas de conception d’un RAG (Retrieval Augmented Generation).
