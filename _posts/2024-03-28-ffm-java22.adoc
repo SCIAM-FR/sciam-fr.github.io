@@ -13,7 +13,7 @@
 == Un peu d'histoire
 
 Depuis le JDK 1.1, il est possible de manipuler des données "off-heap" et d'interagir avec du code natif via l'API JNI : "Java Native Interface".
-L'utilisation du modificateur `native` permet l'invocation de fonctions natives, moyennement une succession d'étapes parfois périlleuses.
+L'utilisation du modificateur `native` permet l'invocation de fonctions natives, moyennant une succession d'étapes parfois périlleuses.
 Cela implique notamment le développement d'une "glue" en langage natif permettant de faire le lien entre code C et Java par exemple, dans laquelle il faudra effectuer les conversions des types de données.
 Il faut aussi être particulièrement vigilant quant à la gestion de la mémoire, le Garbage Collector ne réalisant pas de collecte en dehors de la mémoire "heap".
 
