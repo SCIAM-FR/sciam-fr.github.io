@@ -16,11 +16,14 @@ Ce second article est consacré aux autres évolutions dans les API ainsi que le
 
 == Les évolutions dans les API 
 
-En plus des évolutions majeures proposés dans des JEPS, des évolutions mineures sont proposés dans certaines API.
+En plus des évolutions majeures proposées dans des JEPs, des évolutions mineures sont proposées dans certaines API.
 
-=== Le support de Locale dans des méthodes de `Console` (https://bugs.openjdk.org/browse/JDK-8330276[JDK-8330276])
 
-Avec la classe `Console` introduite dans Java 6, il est possible de facilement afficher du texte sur la console et lire les entrées de l’utilisateur à partir de la console. 
+=== Le support de `Locale` dans des méthodes de `Console` (https://bugs.openjdk.org/browse/JDK-8330276[JDK-8330276])
+
+
+Avec la classe `Console` introduite dans Java 6, il est possible d'afficher facilement du texte sur la console et lire les entrées de l’utilisateur à partir de la console. 
+
 Exemple :
 
 .le fichier DemoLocaleConsole.java
@@ -149,7 +152,8 @@ duree ==> PT19.6926333S
 
 La nouvelle méthode `ofPosixLiteral(String)` de la classe `Inet4Address` crée une `Inet4Address` basée sur la représentation textuelle fournie d’une adresse IPv4 sous une forme compatible https://pubs.opengroup.org/onlinepubs/9699919799/functions/inet_addr.html[POSIX inet_addr].
 
-La méthode `ofPosixLiteral()` implémente un algorithme d’analyse de chaîne au format POSIX inet_addr, permettant d’utiliser des segments d’adresse octal et hexadécimal. « `0` » est le préfixe des nombres octaux, « `0x` » et « `0X` » sont les préfixes des nombres hexadécimaux. Les segments d’adresse non nuls qui commencent à partir de chiffres non égal à zéro sont analysés comme des nombres décimaux.
+La méthode `ofPosixLiteral()` implémente un algorithme d’analyse de chaîne au format POSIX inet_addr, permettant d’utiliser des segments d’adresse octal et hexadécimal. « `0` » est le préfixe des nombres octaux, « `0x` » et « `0X` » sont les préfixes des nombres hexadécimaux. Les segments d’adresse non nuls qui commencent à partir de chiffres non égaux à zéro sont analysés comme des nombres décimaux.
+
 
 Les formes suivantes (non décimales) sont prises en charge par cette méthode :
 
@@ -236,7 +240,8 @@ La classe `java.text.NumberFormat` et ses classes filles ont vu l’ajout des m�
 
 La classe `NumberFormat` analyse par défaut avec indulgence. Les sous-classes peuvent envisager d’implémenter une analyse stricte et, en tant que telle, de redéfinir des implémentations pour les méthodes facultatives `isStrict()` et `setStrict(boolean)`.
 
-La méthode `boolean isStrict()` renvoie `true` si l’analyse est réalisée de manière strict sinon elle retourne `false`. L’implémentation par défaut lève toujours une exception de type `UnsupportedOperationException`. Les sous-classes doivent redéfinir cette méthode lors de l’implémentation d’une analyse stricte.
+La méthode `boolean isStrict()` renvoie `true` si l’analyse est réalisée de manière stricte sinon elle retourne `false`. L’implémentation par défaut lève toujours une exception de type `UnsupportedOperationException`. Les sous-classes doivent redéfinir cette méthode lors de l’implémentation d’une analyse stricte.
+
 
 La méthode `void setStrict(boolean strict)` permet d’indiquer si l’analyse est stricte (`true`) ou indulgente (`false`), par défaut, elle est indulgente. L’implémentation par défaut lève toujours une exception de type `UnsupportedOperationException`. Les sous-classes doivent redéfinir cette méthode lors de l’implémentation d’une analyse stricte.
 
@@ -379,7 +384,8 @@ Plusieurs fonctionnalités sont retirées du JDK 23.
 
 Les String templates, qui étaient proposés en preview dans les JDK 21 et JDK 22, ont été retirés dans le JDK 23.
 
-Cette fonctionnalité était destinée à compléter les chaînes littérales et les blocs de texte de Java en couplant du texte littéral et des expressions intégrées pour réaliser une interpolation de manière potentiellement sûr afin de produire des chaînes de caractères ou une instance quelconque.
+Cette fonctionnalité était destinée à compléter les chaînes littérales et les blocs de texte de Java en couplant du texte littéral et des expressions intégrées pour réaliser une interpolation de manière potentiellement sûre afin de produire des chaînes de caractères ou une instance quelconque.
+
 
 La communauté OpenJDK a estimé que la capacité « ne faisait pas sa part » et que d’autres évaluations et une potentielle refonte prendraient du temps. 
 
