@@ -220,7 +220,7 @@ jshell> Inet4Address.ofPosixLiteral("127.660.51")
 |        at (#13:1)
 ----
 
-Cette méthode ne bloque pas car aucune recherche de nom d’hôte n’est effectuée.
+Cette méthode ne bloque pas, car aucune recherche de nom d’hôte n’est effectuée.
 
 WARNING: Cette méthode produit des résultats différents de ceux de `ofLiteral(java.lang.String)` lorsque le paramètre `posixIPAddressLiteral` contient des segments d’adresse avec des zéros non significatifs. 
 Un segment d’adresse avec un zéro non significatif est toujours analysé comme un nombre octal, donc `0255` (octal) sera analysé comme `173` (décimal). 
@@ -263,7 +263,7 @@ L’objectif de la classe `sun.misc.Unsafe`, introduite en 2002 dans le JDK 1.4,
 * La mémoire du heap est gérée par le ramasse-miettes de la JVM. Des méthodes non sécurisées permettaient aux développeurs de manipuler des champs d’objets et des éléments de tableau à des offsets mémoire spécifiques
 * La mémoire off heap fait référence à la mémoire en dehors du contrôle du ramasse-miettes. La classe `Unsafe` permettait aux développeurs d’allouer, de modifier et de libérer cette mémoire manuellement, offrant ainsi une plus grande flexibilité et des avantages en termes de performances
 
-Comme le nom de la classe l’indique, la plupart de ces opérations ne sont pas sûres. Cependant ces méthodes peuvent aider à augmenter les performances dans certains scénarios spécifiques, mais uniquement si des vérifications exhaustives de sécurité sont effectuées.
+Comme le nom de la classe l’indique, la plupart de ces opérations ne sont pas sûres. Cependant, ces méthodes peuvent aider à augmenter les performances dans certains scénarios spécifiques, mais uniquement si des vérifications exhaustives de sécurité sont effectuées.
 
 Malgré les risques, `sun.misc.Unsafe` est devenu très populaire au fil du temps par les développeurs de bibliothèques à la recherche de performances et de fonctionnalités supérieurs à ce que les API Java standard pouvaient offrir, telles que les opérations atomiques ou la gestion avancée de la mémoire hors heap.
 
@@ -280,9 +280,9 @@ Au fil des versions du JDK, des API standard plus sûres ont été introduites p
 
 Ces API sont intrinsèquement plus stables et fiables et doivent être utilisées à la place de `sun.misc.Unsafe`.
 
-L’objectif de la https://openjdk.org/jeps/471[JEP 471] est d’encourager les développeurs à passer d’`Unsafe` à ces API plus sûres et prises en charge, améliorant ainsi la compatibilité avec les futures versions du JDK tout en réduisant les risques de comportements hératiques ou de plantages.
+L’objectif de la https://openjdk.org/jeps/471[JEP 471] est d’encourager les développeurs à passer d’`Unsafe` à ces API plus sûres et prises en charge, améliorant ainsi la compatibilité avec les futures versions du JDK tout en réduisant les risques de comportements erratiques ou de plantages.
 
-Pour les atteindre, la JEP inclue :
+Pour les atteindre, la JEP inclus :
 
 * la préparation de l’écosystème pour la suppression des méthodes d’accès à la mémoire dans `sun.misc.Unsafe` dans une future version du JDK. Les méthodes d’accès à la mémoire dans `sun.misc.Unsafe` sont dépréciées et seront dépréciées pour la suppression dans une version ultérieure
 
@@ -291,7 +291,7 @@ Pour les atteindre, la JEP inclue :
 Cette JEP n’a pas pour objectif de supprimer entièrement `sun.misc.Unsafe`, car quelques méthodes ne sont pas utilisées pour l’accès à la mémoire. Ces méthodes seront dépréciées et supprimées séparément ultérieurement.
 
 La JEP encourage vivement les développeurs à migrer de `sun.misc.Unsafe` vers les remplacements pris en charge, afin que les applications puissent migrer en douceur vers les versions modernes du JDK. 
-La grande majorité des développeurs Java n'utilisent pas explicitement `sun.misc.Unsafe` dans leur propre code mais de très nombreuses applications en dépendent, directement ou indirectement à cause des nombreuses bibliothèques qui l’utilisent.
+La grande majorité des développeurs Java n'utilisent pas explicitement `sun.misc.Unsafe` dans leur propre code, mais de très nombreuses applications en dépendent, directement ou indirectement à cause des nombreuses bibliothèques qui l’utilisent.
 
 Pour permettre d’évaluer l'impact de la dépréciation et de la suppression des méthodes de `sun.misc.Unsafe` sur les bibliothèques en utilisant, une nouvelle option en ligne de commande de la JVM HostSpot est ajoutée : `--sun-misc-unsafe-memory-access`. 
 Cette option est similaire, dans l'esprit et dans la forme, à l'option `--illegal-access` introduite par la JEP 261 dans le JDK 9. 
@@ -390,11 +390,11 @@ Cette fonctionnalité était destinée à compléter les chaînes littérales et
 
 La communauté OpenJDK a estimé que la capacité « ne faisait pas sa part » et que d’autres évaluations et une potentielle refonte prendraient du temps. 
 
-Il est a noté que c’est la première fois qu’une fonctionnalité en preview n’est pas reconduite dans une version suivante du JDK.
+Il est à noter que c’est la première fois qu’une fonctionnalité en preview n’est pas reconduite dans une version suivante du JDK.
 
 La JEP 12, qui définit le processus de mise en œuvre des fonctionnalités en preview :
 
-* une fonctionnalité en preview, est spécifique pour une version du JDK, et donc si une fonctionnalité n’est pas reconduite en preview ou promue en standard, elle doit être retirée
+une fonctionnalité en preview est spécifique pour une version du JDK, et donc si une fonctionnalité n’est pas reconduite en preview ou promue en standard, elle doit être retirée
 * elle indique clairement qu’une fonctionnalité en preview peut être supprimée, sans qu’il soit nécessaire d’en créer une nouvelle
 
 Une refonte globale de cette fonctionnalité va être effectuée, car elle avait suscité de nombreux débats et ne semblait pas répondre aux attentes de la communauté.
@@ -437,7 +437,7 @@ public class DemoMemorySegment {
 
 === La méthode `ThreadGroup.stop()` (https://bugs.openjdk.org/browse/JDK-8320786[JDK-8320786])
 
-Depuis Java 1.2, la méthode `ThreadGroup.stop()` était marquée comme dépréciée car le concept d’arrêt d’un groupe de threads était mal implémenté dès le départ.
+Depuis Java 1.2, la méthode `ThreadGroup.stop()` était marquée comme dépréciée, car le concept d’arrêt d’un groupe de threads était mal implémenté dès le départ.
 
 Dans le JDK 16, la méthode a été déclarée dépréciée pour suppression.
 
@@ -453,7 +453,7 @@ Cette méthode est finalement supprimée dans le JDK 23 :
 
 Les méthodes `Thread.suspend()`, `Thread.resume()`, `ThreadGroup.suspend()` et `ThreadGroup.resume()` sont dépréciées depuis le JDK 1.2 car elles pouvaient engendrer des deadlocks.
 
-Dans le JDK 14, ces méthodes été dépréciées pour suppressions (deprecated for removal).
+Dans le JDK 14, ces méthodes ont été dépréciées pour suppressions (deprecated for removal).
 
 Dans le JDK 19, les méthodes `suspend()` et `resume()` de la classe `ThreadGroup` lèvent une exception de type `UnsupportedOperationException`.
 
@@ -470,7 +470,7 @@ Dans le JDK 23, toutes ces méthodes ont été retirées :
 Le module `jdk.random` a été supprimé du JDK. Ce module contenait les implémentations des algorithmes `java.util.random.RandomGenerator`. 
 Ces implémentations ont été déplacées vers le `module java.base` qui est désormais responsable de la prise en charge de ces algorithmes.
 
-Si un module utilise une clause requires `jdk.random` alors il faut la supprimer pour permettre sa compilation en Java 23 puisque le module `jdk.random` est supprimé et que le module `java.base` est automatiquement requis.
+Si un module utilise une clause requires `jdk.random` alors, il faut la supprimer pour permettre sa compilation en Java 23 puisque le module `jdk.random` est supprimé et que le module `java.base` est automatiquement requis.
 
 === La suppression des données locales legacy (https://bugs.openjdk.org/browse/JDK-8174269[JDK-8174269])
 
