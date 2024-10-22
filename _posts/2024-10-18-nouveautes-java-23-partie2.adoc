@@ -1,0 +1,542 @@
+= Les nouveautés de Java 23 : partie 2
+:showtitle:
+:page-navtitle: Les nouveautés de Java 23 : partie 2
+:page-excerpt: Ce second article est consacré aux autres autres évolutions dans les API ainsi que les fonctionnalités dépréciées et retirées.
+:layout: post
+:author: jeanmicheldoudoux
+:page-tags: [Java, Java 23, Projet Amber, Projet Panama, Projet Loom]
+:page-vignette: java-23.png
+:page-liquid:
+:page-categories: software news
+
+Le link:{% post_url 2024-10-14-nouveautes-java-23-partie1 %}[premier article^] de cette série a détaillé les fonctionnalités proposées via des JEPs relatives à la syntaxe et aux API dans le JDK 23. 
+
+Comme pour les précédentes versions de Java, cette version 23 inclut des JEPs, mais aussi, et surtout, des évolutions et des améliorations sur la fiabilité (corrections de nombreux bugs), l’outillage, la performance et la sécurité.
+
+Ce second article est consacré aux autres évolutions dans les API ainsi que les fonctionnalités dépréciées et retirées.
+
+== Les évolutions dans les API 
+
+En plus des évolutions majeures proposées dans des JEPs, des évolutions mineures sont proposées dans certaines API.
+
+
+=== Le support de `Locale` dans des méthodes de `Console` (https://bugs.openjdk.org/browse/JDK-8330276[JDK-8330276])
+
+
+Avec la classe `Console` introduite dans Java 6, il est possible d'afficher facilement du texte sur la console et lire les entrées de l’utilisateur à partir de la console. 
+
+Exemple :
+
+.le fichier DemoLocaleConsole.java
+[source,java]
+----
+import java.io.Console;
+
+public class DemoLocaleConsole {
+    public static void main(String[] args) {
+        Console console = System.console();
+        var nom = console.readLine("Saisir votre nom : ");
+        var mdp = console.readPassword("Saisir votre mot de passe : ");
+        if ("azerty".equals(new String(mdp))) {
+            console.printf("Bienvenue %s%n", nom); 
+            console.format("La valeur de PI est environ de %.6f", Math.PI);            
+        }
+    }
+}
+----
+
+Le code peut être compilé et exécuté.
+
+[source,plain]
+----
+C:\java>javac DemoLocaleConsole.java
+
+C:\java>java DemoLocaleConsole
+Saisir votre nom : JM
+Saisir votre mot de passe :
+Bienvenue JM
+La valeur de PI est environ de 3,141593
+----
+
+Ces méthodes utilisent toujours la `Locale` par défaut. Selon le paramètre de langue, `Pi` peut être affiché soit `3.141593` (avec un point), soit `3,141593` (avec une virgule).
+
+À partir de Java 23, il est possible de préciser une locale comme paramètre supplémentaire pour les méthodes `printf(...)`, `format(...)`, `readLine(...)`, et `readPassword(...)`.
+
+Des surcharges de quatre méthodes ont été ajoutées à la classe `java.io.Console` qui attendent en argument un objet de type `java.util.Locale` :
+
+* `public Console format(Locale locale, String format, Object ... args)`
+* `public Console printf(Locale locale, String format, Object ... args)`
+* `public String readLine(Locale locale, String format, Object ... args)`
+* `public char[] readPassword(Locale locale, String format, Object ... args)`
+
+Exemple
+
+[source,plain]
+----
+jshell> /set feedback silent
+-> System.console().printf(Locale.FRANCE, "%1$tA %1$te %1$tB %1$tY%n", new Date())
+mardi 1 octobre 2024
+->
+----
+
+Ces méthodes permettent d’afficher une chaîne ou un prompt à la console formaté avec les paramètres régionaux spécifiés via la `Locale`, qui peuvent être indépendants des paramètres régionaux par défaut.
+Exemple :
+
+.le fichier DemoLocaleConsole.java
+[source,java]
+----
+import java.io.Console;
+import java.util.Locale;
+
+public class DemoLocaleConsole {
+    public static void main(String[] args) {
+        Console console = System.console();
+        var nom = console.readLine("Saisir votre nom : ");
+        var mdp = console.readPassword("Saisir votre mot de passe : ");
+        if ("azerty".equals(new String(mdp))) {
+            console.printf("Bienvenue %s%n", nom); 
+            console.format(Locale.US, "La valeur de PI est environ de %.6f", Math.PI);            
+        }
+    }
+}
+----
+
+Le code peut être compilé et exécuté.
+
+[source,plain]
+----
+C:\java>javac DemoLocaleConsole.java
+
+C:\java>java DemoLocaleConsole
+Saisir votre nom : JM
+Saisir votre mot de passe :
+Bienvenue JM
+La valeur de PI est environ de 3.141593
+----
+
+Dans cet exemple, `Pi` est désormais toujours imprimé dans le style américain avec un point comme séparateur de la partie décimale.
+
+=== La détermination de la durée jusqu’à un autre instant (https://bugs.openjdk.org/browse/JDK-8331202[JDK-8331202])
+
+Pour déterminer la durée entre deux objets de type `Instant`, il fallait auparavant utiliser la méthode `Duration.between()`. 
+Exemple :
+
+[source,plain]
+----
+C:\java>jshell --enable-preview
+|  Welcome to JShell -- Version 23
+|  For an introduction type: /help intro
+
+jshell> import module java.base
+
+jshell> Instant maintenant = Instant.now();
+maintenant ==> 2024-10-01T08:11:28.304397600Z
+
+jshell> Instant plusTard = Instant.now().plus(10, ChronoUnit.SECONDS);
+plusTard ==> 2024-10-01T08:11:47.997030900Z
+
+jshell> Duration duree = Duration.between(maintenant, plusTard);
+duree ==> PT19.6926333S
+----
+
+Comme cette méthode n’est pas facile à trouver, une nouvelle méthode `until(Instant)` a été ajoutée à la classe `java.time.Instant` pour obtenir la durée jusqu’à l’`Instant` spécifié. 
+Cette nouvelle méthode produit la même durée que `Duration.between()` mais elle est plus facile à découvrir pour les utilisateurs. 
+Exemple :
+
+[source,plain]
+----
+jshell> Duration duree = maintenant.until(plusTard);
+duree ==> PT19.6926333S
+----
+
+=== La méthode `ofPosixLiteral()` de la classe `Inet4Address`
+
+La nouvelle méthode `ofPosixLiteral(String)` de la classe `Inet4Address` crée une `Inet4Address` basée sur la représentation textuelle fournie d’une adresse IPv4 sous une forme compatible https://pubs.opengroup.org/onlinepubs/9699919799/functions/inet_addr.html[POSIX inet_addr].
+
+La méthode `ofPosixLiteral()` implémente un algorithme d’analyse de chaîne au format POSIX inet_addr, permettant d’utiliser des segments d’adresse octal et hexadécimal. « `0` » est le préfixe des nombres octaux, « `0x` » et « `0X` » sont les préfixes des nombres hexadécimaux. Les segments d’adresse non nuls qui commencent à partir de chiffres non égaux à zéro sont analysés comme des nombres décimaux.
+
+
+Les formes suivantes (non décimales) sont prises en charge par cette méthode :
+
+* Forme d’adresse littérale avec quadruple valeurs séparées par un point 'x.x.x.x'
++
+[source,plain]
+----
+jshell> Inet4Address.ofPosixLiteral("0177.0.0.1")
+$1 ==> /127.0.0.1
+
+jshell>  Inet4Address.ofPosixLiteral("0x7F.0.0.1")
+$2 ==> /127.0.0.1
+----
+
+* Forme d’adresse littérale avec triple valeurs séparées par un point 'x.x.x', la dernière partie est placée dans les deux octets les plus à droite de l’adresse construite
++
+[source,plain]
+----
+jshell> Inet4Address.ofPosixLiteral("0177.0.0401")
+$5 ==> /127.0.1.1
+
+jshell> Inet4Address.ofPosixLiteral("0x7F.0.0x101")
+$6 ==> /127.0.1.1
+----
+
+* Forme d’adresse littérale avec deux valeurs séparées par un point 'x.x', la dernière partie est placée dans les trois octets les plus à droite de l’adresse construite
++
+[source,plain]
+----
+jshell> Inet4Address.ofPosixLiteral("0177.0201003")
+$7 ==> /127.1.2.3
+
+jshell> Inet4Address.ofPosixLiteral("0x7F.0x10203")
+$8 ==> /127.1.2.3
+
+jshell> Inet4Address.ofPosixLiteral("127.66051")
+$9 ==> /127.1.2.3
+----
+
+* Forme d’adresse littérale avec une seule valeur sans point 'x' avec une valeur qui est stockée directement dans les octets d’adresse construits sans aucun réarrangement
++
+[source,plain]
+----
+jshell> Inet4Address.ofPosixLiteral("0100401404")
+$10 ==> /1.2.3.4
+
+jshell> Inet4Address.ofPosixLiteral("0x1020304")
+$11 ==> /1.2.3.4
+
+jshell> Inet4Address.ofPosixLiteral("16909060")
+$12 ==> /1.2.3.4
+----
+
+Si la chaine de caractères fournie ne représente pas une adresse IPv4 valide au format POSIX, une exception de type `IllegalArgumentException` est levée.
+
+[source,plain]
+----
+jshell> Inet4Address.ofPosixLiteral("127.660.51")
+|  Exception java.lang.IllegalArgumentException: Invalid IP address literal: 127.660.51
+|        at IPAddressUtil.invalidIpAddressLiteral (IPAddressUtil.java:169)
+|        at Inet4Address.parseAddressStringPosix (Inet4Address.java:325)
+|        at Inet4Address.ofPosixLiteral (Inet4Address.java:256)
+|        at (#13:1)
+----
+
+Cette méthode ne bloque pas, car aucune recherche de nom d’hôte n’est effectuée.
+
+WARNING: Cette méthode produit des résultats différents de ceux de `ofLiteral(java.lang.String)` lorsque le paramètre `posixIPAddressLiteral` contient des segments d’adresse avec des zéros non significatifs. 
+Un segment d’adresse avec un zéro non significatif est toujours analysé comme un nombre octal, donc `0255` (octal) sera analysé comme `173` (décimal). 
+D’autre part, `Inet4Address.ofLiteral()` ignore les zéros non significatifs, analyse tous les nombres comme décimaux et produit `255`. 
+Là où cette méthode analyserait `0256.0256.0256.0256` (octal) et produirait `174.174.174.174` (décimal) en notation quadruple à quatre points, `Inet4Address.ofLiteral()` lèvera une exception de type `IllegalArgumentException`.
+
+=== Les méthodes `setStrict()` et `isStrict()` de `NumberFormat`
+
+Une analyse indulgente doit être utilisée lors de la tentative d’analyse d’un nombre à partir d’une chaîne contenant des valeurs non numériques ou non liées au format. 
+
+Une analyse stricte doit être utilisée lorsqu’on tente de s’assurer qu’une chaîne respecte exactement les conventions d’une `Locale`, et peut donc servir à valider la valeur. 
+Par exemple : 
+
+* l’utilisation d’un format de nombre de `Locale.GERMANY` pour analyser le nombre `1999.99` à partir de la chaîne « `1.999,99` »
+* l’utilisation d’un format de devise de `Locale.US` pour analyser le nombre `2500` à partir de la chaîne « `2 500,00 $` ».
+
+La classe `java.text.NumberFormat` et ses classes filles ont vu l’ajout des méthodes `setStrict(boolean)` et `isStrict()`, qui peuvent être utilisées pour changer le mode de formatage.
+
+La classe `NumberFormat` analyse par défaut avec indulgence. Les sous-classes peuvent envisager d’implémenter une analyse stricte et, en tant que telle, de redéfinir des implémentations pour les méthodes facultatives `isStrict()` et `setStrict(boolean)`.
+
+La méthode `boolean isStrict()` renvoie `true` si l’analyse est réalisée de manière stricte sinon elle retourne `false`. L’implémentation par défaut lève toujours une exception de type `UnsupportedOperationException`. Les sous-classes doivent redéfinir cette méthode lors de l’implémentation d’une analyse stricte.
+
+
+La méthode `void setStrict(boolean strict)` permet d’indiquer si l’analyse est stricte (`true`) ou indulgente (`false`), par défaut, elle est indulgente. L’implémentation par défaut lève toujours une exception de type `UnsupportedOperationException`. Les sous-classes doivent redéfinir cette méthode lors de l’implémentation d’une analyse stricte.
+
+=== L'ajout d’une propriété pour définir le nombre maximal d’événements dans un `WatchService` (https://bugs.openjdk.org/browse/JDK-8330077[JDK-8330077])
+
+Les implémentations de `java.nio.file.WatchService` mettent en mémoire tampon jusqu’à un nombre maximal d’événements avant d’ignorer les événements, et de mettre dans la file d’attente un événement `OVERFLOW`.
+
+Une nouvelle propriété système, `jdk.nio.file.WatchService.maxEventsPerPoll`, a été ajoutée pour permettre de spécifier le nombre maximal d’événements en attente qui peuvent être mis en file d’attente avant qu’un événement `OVERFLOW` ne soit émis. La valeur de cette propriété doit être un entier positif.
+
+== Les fonctionnalités dépréciées
+
+Plusieurs fonctionnalités sont dépréciées (deprecated) ou dépréciées pour suppression (deprecated forRemoval).
+
+=== La JEP 471 : Deprecate the Memory-Access Methods in `sun.misc.Unsafe` for Removal ()
+
+L’objectif de la classe `sun.misc.Unsafe`, introduite en 2002 dans le JDK 1.4, a été de proposer des opérations de bas niveau dans et pour le JDK. Elle contient entre-autre des méthodes permettant d’accéder directement à la mémoire dans le heap et hors heap :
+
+* La mémoire du heap est gérée par le ramasse-miettes de la JVM. Des méthodes non sécurisées permettaient aux développeurs de manipuler des champs d’objets et des éléments de tableau à des offsets mémoire spécifiques
+* La mémoire off heap fait référence à la mémoire en dehors du contrôle du ramasse-miettes. La classe `Unsafe` permettait aux développeurs d’allouer, de modifier et de libérer cette mémoire manuellement, offrant ainsi une plus grande flexibilité et des avantages en termes de performances
+
+Comme le nom de la classe l’indique, la plupart de ces opérations ne sont pas sûres. Cependant, ces méthodes peuvent aider à augmenter les performances dans certains scénarios spécifiques, mais uniquement si des vérifications exhaustives de sécurité sont effectuées.
+
+Malgré les risques, `sun.misc.Unsafe` est devenu très populaire au fil du temps par les développeurs de bibliothèques à la recherche de performances et de fonctionnalités supérieurs à ce que les API Java standard pouvaient offrir, telles que les opérations atomiques ou la gestion avancée de la mémoire hors heap.
+
+Cependant, comme ces méthodes contournent les mécanismes de sécurité de Java : elles introduisaient des dangers potentiels tels que des plantages de la JVM et des erreurs difficiles à déboguer. 
+L’utilisation de ces méthodes peut entraîner un comportement inattendu de l’application, une détérioration des performances ou même des blocages de la JVM. 
+Malheureusement, de nombreuses bibliothèques utilisent `sun.misc.Unsafe` puisque la visibilité de cette classe est `public`, mais toutes n’effectuent pas les vérifications de sécurité requises.
+
+Depuis l’introduction des modules en Java, l’objectif est de proposer des solutions de remplacement standard des fonctionnalités de `Unsafe` afin de ne plus permettre une utilisation de cette classe en dehors des API de Java Core du JDK.
+
+Au fil des versions du JDK, des API standard plus sûres ont été introduites pour remplacer ces opérations :
+
+* la classe `java.lang.invoke.VarHandle`, introduit dans le JDK 9 (https://openjdk.org/jeps/193[JEP 193]), fournit des méthodes pour manipuler en toute sécurité et efficacement les champs d’objets, les champs statiques de classes et les éléments de tableaux dans le heap
+* La classe `java.lang.foreign.MemorySegment` l’API Foreign Function & Memory, introduite en standard dans le JDK 22 (https://openjdk.org/jeps/454[JEP 454]), fournit des méthodes pour accéder en toute sécurité et efficacement à la mémoire hors heap, parfois en coopération avec `VarHandle`
+
+Ces API sont intrinsèquement plus stables et fiables et doivent être utilisées à la place de `sun.misc.Unsafe`.
+
+L’objectif de la https://openjdk.org/jeps/471[JEP 471] est d’encourager les développeurs à passer d’`Unsafe` à ces API plus sûres et prises en charge, améliorant ainsi la compatibilité avec les futures versions du JDK tout en réduisant les risques de comportements erratiques ou de plantages.
+
+Pour les atteindre, la JEP inclus :
+
+* la préparation de l’écosystème pour la suppression des méthodes d’accès à la mémoire dans `sun.misc.Unsafe` dans une future version du JDK. Les méthodes d’accès à la mémoire dans `sun.misc.Unsafe` sont dépréciées et seront dépréciées pour la suppression dans une version ultérieure
+
+* et l’aide aux développeurs pour savoir quand leurs applications s’appuient, directement ou indirectement, sur ces méthodes d’accès à la mémoire
+
+Cette JEP n’a pas pour objectif de supprimer entièrement `sun.misc.Unsafe`, car quelques méthodes ne sont pas utilisées pour l’accès à la mémoire. Ces méthodes seront dépréciées et supprimées séparément ultérieurement.
+
+La JEP encourage vivement les développeurs à migrer de `sun.misc.Unsafe` vers les remplacements pris en charge, afin que les applications puissent migrer en douceur vers les versions modernes du JDK. 
+La grande majorité des développeurs Java n'utilisent pas explicitement `sun.misc.Unsafe` dans leur propre code, mais de très nombreuses applications en dépendent, directement ou indirectement à cause des nombreuses bibliothèques qui l’utilisent.
+
+Pour permettre d’évaluer l'impact de la dépréciation et de la suppression des méthodes de `sun.misc.Unsafe` sur les bibliothèques en utilisant, une nouvelle option en ligne de commande de la JVM HostSpot est ajoutée : `--sun-misc-unsafe-memory-access`. 
+Cette option est similaire, dans l'esprit et dans la forme, à l'option `--illegal-access` introduite par la JEP 261 dans le JDK 9. 
+Plusieurs valeurs sont utilisables pour indiquer le comportement attendu :
+
+* `allow` : permet l'utilisation des méthodes d'accès à la mémoire sans avertissement à l'exécution
+* `warn` : permet l'utilisation des méthodes d'accès à la mémoire, mais émet un avertissement à la première utilisation de toute méthode d'accès à la mémoire que ce soit directement ou via la réflexion. Au plus un avertissement est émis, quelles que soient les méthodes d'accès à la mémoire et combien de fois une méthode particulière est utilisée
+* `debug` : permet l'utilisation des méthodes d'accès en mémoire, mais émet un avertissement et une stacktrace à chaque fois que toute méthode d'accès à la mémoire est utilisée, que ce soit directement ou par la réflexion
+* `deny` : interdit l'utilisation des méthodes d'accès à la mémoire en levant une exception de type `UnsupportedOperationException` à chaque fois qu'une telle méthode est invoquée, que ce soit directement ou par la réflexion
+
+Il est aussi possible de tracer les invocations des méthodes dépréciées de `sun.misc.Unsafe` en utilisant l’événement `jdk.DeprecatedInvocation` dans un enregistrement JFR.
+
+La section « https://openjdk.org/jeps/471#sun-misc-Unsafe-memory-access-methods-and-their-replacements[sun.misc.Unsafe memory-access methods and their replacements] » de la JEP propose une liste complète de toutes les méthodes marquées comme obsolètes avec leurs remplacements respectifs.
+
+=== La dépréciation pour suppression du package `java.beans.beancontext` (https://bugs.openjdk.org/browse/JDK-8321428[JDK-8321428])
+
+Le package `java.beans.beancontext` a été ajouté dans la version 1.2 du JDK, bien avant les nouvelles fonctionnalités du langage telles que les annotations, les lambdas et les modules, ainsi que les paradigmes de programmation tels que « Configuration déclarative », « Injection de dépendances » et « Inversion de contrôle ».
+
+Ce package proposait des mécanismes pour l’assemblage de composants JavaBeans hiérarchiques. Cela a permis aux composants individuels de produire et de consommer des services exprimés sous forme d’interfaces par leurs pairs, ancêtres et descendants.
+
+Avec les évolutions du langage Java, ces API sont maintenant à la fois obsolètes et expriment un « anti-pattern » d’assemblage et d’interaction des composants. Elles seront donc dépréciés pour suppression dans une version future.
+
+Il ne faut plus utiliser ces API et prévoir de migrer tout code existant dépendant de ce package vers une solution alternative en prévision de leur suppression future.
+
+=== L’option `DontYieldALot` de la JVM Hotpost est dépréciée (https://bugs.openjdk.org/browse/JDK-8331021[JDK-8331021])
+
+Pour atténuer une anomalie de planification et de préemption des green threads pouvant survenir sur le système d’exploitation Solaris, des bibliothèques inséraient des appels à `Thread.yield()` à de nombreux endroits pour essayer d’être de « bons citoyens ».
+
+Avec le modèle d’ordonnancement des threads utilisé par Hotspot sur Solaris, ces appels à `yield()` étaient non seulement inutiles, mais devenaient également préjudiciables aux performances.
+
+Pour atténuer cette limitation de `yield()`, le flag produit `DontYieldALot` et le flag de développement `DontYieldALotInterval` ont été introduit. Si `DontYieldALot` était `true`, alors les `yield()` deviendraient des no-ops à moins qu’il n’y ait eu quelques millisecondes depuis le dernier `yield()`. Le flag `DontYieldALot` n’était activé que sur Solaris.
+
+25 ans plus tard et le code de la bibliothèque repose sur une planification préemptive et n’utilise pas beaucoup `yield()`. De plus, OpenJDK ne supporte plus Solaris et donc le flag est toujours `false`.
+
+L’option est maintenant marquée comme dépréciée et sera dépréciée pour suppression dans les futures versions.
+
+[source,plain]
+----
+C:\java>java -XX:+DontYieldALot Main
+OpenJDK 64-Bit Server VM warning: Option DontYieldALot was deprecated in version 23.0 and will likely be removed in a future release.
+----
+
+=== L'option `UseEmptySlotsInSupers` de la JVM Hotspot est dépréciée (https://bugs.openjdk.org/browse/JDK-8330607[JDK-8330607])
+
+L’option `-XX:+UseEmptySlotsInSupers` a été dépréciée dans le JDK 23 et deviendra obsolète dans le JDK 24.
+
+[source,plain]
+----
+C:\java>java -XX:+UseEmptySlotsInSupers Main
+OpenJDK 64-Bit Server VM warning: Option UseEmptySlotsInSupers was deprecated in version 23.0 and will likely be removed in a future release.
+----
+
+La valeur par défaut est `true`. Cela signifie que la JVM HotSpot allouera toujours les champs dans une super classe lors de la disposition des champs où il y a un espace aligné pour s’adapter aux champs.
+
+Le code qui s’appuie sur la position des champs d’instance doit être conscient de ce détail de la disposition des champs d’instance. 
+Le format de disposition des champs JVM n’est pas spécifié par les spécifications et est susceptible d’être modifié.
+
+=== L'option `PreserveAllAnnotations` de la JVM est dépréciée (https://bugs.openjdk.org/browse/JDK-8329636[JDK-8329636])
+
+L’option `PreserveAllAnnotations` de la JVM été introduite dans le JDK 1.5 pour prendre en charge le test de code d’annotation Java et a toujours été désactivée par défaut.
+
+Cette option est dépréciée dans le JDK 23. L’utilisation de cette option produit un avertissement.
+
+[source,plain]
+----
+C:\java>java -XX:+PreserveAllAnnotations Main
+OpenJDK 64-Bit Server VM warning: Option PreserveAllAnnotations was deprecated in version 23.0 and will likely be removed in a future release.
+----
+
+L’option sera supprimée dans une future version, probablement dans le JDK 25.
+
+=== L’option `UseNotificationThread` de la JVM est dépréciée (https://bugs.openjdk.org/browse/JDK-8329113[JDK-8329113])
+
+Lorsque les notifications de débogage sont passées de l’envoi par le « Service Thread » masqué au « Notification Thread » non masqué, cette option a été fournie (par défaut à true) afin qu’elle puisse être désactivée en cas de problème lors de l’utilisation du « Notification Thread ». 
+Comme aucun problème n’a été signalé, le « Notification Thread » va devenir le seul moyen d’envoyer des notifications à l’avenir, et l’option ne sera plus disponible.
+
+L’option `UseNotificationThread` de la JVM est dépréciée. 
+Elle sera supprimée dans une future version du JDK.
+
+[source,plain]
+----
+C:\java>java -XX:+UseNotificationThread Main
+OpenJDK 64-Bit Server VM warning: Option UseNotificationThread was deprecated in version 23.0 and will likely be removed in a future release.
+----
+
+== Les fonctionnalités retirées
+
+Plusieurs fonctionnalités sont retirées du JDK 23.
+
+=== Les String templates sont retirés (https://bugs.openjdk.org/browse/JDK-8329949[JDK-8329949])
+
+Les String templates, qui étaient proposés en preview dans les JDK 21 et JDK 22, ont été retirés dans le JDK 23.
+
+Cette fonctionnalité était destinée à compléter les chaînes littérales et les blocs de texte de Java en couplant du texte littéral et des expressions intégrées pour réaliser une interpolation de manière potentiellement sûre afin de produire des chaînes de caractères ou une instance quelconque.
+
+
+La communauté OpenJDK a estimé que la capacité « ne faisait pas sa part » et que d’autres évaluations et une potentielle refonte prendraient du temps. 
+
+Il est à noter que c’est la première fois qu’une fonctionnalité en preview n’est pas reconduite dans une version suivante du JDK.
+
+La JEP 12, qui définit le processus de mise en œuvre des fonctionnalités en preview :
+
+une fonctionnalité en preview est spécifique pour une version du JDK, et donc si une fonctionnalité n’est pas reconduite en preview ou promue en standard, elle doit être retirée
+* elle indique clairement qu’une fonctionnalité en preview peut être supprimée, sans qu’il soit nécessaire d’en créer une nouvelle
+
+Une refonte globale de cette fonctionnalité va être effectuée, car elle avait suscité de nombreux débats et ne semblait pas répondre aux attentes de la communauté.
+
+
+=== La suppression des modes d'accès alignés pour `MethodHandles::byteArrayViewVarHandle`, `byteBufferViewVarHandle`, et les méthodes associées (https://bugs.openjdk.org/browse/JDK-8318966[JDK-8318966])
+
+Le `VarHandle` retourné par `MethodHandles::byteArrayViewVarHandle` ne prend plus en charge les modes d’accès atomiques, et le `VarHandle` retourné par `MethodHandles::byteBufferViewVarHandle` ne prend plus en charge les modes d’accès atomiques lors de l’accès aux tampons dans le heap.
+
+De plus, les méthodes `ByteBuffer::alignedSlice` et `ByteBuffer::alignmentOffset` sont mises à jour pour refléter ces modifications. 
+Elles ne signalent plus les tranches alignées ou les décalages pour les tampons d’octets dans le heap lorsque la valeur unitSize consultée est supérieure à 1. 
+Dans ce cas, elles lèvent une exception `UnsupportedOperationException`.
+
+La fonctionnalité supprimée était basée sur un détail d’implémentation dans la JVM de référence qui n’est pas imposée par les spécifications de la JVM. 
+Par conséquent, il n’est pas garanti de fonctionner sur l’implémentation d’une autre JVM. 
+Cela permet également à l’implémentation de référence d’aligner plus librement les éléments du tableau, si cela est jugé bénéfique.
+
+Les utilisateurs concernés doivent envisager d’utiliser des tampons d’octets directs (off heap), pour lesquels un accès aligné peut être garanti de manière fiable. 
+Ou ils devraient utiliser un `long[]` pour stocker leurs données, qui a des garanties d’alignement plus fortes que `byte[]`. Un `MemorySegment` lié à un tableau `long[]` est accessible via un mode d’accès atomique et n’importe quel type primitif, en utilisant l’API Foreign Function & Memory. 
+Exemple :
+
+.le fichier DemoMemorySegment.java
+[source,java]
+----
+import java.lang.foreign.MemorySegment;
+import java.lang.foreign.ValueLayout;
+import java.lang.invoke.VarHandle;
+
+public class DemoMemorySegment {
+  public static void main(String[] args) {
+    long[] arr = new long[10];
+    MemorySegment segment = MemorySegment.ofArray(arr);
+    VarHandle vh = ValueLayout.JAVA_INT.varHandle(); // accès aux int alignés
+    vh.setVolatile(segment, 0L, 23); // 0L est l'offset en bytes
+    long valeur = (long) vh.getVolatile(segment, 0L);
+    System.out.print(valeur);
+  }
+}
+----
+
+=== La méthode `ThreadGroup.stop()` (https://bugs.openjdk.org/browse/JDK-8320786[JDK-8320786])
+
+Depuis Java 1.2, la méthode `ThreadGroup.stop()` était marquée comme dépréciée, car le concept d’arrêt d’un groupe de threads était mal implémenté dès le départ.
+
+Dans le JDK 16, la méthode a été déclarée dépréciée pour suppression.
+
+Depuis le JDK 19, la méthode `ThreadGroup.stop()` lève une exception de type `UnsupportedOperationException`
+
+Cette méthode est finalement supprimée dans le JDK 23 :
+
+* Le code qui utilise cette méthode ne compilera plus
+
+* Le code utilisant cette méthode compilée vers des versions antérieures lèvera désormais une exception de type `NoSuchMethodError` au lieu de `UnsupportedOperationException` s’il est exécuté sur un JDK 23 ou plus récent
+
+=== Les méthodes `suspend()` et `resume()` des classes `Thread` et `ThreadGroup` (https://bugs.openjdk.org/browse/JDK-8320532[JDK-8320532])
+
+Les méthodes `Thread.suspend()`, `Thread.resume()`, `ThreadGroup.suspend()` et `ThreadGroup.resume()` sont dépréciées depuis le JDK 1.2 car elles pouvaient engendrer des deadlocks.
+
+Dans le JDK 14, ces méthodes ont été dépréciées pour suppressions (deprecated for removal).
+
+Dans le JDK 19, les méthodes `suspend()` et `resume()` de la classe `ThreadGroup` lèvent une exception de type `UnsupportedOperationException`.
+
+Dans le JDK 20, les méthodes `suspend()` et `resume()` de la classe `Thread` font de même.
+
+Dans le JDK 23, toutes ces méthodes ont été retirées :
+
+* Le code qui utilise ces méthodes ne compilera plus
+
+* Le code utilisant ces méthodes compilées vers des versions antérieures lèvera désormais une exception de type `NoSuchMethodError` au lieu de `UnsupportedOperationException` s’il est exécuté sur un JDK 23 ou plus récent.
+
+=== Le module `jdk.random` (https://bugs.openjdk.org/browse/JDK-8330005[JDK-8330005])
+
+Le module `jdk.random` a été supprimé du JDK. Ce module contenait les implémentations des algorithmes `java.util.random.RandomGenerator`. 
+Ces implémentations ont été déplacées vers le `module java.base` qui est désormais responsable de la prise en charge de ces algorithmes.
+
+Si un module utilise une clause requires `jdk.random` alors, il faut la supprimer pour permettre sa compilation en Java 23 puisque le module `jdk.random` est supprimé et que le module `java.base` est automatiquement requis.
+
+=== La suppression des données locales legacy (https://bugs.openjdk.org/browse/JDK-8174269[JDK-8174269])
+
+Les données locales JRE héritées ont été supprimées du JDK. Les données de paramètres régionaux JRE héritées, dont `COMPAT` est un alias pour ces données de paramètres régionaux, sont restées après que les données de paramètres régionaux CLDR basées sur le https://cldr.unicode.org/[Common Locale Data Registry] du Consortium Unicode soient devenues la valeur par défaut avec JDK 9 (https://openjdk.org/jeps/252[JEP 252]).
+
+Les données locales `JRE` ont servi d’outil pour migrer les applications pour le moment. Depuis le JDK 21, les utilisateurs ont été informés de sa suppression future par un message d’avertissement au démarrage, car l’utilisation des données locales `JRE`/`COMPAT` était obsolète.
+
+Elles sont maintenant supprimées du JDK 23, de sorte que la spécification de `JRE` ou `COMPAT` dans la propriété système `java.locale.providers` n’a plus aucun effet. Les applications utilisant des données locales `JRE`/`COMPAT` sont encouragées à migrer vers les données locales CLDR ou à envisager une solution de contournement décrite dans la https://bugs.openjdk.org/browse/JDK-8325568[JDK-8325568].
+
+https://openjdk.org/jeps/252[JEP 252: Use CLDR Locale Data by Default] a été mis à jour avec des recommandations pour les développeurs impactés par la suppression de ces données de paramètres régionaux héritées.
+
+=== La suppression de la délégation de `Subject` dans JMX (https://bugs.openjdk.org/browse/JDK-8326666[JDK-8326666])
+
+Afin de préparer la plate-forme à la suppression du Security Manager, la fonctionnalité JMX (Java Management Extensions) « Subject Delegation » a été supprimée dans le JDK 23.
+
+La méthode `getMBeanServerConnection(Subject delegationSubject)` de la classe `javax.management.remote.JMXConnector` lève désormais une exception de type `UnsupportedOperationException` si elle est appelée avec un `Subject` de délégation non `null`.
+
+Si une application cliente doit effectuer des opérations avec plusieurs identités ou pour le compte de celles-ci, elle devra désormais effectuer plusieurs appels à `JMXConnectorFactory.connect()` et à la méthode `getMBeanServerConnection()` sur le `JMXConnector` renvoyé.
+
+Pour plus d’informations, consultez la section https://docs.oracle.com/en/java/javase/23/jmx/security.html#GUID-EFC2A37D-307F-4001-9D2F-6F0A2A3BC51D[Security] du tutoriel JMX.
+
+=== La suppression de la fonctionnalité Management Applet (m-let) de JMX (https://bugs.openjdk.org/browse/JDK-8318707[JDK-8318707])
+
+Pour préparer la plate-forme à la suppression du Security manager, la fonctionnalité m-let de JMX a été supprimée. Cette suppression n’a aucun impact sur l’agent JMX utilisé pour la surveillance locale et à distance, l’instrumentation intégrée de la machine virtuelle Java ou les outils qui utilisent JMX.
+
+Les classes de l’API qui ont été supprimées sont :
+
+* `javax.management.loading.MLet`
+* `javax.management.loading.MLetContent`
+* `javax.management.loading.PrivateMLet`
+* `javax.management.loading.MLetMBean`
+
+=== La suppression du support de l’option `RegisterFinalizersAtInit` (https://bugs.openjdk.org/browse/JDK-8320522[JDK-8320522])
+
+L’option `RegisterFinalizersAtInit` de la JVM HotSpot, dépréciée dans le JDK 22, a été rendue obsolète dans cette version.
+
+[source,plain]
+----
+C:\java>java -XX:+RegisterFinalizersAtInit Main
+OpenJDK 64-Bit Server VM warning: Ignoring option RegisterFinalizersAtInit; support was removed in 23.0
+----
+
+=== L’option `-Xnoagent` de la JVM est supprimée (https://bugs.openjdk.org/browse/JDK-8312150[JDK-8312150])
+
+L’option `-Xnoagent` de la JVM HotSpot, qui a été dépréciée pour la suppression dans une version précédente, a maintenant été supprimée.
+
+Le lancement de la JVM avec cette option entraînera désormais une erreur et le processus ne sera pas lancé.
+
+[source,plain]
+----
+C:\java>java -Xnoagent Main
+Unrecognized option: -Xnoagent
+Error: Could not create the Java Virtual Machine.
+Error: A fatal exception has occurred. Program will exit.
+
+C:\java>
+----
+
+Les applications qui utilisent cette option lors du lancement de la commande `java` doivent la supprimer.
+
+== Conclusion
+
+Java poursuit son évolution avec le JDK 23 qui propose beaucoup de nouveautés et d’améliorations qui vont permettre à Java de rester pertinent aujourd’hui et demain.
+
+Ce second article de cette série est consacré aux autres évolutions dans les API ainsi que les fonctionnalités dépréciées et retirées dans le JDK 23.
+
+Toutes les évolutions proposées dans le JDK 23 sont détaillées dans les https://jdk.java.net/23/release-notes[releases notes].
+
+N’hésitez donc pas à télécharger et tester une distribution du JDK 23 auprès d’un fournisseur pour anticiper la release de la prochaine version LTS de Java.
