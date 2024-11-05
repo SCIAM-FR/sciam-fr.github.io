@@ -43,7 +43,8 @@ Avec ces modifications, le comportement suivant sera observé en fonction des ar
 
 * `-XX:+UseZGC`
 ** Le mode générationnel de ZGC est utilisé
-* `-XX:+UseZGC -XX:+ZGenerationnel`
+* `-XX:+UseZGC -XX:+ZGenerational`
+
 ** Le mode générationnel de ZGC est utilisé. Un avertissement indiquant que l’option `ZGenerational` est dépréciée et sera supprimée dans une future version est émis
 +
 [source,plain]
@@ -52,7 +53,8 @@ C:\java>java -XX:+UseZGC -XX:+ZGenerational HelloWorld
 OpenJDK 64-Bit Server VM warning: Option ZGenerational was deprecated in version 23.0 and will likely be removed in a future release.
 Hello World
 ----
-* `-XX:+UseZGC -XX:-ZGenerationnel`
+* `-XX:+UseZGC -XX:-ZGenerational`
+
 ** Le mode non générationnel de ZGC est utilisé. Un avertissement indiquant que l’option `ZGenerational` est dépréciée et sera supprimée dans une future version est émis. Un avertissement indiquant que le mode non générationnel est déprécié.
 +
 [source,plain]
@@ -152,7 +154,8 @@ L’algorithme précédent consistait en trois passages par chaque objet actif d
 
 [arabic]
 . Marquage d’objets utilisés
-. Calcul de nouveaux emplacements pour chaque objet vivants
+. Calcul de nouveaux emplacements pour chaque objet vivant
+
 . Déplacement d’objets vers de nouveaux emplacements et mise à jour des champs de chaque objet
 
 Les emplacements des objets calculés à l’étape 2 sont stockés à l’aide de mémoire off heap pour éviter un quatrième passage pour parcourir les objets utilisés dans le heap.
@@ -173,11 +176,13 @@ En tant qu’effet de bord de ce correctif, les JVM peuvent rencontrer une utili
 
 Un nouveau mécanisme de verrouillage léger pour le verrouillage du moniteur d’objets a été introduit dans le JDK 21 (https://bugs.openjdk.org/browse/JDK-8291555[JDK-8291555]).
 
-L’option `LockingMode` de la JVM a été introduit pour permettre la sélection de ce nouveau mécanisme (`LM_LIGHTWEIGHT`, valeur `2`) à la place du mécanisme par défaut (`LM_LEGACY`, valeur `1`).
+L’option `LockingMode` de la JVM a été introduite pour permettre la sélection de ce nouveau mécanisme (`LM_LIGHTWEIGHT`, valeur `2`) à la place du mécanisme par défaut (`LM_LEGACY`, valeur `1`).
+
 
 Dans le JDK 23, la valeur par défaut de `LockingMode` a été remplacée par `LM_LIGHTWEIGHT`. Cela ne devrait pas modifier le comportement sémantique du verrouillage du moniteur Java. Il devrait être neutre en termes de performances pour presque toutes les applications.
 
-Il est possible de revenir au mécanisme historique, en utilisant l’option en ligne de commande `-XX :LockingMode=1`, mais il faut tenir compte que le mode historique devrait être supprimé dans une version future.
+Il est possible de revenir au mécanisme historique, en utilisant l’option en ligne de commande `-XX:LockingMode=1`, mais il faut tenir compte que le mode historique devrait être supprimé dans une version future.
+
 
 === L’assouplissement de l’alignement des tableaux (https://bugs.openjdk.org/browse/JDK-8139457[JDK-8139457])
 
@@ -377,11 +382,13 @@ Quatre certificats racines ont été ajoutés dans le truststore cacerts :
 
 === La méthode `Subject.getSubject()` requiert la propriété `java.security.manager` avec la valeur 'allow' (https://bugs.openjdk.org/browse/JDK-8296244[JDK-8296244])
 
-En prévision de la suppression du Security Manager dans une version ultérieure, la méthode `Subject.getSubject(AccessControlContext)`, dépréciée pour suppression, a été modifiée pour lever une exception de type `UnsupportedOperationException` si elle est appelée lorsqu’un Security manager n’est pas permis.
+En prévision de la suppression du Security Manager dans une version ultérieure, la méthode `Subject.getSubject(AccessControlContext)`, dépréciée pour suppression, a été modifiée pour lever une exception de type `UnsupportedOperationException` si elle est appelée lorsqu’un Security Manager n’est pas permis.
+
 
 Lorsque le Security Manager sera supprimé dans une version ultérieure, la méthode `Subject.getSubject(AccessControlContext)` sera encore modifiée pour lever une exception de type `UnsupportedOperationException` de manière inconditionnelle.
 
-Pour cette version 23 du JDK, le comportement est différemment selon qu’un Security Manager est autorisé ou non :
+Pour cette version 23 du JDK, le comportement est différent selon qu’un Security Manager est autorisé ou non :
+
 
 * Si un gestionnaire de sécurité est autorisé, c’est-à-dire que la propriété système `java.security.manager` est définie sur la ligne de commande avec une chaîne vide, un nom de classe ou la valeur `allow`, il n’y a pas de changement de comportement par rapport aux versions précédentes.
 * Si un gestionnaire de sécurité n’est pas autorisé, si la propriété système `java.security.manager` n’est pas définie sur la ligne de commande ou a été définie sur la ligne de commande avec la valeur `disallow`, les méthodes `doAs()` ou `callAs()` appellent une action avec un `Subject` comme `Subject` actuel pour l’exécution de l’action sur une période limitée. 
