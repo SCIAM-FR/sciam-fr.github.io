@@ -73,7 +73,7 @@ Un nouvel événement JFR est ajouté dans le JDK 23 : `jdk.SerializationMisdec
 
 Cet événement est émis à l’exécution lorsqu’un aspect des champs et méthodes liés à la sérialisation est mal déclaré. En activant l’événement `jdk.SerializationMisdeclaration`, un événement JFR sera émis pour chaque aspect incorrectement déclaré d’une classe `Serializable` lorsqu’elle est chargée dans la JVM.
 
-Par exemple, si la méthode `writeObject()` d’une classe `Serializable` a une signature correcte mais est déclarée publique par inadvertance, elle n’est pas utilisée par le mécanisme de sérialisation. 
+Par exemple, si la méthode `writeObject()` d’une classe `Serializable` a une signature correcte, mais est déclarée publique par inadvertance, elle n’est pas utilisée par le mécanisme de sérialisation.
 Cela pourrait surprendre le développeur de la classe. Pour aider à diagnostiquer de tels problèmes, l’événement `jdk.SerializationMisdeclaration` peut être activé. 
 Exemple :
 
@@ -201,7 +201,7 @@ La syntaxe de cette option est de la forme : `-XX:TrimNativeHeapInterval=__mill
 
 La valeur, précisée en ms, indique l’intervalle auquel la JVM réduira le heap natif. 
 Des valeurs plus faibles récupéreront de la mémoire plus rapidement au prix d’une surcharge plus élevée. 
-La valeur `0` (par défaut) désactive le réduction du heap natif. 
+La valeur `0` (par défaut) désactive la réduction du heap natif.
 La réduction du heap natif est effectuée dans un thread dédié.
 
 Cette option, qui était une option expérimentale, a été officiellement promue en tant qu’option produit.
@@ -253,11 +253,11 @@ Plusieurs mesures ont été prises pour aider les projets à se préparer au pas
 
 === Le nouvel avertissement dangling-doc-comments de -Xlint (https://bugs.openjdk.org/browse/JDK-8303689[JDK-8303689])
 
-Un nouvel avertissement nommée `dangling-doc-comments` est fourni pour l’option `-Xlint` de `javac`, afin de détecter les problèmes liés au placement des commentaires de documentation dans le code source.
+Un nouvel avertissement nommé `dangling-doc-comments` est fourni pour l’option `-Xlint` de `javac`, afin de détecter les problèmes liés au placement des commentaires de documentation dans le code source.
 
-Cet avertissement peut être spécifiée explicitement (par exemple, `-Xlint:dangling-doc-comments`) ou implicitement en activant toutes sous-options (par exemple, `-Xlint` ou `-Xlint:all`).
+Cet avertissement peut être spécifié explicitement (par exemple, `-Xlint:dangling-doc-comments`) ou implicitement en activant toutes sous-options (par exemple, `-Xlint` ou `-Xlint:all`).
 
-Lorsque l’avertissement est activé, `javac` signale tout commentaire de documentation inattendu ou mal déplacé à proximité d’une déclaration, comme par exemple dans les situations suivantes :
+Lorsque l’avertissement est activé, `javac` signale tout commentaire de documentation inattendu ou mal déplacé à proximité d’une déclaration, comme dans les situations suivantes :
 
 * un commentaire de documentation pour une classe de niveau supérieur avant la déclaration du package ou d’importations
 * un commentaire de documentation pour une déclaration qui apparaît après le premier élément de cette déclaration, par exemple après des annotations ou des modificateurs de la déclaration
@@ -288,7 +288,7 @@ public class MaClasse {
 }
 ----
 
-La compilation de cette classe avec tous les avertissements activés affiche deux avertissement de type `dangling-doc-comments`.
+La compilation de cette classe avec tous les avertissements activés affiche deux avertissements de type `dangling-doc-comments`.
 
 [source,plain]
 ----
@@ -338,7 +338,7 @@ C:\java>javac -Xlint:all MaClasse.java
 C:\java>
 ----
 
-Remarque : il est possible que lorsque l’avertissement est activé, `javac` signale des « faux positifs » s’il y a des commentaires décoratifs commençant par `/&#42;*` et peuvent donc ressembler à un commentaire de documentation. Par exemple, les commentaires qui utilisent une ligne d’astérisques avant et après le reste du texte du commentaire, pour aider à faire ressortir le commentaire. La solution dans de tels cas est de changer le commentaire de sorte qu’il ne commence pas par `/&#42;*`, par exemple en changeant au moins un des deux astérisque en un autre caractère.
+Remarque : il est possible que lorsque l’avertissement est activé, `javac` signale des « faux positifs » s’il y a des commentaires décoratifs commençant par `/&#42;*` et peuvent donc ressembler à un commentaire de documentation. Par exemple, les commentaires qui utilisent une ligne d’astérisques avant et après le reste du texte du commentaire, pour aider à faire ressortir le commentaire. La solution dans de tels cas est de changer le commentaire de sorte qu’il ne commence pas par `/&#42;*`, par exemple en changeant au moins un des deux astérisques en un autre caractère.
 
 === Le support des modules JavaScript par l’outil `javadoc` (https://bugs.openjdk.org/browse/JDK-8317621[JDK-8317621])
 
@@ -375,7 +375,7 @@ Quatre certificats racines ont été ajoutés dans le truststore cacerts :
 * GlobalSign R46 et E46
 * Certainly R1 et E1
 
-=== La méthode `Subject.getSubject()` requière la propriété `java.security.manager` avec la valeur 'allow' (https://bugs.openjdk.org/browse/JDK-8296244[JDK-8296244])
+=== La méthode `Subject.getSubject()` requiert la propriété `java.security.manager` avec la valeur 'allow' (https://bugs.openjdk.org/browse/JDK-8296244[JDK-8296244])
 
 En prévision de la suppression du Security Manager dans une version ultérieure, la méthode `Subject.getSubject(AccessControlContext)`, dépréciée pour suppression, a été modifiée pour lever une exception de type `UnsupportedOperationException` si elle est appelée lorsqu’un Security manager n’est pas permis.
 
