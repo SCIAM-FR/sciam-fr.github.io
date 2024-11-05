@@ -166,7 +166,7 @@ L’algorithme Full GC du ramasse-miettes Parallel GC a été réimplémenté po
 
 Le nouvel algorithme fonctionne nettement mieux pour les typologies d’applications problématiques et n’a pas besoin de mémoire supplémentaire, ce qui réduit l’empreinte mémoire. Il permet ainsi d’optimiser les performances dans certains cas spécifiques, en réduisant l’utilisation du heap de 1,5 % lors de l’utilisation de Parallel GC.
 
-=== Le Parallel GC lève une OutOfMemoryException avant que le heap ne soit complètement étendu (https://bugs.openjdk.org/browse/JDK-8328744[JDK-8328744])
+=== Le Parallel GC lève une `OutOfMemoryException` avant que le heap ne soit complètement étendu (https://bugs.openjdk.org/browse/JDK-8328744[JDK-8328744])
 
 Un bug existant peut avoir empêché l’utilisation complète du heap de la JVM alloué avec l’option en ligne de commande -Xmx. Ce bug a été corrigé.
 
@@ -262,7 +262,7 @@ Un nouvel avertissement nommé `dangling-doc-comments` est fourni pour l’optio
 
 Cet avertissement peut être spécifié explicitement (par exemple, `-Xlint:dangling-doc-comments`) ou implicitement en activant toutes sous-options (par exemple, `-Xlint` ou `-Xlint:all`).
 
-Lorsque l’avertissement est activé, `javac` signale tout commentaire de documentation inattendu ou mal déplacé à proximité d’une déclaration, comme dans les situations suivantes :
+Lorsque l’avertissement est activé, `javac` signale tout commentaire de documentation inattendu ou mal placé à proximité d’une déclaration, comme dans les situations suivantes :
 
 * un commentaire de documentation pour une classe de niveau supérieur avant la déclaration du package ou d’importations
 * un commentaire de documentation pour une déclaration qui apparaît après le premier élément de cette déclaration, par exemple après des annotations ou des modificateurs de la déclaration
