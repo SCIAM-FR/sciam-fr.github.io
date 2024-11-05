@@ -163,7 +163,7 @@ L’algorithme Full GC du ramasse-miettes Parallel GC a été réimplémenté po
 
 Le nouvel algorithme fonctionne nettement mieux pour les typologies d’applications problématiques et n’a pas besoin de mémoire supplémentaire, ce qui réduit l’empreinte mémoire. Il permet ainsi d’optimiser les performances dans certains cas spécifiques, en réduisant l’utilisation du heap de 1,5 % lors de l’utilisation de Parallel GC.
 
-=== Le Parallel GC lève une OOM avant que le heap ne soit complètement étendu (https://bugs.openjdk.org/browse/JDK-8328744[JDK-8328744])
+=== Le Parallel GC lève une OutOfMemoryException avant que le heap ne soit complètement étendu (https://bugs.openjdk.org/browse/JDK-8328744[JDK-8328744])
 
 Un bug existant peut avoir empêché l’utilisation complète du heap de la JVM alloué avec l’option en ligne de commande -Xmx. Ce bug a été corrigé.
 
