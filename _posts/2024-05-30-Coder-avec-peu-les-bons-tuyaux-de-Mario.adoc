@@ -1,5 +1,5 @@
 = Video - Coder avec peu, les bons tuyaux de Mario
-:page-excerpt: Découvrez comment Nintendo a fait pour faire tenir mario dans 64Ko de mémoire.
+:page-excerpt: Découvrez comment Nintendo a fait pour faire tenir mario dans 40Ko de mémoire.
 :page-layout: post
 :author: clementdetastes
 :page-tags: [Dev,jeux,Conférence]
