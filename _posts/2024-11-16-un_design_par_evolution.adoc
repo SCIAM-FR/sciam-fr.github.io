@@ -473,7 +473,7 @@ Ce qui doit être extrêmement coûteux en temps et en ressources. Une approche 
 prendre une architecture arbitraire `A1` avec une configuration des composants et service `C1`, effectuer un test réel
 et attendre les résultats après un certain délai. Ensuite, réaliser un benchmarking pour passer à une configuration `C2`, ce qui pourrait
 impliquer des modifications telles que la taille des machines, le nombre de brokers, le nombre de partitions, etc.
-Ce processus se'rait ensuite répété pour d'autres architectures, comme `A2`, `A3`, et ainsi de suite.
+Ce processus serait ensuite répété pour d'autres architectures, comme `A2`, `A3`, et ainsi de suite.
 
 Cependant, avec *stem:[\begin{equation} 10 \end{equation}]* broker pouvant avoir
 *stem:[\begin{equation} 10 \end{equation}]* configurations possibles, cela donne un total de
