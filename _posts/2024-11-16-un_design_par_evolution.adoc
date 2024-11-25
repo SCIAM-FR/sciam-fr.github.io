@@ -446,7 +446,7 @@ Cette combinaison est essentielle pour garantir une utilisation durable et effic
 dans un monde de plus en plus dépendant de l'informatique.
 
 Face à un manque de moyens techniques et d'outils fiables, nous nous retrouvons toujours face une situation avec laquelle il
-est très difficile de réaliser de meilleures architectures pour de grandes applications basées sur des architecture microservices.
+est très difficile de réaliser de meilleures architectures pour de grandes applications basées sur une architecture microservices.
 
 Pour mieux comprendre l’application des algorithmes évolutionnaires dans les architectures cloud, nous allons examiner un cas pratique.
 
