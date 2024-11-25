@@ -234,7 +234,7 @@ d'optimisation complexes, principalement dans le cadre de l'ingénierie et de la
 La stratégie d’évolution se distingue des algorithmes génétiques par sa focalisation sur la mutation et
 l’adaptation des paramètres, avec une moindre importance accordée au croisement.
 Alors que les algorithmes génétiques utilisent une combinaison de croisement, mutation et sélection pour générer de nouvelles solutions,
-la stratégie d’évolution repose principalement sur des mutations appliquées aux individus pour explorer l’espace de recherche.
+la stratégie d’évolution repose essentiellement sur des mutations appliquées aux individus pour explorer l’espace de recherche.
 
 === Programmation génétique (PG)
 
