@@ -116,11 +116,11 @@ Cette capacité d'exploration, amplifiée par la composante aléatoire, ouvre la
 inédites et potentiellement optimisées, qui auraient autrement échappé à toute détection.
 
 Par conséquent, nous utilisons les algorithmes évolutionnaires pour concevoir de nouveaux produits ou systèmes
-de manière similaire à la méthodes MVP (Minimum Viable Product), qui consiste à développer une version simplifiée d’un
+de manière similaire à la méthode MVP (Minimum Viable Product), qui consiste à développer une version simplifiée d’un
 produit, avec les fonctionnalités essentielles, pour tester rapidement son intérêt sur le marché.
 
 Imaginez les algorithmes évolutionnaires comme un processus de développement en plusieurs générations :
-au lieu de créer un produit final parfait dès le début, ils explorent diverses versions de solutions ou ``prototypes''
+au lieu de créer un produit final parfait dès le début, ils explorent diverses versions de solutions ou prototypes
 à travers des itérations rapides.
 
 Chaque version est testée, puis les meilleures configurations sont sélectionnées, ajustées et combinées pour former
@@ -295,9 +295,9 @@ solution mutant pour produire un nouvel individu.
 Le croisement est généralement réalisé avec un taux de croisement CR, qui détermine la probabilité qu'un
 élément de la solution mutant soit remplacé par l'élément correspondant de la solution de départ.
 
-* *Sélection* : Une fois que l'individu mutant (ou recombiné) a été généré, il est comparé à la solution originale
+* *Sélection* : Une fois que l'individu mutant (ou recombiné) a été généré, il est comparé à la solution originale,
 (c'est-à-dire son parent).
-Si la solution mutant est meilleure (selon la fonction de fitness), elle remplace la solution originale dans la population,
+Si la solution mutante est meilleure (selon la fonction de fitness), elle remplace la solution originale dans la population,
 sinon l'individu original est conservé.
 Cela permet de garantir que la population ne se détériore pas au fil des générations.
 
