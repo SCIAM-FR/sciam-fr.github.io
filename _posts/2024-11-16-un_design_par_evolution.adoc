@@ -185,7 +185,7 @@ un grand nombre de possibilités.
 Les plus courants sont les algorithmes génétiques, les stratégies d’évolution, et la programmation génétique.
 
 
-== Catégories des EAs
+== Catégories des Algorithmes Évolutionnaires
 
 === Algorithmes génétiques (AG)
 
