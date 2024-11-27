@@ -36,17 +36,11 @@ Principes programmation réactive
 
 Les principes de la programmation réactive sont encapsulés dans le "Manifeste Réactif", qui énonce quatre caractéristiques clés : 
 
- Responsive (Réactif) : 
-  
-  Les systèmes réactifs répondent rapidement aux utilisateurs pour garantir une expérience fluide et interactive. 
+ Responsive (Réactif) : Les systèmes réactifs répondent rapidement aux utilisateurs pour garantir une expérience fluide et interactive. 
 
- Resilient (Résilient) : 
-  
-  Les systèmes réactifs restent opérationnels même en cas de défaillance, grâce à des mécanismes de gestion des erreurs et de redondance. 
+ Resilient (Résilient) : Les systèmes réactifs restent opérationnels même en cas de défaillance, grâce à des mécanismes de gestion des erreurs et de redondance. 
 
- Elastic (Élastique) : 
-  
-  Les systèmes réactifs s'adaptent aux variations de la charge de travail en allouant dynamiquement les ressources nécessaires. 
+ Elastic (Élastique) : Les systèmes réactifs s'adaptent aux variations de la charge de travail en allouant dynamiquement les ressources nécessaires. 
 
  Message-Driven (Basé sur les Messages) : 
   
@@ -56,13 +50,9 @@ Les principes de la programmation réactive sont encapsulés dans le "Manifeste 
 
 Les standards de la programmation réactive sont basés sur deux modèles. 
 
- ReactiveX:
- 
- ReactiveX à été conçu pour fournir une API unifiée pour le traitement de collections asynchrones, en s'inspirant des méthodes des collections synchrones (comme map, filter, reduce). Il est souvent utilisé pour gérer des événements utilisateur, des requêtes réseau, et d'autres opérations asynchrones dans des applications interactives. Ces implémentations connues sont : RxJava et RxJs. 
+ ReactiveX: ReactiveX à été conçu pour fournir une API unifiée pour le traitement de collections asynchrones, en s'inspirant des méthodes des collections synchrones (comme map, filter, reduce). Il est souvent utilisé pour gérer des événements utilisateur, des requêtes réseau, et d'autres opérations asynchrones dans des applications interactives. Ces implémentations connues sont : RxJava et RxJs. 
 
- Reactive Streams:
-  
-  Reactive Streams a été créé pour résoudre des problèmes spécifiques de backpressure dans les systèmes de traitement de données asynchrones, en définissant un ensemble minimal d'interfaces pour garantir une gestion cohérente et efficace des flux de données entre différentes bibliothèques réactives dans l'écosystème JVM. Ces implementation connues sont Akka Reactor Vertex et RxJAVA2 
+ Reactive Streams: Reactive Streams a été créé pour résoudre des problèmes spécifiques de backpressure dans les systèmes de traitement de données asynchrones, en définissant un ensemble minimal d'interfaces pour garantir une gestion cohérente et efficace des flux de données entre différentes bibliothèques réactives dans l'écosystème JVM. Ces implementation connues sont Akka Reactor Vertex et RxJAVA2 
 
 Dans notre article, on va s'intéresser à Reactor qui est une implémentation de Reactive streams. 
 
