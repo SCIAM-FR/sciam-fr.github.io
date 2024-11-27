@@ -11,7 +11,9 @@
 
 == Introduction:
 
-Avant d'explorer la programmation réactive, il est utile de comprendre les systèmes non réactifs traditionnels et leurs inconvénients, en particulier en ce qui concerne l'utilisation des ressources et la gestion des événements. 
+Pendant longtemps, la programmation Java a été dominée par un modèle synchrone et bloquant. Cependant, l'évolution des architectures logicielles, notamment l'émergence des microservices et du cloud computing, a mis en évidence les limites de ce modèle. Pour répondre à ces nouveaux défis, un nouveau paradigme a vu le jour : la programmation réactive en s'appuyant sur le Reactive Manifesto, offre une solution robuste et performante pour mettre en œuvre des applications réactives en Java.
+
+Pour explorer la programmation réactive, il est utile de comprendre les systèmes non réactifs traditionnels et leurs inconvénients, en particulier en ce qui concerne l'utilisation des ressources et la gestion des événements. 
 
 Les systèmes non réactifs, aussi appelés systèmes synchrones ou bloquants, sont les approches traditionnelles utilisées dans la programmation. Voici quelques caractéristiques clés{nbsp}: 
 
