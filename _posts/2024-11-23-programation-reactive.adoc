@@ -140,15 +140,12 @@ Pour configurer un projet Maven avec Spring WebFlux et Reactor, il est essentiel
  	  @GetMapping("/hello")  
         public Mono<String> sayHello() {   
           return Mono.just("Hello, WebFlux!"); 
- }  
-----
+    }  
 
-[source,java]
-----
-@GetMapping("/numbers")  
-  public Flux<Integer> getNumbers() {  
-    return Flux.range(1, 10) .delayElements(Duration.ofMillis(100));  
-  }  
+    @GetMapping("/numbers")  
+      public Flux<Integer> getNumbers() {  
+        return Flux.range(1, 10) .delayElements(Duration.ofMillis(100));  
+    }  
 } 
 ----
 
