@@ -13,20 +13,18 @@
 
 Avant d'explorer la programmation réactive, il est utile de comprendre les systèmes non réactifs traditionnels et leurs inconvénients, en particulier en ce qui concerne l'utilisation des ressources et la gestion des événements. 
 
-Les systèmes non réactifs, aussi appelés systèmes synchrones ou bloquants, sont les approches traditionnelles utilisées dans la programmation. Voici quelques caractéristiques clés:  
+Les systèmes non réactifs, aussi appelés systèmes synchrones ou bloquants, sont les approches traditionnelles utilisées dans la programmation. Voici quelques caractéristiques clés{nbsp}: 
 
 
-Traitement séquentiel Une tâche doit généralement attendre la fin de l'exécution de la tâche précédente avant de commencer, 
+* Traitement séquentiel Une tâche doit généralement attendre la fin de l'exécution de la tâche précédente avant de commencer, 
 
-Blocage des ressources : Les systèmes non réactifs bloquent souvent des ressources (comme des threads ou des connexions réseau) en attendant des résultats, 
+* Blocage des ressources : Les systèmes non réactifs bloquent souvent des ressources (comme des threads ou des connexions réseau) en attendant des résultats, 
 
-Gestion des événements complexes : La gestion des événements dans les systèmes non réactifs peut devenir complexe et difficile à maintenir, surtout lorsque le nombre d'événements augmente 
+* Gestion des événements complexes : La gestion des événements dans les systèmes non réactifs peut devenir complexe et difficile à maintenir, surtout lorsque le nombre d'événements augmente 
 
-Latence élevée : En raison de la nature bloquante de ces systèmes, ils peuvent entraîner une latence élevée, surtout dans les applications où la rapidité de réponse est cruciale.  
+* Latence élevée : En raison de la nature bloquante de ces systèmes, ils peuvent entraîner une latence élevée, surtout dans les applications où la rapidité de réponse est cruciale.  
 
-Scalabilité limitée : Comme chaque requête ou tâche peut nécessiter son propre thread ou processus, l'augmentation du nombre de requêtes peut rapidement saturer les ressources du système 
-
- 
+* Scalabilité limitée : Comme chaque requête ou tâche peut nécessiter son propre thread ou processus, l'augmentation du nombre de requêtes peut rapidement saturer les ressources du système 
 
 Pour surmonter ces limitations, les systèmes réactifs offrent une alternative en se concentrant sur l'asynchronisme, la non-bloquante, et l'efficacité dans l'utilisation des ressources. Ils permettent de créer des applications qui sont plus réactives, plus résilientes, et plus scalables, en répondant efficacement aux événements et en utilisant les ressources de manière optimale. 
 
