@@ -1,0 +1,111 @@
+= La programmation réactive avec Reactor Spring web Flux  
+:showtitle:
+:page-navtitle: La programmation réactive avec Reactor Spring web Flux  
+:page-excerpt: 
+:layout: post
+:author: khairikhadhraoui
+:page-tags: 
+:page-vignette: 
+:page-liquid:
+:page-categories: software news
+
+Avant d'explorer la programmation réactive, il est utile de comprendre les systèmes non réactifs traditionnels et leurs inconvénients, en particulier en ce qui concerne l'utilisation des ressources et la gestion des événements. 
+
+Les systèmes non réactifs, aussi appelés systèmes synchrones ou bloquants, sont les approches traditionnelles utilisées dans la programmation. Voici quelques caractéristiques clés:  
+
+
+Traitement séquentiel Une tâche doit généralement attendre la fin de l'exécution de la tâche précédente avant de commencer, 
+
+Blocage des ressources : Les systèmes non réactifs bloquent souvent des ressources (comme des threads ou des connexions réseau) en attendant des résultats, 
+
+Gestion des événements complexes : La gestion des événements dans les systèmes non réactifs peut devenir complexe et difficile à maintenir, surtout lorsque le nombre d'événements augmente 
+
+Latence élevée : En raison de la nature bloquante de ces systèmes, ils peuvent entraîner une latence élevée, surtout dans les applications où la rapidité de réponse est cruciale.  
+
+Scalabilité limitée : Comme chaque requête ou tâche peut nécessiter son propre thread ou processus, l'augmentation du nombre de requêtes peut rapidement saturer les ressources du système 
+
+ 
+
+Pour surmonter ces limitations, les systèmes réactifs offrent une alternative en se concentrant sur l'asynchronisme, la non-bloquante, et l'efficacité dans l'utilisation des ressources. Ils permettent de créer des applications qui sont plus réactives, plus résilientes, et plus scalables, en répondant efficacement aux événements et en utilisant les ressources de manière optimale. 
+
+== Principes programmation réactive  
+
+Principes programmation réactive  
+
+Les principes de la programmation réactive sont encapsulés dans le "Manifeste Réactif", qui énonce quatre caractéristiques clés : 
+
+Responsive (Réactif) : Les systèmes réactifs répondent rapidement aux utilisateurs pour garantir une expérience fluide et interactive. 
+
+Resilient (Résilient) : Les systèmes réactifs restent opérationnels même en cas de défaillance, grâce à des mécanismes de gestion des erreurs et de redondance. 
+
+Elastic (Élastique) : Les systèmes réactifs s'adaptent aux variations de la charge de travail en allouant dynamiquement les ressources nécessaires. 
+
+Message-Driven (Basé sur les Messages) : Les systèmes réactifs communiquent par la transmission de messages asynchrones, facilitant la déconnexion et le découplage des composants. 
+
+== Standard de la programmation réactive 
+
+Les standards de la programmation réactive sont basés sur deux modèles. 
+
+ReactiveX à été conçu pour fournir une API unifiée pour le traitement de collections asynchrones, en s'inspirant des méthodes des collections synchrones (comme map, filter, reduce). Il est souvent utilisé pour gérer des événements utilisateur, des requêtes réseau, et d'autres opérations asynchrones dans des applications interactives. Ces implémentations connues sont : RxJava et RxJs. 
+
+Reactive Streams  Il a été créé pour résoudre des problèmes spécifiques de backpressure dans les systèmes de traitement de données asynchrones, en définissant un ensemble minimal d'interfaces pour garantir une gestion cohérente et efficace des flux de données entre différentes bibliothèques réactives dans l'écosystème JVM. Ces implementation connues sont Akka Reactor Vertex et RxJAVA2 
+
+Dans notre article, on va s'intéresser à Reactor qui est une implémentation de Reactive streams. 
+
+Les objectifs principaux de Reactive Streams sont : 
+
+Asynchronisme : Gérer les flux de données de manière non bloquante et asynchrone. 
+
+Backpressure : Introduire une rétropression pour permettre aux consommateurs de signaler aux producteurs leur capacité à traiter les données, évitant ainsi les surcharges. 
+
+Interopérabilité : Fournir une interface standard pour que différentes bibliothèques réactives puissent fonctionner ensemble. 
+
+Interfaces principales de Reactive Streams : 
+
+Publisher<T> : Représente une source qui peut émettre une séquence de valeurs asynchrones. Les éditeurs appellent la méthode subscribe() pour permettre aux abonnés de recevoir les éléments. 
+
+Subscriber<T> : Représente un consommateur de données. Il reçoit les éléments émis par un Publisher via quatre méthodes : onSubscribe(), onNext(), onError(), et onComplete(). 
+
+Subscription : Gère le lien entre un Publisher et un Subscriber. Elle permet de demander des éléments (request(long n)) ou d'annuler la souscription (cancel()). 
+
+Processor<T, R> : Combine les fonctionnalités d'un Publisher et d'un Subscriber. Un Processor reçoit des éléments, les traite, et les renvoie sous forme d'un autre flux. 
+
+== Project Reactor : 
+
+Reactor est une bibliothèque réactive pour Java développée par Pivotal (maintenant VMware) et intégrée dans l'écosystème Spring. Elle fournit une implémentation de Reactive Streams et permet de construire des applications non bloquantes, asynchrones, et scalables. Reactor est au cœur de Spring WebFlux, le module réactif de Spring Framework. 
+
+Les principales abstractions fournies par Reactor sont : 
+
+Mono<T> : Représente un flux réactif qui produit au maximum une seule valeur ou une erreur. 
+
+Flux<T> : Représente un flux réactif qui peut émettre zéro, une ou plusieurs valeurs, voire un flux infini. 
+
+Ces deux types sont les composants de base utilisés pour modéliser des flux de données asynchrones en Java avec Reactor. 
+
+En pratique un Flux peut être sérialisé sous plusieur formes  
+
+Json Array : retourne un arrayList normale 
+
+text Event Stream : envoie un flux d'objets Json contenue donnés par donne dès qu’ils sont disponible. 
+
+flux de json stream : De la même manière entre deux serveurs on peut avoir un flux de  json Stream. 
+
+== Spring Web Flux avec Reactor  
+
+Spring web flux fait partie de projet Spring 5  c'est un module Spring basé sur une api http exposé à la source sur reactive Streams. dans lequel on continue à utiliser les mêmes annotation du contrôleurs Spring MVC (@conttreler, @RequestMapping, etc.) sauf que au lieu d'utiliser des type de retour List<T>, T ou void, on utilise Flux<T> ou Mono<T>.  
+
+Composants de Spring WebFlux 
+
+Contrôleurs Réactifs : Comme dans Spring MVC, mais avec des types réactifs comme Mono et Flux. 
+
+WebClient : Un client HTTP non-bloquant qui remplace RestTemplate pour les appels externes réactifs. 
+
+Router Function : Une approche fonctionnelle pour définir des routes HTTP. 
+
+Avantages: 
+
+Scalabilité : La nature non-bloquante permet de gérer un grand nombre de connexions simultanées avec moins de threads. 
+
+Performance : Idéal pour les applications nécessitant une faible latence et une haute performance. 
+
+Flexibilité : Peut être utilisé pour des microservices, des applications Web, ou même des applications fonctionnant avec d'autres paradigmes réactifs comme RxJava. 
