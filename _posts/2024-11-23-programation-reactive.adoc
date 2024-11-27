@@ -34,11 +34,11 @@ Pour surmonter ces limitations, les systèmes réactifs offrent une alternative 
 
 Les principes de la programmation réactive sont encapsulés dans le "Manifeste Réactif", qui énonce quatre caractéristiques clés{nbsp}:
 
-* _Responsive (Réactif) : Les systèmes réactifs répondent rapidement aux utilisateurs pour garantir une expérience fluide et interactive. 
+* Responsive (Réactif) : Les systèmes réactifs répondent rapidement aux utilisateurs pour garantir une expérience fluide et interactive. 
 
-* _Resilient (Résilient) : Les systèmes réactifs restent opérationnels même en cas de défaillance, grâce à des mécanismes de gestion des erreurs et de redondance. 
+* Resilient (Résilient) : Les systèmes réactifs restent opérationnels même en cas de défaillance, grâce à des mécanismes de gestion des erreurs et de redondance. 
 
-* _Elastic (Élastique) : Les systèmes réactifs s'adaptent aux variations de la charge de travail en allouant dynamiquement les ressources nécessaires. 
+* Elastic (Élastique) : Les systèmes réactifs s'adaptent aux variations de la charge de travail en allouant dynamiquement les ressources nécessaires. 
 
 Message-Driven (Basé sur les Messages) : 
   
@@ -48,29 +48,29 @@ Les systèmes réactifs communiquent par la transmission de messages asynchrones
 
 Les standards de la programmation réactive sont basés sur deux modèles{nbsp}: 
 
-* _ReactiveX: ReactiveX à été conçu pour fournir une API unifiée pour le traitement de collections asynchrones, en s'inspirant des méthodes des collections synchrones (comme map, filter, reduce). Il est souvent utilisé pour gérer des événements utilisateur, des requêtes réseau, et d'autres opérations asynchrones dans des applications interactives. Ces implémentations connues sont : RxJava et RxJs. 
+* ReactiveX: ReactiveX à été conçu pour fournir une API unifiée pour le traitement de collections asynchrones, en s'inspirant des méthodes des collections synchrones (comme map, filter, reduce). Il est souvent utilisé pour gérer des événements utilisateur, des requêtes réseau, et d'autres opérations asynchrones dans des applications interactives. Ces implémentations connues sont : RxJava et RxJs. 
 
-* _Reactive Streams: Reactive Streams a été créé pour résoudre des problèmes spécifiques de backpressure dans les systèmes de traitement de données asynchrones, en définissant un ensemble minimal d'interfaces pour garantir une gestion cohérente et efficace des flux de données entre différentes bibliothèques réactives dans l'écosystème JVM. Ces implementation connues sont Akka Reactor Vertex et RxJAVA2 
+* Reactive Streams: Reactive Streams a été créé pour résoudre des problèmes spécifiques de backpressure dans les systèmes de traitement de données asynchrones, en définissant un ensemble minimal d'interfaces pour garantir une gestion cohérente et efficace des flux de données entre différentes bibliothèques réactives dans l'écosystème JVM. Ces implementation connues sont Akka Reactor Vertex et RxJAVA2 
 
 Dans notre article, on va s'intéresser à Reactor qui est une implémentation de Reactive streams. 
 
-Les objectifs principaux de Reactive Streams sont : 
+Les objectifs principaux de Reactive Streams sont {nbsp}: 
 
-Asynchronisme : Gérer les flux de données de manière non bloquante et asynchrone. 
+* Asynchronisme : Gérer les flux de données de manière non bloquante et asynchrone. 
 
-Backpressure : Introduire une rétropression pour permettre aux consommateurs de signaler aux producteurs leur capacité à traiter les données, évitant ainsi les surcharges. 
+* Backpressure : Introduire une rétropression pour permettre aux consommateurs de signaler aux producteurs leur capacité à traiter les données, évitant ainsi les surcharges. 
 
-Interopérabilité : Fournir une interface standard pour que différentes bibliothèques réactives puissent fonctionner ensemble. 
+* Interopérabilité : Fournir une interface standard pour que différentes bibliothèques réactives puissent fonctionner ensemble. 
 
-Interfaces principales de Reactive Streams : 
+Interfaces principales de Reactive Streams {nbsp}: 
 
-Publisher<T> : Représente une source qui peut émettre une séquence de valeurs asynchrones. Les éditeurs appellent la méthode subscribe() pour permettre aux abonnés de recevoir les éléments. 
+* Publisher<T> : Représente une source qui peut émettre une séquence de valeurs asynchrones. Les éditeurs appellent la méthode subscribe() pour permettre aux abonnés de recevoir les éléments. 
 
-Subscriber<T> : Représente un consommateur de données. Il reçoit les éléments émis par un Publisher via quatre méthodes : onSubscribe(), onNext(), onError(), et onComplete(). 
+* Subscriber<T> : Représente un consommateur de données. Il reçoit les éléments émis par un Publisher via quatre méthodes : onSubscribe(), onNext(), onError(), et onComplete(). 
 
-Subscription : Gère le lien entre un Publisher et un Subscriber. Elle permet de demander des éléments (request(long n)) ou d'annuler la souscription (cancel()). 
+* Subscription : Gère le lien entre un Publisher et un Subscriber. Elle permet de demander des éléments (request(long n)) ou d'annuler la souscription (cancel()). 
 
-Processor<T, R> : Combine les fonctionnalités d'un Publisher et d'un Subscriber. Un Processor reçoit des éléments, les traite, et les renvoie sous forme d'un autre flux. 
+* Processor<T, R> : Combine les fonctionnalités d'un Publisher et d'un Subscriber. Un Processor reçoit des éléments, les traite, et les renvoie sous forme d'un autre flux. 
 
 == Project Reactor : 
 
