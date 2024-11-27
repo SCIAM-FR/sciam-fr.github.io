@@ -40,9 +40,7 @@ Les principes de la programmation réactive sont encapsulés dans le "Manifeste 
 
 * Elastic (Élastique) : Les systèmes réactifs s'adaptent aux variations de la charge de travail en allouant dynamiquement les ressources nécessaires. 
 
-Message-Driven (Basé sur les Messages) : 
-  
-Les systèmes réactifs communiquent par la transmission de messages asynchrones, facilitant la déconnexion et le découplage des composants. 
+* Message-Driven (Basé sur les Messages) : Les systèmes réactifs communiquent par la transmission de messages asynchrones, facilitant la déconnexion et le découplage des composants. 
 
 == Standard de la programmation réactive
 
@@ -76,41 +74,41 @@ Interfaces principales de Reactive Streams {nbsp}:
 
 Reactor est une bibliothèque réactive pour Java développée par Pivotal (maintenant VMware) et intégrée dans l'écosystème Spring. Elle fournit une implémentation de Reactive Streams et permet de construire des applications non bloquantes, asynchrones, et scalables. Reactor est au cœur de Spring WebFlux, le module réactif de Spring Framework. 
 
-Les principales abstractions fournies par Reactor sont : 
+Les principales abstractions fournies par Reactor sont {nbsp}: 
 
-=== Mono<T> : Représente un flux réactif qui produit au maximum une seule valeur ou une erreur. 
+ * Mono<T> : Représente un flux réactif qui produit au maximum une seule valeur ou une erreur. 
 
-=== Flux<T> : Représente un flux réactif qui peut émettre zéro, une ou plusieurs valeurs, voire un flux infini. 
+ * Flux<T> : Représente un flux réactif qui peut émettre zéro, une ou plusieurs valeurs, voire un flux infini. 
 
 Ces deux types sont les composants de base utilisés pour modéliser des flux de données asynchrones en Java avec Reactor. 
 
-En pratique un Flux peut être sérialisé sous plusieur formes  
+En pratique un Flux peut être sérialisé sous plusieur formes  {nbsp}: 
 
--Json Array : retourne un arrayList normale 
+* Json Array : retourne un arrayList normale 
 
--Text Event Stream : envoie un flux d'objets Json contenue donnés par donne dès qu’ils sont disponible. 
+* Text Event Stream : envoie un flux d'objets Json contenue donnés par donne dès qu’ils sont disponible. 
 
--Flux de json stream : De la même manière entre deux serveurs on peut avoir un flux de  json Stream. 
+* Flux de json stream : De la même manière entre deux serveurs on peut avoir un flux de  json Stream. 
 
 == Spring Web Flux avec Reactor  
 
 Spring web flux fait partie de projet Spring 5  c'est un module Spring basé sur une api http exposé à la source sur reactive Streams. dans lequel on continue à utiliser les mêmes annotation du contrôleurs Spring MVC (@conttreler, @RequestMapping, etc.) sauf que au lieu d'utiliser des type de retour List<T>, T ou void, on utilise Flux<T> ou Mono<T>.  
 
-=== Composants de Spring WebFlux 
+=== Composants de Spring WebFlux {nbsp}:
 
--Contrôleurs Réactifs : Comme dans Spring MVC, mais avec des types réactifs comme Mono et Flux. 
+* Contrôleurs Réactifs : Comme dans Spring MVC, mais avec des types réactifs comme Mono et Flux. 
 
--WebClient : Un client HTTP non-bloquant qui remplace RestTemplate pour les appels externes réactifs. 
+* WebClient : Un client HTTP non-bloquant qui remplace RestTemplate pour les appels externes réactifs. 
 
-R-outer Function : Une approche fonctionnelle pour définir des routes HTTP. 
+* Router Function : Une approche fonctionnelle pour définir des routes HTTP. 
 
-==== Avantages: 
+==== Avantages{nbsp}:
 
-Scalabilité : La nature non-bloquante permet de gérer un grand nombre de connexions simultanées avec moins de threads. 
+* Scalabilité : La nature non-bloquante permet de gérer un grand nombre de connexions simultanées avec moins de threads. 
 
-Performance : Idéal pour les applications nécessitant une faible latence et une haute performance. 
+* Performance : Idéal pour les applications nécessitant une faible latence et une haute performance. 
 
-Flexibilité : Peut être utilisé pour des microservices, des applications Web, ou même des applications fonctionnant avec d'autres paradigmes réactifs comme RxJava. 
+* Flexibilité : Peut être utilisé pour des microservices, des applications Web, ou même des applications fonctionnant avec d'autres paradigmes réactifs comme RxJava. 
 
 Configuration d'un projet Spring WebFlux 
 
