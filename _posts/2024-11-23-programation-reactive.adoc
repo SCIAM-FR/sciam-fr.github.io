@@ -10,6 +10,7 @@
 :page-categories: software news
 
 ==Introduction:
+
 Avant d'explorer la programmation réactive, il est utile de comprendre les systèmes non réactifs traditionnels et leurs inconvénients, en particulier en ce qui concerne l'utilisation des ressources et la gestion des événements. 
 
 Les systèmes non réactifs, aussi appelés systèmes synchrones ou bloquants, sont les approches traditionnelles utilisées dans la programmation. Voici quelques caractéristiques clés:  
@@ -33,24 +34,24 @@ Pour surmonter ces limitations, les systèmes réactifs offrent une alternative 
 
 Principes programmation réactive  
 
-===Les principes de la programmation réactive sont encapsulés dans le "Manifeste Réactif", qui énonce quatre caractéristiques clés : 
+=== Les principes de la programmation réactive sont encapsulés dans le "Manifeste Réactif", qui énonce quatre caractéristiques clés : 
 
-===Responsive (Réactif) : Les systèmes réactifs répondent rapidement aux utilisateurs pour garantir une expérience fluide et interactive. 
+=== Responsive (Réactif) : Les systèmes réactifs répondent rapidement aux utilisateurs pour garantir une expérience fluide et interactive. 
 
-===Resilient (Résilient) : Les systèmes réactifs restent opérationnels même en cas de défaillance, grâce à des mécanismes de gestion des erreurs et de redondance. 
+=== Resilient (Résilient) : Les systèmes réactifs restent opérationnels même en cas de défaillance, grâce à des mécanismes de gestion des erreurs et de redondance. 
 
-===Elastic (Élastique) : Les systèmes réactifs s'adaptent aux variations de la charge de travail en allouant dynamiquement les ressources nécessaires. 
+=== Elastic (Élastique) : Les systèmes réactifs s'adaptent aux variations de la charge de travail en allouant dynamiquement les ressources nécessaires. 
 
-===Message-Driven (Basé sur les Messages) : Les systèmes réactifs communiquent par la transmission de messages asynchrones, facilitant la déconnexion et le découplage des composants. 
+=== Message-Driven (Basé sur les Messages) : Les systèmes réactifs communiquent par la transmission de messages asynchrones, facilitant la déconnexion et le découplage des composants. 
 
 == Standard de la programmation réactive 
 
 Les standards de la programmation réactive sont basés sur deux modèles. 
 
-===ReactiveX:
+=== ReactiveX:
  ReactiveX à été conçu pour fournir une API unifiée pour le traitement de collections asynchrones, en s'inspirant des méthodes des collections synchrones (comme map, filter, reduce). Il est souvent utilisé pour gérer des événements utilisateur, des requêtes réseau, et d'autres opérations asynchrones dans des applications interactives. Ces implémentations connues sont : RxJava et RxJs. 
 
-===Reactive Streams:
+=== Reactive Streams:
   Reactive Streams a été créé pour résoudre des problèmes spécifiques de backpressure dans les systèmes de traitement de données asynchrones, en définissant un ensemble minimal d'interfaces pour garantir une gestion cohérente et efficace des flux de données entre différentes bibliothèques réactives dans l'écosystème JVM. Ces implementation connues sont Akka Reactor Vertex et RxJAVA2 
 
 Dans notre article, on va s'intéresser à Reactor qui est une implémentation de Reactive streams. 
@@ -79,9 +80,9 @@ Reactor est une bibliothèque réactive pour Java développée par Pivotal (main
 
 Les principales abstractions fournies par Reactor sont : 
 
-===Mono<T> : Représente un flux réactif qui produit au maximum une seule valeur ou une erreur. 
+=== Mono<T> : Représente un flux réactif qui produit au maximum une seule valeur ou une erreur. 
 
-===Flux<T> : Représente un flux réactif qui peut émettre zéro, une ou plusieurs valeurs, voire un flux infini. 
+=== Flux<T> : Représente un flux réactif qui peut émettre zéro, une ou plusieurs valeurs, voire un flux infini. 
 
 Ces deux types sont les composants de base utilisés pour modéliser des flux de données asynchrones en Java avec Reactor. 
 
@@ -97,7 +98,7 @@ En pratique un Flux peut être sérialisé sous plusieur formes
 
 Spring web flux fait partie de projet Spring 5  c'est un module Spring basé sur une api http exposé à la source sur reactive Streams. dans lequel on continue à utiliser les mêmes annotation du contrôleurs Spring MVC (@conttreler, @RequestMapping, etc.) sauf que au lieu d'utiliser des type de retour List<T>, T ou void, on utilise Flux<T> ou Mono<T>.  
 
-===Composants de Spring WebFlux 
+=== Composants de Spring WebFlux 
 
 -Contrôleurs Réactifs : Comme dans Spring MVC, mais avec des types réactifs comme Mono et Flux. 
 
@@ -105,7 +106,7 @@ Spring web flux fait partie de projet Spring 5  c'est un module Spring basé sur
 
 R-outer Function : Une approche fonctionnelle pour définir des routes HTTP. 
 
-====Avantages: 
+==== Avantages: 
 
 Scalabilité : La nature non-bloquante permet de gérer un grand nombre de connexions simultanées avec moins de threads. 
 
@@ -115,7 +116,7 @@ Flexibilité : Peut être utilisé pour des microservices, des applications Web,
 
 Configuration d'un projet Spring WebFlux 
 
-Maven :  
+== Configuration Maven :  
 
 Pour configurer un projet Maven avec Spring WebFlux et Reactor, il est essentiel d'ajouter les dépendances appropriées dans le fichier pom.xml. Voici les étapes à suivre pour inclure ces dépendances. 
 [source,plain]
@@ -130,82 +131,65 @@ Pour configurer un projet Maven avec Spring WebFlux et Reactor, il est essentiel
     <artifactId>reactor-spring</artifactId>
     <version>1.0.1.RELEASE</version>
 </dependency>
+----
 
------
-===Création d'un contrôleur réactif: 
+=== Création d'un contrôleur réactif: 
 
  
-[source,plain]
+[source,java]
 ----
 @RestController 
 
  public class ReactiveController { 
-
- 	@GetMapping("/hello")  
-
-public Mono<String> sayHello() {  
-
-return Mono.just("Hello, WebFlux!"); 
-
+ 	  @GetMapping("/hello")  
+        public Mono<String> sayHello() {   
+          return Mono.just("Hello, WebFlux!"); 
  }  
------
-[source,plain]
+----
+
+[source,java]
 ----
 @GetMapping("/numbers")  
-
-public Flux<Integer> getNumbers() {  
-
-return Flux.range(1, 10) .delayElements(Duration.ofMillis(100));  
-
-}  
-
+  public Flux<Integer> getNumbers() {  
+    return Flux.range(1, 10) .delayElements(Duration.ofMillis(100));  
+  }  
 } 
------
-===Exemple d'utilisation de WebClient : 
-[source,plain]
+----
+
+=== Exemple d'utilisation de WebClient : 
+
+[source,java]
 ----
 public class WebClientExample { 
-
- private final WebClient webClient =WebClient.create("http://example.com"); 
-
- public Mono<String> fetchData() { 
-
- 	return webClient.get() .uri("/api/data") .retrieve()  
-
-.bodyToMono(String.class);  
-
-} 
-
+  private final WebClient webClient =WebClient.create("http://example.com"); 
+    public Mono<String> fetchData() { 
+ 	    return webClient.get() .uri("/api/data") .retrieve()  
+          .bodyToMono(String.class);    
+  } 
  } 
------
-===Gestion du Backpressure 
+----
+
+=== Gestion du Backpressure 
 
 Le backpressure est une composante essentielle dans les systèmes réactifs pour gérer le flux de données entre les producteurs et les consommateurs. Avec Reactor, vous pouvez contrôler le backpressure via des opérateurs comme limitRate. 
 
 Exemple d'utilisation de limitRate pour réguler la consommation des données : 
 
-[source,plain]
+[source,java]
 ---- 
 
 Flux<Integer> flux = WebClient.create("http://example.com")  
-
-.get()  
-
-.uri("/api/large-stream")  
-
-.retrieve() .bodyToFlux(Integer.class)  
-
-.limitRate(5); 
-
- flux.subscribe(data -> { // Traitement des données  
-
-System.out.println("Received: " + data);  
-
+  .get()  
+  .uri("/api/large-stream")  
+  .retrieve() .bodyToFlux(Integer.class)  
+  .limitRate(5); 
+  flux.subscribe(data -> { // Traitement des données  
+    System.out.println("Received: " + data);  
 }); 
 
--------
+----
 
-==Conclusion 
+== Conclusion 
 
 Spring Reactor propulse le développement d'applications modernes vers de nouveaux sommets en leur conférant réactivité, performance et résilience. En s'alignant sur le Reactive Manifesto, cette technologie ouvre la voie à des systèmes distribués agiles et efficaces. Toutefois, son adoption requiert une solide compréhension des concepts fondamentaux et une évaluation minutieuse des besoins spécifiques de chaque projet.
 
