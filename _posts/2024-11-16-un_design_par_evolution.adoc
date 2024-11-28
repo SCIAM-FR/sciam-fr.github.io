@@ -14,26 +14,22 @@ en mettant en lumière leur potentiel à stimuler l'innovation et à résoudre c
 
 == Introduction
 
-Les algorithmes exacts (déterministes) jouent un rôle fondamental dans la résolution de nombreux problèmes dans divers
-domaines, qu'il s'agisse de tri de données, de recherche de chemins optimaux, ou encore de résolution d’équations complexes.
+Les algorithmes exacts (déterministes) jouent un rôle fondamental dans la résolution de nombreux problèmes dans divers domaines, qu'il s'agisse de tri de données, de recherche de chemins optimaux, ou encore de résolution d’équations complexes.
 
-Cependant, face à des problèmes dits ``NP-difficiles``footnote:np-difficult[En informatique théorique,
-le terme "NP-difficiles" (ou NP-hard en anglais) désigne une classe
-de problèmes qui sont au moins aussi difficiles à résoudre que les problèmes de la classe
-NP (Non-deterministic Polynomial time); Example : Le célèbre problème du voyageur de commerce
-(TSP, Travelling Salesman Problem) en version d’optimisation qui consiste à trouver le chemin optimal
-parmi plusieurs villes est un défi immense quand le nombre de villes augmente.] ou à de vastes espaces de conception,
-ils révèlent rapidement leurs limites.
+Cependant, face à des problèmes dits ``NP-difficiles`` ou à de vastes espaces de conception, ils révèlent rapidement leurs limites.
+
+[NOTE]
+En informatique théorique, le terme "NP-difficiles" (ou NP-hard en anglais) désigne une classe de problèmes qui sont au moins aussi difficiles à résoudre que les problèmes de la classe NP (Non-deterministic Polynomial Time); Example :
+Le célèbre problème du voyageur de commerce (TSP, Travelling Salesman Problem) en version d’optimisation qui consiste à trouver le chemin optimal parmi plusieurs villes est un défi immense quand le nombre de villes augmente.
 
 Ces algorithmes déterministes sont conçus pour parcourir de manière exhaustive toutes les solutions possibles pour garantir de trouver l’optimum, ce qui rend leur utilisation peu pratique, voire impossible, pour des problèmes de grande dimension ou en constante évolution.
 
-Les algorithmes approximatifs, heuristiques ou méta-heuristiquesfootnote:meta[Les méta-heuristiques sont des méthodes d'optimisation
-avancées conçues pour résoudre des problèmes complexes, souvent difficiles à traiter par des algorithmes exacts en
-raison de la taille ou de la complexité de l'espace de recherche. Ces approches utilisent des stratégies globales
-et adaptatives pour explorer efficacement l'espace des solutions et trouver des solutions optimales ou
-quasi-optimales dans un temps raisonnable.], quant à eux, apportent une approche différente pour obtenir des solutions
+Les algorithmes approximatifs, heuristiques ou méta-heuristiques, quant à eux, apportent une approche différente pour obtenir des solutions
 proches de l'optimum, dites quasi-optimales, dans des délais raisonnables, ce qui est souvent suffisant pour
 les applications pratiques.
+
+[NOTE]
+Les méta-heuristiques sont des méthodes d'optimisation avancées conçues pour résoudre des problèmes complexes, souvent difficiles à traiter par des algorithmes exacts en raison de la taille ou de la complexité de l'espace de recherche. Ces approches utilisent des stratégies globales et adaptatives pour explorer efficacement l'espace des solutions et trouver des solutions optimales ou quasi-optimales dans un temps raisonnable.
 
 Une des classes des méta-heuristiques est celle des algorithmes évolutionnaires, souvent assimilés aux 'algorithmes génétiques' dont l'approche est inspirée des mécanismes de l'évolution naturelle.
 
