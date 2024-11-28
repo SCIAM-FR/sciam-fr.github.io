@@ -264,7 +264,7 @@ Dans ce contexte, une solution est dite dominée si une autre solution est au mo
 bonne dans tous les objectifs et strictement meilleure dans au moins un objectif.
 Les solutions non dominées forment donc ce qu'on appelle la frontière de Pareto.]
 
-], plutôt qu'une seule solution optimale.
+, plutôt qu'une seule solution optimale.
 Le front de Pareto représente un ensemble de solutions où aucune ne peut être améliorée dans un objectif sans
 détériorer un autre objectif.
 
