@@ -564,7 +564,7 @@ redéfiniront l’avenir du design et de l’ingénierie.
 == Références
 
 [bibliography]
-* P.J.E. Peebles, *Principles of Physical Cosmologye*, Princeton Univ Pr, Ewing, New Jersey, U.S.A, 1993.
+* P.J.E. Peebles, *Principles of Physical Cosmologye*, Princeton Univ Pr, Ewing, New Jersey, U.S.A., 1993.
 * E.L. Lawler, J.K. Lenstra, A.H.G. Rinnooy Kan, & D.B Shmoys, *The Traveling Salesman Problem: A Guided Tour of Combinatorial Optimization*, Wiley, 1985
 * A.E. Eiben, & J.E. Smith, *Introduction to Evolutionary Computing*, Springer, 2003.
 * M. Garey and D. Johnson, *Computers and Intractability. A Guide to the Theory of NP-Completeness.*, Freemann, San Francisco, 1979.
