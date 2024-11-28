@@ -7,7 +7,7 @@
 :page-tags: [Algorithms, IA, Machine Learning, Optimisation, Programmation Génétique, Design, Evolution]
 :page-vignette: genetics.png
 :page-liquid:
-:page-categories: Intelligence Artificielle, Algorithmes, Programmation génétique
+:page-categories: software llm news 
 
 == Prélude
 
