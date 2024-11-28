@@ -91,7 +91,7 @@ Ces algorithmes déterministes sont conçus pour parcourir de manière exhaustiv
 pour garantir de trouver l’optimum, ce qui rend leur utilisation peu pratique, voire impossible, pour des problèmes de
 grande dimension ou en constante évolution.
 
-Les algorithmes approximatifs, heuristiques ou méta-heuristiques footnote:meta[Les méta-heuristiques sont des méthodes d'optimisation
+Les algorithmes approximatifs, heuristiques ou méta-heuristiquesfootnote:meta[Les méta-heuristiques sont des méthodes d'optimisation
 avancées conçues pour résoudre des problèmes complexes, souvent difficiles à traiter par des algorithmes exacts en
 raison de la taille ou de la complexité de l'espace de recherche. Ces approches utilisent des stratégies globales
 et adaptatives pour explorer efficacement l'espace des solutions et trouver des solutions optimales ou
