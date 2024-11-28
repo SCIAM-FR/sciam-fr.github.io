@@ -1,7 +1,7 @@
 = Un design évolutif pour des solutions révolutionnaires
 :showtitle:
 :page-navtitle: Un design évolutif pour des solutions révolutionnaires
-:page-excerpt:
+:page-excerpt: Les algorithmes évolutionnaires offrent une approche novatrice pour concevoir des solutions et produits optimales ou quasi-optimales dans des délais raisonnables.
 :layout: post
 :author: saidboudjelda
 :page-tags: [Algorithms, IA, Machine Learning, Optimisation, Programmation Génétique, Design, Evolution]
@@ -9,70 +9,8 @@
 :page-liquid:
 :page-categories: software llm news 
 
-== Prélude
-
-Il y a environ 13,8 milliards d'années, l'Univers tel que nous le connaissons a émergé d'un événement d'une incommensurable densité et énergie : le *Big Bang*.
-Cet instant initial ne fut pas une explosion dans l'espace, mais plutôt une expansion de l'espace lui-même.
-Le temps, l'espace et la matière sont nés ensemble, jaillissant d'une singularité mystérieuse.
-
-Dans ses premiers instants, l'Univers était une soupe chaude et dense de particules élémentaires :
-quarks, électrons, photons et autres.
-À mesure qu'il s'étendait, cette soupe refroidissait.
-
-Quelques centaines de milliers d'années après le Big Bang, les quarks se lièrent pour former des protons et des neutrons,
-et ces derniers se combinèrent pour donner naissance aux premiers noyaux atomiques.
-
-Les scientifiques estiment qu'il existe environ \(10^{80}\)  atomesfootnote:atoms[Le nombre d'atomes dans l'univers
-observable est estimé à environ \(10^{80}\).
-En 2004, Carl Sagan a popularisé dans Cosmos l’idée du nombre d’atomes dans l’univers observable en discutant de l’immensité de l’espace.]
-dans l'Univers visible, soit un chiffre gigantesque :
-un 1 suivi de 80 zéros. Ce nombre colossal a été calculé en combinant plusieurs observations et hypothèses.
-
-Et dans un autre univers qui est l'univers *mathématique*, il existe des espaces dont le nombre d'éléments
-est plus grand que le nombre d'atomes dans l'univers visible.
-En voici deux exemples :
-
-Nous avons une séquence de lettres *``ABC``* et nous voulons trouver toutes les permutations possibles, c'est-à-dire
-**``ABC``**, **``ACB``**, **``BAC``**, **``BCA``**, **``CAB``**, **``CBA``**, soit un total de ``6``
-permutations, ce qui est facile à calculer.
-Mais imaginez que nous avons une séquence de lettres plus longue, disons ``71`` lettres !
-Et nous devons trouver toutes les permutations possibles !!!.
-
-Maintenant, nous devons trouver la meilleure solution pour le problème suivant :
-
-Un voyageur doit visiter un ensemble de 𝑛 villes, chacune exactement une fois, avant de revenir à sa ville de départ.
-Les distances entre les villes sont connues, et le but est de déterminer l'itinéraire qui minimise la distance
-totale parcourue et/ou le coût total.
-
-Si nous souhaitons représenter ce problème de manière mathématique, nous pouvons le formuler ainsi :
-Soit \(𝑉 = \{c_1, c_2, c_3,..., c_𝑛\} \) l'ensemble des villes à visiter, et \( d(i, j) \) la distance entre les villes 𝑖 et 𝑗.
-Une matrice de distances \((D)\) est définie telle que \( D[i, j] \) = \( d(i, j) \) pour tout 𝑖, 𝑗 ∈ 𝑉.
-
-En sortie, nous aurons besoin de trouver une permutation \(𝜋 = (𝜋_1, 𝜋_2, ..., 𝜋_𝑛) \) de l'ensemble \(𝑉\) telle que le
-coût total de la tournée soit minimal, c'est-à-dire que la somme des distances entre les villes successives :
-
-stem:[\text{t}(\pi) = \sum_{i=1}^{n-1} D[\pi_i, \pi_{i+1}\]]
-
-Et si nous calculons la complexité de ce problème, nous trouvons qu'il est de l'ordre de \(O(n!)\)
-footnote:fact[La fonction factorielle, notée 𝑛!, est une opération mathématique qui multiplie tous les entiers positifs
-d’un nombre 𝑛 jusqu'à 1.
-Elle est utilisée dans de nombreux domaines comme les probabilités, les statistiques, les algorithmes et la combinatoire.
-\(n! = n × (n - 1) × (n - 2) × ... × 2 × 1\)].
-Cette croissance rapide rend son calcul très coûteux en termes de complexité.
-
-Par exemple, pour stem:[\begin{equation} 𝑛 = 10 \end{equation}] il y a stem:[\begin{equation}9!= 362,880 \end{equation}]
-chemins à explorer.
-
-Pour stem:[\begin{equation} 𝑛 = 20\end{equation}] il y a  stem:[\begin{equation} 19!≈ 1.22 * 10^{17} \end{equation}]
-footnote:nb[Le nombre stem:[\begin{equation} 19!≈ 1.22 * 10^{17} \end{equation}] est une notation scientifique utilisée
-pour représenter des nombres très grands ou très petits de manière concise.
-Voici comment l’interpréter en valeur exacte 1.22×100,000,000,000,000,000 = 122,000,000,000,000,000 ou 122 quadrillions.] et
-pour 71 villes, le nombre de chemins candidats est supérieur à stem:[\begin{equation} 70!≈ 5 * 10^{99} \end{equation}]
-qui est plus grand que le nombre d'atomes dans l'univers connu ce qui devient ingérable pour un ordinateur.
-
-
-Ce problème est connu sous le nom du problème du voyageur de commerce *(TSP, Travelling Salesman Problem en anglais)*
-
+Cet article explore l'application des algorithmes évolutionnaires dans divers domaines, notamment le design, et l'optimisation des architectures cloud,
+en mettant en lumière leur potentiel à stimuler l'innovation et à résoudre certains des problèmes les plus complexes de l'informatique moderne.
 
 == Introduction
 
@@ -130,36 +68,10 @@ De la même façon que le MVP évolue par étapes en fonction du retour des util
 
 Évidemment, au contraire du MVP, les algorithmes évolutionnaires ne sont pas tenus de produire une solution
 immédiatement ``viable`` ou utilisable à chaque itération.
+
 Ils évoluent de manière itérative afin d'explorer l'espace de recherche pour converger progressivement vers des solutions optimales.
 Dans ce contexte, on utilise un critère de fitness pour évaluer et comparer les solutions, permettant de sélectionner
 et d'améliorer les meilleures configurations à chaque génération, même si elles ne sont pas directement applicables dans l’immédiat.
-
-=== Simple comparaison entre le calcul des permutations et le problème du voyageur de commerce (TSP)
-Le calcul des *permutations* consiste à générer toutes les combinaisons possibles d’un ensemble donné.
-C’est un **problème exact** et déterministe : il n’a pas de contraintes complexes, et un algorithme peut
-produire toutes les solutions en `O(n!)`.
-
-En revanche, le *problème du voyageur de commerce (TSP)* vise à trouver le chemin le plus court pour visiter plusieurs villes.
-C’est un **problème NP-difficile**, car il faut identifier la solution optimale parmi un très grand nombre
-de possibilités tout en respectant des contraintes (distances, coûts, etc.).
-
-Bien que la résolution exacte du TSP ait aussi une complexité de `O(n!)`, cela devient impraticable pour de nombreux points.
-Nous utilisons donc des **métaheuristiques** (comme les algorithmes génétiques), qui permettent de trouver des
-solutions *approximatives,* mais efficaces en temps raisonnable.
-
-*En résumé :*
-
-[cols="3", options="header"]
-|===
-| **Aspect**              | **Calcul des Permutations**             | **Problème du Voyageur de Commerce**
-
-| **Objectif**            | Générer toutes les solutions possibles. | Trouver la meilleure solution parmi toutes.
-| **Solution requise**    | Ensemble complet des permutations.      | Un chemin optimal ou quasi-optimal.
-| **Complexité**          | `O(n!)`                                 | `O(n!)` pour exact, mais une métaheuristique réduit.
-| **Contraintes**         | Aucune contrainte particulière.         | Inclut des contraintes spécifiques (distances, coûts).
-| **Type d'algorithme**   | Exact et déterministe.                  | Exact (impraticable à grande échelle) ou métaheuristique.
-|===
-
 
 == Algorithmes Évolutionnaires : Inspirés par la Nature
 
@@ -318,7 +230,7 @@ des techniques locales de recherche (souvent appelées descentes locales ou mét
 L'objectif principal des algorithmes mémétiques est d'améliorer l'efficacité de la recherche en combinant la capacité
 d'exploration globale des algorithmes évolutionnaires avec la capacité d'exploitation locale des méthodes de recherche locale.
 
-=== Algorithmes Co-Evolutionnaires (AC-E)
+=== Algorithmes Co-Évolutionnaires (AC-E)
 
 Les algorithmes co-évolutionnaires s'inspirent du concept de
 coévolution biologique, où deux ou plusieurs populations évoluent simultanément en réponse aux pressions exercées que
@@ -341,12 +253,9 @@ leur efficacité dans le design ou l’optimisation.
 
 == Utilisation des algorithmes évolutionnaires dans le design
 
-Nous avons déjà présenté le problème de voyageur de commerce (TSP) qui est un classique en optimisation combinatoire et
+Le design est un domaine avec lequel les algorithmes évolutionnaires ont montré leur efficacité.
+Bien qu'il soit souvent considéré comme un problème abstrait, il a des applications très concrètes dans de nombreux domaines
 dans lequel les algorithmes évolutionnaires ont montré leur efficacité.
-
-Bien qu'il soit souvent considéré comme un problème abstrait, il a des applications très concrètes dans de nombreux domaines.
-Par exemple, en logistique, le TSP est utilisé pour optimiser les tournées de livraison, minimiser les coûts de
-transport et réduire les émissions de CO2.
 
 Dans le domaine de la fabrication, il est utilisé pour planifier les itinéraires des robots ou des machines,
 minimiser les temps de production et maximiser l'efficacité des opérations.
@@ -354,8 +263,6 @@ minimiser les temps de production et maximiser l'efficacité des opérations.
 Dans le secteur des télécommunications, il est utilisé pour optimiser les réseaux de communication,
 minimiser les temps de latence et maximiser la bande passante disponible.
 Et dans le domaine de la recherche opérationnelle, il est utilisé pour résoudre des problèmes de distribution,
-
-*Mais comment pouvons-nous l’appliquer dans notre domaine, celui de la conception et de l’architecture du développement logiciel ?*
 
 
 == Applications des algorithmes évolutionnaires dans le design
@@ -381,7 +288,7 @@ de sa robustesse, de ses performances , et de sa portabilité  sur de nombreuses
 Voici quelques bibliothèques et frameworks couramment utilisés dans ce domaine :
 
 === JMetal
-https://jmetal.readthedocs.io:[jMetal, window=_blank] est un framework java opensource
+https://jmetal.readthedocs.io[jMetal, window=_blank] est un framework java opensource
 footnote:jmetal[Le code source de jMetal est disponible sur Github https://github.com/jMetal/jMetal:[jMetal Github]],
 qui fournit une collection est une bibliothèque Java dédiée à l'optimisation multi-objectifs.
 Elle offre un ensemble d'outils pour résoudre des problèmes d'optimisation multi-objectifs.
@@ -406,7 +313,7 @@ de regroupement pour maintenir la diversité des solutions.], SPEA2 footnote:spe
 * Optimisation par colonies de fourmis, etc.
 
 === MOEA Framework
-https://www.moeaframework.org:[MOEA Framework, window=_blank] est une bibliothèque Java open-source
+https://www.moeaframework.org[MOEA Framework, window=_blank] est une bibliothèque Java open-source
 footnote:moea[Le code source de la bibliothèque se trouve sur ce lien :
 https://github.com/MOEAD/moea-framework:[MOEA GitHub, window=_blank]] conçue pour
 l'optimisation multi-objectifs utilisant des algorithmes évolutionnaires. Elle est très populaire dans la communauté
@@ -421,12 +328,12 @@ Le framework est conçu pour être extensible et personnalisable, permettant aux
 algorithmes et opérateurs d'évolution.
 
 === Opt4J
-https://github.com/sdarg/opt4j:[Opt4J, window=_blank] est une bibliothèque Java pour l'optimisation basée sur les
+https://github.com/sdarg/opt4j[Opt4J, window=_blank] est une bibliothèque Java pour l'optimisation basée sur les
 ``métaheuristiques``, particulièrement adaptée pour la recherche.
 Elle offre une intégration modulaire, ce qui permet de combiner différents algorithmes pour résoudre des problèmes d'optimisation.
 
 === ECJ
-ECJ (Evolutionary Computation in Java) est un système de calcul évolutionnaire écrit en Java.
+https://github.com/GMUEClab/ecj[ECJ, window=_blank] (Evolutionary Computation in Java) est un système de calcul évolutionnaire écrit en Java.
 Il a été conçu pour être extrêmement flexible, permettant aux utilisateurs de configurer presque toutes les classes
 et leurs paramètres dynamiquement à l'exécution à l'aide d'un fichier de paramètres fourni par l'utilisateur.
 Les structures du système sont organisées de manière à être facilement modifiables tout en maintenant une grande efficacité.
@@ -564,7 +471,6 @@ redéfiniront l’avenir du design et de l’ingénierie.
 == Références
 
 [bibliography]
-* P.J.E. Peebles, *Principles of Physical Cosmologye*, Princeton Univ Pr, Ewing, New Jersey, U.S.A., 1993.
 * E.L. Lawler, J.K. Lenstra, A.H.G. Rinnooy Kan, & D.B Shmoys, *The Traveling Salesman Problem: A Guided Tour of Combinatorial Optimization*, Wiley, 1985
 * A.E. Eiben, & J.E. Smith, *Introduction to Evolutionary Computing*, Springer, 2003.
 * M. Garey and D. Johnson, *Computers and Intractability. A Guide to the Theory of NP-Completeness.*, Freemann, San Francisco, 1979.
