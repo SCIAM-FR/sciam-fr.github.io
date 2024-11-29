@@ -75,7 +75,7 @@ Les principales interfaces de Reactive Streams sont{nbsp}:
 
 * `Subscriber<T>` : représente un consommateur de données. Il reçoit les éléments émis par le producteur 'Publisher' via la méthode : onSubscribe(). 
 
-* `Subscription` : gère le lien entre un 'Publisher' et un 'Subscriber'. Elle permet de demander des éléments (request(long n)) ou d'annuler la souscription (cancel()). 
+* `Subscription` : gère le lien entre un `Publisher` et un `Subscriber`. Elle permet de demander des éléments (`request(long n)`) ou d'annuler la souscription (`cancel()`). 
 
 * `Processor<T, R>` : combine les fonctionnalités d'un 'Publisher' et d'un 'Subscriber'. Un 'Processor' reçoit des éléments, les traite, et les renvoie sous forme d'un autre flux. 
 
