@@ -204,5 +204,4 @@ Flux<Integer> flux = WebClient.create("http://example.com")
 
 Spring Reactor propulse le développement d'applications modernes vers de nouveaux sommets en leur conférant réactivité, performance et résilience. En s'alignant 
 sur le Reactive Manifesto, cette technologie ouvre la voie à des systèmes distribués agiles et efficaces. Toutefois, son adoption implique une courbe d'apprentissage 
-plus prononcée, en particulier pour comprendre les concepts de la programmation réactive. Cependant, pour les projets exigeant une grande performance et une grande 
-évolutivité, WebFlux est une solution robuste et adaptée aux besoins actuels.
+plus prononcée, en particulier pour comprendre les concepts de la programmation réactive.
