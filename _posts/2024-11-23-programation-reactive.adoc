@@ -9,7 +9,7 @@
 :page-liquid:
 :page-categories: software news
 
-== Introduction
+== Introduction :
 
 Pendant longtemps, la programmation Java a été dominée par un modèle synchrone et bloquant. Cependant, l'évolution des architectures 
 logicielles, notamment l'émergence des microservices et du cloud computing, a mis en évidence les limites de ce modèle. Pour répondre 
@@ -33,19 +33,21 @@ programmation. Voici quelques caractéristiques clés{nbsp}:
 
 * Scalabilité limitée : comme chaque requête ou tâche peut nécessiter son propre thread ou processus, l'augmentation du nombre de requêtes peut rapidement saturer les ressources du système 
 
-Pour surmonter ces limitations, les systèmes réactifs offrent une alternative en se concentrant sur l'asynchronisme, la non-bloquante, et l'efficacité dans l'utilisation des ressources. Ils permettent de créer des applications qui sont plus réactives, plus résilientes, et plus scalables, en répondant efficacement aux événements et en utilisant les ressources de manière optimale. 
+Pour surmonter ces limitations, les systèmes réactifs offrent une alternative en se concentrant sur l'asynchronisme, non-bloquant, et l'efficacité dans l'utilisation 
+des ressources. Ils permettent de créer des applications qui sont plus réactives, plus résilientes, et plus scalables, en répondant efficacement aux événements et en
+ utilisant les ressources de manière optimale. 
 
 == Les principes de la programmation réactive   
 
 Les principes de la programmation réactive sont encapsulés dans le "Manifeste Réactif", qui énonce quatre caractéristiques clés{nbsp}:
 
-* Responsive (Réactif) : Les systèmes réactifs répondent rapidement aux utilisateurs pour garantir une expérience fluide et interactive. 
+* Responsive (Réactif) : les systèmes réactifs répondent rapidement aux utilisateurs pour garantir une expérience fluide et interactive.
 
-* Resilient (Résilient) : Les systèmes réactifs restent opérationnels même en cas de défaillance, grâce à des mécanismes de gestion des erreurs et de redondance. 
+* Resilient (Résilient) : les systèmes réactifs restent opérationnels même en cas de défaillance, grâce à des mécanismes de gestion des erreurs et de redondance.
 
-* Elastic (Élastique) : Les systèmes réactifs s'adaptent aux variations de la charge de travail en allouant dynamiquement les ressources nécessaires. 
+* Elastic (Élastique) : les systèmes réactifs s'adaptent aux variations de la charge de travail en allouant dynamiquement les ressources nécessaires.
 
-* Message-Driven (Basé sur les Messages) : Les systèmes réactifs communiquent par la transmission de messages asynchrones, facilitant la déconnexion et le découplage des composants. 
+* Message-Driven (Basé sur les Messages) : les systèmes réactifs communiquent par la transmission de messages asynchrones, facilitant la connexion et le découplage des composants.
 
 == Les bibliotheques de la programmation réactive sont basés sur deux modèles{nbsp}: 
 
@@ -53,11 +55,11 @@ Les principes de la programmation réactive sont encapsulés dans le "Manifeste 
 des collections synchrones (comme map, filter, reduce). Il est souvent utilisé pour gérer des événements utilisateur, des requêtes 
 réseau, et d'autres opérations asynchrones dans des applications interactives. Ces implémentations connues sont : RxJava et RxJs. 
 
-* Reactive Streams: Reactive Streams a été créé pour résoudre des problèmes spécifiques de backpressure dans les systèmes de traitement de données 
-asynchrones, en définissant un ensemble minimal d'interfaces pour garantir une gestion cohérente et efficace des flux de données 
-entre différentes bibliothèques réactives dans l'écosystème JVM. Ces implementation connues sont Akka Reactor Vertex et RxJAVA2 
+* Reactive Streams : Reactive Streams a été créé pour résoudre des problèmes spécifiques de backpressure dans les systèmes de traitement
+ de données asynchrones, en définissant un ensemble minimal d'interfaces pour garantir une gestion cohérente et efficace des flux de données
+  entre différentes bibliothèques réactives dans l'écosystème JVM. Les implémentations connues sont Akka, Reactor, Vert.x et RxJAVA2.
 
-Dans notre article, on va s'intéresser à Reactor qui est une implémentation de Reactive streams. 
+Dans cet article, on va s'intéresser à Reactor qui est une implémentation de Reactive streams. 
 
 Les objectifs principaux de Reactive Streams sont {nbsp}: 
 
@@ -71,53 +73,56 @@ Les principales interfaces de Reactive Streams sont{nbsp}:
 
 * `Publisher<T>` : représente une source qui peut émettre une séquence de valeurs asynchrones. Les éditeurs appellent la méthode `subscribe()` pour permettre aux abonnés de recevoir les éléments. 
 
-* Subscriber<T> : Représente un consommateur de données. Il reçoit les éléments émis par un Publisher via quatre méthodes : onSubscribe(), onNext(), onError(), et onComplete(). 
+* `Subscriber<T>` : représente un consommateur de données. Il reçoit les éléments émis par le producteur 'Publisher' via la méthode : onSubscribe(). 
 
-* Subscription : Gère le lien entre un Publisher et un Subscriber. Elle permet de demander des éléments (request(long n)) ou d'annuler la souscription (cancel()). 
+* `Subscription` : gère le lien entre un 'Publisher' et un 'Subscriber'. Elle permet de demander des éléments (request(long n)) ou d'annuler la souscription (cancel()). 
 
-* Processor<T, R> : Combine les fonctionnalités d'un Publisher et d'un Subscriber. Un Processor reçoit des éléments, les traite, et les renvoie sous forme d'un autre flux. 
+* `Processor<T, R>` : combine les fonctionnalités d'un 'Publisher' et d'un 'Subscriber'. Un 'Processor' reçoit des éléments, les traite, et les renvoie sous forme d'un autre flux. 
 
-== Project Reactor : 
+== Le Project Reactor : 
 
-Reactor est une bibliothèque réactive pour Java développée par Pivotal (maintenant VMware) et intégrée dans l'écosystème Spring. Elle fournit une implémentation de Reactive Streams et permet de construire des applications non bloquantes, asynchrones, et scalables. Reactor est au cœur de Spring WebFlux, le module réactif de Spring Framework. 
+Reactor est une bibliothèque réactive pour Java développée par Pivotal (maintenant VMware) et intégrée dans l'écosystème Spring. Elle fournit une implémentation de Reactive Streams et permet de 
+construire des applications non bloquantes, asynchrones, et scalables. Reactor est au cœur de Spring WebFlux, le module réactif Web de Spring Framework. 
 
 Les principales abstractions fournies par Reactor sont {nbsp}: 
 
- * Mono<T> : Représente un flux réactif qui produit au maximum une seule valeur ou une erreur. 
+ * 'Mono<T>' : représente un flux réactif qui produit au maximum une seule valeur. 
 
- * Flux<T> : Représente un flux réactif qui peut émettre zéro, une ou plusieurs valeurs, voire un flux infini. 
+ * 'Flux<T>' : représente un flux réactif qui peut émettre zéro, une ou plusieurs valeurs, voire un flux infini. 
 
 Ces deux types sont les composants de base utilisés pour modéliser des flux de données asynchrones en Java avec Reactor. 
 
-En pratique un Flux peut être sérialisé sous plusieur formes  {nbsp}: 
+En pratique un 'Flux' peut être sérialisé sous plusieur formes{nbsp}: 
 
-* Json Array : retourne un arrayList normale 
+* Json Array 
 
-* Text Event Stream : envoie un flux d'objets Json contenue donnés par donne dès qu’ils sont disponible. 
+* Text Event Stream 
 
-* Flux de json stream : De la même manière entre deux serveurs on peut avoir un flux de  json Stream. 
+* Flux de json stream
 
 == Spring Web Flux avec Reactor  
 
-Spring web flux fait partie de projet Spring 5  c'est un module Spring basé sur une api http exposé à la source sur reactive Streams. dans lequel on continue à utiliser les mêmes annotation du contrôleurs Spring MVC (@conttreler, @RequestMapping, etc.) sauf que au lieu d'utiliser des type de retour List<T>, T ou void, on utilise Flux<T> ou Mono<T>.  
+Spring Web Flux fait partie de projet Spring 5 : c'est un module Spring basé sur une API HTTP exposée à la source sur reactive Streams dans lequel 
+on continue à utiliser les mêmes annotations pour les contrôleurs Spring MVC (`@Controller`, `@RequestMapping`, etc). Cependant au lieu d'utiliser 
+des types de retour `List<T>`, `T` ou `void`, on utilise `Flux<T>` ou `Mono<T>`.  
 
-=== Composants de Spring WebFlux {nbsp}:
+=== Les composants de Spring WebFlux {nbsp}:
 
-* Contrôleurs Réactifs : Comme dans Spring MVC, mais avec des types réactifs comme Mono et Flux. 
+* Les contrôleurs réactifs : comme dans Spring MVC, mais avec des types réactifs `Mono` et `Flux`. 
 
-* WebClient : Un client HTTP non-bloquant qui remplace RestTemplate pour les appels externes réactifs. 
+* `WebClient` : un client HTTP non-bloquant qui remplace `RestTemplate` pour les appels externes réactifs. 
 
-* Router Function : Une approche fonctionnelle pour définir des routes HTTP. 
+* Router Function : une approche fonctionnelle pour définir des routes HTTP. 
 
-==== Avantages{nbsp}:
+==== Les avantages{nbsp}:
 
-* Scalabilité : La nature non-bloquante permet de gérer un grand nombre de connexions simultanées avec moins de threads. 
+* Scalabilité : la nature non-bloquante permet de gérer un grand nombre de connexions simultanées avec moins de threads. 
 
-* Performance : Idéal pour les applications nécessitant une faible latence et une haute performance. 
+* Performance : adapté pour les applications nécessitant une faible latence et une haute performance. 
 
-* Flexibilité : Peut être utilisé pour des microservices, des applications Web, ou même des applications fonctionnant avec d'autres paradigmes réactifs comme RxJava. 
+* Flexibilité : peut être utilisé pour des microservices, des applications Web, ou même des applications fonctionnant avec d'autres paradigmes réactifs comme RxJava. 
 
-==== Inconvénients :
+==== Les inconvénients :
 
 Bien que la programmation réactive soit un outil puissant pour de nombreuses applications modernes, elle présente également des inconvénients.
 
@@ -129,11 +134,11 @@ Bien que la programmation réactive soit un outil puissant pour de nombreuses ap
 
 * Pas toujours adapté : Toutes les applications n'ont pas besoin des avantages de la programmation réactive, comme la haute disponibilité ou l'évolutivité massive. Pour des applications simples ou à faible trafic, l'approche réactive peut introduire une complexité inutile.
 
-== Configuration d'un projet Spring WebFlux 
+== La configuration d'un projet Spring WebFlux 
 
-=== Configuration Maven :  
+=== La configuration Maven :  
 
-Pour configurer un projet Maven avec Spring WebFlux et Reactor, il est essentiel d'ajouter les dépendances appropriées dans le fichier pom.xml. Voici les étapes à suivre pour inclure ces dépendances. 
+Pour configurer un projet Maven avec Spring WebFlux et Reactor, il faut ajouter les dépendances appropriées dans le fichier pom.xml :
 [source,plain]
 ----
  <dependency>
@@ -148,8 +153,15 @@ Pour configurer un projet Maven avec Spring WebFlux et Reactor, il est essentiel
 </dependency>
 ----
 
-=== Création d'un contrôleur réactif: 
+=== La création d'un contrôleur réactif : 
 
+Le contrôleur contient deux méthodes :
+
+*La première méthode : retourne un Mono créé à partir d'une valeur unique fournie en paramètre.
+
+*La deuxième méthode fournit un flux (Flux) représentant une séquence d'entiers allant de 1 à 10, avec un délai de 100 millisecondes entre chaque élément émis.
+
+Si un client appelle l'API /numbers, il recevra chaque nombre (de 1 à 10) avec un intervalle de 100 millisecondes entre eux.
  
 [source,java]
 ----
@@ -168,7 +180,7 @@ Pour configurer un projet Maven avec Spring WebFlux et Reactor, il est essentiel
 } 
 ----
 
-=== Exemple d'utilisation de WebClient : 
+=== Un exemple d'utilisation de WebClient : 
 
 [source,java]
 ----
