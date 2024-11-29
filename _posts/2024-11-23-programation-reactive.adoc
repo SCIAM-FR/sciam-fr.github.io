@@ -117,7 +117,7 @@ Spring web flux fait partie de projet Spring 5  c'est un module Spring basé sur
 
 * Flexibilité : Peut être utilisé pour des microservices, des applications Web, ou même des applications fonctionnant avec d'autres paradigmes réactifs comme RxJava. 
 
-==== Inconvénients 
+==== Inconvénients :
 
 Bien que la programmation réactive soit un outil puissant pour de nombreuses applications modernes, elle présente également des inconvénients.
 
@@ -129,9 +129,9 @@ Bien que la programmation réactive soit un outil puissant pour de nombreuses ap
 
 * Pas toujours adapté : Toutes les applications n'ont pas besoin des avantages de la programmation réactive, comme la haute disponibilité ou l'évolutivité massive. Pour des applications simples ou à faible trafic, l'approche réactive peut introduire une complexité inutile.
 
-= Configuration d'un projet Spring WebFlux 
+== Configuration d'un projet Spring WebFlux 
 
-== Configuration Maven :  
+=== Configuration Maven :  
 
 Pour configurer un projet Maven avec Spring WebFlux et Reactor, il est essentiel d'ajouter les dépendances appropriées dans le fichier pom.xml. Voici les étapes à suivre pour inclure ces dépendances. 
 [source,plain]
@@ -200,7 +200,7 @@ Flux<Integer> flux = WebClient.create("http://example.com")
 
 ----
 
-== Conclusion 
+= Conclusion 
 
 Spring Reactor propulse le développement d'applications modernes vers de nouveaux sommets en leur conférant réactivité, performance et résilience. En s'alignant 
 sur le Reactive Manifesto, cette technologie ouvre la voie à des systèmes distribués agiles et efficaces. Toutefois, son adoption implique une courbe d'apprentissage 
