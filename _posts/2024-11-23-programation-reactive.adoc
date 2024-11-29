@@ -47,9 +47,7 @@ Les principes de la programmation réactive sont encapsulés dans le "Manifeste 
 
 * Message-Driven (Basé sur les Messages) : Les systèmes réactifs communiquent par la transmission de messages asynchrones, facilitant la déconnexion et le découplage des composants. 
 
-== Standard de la programmation réactive
-
-Les bibliotheques de la programmation réactive sont basés sur deux modèles{nbsp}: 
+== Les bibliotheques de la programmation réactive sont basés sur deux modèles{nbsp}: 
 
 * ReactiveX : ReactiveX a été conçu pour fournir une API unifiée pour le traitement de collections asynchrones, en s'inspirant des méthodes 
 des collections synchrones (comme map, filter, reduce). Il est souvent utilisé pour gérer des événements utilisateur, des requêtes 
@@ -119,7 +117,19 @@ Spring web flux fait partie de projet Spring 5  c'est un module Spring basé sur
 
 * Flexibilité : Peut être utilisé pour des microservices, des applications Web, ou même des applications fonctionnant avec d'autres paradigmes réactifs comme RxJava. 
 
-Configuration d'un projet Spring WebFlux 
+==== Inconvénients 
+
+Bien que la programmation réactive soit un outil puissant pour de nombreuses applications modernes, elle présente également des inconvénients.
+
+* Débogage et test complexes : Les applications réactives introduisent des comportements asynchrones difficiles à tracer, rendant le débogage et la compréhension des erreurs plus compliqués. De même, les tests nécessitent souvent des outils spécialisés pour simuler les flux asynchrones.
+
+* Code plus difficile à lire et maintenir : En raison de la composition des flux et des chaînes d'opérateurs, le code réactif peut devenir difficile à comprendre, en particulier pour ceux qui n’ont pas l’habitude de travailler avec ce paradigme.
+
+* Coût d'intégration dans les projets existants : Migrer une application traditionnelle vers une approche réactive peut être coûteux et complexe. Il peut être nécessaire de refactoriser une grande partie du code et d’adapter les couches d’infrastructure.
+
+* Pas toujours adapté : Toutes les applications n'ont pas besoin des avantages de la programmation réactive, comme la haute disponibilité ou l'évolutivité massive. Pour des applications simples ou à faible trafic, l'approche réactive peut introduire une complexité inutile.
+
+= Configuration d'un projet Spring WebFlux 
 
 == Configuration Maven :  
 
@@ -153,7 +163,7 @@ Pour configurer un projet Maven avec Spring WebFlux et Reactor, il est essentiel
 
     @GetMapping("/numbers")  
       public Flux<Integer> getNumbers() {  
-        return Flux.range(1, 10) .delayElements(Duration.ofMillis(100));  
+        return Flux.range(1, 10).delayElements(Duration.ofMillis(100));  
     }  
 } 
 ----
@@ -183,20 +193,16 @@ Exemple d'utilisation de `limitRate` pour réguler la consommation des données 
 
 Flux<Integer> flux = WebClient.create("http://example.com")  
                               .get()  
-                              .uri("/api/large-stream")  
-                              .retrieve() .bodyToFlux(Integer.class)  
-                              .limitRate(5); 
-                  flux.subscribe(data -> { // Traitement des données  
-              System.out.println("Received: " + data);  
-}); 
+                                .uri("/api/large-stream")  
+                                  .retrieve() .bodyToFlux(Integer.class)  
+                                    .limitRate(5); 
+                    flux.subscribe(data -> { System.out.println("Received: " + data);}); 
 
 ----
 
 == Conclusion 
 
 Spring Reactor propulse le développement d'applications modernes vers de nouveaux sommets en leur conférant réactivité, performance et résilience. En s'alignant 
-sur le Reactive Manifesto, cette technologie ouvre la voie à des systèmes distribués agiles et efficaces. Toutefois, son adoption requiert une solide
- compréhension des concepts fondamentaux et une évaluation minutieuse des besoins spécifiques de chaque projet.
-
-L'adoption de WebFlux implique une courbe d'apprentissage plus prononcée, en particulier pour comprendre les concepts de la programmation réactive. Cependant, 
-pour les projets exigeant une grande performance et une grande évolutivité, WebFlux est une solution robuste et adaptée aux besoins actuels.
+sur le Reactive Manifesto, cette technologie ouvre la voie à des systèmes distribués agiles et efficaces. Toutefois, son adoption implique une courbe d'apprentissage 
+plus prononcée, en particulier pour comprendre les concepts de la programmation réactive. Cependant, pour les projets exigeant une grande performance et une grande 
+évolutivité, WebFlux est une solution robuste et adaptée aux besoins actuels.
