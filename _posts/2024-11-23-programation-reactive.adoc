@@ -155,7 +155,7 @@ Pour configurer un projet Maven avec Spring WebFlux et Reactor, il faut ajouter 
 
 === La création d'un contrôleur réactif : 
 
-Le contrôleur contient deux méthodes :
+Nous allons utiliser un contrôleur contient deux méthodes :
 
 *La première méthode : retourne un Mono créé à partir d'une valeur unique fournie en paramètre.
 
@@ -182,12 +182,22 @@ Si un client appelle l'API /numbers, il recevra chaque nombre (de 1 à 10) avec 
 
 === Un exemple d'utilisation de WebClient : 
 
+WebClient C'est une classe fournie par Spring WebFlux pour effectuer des appels HTTP non bloquants (client HTTP réactif).
+
+Nous allons initialiser un WebClient par la methode create("http://example.com") pointant vers l'URL de base http://example.com 
+
+La méthode get() initie une requête HTTP de type GET, tandis que uri("/api/data") spécifie le chemin relatif de l'API 
+cible (ajouté à l'URL de base du WebClient). La méthode retrieve() exécute la requête et prépare la réponse pour être traitée. 
+Enfin, bodyToMono(String.class) extrait le corps de la réponse HTTP et le convertit en un objet réactif de type Mono<String>, 
+permettant de manipuler la réponse asynchrone dans un pipeline réactif. Si la requête réussit, le contenu de la réponse sera 
+disponible sous forme de chaîne dans le Mono.
+
 [source,java]
 ----
 public class WebClientExample { 
   private final WebClient webClient =WebClient.create("http://example.com"); 
     public Mono<String> fetchData() { 
- 	    return webClient.get() .uri("/api/data") .retrieve()  
+ 	    return webClient.get().uri("/api/data") .retrieve()  
           .bodyToMono(String.class);    
   } 
  } 
@@ -199,6 +209,10 @@ Le backpressure est une composante essentielle dans les systèmes réactifs pour
 Avec Reactor, vous pouvez contrôler le backpressure via des opérateurs comme `limitRate`. 
 
 Exemple d'utilisation de `limitRate` pour réguler la consommation des données : 
+
+La methode limitRate(5) applique un mécanisme de contrôle du flux (backpressure) pour limiter la consommation à un maximum de 5 éléments à la fois. Enfin, 
+un abonné est attaché au flux avec subscribe(), qui imprime chaque élément reçu via un callback, permettant de traiter les données au fur et à mesure de leur 
+arrivée. Ce code est adapté au traitement de grandes quantités de données de manière asynchrone et contrôlée.
 
 [source,java]
 ---- 
