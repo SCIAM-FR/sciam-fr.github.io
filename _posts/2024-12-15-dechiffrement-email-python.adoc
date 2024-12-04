@@ -315,6 +315,10 @@ A noter néanmoins que l'intégration de cette nouvelle fonctionnalité à `cryp
 temps à l'équipe SCIAM, entre développement et revues de code. Une contribution open-source prend du
 temps, mais c'est un investissement qui en vaut la peine !
 
+== Notebook 
+
+Vous pouvez retrouver le notebook Jupyter complet de cet article sur notre dépôt GitHub :
+https://github.com/SCIAM-FR/email-decryption-demo[SCIAM-FR/email-decryption-demo].
 
 == Liens utiles
 * https://cryptography.io/en/latest/[Cryptography Documentation]
