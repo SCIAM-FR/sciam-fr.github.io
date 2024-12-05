@@ -1,0 +1,326 @@
+= Déchiffrement d'Emails avec Python
+:showtitle:
+:page-navtitle: Déchiffrement d'Emails avec Python
+:page-excerpt: Découvrez comment déchiffrer des emails chiffrés avec Python en utilisant `openssl`, `asn1crypto` et `cryptography`.
+:layout: post
+:author: quentinretourne
+:page-tags: [Tutoriel, Python, Cryptographie]
+:page-vignette: email_decryption.png
+:page-categories: software
+
+Le déchiffrement d'emails chiffrés est une tâche essentielle pour garantir la confidentialité des
+communications. Dans cet article, nous présentons différentes solutions pour déchiffrer des emails
+chiffrés en utilisant Python, en particulier avec l'exécutable `openssl` et les librairies
+`asn1crypto` et `cryptography`. Nous terminons en présentant une nouvelle méthode de déchiffrement
+de mails chiffrés, développée par nos soins, qui vient d'être intégrée à `cryptography` en Novembre
+2024. 
+
+== Quelques prérequis
+
+Avant de plonger dans le déchiffrement des emails, il est important de comprendre quelques concepts
+de base en cryptographie.
+
+=== Cryptographie et chiffrement
+
+La cryptographie est l'art de sécuriser les communications en les transformant de manière à ce
+qu'elles ne puissent être lues que par les destinataires prévus. Un message chiffré n'aura pas de
+sens pour un observateur externe. En cryptographie, il s'agit donc de chiffrer et de déchiffrer des
+messages. Pour ce faire, plusieurs algorithmes de chiffrement sont utilisés; nous allons parcourir
+ceux qui nous seront utiles dans cet article.
+
+Le https://fr.wikipedia.org/wiki/Chiffrement_RSA[chiffrement RSA] est un algorithme de cryptographie
+asymétrique qui utilise une paire de clés : une clé publique pour le chiffrement et une clé privée
+pour le déchiffrement. RSA est largement utilisé pour sécuriser les communications sur Internet,
+notamment pour les certificats SSL/TLS et les connexions SSH.
+
+Par opposition au chiffrement asymétrique (dont RSA fait partie), on peut aussi chiffrer des
+messages de manière symétrique. Dans ce cas, on utilise la même clé pour chiffrer et déchiffrer les
+messages. Cela est utile pour d'autres cas d'usages : le chiffrement symétrique est généralement
+plus rapide que le chiffrement asymétrique (même si cela dépend des algorithmes utilisés). 
+
+Ces deux types de chiffrement sont utilisés dans le format PKCS #7 pour chiffrer des emails, que
+nous allons étudier ci-dessous.
+
+=== Le format PKCS #7
+
+Les spécifications https://en.wikipedia.org/wiki/PKCS_7[PKCS #7] (Public Key Cryptography Standards
+#7) définissent un format standard pour sécuriser des messages, et notamment des emails. PKCS #7 est
+un format très vaste, mais il permet notamment de signer / vérifier des messages, ainsi que les
+chiffrer / déchiffrer. Dans cet article, nous allons nous appesantir sur le spécifications de "chiffrement /
+déchiffrement" de PKCS #7 par opposition à la partie "signature". On la désigne aussi par
+"encapsulation" ou "enveloped data" en anglais.
+
+Dans le cas de chiffrement d'un message PKCS #7, deux chiffrements ont lieu:
+1. Le chiffrement du contenu du message, selon un algorithme de chiffrement symétrique nécessitant
+une clé. Cette clé est générée de manière aléatoire.
+2. Le(s) chiffrement(s) de la clé ci-dessus, cette fois-ci de façon asymétrique, pour chaque destinataire
+du message. Cela est fait avec la/les clé(s) RSA publique(s) du ou des destinataires, qui doivent
+être mises à disposition de l'expéditeur du message.
+
+Ainsi, lors du déchiffrement, chaque destinataire va :
+- Inspecter chaque clé chiffrée dans le message sous format PKCS #7, et trouver celle qui
+correspond à leur clé RSA publique.
+- Déchiffrer la clé symétrique avec leur clé RSA privée.
+- Déchiffrer le contenu du message avec la clé symétrique fraîchement déchiffrée
+
+L'avantage de cette méthode permet d'économiser du temps de calcul et de réduire la taille du
+message à transporter. En effet, le contenu (qui n'a pas de limite de taille) est chiffré une seule
+fois avec un algorithme symétrique, beaucoup plus rapide que ses homologues asymétriques. De plus,
+c'est uniquement la clé symétrique (entre 128 et 256 bits selon les algorithmes) qui est chiffrée
+plusieurs fois pour chaque destinataire par un algorithme asymétrique et stockée dans la structure
+du message. 
+
+Maintenant qu'on a vu les bases, passons à la pratique.
+
+== Analyse d'un message chiffré
+
+La structure https://fr.wikipedia.org/wiki/Abstract_Syntax_Notation_One[ASN.1] (Abstract Syntax
+Notation One) est un standard de notation utilisé pour représenter des données, couramment utilisé
+dans les protocoles de communication et les certificats numériques.
+
+Nous allons étudier un message chiffré, stocké dans le fichier `enveloped.der`. Les messages PKCS#7
+sont toujours encodés dans une structure ASN.1. Ici, elle est sous format DER, un format binaire
+classique pour ce type de structure. 
+
+=== Avec OpenSSL
+
+OpenSSL est une bibliothèque logicielle open-source qui fournit des implémentations d'énormément de
+protocoles de sécurité. Elle est fournie notamment sous forme d'un exécutable en ligne de commande
+qui permet de manipuler des certificats, des clés et des messages chiffrés. Cet exécutable est
+généralement installé par défaut dans les environnements Conda pour Python, ce qui est très
+pratique. Ainsi, on peut l'utiliser tel quel via la bibliothèque built-in `subprocess` :
+
+[source, python]
+----
+import subprocess
+
+instructions = [
+    "openssl",
+    "asn1parse",
+    "-in",
+    "vectors/enveloped.der",
+    "-inform",
+    "der",
+]
+output = subprocess.run(instructions, check=True, capture_output=True)
+print(output.stdout.decode())
+----
+
+Résultat :
+[source, cmd]
+----
+0:d=0  hl=4 l= 667 cons: SEQUENCE          
+4:d=1  hl=2 l=   9 prim: OBJECT            :pkcs7-envelopedData
+15:d=1  hl=4 l= 652 cons: cont [ 0 ]        
+19:d=2  hl=4 l= 648 cons: SEQUENCE          
+23:d=3  hl=2 l=   1 prim: INTEGER           :00
+26:d=3  hl=4 l= 579 cons: SET               
+30:d=4  hl=4 l= 575 cons: SEQUENCE          
+34:d=5  hl=2 l=   1 prim: INTEGER           :00
+37:d=5  hl=2 l=  39 cons: SEQUENCE          
+39:d=6  hl=2 l=  26 cons: SEQUENCE          
+41:d=7  hl=2 l=  24 cons: SET               
+43:d=8  hl=2 l=  22 cons: SEQUENCE          
+45:d=9  hl=2 l=   3 prim: OBJECT            :commonName
+50:d=9  hl=2 l=  15 prim: UTF8STRING        :cryptography CA
+67:d=6  hl=2 l=   9 prim: INTEGER           :E712D3A0A56ED6C9
+78:d=5  hl=2 l=  13 cons: SEQUENCE          
+80:d=6  hl=2 l=   9 prim: OBJECT            :rsaEncryption
+91:d=6  hl=2 l=   0 prim: NULL              
+93:d=5  hl=4 l= 512 prim: OCTET STRING      [HEX DUMP]:08086584F1DD436CDA1FB527B243FA02
+609:d=3  hl=2 l=  60 cons: SEQUENCE          
+611:d=4  hl=2 l=   9 prim: OBJECT            :pkcs7-data
+622:d=4  hl=2 l=  29 cons: SEQUENCE          
+624:d=5  hl=2 l=   9 prim: OBJECT            :aes-128-cbc
+635:d=5  hl=2 l=  16 prim: OCTET STRING      [HEX DUMP]:2CD7875912507DFC7E65EA7CB86C73BB
+653:d=4  hl=2 l=  16 prim: cont [ 0 ]   
+----
+
+Dans cette structure, on observe bien les différents morceaux identifiés précédemment, comme :
+- Le type de message (pkcs7-envelopedData).
+- Les clés chiffrées et l'algorithme utilisé (RSA) pour chaque destinataire (ici, il n'y en a qu'un).
+- Le contenu chiffré et l'algorithme utilisé (AES 128 CBC)
+
+=== Avec `asn1crypto`
+
+On peut faire le même exercice en utilisant la librairie `asn1crypto`. Cette bibliothèque permet de
+manipuler des structures ASN.1 de manière plus aisée que `openssl`, en offrant des classes Python
+qui peuvent être sérialisées et désérialisées facilement en dictionnaires. Dans notre cas, prenons
+l'exemple de la lecture d'une partie de la structure du message chiffré :
+
+[source, python]
+----
+from asn1crypto import cms
+
+with open("vectors/enveloped.der", "rb") as file:
+    enveloped = file.read()
+
+# Load the structure
+content_info = cms.ContentInfo.load(enveloped)
+content_type: cms.ContentType = content_info["content_type"]
+enveloped_data: cms.EnvelopedData = content_info["content"]
+
+# Encrypted content info
+encrypted_content_info: cms.EncryptedContentInfo = enveloped_data["encrypted_content_info"]
+dict(encrypted_content_info.native)
+----
+
+Résultat :
+
+[source, python]
+----
+{
+    "content_encryption_algorithm": {
+        "algorithm": "aes128_cbc",
+        "parameters": b",\xd7\x87Y\x12P}\xfc~e\xea|\xb8ls\xbb",
+    },
+    "content_type": "data",
+    "encrypted_content": b"[tN\xcb\xdd]\x0b\xa2\xa2\x98T\xf8[t_`",
+}
+----
+
+== Déchiffrement 
+
+Nous allons maintenant déchiffrer le message chiffré. Pour cela, nous avons besoin des différentes
+informations du destinataire, notamment son certificat X.509 et sa clé privée RSA. Ensuite, nous
+verrons 3 méthodes pour déchiffrer le message : avec `openssl`, avec `asn1crypto` et avec
+`cryptography`.
+
+=== Lecture du certificat et de la clé privée
+
+Nous lisons le certificat X.509 et la clé privée RSA, avec la librairie `cryptography` :
+
+[source, python]
+----
+from cryptography.hazmat.primitives.serialization import load_pem_private_key
+from cryptography.x509 import load_pem_x509_certificate
+
+# Clé publique : certificat RSA
+with open("vectors/rsa_ca.pem", "rb") as file:
+    certificate = load_pem_x509_certificate(file.read())
+
+# Clé privée : RSA
+with open("vectors/rsa_key.pem", "rb") as file:
+    private_key = load_pem_private_key(file.read(), password=None)
+----
+
+=== Avec OpenSSL
+Utilisons `openssl` pour déchiffrer le message :
+
+[source, python]
+----
+import subprocess
+
+instructions = [
+    "openssl",
+    "cms",
+    "-decrypt",
+    "-in",
+    "vectors/enveloped.der",
+    "-inkey",
+    "vectors/rsa_key.pem",
+    "-inform",
+    "der",
+]
+output = subprocess.run(instructions, capture_output=True)
+output.stdout.decode()
+----
+
+=== Avec `asn1crypto`
+Nous utilisons `asn1crypto` pour analyser et déchiffrer le message :
+
+[source, python]
+----
+from asn1crypto import cms
+from cryptography.hazmat.primitives import padding
+from cryptography.hazmat.primitives.asymmetric import padding as asymmetric_padding
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+
+# Load the message
+with open("vectors/enveloped.der", "rb") as file:
+    enveloped = file.read()
+
+# On lie les clés privées avec les numéros de série des certificats
+# Cela permet au destinataire de retrouver sa clé privée
+private_keys = {certificate.serial_number: private_key}
+
+# Load the structure
+content_info = cms.ContentInfo.load(enveloped)
+content_type = content_info["content_type"]
+enveloped_data = content_info["content"]
+
+# Decrypt the keys of recipient information, if possible
+decrypted_keys = {}
+for recipient_info in enveloped_data["recipient_infos"].native:
+    serial_number = recipient_info["rid"]["serial_number"]
+    if serial_number in private_keys:
+        decrypted_keys[serial_number] = private_keys[serial_number].decrypt(
+            recipient_info["encrypted_key"], asymmetric_padding.PKCS1v15()
+        )
+
+# Decrypt the content (AES 128 CBC)
+def decrypt(ciphertext, key, initialization_vector) -> str:
+    cipher = Cipher(algorithms.AES(key), modes.CBC(initialization_vector))
+    decryptor = cipher.decryptor()
+    padded_data = decryptor.update(ciphertext) + decryptor.finalize()
+    unpadder = padding.PKCS7(algorithms.AES128.block_size).unpadder()
+    plaintext = unpadder.update(padded_data) + unpadder.finalize()
+    return plaintext.decode()
+
+encrypted = enveloped_data["encrypted_content_info"].native
+decrypted_content = decrypt(
+    encrypted["encrypted_content"],
+    decrypted_keys[certificate.serial_number],
+    encrypted["content_encryption_algorithm"]["parameters"],
+)
+print("Decrypted content:", decrypted_content)
+----
+
+=== Avec `cryptography`
+
+Enfin, nous utilisons la nouvelle méthode de déchiffrement de messages PKCS #7 intégrée en Novembre
+2024 à version 44.0.0 de `cryptography` (pas encore sortie) : 
+
+[source, python]
+----
+from cryptography.hazmat.primitives.serialization import pkcs7
+
+with open("vectors/enveloped.der", "rb") as file:
+    enveloped = file.read()
+
+decrypted = pkcs7.decrypt_der(enveloped, certificate, private_key, [])
+print("Decrypted content:", decrypted_content)
+----
+
+== Conclusion
+Nous avons présenté différentes méthodes pour déchiffrer des emails chiffrés en utilisant Python.
+Chacune de ces méthodes ont leurs avantages et leurs inconvénients.
+
+`openssl` est un exécutable facile d'accès contenant toutes les fonctionnalités cryptographiques à
+portée de la ligne de commande. Cependant, pour des raisons de sécurité, il est déconseillé
+d'utiliser OpenSSL directement, car il a déjà exposé des vulnérabilités par le passé. De plus, c'est
+une dépendance supplémentaire, bien qu'elle soit facile à régler via Conda. 
+
+La méthode utilisant `asn1crypto` permet de réaliser le déchiffrement 100% en Python, sans
+dépendance particulière. Néanmoins, elle demande des connaissances plus avancées en cryptographie et
+ne constitue pas une solution clé en main. En effet, la gestion d'autres cas d'usages de PKCS #7
+(signature, autres algorithmes) demande de la réflexion. De plus, `asn1crypto` est n'est plus
+maintenue depuis fin 2022. 
+
+Enfin, la méthode utilisant `cryptography` est la plus simple et la plus sécurisée. Elle est
+installée dans une librairie maintenue, et est fiable grâce à l'utilisation de Python & Rust. C'est
+la méthode que nous recommandons pour déchiffrer des emails chiffrés en Python.
+
+A noter néanmoins que l'intégration de cette nouvelle fonctionnalité à `cryptography` a pris du
+temps à l'équipe SCIAM, entre développement et revues de code. Une contribution open-source prend du
+temps, mais c'est un investissement qui en vaut la peine !
+
+== Notebook 
+
+Vous pouvez retrouver le notebook Jupyter complet de cet article sur notre dépôt GitHub :
+https://github.com/SCIAM-FR/email-decryption-demo[SCIAM-FR/email-decryption-demo].
+
+== Liens utiles
+* https://cryptography.io/en/latest/[Cryptography Documentation]
+* https://github.com/wbond/asn1crypto[ASN.1 Crypto Documentation]
+* https://www.baeldung.com/cs/public-key-cryptography-standards[Article sur PKCS #7]
