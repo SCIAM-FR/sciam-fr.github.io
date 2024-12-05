@@ -139,7 +139,8 @@ Maintenant, examinons de plus près ce que gRPC peut nous proposer :
 +
 image::kostiantynkompaniiets/grpc-protobuf/gRPC_flux-1.png[image,width=50%,align="center"]
 
-** *Streaming côté serveur* : le client envoie une seule requête mais peut recevoir un flux (stream) de messages en réponse.
+** *Streaming côté serveur* : le client envoie une seule requête, mais peut recevoir un flux (stream) de messages en réponse.
+
 +
 image::kostiantynkompaniiets/grpc-protobuf/gRPC_flux-2.png[image,width=50%,align="center"]
 
