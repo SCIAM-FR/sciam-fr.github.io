@@ -4,7 +4,7 @@
 :layout: post
 :author: kostiantynkompaniiets
 :page-tags: [Java, Quarkus, REST, API, RPC, gRPC, Protobuf]
-:page-vignette: gRPC_article_logo.png
+:page-vignette: grpc_article_logo.png
 :page-liquid:
 :page-categories: software
 
@@ -85,7 +85,7 @@ message UserList {
 ----
 
 <1> La première ligne de code indique la version de syntaxe Protobuf qui sera utilisée (``proto3`` est la version actuelle, la version ``proto2`` est utilisée par défaut) ;
-<2> L'attribut ``option`` offre un contrôle granulaire sur la génération de code Java à partir de définitions Protobuf. Il permet de spécifier des directives personnalisées pour chaque message ou pour l'ensemble du fichier .proto.
+<2> L'attribut ``option`` offre un contrôle granulaire sur la génération de code Java à partir de définitions Protobuf. Il permet de spécifier des directives personnalisées pour chaque message ou pour l'ensemble du fichier `proto`.
 Par exemple, l'option ``java_package`` sert à définir le package Java cible, tandis que ``java_multiple_files`` indique que chaque message doit être généré dans un fichier Java distinct ;
 <3> Ensuite, il y a un attribut facultatif : la définition du package (similaire aux packages en Java) pour éviter les collisions de noms dans les modèles ;
 <4> Après cela, on peut voir le modèle de données, qui est indiqué par le mot clé ``message`` et bien sûr par le nom du modèle (pour les développeurs Java ou TypeScript, cela correspond à une classe ou à un DTO) ;
