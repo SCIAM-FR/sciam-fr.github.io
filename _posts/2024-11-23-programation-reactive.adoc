@@ -140,7 +140,7 @@ Bien que la programmation réactive soit un outil puissant pour de nombreuses ap
 
 * Code plus difficile à lire et maintenir : en raison de la composition des flux et des chaînes d'opérateurs, le code réactif peut devenir difficile à comprendre, en particulier pour ceux qui n’ont pas l’habitude de travailler avec ce paradigme.
 
-* Coût d'intégration dans les projets existants : Migrer une application traditionnelle vers une approche réactive peut être coûteux et complexe. Il peut être nécessaire de refactoriser une grande partie du code et d’adapter les couches d’infrastructure.
+* Coût d'intégration dans les projets existants : migrer une application traditionnelle vers une approche réactive peut être coûteux et complexe. Il peut être nécessaire de refactoriser une grande partie du code et d’adapter les couches d’infrastructure.
 
 * Pas toujours adapté : toutes les applications n'ont pas besoin des avantages de la programmation réactive, comme la haute disponibilité ou l'évolutivité massive. Pour des applications simples ou à faible trafic, l'approche réactive peut introduire une complexité inutile.
 
