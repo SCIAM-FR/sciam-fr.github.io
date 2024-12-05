@@ -1,37 +1,45 @@
 = La programmation réactive avec Reactor et Spring Web Flux  
 :showtitle:
 :page-navtitle: La programmation réactive avec Reactor et Spring Web Flux  
-:page-excerpt: ce article decrit les notion de la programation non bloquante avec Reactor et spring Web Flux 
+:page-excerpt: Cet article décrit les notions de la programmation non bloquante avec Reactor et Spring WebFlux.
 :layout: post
 :author: khairikhadhraoui
 :page-tags: [java, Spring webFlux, reactor, reactive programming, programation non bloquante, ReactiveX, Reactive Streams ]
-:page-vignette: programation-reactive.jpg
+:page-vignette: images/khairi/programation-reactive.jpg
 :page-liquid:
 :page-categories: software news
 
-== Introduction :
+== Introduction:
 
 L'évolution rapide des architectures logicielles vers des modèles distribués (microservices) et cloud-native a révélé les contraintes 
 inhérentes à la programmation bloquante traditionnelle. Pour répondre à ces nouveaux défis, la programmation réactive, fondée sur les 
 principes du Reactive Manifesto, propose un paradigme plus adapté pour concevoir et développer des applications Java hautement réactives, 
 capables de s'adapter aux fluctuations de charge et de garantir une faible latence.
 
-Pour explorer la programmation réactive, il est utile de comprendre les systèmes non réactifs traditionnels et leurs inconvénients, 
-en particulier en ce qui concerne l'utilisation des ressources et la gestion des événements. 
+Pour explorer la programmation réactive, il est essentiel de bien comprendre le fonctionnement des systèmes traditionnels non réactifs et leurs
+ limites. Cela inclut une clarification des termes synchrone et asynchrone  ainsi que bloquant et non bloquant.
+
+Voici une clarification :
+
+* Synchrone : Les opérations se déroulent séquentiellement, une tâche ne commence que lorsque la précédente est terminée. Le contrôle revient à l'appelant uniquement après la fin de l'exécution de l'opération.
+* Asynchrone : Les opérations peuvent être déclenchées sans attendre leur achèvement. Le contrôle revient immédiatement à l'appelant, et les résultats sont généralement traités via des rappels (callbacks), des promesses ou des mécanismes similaires.
+* Bloquant : Une opération est dite bloquante si elle empêche l'appelant de continuer tant qu'elle n'est pas terminée (exemple classique : lecture d'un fichier ou attente d'une requête réseau).
+* Non bloquant : Une opération est non bloquante si l'appelant peut continuer à exécuter d'autres tâches en attendant que l'opération se termine (souvent en vérifiant l'état de l'opération ou via des mécanismes d'interruption).
+
+Les notions synchrone/bloquant et asynchrone/non bloquant ne sont pas synonymes.
+
+Une opération synchrone peut être bloquante ou non bloquante.
+Une opération asynchrone peut être bloquante ou non bloquante.
 
 Les systèmes non réactifs, aussi appelés systèmes synchrones ou bloquants, sont les approches traditionnelles utilisées dans la 
 programmation. Voici quelques caractéristiques clés{nbsp}: 
 
+* Utilisation inefficace des ressources: chaque thread ou processus peut attendre, bloqué sur des opérations I/O (entrées/sorties), réduisant ainsi l'efficacité du traitement parallèle.
+* Difficultés de scalabilité: ajouter plus de threads pour gérer un plus grand nombre de requêtes augmente la consommation de mémoire et entraîne des coûts de commutation de contexte.
+* Latence accrue:  les opérations bloquantes imposent une attente, ce qui augmente les temps de réponse pour les utilisateurs ou les systèmes.
+* Complexité dans la gestion de la concurrence: les développeurs doivent souvent gérer manuellement les verrous, les mutex ou d'autres mécanismes pour coordonner l'accès concurrent aux ressources
+* Faible adaptabilité aux environnements modernes: les systèmes modernes, comme les microservices ou les applications cloud, nécessitent une gestion flexible des interactions réseau et des appels API. Les modèles non réactifs sont moins adaptés à ces environnements.
 
-* Traitement séquentiel : une tâche doit généralement attendre la fin de l'exécution de la tâche précédente avant de commencer, 
-
-* Blocage des ressources : les systèmes non réactifs bloquent souvent des ressources (comme des threads ou des connexions réseau) en attendant des résultats, 
-
-* Gestion des événements complexes : la gestion des événements dans les systèmes non réactifs peut devenir complexe et difficile à maintenir, surtout lorsque le nombre d'événements augmente 
-
-* Latence élevée : en raison de la nature bloquante de ces systèmes, ils peuvent entraîner une latence élevée, surtout dans les applications où la rapidité de réponse est cruciale
-
-* Scalabilité limitée : comme chaque requête ou tâche peut nécessiter son propre thread ou processus, l'augmentation du nombre de requêtes peut rapidement saturer les ressources du système 
 
 Pour surmonter ces limitations, les systèmes réactifs offrent une alternative en se concentrant sur l'asynchronisme, non-bloquant, et l'efficacité dans l'utilisation 
 des ressources. Ils permettent de créer des applications qui sont plus réactives, plus résilientes, et plus scalables, en répondant efficacement aux événements et en
@@ -39,7 +47,7 @@ des ressources. Ils permettent de créer des applications qui sont plus réactiv
 
 == Les principes de la programmation réactive   
 
-Les principes de la programmation réactive sont encapsulés dans le "Manifeste Réactif", qui énonce quatre caractéristiques clés{nbsp}:
+Les principes de la programmation réactive sont décrites dans le "Manifeste Réactif", qui énonce quatre caractéristiques clés{nbsp}:
 
 * Responsive (Réactif) : les systèmes réactifs répondent rapidement aux utilisateurs pour garantir une expérience fluide et interactive.
 
@@ -49,7 +57,9 @@ Les principes de la programmation réactive sont encapsulés dans le "Manifeste 
 
 * Message-Driven (Basé sur les Messages) : les systèmes réactifs communiquent par la transmission de messages asynchrones, facilitant la connexion et le découplage des composants.
 
-== Les bibliotheques de la programmation réactive sont basés sur deux modèles{nbsp}: 
+== Les bibliotheques de la programmation réactive
+
+Les bibliotheques de la programmation réactive sont basés sur deux modèles qui ont été portées dans le JDK 9 avec l'API Flow 
 
 * ReactiveX : ReactiveX a été conçu pour fournir une API unifiée pour le traitement de collections asynchrones, en s'inspirant des méthodes 
 des collections synchrones (comme map, filter, reduce). Il est souvent utilisé pour gérer des événements utilisateur, des requêtes 
@@ -61,7 +71,7 @@ réseau, et d'autres opérations asynchrones dans des applications interactives.
 
 Dans cet article, on va s'intéresser à Reactor qui est une implémentation de Reactive streams. 
 
-Les objectifs principaux de Reactive Streams sont {nbsp}: 
+Les objectifs principaux de Reactive Streams sont{nbsp}: 
 
 * Asynchronisme : gérer les flux de données de manière non bloquante et asynchrone. 
 
@@ -81,10 +91,10 @@ Les principales interfaces de Reactive Streams sont{nbsp}:
 
 == Le Project Reactor : 
 
-Reactor est une bibliothèque réactive pour Java développée par Pivotal (maintenant VMware) et intégrée dans l'écosystème Spring. Elle fournit une implémentation de Reactive Streams et permet de 
+Reactor est une bibliothèque réactive pour Java développée par Pivotal (maintenant Broadcom) et intégrée dans l'écosystème Spring. Elle fournit une implémentation de Reactive Streams et permet de 
 construire des applications non bloquantes, asynchrones, et scalables. Reactor est au cœur de Spring WebFlux, le module réactif Web de Spring Framework. 
 
-Les principales abstractions fournies par Reactor sont {nbsp}: 
+Les principales abstractions fournies par Reactor sont{nbsp}: 
 
  * 'Mono<T>' : représente un flux réactif qui produit au maximum une seule valeur. 
 
@@ -102,11 +112,11 @@ En pratique un 'Flux' peut être sérialisé sous plusieur formes{nbsp}:
 
 == Spring Web Flux avec Reactor  
 
-Spring Web Flux fait partie de projet Spring 5 : c'est un module Spring basé sur une API HTTP exposée à la source sur reactive Streams dans lequel 
+Spring Web Flux fait partie de projet Spring 5 : c'est un module Spring basé sur une API HTTP exposée à la source sur Reactive Streams dans lequel 
 on continue à utiliser les mêmes annotations pour les contrôleurs Spring MVC (`@Controller`, `@RequestMapping`, etc). Cependant au lieu d'utiliser 
 des types de retour `List<T>`, `T` ou `void`, on utilise `Flux<T>` ou `Mono<T>`.  
 
-=== Les composants de Spring WebFlux {nbsp}:
+=== Les composants de Spring WebFlux
 
 * Les contrôleurs réactifs : comme dans Spring MVC, mais avec des types réactifs `Mono` et `Flux`. 
 
@@ -120,23 +130,23 @@ des types de retour `List<T>`, `T` ou `void`, on utilise `Flux<T>` ou `Mono<T>`.
 
 * Performance : adapté pour les applications nécessitant une faible latence et une haute performance. 
 
-* Flexibilité : peut être utilisé pour des microservices, des applications Web, ou même des applications fonctionnant avec d'autres paradigmes réactifs comme RxJava. 
+* Flexibilité : peut être utilisé pour des microservices, des applications Web, ou même des applications fonctionnant avec d'autres implémentations réactifs comme RxJava. 
 
-==== Les inconvénients :
+==== Les inconvénients
 
 Bien que la programmation réactive soit un outil puissant pour de nombreuses applications modernes, elle présente également des inconvénients.
 
-* Débogage et test complexes : Les applications réactives introduisent des comportements asynchrones difficiles à tracer, rendant le débogage et la compréhension des erreurs plus compliqués. De même, les tests nécessitent souvent des outils spécialisés pour simuler les flux asynchrones.
+* Débogage et test complexes : les applications réactives introduisent des comportements asynchrones difficiles à tracer, rendant le débogage et la compréhension des erreurs plus compliqués. De même, les tests nécessitent souvent des outils spécialisés pour simuler les flux asynchrones.
 
-* Code plus difficile à lire et maintenir : En raison de la composition des flux et des chaînes d'opérateurs, le code réactif peut devenir difficile à comprendre, en particulier pour ceux qui n’ont pas l’habitude de travailler avec ce paradigme.
+* Code plus difficile à lire et maintenir : en raison de la composition des flux et des chaînes d'opérateurs, le code réactif peut devenir difficile à comprendre, en particulier pour ceux qui n’ont pas l’habitude de travailler avec ce paradigme.
 
 * Coût d'intégration dans les projets existants : Migrer une application traditionnelle vers une approche réactive peut être coûteux et complexe. Il peut être nécessaire de refactoriser une grande partie du code et d’adapter les couches d’infrastructure.
 
-* Pas toujours adapté : Toutes les applications n'ont pas besoin des avantages de la programmation réactive, comme la haute disponibilité ou l'évolutivité massive. Pour des applications simples ou à faible trafic, l'approche réactive peut introduire une complexité inutile.
+* Pas toujours adapté : toutes les applications n'ont pas besoin des avantages de la programmation réactive, comme la haute disponibilité ou l'évolutivité massive. Pour des applications simples ou à faible trafic, l'approche réactive peut introduire une complexité inutile.
 
 == La configuration d'un projet Spring WebFlux 
 
-=== La configuration Maven :  
+=== La configuration Maven  
 
 Pour configurer un projet Maven avec Spring WebFlux et Reactor, il faut ajouter les dépendances appropriées dans le fichier pom.xml :
 [source,plain]
@@ -153,54 +163,55 @@ Pour configurer un projet Maven avec Spring WebFlux et Reactor, il faut ajouter 
 </dependency>
 ----
 
-=== La création d'un contrôleur réactif : 
+=== La création d'un contrôleur réactif
 
 Nous allons utiliser un contrôleur contient deux méthodes :
 
-*La première méthode : retourne un Mono créé à partir d'une valeur unique fournie en paramètre.
+* La première méthode : retourne un 'Mono' créé à partir d'une valeur unique fournie en paramètre.
 
-*La deuxième méthode fournit un flux (Flux) représentant une séquence d'entiers allant de 1 à 10, avec un délai de 100 millisecondes entre chaque élément émis.
+* La deuxième méthode fournit un flux (`Flux`) représentant une séquence d'entiers allant de 1 à 10, avec un délai de 100 millisecondes entre chaque élément émis.
 
 Si un client appelle l'API /numbers, il recevra chaque nombre (de 1 à 10) avec un intervalle de 100 millisecondes entre eux.
  
 [source,java]
 ----
-@RestController 
 
- public class ReactiveController { 
+  @RestController 
+  public class ReactiveController { 
  	  @GetMapping("/hello")  
-        public Mono<String> sayHello() {   
-          return Mono.just("Hello, WebFlux!"); 
+    public Mono<String> sayHello() {   
+      return Mono.just("Hello, WebFlux!"); 
     }  
 
     @GetMapping("/numbers")  
-      public Flux<Integer> getNumbers() {  
-        return Flux.range(1, 10).delayElements(Duration.ofMillis(100));  
-    }  
-} 
+    public Flux<Integer> getNumbers() {  
+      return Flux.range(1, 10).delayElements(Duration.ofMillis(100));  
+    }   
+  } 
 ----
 
-=== Un exemple d'utilisation de WebClient : 
+=== Un exemple d'utilisation de WebClient
 
-WebClient C'est une classe fournie par Spring WebFlux pour effectuer des appels HTTP non bloquants (client HTTP réactif).
+'WebClient' est une classe fournie par Spring WebFlux pour effectuer des appels HTTP non bloquants (client HTTP réactif).
 
-Nous allons initialiser un WebClient par la methode create("http://example.com") pointant vers l'URL de base http://example.com 
+Nous allons initialiser un `WebClient` en invoquant la méthode `create("http://example.com")` en lui passant en paramètre l'URL de base `http://example.com`.
 
-La méthode get() initie une requête HTTP de type GET, tandis que uri("/api/data") spécifie le chemin relatif de l'API 
-cible (ajouté à l'URL de base du WebClient). La méthode retrieve() exécute la requête et prépare la réponse pour être traitée. 
-Enfin, bodyToMono(String.class) extrait le corps de la réponse HTTP et le convertit en un objet réactif de type Mono<String>, 
+La méthode `get()` initie une requête HTTP de type `GET` et la méthode `uri("/api/data")` spécifie le chemin relatif de l'API.
+cible (ajouté à l'URL de base du `WebClient`). La méthode `retrieve()` exécute la requête et récupère la réponse pour être traitée. 
+Enfin, `bodyToMono(String.class)` extrait le corps de la réponse HTTP et le convertit en un objet de type Mono<String>,
 permettant de manipuler la réponse asynchrone dans un pipeline réactif. Si la requête réussit, le contenu de la réponse sera 
-disponible sous forme de chaîne dans le Mono.
+disponible sous forme de chaîne dans le `Mono`.
 
 [source,java]
 ----
-public class WebClientExample { 
-  private final WebClient webClient =WebClient.create("http://example.com"); 
-    public Mono<String> fetchData() { 
- 	    return webClient.get().uri("/api/data") .retrieve()  
-          .bodyToMono(String.class);    
-  } 
- } 
+public class WebClientExample {
+    private final WebClient webClient = WebClient.create("http://example.com");
+
+    public Mono<String> fetchData() {
+        return webClient.get().uri("/api/data").retrieve()
+                .bodyToMono(String.class);
+    }
+} 
 ----
 
 === La gestion du backpressure 
@@ -210,23 +221,26 @@ Avec Reactor, vous pouvez contrôler le backpressure via des opérateurs comme `
 
 Exemple d'utilisation de `limitRate` pour réguler la consommation des données : 
 
-La methode limitRate(5) applique un mécanisme de contrôle du flux (backpressure) pour limiter la consommation à un maximum de 5 éléments à la fois. Enfin, 
-un abonné est attaché au flux avec subscribe(), qui imprime chaque élément reçu via un callback, permettant de traiter les données au fur et à mesure de leur 
+La methode `limitRate(5)` applique un mécanisme de contrôle du flux (backpressure) pour limiter la consommation à un maximum de 5 éléments à la fois. Enfin, 
+un abonné est attaché au flux avec `subscribe()`, qui affiche chaque élément reçu via un callback, permettant de traiter les données au fur et à mesure de leur
 arrivée. Ce code est adapté au traitement de grandes quantités de données de manière asynchrone et contrôlée.
 
 [source,java]
 ---- 
 
-Flux<Integer> flux = WebClient.create("http://example.com")  
-                              .get()  
-                                .uri("/api/large-stream")  
-                                  .retrieve() .bodyToFlux(Integer.class)  
-                                    .limitRate(5); 
-                    flux.subscribe(data -> { System.out.println("Received: " + data);}); 
-
+    Flux<Integer> flux = WebClient.create("http://example.com")
+            .get()
+            .uri("/api/large-stream")
+            .retrieve()
+            .bodyToFlux(Integer.class)
+            .limitRate(5);
+    flux.subscribe(data ->
+    {
+        System.out.println("Received: " + data);
+    });
 ----
 
-= Conclusion 
+== Conclusion: 
 
 Spring Reactor propulse le développement d'applications modernes vers de nouveaux sommets en leur conférant réactivité, performance et résilience. En s'alignant 
 sur le Reactive Manifesto, cette technologie ouvre la voie à des systèmes distribués agiles et efficaces. Toutefois, son adoption implique une courbe d'apprentissage 
