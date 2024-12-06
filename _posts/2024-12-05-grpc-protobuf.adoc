@@ -1,0 +1,440 @@
+:showtitle:
+:page-navtitle: Au-delà de REST : découvrir les avantages de gRPC et Protocol Buffers
+:page-excerpt: Découvrez comment gRPC et Protocol Buffers peuvent révolutionner votre façon de concevoir et de développer des API. Apprenez à tirer parti du typage fort, de la sérialisation efficace et du streaming bidirectionnel pour créer des applications réactives à haute performance.
+:layout: post
+:author: kostiantynkompaniiets
+:page-tags: [Java, Quarkus, REST, API, RPC, gRPC, Protobuf]
+:page-vignette: grpc_article_logo.png
+:page-liquid:
+:page-categories: software
+
+= Au-delà de REST : découvrir les avantages de gRPC et Protocol Buffers
+
+Il semble très difficile de trouver un développeur qui n'ait jamais entendu parler de REST.
+Ce n'est pas surprenant : ce style d'architecture logicielle est depuis de nombreuses années la norme de référence dans le développement logiciel.
+Sa simplicité d'utilisation intuitive et son abstraction par rapport aux langages de programmation spécifiques font de REST (couplé à JSON) le choix idéal pour tout développeur confronté à des échanges réseau (et, selon mon humble avis, cela concerne la grande majorité des développeurs).
+
+Bien sûr, REST n’est pas la seule approche architecturale pour créer des solutions logicielles distribuées et des applications Web.
+Avec l'évolution dynamique du monde de la programmation et de l'architecture logicielle, de nouvelles alternatives ont vu le jour pour répondre aux besoins actuels des développeurs.
+GraphQL, WebSockets, MQTT, SOAP : autant d'alternatives à REST, chacune avec ses propres forces et faiblesses, qui trouvent leur place dans des contextes spécifiques.
+
+Cependant, dans cet article, je voudrais attirer votre attention sur une autre approche intéressante pour établir la communication entre les services, à savoir *gRPC* et son partenaire inséparable - *Protocol Buffers*, ou simplement *Protobuf*.
+À ce stade, beaucoup d'entre vous se demanderont : pourquoi j'aurais besoin de quelque chose dont je n'ai probablement jamais entendu parler auparavant, et qui peut être facilement résolu en utilisant l'approche REST ?
+C’est à cette question que nous allons essayer de répondre ci-dessous.
+
+== Qu'est-ce que gRPC ?
+
+Selon https://grpc.io/[le site Web officiel^], gRPC est un framework RPC moderne, performant et open-source, capable de fonctionner dans n’importe quel environnement.
+Le concept de RPC (Remote Procedure Call) n’est pas nouveau dans le domaine de la programmation.
+Ce protocole, qui permet à un programme sur un service/serveur d’appeler des fonctions sur un autre service/serveur, existe depuis le début des années 1980.
+En 2016, Google a lancé un framework basé sur ce protocole et l’a nommé gRPC (cela peut vous surprendre, mais le ``g`` ne représente pas ``Google``. En réalité, il a différentes significations selon https://github.com/grpc/grpc/blob/master/doc/g_stands_for.md[les versions du framework^]).
+
+Avec gRPC, l'application cliente peut effectuer l'appel à la méthode ou à la fonction sur le côté serveur de l'application comme si elle appelait la méthode dans une autre classe de la même application (cliente).
+En s'appuyant sur les concepts RPC, gRPC nécessite la définition de l'API de service partagée avec toutes les méthodes requises (y compris les paramètres avec leurs types définis et le type de la réponse).
+Cette définition peut ensuite être transformée en serveurs et clients (ou stubs) dans différents langages qui peuvent interagir facilement entre eux.
+
+image::kostiantynkompaniiets/grpc-protobuf/gRPC_schema.png[image,width=60%,align="center"]
+
+Tout d'abord, il faut noter que gRPC est basé sur HTTP/2, la version du protocole de transfert de données HTTP, successeur de HTTP/1.1, qui a été adoptée comme standard un an avant le lancement du framework.
+Il utilise Protocol Buffers (Protobuf) comme langage de description d’interfaces.
+C’est ce point que je propose d'examiner à l'étape suivante.
+
+== Protocol Buffers : concept et syntaxe
+
+https://protobuf.dev/[Les Protocol Buffers^] (ou simplement Protobuf) sont un mécanisme de sérialisation de données et un langage de description d'interfaces, développés par Google pour sérialiser des données structurées.
+Ils sont indépendants des langages et des plateformes, ce qui permet de transmettre et de stocker des données de manière efficace.
+Protobuf définit la structure de vos données et génère, grâce au compilateur Protoc, du code pour la sérialisation et la désérialisation selon le langage de programmation choisi.
+Les données de ce format sont sérialisées et transmises sous forme binaire, ce qui garantit une vitesse de transport supplémentaire.
+Protobuf prend en charge la génération de code pour des langages de programmation tels que C++, C#, Dart, Go, Java, Kotlin, Objective-C, Swift, Python et Ruby (la dernière version, ``proto3``, fonctionne également avec PHP).
+De plus, une intégration avec JavaScript est en cours (bien qu’il existe déjà des implémentations non officielles pour JavaScript, TypeScript et Node.js).
+
+Examinons de plus près la syntaxe de Protobuf :
+
+[source,protobuf]
+----
+syntax = "proto3"; <1>
+
+option java_multiple_files = true; <2>
+option java_package = "com.kompike";
+option java_outer_classname = "UserProto";
+
+package model; <3>
+
+message User { <4>
+ int32 id = 1; <5>
+ string name = 2;
+ string email = 3;
+ Role role = 4;
+ bool is_blocked = 5;
+}
+
+enum Role { <6>
+ ROLE_UNSPECIFIED = 0;
+ USER = 1;
+ SUPER_USER = 2;
+ ADMIN = 3;
+}
+
+message UserId {
+ int32 id = 1;
+}
+
+message UserList {
+ repeated User users = 1; <7>
+}
+----
+
+<1> La première ligne de code indique la version de syntaxe Protobuf qui sera utilisée (``proto3`` est la version actuelle, la version ``proto2`` est utilisée par défaut) ;
+<2> L'attribut ``option`` offre un contrôle granulaire sur la génération de code Java à partir de définitions Protobuf. Il permet de spécifier des directives personnalisées pour chaque message ou pour l'ensemble du fichier `proto`.
+Par exemple, l'option ``java_package`` sert à définir le package Java cible, tandis que ``java_multiple_files`` indique que chaque message doit être généré dans un fichier Java distinct ;
+<3> Ensuite, il y a un attribut facultatif : la définition du package (similaire aux packages en Java) pour éviter les collisions de noms dans les modèles ;
+<4> Après cela, on peut voir le modèle de données, qui est indiqué par le mot clé ``message`` et bien sûr par le nom du modèle (pour les développeurs Java ou TypeScript, cela correspond à une classe ou à un DTO) ;
+<5> L'étape suivante consiste à définir les champs nécessaires et leurs types (en effet, Protobuf est un langage typé, ce qui est un grand avantage par rapport à JSON).
+Comme vous pouvez le constater, pour ajouter un champ, vous devez spécifier son type (``int32``), son nom (``id``) et son numéro d'ordre (``1``).
+Il est important de noter que la numérotation des champs commence à ``1`` (la valeur avec le numéro d'ordre ``0`` n'est disponible que pour les énumérations et correspond à la valeur par défaut), et doit également être unique dans le cadre d’un modèle (message) ;
+<6> Il convient également de mentionner la création d'énumérations (pour les développeurs Java ou TypeScript, cela correspond à un enum).
+Une bonne pratique dans Protobuf est de créer une valeur par défaut avec le numéro d’ordre ``0``.
+<7> Enfin, j’aimerais mentionner un point intéressant et très utile : le mot-clé ``repeated``, utilisé pour créer des collections (dans notre exemple, il s'agit d'une collection d’utilisateurs dans le modèle ``UserList``).
+
+Ce sont essentiellement tous les détails de la syntaxe Protobuf. 
+Nous pouvons créer des modèles Java à partir de ces messages en utilisant la commande suivante :
+
+[source,shell]
+----
+protoc --proto_path=proto --java_out=generated proto/user.proto
+----
+Le code généré comprend des fichiers Java distincts pour chaque message, ainsi que les classes ``Builder`` correspondantes.
+Ces classes (qui sont assez longues, souvent plus de 100 lignes) respectent généralement les conventions JavaBeans, fournissant des getters et setters standard pour chaque champ.
+De plus, des champs et méthodes spécifiques à Protobuf, tels que ceux pour la validation ou la sérialisation des messages, sont générés automatiquement.
+
+== Présentation générale de gRPC
+
+=== RPC : définition et utilisations
+
+Avant de passer aux fonctionnalités de gRPC, examinons brièvement ce qu'est RPC et comment cela fonctionne.
+
+RPC (Remote Procedure Call) permet à un ou plusieurs services (clients) d’appeler une procédure (fonction) sur un autre service (serveur). 
+Le client envoie une requête au serveur avec le nom de la procédure et ses paramètres, le serveur traite la requête et renvoie le résultat au client. 
+Visuellement, cela ressemble à un appel à un service local, tout en masquant la complexité des communications réseau.
+
+RPC peut être utilisé dans les systèmes distribués et les architectures microservices, où plusieurs services doivent communiquer entre eux de manière efficace.
+Cela comprend les systèmes financiers, les applications de télécommunications, les systèmes de messagerie ou les jeux en ligne.
+Étant une solution à la fois assez simple et complexe, RPC présente un certain nombre d'avantages et d'inconvénients :
+
+[width="100%",cols="50%,50%",options="header",align="center"]
+|===
+|*Avantages* |*Inconvénients*
+|Simplifie les appels de fonctions distantes en cachant les complexités réseau |Compatibilité limitée avec certaines technologies ou plateformes comparé à REST
+|Fournit de hautes performances et une faible latence |La gestion des erreurs et des exceptions en cas de problèmes réseau peut être difficile
+|Flexible et adaptable à divers cas d'utilisation |Scalabilité plus complexe à gérer dans des environnements distribués
+|===
+
+=== Caractéristiques de gRPC
+
+Maintenant, examinons de plus près ce que gRPC peut nous proposer :
+
+* Comme nous l’avons vu précédemment, gRPC fonctionne sur HTTP/2 ou des versions plus récentes, offrant ainsi toutes les fonctionnalités proposées par ces protocoles : multiplexage de plusieurs requêtes sur une seule connexion TCP, compression des en-têtes (HTTP headers), push côté serveur, utilisation du protocole binaire.
+* Le framework propose plusieurs types de connexions entre client et serveur, notamment :
+** *RPC unidirectionnel* : le type de connexion le plus simple, où le client envoie une requête et reçoit une seule réponse du serveur.
++
+image::kostiantynkompaniiets/grpc-protobuf/gRPC_flux-1.png[image,width=50%,align="center"]
+
+** *Streaming côté serveur* : le client envoie une seule requête, mais peut recevoir un flux (stream) de messages en réponse.
+
++
+image::kostiantynkompaniiets/grpc-protobuf/gRPC_flux-2.png[image,width=50%,align="center"]
+
+** *Streaming côté client* : ce cas est l'inverse du précédent, où le client envoie un flux (stream) de messages et reçoit une seule réponse du serveur.
++
+image::kostiantynkompaniiets/grpc-protobuf/gRPC_flux-3.png[image,width=50%,align="center"]
+
+** *Streaming bidirectionnel* : le cas où le client et le serveur utilisent tous deux le streaming pour l'échange de données.
++
+image::kostiantynkompaniiets/grpc-protobuf/gRPC_flux-4.png[image,width=50%,align="center"]
+
+* Il est possible de terminer l'appel de la fonction grâce à la fonctionnalité d'annulation RPC.
+* gRPC permet d'envoyer des métadonnées personnalisées (détails spécifiques à la requête) sous forme de paires clé-valeur.
+* Le framework prend également en charge l’utilisation d’intercepteurs et l’équilibrage de charge (load balancing).
+
+Ensuite, je propose d’examiner la création de services gRPC.
+
+== Syntaxe d'un service gRPC
+
+Pour utiliser gRPC, il est d’abord nécessaire de créer un service et les méthodes requises (évidemment, à l'aide de Protobuf).
+Voyons tout de suite un exemple de ce type de service :
+
+[source,protobuf]
+----
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.kompike";
+option java_outer_classname = "UserServiceProto";
+
+package service;
+
+import "user.proto"; <1>
+import "google/protobuf/empty.proto"; <2>
+
+service UserService { <3>
+ rpc GetUserById (model.UserId) returns (model.User) {} <4>
+ rpc GetAllUsers (google.protobuf.Empty) returns (model.UserList) {}
+}
+----
+
+<1> Comme dans l'exemple précédent, on commence par la définition de la version de la syntaxe et du package, puis on voit une nouveauté : nous importons le modèle d’utilisateur créé précédemment à partir d’un autre fichier à l’aide du mot-clé ``import`` pour utiliser le modèle correspondant dans le fichier actuel.
+<2> Nous pouvons également utiliser des éléments intégrés (comme le message ``Empty``) en les important directement à partir des packages Protobuf (pour ce faire, il faut ajouter la dépendance à votre projet, pour les projets Maven, il s'agit de l'artefact ``protobuf-java``)
+<3> L’étape suivante consiste à créer un service RPC.
+Pour cela, il suffit de créer une nouvelle entité avec le nom souhaité (``UserService``) et de la marquer avec le mot-clé ``service``. 
+<4> Ensuite, la création des méthodes commence : la méthode est définie à l’aide du mot-clé ``rpc``, suivie du nom de la méthode (``GetUserById``), des types de ses paramètres (``UserId``) ainsi que du type de valeur de retour.
+Visuellement, cela ressemble beaucoup à une interface en Java, n’est-ce pas ?
+
+Pour générer le code à partir de ces messages, il est plus facile d'utiliser des bibliothèques et des plugins spécifiques à chaque langage (par exemple, ``quarkus-grpc`` ou ``protobuf-maven-plugin``). 
+Le code généré vous fournira plusieurs classes, notamment un client gRPC et l'interface pour implémenter un serveur gRPC.
+
+Voilà donc tout ce qu’il faut savoir pour créer un service gRPC.
+Ensuite, je propose de découvrir les avantages de cette approche et de la comparer au standard largement reconnu qu’est REST.
+
+== gRPC vs REST
+
+Maintenant que nous avons compris ce qu’est gRPC, nous pouvons passer à ses points forts et faibles, et déterminer quand l’utiliser ou éviter son utilisation.
+
+=== Avantages et inconvénients de gRPC
+
+Les principaux avantages de gRPC sont :
+
+* *Haute performance* : gRPC utilise HTTP/2, ce qui permet de créer plusieurs requêtes sur la base d'une même connexion, entraînant une augmentation significative de la vitesse de transfert d'informations.
+* *Transmission bidirectionnelle* : gRPC prend en charge la transmission bidirectionnelle en flux (grâce à HTTP/2), ce qui permet d'utiliser des schémas de communication plus complexes et d'échanger des données en temps réel.
+* *Indépendance linguistique* : gRPC et Protobuf prennent en charge la compilation dans un large éventail de langages de programmation. Cela permet de créer des services RPC dans différentes langues tout en assurant une communication fluide entre eux.
+* *Typage strict* : l'utilisation de fichiers proto assure une définition claire de la structure des données, ce qui aide à prévenir les erreurs et à améliorer la qualité du code.
+* *Taille des messages réduite* : l'utilisation d'un format binaire permet de transmettre des données de manière plus compacte, ce qui réduit la charge sur le réseau et rend le transfert de données plus efficace.
+
+Cela semble plutôt bien, n'est-ce pas ?
+Cependant, ce framework a aussi ses inconvénients (il n'y a pas de rose sans épines), à savoir :
+
+* *Implémentation plus complexe* : l'utilisation de gRPC et de Protobuf nécessitera plus de temps et d'efforts à maîtriser que l'utilisation d'une API REST classique.
+* *Écosystème limité et support dans les navigateurs* : l'écosystème d'outils et de bibliothèques prenant en charge gRPC peut être plus restreint que pour les API REST (par exemple, Swagger, frameworks de test, etc.). De plus, gRPC n'est pas pris en charge par les navigateurs sans outils ou serveurs proxy supplémentaires.
+* *Difficulté d'analyse des données transmises* : le format binaire des données peut compliquer le processus de débogage et d'analyse des messages.
+
+=== Domaines d'utilisation de gRPC
+
+Compte tenu de tous ces points forts et faibles, nous pouvons déterminer quand il est pertinent d’utiliser gRPC et quand il vaut mieux l’éviter.
+
+Ainsi, les cas d'utilisation les plus évidents de gRPC sont :
+
+* *Architecture microservices* : gRPC est idéal pour la communication entre les microservices grâce à sa haute performance et à sa rapidité de transfert de données.
+* *Applications en temps réel* : gRPC peut être utilisé pour les applications nécessitant une faible latence et nécessitant des mises à jour en temps réel, telles que les chats, les résultats sportifs ou les plateformes de trading financier, ainsi que d'autres services qui bénéficient de la transmission bidirectionnelle en flux de données.
+* *Interopérabilité entre langages* : gRPC peut être efficace pour construire des systèmes distribués composés de nombreux composants interagissant écrits dans différents langages de programmation.
+* *Applications mobiles et IoT* : le format binaire compact de Protobuf est particulièrement utile pour les applications mobiles et IoT, où la bande passante et les performances sont des enjeux critiques.
+
+Dans les cas suivants, l'utilisation de gRPC peut être problématique ou exiger trop d’efforts de configuration :
+
+* *Applications Web et services fonctionnant principalement via un navigateur Web* : bien que la majorité des navigateurs modernes supportent HTTP/2, certaines fonctionnalités essentielles à gRPC, comme https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Trailer[les Trailers HTTP^], ne sont pas encore pleinement implémentées. Cela peut nécessiter des solutions supplémentaires, comme gRPC-Web, ce qui est plus coûteux en termes d'infrastructure et de ressources d'équipe.
+* *Écriture de bibliothèques et d'API publiques* : si votre API doit être ouverte et accessible à un large public ou être intégrée à d'autres systèmes, REST avec JSON est un meilleur choix.
+* *Petits projets ou projets peu exigeants* : si votre projet est petit ou n'a pas d'exigences strictes en matière de performances, l'utilisation de gRPC peut être trop complexe. Pour les petites équipes ou les projets sans exigences intensives en matière de performances et d'évolutivité, une API REST sera plus simple à mettre en place et à maintenir.
+* *Transmission de gros volumes de données sur le réseau* : gRPC transfère les données dans un format binaire et peut utiliser la mise en cache en cours de processus. La performance de ce protocole peut être inférieure lors du transfert continu de grandes quantités de données sur le réseau (bien que, à mon avis, ce ne soit pas la meilleure idée, quel que soit le protocole). En revanche, il convient de noter que la taille maximale d'un fichier proto pris en charge par toutes les implémentations, sous forme sérialisée, doit être inférieure à 2 Go.
+
+=== Comparaison entre gRPC et REST
+
+Comparons maintenant gRPC et REST en nous basant sur tout ce qui a été mentionné ci-dessus :
+
+[width="100%",cols="27%,37%,36%",options="header",]
+|===
+|*Paramètre* |*gRPC* |*REST*
+|Protocole de transport |HTTP/2 et HTTP/3 |HTTP/1.1, HTTP/2 et HTTP/3
+|Format de données |Protocol Buffers (format binaire) |Différents formats, JSON est le plus souvent utilisé
+|Performance |Plus élevée (latence inférieure, sérialisation plus rapide) |Plus faible (latence supérieure, sérialisation plus lente)
+|Contrats d'API |Appels de procédures à distance (RPC) |Basé sur les conventions HTTP (GET, POST, PUT, DELETE) et les ressources
+|Mode de communication |Requêtes-réponses, streaming |Requêtes-réponses
+|Prise en charge des langages |Supporte de nombreux langages grâce à Protobuf et protoc |Supporté dans tous les langages grâce à HTTP et JSON
+|Flux |Supporte le flux bidirectionnel |Ne supporte pas le flux de données
+|Complexité de configuration |Plus élevée (nécessité de définir des fichiers proto, génération de code) |Plus faible (configuration simple, fonctionne avec HTTP et JSON)
+|Prise en charge par les navigateurs web |Limitée (gRPC-Web) |Supportée par tous les navigateurs web
+|Utilisation pour les API publiques |Moins utilisé pour les API publiques en raison de sa complexité |Souvent utilisé en raison de sa simplicité et de sa prévalence
+|Évolutivité |Élevée, adaptée aux architectures de microservices |Plus adaptée aux API simples
+|===
+
+En résumé, nous pouvons dire que gRPC est excellent pour les systèmes exigeant des performances et une vitesse élevées, les architectures de microservices et les applications en temps réel nécessitant un flux bidirectionnel.
+En revanche, REST reste une solution simple et universelle pour les API publiques et les bibliothèques, les applications web et les projets pour lesquels la simplicité de mise en œuvre et de maintenance est primordiale.
+
+== Quarkus et gRPC
+
+Quarkus vous permet de configurer facilement votre application gRPC à l'aide de l'extension ``quarkus-grpc``.
+Grâce à cette extension, vous n'avez pas à vous soucier des tâches routinières, Quarkus s'en charge pour vous. Voyons pas à pas comment configurer votre application gRPC (en utilisant les messages proto précédemment créés).
+
+Tout d'abord, nous devons ajouter les extensions Quarkus à notre projet :
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-grpc</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-rest</artifactId>
+</dependency>
+----
+
+Si vous utilisez Gradle, cela ressemblera à ceci :
+
+[source,groovy]
+----
+implementation 'io.quarkus:quarkus-grpc'
+implementation 'io.quarkus:quarkus-rest'
+----
+
+NOTE: Si vous utilisez Maven, vous devez ajouter les objectifs d'exécution ``generate-code`` et ``generate-code-test`` (généralement ajoutés automatiquement lors de la configuration de l'extension).
+
+Ensuite, nous devons ajouter nos fichiers proto dans le répertoire ``src/main/proto``, c'est l'emplacement par défaut où protoc cherchera pour générer les fichiers Java correspondants.
+
+L'étape suivante consiste à lancer la génération de code :
+
+[source,shell]
+----
+mvn clean install
+----
+
+Ou :
+
+[source,shell]
+----
+gradle clean build
+----
+
+La prochaine étape dépend de ce que vous allez créer : le client ou le serveur.
+
+=== Création d'un client gRPC
+
+Si vous avez besoin d'utiliser un client gRPC, la classe correspondante est déjà créée pour vous.
+Il vous suffit de l'utiliser dans votre code en l'annotant avec ``@GrpcClient`` et en fournissant le nom du client :
+
+[source,java]
+----
+@Path("/users")
+public class UserResource {
+
+    @GrpcClient("user")
+    public UserService userServiceClient;
+
+    @GET
+    @Path("/{id}")
+    public Uni<String> getEmailById(int id) {
+        UserId userId = UserId.newBuilder().setId(id).build();
+        return userServiceClient.getUserById(userId)
+                .onItem()
+                .transform(User::getEmail);
+    }
+}
+----
+
+Pour compléter la configuration du client, vous devez ajouter l'hôte et le port à utiliser par le client dans votre ``application.properties`` :
+
+[source,properties]
+----
+quarkus.grpc.clients.user.host=localhost
+quarkus.grpc.clients.user.port=8484
+----
+
+C'est tout ce dont vous avez besoin pour créer le client gRPC.
+
+=== Création d'un serveur gRPC
+
+Si vous avez besoin de créer un serveur gRPC, vous devez implémenter l'interface (``UserService``) créée pour vous par protoc :
+
+[source,java]
+----
+@GrpcService
+public class UserGrpcService implements UserService {
+
+    @Override
+    public Uni<User> getUserById(UserId request) {
+        return Uni.createFrom().item(request.getId())
+                .map(UserGrpcService::getTestUser);
+    }
+
+    @Override
+    public Multi<UserList> getAllUsers(Empty request) {
+        return Multi.createFrom()
+                .item(() -> UserList.newBuilder().addUsers(getTestUser(1)).build());
+    }
+
+    private static User getTestUser(int id) {
+        return User.newBuilder()
+                .setId(id)
+                .setEmail("test@test.com")
+                .setName("Test User")
+                .build();
+    }
+}
+----
+
+Configurez ensuite l'hôte et le port du serveur gRPC actuel :
+
+[source,properties]
+----
+quarkus.grpc.server.host=localhost
+quarkus.grpc.server.port=8484
+----
+
+Voilà tout ce dont vous avez besoin, vous êtes maintenant prêt à utiliser votre application gRPC.
+
+Pour consulter des exemples ou exécuter l'intégration client-serveur en local, n'hésitez pas à consulter https://github.com/kompike/grpc-quarkus[ce projet^] sur GitHub.
+
+== Solution hybride
+
+Si vous pensez toujours que gRPC est peut-être trop complexe, ne fermez pas cet article trop vite, j'ai une dernière section pour [line-through]#vous attirer du côté obscur de la force# vous intéresser davantage.
+
+Pour minimiser tous les problèmes potentiels et les limitations de gRPC, je souhaiterais proposer une solution hybride : l'utilisation de REST avec Protobuf.
+Cette option peut sembler étrange (pourquoi changer quelque chose qui fonctionne déjà bien, comme JSON), mais examinons les avantages potentiels de cette solution :
+
+* *Transfert de données plus rapide* : comme nous l'avons déjà mentionné, Protobuf est transmis sur le réseau sous forme binaire, et sa sérialisation et désérialisation sont presque instantanées.
+* *Typage strict* : JSON est le format de données le plus populaire, notamment en raison de l'absence de structure de message définie. Cependant, à mon avis, c'est aussi son principal inconvénient. Protobuf permet de résoudre facilement ce problème.
+* *Possibilité de génération automatique de code pour de nombreux langages de programmation* : oui, JSON est une technologie neutre en termes de langage, mais pour utiliser les données transmises à l'aide de JSON, il faut créer des DTO et des modèles correspondants. C'est ce que votre framework utilisera pour analyser les données reçues. En revanche, Protobuf (à l'aide de Protoc) peut créer ces modèles automatiquement.
+* *Fonctionnement avec les navigateurs Web* : Protobuf n’est pas lié à HTTP/2, donc il n’y a aucun problème pour l’utiliser avec des applications web.
+
+Bien sûr, l'ajout de Protobuf à la place de JSON présente également quelques inconvénients, mais ils ne sont pas si significatifs par rapport aux avantages :
+
+* *Complexité d'analyse des messages au format binaire* : si vous devez fréquemment analyser des messages sous forme binaire (par exemple, lors du débogage du réseau), vous pourriez rencontrer des difficultés (d'après mon expérience, ce n'est pas l'opération la plus courante).
+* *Nécessité de configurer la conversion* : pour travailler avec Protobuf et créer des modèles, vous devrez consacrer un peu de temps à apprendre la syntaxe et à configurer la génération de code à l'aide de Protoc, mais ces quelques heures vous feront gagner beaucoup de temps à l'avenir.
+
+Pour transmettre Protobuf sur le réseau, il faut spécifier ``application/protobuf`` ou ``application/x-protobuf`` comme type de média (``MediaType``).
+Par exemple, dans Quarkus, cela se présenterait ainsi :
+
+[source,java]
+----
+@Produces("application/protobuf")
+----
+
+Dans Spring, un peu plus de code est nécessaire, vous devez ajouter un nouveau convertisseur à votre service :
+
+
+[source,java]
+----
+@Bean
+ProtobufHttpMessageConverter protobufHttpMessageConverter() {
+    return new ProtobufHttpMessageConverter();
+}
+----
+
+Et pour travailler avec JavaScript/TypeScript, il faut modifier le ``responseType`` de chaque requête HTTP en ``arraybuffer`` (probablement en utilisant un intercepteur) :
+
+
+[source,javascript]
+----
+responseType: "arraybuffer"
+----
+
+== Conclusion
+
+gRPC est un protocole réseau assez intéressant et en même temps un peu inhabituel et complexe (pour ceux qui n'ont jamais fait de RPC).
+Bien sûr, il ne peut en aucun cas remplacer REST, mais il n'est pas conçu pour cela non plus.
+gRPC est une excellente alternative à l'approche standard et vise principalement à exploiter toute la puissance du standard HTTP/2, ce qui en fait un outil très puissant en termes de performances, de compacité et de flux de données bidirectionnels.
+
+=== Liens utiles
+
+* https://grpc.io/[window=_blank] - Le site officiel de gRPC
+* https://github.com/grpc[window=_blank] - Le compte GitHub du framework gRPC et des projets associés
+* https://protobuf.dev/[window=_blank] - Le site officiel des Protocol Buffers
+* https://github.com/protocolbuffers/protobuf[window=_blank] - Le compte GitHub des Protocol Buffers
+* https://quarkus.io/extensions/io.quarkus/quarkus-grpc/[window=_blank] - Une extension Quarkus pour gRPC
