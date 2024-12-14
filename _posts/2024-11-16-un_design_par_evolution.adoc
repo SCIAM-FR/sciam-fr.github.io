@@ -219,7 +219,8 @@ et de concevoir des **interfaces utilisateur** intuitives et efficaces, amélior
 == Java et les algorithmes évolutionnaires
 
 Le langage java est un choix populaire pour implémenter des algorithmes évolutionnaires en raison de sa simplicité,
-de sa robustesse, de ses performances , et de sa portabilité  sur de nombreuses plateformes.
+de sa robustesse, de ses performances, et de sa portabilité sur de nombreuses plateformes.
+
 Voici quelques bibliothèques et frameworks couramment utilisés dans ce domaine :
 
 === JMetal
