@@ -14,7 +14,8 @@ en mettant en lumière leur potentiel à stimuler l'innovation et à résoudre c
 
 == Introduction
 
-Les algorithmes exacts (déterministes) jouent un rôle fondamental dans la résolution de nombreux problèmes dans divers domaines, qu'il s'agisse de tri de données, de recherche de chemins optimaux, ou encore de résolution d’équations complexes.
+Les algorithmes exacts (déterministes) jouent un rôle fondamental pour la résolution de nombreux problèmes dans divers domaines, qu'il s'agisse de tri de données, de recherche de chemins optimaux, ou encore de résolution d’équations complexes.
+
 
 Cependant, face à des problèmes dits ``NP-difficiles`` ou à de vastes espaces de conception, ils révèlent rapidement leurs limites.
 
