@@ -43,7 +43,8 @@ Cette capacité d'exploration, amplifiée par la composante aléatoire, ouvre la
 Par conséquent, nous utilisons les algorithmes évolutionnaires pour concevoir de nouveaux produits ou systèmes de manière similaire à la méthode MVP (Minimum Viable Product), qui consiste à développer une version simplifiée d’un produit, avec les fonctionnalités essentielles, pour tester rapidement son intérêt sur le marché.
 
 Imaginez les algorithmes évolutionnaires comme un processus de développement en plusieurs générations :
-au lieu de créer un produit final parfait dès le début, ils explorent diverses versions de solutions ou prototypes à travers des itérations rapides.
+au lieu de créer un produit final parfait dès le début, on explore diverses versions de solutions ou prototypes à travers des itérations rapides.
+
 
 Chaque version est testée, puis les meilleures configurations sont sélectionnées, ajustées et combinées pour former une nouvelle génération améliorée.
 De la même façon que le MVP évolue par étapes en fonction du retour des utilisateurs, les algorithmes évolutionnaires évaluent, adaptent et optimisent chaque itération pour s’approcher de la solution optimale.
