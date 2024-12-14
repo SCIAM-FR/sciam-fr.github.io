@@ -20,7 +20,8 @@ Cependant, face à des problèmes dits ``NP-difficiles`` ou à de vastes espaces
 
 [NOTE]
 En informatique théorique, le terme "NP-difficiles" (ou NP-hard en anglais) désigne une classe de problèmes qui sont au moins aussi difficiles à résoudre que les problèmes de la classe NP (Non-deterministic Polynomial Time); Example :
-Le célèbre problème du voyageur de commerce (TSP, Travelling Salesman Problem) en version d’optimisation qui consiste à trouver le chemin optimal parmi plusieurs villes est un défi immense quand le nombre de villes augmente.
+Par exemple, le célèbre problème du voyageur de commerce (TSP, Travelling Salesman Problem) en version d’optimisation qui consiste à trouver le chemin optimal parmi plusieurs villes est un défi immense quand le nombre de villes augmente.
+
 
 Ces algorithmes déterministes sont conçus pour parcourir de manière exhaustive toutes les solutions possibles afin de garantir la découverte de l’optimum.
 Cette exhaustivité rend leur utilisation peu pratique, voire impossible, pour des problèmes de grande dimension ou en constante évolution.
