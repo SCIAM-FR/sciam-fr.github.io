@@ -223,7 +223,7 @@ de sa robustesse, de ses performances , et de sa portabilité  sur de nombreuses
 Voici quelques bibliothèques et frameworks couramment utilisés dans ce domaine :
 
 === JMetal
-https://jmetal.readthedocs.io[jMetal, window=_blank] est un framework java opensource
+https://jmetal.readthedocs.io[jMetal^] est un framework java opensource
 footnote:jmetal[Le code source de jMetal est disponible sur Github https://github.com/jMetal/jMetal:[jMetal Github]],
 qui fournit une collection et une bibliothèque Java dédiée à l'optimisation multi-objectifs.
 Elle offre un ensemble d'outils pour résoudre des problèmes d'optimisation multi-objectifs.
