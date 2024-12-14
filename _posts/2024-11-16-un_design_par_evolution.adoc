@@ -31,7 +31,7 @@ les applications pratiques.
 [NOTE]
 Les méta-heuristiques sont des méthodes d'optimisation avancées conçues pour résoudre des problèmes complexes, souvent difficiles à traiter par des algorithmes exacts en raison de la taille ou de la complexité de l'espace de recherche. Ces approches utilisent des stratégies globales et adaptatives pour explorer efficacement l'espace des solutions et trouver des solutions optimales ou quasi-optimales dans un temps raisonnable.
 
-Une des classes des méta-heuristiques est celle des algorithmes évolutionnaires, souvent assimilés aux 'algorithmes génétiques' dont l'approche est inspirée des mécanismes de l'évolution naturelle.
+Une des classes des méta-heuristiques est celle des algorithmes évolutionnaires, souvent assimilés aux 'algorithmes génétiques'.
 
 En simulant des processus tels que la sélection, le croisement et la mutation, les algorithmes évolutionnaires génèrent progressivement des solutions optimales ou quasi-optimales contrairement aux algorithmes exacts qui peuvent être bloqués par des solutions locales ou des configurations complexes.
 
@@ -172,7 +172,7 @@ L'objectif principal des algorithmes mémétiques est d'améliorer l'efficacité
 
 === Algorithmes Co-Évolutionnaires (AC-E)
 
-Les algorithmes co-évolutionnaires s'inspirent du concept de coévolution biologique, où deux ou plusieurs populations évoluent simultanément en réponse aux pressions exercées que  chacune subit de l'autre.
+Ils s'inspirent du concept de coévolution biologique, où deux ou plusieurs populations évoluent simultanément en réponse aux pressions exercées que  chacune subit de l'autre.
 
 Ainsi, les individus d’une population sont souvent évalués non seulement en fonction de leur performance par rapport à des critères internes, mais aussi en tenant compte de leur interaction avec les individus d’autres populations.
 
