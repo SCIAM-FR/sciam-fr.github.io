@@ -233,9 +233,7 @@ Voici quelques bibliothèques et frameworks couramment utilisés dans ce domaine
 https://jmetal.readthedocs.io[jMetal^] est un framework java opensource
 footnote:jmetal[Le code source de jMetal est disponible sur Github https://github.com/jMetal/jMetal:[jMetal Github]],
 qui fournit une collection et une bibliothèque Java dédiée à l'optimisation multi-objectifs.
-Elle offre un ensemble d'outils pour résoudre des problèmes d'optimisation multi-objectifs.
-jMetal fournit une collection d'algorithmes évolutionnaires et des structures de données pour les utiliser
-de manière flexible et extensible.
+Elle fournit une collection d'algorithmes évolutionnaires et des structures de données pour les utiliser de manière flexible et extensible.
 Il prend en charge plusieurs types d'algorithmes évolutionnaires et techniques d'optimisation multi-objectifs,
 comme les algorithmes génétiques, les stratégies d'évolution, la programmation génétique, les algorithmes évolutionnaires
 multi-objectifs (MOEA) comme NSGA-II footnote:nsga[*NSGA-II (Non-dominated Sorting Genetic Algorithm II)*
