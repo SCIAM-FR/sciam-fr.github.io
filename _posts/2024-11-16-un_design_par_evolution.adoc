@@ -19,7 +19,8 @@ Les algorithmes exacts (déterministes) jouent un rôle fondamental dans la rés
 Cependant, face à des problèmes dits ``NP-difficiles`` ou à de vastes espaces de conception, ils révèlent rapidement leurs limites.
 
 [NOTE]
-En informatique théorique, le terme "NP-difficiles" (ou NP-hard en anglais) désigne une classe de problèmes qui sont au moins aussi difficiles à résoudre que les problèmes de la classe NP (Non-deterministic Polynomial Time); Example :
+En informatique théorique, le terme "NP-difficiles" (ou NP-hard en anglais) désigne une classe de problèmes qui sont au moins aussi difficiles à résoudre que les problèmes de la classe NP (Non-deterministic Polynomial Time).
+
 Par exemple, le célèbre problème du voyageur de commerce (TSP, Travelling Salesman Problem) en version d’optimisation qui consiste à trouver le chemin optimal parmi plusieurs villes est un défi immense quand le nombre de villes augmente.
 
 
