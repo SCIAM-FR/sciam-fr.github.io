@@ -79,7 +79,7 @@ Les objectifs principaux de Reactive Streams sont{nbsp}:
 
 * Interopérabilité : Fournir une interface standard pour que différentes bibliothèques réactives puissent fonctionner ensemble. 
 
-Les principales interfaces de Reactive Streams sont{nbsp}: 
+Les principales interfaces de Reactive Streams, portées dans l'API Flow du JDK 9,  sont{nbsp}: 
 
 * `Publisher<T>` : représente une source qui peut émettre une séquence de valeurs asynchrones. Les éditeurs appellent la méthode `subscribe()` pour permettre aux abonnés de recevoir les éléments. 
 
