@@ -102,7 +102,7 @@ Les principales abstractions fournies par Reactor sont{nbsp}:
 
 Ces deux types sont les composants de base utilisés pour modéliser des flux de données asynchrones en Java avec Reactor. 
 
-En pratique un 'Flux' peut être sérialisé sous plusieur formes{nbsp}: 
+En pratique un 'Flux' peut être sérialisé sous plusieurs formes{nbsp}: 
 
 * Json Array 
 
