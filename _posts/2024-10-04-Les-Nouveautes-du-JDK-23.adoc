@@ -1,0 +1,32 @@
+= Video - Techreview - Les Nouveautés du JDK 23
+:page-excerpt: Découvrez les nouveautés du JDK 23.
+:page-layout: post
+:author: jeanmicheldoudoux
+:page-tags: [Java, Techreview]
+:page-vignette: 2024/les-nouveautes-du-JDK-23.jpg
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: software video
+:page-vimeo-id: 1040200220
+
+Cette présentation brosse une revue détaillée des nouveautés qui sont proposées en standard, en preview et en incubation dans la version 23 du JDK issues des projets ou des travaux d’OpenJDK.
+
+Le JDK 23 propose des évolutions syntaxiques et dans les API en standard et en preview pour la première fois ou pour une Neme preview :
+
+* des commentaires de documentation en Markdown
+
+* une première preview des types primitifs dans les patterns et de leur support dans l’instruction `instanceof` et l’instruction `switch`
+
+* une première preview de l’importation de modules
+
+* dépréciation des méthodes d’accès à la mémoire de `sun.misc.UnSafe`
+
+Certaines fonctionnalités restent en preview ou en incubation avec ou sans évolutions :
+
+* une troisième preview des Scoped values, de la concurrence structurée (structured concurrency), des classes et des méthodes d’instance implicitement déclarées
+
+* une seconde preview de flexible constructor bodies, des Streams Gatherer et de l’ API Class-File
+
+* une huitième incubation de l’API Vector
+
+Mais aussi des fonctionnalités dans les API de Java Core et dans la JVM HotSpot et les fonctionnalités dépréciées/supprimées qui ne font pas l'objet d'une JEP.
