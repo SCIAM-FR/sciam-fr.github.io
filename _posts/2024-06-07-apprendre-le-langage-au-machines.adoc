@@ -1,0 +1,15 @@
+= Video - Techreview - Apprendre le langage aux machines
+:page-excerpt: apprendre le langage aux machines
+:page-layout: post
+:author: pierrelepagnol
+:page-tags: [IA, LLM, Techreview]
+:page-vignette: 2024/Apprendre-le-langage-aux-machines.jpg
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: llm video
+:page-vimeo-id: 1040200172
+
+
+L'intelligence artificielle » est partout et au cœur cette révolution se trouve le domaine du traitement automatique des langues (TAL/NLP). Dans cette TechReview, nous présenterons le cycle de cours/conférences sur le NLP au prestigieux Collège de France qui a retracé toutes les problématiques et avancées du domaine. Des systèmes de correction à ChatGPT.
+
+Nous ferons un focus sur 3 problématiques actuelles de la recherche en IA/NLP (Multimodalités, Multilingualité et Agents conversationnels) pour en comprendre les enjeux et défis. Nous finirons par une rétrospective du talk de Yann Lecun (MetaAI) sur le futur de l'IA ("Objective-driven AI"). Nous repartirons avec une meilleure vision de l'IA, dépassant le prompt-engineering et mettant en perspective les progrès et les innovations à venir.
