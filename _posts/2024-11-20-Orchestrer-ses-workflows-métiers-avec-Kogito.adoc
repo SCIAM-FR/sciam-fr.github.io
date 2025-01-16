@@ -1,0 +1,22 @@
+= Video - Orchestrer ses workflows métiers avec Kogito
+:page-excerpt: A la découverte de Kogito, le moteur de workflow cloud-native de Red Hat, et de son intégration avec Quarkus.
+:page-layout: post
+:author: chakerfezai
+:page-tags: [Kogito,Quarkus,BPMN,Conférence]
+:page-vignette: 2024/Orchestrer-ses-workflows-metiers-avec-Kogito.jpg
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: software video
+:page-vimeo-id: 1045375608
+
+Avec l’essor des architectures Cloud-native et les microservice, les frameworks historiques de Java doivent évoluer et se réinventer pour migrer vers le cloud. La gestion des processus métier (BPM) n’échappe pas à cette règle.
+
+Lorsqu’on se penche sérieusement sur l’architecture microservice, open se rend compte que celle-ce nécessite la mise en oeuvre de nombreux pattern et briques techniques qui la rendent complexe. Plus particulièrement le sujet de l’orchestration métiers au sein de ces services et souvent négligé et donne lieu à de grandes quantités de boilerplate code.
+
+Ne paniquez pas ! Kogito est là pour résoudre ce problème en déplaçant ce code technique et lourd à maintenir dans de la configuration standard..
+
+Kogito, projet open source de la fondation Apache, permet de tirer parti du standard BPMN (de création de workflow métiers) dans une architecture micro service sans ajouter de nouveau Middleware à votre projet.
+
+Cette conférence Kogito commencera par une brève introduction de BPMN et jBMN, qui permet aux business analyst de concevoir graphiquement leur workflow.
+
+Rejoignez-moi dans 45 minutes de live coding d’un système de commande en ligne et comment créer un workflow métiers cloud-native avec Quarkus et Kogito qui orchestre un ensemble des microservices.
