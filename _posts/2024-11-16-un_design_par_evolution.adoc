@@ -82,7 +82,7 @@ Les plus courants sont les algorithmes génétiques, les stratégies d’évolut
 Les algorithmes génétiques représentent une catégorie des algorithmes évolutionnaires, inspirés par l'évolution biologique des organismes vivants.
 Ils traduisent les mécanismes de l'évolution en un processus computationnel capable de résoudre des problèmes complexes et d'identifier des solutions adaptées.
 
-Pour appliquer ce cadre, nous commençons par **modéliser** ou **formuler** précisément ce problème.
+Pour concevoir de tels algorithmes, nous devons commencer par **modéliser** ou **formuler** précisément ce problème.
 Cela consiste en la définition des paramètres, des contraintes et des objectifs à optimiser.
 Cette phase est décisive, car elle permet de transformer un problème complexe en une structure organisée et logique, facilitant ainsi l’analyse et mettant en lumière les paramètres critiques ainsi que les limitations du problème à résoudre.
 
@@ -126,12 +126,11 @@ La programmation génétique est appliquée dans des domaines variés, tels que 
 
 Les MOEA sont une classe d'algorithmes évolutionnaires conçus pour résoudre des problèmes d'optimisation multi-objectifs.
 Contrairement aux problèmes d'optimisation mono-objectifs où un seul objectif est maximisé ou minimisé, les problèmes multi-objectifs comportent plusieurs critères contradictoires ou complémentaires à prendre en compte.
-Leur objectif est de trouver un ensemble de solutions optimales, appelées *Front de Pareto* footnote:frontpareto[La frontière de Pareto,ou front de Pareto, est un concept fondamental dans l'optimisation multi-objectifs.
+Leur but est de trouver un ensemble de solutions optimales, appelées *Front de Pareto* footnote:frontpareto[La frontière de Pareto, ou front de Pareto, est un concept fondamental dans l'optimisation multi-objectifs.
 Elle représente l'ensemble des solutions non dominées dans un problème où plusieurs critères ou objectifs sont pris en compte.
 Dans ce contexte, une solution est dite dominée si une autre solution est au moins aussi bonne dans tous les objectifs et strictement meilleure dans au moins un objectif.
-Les solutions non dominées forment donc ce qu'on appelle la frontière de Pareto.]
-
-, plutôt qu'une seule solution optimale.
+Les solutions non dominées forment donc ce qu'on appelle la frontière de Pareto.],
+plutôt qu'une seule solution optimale.
 Le front de Pareto représente un ensemble de solutions où aucune ne peut être améliorée dans un objectif sans
 détériorer un autre objectif.
 
@@ -154,8 +153,8 @@ où :
 - stem:[x_{r1}], stem:[x_{r2}], et stem:[x_{r3}] sont des solutions sélectionnées aléatoirement dans la population,
 - stem:[F] est un facteur de mutation qui contrôle l'amplitude de la mutation.
 
-* *Croisement (Recombinaison)* : L'opérateur de croisement combine la solution d'origine (parents) avec la solution mutant pour produire un nouvel individu.
-Le croisement est généralement réalisé avec un taux de croisement CR, qui détermine la probabilité qu'un élément de la solution mutant soit remplacé par l'élément correspondant de la solution de départ.
+* *Croisement (Recombinaison)* : L'opérateur de croisement combine la solution d'origine (parent) avec la solution mutante pour produire un nouvel individu.
+Le croisement est généralement réalisé avec un taux de croisement CR, qui détermine la probabilité qu'un élément de la solution mutante soit remplacée par l'élément correspondant de la solution de départ.
 
 * *Sélection* : Une fois que l'individu mutant (ou recombiné) a été généré, il est comparé à la solution originale, (c'est-à-dire son parent).
 
@@ -195,8 +194,6 @@ En fonction des contraintes et des objectifs, ces algorithmes peuvent être comb
 == Utilisation des algorithmes évolutionnaires dans le design
 
 Le design est un domaine avec lequel les algorithmes évolutionnaires ont montré leur efficacité.
-Bien qu'il soit souvent considéré comme un problème abstrait, il a des applications très concrètes dans de nombreux domaines
-dans lequel les algorithmes évolutionnaires ont montré leur efficacité.
 
 Dans le domaine de la fabrication, il est utilisé pour planifier les itinéraires des robots ou des machines,
 minimiser les temps de production et maximiser l'efficacité des opérations.
@@ -300,7 +297,7 @@ Pour mieux comprendre l’application des algorithmes évolutionnaires dans les 
 Dans un ou plusieurs clusters Kafka composés de plusieurs brokers par cluster,
 avec une infrastructure de communication cellulaire `5G`, des milliers de capteurs IoT, une diversité
 d'API utilisant différents protocoles, ainsi que des milliers de microservices et d'applications, nous sommes confrontés à un
-problème d'optimisation particulièrement complexe footnote:[Ce type d'architecture n'est pas une hypothèse théorique,
+problème d'optimisation particulièrement complexefootnote:[Ce type d'architecture n'est pas une hypothèse théorique,
 mais une réalité dans le domaine du cloud computing et de l'IoT.
 Par exemple, une ville intelligente connecte des milliers de capteurs IoT pour surveiller
 la qualité de l'air, la circulation, ou encore la gestion des déchets.].
@@ -330,6 +327,8 @@ complexité des paramètres à considérer (latence réseaux, partitions, charge
 Pour résoudre ce problème efficacement, nous pouvons utiliser un des algorithmes communément utilisés dans ce contexte qui est *NSGA-II (Non-dominated Sorting Genetic Algorithm II)*, une méthode bien adaptée aux problèmes d'optimisation multi-objectifs.
 
 Cet algorithme est conçu pour trouver des solutions optimales en équilibrant plusieurs objectifs contradictoires, tels que :
+
+
 - Minimiser la latence.
 - Maximiser les performances globales.
 - Réduire les coûts.
@@ -342,9 +341,9 @@ Tout en simulant les différentes configurations possibles, *NSGA-II* explore l'
 1. **Initialisation** : Générer une population initiale de configurations aléatoires,
 et pour exemple :
 
-- Configuration 1 : `3` machines de `50BG` de RAM, `4` CPU de `16` cœurs, `100GB` de disque,
+- Configuration 1 : `3` machines de `50GB` de RAM, `4` CPU de `16` cœurs, `100GB` de disque,
 `1GB/s` de réseau. Concernant la configuration de Kafka, chaque cluster inclut 10 brokers, avec `3` partitions par topic.
-L’ensemble est conçu pour gérer 100 topics pour
+L’ensemble est conçu pour gérer 100 topics.
 - Configuration 2 : 1 Machine puissante de `100GB` de RAM, `8` CPU de `32` cœurs, `500GB` de disque,
 `10GB/s` de réseau. Du côté de la configuration Kafka, le cluster est organisé avec 5 brokers et 5 partitions par topic.
 - Configuration 3 : 5 petites machines de `4` CPU chacune, `16GB` de RAM,
