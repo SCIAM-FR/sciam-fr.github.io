@@ -202,9 +202,6 @@ Dans le secteur des télécommunications, il est utilisé pour optimiser les ré
 minimiser les temps de latence et maximiser la bande passante disponible.
 Et dans le domaine de la recherche opérationnelle, il est utilisé pour résoudre des problèmes de distribution,
 
-
-== Applications des algorithmes évolutionnaires dans le design
-
 Dans le **design industriel**, les algorithmes évolutionnaires permettent de concevoir des produits innovants en
 optimisant des critères tels que la **résistance**, le **poids** ou le **coût**.
 Par exemple, ils peuvent être utilisés pour créer des formes aérodynamiques ou des composants mécaniques plus performants.
