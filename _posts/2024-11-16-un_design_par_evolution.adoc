@@ -332,7 +332,8 @@ découvrir des solutions innovantes et performantes, tout en répondant aux exig
 
 - **Diversité des solutions** : garantit une exploration équilibrée de l'espace des configurations.
 
-- **Adaptabilité** : Peut être appliqué à des problèmes complexes avec des objectifs multiples et contradictoires.
+- **Adaptabilité** : peut être appliqué à des problèmes complexes avec des objectifs multiples et contradictoires.
+
 
 == Conclusion
 Les algorithmes évolutionnaires offrent une approche puissante pour résoudre des problèmes d'optimisation complexes qui sont autrement insolubles avec des méthodes traditionnelles.
