@@ -11,7 +11,8 @@
 
 Cet article explore l'application des algorithmes évolutionnaires dans divers domaines, notamment le design, et l'optimisation des architectures cloud, en mettant en lumière leur potentiel à stimuler l'innovation et à résoudre certains des problèmes les plus complexes de l'informatique moderne.
 Nous présenterons également quelques bibliothèques Java permettant d'exploiter ces algorithmes.
-Pour finir, nous décrirons un exemple de mise en œuvre de ces algorithmes sur un problème cancret d'architecture logicielle.
+Pour finir, nous décrirons un exemple de mise en œuvre de ces algorithmes sur un problème concret d'architecture logicielle.
+
 
 == Introduction
 
