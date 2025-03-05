@@ -1,0 +1,364 @@
+= Un design évolutif pour des solutions révolutionnaires
+:showtitle:
+:page-navtitle: Un design évolutif pour des solutions révolutionnaires
+:page-excerpt: Les algorithmes évolutionnaires offrent une approche novatrice pour concevoir des solutions et produits optimales ou quasi-optimales dans des délais raisonnables. Cet article est une introduction aux concepts d'alogorithems génétiques, présente des librairies Java pour les mettre en oeuvre et évoque un cas concret d'utilisation.
+:layout: post
+:author: saidboudjelda
+:page-tags: [Algorithms, IA, Machine Learning, Optimisation, Programmation Génétique, Design, Evolution]
+:page-vignette: genetics.png
+:page-liquid:
+:page-categories: software news
+
+Cet article explore l'application des algorithmes évolutionnaires dans divers domaines, notamment le design, et l'optimisation des architectures cloud, en mettant en lumière leur potentiel à stimuler l'innovation et à résoudre certains des problèmes les plus complexes de l'informatique moderne.
+Nous présenterons également quelques bibliothèques Java permettant d'exploiter ces algorithmes.
+Pour finir, nous décrirons un exemple de mise en œuvre de ces algorithmes sur un problème concret d'architecture logicielle.
+
+
+== Introduction
+
+Les algorithmes exacts (déterministes) jouent un rôle fondamental pour la résolution de nombreux problèmes dans divers domaines, qu'il s'agisse de tri de données, de recherche de chemins optimaux, ou encore de résolution d’équations complexes.
+
+
+Cependant, face à des problèmes dits "NP-difficiles" ou à de vastes espaces de conception, ils révèlent rapidement leurs limites.
+
+[NOTE]
+En informatique théorique, le terme "NP-difficiles" (ou NP-hard en anglais) désigne une classe de problèmes qui sont au moins aussi difficiles à résoudre que les problèmes de la classe NP (Non-deterministic Polynomial Time).
+
+Par exemple, le célèbre problème du voyageur de commerce (TSP, Travelling Salesman Problem) en version d’optimisation qui consiste à trouver le chemin optimal parmi plusieurs villes est un défi immense quand le nombre de villes augmente.
+
+Ces algorithmes déterministes sont conçus pour parcourir de manière exhaustive toutes les solutions possibles afin de garantir la découverte de l’optimum.
+Cette exhaustivité rend leur utilisation peu pratique, voire impossible, pour des problèmes de grande dimension ou en constante évolution.
+
+Les algorithmes approximatifs, heuristiques ou méta-heuristiques, quant à eux, apportent une approche différente pour obtenir des solutions proches de l'optimum, dites quasi-optimales, dans des délais raisonnables, ce qui est souvent suffisant pour les applications pratiques.
+
+[NOTE]
+Les méta-heuristiques sont des méthodes d'optimisation avancées conçues pour résoudre des problèmes complexes, souvent difficiles à traiter par des algorithmes exacts en raison de la taille ou de la complexité de l'espace de recherche. Ces approches utilisent des stratégies globales et adaptatives pour explorer efficacement l'espace des solutions et trouver des solutions optimales ou quasi-optimales dans un temps raisonnable.
+
+Une des classes des méta-heuristiques est celle des algorithmes évolutionnaires, souvent assimilés aux 'algorithmes génétiques'.
+
+En simulant des processus tels que la sélection, le croisement et la mutation, les algorithmes évolutionnaires génèrent progressivement des solutions optimales ou quasi-optimales contrairement aux algorithmes exacts qui peuvent être bloqués par des solutions locales ou des configurations complexes.
+
+Au-delà de la résolution de problèmes spécifiques, les algorithmes évolutionnaires se distinguent par leur efficacité dans l'exploration d'espaces de recherche vastes et complexes, surtout lorsque les dimensions du problème augmentent et entraînent une prolifération de configurations possibles.
+
+Ces algorithmes apportent une dynamique adaptative et flexible, élargissant considérablement le champ de recherche en pénétrant des zones inexplorées et souvent inaccessibles aux méthodes classiques ou à l'intuition humaine.
+Cette capacité d'exploration, amplifiée par la composante aléatoire, ouvre la voie à la découverte de solutions innovantes, inédites et potentiellement optimisées, qui auraient, autrement, échappé à toute détection.
+
+Par conséquent, nous utilisons les algorithmes évolutionnaires pour concevoir de nouveaux produits ou systèmes de manière similaire à la méthode MVP (Minimum Viable Product), qui consiste à développer une version simplifiée d’un produit, avec les fonctionnalités essentielles, pour tester rapidement son intérêt sur le marché.
+
+Imaginez les algorithmes évolutionnaires comme un processus de développement en plusieurs générations : au lieu de créer un produit final parfait dès le début, on explore diverses versions de solutions ou prototypes à travers des itérations rapides.
+
+Chaque version est testée, puis les meilleures configurations sont sélectionnées, ajustées et combinées pour former une nouvelle génération améliorée.
+De la même façon que le MVP évolue par étapes en fonction du retour des utilisateurs, les algorithmes évolutionnaires évaluent, adaptent et optimisent chaque itération pour s’approcher de la solution optimale.
+
+Évidemment, au contraire du MVP, les algorithmes évolutionnaires ne sont pas tenus de produire une solution immédiatement viable ou utilisable à chaque itération.
+
+
+Ils évoluent de manière itérative afin d'explorer l'espace de recherche pour converger progressivement vers des solutions optimales.
+Dans ce contexte, on utilise un critère de fitness pour évaluer et comparer les solutions, permettant de sélectionner et d'améliorer les meilleures configurations à chaque génération, même si elles ne sont pas directement applicables dans l’immédiat.
+
+== Algorithmes Évolutionnaires : Inspirés par la Nature
+
+L’évolution naturelle est un processus par lequel les systèmes s’adaptent progressivement à leur environnement au fil des générations.
+L'évolution biologique, en tant que cas spécifique de ce phénomène, constitue l'une de ses manifestations les plus étudiées et tangibles.
+
+Grâce à des mécanismes tels que la sélection naturelle, les mutations génétiques, et le croisement, les espèces évoluent pour mieux survivre et se reproduire dans des environnements en perpétuel changement.
+Ces mécanismes favorisent les traits les plus avantageux, permettant aux organismes de devenir progressivement plus adaptés au fil du temps.
+Bien que ce processus soit lent, il est incroyablement efficace pour explorer un vaste espace de possibilités et maximiser les chances de survie dans des contextes variés et souvent imprévisibles.
+
+Inspirés par cette dynamique naturelle, les chercheurs en Intelligence Artificielle et en optimisation ont développé des algorithmes d’optimisation appelés "évolutionnaires" ou "évolutionnistes".
+
+Ces algorithmes, de nature stochastique (aléatoire), s’appuient sur les principes de l’évolution naturelle, en général, pour résoudre des problèmes complexes dans lesquels il faut trouver les meilleures solutions parmi un grand nombre de possibilités.
+
+Les plus courants sont les algorithmes génétiques, les stratégies d’évolution, et la programmation génétique.
+
+== Catégories des Algorithmes Évolutionnaires
+
+=== Algorithmes Génétiques (AG)
+
+
+Les algorithmes génétiques représentent une catégorie des algorithmes évolutionnaires, inspirés par l'évolution biologique des organismes vivants.
+Ils traduisent les mécanismes de l'évolution en un processus computationnel capable de résoudre des problèmes complexes et d'identifier des solutions adaptées.
+
+Pour concevoir de tels algorithmes, nous devons commencer par *modéliser* ou *formuler* précisément ce problème.
+Cela consiste en la définition des paramètres, des contraintes et des objectifs à optimiser.
+Cette phase est décisive, car elle permet de transformer un problème complexe en une structure organisée et logique, facilitant ainsi l’analyse et mettant en lumière les paramètres critiques ainsi que les limitations du problème à résoudre.
+
+Ensuite, une fois les solutions potentielles modélisées, nous générons un certain nombre de ces solutions, soit de manière aléatoire, soit en intégrant des connaissances préexistantes, pour former la *population initiale*.
+Cet ensemble de solutions constitue la base à partir de laquelle les solutions vont évoluer afin d’atteindre un optimum ou de s’en rapprocher.
+Pour cela, chaque solution est évaluée à l'aide d'une "fonction fitness", qui mesure son aptitude à répondre aux objectifs définis.
+Les critères de fitness peuvent inclure la robustesse, l’efficacité, le coût ou encore la performance.
+
+Les solutions les plus performantes, c’est-à-dire celles ayant les meilleurs scores de fitness, sont sélectionnées pour contribuer à la génération suivante.
+Cette étape, appelée *sélection*, vise à favoriser les solutions qui se rapprochent le plus de l'optimum.
+L’approche où les solutions ayant les meilleurs scores sont systématiquement choisies est appelée *élitisme*.
+Cependant, d'autres types de sélection existent, comme la roulette (Roulette Wheel Selection), le tournoi (Tournament Selection), la sélection par rang (Rank Selection), et la sélection stochastique universelle (Stochastic Universal Sampling).
+
+Une fois les solutions sélectionnées, le *croisement* combine des éléments de deux solutions parentales pour générer de nouvelles solutions, appelées *enfants*.
+
+Ce processus permet d’explorer de nouveaux points dans l’espace de recherche en mélangeant les caractéristiques des solutions existantes, augmentant ainsi les chances de découvrir des configurations innovantes ou plus performantes.
+
+Finalement, la *mutation* consiste à introduire des modifications aléatoires à certains éléments de solutions sélectionnées aléatoirement.
+
+Ce mécanisme a pour objectif de créer de nouvelles variantes, augmentant ainsi la diversité de la population et permettant d’explorer des régions de l’espace de recherche qui pourraient autrement rester inaccessibles.
+
+Ce cycle de sélection, croisement, et mutation se répète sur plusieurs générations, et la population évolue vers des solutions de plus en plus optimales.
+
+=== Stratégie d'Évolution (SE)
+
+La stratégie d'évolution a été introduite dans les années 1960 par *https://en.wikipedia.org/wiki/Ingo_Rechenberg[Ingo Rechenberg^]* et *https://en.wikipedia.org/wiki/Hans-Paul_Schwefel[Hans-Paul Schwefel^]* pour résoudre des problèmes d'optimisation complexes, principalement dans le cadre de l'ingénierie et de la conception de systèmes.
+La stratégie d’évolution se distingue des algorithmes génétiques par sa focalisation sur la mutation et l’adaptation des paramètres, avec une moindre importance accordée au croisement.
+Alors que les algorithmes génétiques utilisent une combinaison de croisement, mutation et sélection pour générer de nouvelles solutions, la stratégie d’évolution repose essentiellement sur des mutations appliquées aux individus pour explorer l’espace de recherche.
+
+=== Programmation génétique (PG)
+
+La programmation génétique est utilisée pour générer des programmes informatiques capables de résoudre des problèmes complexes.
+Contrairement aux algorithmes génétiques qui manipulent des vecteurs de réels ou des chaînes binaires, la programmation génétique utilise des arbres de syntaxe où les nœuds représentent des opérateurs et les feuilles des constantes ou des variables.
+
+Le processus commence par une population initiale d'arbres générés aléatoirement, suivie de l'évaluation de leur performance à résoudre le problème via une fonction de fitness.
+Ensuite, les meilleurs individus sont sélectionnés pour la reproduction, où le croisement et la mutation sont utilisés pour générer de nouvelles solutions.
+
+La programmation génétique est appliquée dans des domaines variés, tels que la création automatique de logiciels, l'optimisation de modèles d'apprentissage automatique, la conception de circuits électroniques, la génération de stratégies de jeu et la création d'algorithmes d'optimisation.
+
+=== Algorithmes évolutionnaires multi-objectifs (MOEA)
+
+Les MOEA sont une classe d'algorithmes évolutionnaires conçus pour résoudre des problèmes d'optimisation multi-objectifs.
+Contrairement aux problèmes d'optimisation mono-objectifs où un seul objectif est maximisé ou minimisé, les problèmes multi-objectifs comportent plusieurs critères contradictoires ou complémentaires à prendre en compte.
+Leur but est de trouver un ensemble de solutions optimales, appelées **Front de Pareto**, plutôt qu'une seule solution optimale.
+
+IMPORTANT: La frontière de Pareto, ou front de Pareto, est un concept fondamental dans l'optimisation multi-objectifs.
+Elle représente l'ensemble des solutions non dominées dans un problème où plusieurs critères ou objectifs sont pris en compte.
+Dans ce contexte, une solution est dite dominée si une autre solution est au moins aussi bonne dans tous les objectifs et strictement meilleure dans au moins un objectif.
+Les solutions non dominées forment donc ce qu'on appelle la frontière de Pareto.
+
+Le front de Pareto représente un ensemble de solutions où aucune ne peut être améliorée dans un objectif sans détériorer un autre objectif.
+
+=== Évolution Différentielle (ED)
+
+L'évolution différentielle (Differential Evolution) est un algorithme évolutionnaire utilisé principalement pour résoudre des problèmes d'optimisation continue dans des espaces de recherche de grande dimension.
+Il a été proposé pour la première fois par *Rainer Storn* et *Kenneth Price* en 1995.
+L'évolution différentielle est similaire aux autres algorithmes évolutionnaires, mais elle se distingue par ses opérateurs de mutation et de croisement spécifiques.
+
+L'idée principale de l'évolution différentielle est d'utiliser des différences vectorielles entre des individus (solutions candidates) pour générer de nouvelles solutions.
+L'algorithme repose sur trois opérateurs principaux : mutation, croisement et sélection.
+
+* *Mutation*: La mutation dans *ED* est réalisée en combinant les différences entre des solutions (ou individus) pour créer de nouvelles solutions candidates.
+Plus précisément, une différence entre deux solutions de la population est ajoutée à une troisième solution pour produire un individu mutant.
+stem:[v_i = x_{r1} + F \cdot (x_{r2} - x_{r3})]
+où :
+- stem:[v_i] est le vecteur mutant,
+- stem:[x_{r1}], stem:[x_{r2}], et stem:[x_{r3}] sont des solutions sélectionnées aléatoirement dans la population,
+- stem:[F] est un facteur de mutation qui contrôle l'amplitude de la mutation.
+
+* *Croisement (Recombinaison)* : L'opérateur de croisement combine la solution d'origine (parent) avec la solution mutante pour produire un nouvel individu.
+Le croisement est généralement réalisé avec un taux de croisement _CR_, qui détermine la probabilité qu'un élément de la solution mutante soit remplacée par l'élément correspondant de la solution de départ.
+
+* *Sélection* : Une fois que l'individu mutant (ou recombiné) a été généré, il est comparé à la solution originale, (c'est-à-dire son parent).
+Si la solution mutante est meilleure (selon la fonction de fitness), elle remplace la solution originale dans la population, sinon l'individu original est conservé.
+Cela permet de garantir que la population ne se détériore pas au fil des générations.
+
+La mutation dans *ED* repose sur une approche novatrice qui exploite les différences entre individus pour produire des solutions prometteuses.
+
+Cette méthode permet un compromis efficace entre exploration (recherche dans de nouvelles zones) et exploitation (raffinement des solutions actuelles).
+
+Les paramètres comme le facteur stem:[F] et la stratégie de mutation choisie jouent un rôle crucial dans la performance de l'algorithme.
+
+*Applications concrètes* : Optimisation des hyperparamètres dans les réseaux de neurones ou dans des systèmes où la solution est un vecteur continu, comme l'optimisation de la trajectoire d'un robot autonome en utilisant des données sensorielles.
+
+=== Algorithmes Mémétiques (AM)
+
+Les algorithmes mémétiques (ou algorithmes de la mémoire), parfois appelés métaheuristiques hybrides, sont une classe d'algorithmes d'optimisation qui combinent les algorithmes évolutionnaires avec des techniques locales de recherche (souvent appelées descentes locales ou méthodes de voisinage).
+L'objectif principal des algorithmes mémétiques est d'améliorer l'efficacité de la recherche en combinant la capacité d'exploration globale des algorithmes évolutionnaires avec la capacité d'exploitation locale des méthodes de recherche locale.
+
+=== Algorithmes Co-Évolutionnaires (AC-E)
+
+Ils s'inspirent du concept de coévolution biologique, où deux ou plusieurs populations évoluent simultanément en réponse aux pressions que chacune subit de l'autre.
+
+Ainsi, les individus d’une population sont souvent évalués non seulement en fonction de leur performance par rapport à des critères internes, mais aussi en tenant compte de leur interaction avec les individus d’autres populations.
+
+Ces algorithmes sont souvent utilisés dans des contextes où les solutions optimales sont dépendantes des interactions entre différents agents ou éléments.
+
+Cela peut être appliqué dans divers domaines, comme l'optimisation multi-objectifs, la résolution de problèmes combinatoires complexes, ou même dans les jeux et la robotique.
+
+Chaque type d'algorithme évolutionnaire est adapté à des types spécifiques de problèmes.
+
+Les AG et les MOEA sont parmi les plus polyvalents, tandis que des approches comme la programmation génétique ou l'évolution différentielle répondent à des besoins plus spécialisés.
+
+En fonction des contraintes et des objectifs, ces algorithmes peuvent être combinés ou modifiés pour maximiser leur efficacité dans le design ou l’optimisation.
+
+== Utilisation des algorithmes évolutionnaires dans le design
+
+Le design est un domaine avec lequel les algorithmes évolutionnaires ont montré leur efficacité.
+
+Dans le domaine de la fabrication, il est utilisé pour planifier les itinéraires des robots ou des machines, minimiser les temps de production et maximiser l'efficacité des opérations.
+
+Dans le secteur des télécommunications, il est utilisé pour optimiser les réseaux de communication, minimiser les temps de latence et maximiser la bande passante disponible.
+Et dans le domaine de la recherche opérationnelle, il est utilisé pour résoudre des problèmes de distribution.
+
+Dans le *design industriel*, les algorithmes évolutionnaires permettent de concevoir des produits innovants en optimisant des critères tels que la *résistance*, le *poids* ou le *coût*.
+Par exemple, ils peuvent être utilisés pour créer des formes aérodynamiques ou des composants mécaniques plus performants.
+
+En *architecture* et *design urbain*, les AE sont exploités pour générer des *plans de bâtiments* ou des *modèles urbains* conformes à des contraintes environnementales ou esthétiques.
+
+Dans le domaine du *design génératif*, ils facilitent l'exploration de concepts créatifs en produisant automatiquement des *formes artistiques* ou des *patrons visuels uniques*.
+
+Enfin, dans le *design d'interfaces* ou de systèmes, les AE permettent d'optimiser les *flux d'interaction* et de concevoir des **interfaces utilisateur** intuitives et efficaces, améliorant ainsi l'expérience utilisateur globale.
+
+
+== Java et les algorithmes évolutionnaires
+
+Le langage java est un choix populaire pour implémenter des algorithmes évolutionnaires en raison de sa simplicité, de sa robustesse, de ses performances, et de sa portabilité sur de nombreuses plateformes.
+
+Voici quelques bibliothèques et frameworks couramment utilisés dans ce domaine :
+
+=== JMetal
+https://jmetal.readthedocs.io[jMetal^] est une bibliothèque Java open source dédiée à l'optimisation multi-objectifs.
+Elle fournit une collection d'algorithmes évolutionnaires et des structures de données pour les utiliser de manière flexible et extensible.
+
+Plusieurs types d'algorithmes évolutionnaires et techniques d'optimisation multi-objectifs sont pris en charge.
+
+En plus des classiques algorithmes génétiques, stratégies d'évolution, programmation génétique, elle propose des algorithmes évolutionnaires multi-objectifs (MOEA) comme NSGA-IIfootnote:nsga[*NSGA-II (Non-dominated Sorting Genetic Algorithm II)* est un algorithme génétique multi-objectifs largement utilisé en recherche opérationnelle et en informatique.
+
+Il classe les solutions en différents “fronts de Pareto” en fonction de leur non-dominance et utilise une distance de regroupement pour maintenir la diversité des solutions.]
+, SPEA2footnote:spea2[*SPEA2 (Strength Pareto Evolutionary Algorithm 2)* est un algorithme évolutionnaire conçu pour résoudre des problèmes d'optimisation multi-objectifs.
+ Il vise à trouver un ensemble de solutions qui approchent le front de Pareto du problème, c'est-à-dire l'ensemble des solutions non dominées où aucune solution n'est strictement meilleure qu'une autre dans tous les objectifs.]
+, IBEAfootnote:ibea[*IBEA (Indicator-Based Evolutionary Algorithm)* est un algorithme évolutionnaire conçu pour résoudre des problèmes d'optimisation multi-objectifs.
+ Il se distingue des autres algorithmes multi-objectifs en utilisant des indicateurs pour guider la recherche de solutions plutôt que de se baser uniquement sur les principes de dominance de Pareto.
+ L'IBEA est particulièrement adapté aux problèmes complexes où il est difficile de définir une fonction de dominance simple, et il a pour objectif d'optimiser à la fois la convergence (proximité de Front de Pareto) et la diversité (répartition des solutions)] et autres.
+
+=== MOEA Framework
+https://www.moeaframework.org[MOEA Framework^] est une bibliothèque Java open-source conçue pour l'optimisation multi-objectifs utilisant des algorithmes évolutionnaires.
+Elle est très populaire dans la communauté de la recherche et de l’industrie.
+Le framework offre une large gamme d'algorithmes d'optimisation multi-objectifs et des outils pour l’évaluation, la gestion et la visualisation des résultats.
+
+MOEA offre plusieurs algorithmes, y compris des versions avancées de NSGA-II, SPEA2, NSGA-III, et d'autres techniques populaires d'optimisation.
+
+Le framework est conçu pour être extensible et personnalisable, permettant aux utilisateurs de définir leurs propres problèmes, algorithmes et opérateurs d'évolution.
+
+=== Opt4J
+https://github.com/sdarg/opt4j[Opt4J^] est une bibliothèque Java pour l'optimisation basée sur les `métaheuristiques`, particulièrement adaptée pour la recherche.
+Elle offre une intégration modulaire, ce qui permet de combiner différents algorithmes pour résoudre des problèmes d'optimisation.
+
+=== ECJ
+https://github.com/GMUEClab/ecj[ECJ^] (Evolutionary Computation in Java) est un système de calcul évolutionnaire écrit en Java.
+
+Il a été conçu pour être extrêmement flexible, permettant aux utilisateurs de configurer presque toutes les classes et leurs paramètres dynamiquement à l'exécution à l'aide d'un fichier de paramètres fourni par l'utilisateur.
+Les structures du système sont organisées de manière à être facilement modifiables tout en maintenant une grande efficacité.
+
+ECJ est développé par l'ECLab (Evolutionary Computation Laboratory) de l'Université George Mason.
+ECJ possède un projet "frère" appelé MASON, un système de simulation multi-agents conçu pour bien s'intégrer avec ECJ.
+
+== Algorithmes évolutionnaires au cœur des architectures cloud
+
+Le cloud computing a révolutionné la manière dont les entreprises gèrent leurs infrastructures informatiques, mais il introduit également de la complexité et des coûts difficiles à prévoir.
+
+Le *FinOps* émerge comme une réponse pour aligner les décisions financières, techniques et environnementales, permettant non seulement de maîtriser les dépenses, mais aussi de réduire l’empreinte carbone.
+Cette combinaison est essentielle pour garantir une utilisation durable et efficiente du cloud dans un monde de plus en plus dépendant de l'informatique.
+
+Face à un manque de moyens techniques et d'outils fiables, nous nous retrouvons toujours face une situation avec laquelle il est très difficile de réaliser d'optimiser de grandes applications basées sur une architecture microservices.
+
+Pour mieux comprendre l’application des algorithmes évolutionnaires dans les architectures cloud, nous allons examiner un cas pratique.
+
+=== Cas d'utilisation : Optimisation des architectures Kafka dans un environnement cloud
+
+Dans un ou plusieurs clusters Kafka composés de plusieurs brokers par cluster, avec une infrastructure de communication cellulaire _5G_, des milliers de capteurs IoT, une diversité d'API utilisant différents protocoles, ainsi que des milliers de microservices et d'applications, nous sommes confrontés à un problème d'optimisation particulièrement complexe
+
+NOTE: Ce type d'architecture n'est pas une hypothèse théorique, mais une réalité dans le domaine du cloud computing et de l'IoT.
+Par exemple, une ville intelligente connecte des milliers de capteurs IoT pour surveiller la qualité de l'air, la circulation, ou encore la gestion des déchets.
+
+La question est la suivante :
+
+====
+Comment concevoir une architecture optimale pour nos clusters *Kafka* et déterminer la configuration idéale des différents brokers ainsi que la taille des machines (*RAM*, *CPU*, *DISK*, *Network* ...) à utiliser pour chaque nœud pour minimiser la latence et maximiser le débit ?
+====
+
+L'objectif est de permettre à nos microservices d'échanger des données en temps réel tout en respectant des contraintes telles que la scalabilité, le temps de réponse et les coûts.
+
+=== Résoudre le problème avec une approche traditionnelle
+Une approche classique consisterait à tester manuellement toutes les architectures et leurs configurations possibles.
+Ce qui doit être extrêmement coûteux en temps et en ressources.
+Une approche intuitive serait de : prendre une architecture arbitraire `A1` avec une configuration des composants et service `C1`, effectuer un test réel et attendre les résultats après un certain délai. Ensuite, réaliser un benchmarking pour passer à une configuration `C2`, ce qui pourrait  impliquer des modifications telles que la taille des machines, le nombre de brokers, le nombre de partitions, etc.
+Ce processus serait ensuite répété pour d'autres architectures, comme `A2`, `A3`, et ainsi de suite.
+
+Cependant, avec 10 brokers pouvant avoir 10 configurations possibles, cela donne un total de stem:[10^{10}] configurations.
+Tester un tel volume est impraticable, même avec des outils d'automatisation, en raison du temps requis et de la complexité des paramètres à considérer (latence réseaux, partitions, charge, mémoire, CPU, disponibilité, etc.)
+
+=== NSGA-II : Une approche évolutionnaire pour l’optimisation multi-objectifs
+Pour résoudre ce problème efficacement, nous pouvons utiliser un des algorithmes communément utilisés dans ce contexte qui est *NSGA-II (Non-dominated Sorting Genetic Algorithm II)*, une méthode bien adaptée aux problèmes d'optimisation multi-objectifs.
+
+Cet algorithme est conçu pour trouver des solutions optimales en équilibrant plusieurs objectifs contradictoires, tels que :
+
+- Minimiser la latence.
+- Maximiser les performances globales.
+- Réduire les coûts.
+- Maximiser la scalabilité.
+
+Tout en simulant les différentes configurations possibles, *NSGA-II* explore l'espace des solutions pour trouver un ensemble de solutions optimales.
+
+==== Étapes principales de NSGA-II :
+
+. **Initialisation** : Générer une population initiale de configurations aléatoires,
+et pour exemple :
+- Configuration 1 : `3` machines de `50GB` de RAM, `4` CPU de `16` cœurs, `100GB` de disque,
+`1GB/s` de réseau.
+Concernant la configuration de Kafka, chaque cluster inclut 10 brokers, avec `3` partitions par topic.
+L’ensemble est conçu pour gérer 100 topics.
+- Configuration 2 : 1 Machine puissante de `100GB` de RAM, `8` CPU de `32` cœurs, `500GB` de disque,
+`10GB/s` de réseau.
+Du côté de la configuration Kafka, le cluster est organisé avec 5 brokers et 5 partitions par topic.
+- Configuration 3 : 5 petites machines de `4` CPU chacune, `16GB` de RAM,
+`1GB/s` de réseau.
+La configuration Kafka prévoit 20 brokers par cluster, avec 2 partitions par topic.
+Pour le stockage des données, une solution de stockage sur le cloud est utilisée.
+. **Évaluation** : Mesurer les performances de chaque configuration selon les objectifs (latence, débit, etc.)
+Nous gardons les configurations ayant les meilleures performances tout en essayant de diversifier les solutions.
+Chaque configuration sera évaluée en fonction des objectifs définis.
+. **Tri par domination** : Classer les solutions en fonction de leur non-domination.
+Les solutions qui ne sont pas surpassées sur tous les objectifs appartiennent au "front de Pareto".
+. **Crowding distance** : Mesurer la diversité des solutions dans chaque rang de domination pour favoriser une exploration équilibrée.
+. **Opérations génétiques** :
+- Sélection des solutions les plus prometteuses.
+- Recombinaison (croisement) pour générer de nouvelles configurations.
+- Mutation : Nous ajoutons des modifications aléatoires, comme réduire ou augmenter la quantité de RAM,
+ajouter un autre type de machine ou modifier les règles de mise à l'échelle automatique.
+Par exemple, une configuration avec 3 machines moyennes pourrait être mutée pour inclure une mise à l'échelle automatique en fonction de la charge.
+. **Itérations** : Répéter le processus sur plusieurs générations pour faire converger la population vers une solution optimale.
+
+==== Avantages de NSGA-II :
+En utilisant NSGA-II, nous pouvons naviguer efficacement dans l'immense espace des configurations possibles et
+découvrir des solutions innovantes et performantes, tout en répondant aux exigences multi-objectifs de notre système.
+
+- **Front de Pareto** : permet d'obtenir un ensemble de solutions optimales, laissant aux décideurs le choix parmi plusieurs compromis entre les objectifs.
+
+- **Efficacité computationnelle** : réduit la complexité grâce à des mécanismes optimisés comme le tri rapide des solutions dominées.
+
+- **Diversité des solutions** : garantit une exploration équilibrée de l'espace des configurations.
+
+- **Adaptabilité** : peut être appliqué à des problèmes complexes avec des objectifs multiples et contradictoires.
+
+
+== Conclusion
+Les algorithmes évolutionnaires offrent une approche puissante pour résoudre des problèmes d'optimisation complexes qui sont autrement insolubles avec des méthodes traditionnelles.
+
+En imitant les processus évolutifs naturels, ces algorithmes peuvent explorer efficacement de vastes espaces de recherche et trouver des solutions quasi-optimales en un temps raisonnable.
+
+Leurs applications couvrent divers domaines, allant du design industriel et de l'urbanisme à l'optimisation des architectures cloud.
+
+Dans le contexte des architectures cloud, les algorithmes évolutionnaires comme `NSGA-II` fournissent un cadre robuste pour optimiser les problèmes multi-objectifs, tels que la minimisation de la latence et des coûts tout en maximisant les performances et la scalabilité.
+
+Cette approche améliore non seulement l'efficacité des infrastructures cloud, mais soutient également des opérations durables et rentables.
+
+Avec l’évolution rapide des technologies, l’intégration des algorithmes évolutionnaires dans les processus de conception et d’optimisation est appelée à se généraliser.
+
+Ces outils stimuleront l'innovation et permettront le développement de systèmes toujours plus sophistiqués, adaptatifs et résilients.
+
+
+En exploitant pleinement leur potentiel, nous serons en mesure de relever certains des défis les plus complexes de notre époque, ouvrant ainsi la voie à des solutions véritablement révolutionnaires qui redéfiniront l’avenir du design et de l’ingénierie.
+
+[bibliography]
+== Bibliographie
+* E.L. Lawler, J.K. Lenstra, A.H.G. Rinnooy Kan, & D.B Shmoys, *The Traveling Salesman Problem: A Guided Tour of Combinatorial Optimization*, Wiley, 1985
+* A.E. Eiben, & J.E. Smith, *Introduction to Evolutionary Computing*, Springer, 2003.
+* M. Garey and D. Johnson, *Computers and Intractability. A Guide to the Theory of NP-Completeness.*, Freemann, San Francisco, 1979.
+* C.M. Papadimitriou, *Computational Complexity*, Addison-Wesley, Reading, Massachusetts, 1994.
+* D.E. Goldberg, *Genetic Algorithms in Search, Optimization, and Machine Learning*, Addison-Wesley, 1989.
+* F. Neumann and C.~Witt, *Bioinspired Computation in Combinatorial Optimization: Algorithms and Their Computational Complexity*, Natural Computing Series, 2010.
