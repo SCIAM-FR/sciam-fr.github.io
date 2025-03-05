@@ -50,7 +50,8 @@ Imaginez les algorithmes évolutionnaires comme un processus de développement e
 Chaque version est testée, puis les meilleures configurations sont sélectionnées, ajustées et combinées pour former une nouvelle génération améliorée.
 De la même façon que le MVP évolue par étapes en fonction du retour des utilisateurs, les algorithmes évolutionnaires évaluent, adaptent et optimisent chaque itération pour s’approcher de la solution optimale.
 
-Évidemment, au contraire du MVP, les algorithmes évolutionnaires ne sont pas tenus de produire une solution immédiatement _viable_ ou utilisable à chaque itération.
+Évidemment, au contraire du MVP, les algorithmes évolutionnaires ne sont pas tenus de produire une solution immédiatement viable ou utilisable à chaque itération.
+
 
 Ils évoluent de manière itérative afin d'explorer l'espace de recherche pour converger progressivement vers des solutions optimales.
 Dans ce contexte, on utilise un critère de fitness pour évaluer et comparer les solutions, permettant de sélectionner et d'améliorer les meilleures configurations à chaque génération, même si elles ne sont pas directement applicables dans l’immédiat.
