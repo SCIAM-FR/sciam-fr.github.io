@@ -328,7 +328,8 @@ découvrir des solutions innovantes et performantes, tout en répondant aux exig
 
 - **Front de Pareto** : permet d'obtenir un ensemble de solutions optimales, laissant aux décideurs le choix parmi plusieurs compromis entre les objectifs.
 
-- **Efficacité computationnelle** : Réduit la complexité grâce à des mécanismes optimisés comme le tri rapide des solutions dominées.
+- **Efficacité computationnelle** : réduit la complexité grâce à des mécanismes optimisés comme le tri rapide des solutions dominées.
+
 - **Diversité des solutions** : Garantit une exploration équilibrée de l'espace des configurations.
 - **Adaptabilité** : Peut être appliqué à des problèmes complexes avec des objectifs multiples et contradictoires.
 
