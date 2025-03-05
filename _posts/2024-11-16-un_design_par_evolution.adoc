@@ -216,7 +216,8 @@ Elle fournit une collection d'algorithmes évolutionnaires et des structures de 
 
 Plusieurs types d'algorithmes évolutionnaires et techniques d'optimisation multi-objectifs sont pris en charge.
 
-En plus des classiques algorithmes génétiques, stratégies d'évolution, programmation génétique, elle propose des algorithmes évolutionnaires multi-objectifs (MOEA) comme NSGA-IIfootnote:nsga[*NSGA-II (Non-dominated Sorting Genetic Algorithm II)* est un algorithme génétique multi-objectifs largement très utilisé en recherche opérationnelle et en informatique.
+En plus des classiques algorithmes génétiques, stratégies d'évolution, programmation génétique, elle propose des algorithmes évolutionnaires multi-objectifs (MOEA) comme NSGA-IIfootnote:nsga[*NSGA-II (Non-dominated Sorting Genetic Algorithm II)* est un algorithme génétique multi-objectifs largement utilisé en recherche opérationnelle et en informatique.
+
 Il classe les solutions en différents “fronts de Pareto” en fonction de leur non-dominance et utilise une distance de regroupement pour maintenir la diversité des solutions.]
 , SPEA2footnote:spea2[*SPEA2 (Strength Pareto Evolutionary Algorithm 2)* est un algorithme évolutionnaire conçu pour résoudre des problèmes d'optimisation multi-objectifs.
  Il vise à trouver un ensemble de solutions qui approchent le front de Pareto du problème, c'est-à-dire l'ensemble des solutions non dominées où aucune solution n'est strictement meilleure qu'une autre dans tous les objectifs.]
