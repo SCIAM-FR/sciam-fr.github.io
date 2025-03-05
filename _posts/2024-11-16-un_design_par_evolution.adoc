@@ -73,7 +73,8 @@ Les plus courants sont les algorithmes génétiques, les stratégies d’évolut
 
 == Catégories des Algorithmes Évolutionnaires
 
-=== Algorithmes génétiques (AG)
+=== Algorithmes Génétiques (AG)
+
 
 Les algorithmes génétiques représentent une catégorie des algorithmes évolutionnaires, inspirés par l'évolution biologique des organismes vivants.
 Ils traduisent les mécanismes de l'évolution en un processus computationnel capable de résoudre des problèmes complexes et d'identifier des solutions adaptées.
