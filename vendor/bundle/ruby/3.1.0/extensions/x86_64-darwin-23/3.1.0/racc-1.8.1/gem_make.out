@@ -1,0 +1,15 @@
+current directory: /Users/rickenbazolo/Documents/shared/sciam/blog.sciam.fr/vendor/bundle/ruby/3.1.0/gems/racc-1.8.1/ext/racc/cparse
+/Users/rickenbazolo/.rbenv/versions/3.1.2/bin/ruby -I /Users/rickenbazolo/.rbenv/versions/3.1.2/lib/ruby/3.1.0 -r ./siteconf20250322-48999-ounpp9.rb extconf.rb
+creating Makefile
+
+current directory: /Users/rickenbazolo/Documents/shared/sciam/blog.sciam.fr/vendor/bundle/ruby/3.1.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= clean
+
+current directory: /Users/rickenbazolo/Documents/shared/sciam/blog.sciam.fr/vendor/bundle/ruby/3.1.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\=
+compiling cparse.c
+linking shared-object racc/cparse.bundle
+
+current directory: /Users/rickenbazolo/Documents/shared/sciam/blog.sciam.fr/vendor/bundle/ruby/3.1.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= install
+/usr/bin/install -c -m 0755 cparse.bundle ./.gem.20250322-48999-361ys0/racc

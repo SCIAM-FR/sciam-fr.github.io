@@ -1,0 +1,21 @@
+current directory: /Users/rickenbazolo/Documents/shared/sciam/blog.sciam.fr/vendor/bundle/ruby/3.1.0/gems/json-2.10.2/ext/json/ext/parser
+/Users/rickenbazolo/.rbenv/versions/3.1.2/bin/ruby -I /Users/rickenbazolo/.rbenv/versions/3.1.2/lib/ruby/3.1.0 -r ./siteconf20250322-48999-v4mv37.rb extconf.rb
+checking for rb_enc_interned_str() in ruby.h... yes
+checking for rb_hash_new_capa() in ruby.h... no
+checking for rb_hash_bulk_insert() in ruby.h... yes
+checking for rb_category_warn() in ruby.h... yes
+checking for strnlen() in string.h... yes
+checking for whether -std=c99 is accepted as CFLAGS... yes
+creating Makefile
+
+current directory: /Users/rickenbazolo/Documents/shared/sciam/blog.sciam.fr/vendor/bundle/ruby/3.1.0/gems/json-2.10.2/ext/json/ext/parser
+make DESTDIR\= clean
+
+current directory: /Users/rickenbazolo/Documents/shared/sciam/blog.sciam.fr/vendor/bundle/ruby/3.1.0/gems/json-2.10.2/ext/json/ext/parser
+make DESTDIR\=
+compiling parser.c
+linking shared-object json/ext/parser.bundle
+
+current directory: /Users/rickenbazolo/Documents/shared/sciam/blog.sciam.fr/vendor/bundle/ruby/3.1.0/gems/json-2.10.2/ext/json/ext/parser
+make DESTDIR\= install
+/usr/bin/install -c -m 0755 parser.bundle ./.gem.20250322-48999-t3197g/json/ext

@@ -1,0 +1,16 @@
+current directory: /Users/rickenbazolo/Documents/shared/sciam/blog.sciam.fr/vendor/bundle/ruby/3.1.0/gems/eventmachine-1.2.7/ext/fastfilereader
+/Users/rickenbazolo/.rbenv/versions/3.1.2/bin/ruby -I /Users/rickenbazolo/.rbenv/versions/3.1.2/lib/ruby/3.1.0 -r ./siteconf20250322-48999-ouxsai.rb extconf.rb
+creating Makefile
+
+current directory: /Users/rickenbazolo/Documents/shared/sciam/blog.sciam.fr/vendor/bundle/ruby/3.1.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make DESTDIR\= clean
+
+current directory: /Users/rickenbazolo/Documents/shared/sciam/blog.sciam.fr/vendor/bundle/ruby/3.1.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make DESTDIR\=
+compiling mapper.cpp
+compiling rubymain.cpp
+linking shared-object fastfilereaderext.bundle
+
+current directory: /Users/rickenbazolo/Documents/shared/sciam/blog.sciam.fr/vendor/bundle/ruby/3.1.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make DESTDIR\= install
+/usr/bin/install -c -m 0755 fastfilereaderext.bundle ./.gem.20250322-48999-a936z5

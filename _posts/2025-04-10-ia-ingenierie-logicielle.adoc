@@ -1,0 +1,76 @@
+= Structuration de l’intelligence artificielle par l’ingénierie logicielle : apports des design patterns à l’intégration des LLM
+:page-navtitle: Structuration de l’intelligence artificielle par l’ingénierie logicielle : apports des design patterns à l’intégration des LLM
+:page-excerpt: Explorons l’apport des design patterns à l’intégration des modèles d’IA pour des systèmes intelligents.
+:layout: post
+:author: rickenbazolo
+:page-tags: [Java, Ingénierie logicielle, Design Patterns, Intelligence Artificielle appliquée, Architecture logicielle, Programmation et bonnes pratiques]
+:docinfo: shared-footer
+:page-vignette: ingenieurie_logicielle_ia.png
+:page-vignette-licence: 'Image générée par l'IA'
+:page-liquid:
+:showtitle:
+:page-categories: software llm
+
+L’intelligence artificielle est désormais bien plus qu’une tendance, elle s’intègre au cœur des systèmes logiciels. Mais cette intégration ne se fait pas sans poser des défis techniques majeurs. Comment rendre un système capable de s’adapter à des composants évolutifs, parfois imprévisibles, comme les modèles d’IA ? C’est là que l’ingénierie logicielle entre en jeu.
+
+Dans cet article, nous allons explorer deux patterns design, en particulier *Strategy* et *Observer*, pour structurer proprement l’intégration des modèles d’intelligence artificielle dans vos systèmes.
+
+== Intégrer des LLM dans des applications métier, un défi sous-estimé
+
+Content
+
+== Pourquoi l'ingénierie logicielle est essentielle à l’IA métier
+
+Content
+
+== L’ingénierie logicielle au service de l’IA générative
+
+Content (L’ingénierie logicielle permet de structurer l’intégration d’un LLM en respectant des principes comme la modularité, la testabilité, etc.)
+
+== Strategy Pattern, abstraire et choisir dynamiquement ses LLM
+
+Content (abstraire l’utilisation de LLM selon le contexte métier)
+
+=== Problème
+
+Content
+
+=== Solution
+
+Content
+
+=== Exemple
+
+Content code and use case
+
+== Observer Pattern, orchestrer le cycle de vie des composants IA
+
+Content (Quand un modèle est mis à jour, les systèmes de cache, d’évaluation ou d’interface utilisateur doivent réagir sans couplage direct.)
+
+=== Problème
+
+Content
+
+=== Solution
+
+Content
+
+=== Exemple
+
+Content code and use case
+
+== Structurer l’intégration des LLM dans une architecture métier
+
+Content, bonnes pratiques et exemple d'archi
+
+== Autres patterns utiles pour les LLM
+
+Content - Factory, Command, Decorator, Facade
+
+== Étendre la structuration IA vers des pipelines et des agents
+
+Content, pipelines IA, Agents IA orchestrés, RAG
+
+== Conclusion
+
+L’IA générative a besoin d’ingénierie, pas juste de prompts (complete)
