@@ -71,7 +71,7 @@ layout: default
                           author.name }}</a></span>
                       <div class="flex">
                         <span class="text-base font-normal text-navysciam">{{ post.date | date: "%d/%m/%Y" }}</span>
-                        <p class="text-navysciam pl-2">• {{ post.content | reading_time | pluralize: "min" }} de lecture
+                        <p class="text-navysciam pl-2">• {% reading_time post.content %} de lecture
                         </p>
                       </div>
                     </div>
@@ -184,7 +184,7 @@ layout: default
                             <a href="{{ '/author/' | append: post.author | append: '/index.html' | relative_url }}">{{ author.name }}</a></span>
                           <div class="flex">
                             <span class="text-base font-normal text-navysciam">{{ post.date | date: "%d/%m/%Y" }}</span>
-                            <p class="text-navysciam pl-2">• {{ post.content | reading_time | pluralize: "min" }} de lecture</p>
+                            <p class="text-navysciam pl-2">• {% reading_time post.content %} de lecture</p>
                           </div>
                         </div>
                       </div>
@@ -284,7 +284,7 @@ layout: default
                               author.name }}</a></span>
                           <div class="flex">
                             <span class="text-base font-normal text-navysciam">{{ post.date | date: "%d/%m/%Y" }}</span>
-                            <p class="text-navysciam pl-2">• {{ post.content | reading_time | pluralize: "min" }} de lecture</p>
+                            <p class="text-navysciam pl-2">• {% reading_time post.content %} de lecture</p>
                           </div>
                         </div>
                       </div>

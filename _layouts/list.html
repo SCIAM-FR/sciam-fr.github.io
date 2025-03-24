@@ -98,8 +98,7 @@ pagination:
               <div class="flex">
                 <span class="text-base font-normal text-navysciam">{{ post.date | date: "%d/%m/%Y" }}</span>
                 {% unless post.vimeo-id %}
-                <p class="text-navysciam pl-2">• {{ post.content | reading_time | pluralize: "min" }} de
-                  lecture</p>
+                <p class="text-navysciam pl-2">• {% reading_time post.content %} de lecture</p>
 		{% endunless %}
               </div>
             </div>
