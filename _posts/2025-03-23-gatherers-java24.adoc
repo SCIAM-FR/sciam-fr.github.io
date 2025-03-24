@@ -54,7 +54,7 @@ Stream.of(0, 1, 2, 3) <1>
 <3> Opération terminale
 
 Bien que nombreuses, les opérations intermédiaires proposées par l'API ne répondent pas à tous les cas d'usage.
-Supposons que nous souhaitions traiter séquentiellement un flux composé de paires successives de `String` (nom, prénom) pour reconstruire une liste d'utilisateurs en mappant sur le type `record Hero(String firstName, String lastName) {}` :
+Supposons que nous souhaitions traiter séquentiellement un flux composé de paires successives de `String` (prénom, nom) pour reconstruire une liste de personnages en mappant sur le type `record Hero(String firstName, String lastName) {}` :
 
 [source, java]
 ----
