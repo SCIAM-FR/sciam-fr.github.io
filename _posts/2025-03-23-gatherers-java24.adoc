@@ -68,7 +68,7 @@ L'utilisation d'un stream pour un tel traitement devient inadaptée : une itéra
 == La pièce manquante du puzzle Stream
 
 L'API Stream propose de nombreuses opérations terminales telles que `forEach()`, `findFirst()`, `count()`, ... répondant chacune à un besoin courant précis.
-Il est également possible de définir n'importe quelle opération terminale en définissant sa propre implémentation de `Collector<? super T, A, R>` et en la fournissant comme paramètre de l'opération terminale `collect()`.
+Il est également possible de définir ses propres opérations terminales en définissant sa propre implémentation de `Collector<? super T, A, R>` et en la fournissant comme paramètre de l'opération terminale `collect()`.
 La classe `Collectors` vient aussi, à mi-chemin, enrichir l'API en fournissant diverses fabriques pour créer des instances personnalisées de `Collector` avec par exemple `Collectors::groupingBy` ou `Collectors::joining`.
 
 Néanmoins, l'API ne proposait jusqu'alors pas de richesse équivalente pour ce qui est des opérations intermédiaires, en ne fournissant pas de possibilité de créer ses implémentations personnalisées.
