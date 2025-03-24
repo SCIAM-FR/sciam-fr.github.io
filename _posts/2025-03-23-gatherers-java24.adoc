@@ -12,7 +12,7 @@
 
 == Un peu d'histoire
 
-Alors que Java 8 sortait il y a un peu plus de 11 ans en mars 2014, il apportait une fonctionnalité qui allait significativement impacter la façon dont on allait écrire notre code grâce à l'API Stream et aux expressions lambdas.
+Alors que Java 8 sortait il y a un peu plus de onze ans en mars 2014, il apportait une fonctionnalité qui allait significativement impacter la façon dont nous écrivons notre code grâce à l'API Stream et aux expressions lambdas.
 Avec son approche fonctionnelle, l'API Stream offre une manière élégante et expressive de réaliser des traitements sur des flux de données.
 
 Le JDK 24 vient enrichir l'API Stream avec le concept de "gatherer".
@@ -22,7 +22,7 @@ Le JDK 24 vient enrichir l'API Stream avec le concept de "gatherer".
 Avant de plonger dans le vif du sujet, rappelons qu'un Stream repose sur 3 éléments clés :
 
 * Une source de données
-* De 0 à n opérations intermédiaires
+* De `0` à `n` opérations intermédiaires
 * Une unique opération terminale
 
 La *source* du Stream peut être construite de diverses manières, par exemple :
@@ -53,7 +53,7 @@ Stream.of(0, 1, 2, 3) <1>
 <2> Opération intermédiaire
 <3> Opération terminale
 
-Bien que nombreuses, les opérations intermédiaires proposées par l'API ne répondent pas à tous les cas d'usages.
+Bien que nombreuses, les opérations intermédiaires proposées par l'API ne répondent pas à tous les cas d'usage.
 Supposons que nous souhaitions traiter séquentiellement un flux composé de paires successives de `String` (nom, prénom) pour reconstruire une liste d'utilisateurs en mappant sur le type `record Hero(String firstName, String lastName) {}` :
 
 [source, java]
@@ -67,8 +67,8 @@ L'utilisation d'un stream pour un tel traitement devient inadaptée : une itéra
 
 == La pièce manquante du puzzle Stream
 
-L'API Stream propose de nombreuses opérations terminales telles que `forEach()`, `findFirst()`, `count()`, ... répondant chacune à un besoin courant spécifique.
-Il est également possible de définir n'importe quelle opération terminale en définissant sa propre implémentation de `Collector<? super T, A, R> collector` et en la fournissant comme paramètre de l'opération terminale `collect()`.
+L'API Stream propose de nombreuses opérations terminales telles que `forEach()`, `findFirst()`, `count()`, ... répondant chacune à un besoin courant précis.
+Il est également possible de définir n'importe quelle opération terminale en définissant sa propre implémentation de `Collector<? super T, A, R>` et en la fournissant comme paramètre de l'opération terminale `collect()`.
 La classe `Collectors` vient aussi, à mi-chemin, enrichir l'API en fournissant diverses fabriques pour créer des instances personnalisées de `Collector` avec par exemple `Collectors::groupingBy` ou `Collectors::joining`.
 
 Néanmoins, l'API ne proposait jusqu'alors pas de richesse équivalente pour ce qui est des opérations intermédiaires, en ne fournissant pas de possibilité de créer ses implémentations personnalisées.
@@ -378,7 +378,7 @@ L'API propose quelques outils pour optimiser le traitement des streams utilisant
 === La méthode `Downstream::isRejecting`
 
 L'interface `Downstream` fournit la méthode `boolean isRejecting()` qui indique si le _downstream_ continue d'accepter de nouveaux éléments ou non.
-Comme son nom l'indique, si l'invocation de la méthode renvoie `true`, le _downstream_ n'accepte plus de nouveau élément.
+Comme son nom l'indique, si l'invocation de la méthode renvoie `true`, le _downstream_ n'accepte plus de nouvel élément.
 
 Cette information peut être exploitée par un gatherer pour s'éviter de réaliser des traitements qui s'avéreraient inutiles, puisque le _downstream_ rejette tout nouvel élément qui lui serait transmis.
 
@@ -398,7 +398,7 @@ Cette information peut être exploitée par un gatherer pour s'éviter de réali
 
 === La fabrique `Integrator::ofGreedy`
 
-L'interface `Integrator` fournit la fabrique `ofGreedy()` permettant d'obtenir une instance d'_integrator_ conçu pour consommer l'intégralité de son input (si tenté que le _downstream_ continue d'accepter des éléments). +
+L'interface `Integrator` fournit la fabrique `ofGreedy()` permettant d'obtenir une instance d'_integrator_ conçu pour consommer l'intégralité de ses données d'entrée (si l'en est que le _downstream_ continue d'accepter des éléments). +
  Elle accepte une instance de `Greedy` qui étend simplement `Integrator` : `interface Greedy<A, T, R> extends Integrator<A, T, R> {}`.
 
 On peut donc l'utiliser en lui fournissant une expression lambda de la même manière que pour définir notre _integrator_ :
