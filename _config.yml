@@ -66,7 +66,6 @@ plugins:
   - jekyll-auto-authors
   - jekyll-asciidoc
   - asciidoctor-diagram
-  - liquid_reading_time
   - liquid_pluralize
   - jekyll-feed
   - jekyll-sitemap
