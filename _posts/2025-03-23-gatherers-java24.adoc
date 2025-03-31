@@ -399,7 +399,21 @@ Cette information peut être exploitée par un gatherer pour s'éviter de réali
 === Le retour de la méthode `Downstream::push`
 
 La méthode `Downstream::push` renvoie un booléen : si sa valeur est `false`, alors le _downstream_ n'accepte plus de nouveaux éléments.
-On pourra l'utiliser de manière analogue à `isRejecting()`.
+On pourra l'utiliser de manière analogue à `isRejecting()` et ainsi améliorer le code précédent :
+
+.Utilisation de `isRejecting()`
+[source,java]
+----
+(state, element, downstream) -> {
+  if (downstream.isRejecting()) {
+    // Le downstream n'accepte plus de nouveaux éléments
+    return false;
+  }
+  Object result = process(element);
+  return downstream.push(result); <1>
+}
+----
+<1> Utilisation du retour de la méthode `push()`
 
 On peut retenir le fonctionnement suivant :
 
@@ -587,8 +601,7 @@ Gatherer<Integer, AtomicInteger, Integer> limiter = Gatherer.ofSequential(
     if (state.getAndIncrement() >= 3) {
       return false;
     }
-    downstream.push(element);
-    return true;
+    return downstream.push(element);
   }
 );
 
