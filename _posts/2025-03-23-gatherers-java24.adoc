@@ -59,7 +59,7 @@ Supposons que nous souhaitions traiter séquentiellement un flux composé de pai
 [source, java]
 ----
 record Hero(String firstName, String lastName) {}
-Stream.of("Luke", "Skywalker", "Han", "Solo")
+Stream.of("Duke", "Skydancer", "Hank ", "Solau")
   .xxx // Besoin d'une opération intermédiaire personnalisée
 ----
 
@@ -207,7 +207,7 @@ Gatherer<String, State, Hero> heroGatherer = Gatherer.ofSequential( <2>
   }
 );
 
-Stream.of("Luke", "Skywalker", "Han", "Solo")
+Stream.of("Duke", "Skydancer", "Hank", "Solau")
   .gather(heroGatherer)
   .forEach(System.out::println);
 ----
@@ -219,8 +219,8 @@ Stream.of("Luke", "Skywalker", "Han", "Solo")
 
 .Affichage dans la console
 ----
-Hero[firstName=Luke, lastName=Skywalker]
-Hero[firstName=Han, lastName=Solo]
+Hero[firstName=Duke, lastName=Skydancer]
+Hero[firstName=Hank, lastName=Solau]
 ----
 
 == L'utilisation d'un `finisher`
@@ -257,16 +257,16 @@ Gatherer<String, List<String>, Hero> heroGatherer = Gatherer.ofSequential(
 
 .Affichage dans la console
 ----
-Hero[firstName=Luke, lastName=Skywalker]
-Hero[firstName=Han, lastName=Solo]
-Hero[firstName=Lando, lastName=null]
+Hero[firstName=Duke, lastName=Skydancer]
+Hero[firstName=Hank, lastName=Solau]
+Hero[firstName=Rando, lastName=null]
 ----
 
 == L'utilisation d'un `combiner`
 
-Une des marques de fabrique de la trilogie Star Wars est la parallélisation des événements.
-Pendant que Luke suit les enseignements de maître Yoda sur Dagobah, Han Solo et ses compagnons fuient l'empire et recherchent de l'aide auprès de Lando Calrissian.
-Il est désormais temps de rassembler nos héros avant d'affronter Dark Vador, et c'est bien d'un `combiner` dont ils vont avoir besoin.
+Une des marques de fabrique de la trilogie _Star Gatherers_ est la parallélisation des événements.
+Pendant que Duke Skydancer suit les enseignements de Maître Yoga sur la planète Gadobah, Hank Solau et ses compagnons fuient l'empire et recherchent de l'aide auprès de Rando Galrissian.
+Il est désormais temps de rassembler nos héros avant d'affronter Dork Vapor, et c'est bien d'un `combiner` dont ils vont avoir besoin.
 
 En étoffant notre type `Hero` d'un attribut `enum Strength`, utilisons un gatherer pour les regrouper par `Strength` afin de générer des `Category`.
 
@@ -277,16 +277,16 @@ enum Strength { LOW, MID, HIGH }
 record Hero(String firstName, String lastName, Strength strength) {}
 record Category(Strength strength, List<String> firstNames) {}
 Stream<Hero> heroes = Stream.of(
-  new Hero("Luke", "Skywalker", Strength.HIGH),
-  new Hero("Leia", "Organa", Strength.HIGH),
-  new Hero("Han", "Solo", Strength.MID),
-  new Hero("Obi-Wan", "Kenobi", Strength.HIGH),
-  new Hero("Yoda", "", Strength.HIGH),
-  new Hero("Chewbacca", "", Strength.MID),
-  new Hero("Lando", "Calrissian", Strength.MID),
-  new Hero("Wedge", "Antilles", Strength.MID),
-  new Hero("C-3PO", "", Strength.LOW),
-  new Hero("R2-D2", "", Strength.LOW)
+  new Hero("Duke", "Skydancer", Strength.HIGH),
+  new Hero("Léa", "Origami", Strength.HIGH),
+  new Hero("Hank", "Solau", Strength.MID),
+  new Hero("Obi-Two", "Kanobi", Strength.HIGH),
+  new Hero("Yoga", "", Strength.HIGH),
+  new Hero("Chewbarka", "", Strength.MID),
+  new Hero("Rando", "Galrissian", Strength.MID),
+  new Hero("Vedge", "Antillus", Strength.MID),
+  new Hero("C-4PA", "", Strength.LOW),
+  new Hero("R3-D3", "", Strength.LOW)
 );
 ----
 
@@ -335,9 +335,9 @@ heroes
 
 .Affichage dans la console
 ----
-Category[strength=HIGH, firstNames=[Luke, Leia, Obi-Wan, Yoda]]
-Category[strength=LOW, firstNames=[C-3PO, R2-D2]]
-Category[strength=MID, firstNames=[Han, Chewbacca, Lando, Wedge]]
+Category[strength=HIGH, firstNames=[Duke, Léa, Obi-Two, Yoga]]
+Category[strength=LOW, firstNames=[C-4PA, R3-D4]]
+Category[strength=MID, firstNames=[Hank, Chewbarka, Rando, Vedge]]
 ----
 
 == Les méthodes `Gatherer::defaultInitializer`, `Gatherer::defaultCombiner` et `Gatherer::defaultFinisher`
@@ -443,7 +443,7 @@ Cette fabrique peut être utilisée pour définir notre `Gatherer` qui traite le
 .Utilisation du gatherer `Gatherers::windowFixed`
 [source,java]
 ----
-Stream.of("Luke", "Skywalker", "Han", "Solo")
+Stream.of("Duke", "Skydancer", "Hank", "Solau")
   .gather(Gatherers.windowFixed(2))
   .map(list -> new Hero(list.getFirst(), list.getLast()))
   .forEach(System.out::println);
@@ -451,8 +451,8 @@ Stream.of("Luke", "Skywalker", "Han", "Solo")
 
 .Affichage dans la console
 ----
-Hero[firstName=Luke, lastName=Skywalker]
-Hero[firstName=Han, lastName=Solo]
+Hero[firstName=Duke, lastName=Skydancer]
+Hero[firstName=Hank, lastName=Solau]
 ----
 
 === La fabrique `Gatherers::windowSliding`
