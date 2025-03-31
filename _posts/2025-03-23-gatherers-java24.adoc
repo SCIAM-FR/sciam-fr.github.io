@@ -429,7 +429,7 @@ Outre la sémantique explicite qu'apporte cette fabrique (l'_integrator_ n'est p
 En effet, les streams utilisent des `java.util.Spliterator` pour parcourir les éléments de la source de données.
 Leur nom vient de _split_ (découper) et _iterator_ (itérateur), car ils permettent non seulement d'itérer sur les éléments, mais aussi de diviser la source en plusieurs sous-parties pour le traitement parallèle. +
 Lorsque l'_integrator_ est _greedy_, on sait que l'on doit traiter tous les éléments donc le stream peut utiliser `Spliterator::forEachRemaining` qui sera plus optimisé pour un parcours complet.
-Dans l'autre cas, le stream utilisera `Spliterator::tryAdvance` car l'on ne sait pas si et quand le parcours se termine.
+Dans l'autre cas, le stream utilisera `Spliterator::tryAdvance` car l'on ne sait pas si et quand le parcours se termine prématurément.
 
 == La classe `Gatherers`
 
