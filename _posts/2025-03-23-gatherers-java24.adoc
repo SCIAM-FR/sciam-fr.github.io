@@ -396,6 +396,17 @@ Cette information peut être exploitée par un gatherer pour s'éviter de réali
 }
 ----
 
+=== Le retour de la méthode `Downstream::push`
+
+La méthode `Downstream::push` renvoie un booléen : si sa valeur est `false`, alors le _downstream_ n'accepte plus de nouveaux éléments.
+On pourra l'utiliser de manière analogue à `isRejecting()`.
+
+On peut retenir le fonctionnement suivant :
+
+* un nouveau _downstream_ est toujours initialisé dans un état qui accepte un nouvel élément
+* un _downstream_ peut passer de l'état "non-rejecting" à "rejecting", une seule fois, et uniquement dans ce sens
+* un _downstream_ ne peut changer d'état que lorsqu'un élément lui est envoyé via la méthode `push()`
+
 === La fabrique `Integrator::ofGreedy`
 
 L'interface `Integrator` fournit la fabrique `ofGreedy()` permettant d'obtenir une instance d'_integrator_ conçu pour consommer l'intégralité de ses données d'entrée (si l'en est que le _downstream_ continue d'accepter des éléments). +
@@ -414,7 +425,11 @@ Integrator.ofGreedy((state, hero, _) -> {
 ...
 ----
 
-Outre la sémantique explicite qu'apporte cette fabrique (l'_integrator_ n'est pas court-circuit), l'API peut utiliser cette information pour réaliser des optimisations lors de l'exécution du stream.
+Outre la sémantique explicite qu'apporte cette fabrique (l'_integrator_ n'est pas court-circuit), l'API peut utiliser cette information pour réaliser des optimisations lors de l'exécution du stream. +
+En effet, les streams utilisent des `java.util.Spliterator` pour parcourir les éléments de la source de données.
+Leur nom vient de _split_ (découper) et _iterator_ (itérateur), car ils permettent non seulement d'itérer sur les éléments, mais aussi de diviser la source en plusieurs sous-parties pour le traitement parallèle. +
+Lorsque l'_integrator_ est _greedy_, on sait que l'on doit traiter tous les éléments donc le stream peut utiliser `Spliterator::forEachRemaining` qui sera plus optimisé pour un parcours complet.
+Dans l'autre cas, le stream utilisera `Spliterator::tryAdvance` car l'on ne sait pas si et quand le parcours se termine.
 
 == La classe `Gatherers`
 
