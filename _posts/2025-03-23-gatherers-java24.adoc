@@ -646,7 +646,7 @@ Stream.of(1, 2, 3, 4, 5, 6, 7)
 == Conclusion
 
 Java 24 vient de sortir et fournit maintenant en standard l'API Stream Gatherers.
-Celle-ci offre les outils nécessaires aux développeurs pour créer des opérations intermédiaires personnalisées _stateless_ ou _stateful_, _greedy_ ou court-circuit, séquentielles ou parallèles...
+Celle-ci offre les outils nécessaires aux développeurs pour créer des opérations intermédiaires personnalisées _stateless_ ou _stateful_, _greedy_ ou court-circuit, séquentielles ou parallèles... +
 Elle fournit également quelques fabriques utiles grâce à la classe `Gatherers` et l'on voit déjà fleurir des bibliothèques qui proposent différents gatherers, comme https://github.com/tginsberg/gatherers4j[gatherers4j] ou encore https://github.com/jhspetersson/packrat[packrat].
 
 À votre tour de télécharger le JDK 24 et créer les vôtres.
