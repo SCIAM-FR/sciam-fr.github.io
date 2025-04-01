@@ -552,7 +552,7 @@ Stream.of(1, 2, 3, 4, 5, 6, 7)
 
 == La fabrique `Gatherers::mapConcurrent`
 
-`mapConcurrent(final int maxConcurrency, final Function<? super T, ? extends R> mapper)` renvoie un `Gatherer` "one-to-one" qui invoque la fonction fournie sur chaque élément du flux en parallèle avec des threads virtuels, avec un niveau de concurrence maximal défini par `maxConcurrency`.
+`mapConcurrent(final int maxConcurrency, final Function<? super T, ? extends R> mapper)` renvoie un `Gatherer` "one-to-one" qui invoque la fonction fournie sur chaque élément du flux en parallèle avec des threads virtuels, dont le nombre maximal est défini par `maxConcurrency`.
 
 
 .Utilisation du gatherer `Gatherers::mapConcurrent`
@@ -649,4 +649,4 @@ Java 24 vient de sortir et fournit maintenant en standard l'API Stream Gatherers
 Celle-ci offre les outils nécessaires aux développeurs pour créer des opérations intermédiaires personnalisées _stateless_ ou _stateful_, _greedy_ ou court-circuit, séquentielles ou parallèles... +
 Elle fournit également quelques fabriques utiles grâce à la classe `Gatherers` et l'on voit déjà fleurir des bibliothèques qui proposent différents gatherers, comme https://github.com/tginsberg/gatherers4j[gatherers4j] ou encore https://github.com/jhspetersson/packrat[packrat].
 
-À votre tour de télécharger le JDK 24 et créer les vôtres.
+À votre tour de télécharger un JDK 24 et créer les vôtres.
