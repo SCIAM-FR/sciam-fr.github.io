@@ -532,7 +532,7 @@ Stream.of(1, 2, 3, 4, 5, 6, 7)
 
 Les paramètres attendus sont les suivants :
 
-* `Supplier<R> initial` : fourni la valeur initiale, du même type que le type de sortie du stream (`R`)
+* `Supplier<R> initial` : fournit la valeur initiale, du même type que le type de sortie du stream (`R`)
 * `BiFunction<? super R, ? super T, ? extends R> folder` : bi-fonction qui implémente la logique du traitement à opérer avec l'état consolidé de type `R` et l'élément courant de type `T`.
 
 .Utilisation du gatherer `Gatherers::fold`
