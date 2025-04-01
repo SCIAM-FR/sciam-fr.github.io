@@ -1,6 +1,6 @@
 = L'API Stream Gatherers dans Java 24
 :page-navtitle: L'API Stream Gatherers dans Java 24
-:page-excerpt: Java 24 fournit en standard l'API Stream Gatherers qui vient ajouter au puzzle des streams une pièce manquante : les gatherers. Ils permettent de définir ses propres opérations intermédiaires, à l'image des collecteurs pour les opérations terminales.
+:page-excerpt: Java 24 fournit en standard l'API Stream Gatherers qui vient ajouter au puzzle des streams une pièce manquante : les gatherers. Ils permettent de définir ses propres opérations intermédiaires, à l'image des `Collector` pour les opérations terminales.
 :layout: post
 :author: clementdetastes
 :page-tags: [Java, Java 24, Stream, Gatherers]
@@ -10,12 +10,10 @@
 :showtitle:
 :page-categories: software news
 
-== Un peu d'histoire
-
 Alors que Java 8 sortait il y a un peu plus de onze ans en mars 2014, il apportait une fonctionnalité qui allait significativement impacter la façon dont nous écrivons notre code grâce à l'API Stream et aux expressions lambdas.
 Avec son approche fonctionnelle, l'API Stream offre une manière élégante et expressive de réaliser des traitements sur des flux de données.
 
-Le JDK 24 vient enrichir l'API Stream avec le concept de "gatherer".
+Le JDK 24 vient enrichir en standard l'API Stream avec le concept de "gatherer".
 
 == Quelques rappels
 
@@ -39,19 +37,38 @@ Le parcours du stream ne débute que lorsque l'opération terminale est invoqué
 Ces opérations peuvent être _stateless_ (`map()`, `filter()`) ou _stateful_ (`distinct()`, `sorted()`).
 
 L'*opération terminale* peut traverser le stream pour produire un résultat (ex. `reduce()`) ou un effet (ex. `forEach()`).
-Elle peut être _eager_ (tous les éléments seront parcourus, comme pour `IntStream::sum`) ou _court-circuit_ (un sous-ensemble seulement est parcouru avant de produire un résultat, comme pour `anyMatch()`).
+
+Les opérations intermédiaires et terminales peuvent être _greedy_ (tous les éléments seront parcourus, comme pour `IntStream::sum`) ou _court-circuit_ (un sous-ensemble seulement est parcouru avant de produire un résultat, comme pour `limit()` ou `anyMatch()`).
 
 .Exemple de stream basique
 [source,java]
 ----
-// Affiche 123
-Stream.of(0, 1, 2, 3) <1>
-  .filter(i -> i > 0) <2>
-  .forEach(System.out::print); <3>
+var list = Stream.of("Paris", "Lyon", "Marseille", "Cheverny") <1>
+  .filter(str -> str.contains("a")) <2>
+  .map(String::toUpperCase) <2>
+  .toList(); <3>
+
+System.out.println(list); // Affiche [PARIS, MARSEILLE]
 ----
 <1> Source du stream
-<2> Opération intermédiaire
+<2> Opérations intermédiaires
 <3> Opération terminale
+
+Un des atouts de l'API Stream est sa capacité à s'exécuter aussi bien de manière séquentielle que parallèle sans modifier en profondeur le code.
+Les méthodes `Stream::parallel` et `Stream::sequential` permettent de basculer entre ces modes, offrant ainsi une flexibilité d'exécution adaptée aux besoins de performance.
+Un stream parallèle exploite le `ForkJoinPool` commun pour répartir le traitement sur plusieurs threads, ce qui peut accélérer les opérations sur de grandes collections.
+L'exécution en parallèle nécessitant toutefois certaines attentions (ordre, effets de bord...).
+
+.Bascule en stream parallèle
+[source,java]
+----
+var list = Stream.of("Paris", "Lyon", "Marseille", "Cheverny")
+  .parallel() <1>
+  .filter(str -> str.contains("a"))
+  .map(String::toUpperCase)
+  .toList();
+----
+<1> Appel à `Stream::parallel` pour basculer en stream parallèle
 
 Bien que nombreuses, les opérations intermédiaires proposées par l'API ne répondent pas à tous les cas d'usage.
 Supposons que nous souhaitions traiter séquentiellement un flux composé de paires successives de `String` (prénom, nom) pour reconstruire une liste de personnages en mappant sur le type `record Hero(String firstName, String lastName) {}` :
@@ -80,7 +97,7 @@ Après une période de maturation de 2 previews (https://openjdk.org/jeps/461[JE
 [cols="1,1,1,1"]
 |===
 |
-|Opérations courantes
+|Opérations spécifiques
 |Opération générique
 |Fabrique
 
@@ -123,7 +140,7 @@ L'interface `Gatherer` définit 4 opérations qui fonctionnent de concert, selon
 == Les fabriques de `Gatherer`
 
 L'interface `Gatherer` fournit plusieurs fabriques permettant d'obtenir une instance de `Gatherer` à partir d'une implémentation de tout ou partie des quatre opérations.
-La fourniture d'une implémentation d'un `integrator` est le minimum requis, les autres opérations étant quant à elles optionnelles.
+La fourniture d'une implémentation d'un `Integrator` est le minimum requis, les autres opérations étant quant à elles optionnelles.
 
 Cette instance de `Gatherer` peut être :
 
@@ -147,7 +164,7 @@ Le retour de type booléen indique s'il faut continuer à traiter de nouveaux é
 
 Armé de cet outil "à tout faire", un bon exercice pour se familiariser avec l'API peut être de ré-implémenter une opération intermédiaire existante, par exemple le cas de `map()`.
 Pour chaque élément de l'_upstream_, `map()` applique la `Function` passée en paramètre de la méthode puis transmet l'élément au _downstream_.
-Pour cela, nous n'avons besoin que de définir un `integrator`.
+Pour cela, nous n'avons besoin que de définir un `Integrator`.
 
 Par exemple pour transformer un flux de `String` en leurs versions en lettres capitales :
 
@@ -192,6 +209,7 @@ Il s'agit simplement d'un `Supplier<A>` qui permet de préciser le type `A` de l
 class State { <1>
   String firstName;
 }
+
 record Hero(String firstName, String lastName) {}
 
 Gatherer<String, State, Hero> heroGatherer = Gatherer.ofSequential( <2>
@@ -274,8 +292,11 @@ En étoffant notre type `Hero` d'un attribut `enum Strength`, utilisons un gathe
 [source,java]
 ----
 enum Strength { LOW, MID, HIGH }
+
 record Hero(String firstName, String lastName, Strength strength) {}
+
 record Category(Strength strength, List<String> firstNames) {}
+
 Stream<Hero> heroes = Stream.of(
   new Hero("Duke", "Skydancer", Strength.HIGH),
   new Hero("Léa", "Origami", Strength.HIGH),
@@ -353,6 +374,7 @@ Or la seule fabrique permettant de construire un gatherer parallèle impose de f
 class State {
   Integer max = null;
 }
+
 Gatherer<Integer, ?, Integer> gatherer = Gatherer.of(
   State::new,
   (state, element, downstream) -> {
@@ -423,8 +445,8 @@ On peut retenir le fonctionnement suivant :
 
 === La fabrique `Integrator::ofGreedy`
 
-L'interface `Integrator` fournit la fabrique `ofGreedy()` permettant d'obtenir une instance d'_integrator_ conçu pour consommer l'intégralité de ses données d'entrée (si l'en est que le _downstream_ continue d'accepter des éléments). +
- Elle accepte une instance de `Greedy` qui étend simplement `Integrator` : `interface Greedy<A, T, R> extends Integrator<A, T, R> {}`.
+L'interface `Integrator` fournit la fabrique `ofGreedy()` permettant d'obtenir une instance de type `Integrator` conçue pour consommer l'intégralité de ses données d'entrée (si l'en est que le _downstream_ continue d'accepter des éléments). +
+ Elle accepte une instance de type `Greedy` qui étend simplement `Integrator` : `interface Greedy<A, T, R> extends Integrator<A, T, R> {}`.
 
 On peut donc l'utiliser en lui fournissant une expression lambda de la même manière que pour définir notre _integrator_ :
 
@@ -530,14 +552,15 @@ Stream.of(1, 2, 3, 4, 5, 6, 7)
 
 == La fabrique `Gatherers::mapConcurrent`
 
-`mapConcurrent(final int maxConcurrency, final Function<? super T, ? extends R> mapper)` renvoie un `Gatherer` "one-to-one" qui invoque la fonction fournie sur chaque élément du flux en parallèle avec des threads virtuels, jusqu'à une limite fournie.
-Son implémentation repose sur un `Semaphore` qui limite le nombre d'accès simultanés à la valeur fournie.
+`mapConcurrent(final int maxConcurrency, final Function<? super T, ? extends R> mapper)` renvoie un `Gatherer` "one-to-one" qui invoque la fonction fournie sur chaque élément du flux en parallèle avec des threads virtuels, avec un niveau de concurrence maximal défini par `maxConcurrency`.
+
 
 .Utilisation du gatherer `Gatherers::mapConcurrent`
 [source,java]
 ----
 class Service {
   AtomicInteger concurrentAccessCount = new AtomicInteger(0); <1>
+
   int process(int i) {
     int count = concurrentAccessCount.incrementAndGet();
     System.out.println(Thread.currentThread() + " - Accès concurrent(s) : " + count); <2>
@@ -622,7 +645,8 @@ Stream.of(1, 2, 3, 4, 5, 6, 7)
 
 == Conclusion
 
-Java 24 vient de sortir et fournit maintenant en standard l'API Stream Gatherers qui vient ajouter au puzzle des streams ce qui était une pièce manquante.
-Elle offre les outils pour permettre aux développeurs de créer des opérations intermédiaires personnalisées _stateless_ ou _stateful_, _greedy_ ou court-circuit, séquentielles ou parallèles...
-Elle fournit également quelques fabriques utiles grâce à la classe `Gatherers` et l'on voit déjà fleurir des bibliothèques qui proposent quantité de gatherers, comme https://github.com/tginsberg/gatherers4j[gatherers4j] ou encore https://github.com/jhspetersson/packrat[packrat]. +
-À votre tour de télécharger le JDK 24 et créer les vôtres ?
+Java 24 vient de sortir et fournit maintenant en standard l'API Stream Gatherers.
+Celle-ci offre les outils nécessaires aux développeurs pour créer des opérations intermédiaires personnalisées _stateless_ ou _stateful_, _greedy_ ou court-circuit, séquentielles ou parallèles...
+Elle fournit également quelques fabriques utiles grâce à la classe `Gatherers` et l'on voit déjà fleurir des bibliothèques qui proposent différents gatherers, comme https://github.com/tginsberg/gatherers4j[gatherers4j] ou encore https://github.com/jhspetersson/packrat[packrat].
+
+À votre tour de télécharger le JDK 24 et créer les vôtres.
