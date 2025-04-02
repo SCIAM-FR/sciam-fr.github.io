@@ -27,7 +27,7 @@ La *source* du Stream peut être construite de diverses manières, par exemple :
 
 * À partir d'une `java.util.Collection` grâce aux méthodes `stream()` ou `parallelStream()`
 * Depuis un tableau avec la méthode `Arrays.stream(Object[])`
-* Via l'une des fabriques `Stream::of`, `Instream::range`, `Stream::iterate`
+* Via l'une des fabriques `Stream::of`, `IntStream::range`, `Stream::iterate`
 * Avec `BufferedReader.lines()` pour manipuler les lignes d'un fichier
 * Depuis diverses méthodes de la classe `java.util.Random` comme `ints()` ou `doubles()`
 * ...
@@ -76,21 +76,21 @@ Supposons que nous souhaitions traiter séquentiellement un flux composé de pai
 [source, java]
 ----
 record Hero(String firstName, String lastName) {}
-Stream.of("Duke", "Skydancer", "Hank ", "Solau")
+Stream.of("Duke", "Skydancer", "Hank", "Solau")
   .xxx // Besoin d'une opération intermédiaire personnalisée
 ----
 
-L'utilisation d'un stream pour un tel traitement devient inadaptée : une itération classique et des manipulations sur les index serait plus propice.
+L'utilisation d'un stream pour un tel traitement devient inadaptée : une itération classique et des manipulations sur les index seraient plus propices.
 
 == La pièce manquante du puzzle Stream
 
 L'API Stream propose de nombreuses opérations terminales telles que `forEach()`, `findFirst()`, `count()`, ... répondant chacune à un besoin courant précis.
-Il est également possible de définir ses propres opérations terminales en définissant sa propre implémentation de `Collector<? super T, A, R>` et en la fournissant comme paramètre de l'opération terminale `collect()`.
+Il est également possible de définir ses propres opérations terminales en définissant sa propre implémentation de `Collector<? super T, A, R>`, et en la fournissant comme paramètre de l'opération terminale `collect()`.
 La classe `Collectors` vient aussi, à mi-chemin, enrichir l'API en fournissant diverses fabriques pour créer des instances personnalisées de `Collector` avec par exemple `Collectors::groupingBy` ou `Collectors::joining`.
 
 Néanmoins, l'API ne proposait jusqu'alors pas de richesse équivalente pour ce qui est des opérations intermédiaires, en ne fournissant pas de possibilité de créer ses implémentations personnalisées.
 Bien que l'API ait été enrichie au cours du temps (par exemple, ajout des opérations `dropWhile()` et `takeWhile()` en Java 9 et `mapMulti()` en JDK 16), il n'y avait toujours pas l'équivalent d'un `collect()` pour les opérations intermédiaires. +
-La https://openjdk.org/jeps/485[JEP 485: Stream Gatherers] vient apporter la pièce manquante au puzzle en ajoutant l'opération intermédiaire `Stream::gather` qui accepte une instance de `java.util.stream.Gatherer`.
+La https://openjdk.org/jeps/485[JEP 485: Stream Gatherers] vient apporter un outil supplémentaire en ajoutant l'opération intermédiaire `Stream::gather` qui accepte une instance de `java.util.stream.Gatherer`.
 Après une période de maturation de 2 previews (https://openjdk.org/jeps/461[JEP 461] en Java 22 et https://openjdk.org/jeps/473[JEP 473] en Java 23), la fonctionnalité est standard en Java 24.
 
 .Analogies entre opérations intermédiaires et terminales
@@ -162,7 +162,7 @@ Le retour de type booléen indique s'il faut continuer à traiter de nouveaux é
 
 == La ré-implémentation d'une opération existante
 
-Armé de cet outil "à tout faire", un bon exercice pour se familiariser avec l'API peut être de ré-implémenter une opération intermédiaire existante, par exemple le cas de `map()`.
+Armé de cet outil "à tout faire", un bon exercice pour se familiariser avec l'API peut être de réimplémenter une opération intermédiaire existante, par exemple le cas de `map()`.
 Pour chaque élément de l'_upstream_, `map()` applique la `Function` passée en paramètre de la méthode puis transmet l'élément au _downstream_.
 Pour cela, nous n'avons besoin que de définir un `Integrator`.
 
@@ -357,7 +357,7 @@ heroes
 .Affichage dans la console
 ----
 Category[strength=HIGH, firstNames=[Duke, Léa, Obi-Two, Yoga]]
-Category[strength=LOW, firstNames=[C-4PA, R3-D4]]
+Category[strength=LOW, firstNames=[C-4PA, R3-D3]]
 Category[strength=MID, firstNames=[Hank, Chewbarka, Rando, Vedge]]
 ----
 
