@@ -515,7 +515,7 @@ Stream.of(1, 2, 3, 4, 5, 6, 7)
 
 === La fabrique `Gatherers::scan`
 
-`scan(Supplier<R> initial, BiFunction<? super R, ? super T, ? extends R> scanner` renvoie un `Gatherer` séquentiel de type "one-to-one" qui applique la fonction fournie à l'état actuel et à l'élément courant pour produire l'élément suivant, qu'il transmet en sortie.
+`scan(Supplier<R> initial, BiFunction<? super R, ? super T, ? extends R> scanner)` renvoie un `Gatherer` séquentiel de type "one-to-one" qui applique la fonction fournie à l'état actuel et à l'élément courant pour produire l'élément suivant, qu'il transmet en sortie.
 
 [source,java]
 ----
