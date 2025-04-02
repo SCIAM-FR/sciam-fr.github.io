@@ -528,7 +528,7 @@ Stream.of(1, 2, 3, 4, 5, 6, 7)
 
 === La fabrique `Gatherers::fold`
 
-`static <T, R> Gatherer<T, ?, R> fold(Supplier<R> initial, BiFunction<? super R, ? super T, ? extends R> folder)` renvoie un `Gatherer` séquentiel de type "many-to-one" qui agrège les données du flux de manière incrémentale et renvoie le résultat une fois tous les éléments du flux entrant consommés.
+`fold(Supplier<R> initial, BiFunction<? super R, ? super T, ? extends R> folder)` renvoie un `Gatherer` séquentiel de type "many-to-one" qui agrège les données du flux de manière incrémentale et renvoie le résultat une fois tous les éléments du flux entrant consommés.
 
 Les paramètres attendus sont les suivants :
 
