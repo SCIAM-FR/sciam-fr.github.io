@@ -550,7 +550,7 @@ Stream.of(1, 2, 3, 4, 5, 6, 7)
 01234567
 ----
 
-== La fabrique `Gatherers::mapConcurrent`
+=== La fabrique `Gatherers::mapConcurrent`
 
 `mapConcurrent(final int maxConcurrency, final Function<? super T, ? extends R> mapper)` renvoie un `Gatherer` "one-to-one" qui invoque la fonction fournie sur chaque élément du flux en parallèle avec des threads virtuels, dont le nombre maximal est défini par `maxConcurrency`.
 
