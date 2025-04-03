@@ -1,7 +1,7 @@
 = JChateau 2025 - Un excellent cru
 :page-navtitle: JChateau 2025 - Un excellent cru
 :figure-caption!:
-:page-excerpt: L'unconference JChateau a eu lieu du 27 ou 29 mars 2025, réunissant des passionnés de l'ecosystème Java pour partager leurs expériences et leurs connaissances. Comme les 2 années précédentes SCIAM a participé à cet événement assez unique. Ce post présente un florilège des sujets présentés auxquels nous avons partipés
+:page-excerpt: L'unconference JChateau a eu lieu du 27 ou 29 mars 2025, réunissant des passionnés de l'ecosystème Java pour partager leurs expériences et leurs connaissances. Comme les 2 années précédentes SCIAM a participé à cet événement assez unique. Ce post présente un florilège des sujets présentés auxquels nous avons participé.
 :layout: post
 :page-auteurs: [clementdetastes,antoinesabotdurand]
 :page-tags: [Java, unconference, JChateau]
