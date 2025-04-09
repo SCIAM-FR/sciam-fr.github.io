@@ -1,5 +1,5 @@
 = Structuration de l’intelligence artificielle par l’ingénierie logicielle : les apports des design patterns à l’intégration des LLM
-:page-navtitle: Structuration de l’intelligence artificielle par l’ingénierie logicielle : Apports des design patterns à l’intégration des LLM
+:page-navtitle: Structuration de l’intelligence artificielle par l’ingénierie logicielle : les apports des design patterns à l’intégration des LLM
 :page-excerpt: L’intelligence artificielle est désormais bien plus qu’une tendance, elle s’intègre au cœur des systèmes logiciels. Mais cette intégration ne se fait pas sans poser des défis techniques majeurs. Comment rendre un système capable de s’adapter à des composants évolutifs, parfois imprévisibles, comme les grands modèles de langage (LLM).
 :layout: post
 :author: rickenbazolo
