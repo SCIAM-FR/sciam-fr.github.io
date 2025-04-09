@@ -17,11 +17,11 @@ Dans cet article, nous allons examiner quelques design patterns, en mettant part
 
 == Intégrer des LLM dans des applications métier, un défi sous-estimé
 
-Les grands modèles de langage (LLM) tels que ceux https://platform.openai.com/docs/models/[d'OpenAI^], https://www.anthropic.com/[Anthropic^] et https://docs.mistral.ai/getting-started/models/models_overview/[Mistral^] pour n'en citer que quelques uns, ouvrent la voie à une nouvelle génération d'applications intelligentes, des outils d'analyse de texte, des générateurs de rapports, des chatbots et des solutions d'automatisation des tâches récurrentes, entre autres.
+Les grands modèles de langage (LLM) tels que ceux https://platform.openai.com/docs/models/[d'OpenAI^], https://www.anthropic.com/[Anthropic^] et https://docs.mistral.ai/getting-started/models/models_overview/[Mistral^] pour n'en citer que quelques-uns, ouvrent la voie à une nouvelle génération d'applications intelligentes, des outils d'analyse de texte, des générateurs de rapports, des chatbots et des solutions d'automatisation des tâches récurrentes, entre autres.
 
 Cependant, entre la preuve de concept et une intégration propre dans un système d’information, le fossé est immense. *Pourquoi ?* Parce qu’un LLM n’est pas un simple service qu’on appelle. C’est une entité complexe, avec :
 
-* Des coups varriables;
+* Des coups variables;
 * Des comportements dynamiques;
 * Des besoins de sécurité, de performance, de contrôle, d'audit et de monitoring.
 
@@ -38,11 +38,11 @@ Pour qu’une IA délivre une réelle valeur métier, elle doit être intégrée
 * *Être surveillée et observée en continu* : il est crucial de détecter les dérives, biais ou pannes, et de réagir rapidement;
 * *Évoluer en fonction du contexte d’utilisation* : les attentes métiers changent, les données aussi, le système doit permettre une adaptation fluide du modèle.
 
-C’est exactement ici que l’ingénierie logicielle devient essentielle, elle permet, de concevoir des architectures évolutives, robustes et pérennes, en appliquant des principes de conception et des patterns éprouvés.
+C’est exactement ici que l’ingénierie logicielle devient essentielle : elle permet de concevoir des architectures évolutives, robustes et pérennes, en appliquant des principes de conception et des patterns éprouvés.
 
 Elle permet notamment de : 
 
-* *Séparer la logique métier de l'intéligence artificielle*, pour une meilleure modularité;
+* *Séparer la logique métier de l'intelligence artificielle*, pour une meilleure modularité;
 * *Encapsuler les LLM dans des abstractions claires*, facilitant leur test, leur évolution et leur réutilisation;
 * *Orchestrer leur cycle de vie et leur comportement*, depuis leur sélection et configuration, jusqu'à leur déploiement, leur supervision en production, et leur évolution continue.
 
@@ -60,14 +60,14 @@ L’ingénierie logicielle joue un rôle fondamental dans l’intégration des g
 C’est dans ce cadre que les *design patterns* trouvent tout leur intérêt. En tant que solutions génériques et réutilisables à des problèmes courants d’architecture logicielle, leur application à l’IA générative permet de :
 
 * *Rendre les modèles interchangeables*, en encapsulant leur logique derrière une interface commune;
-* *Gérer les événements liés à leur fonctionnement*, comme les appels de fonctions (`function calling`), l’utilisation d’`outils`, ou l’orchestration via des `agents`;
+* *Gérer les événements liés à leur fonctionnement*, comme les appels de fonctions (`function calling`), l’utilisation d’outils (`tools`), ou l’orchestration via des `agents`;
 * *Préserver la cohérence du système*, même si la couche d’IA change radicalement (changement de modèle, de fournisseur, ou de stratégie d’intégration).
 
 Dans ce contexte, les design patterns *Strategy* et *Observer* s’avèrent particulièrement efficaces.
 
-== Strategy Pattern : abstraction et sélection dynamique
+== Le pattern Strategy : abstraction et sélection dynamique
 
-Le *Strategy Pattern* permet d’abstraire différentes implémentations d’algorithmes, de modèles ou de fournisseurs d’IA derrière une interface commune, afin de sélectionner dynamiquement le comportement le plus adapté aux besoins spécifiques du système.
+Le *pattern Strategy* permet d’abstraire différentes implémentations d’algorithmes, de modèles ou de fournisseurs d’IA derrière une interface commune, afin de sélectionner dynamiquement le comportement le plus adapté aux besoins spécifiques du système.
 
 Cette approche est idéale pour intégrer plusieurs LLM ou approches (comme le `prompt engineering`, le `fine-tuning`, etc.) sans coupler le reste du système à une implémentation spécifique, ce qui garantit flexibilité, modularité et évolutivité.
 
@@ -75,9 +75,9 @@ Cette approche est idéale pour intégrer plusieurs LLM ou approches (comme le `
 
 Dans une application de support à la recherche et à la conformité réglementaire, l’objectif est d’automatiser l’analyse des documents légaux (textes de lois, contrats, normes, etc.) pour en extraire les points clés ou vérifier leur conformité. Selon le contexte, comme le volume du document, la sensibilité des données et le coût associé à l’analyse, il est possible d’opter pour l’une des trois approches suivantes :
 
-* Utilisation de GPT-4o : Pour des documents volumineux nécessitant une analyse fine et détaillée, l’appel à GPT-4o permet d’obtenir un résumé précis et une interprétation contextualisée.
-* Utilisation d'un modèle open source local (ex. Mistral, Llama) : Lorsque les données sont sensibles ou que la confidentialité est primordiale, utiliser un modèle local garantit de ne pas transmettre d’informations critiques à un service externe tout en fournissant une analyse de qualité.
-* Analyse heuristique : Si le contexte ne justifie pas l’utilisation d’un LLM par exemple pour des documents courts ou moins complexes, une méthode heuristique basée sur des règles simples (comme la recherche de mots-clés) peut suffire à extraire les informations essentielles.
+* Utilisation de GPT-4o : pour des documents volumineux nécessitant une analyse fine et détaillée, l’appel à GPT-4o permet d’obtenir un résumé précis et une interprétation contextualisée.
+* Utilisation d'un modèle open source local (ex. Mistral, Llama) : lorsque les données sont sensibles ou que la confidentialité est primordiale, utiliser un modèle local garantit de ne pas transmettre d’informations critiques à un service externe tout en fournissant une analyse de qualité.
+* Analyse heuristique : si le contexte ne justifie pas l’utilisation d’un LLM par exemple pour des documents courts ou moins complexes, une méthode heuristique basée sur des règles simples (comme la recherche de mots-clés) peut suffire à extraire les informations essentielles.
 
 *Implémentation type (extrait pseudo-code)* :
 [source,java]
@@ -173,19 +173,19 @@ public class RegulatoryComplianceDemo { // <6>
 }
 ----
 
-`(1)` *Interface scellée* : La déclaration sealed interface garantit que seules les classes autorisées (ici, les trois stratégies) peuvent l'implémenter, renforçant ainsi le contrôle sur les implémentations.
+`(1)` *Interface scellée* : la déclaration `sealed interface` garantit que seules les classes autorisées (ici, les trois stratégies) peuvent l'implémenter, renforçant ainsi le contrôle sur les implémentations.
 
-`(2)`, `(3)`, `(4)` *Stratégies concrètes* : Chaque classe implémente la méthode analyzeCompliance avec une logique spécifique (appel externe, modèle local ou heuristique).
+`(2)`, `(3)`, `(4)` *Stratégies concrètes* : chaque classe implémente la méthode `analyzeCompliance` avec une logique spécifique (appel externe, modèle local ou heuristique).
 
-`(5)` *Contexte* : La classe `ComplianceContext` permet de définir et de changer dynamiquement la stratégie utilisée, en fonction des critères (sensibilité des données, longueur du texte, etc.).
+`(5)` *Contexte* : la classe `ComplianceContext` permet de définir et de changer dynamiquement la stratégie utilisée, en fonction des critères (sensibilité des données, longueur du texte, etc.).
 
-`(6)` *Simulation* : La classe `RegulatoryComplianceDemo` simule le choix de la stratégie pour analyser une requête réglementaire et affiche le résultat.
+`(6)` *Simulation* : la classe `RegulatoryComplianceDemo` simule le choix de la stratégie pour analyser une requête réglementaire et affiche le résultat.
 
-Cet exemple montre comment le Strategy Pattern permet de découpler le choix de l’algorithme d’analyse des règles métiers, ce qui facilite l’extension ou le remplacement des stratégies d’IA sans impacter le reste de l’application.
+Cet exemple montre comment le pattern Strategy permet de découpler le choix de l’algorithme d’analyse des règles métiers, ce qui facilite l’extension ou le remplacement des stratégies d’IA sans impacter le reste de l’application.
 
 NOTE: Les informations fournies pour le cas type sont uniquement à titre d'exemple.
 
-== Observer Pattern, orchestrer le cycle de vie des composants IA
+== Le pattern Observer, orchestrer le cycle de vie des composants IA
 
 L'*Observer Pattern* permet d'orchestrer le cycle de vie des composants IA en découpant la logique métier des notifications d'événements. Grâce à un mécanisme d’abonnement, les différents modules (logs, alertes, audits, feedback utilisateur, etc.) sont automatiquement informés de chaque changement d’état du système (appel, réponse, erreur), assurant ainsi une gestion flexible et découplée.
 
@@ -196,7 +196,7 @@ Cette approche favorise une architecture modulaire, évolutive et aisément main
 Dans un chatbot de support client évolué intégrant un système Agentic RAG, l’objectif est d’automatiser la réponse aux demandes des clients tout en orchestrant intelligemment le cycle de vie du traitement. 
 Dès qu’un utilisateur pose une question, le chatbot interroge une base de connaissances (récupération), génère une réponse contextuelle (génération) et notifie automatiquement les composants concernés (logs, analytics, alertes, feedback utilisateur) de chaque étape. 
 
-L'Observer Pattern permet ainsi de décorréler la logique métier du processus de notifications et de faciliter l’intégration de nouvelles fonctionnalités d’observation.
+Le pattern Observer permet ainsi de décorréler la logique métier du processus de notifications et de faciliter l’intégration de nouvelles fonctionnalités d’observation.
 
 *Implémentation type (extrait pseudo-code)* :
 [source,java]
@@ -318,13 +318,13 @@ public class ChatbotObserverDemo {
 }
 ----
 
-* *Gestion des événements du cycle de vie* : L’interface scellée `(1)` définit l’ensemble des événements possibles du chatbot. Ses implémentations `(2)` `QueryReceived`, `(3)` `InfoRetrieved`, `(4)` `ResponseGenerated` et `(5)` `ErrorOccurred` représentent respectivement la réception d’une requête, la récupération d’informations, la génération d’une réponse et la gestion d’erreurs.
+* *Gestion des événements du cycle de vie* : l’interface scellée `(1)` définit l’ensemble des événements possibles du chatbot. Ses implémentations `(2)` `QueryReceived`, `(3)` `InfoRetrieved`, `(4)` `ResponseGenerated` et `(5)` `ErrorOccurred` représentent respectivement la réception d’une requête, la récupération d’informations, la génération d’une réponse et la gestion d’erreurs.
 
-* *Mécanisme d’observation* : L’interface `(6)` `ChatbotObserver` impose la méthode `update` pour notifier les changements. Les observateurs concrets, tels que `(8)` `LoggerObserver` et `(9)` `AnalyticsObserver`, réagissent aux événements en effectuant par exemple de la journalisation ou le suivi analytique.
+* *Mécanisme d’observation* : l’interface `(6)` `ChatbotObserver` impose la méthode `update` pour notifier les changements. Les observateurs concrets, tels que `(8)` `LoggerObserver` et `(9)` `AnalyticsObserver`, réagissent aux événements en effectuant par exemple de la journalisation ou le suivi analytique.
 
 * *Orchestration du cycle de vie* : La classe `(7)` `ChatbotAgent` centralise le traitement des requêtes. Elle gère la liste des observateurs et notifie chacun des étapes du traitement (réception de la requête, récupération d’informations, génération de réponse ou erreur) via la méthode `processQuery`.
 
-* *Simulation* : La classe `(10)` `ChatbotObserverDemo` sert de point d’entrée, illustrant l’ajout des observateurs au `ChatbotAgent` et le déroulement complet d’un traitement de requête, démontrant ainsi le fonctionnement du pattern Observer dans le contexte d’un chatbot IA.
+* *Simulation* : la classe `(10)` `ChatbotObserverDemo` sert de point d’entrée, illustrant l’ajout des observateurs au `ChatbotAgent` et le déroulement complet d’un traitement de requête, démontrant ainsi le fonctionnement du pattern Observer dans le contexte d’un chatbot IA.
 
 Cette structure permet de découpler la logique du traitement du chatbot de la gestion des notifications, rendant le système modulaire, flexible et facilement extensible pour intégrer d'autres observateurs si nécessaire.
 
@@ -334,7 +334,7 @@ NOTE: Les informations fournies pour le cas type sont uniquement à titre d'exem
 
 En plus des design patterns *Strategy* et *Observer*, d'autres design patterns facilitent une intégration des LLM plus propre, modulaire et alignée avec les besoins métiers. Voici quelques patterns particulièrement pertinents dans ce contexte.
 
-=== Factory Pattern : Instancier dynamiquement des modèles avec des paramètres métier
+=== Le pattern Factory : instancier dynamiquement des modèles avec des paramètres métier
 
 Lorsque vous devez configurer dynamiquement des appels à un LLM selon le contexte (`créatif`, `concis`, etc.), il est préférable de ne pas exposer ces détails dans tout votre code. Le *Factory Pattern* permet de centraliser cette logique d’instanciation et de garantir la cohérence des configurations.
 
@@ -360,10 +360,10 @@ public class LLMFactory {
 
 NOTE: Cet exemple permet de centraliser et de modifier facilement la logique de configuration sans avoir à exposer les détails dans tout votre code.
 
-=== Command Pattern - Orchestrer des pipelines IA
+=== Le pattern Command - orchestrer des pipelines IA
 
 Les pipelines IA exécutent une série ordonnée de tâches, telles que `classification` → `résumé` → `génération`.
-Le *Command Pattern* peut être utilisé pour encapsuler chaque étape du pipeline dans des objets de commande distincts. Cela permet de gérer les opérations de manière flexible et de les exécuter ou annuler indépendamment.
+Le *pattern Command* peut être utilisé pour encapsuler chaque étape du pipeline dans des objets de commande distincts. Cela permet de gérer les opérations de manière flexible et de les exécuter ou annuler indépendamment.
 
 Exemple :
 [source,java]
@@ -486,18 +486,18 @@ public class Main {
 }
 ----
 
-NOTE: Cet exemple montre comment le **Command Pattern** peut rendre la gestion d'un pipeline IA flexible, en isolant chaque opération dans un objet distinct et en permettant de les exécuter ou annuler indépendamment,
+NOTE: Cet exemple montre comment le **pattern Command** peut rendre la gestion d'un pipeline IA flexible, en isolant chaque opération dans un objet distinct et en permettant de les exécuter ou annuler indépendamment,
 nous pouvons aussi définir des pipelines de type `RAG` : *naïve*, *modulaire*, *Agentic*, etc.
 
 == À retenir : les design patterns sont complémentaires, pas exclusifs
 
 Il est important de comprendre que les design patterns ne s'excluent pas mutuellement. Bien au contraire, ils sont souvent utilisés ensemble, dans des couches ou des rôles différents du système. Par exemple :
 
-* Le *Strategy Pattern* peut être combiné avec une *Factory* pour créer dynamiquement la bonne stratégie selon le contexte.
-* Un *Command Pattern* peut encapsuler des actions IA, chacune enrichie par un *Decorator* (ex. logs, métriques).
+* Le *pattern Strategy* peut être combiné avec une *Factory* pour créer dynamiquement la bonne stratégie selon le contexte.
+* Un *pattern Command* peut encapsuler des actions IA, chacune enrichie par un *Decorator* (ex. logs, métriques).
 * Une *Facade* peut regrouper plusieurs stratégies et commandes sous une interface unifiée, tout en notifiant des *Observers* à chaque étape importante.
 
-L’objectif n’est pas d’utiliser le plus de patterns possible, mais de les combiner de manière cohérente pour : réduire le couplage, améliorer la maintenabilité, et augmenter la flexibilité.
+L’objectif n’est pas d’utiliser le plus de patterns possible, mais de les combiner de manière cohérente pour : réduire le couplage, améliorer la maintenabilité et augmenter la flexibilité.
 
 == Structurer l’intégration des LLM dans une architecture métier : approche hexagonale
 
@@ -507,12 +507,12 @@ L’objectif n’est pas d’utiliser le plus de patterns possible, mais de les 
 * la testabilité du domaine métier,
 * la flexibilité pour changer de fournisseur ou de modèle LLM.
 
-*Avantage de l'approche hexagonale pour les LLM*
+*L'approche hexagonale pour les LLM présente plusieurs avantages :*
 
-* *Isolation métier* : Le domaine reste indépendant des détails techniques du LLM (API, paramètres, prompt…).
-* *Testabilité* : Le cœur métier peut être testé avec des mocks, sans LLM réel.
-* *Substitution facile* : Il suffit de changer un adaptateur pour tester un autre modèle ou fournisseur, sans modifier le code métier.
-* *Composabilité* : Les adaptateurs LLM peuvent eux mêmes appliquer d’autres patterns (Decorator, Observer…) sans impacter le domaine avec la possibilité de chaîner des traitements IA ou de les enrichir sans couplage.
+* *Isolation métier* : le domaine reste indépendant des détails techniques du LLM (API, paramètres, prompt…).
+* *Testabilité* : le cœur métier peut être testé avec des mocks, sans LLM réel.
+* *Substitution facile* : il suffit de changer un adaptateur pour tester un autre modèle ou fournisseur, sans modifier le code métier.
+* *Composabilité* : les adaptateurs LLM peuvent eux mêmes appliquer d’autres patterns (Decorator, Observer…) sans impacter le domaine avec la possibilité de chaîner des traitements IA ou de les enrichir sans couplage.
 
 *Illustration d’une architecture hexagonale avec LLM*
 [source,scss]
@@ -542,7 +542,7 @@ Cette approche fonctionne aussi pour des scénarios plus complexes :
 
 == Conclusion
 
-Dans cet article, nous avons exploré quelques design patterns applicables au domaine de l'IA, mais il en existe bien d'autres à découvrir. Par exemple, le *Decorator Pattern* peut être utilisé pour ajouter dynamiquement des responsabilités supplémentaires à des objets dans un système *RAG (Retrieval Augmented Generation)*, permettant ainsi de tester, remplacer ou surveiller chaque étape du processus de génération augmentée par récupération.
+Dans cet article, nous avons exploré quelques design patterns applicables au domaine de l'IA, mais il en existe bien d'autres à découvrir. Par exemple, le *pattern Decorator* peut être utilisé pour ajouter dynamiquement des responsabilités supplémentaires à des objets dans un système *RAG (Retrieval Augmented Generation)*, permettant ainsi de tester, remplacer ou surveiller chaque étape du processus de génération augmentée par récupération.
 
 L'intégration de LLM dans les applications métier ne se résume pas à la simple connexion d'une API ou à du *prompt engineering*. Elle nécessite la conception d'une *architecture intelligente*, fondée sur des abstractions et des interfaces solides, capables de s'adapter aux évolutions, de répondre aux divers contextes d'utilisation, et d'être testées, maintenues et évolutives sur le long terme.
 
