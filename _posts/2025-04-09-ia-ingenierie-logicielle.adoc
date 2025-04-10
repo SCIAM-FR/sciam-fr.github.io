@@ -3,9 +3,9 @@
 :page-excerpt: L’intelligence artificielle est désormais bien plus qu’une tendance, elle s’intègre au cœur des systèmes logiciels. Mais cette intégration ne se fait pas sans poser des défis techniques majeurs. Comment rendre un système capable de s’adapter à des composants évolutifs, parfois imprévisibles, comme les grands modèles de langage (LLM).
 :layout: post
 :author: rickenbazolo
-:page-tags: [Java, LLM, Ingénierie logicielle, Design Patterns, Intelligence Artificielle appliquée, Architecture logicielle, Programmation et bonnes pratiques]
+:page-tags: [Java, LLM, Ingénierie logicielle, Design Patterns, Intelligence Artificielle appliquée, Architecture logicielle]
 :docinfo: shared-footer
-:page-vignette: ingenieurie_logicielle_ia.png
+:page-vignette: ingenierie_logicielle_ia.png
 :page-vignette-licence: 'Image générée par l'IA'
 :page-liquid:
 :showtitle:
@@ -21,29 +21,29 @@ Les grands modèles de langage (LLM) tels que ceux https://platform.openai.com/d
 
 Cependant, entre la preuve de concept et une intégration propre dans un système d’information, le fossé est immense. *Pourquoi ?* Parce qu’un LLM n’est pas un simple service qu’on appelle. C’est une entité complexe, avec :
 
-* Des coups variables;
-* Des comportements dynamiques;
-* Des besoins de sécurité, de performance, de contrôle, d'audit et de monitoring.
+* Des coûts variables
+* Des comportements dynamiques
+* Des besoins de sécurité, de performance, de contrôle, d'audit et de monitoring
 
 Pour les intégrer efficacement dans des applications métier, il faut revenir aux fondamentaux de *l’ingénierie logicielle*.
 
 == Pourquoi l'ingénierie logicielle est essentielle à l’IA métier
 
-Les grands modèles de langage (LLM) ne sont pas des `boîte noire magique` que l'on peut simplement brancher à la fin d'un pipeline. Bien que leur puissance soit indéniable, leur efficacité repose entièrement sur la manière dont ils sont intégrés au sein du système d'information.
+Les grands modèles de langage (LLM) ne sont pas des `boîtes noires magiques` que l'on peut simplement brancher à la fin d'un pipeline. Bien que leur puissance soit indéniable, leur efficacité repose entièrement sur la manière dont ils sont intégrés au sein du système d'information.
 
 Pour qu’une IA délivre une réelle valeur métier, elle doit être intégrée dans un cadre logiciel structuré, pensé pour l’évolutivité, la fiabilité et la maintenabilité. Dans une application métier, une IA doit donc :
 
-* *Être remplaçable* : on doit pouvoir la remplacer ou la faire évoluer sans remettre en cause toute l’architecture du système;
-* *Être testable* : ses comportements doivent pouvoir être vérifiés, contrôlés et validés dans différents scénarios d’usage, de manière isolée comme en interaction avec d'autres composants;
-* *Être surveillée et observée en continu* : il est crucial de détecter les dérives, biais ou pannes, et de réagir rapidement;
+* *Être remplaçable* : on doit pouvoir la remplacer ou la faire évoluer sans remettre en cause toute l’architecture du système.
+* *Être testable* : ses comportements doivent pouvoir être vérifiés, contrôlés et validés dans différents scénarios d’usage, de manière isolée comme en interaction avec d'autres composants.
+* *Être surveillée et observée en continu* : il est crucial de détecter les dérives, biais ou pannes, et de réagir rapidement.
 * *Évoluer en fonction du contexte d’utilisation* : les attentes métiers changent, les données aussi, le système doit permettre une adaptation fluide du modèle.
 
 C’est exactement ici que l’ingénierie logicielle devient essentielle : elle permet de concevoir des architectures évolutives, robustes et pérennes, en appliquant des principes de conception et des patterns éprouvés.
 
-Elle permet notamment de : 
+Elle permet notamment de :
 
-* *Séparer la logique métier de l'intelligence artificielle*, pour une meilleure modularité;
-* *Encapsuler les LLM dans des abstractions claires*, facilitant leur test, leur évolution et leur réutilisation;
+* *Séparer la logique métier de l'intelligence artificielle*, pour une meilleure modularité.
+* *Encapsuler les LLM dans des abstractions claires*, facilitant leur test, leur évolution et leur réutilisation.
 * *Orchestrer leur cycle de vie et leur comportement*, depuis leur sélection et configuration, jusqu'à leur déploiement, leur supervision en production, et leur évolution continue.
 
 NOTE: L'ingénierie logicielle est l'application des principes de l'ingénierie à la conception, au développement, au test, ainsi qu’au déploiement et à la gestion de logiciels et des systèmes d’information.
@@ -52,16 +52,16 @@ NOTE: L'ingénierie logicielle est l'application des principes de l'ingénierie 
 
 L’ingénierie logicielle joue un rôle fondamental dans l’intégration des grands modèles de langage (LLM) au sein des systèmes d’information. Elle permet de structurer cette intégration en s’appuyant sur des principes éprouvés tels que :
 
-* *La séparation des responsabilités* : chaque composant du système a un rôle précis, ce qui facilite la compréhension, la maintenance et l’évolution du code;
-* *La modularité* : les différents éléments du système peuvent être développés, remplacés ou étendus indépendamment les uns des autres;
-* *La testabilité* : les modèles et les comportements peuvent être validés de manière isolée, ce qui garantit la fiabilité du système;
+* *La séparation des responsabilités* : chaque composant du système a un rôle précis, ce qui facilite la compréhension, la maintenance et l’évolution du code.
+* *La modularité* : les différents éléments du système peuvent être développés, remplacés ou étendus indépendamment les uns des autres.
+* *La testabilité* : les modèles et les comportements peuvent être validés de manière isolée, ce qui garantit la fiabilité du système.
 * *La réversibilité des choix technologiques* : le système reste adaptable, même si les technologies ou les fournisseurs de LLM évoluent.
 
 C’est dans ce cadre que les *design patterns* trouvent tout leur intérêt. En tant que solutions génériques et réutilisables à des problèmes courants d’architecture logicielle, leur application à l’IA générative permet de :
 
-* *Rendre les modèles interchangeables*, en encapsulant leur logique derrière une interface commune;
-* *Gérer les événements liés à leur fonctionnement*, comme les appels de fonctions (`function calling`), l’utilisation d’outils (`tools`), ou l’orchestration via des `agents`;
-* *Préserver la cohérence du système*, même si la couche d’IA change radicalement (changement de modèle, de fournisseur, ou de stratégie d’intégration).
+* *Rendre les modèles interchangeables*, en encapsulant leur logique derrière une interface commune
+* *Gérer les événements liés à leur fonctionnement*, comme les appels de fonctions (`function calling`), l’utilisation d’outils (`tools`), ou l’orchestration via des `agents`
+* *Préserver la cohérence du système*, même si la couche d’IA change radicalement (changement de modèle, de fournisseur, ou de stratégie d’intégration)
 
 Dans ce contexte, les design patterns *Strategy* et *Observer* s’avèrent particulièrement efficaces.
 
@@ -71,24 +71,28 @@ Le *pattern Strategy* permet d’abstraire différentes implémentations d’alg
 
 Cette approche est idéale pour intégrer plusieurs LLM ou approches (comme le `prompt engineering`, le `fine-tuning`, etc.) sans coupler le reste du système à une implémentation spécifique, ce qui garantit flexibilité, modularité et évolutivité.
 
-*Cas typique* :
+*Cas typique* : Dans une application de support à la recherche et à la conformité réglementaire, l’objectif est d’automatiser l’analyse des documents légaux (textes de lois, contrats, normes, etc.) pour en extraire les points clés ou vérifier leur conformité. Selon le contexte, comme le volume du document, la sensibilité des données et le coût associé à l’analyse, il est possible d’opter pour l’une des trois approches suivantes :
 
-Dans une application de support à la recherche et à la conformité réglementaire, l’objectif est d’automatiser l’analyse des documents légaux (textes de lois, contrats, normes, etc.) pour en extraire les points clés ou vérifier leur conformité. Selon le contexte, comme le volume du document, la sensibilité des données et le coût associé à l’analyse, il est possible d’opter pour l’une des trois approches suivantes :
-
-* Utilisation de GPT-4o : pour des documents volumineux nécessitant une analyse fine et détaillée, l’appel à GPT-4o permet d’obtenir un résumé précis et une interprétation contextualisée.
-* Utilisation d'un modèle open source local (ex. Mistral, Llama) : lorsque les données sont sensibles ou que la confidentialité est primordiale, utiliser un modèle local garantit de ne pas transmettre d’informations critiques à un service externe tout en fournissant une analyse de qualité.
-* Analyse heuristique : si le contexte ne justifie pas l’utilisation d’un LLM par exemple pour des documents courts ou moins complexes, une méthode heuristique basée sur des règles simples (comme la recherche de mots-clés) peut suffire à extraire les informations essentielles.
+* Utilisation de GPT-4o : pour des documents volumineux nécessitant une analyse fine et détaillée, l’appel à GPT-4o permet d’obtenir un résumé précis et une interprétation contextualisée
+* Utilisation d'un modèle open source local (ex. Mistral, Llama) : lorsque les données sont sensibles ou que la confidentialité est primordiale, utiliser un modèle local garantit de ne pas transmettre d’informations critiques à un service externe tout en fournissant une analyse de qualité
+* Analyse heuristique : si le contexte ne justifie pas l’utilisation d’un LLM par exemple pour des documents courts ou moins complexes, une méthode heuristique basée sur des règles simples (comme la recherche de mots-clés) peut suffire à extraire les informations essentielles
 
 *Implémentation type (extrait pseudo-code)* :
+
+* *Interface scellée* : la déclaration `sealed interface` garantit que seules les classes autorisées (ici, les trois stratégies) peuvent l'implémenter, renforçant ainsi le contrôle sur les implémentations
 [source,java]
 ----
 // Définition d'une interface scellée pour les stratégies d'analyse de conformité.
-public sealed interface RegulatoryComplianceStrategy permits GPT4ComplianceStrategy, LocalLegalModelStrategy, KeywordHeuristicComplianceStrategy { // <1>
+public sealed interface RegulatoryComplianceStrategy permits GPT4ComplianceStrategy, LocalLegalModelStrategy, KeywordHeuristicComplianceStrategy {
     String analyzeCompliance(String legalText);
 }
+----
 
+* *Stratégies concrètes* : chaque classe implémente la méthode `analyzeCompliance` avec une logique spécifique (appel externe, modèle local ou heuristique)
+[source,java]
+----
 // Implémentation simulant une analyse avec GPT-4o (appel externe).
-public final class GPT4ComplianceStrategy implements RegulatoryComplianceStrategy { // <2>
+public final class GPT4ComplianceStrategy implements RegulatoryComplianceStrategy {
     @Override
     public String analyzeCompliance(String legalText) {
         // Simulation d'un appel externe à GPT-4o pour analyser le texte.
@@ -97,7 +101,7 @@ public final class GPT4ComplianceStrategy implements RegulatoryComplianceStrateg
 }
 
 // Implémentation simulant une analyse avec un modèle légal open source local.
-public final class LocalLegalModelStrategy implements RegulatoryComplianceStrategy { // <3>
+public final class LocalLegalModelStrategy implements RegulatoryComplianceStrategy {
     @Override
     public String analyzeCompliance(String legalText) {
         // Simulation d'une analyse par un modèle local.
@@ -106,7 +110,7 @@ public final class LocalLegalModelStrategy implements RegulatoryComplianceStrate
 }
 
 // Implémentation utilisant une approche heuristique basée sur des mots-clés.
-public final class KeywordHeuristicComplianceStrategy implements RegulatoryComplianceStrategy { // <4>
+public final class KeywordHeuristicComplianceStrategy implements RegulatoryComplianceStrategy {
     @Override
     public String analyzeCompliance(String legalText) {
         // Analyse simple : recherche de mots-clés liés à la conformité.
@@ -117,55 +121,68 @@ public final class KeywordHeuristicComplianceStrategy implements RegulatoryCompl
         }
     }
 }
+----
 
+* *Contexte* : la classe `ComplianceContext` permet de définir et de changer dynamiquement la stratégie utilisée, en fonction des critères (sensibilité des données, longueur du texte, etc.)
+[source,java]
+----
 // Contexte qui utilise la stratégie choisie dynamiquement.
-public class ComplianceContext { // <5>
+public class ComplianceContext {
     private RegulatoryComplianceStrategy strategy;
-    
+
     public ComplianceContext(RegulatoryComplianceStrategy strategy) {
+        if (strategy == null) {
+            throw IllegalStateException("La stratégie est nulle");
+        }
         this.strategy = strategy;
     }
-    
+
     // Permet de modifier la stratégie à la volée.
     public void setStrategy(RegulatoryComplianceStrategy strategy) {
         this.strategy = strategy;
     }
-    
+
     // Méthode pour analyser la conformité du texte juridique.
     public String analyze(String legalText) {
         return strategy.analyzeCompliance(legalText);
     }
 }
+----
 
+* *Simulation* : la classe `RegulatoryComplianceDemo` simule le choix de la stratégie pour analyser une requête réglementaire et affiche le résultat
+[source,java]
+----
 // Classe de démonstration pour simuler l'analyse de conformité dans une application de support juridique.
-public class RegulatoryComplianceDemo { // <6>
+public class RegulatoryComplianceDemo {
     public static void main(String[] args) {
         // Exemple de requête juridique : analyse de la conformité par rapport au RGPD.
-        var legalQuery = "L'utilisation des données doit être conforme au RGPD et respecter les droits des utilisateurs.";
-        
-        var context = new ComplianceContext(null);
-        
+        String legalQuery = "L'utilisation des données doit être conforme au RGPD et respecter les droits des utilisateurs.";
+
+        RegulatoryComplianceStrategy strategy = null;
+
         // Critères simulés : si le texte est sensible (contient "RGPD") ou selon sa longueur.
-        var isSensitive = legalQuery.contains("RGPD");
-        var length = legalQuery.length();
-        
+        boolean isSensitive = legalQuery.contains("RGPD");
+        int length = legalQuery.length();
+
         // Choix de la stratégie en fonction des critères.
         if (isSensitive) {
             // Pour des données sensibles, utiliser le modèle local pour éviter les appels externes.
-            context.setStrategy(new LocalLegalModelStrategy());
+            strategy = new LocalLegalModelStrategy();
         } else if (length > 100) {
             // Si le texte est très long, utiliser GPT-4 pour une analyse détaillée.
-            context.setStrategy(new GPT4ComplianceStrategy());
+            strategy = new GPT4ComplianceStrategy();
         } else {
             // Sinon, se contenter d'une analyse heuristique.
-            context.setStrategy(new KeywordHeuristicComplianceStrategy());
+            strategy = new KeywordHeuristicComplianceStrategy();
         }
-        
+
+        ComplianceContext context = new ComplianceContext(strategy);
+
         // Affichage du résultat de l'analyse.
         System.out.println(context.analyze(legalQuery));
-        
+
         // Simulation d'un autre cas d'usage avec un texte différent.
-        var anotherQuery = "Vérifier si l'utilisation de ces données respecte les normes internationales sans référence au RGPD.";
+        String anotherQuery = "Vérifier si l'utilisation de ces données respecte les normes internationales sans référence au RGPD.";
         // Ici, on choisit directement l'analyse heuristique.
         context.setStrategy(new KeywordHeuristicComplianceStrategy());
         System.out.println(context.analyze(anotherQuery));
@@ -173,62 +190,89 @@ public class RegulatoryComplianceDemo { // <6>
 }
 ----
 
-`(1)` *Interface scellée* : la déclaration `sealed interface` garantit que seules les classes autorisées (ici, les trois stratégies) peuvent l'implémenter, renforçant ainsi le contrôle sur les implémentations.
-
-`(2)`, `(3)`, `(4)` *Stratégies concrètes* : chaque classe implémente la méthode `analyzeCompliance` avec une logique spécifique (appel externe, modèle local ou heuristique).
-
-`(5)` *Contexte* : la classe `ComplianceContext` permet de définir et de changer dynamiquement la stratégie utilisée, en fonction des critères (sensibilité des données, longueur du texte, etc.).
-
-`(6)` *Simulation* : la classe `RegulatoryComplianceDemo` simule le choix de la stratégie pour analyser une requête réglementaire et affiche le résultat.
-
 Cet exemple montre comment le pattern Strategy permet de découpler le choix de l’algorithme d’analyse des règles métiers, ce qui facilite l’extension ou le remplacement des stratégies d’IA sans impacter le reste de l’application.
 
 NOTE: Les informations fournies pour le cas type sont uniquement à titre d'exemple.
 
 == Le pattern Observer, orchestrer le cycle de vie des composants IA
 
-L'*Observer Pattern* permet d'orchestrer le cycle de vie des composants IA en découpant la logique métier des notifications d'événements. Grâce à un mécanisme d’abonnement, les différents modules (logs, alertes, audits, feedback utilisateur, etc.) sont automatiquement informés de chaque changement d’état du système (appel, réponse, erreur), assurant ainsi une gestion flexible et découplée.
+Le *pattern Observer* permet d'orchestrer le cycle de vie des composants IA en découpant la logique métier des notifications d'événements. Grâce à un mécanisme d’abonnement, les différents modules (logs, alertes, audits, feedback utilisateur, etc.) sont automatiquement informés de chaque changement d’état du système (appel, réponse, erreur), assurant ainsi une gestion flexible et découplée.
 
 Cette approche favorise une architecture modulaire, évolutive et aisément maintenable, essentielle pour piloter efficacement les interactions et le suivi des opérations d’un modèle d’IA.
 
-*Cas typique* : 
-
-Dans un chatbot de support client évolué intégrant un système Agentic RAG, l’objectif est d’automatiser la réponse aux demandes des clients tout en orchestrant intelligemment le cycle de vie du traitement. 
-Dès qu’un utilisateur pose une question, le chatbot interroge une base de connaissances (récupération), génère une réponse contextuelle (génération) et notifie automatiquement les composants concernés (logs, analytics, alertes, feedback utilisateur) de chaque étape. 
+*Cas typique* : Dans un chatbot de support client évolué intégrant un système Agentic RAG, l’objectif est d’automatiser la réponse aux demandes des clients tout en orchestrant intelligemment le cycle de vie du traitement.
+Dès qu’un utilisateur pose une question, le chatbot interroge une base de connaissances (récupération), génère une réponse contextuelle (génération) et notifie automatiquement les composants concernés (logs, analytics, alertes, feedback utilisateur) de chaque étape.
 
 Le pattern Observer permet ainsi de décorréler la logique métier du processus de notifications et de faciliter l’intégration de nouvelles fonctionnalités d’observation.
 
 *Implémentation type (extrait pseudo-code)* :
+
+* *Gestion des événements du cycle de vie* : l’interface scellée `ChatbotEvent` définit l’ensemble des événements possibles du chatbot. Ses implémentations `QueryReceived`, `InfoRetrieved`, `ResponseGenerated` et `ErrorOccurred` représentent respectivement la réception d’une requête, la récupération d’informations, la génération d’une réponse et la gestion d’erreurs
 [source,java]
 ----
 // Définition d'une interface scellée pour les événements du cycle de vie du chatbot.
-public sealed interface ChatbotEvent permits QueryReceived, InfoRetrieved, ResponseGenerated, ErrorOccurred { // <1>
-
-} 
+public sealed interface ChatbotEvent permits QueryReceived, InfoRetrieved, ResponseGenerated, ErrorOccurred {
+}
 
 // Événement indiquant la réception d'une requête utilisateur.
-public record QueryReceived(String query) implements ChatbotEvent { // <2>
+public record QueryReceived(String query) implements ChatbotEvent {
 }
 
 // Événement indiquant la récupération d'informations pertinentes.
-public record InfoRetrieved(String info) implements ChatbotEvent { // <3>
+public record InfoRetrieved(String info) implements ChatbotEvent {
 }
 
 // Événement indiquant la génération d'une réponse.
-public record ResponseGenerated(String response) implements ChatbotEvent { // <4>
+public record ResponseGenerated(String response) implements ChatbotEvent {
 }
 
 // Événement indiquant qu'une erreur est survenue.
-public record ErrorOccurred(Exception exception) implements ChatbotEvent { // <5>
+public record ErrorOccurred(Exception exception) implements ChatbotEvent {
 }
+----
 
+* *Mécanisme d’observation* : l’interface `ChatbotObserver` impose la méthode `update` pour notifier les changements. Les observateurs concrets, tels que `LoggerObserver` et `AnalyticsObserver`, réagissent aux événements en effectuant par exemple de la journalisation ou le suivi analytique
+[source,java]
+----
 // Interface des observateurs qui réagissent aux événements du chatbot.
-public interface ChatbotObserver { // <6>
+public interface ChatbotObserver {
     void update(ChatbotEvent event);
 }
 
+// Observateur chargé de la journalisation.
+public class LoggerObserver implements ChatbotObserver {
+    @Override
+    public void update(ChatbotEvent event) {
+        switch (event) {
+            case QueryReceived qr ->
+                System.out.println("[Logger] Requête reçue : " + qr.getQuery());
+            case InfoRetrieved ir ->
+                System.out.println("[Logger] Informations récupérées : " + ir.getInfo());
+            case ResponseGenerated rg ->
+                System.out.println("[Logger] Réponse générée : " + rg.getResponse());
+            case ErrorOccurred eo ->
+                System.out.println("[Logger] Erreur : " + eo.getException().getMessage());
+            default -> {}  // Facultatif : gérer les types inattendus
+        }
+    }
+}
+
+// Observateur chargé d'envoyer des données analytiques.
+public class AnalyticsObserver implements ChatbotObserver {
+    @Override
+    public void update(ChatbotEvent event) {
+        if (event instanceof ResponseGenerated rg) {
+            System.out.println("[Analytics] La réponse générée contient " + rg.getResponse().length() + " caractères.");
+        }
+    }
+}
+----
+
+* *Orchestration du cycle de vie* : La classe `ChatbotAgent` centralise le traitement des requêtes. Elle gère la liste des observateurs et notifie chacun des étapes du traitement (réception de la requête, récupération d’informations, génération de réponse ou erreur) via la méthode `processQuery`
+[source,java]
+----
 // Classe gérant le cycle de vie du chatbot et notifiant les observateurs.
-public class ChatbotAgent { // <7>
+public class ChatbotAgent {
     private final List<ChatbotObserver> observers = new ArrayList<>();
 
     public void addObserver(ChatbotObserver observer) {
@@ -276,37 +320,15 @@ public class ChatbotAgent { // <7>
         return "Réponse générée à partir de : " + info;
     }
 }
+----
 
-// Observateur chargé de la journalisation.
-public class LoggerObserver implements ChatbotObserver { // <8>
-    @Override
-    public void update(ChatbotEvent event) {
-        if (event instanceof QueryReceived qr) {
-            System.out.println("[Logger] Requête reçue : " + qr.getQuery());
-        } else if (event instanceof InfoRetrieved ir) {
-            System.out.println("[Logger] Informations récupérées : " + ir.getInfo());
-        } else if (event instanceof ResponseGenerated rg) {
-            System.out.println("[Logger] Réponse générée : " + rg.getResponse());
-        } else if (event instanceof ErrorOccurred eo) {
-            System.out.println("[Logger] Erreur : " + eo.getException().getMessage());
-        }
-    }
-}
-
-// Observateur chargé d'envoyer des données analytiques.
-public class AnalyticsObserver implements ChatbotObserver { // <9>
-    @Override
-    public void update(ChatbotEvent event) {
-        if (event instanceof ResponseGenerated rg) {
-            System.out.println("[Analytics] La réponse générée contient " + rg.getResponse().length() + " caractères.");
-        }
-    }
-}
-
+* *Simulation* : la classe `ChatbotObserverDemo` sert de point d’entrée, illustrant l’ajout des observateurs au `ChatbotAgent` et le déroulement complet d’un traitement de requête, démontrant ainsi le fonctionnement du pattern Observer dans le contexte d’un chatbot IA
+[source,java]
+----
 // Classe de démonstration du pattern Observer appliqué à un chatbot de support client.
 public class ChatbotObserverDemo {
-    public static void main(String[] args) { // <10>
-        var chatbot = new ChatbotAgent();
+    public static void main(String[] args) {
+        ChatbotAgent chatbot = new ChatbotAgent();
 
         // Ajout des observateurs : Logger et Analytics.
         chatbot.addObserver(new LoggerObserver());
@@ -317,14 +339,6 @@ public class ChatbotObserverDemo {
     }
 }
 ----
-
-* *Gestion des événements du cycle de vie* : l’interface scellée `(1)` définit l’ensemble des événements possibles du chatbot. Ses implémentations `(2)` `QueryReceived`, `(3)` `InfoRetrieved`, `(4)` `ResponseGenerated` et `(5)` `ErrorOccurred` représentent respectivement la réception d’une requête, la récupération d’informations, la génération d’une réponse et la gestion d’erreurs.
-
-* *Mécanisme d’observation* : l’interface `(6)` `ChatbotObserver` impose la méthode `update` pour notifier les changements. Les observateurs concrets, tels que `(8)` `LoggerObserver` et `(9)` `AnalyticsObserver`, réagissent aux événements en effectuant par exemple de la journalisation ou le suivi analytique.
-
-* *Orchestration du cycle de vie* : La classe `(7)` `ChatbotAgent` centralise le traitement des requêtes. Elle gère la liste des observateurs et notifie chacun des étapes du traitement (réception de la requête, récupération d’informations, génération de réponse ou erreur) via la méthode `processQuery`.
-
-* *Simulation* : la classe `(10)` `ChatbotObserverDemo` sert de point d’entrée, illustrant l’ajout des observateurs au `ChatbotAgent` et le déroulement complet d’un traitement de requête, démontrant ainsi le fonctionnement du pattern Observer dans le contexte d’un chatbot IA.
 
 Cette structure permet de découpler la logique du traitement du chatbot de la gestion des notifications, rendant le système modulaire, flexible et facilement extensible pour intégrer d'autres observateurs si nécessaire.
 
@@ -338,11 +352,11 @@ En plus des design patterns *Strategy* et *Observer*, d'autres design patterns f
 
 Lorsque vous devez configurer dynamiquement des appels à un LLM selon le contexte (`créatif`, `concis`, etc.), il est préférable de ne pas exposer ces détails dans tout votre code. Le *Factory Pattern* permet de centraliser cette logique d’instanciation et de garantir la cohérence des configurations.
 
-Exemple:
+Exemple (extrait pseudo-code) :
 [source,java]
 ----
 // Définition immuable de la configuration du LLM
-public record LLMConfig(String model, double temperature, double topP, int maxTokens)
+public record LLMConfig(String model, double temperature, double topP, int maxTokens) {};
 
 // Factory centralisant la logique d'instanciation en fonction du contexte
 public class LLMFactory {
@@ -365,7 +379,7 @@ NOTE: Cet exemple permet de centraliser et de modifier facilement la logique de 
 Les pipelines IA exécutent une série ordonnée de tâches, telles que `classification` → `résumé` → `génération`.
 Le *pattern Command* peut être utilisé pour encapsuler chaque étape du pipeline dans des objets de commande distincts. Cela permet de gérer les opérations de manière flexible et de les exécuter ou annuler indépendamment.
 
-Exemple :
+Exemple (extrait pseudo-code) :
 [source,java]
 ----
 // PipelineContext.java
@@ -375,7 +389,7 @@ public class PipelineContext {
     private String classification;
     private String summary;
     private String generation;
-    // Implémentation code ..
+    // Implémentation du code.
 }
 
 // Command.java
@@ -391,13 +405,13 @@ public final class ClassificationCommand implements Command {
     @Override
     public void execute(PipelineContext context) {
         // Simulation d'un appel à un LLM par exemple, déterminer une catégorie pour le texte d'entrée.
-        var result = callLlm("classification: " + context.input());
+        String result = callLlm("classification: " + context.input());
         context.setClassification(result);
     }
 
     @Override
     public void undo(PipelineContext context) {
-        context.setClassification(null); // Annulation de la classification...
+        context.setClassification(null); // Annulation de la classification.
     }
 }
 
@@ -407,13 +421,13 @@ public final class SummarizationCommand implements Command {
     @Override
     public void execute(PipelineContext context) {
         // Simulation d'un appel à un LLM pour la création d'un résumé basé sur la classification.
-        var result = callLlm("summarize: " + context.getClassification());
+        String result = callLlm("summarize: " + context.getClassification());
         context.setSummary(result);
     }
 
     @Override
     public void undo(PipelineContext context) {
-        context.setSummary(null); // Annulation du résumé...
+        context.setSummary(null); // Annulation du résumé.
     }
 }
 
@@ -423,13 +437,13 @@ public final class GenerationCommand implements Command {
     @Override
     public void execute(PipelineContext context) {
         // Simulation d'un appel à un LLM pour la génération de texte en se basant sur le résumé.
-        var result = callLlm("generate: " + context.getSummary());
+        String result = callLlm("generate: " + context.getSummary());
         context.setGeneration(result);
     }
 
     @Override
     public void undo(PipelineContext context) {
-        context.setGeneration(null); // Annulation de la génération...
+        context.setGeneration(null); // Annulation de la génération.
     }
 }
 
@@ -450,8 +464,8 @@ public class Pipeline {
 
     public void undo(PipelineContext context) {
         // On annule dans l'ordre inverse
-        for (int i = commands.size() - 1; i >= 0; i--) {
-            commands.get(i).undo(context);
+        for (Command command : commands.reversed()) {
+            command.undo(context);
         }
     }
 }
@@ -487,7 +501,7 @@ public class Main {
 ----
 
 NOTE: Cet exemple montre comment le **pattern Command** peut rendre la gestion d'un pipeline IA flexible, en isolant chaque opération dans un objet distinct et en permettant de les exécuter ou annuler indépendamment,
-nous pouvons aussi définir des pipelines de type `RAG` : *naïve*, *modulaire*, *Agentic*, etc.
+nous pouvons aussi définir des pipelines de type *RAG* : *naïve*, *modulaire*, *Agentic*, etc.
 
 == À retenir : les design patterns sont complémentaires, pas exclusifs
 
@@ -498,47 +512,6 @@ Il est important de comprendre que les design patterns ne s'excluent pas mutuell
 * Une *Facade* peut regrouper plusieurs stratégies et commandes sous une interface unifiée, tout en notifiant des *Observers* à chaque étape importante.
 
 L’objectif n’est pas d’utiliser le plus de patterns possible, mais de les combiner de manière cohérente pour : réduire le couplage, améliorer la maintenabilité et augmenter la flexibilité.
-
-== Structurer l’intégration des LLM dans une architecture métier : approche hexagonale
-
-*L’architecture hexagonale* (ou Ports and Adapters) propose une séparation claire entre le cœur du métier (business logic) et ses interfaces externes (UI, base de données, APIs, IA, etc.). Cette approche est idéale pour intégrer des composants IA, notamment les LLM dans une architecture métier tout en gardant :
-
-* l’indépendance métier vis-à-vis de la technologie IA,
-* la testabilité du domaine métier,
-* la flexibilité pour changer de fournisseur ou de modèle LLM.
-
-*L'approche hexagonale pour les LLM présente plusieurs avantages :*
-
-* *Isolation métier* : le domaine reste indépendant des détails techniques du LLM (API, paramètres, prompt…).
-* *Testabilité* : le cœur métier peut être testé avec des mocks, sans LLM réel.
-* *Substitution facile* : il suffit de changer un adaptateur pour tester un autre modèle ou fournisseur, sans modifier le code métier.
-* *Composabilité* : les adaptateurs LLM peuvent eux mêmes appliquer d’autres patterns (Decorator, Observer…) sans impacter le domaine avec la possibilité de chaîner des traitements IA ou de les enrichir sans couplage.
-
-*Illustration d’une architecture hexagonale avec LLM*
-[source,scss]
-----
-                [ UI / API ]
-                     ↓
-     [ Application Service / Use Case Layer ]
-                     ↓
-         +---------------------------+
-         |     Domaine Metier        |
-         |  (Use cases + Interfaces) |
-         +---------------------------+
-                ↑            ↑
-     [ Adapter: GPT-4o ]  [ Adapter: Mistral ]
-                ↑            ↑
-     [ External APIs ]   [ Local model ]
-
-----
-
-*En pratique*
-
-Cette approche fonctionne aussi pour des scénarios plus complexes :
-
-* un pipeline RAG (Retrieval-Augmented Generation) peut être découpé en ports pour la recherche, le ranking et la génération;
-* un LLM orchestré par des agents peut être modélisé comme une série de ports / adaptateurs spécialisés;
-* la gestion de prompts peut devenir une stratégie injectée dans l’adaptateur, et ainsi testée indépendamment.
 
 == Conclusion
 
