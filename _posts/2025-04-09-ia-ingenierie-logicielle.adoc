@@ -71,7 +71,7 @@ Le *pattern Strategy* permet d’abstraire différentes implémentations d’alg
 
 Cette approche est idéale pour intégrer plusieurs LLM ou approches (comme le `prompt engineering`, le `fine-tuning`, etc.) sans coupler le reste du système à une implémentation spécifique, ce qui garantit flexibilité, modularité et évolutivité.
 
-*Cas typique* : Dans une application de support à la recherche et à la conformité réglementaire, l’objectif est d’automatiser l’analyse des documents légaux (textes de lois, contrats, normes, etc.) pour en extraire les points clés ou vérifier leur conformité. Selon le contexte, comme le volume du document, la sensibilité des données et le coût associé à l’analyse, il est possible d’opter pour l’une des trois approches suivantes :
+*Cas typique* : dans une application de support à la recherche et à la conformité réglementaire, l’objectif est d’automatiser l’analyse des documents légaux (textes de lois, contrats, normes, etc.) pour en extraire les points clés ou vérifier leur conformité. Selon le contexte, comme le volume du document, la sensibilité des données et le coût associé à l’analyse, il est possible d’opter pour l’une des trois approches suivantes :
 
 * Utilisation de GPT-4o : pour des documents volumineux nécessitant une analyse fine et détaillée, l’appel à GPT-4o permet d’obtenir un résumé précis et une interprétation contextualisée
 * Utilisation d'un modèle open source local (ex. Mistral, Llama) : lorsque les données sont sensibles ou que la confidentialité est primordiale, utiliser un modèle local garantit de ne pas transmettre d’informations critiques à un service externe tout en fournissant une analyse de qualité
@@ -200,7 +200,7 @@ Le *pattern Observer* permet d'orchestrer le cycle de vie des composants IA en d
 
 Cette approche favorise une architecture modulaire, évolutive et aisément maintenable, essentielle pour piloter efficacement les interactions et le suivi des opérations d’un modèle d’IA.
 
-*Cas typique* : Dans un chatbot de support client évolué intégrant un système Agentic RAG, l’objectif est d’automatiser la réponse aux demandes des clients tout en orchestrant intelligemment le cycle de vie du traitement.
+*Cas typique* : dans un chatbot de support client évolué intégrant un système Agentic RAG, l’objectif est d’automatiser la réponse aux demandes des clients tout en orchestrant intelligemment le cycle de vie du traitement.
 Dès qu’un utilisateur pose une question, le chatbot interroge une base de connaissances (récupération), génère une réponse contextuelle (génération) et notifie automatiquement les composants concernés (logs, analytics, alertes, feedback utilisateur) de chaque étape.
 
 Le pattern Observer permet ainsi de décorréler la logique métier du processus de notifications et de faciliter l’intégration de nouvelles fonctionnalités d’observation.
