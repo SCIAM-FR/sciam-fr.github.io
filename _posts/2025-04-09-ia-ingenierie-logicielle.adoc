@@ -21,9 +21,9 @@ Les grands modèles de langage (LLM) tels que ceux https://platform.openai.com/d
 
 Cependant, entre la preuve de concept et une intégration propre dans un système d’information, le fossé est immense. *Pourquoi ?* Parce qu’un LLM n’est pas un simple service qu’on appelle. C’est une entité complexe, avec :
 
-* Des coûts variables
-* Des comportements dynamiques
-* Des besoins de sécurité, de performance, de contrôle, d'audit et de monitoring
+* Des coûts variables,
+* Des comportements dynamiques,
+* Des besoins de sécurité, de performance, de contrôle, d'audit et de monitoring.
 
 Pour les intégrer efficacement dans des applications métier, il faut revenir aux fondamentaux de *l’ingénierie logicielle*.
 
@@ -33,17 +33,17 @@ Les grands modèles de langage (LLM) ne sont pas des `boîtes noires magiques` q
 
 Pour qu’une IA délivre une réelle valeur métier, elle doit être intégrée dans un cadre logiciel structuré, pensé pour l’évolutivité, la fiabilité et la maintenabilité. Dans une application métier, une IA doit donc :
 
-* *Être remplaçable* : on doit pouvoir la remplacer ou la faire évoluer sans remettre en cause toute l’architecture du système.
-* *Être testable* : ses comportements doivent pouvoir être vérifiés, contrôlés et validés dans différents scénarios d’usage, de manière isolée comme en interaction avec d'autres composants.
-* *Être surveillée et observée en continu* : il est crucial de détecter les dérives, biais ou pannes, et de réagir rapidement.
+* *Être remplaçable* : on doit pouvoir la remplacer ou la faire évoluer sans remettre en cause toute l’architecture du système,
+* *Être testable* : ses comportements doivent pouvoir être vérifiés, contrôlés et validés dans différents scénarios d’usage, de manière isolée comme en interaction avec d'autres composants,
+* *Être surveillée et observée en continu* : il est crucial de détecter les dérives, biais ou pannes, et de réagir rapidement,
 * *Évoluer en fonction du contexte d’utilisation* : les attentes métiers changent, les données aussi, le système doit permettre une adaptation fluide du modèle.
 
 C’est exactement ici que l’ingénierie logicielle devient essentielle : elle permet de concevoir des architectures évolutives, robustes et pérennes, en appliquant des principes de conception et des patterns éprouvés.
 
 Elle permet notamment de :
 
-* *Séparer la logique métier de l'intelligence artificielle*, pour une meilleure modularité.
-* *Encapsuler les LLM dans des abstractions claires*, facilitant leur test, leur évolution et leur réutilisation.
+* *Séparer la logique métier de l'intelligence artificielle*, pour une meilleure modularité,
+* *Encapsuler les LLM dans des abstractions claires*, facilitant leur test, leur évolution et leur réutilisation,
 * *Orchestrer leur cycle de vie et leur comportement*, depuis leur sélection et configuration, jusqu'à leur déploiement, leur supervision en production, et leur évolution continue.
 
 NOTE: L'ingénierie logicielle est l'application des principes de l'ingénierie à la conception, au développement, au test, ainsi qu’au déploiement et à la gestion de logiciels et des systèmes d’information.
@@ -52,16 +52,16 @@ NOTE: L'ingénierie logicielle est l'application des principes de l'ingénierie 
 
 L’ingénierie logicielle joue un rôle fondamental dans l’intégration des grands modèles de langage (LLM) au sein des systèmes d’information. Elle permet de structurer cette intégration en s’appuyant sur des principes éprouvés tels que :
 
-* *La séparation des responsabilités* : chaque composant du système a un rôle précis, ce qui facilite la compréhension, la maintenance et l’évolution du code.
-* *La modularité* : les différents éléments du système peuvent être développés, remplacés ou étendus indépendamment les uns des autres.
-* *La testabilité* : les modèles et les comportements peuvent être validés de manière isolée, ce qui garantit la fiabilité du système.
+* *La séparation des responsabilités* : chaque composant du système a un rôle précis, ce qui facilite la compréhension, la maintenance et l’évolution du code,
+* *La modularité* : les différents éléments du système peuvent être développés, remplacés ou étendus indépendamment les uns des autres,
+* *La testabilité* : les modèles et les comportements peuvent être validés de manière isolée, ce qui garantit la fiabilité du système,
 * *La réversibilité des choix technologiques* : le système reste adaptable, même si les technologies ou les fournisseurs de LLM évoluent.
 
 C’est dans ce cadre que les *design patterns* trouvent tout leur intérêt. En tant que solutions génériques et réutilisables à des problèmes courants d’architecture logicielle, leur application à l’IA générative permet de :
 
-* *Rendre les modèles interchangeables*, en encapsulant leur logique derrière une interface commune
-* *Gérer les événements liés à leur fonctionnement*, comme les appels de fonctions (`function calling`), l’utilisation d’outils (`tools`), ou l’orchestration via des `agents`
-* *Préserver la cohérence du système*, même si la couche d’IA change radicalement (changement de modèle, de fournisseur, ou de stratégie d’intégration)
+* *Rendre les modèles interchangeables*, en encapsulant leur logique derrière une interface commune,
+* *Gérer les événements liés à leur fonctionnement*, comme les appels de fonctions (`function calling`), l’utilisation d’outils (`tools`), ou l’orchestration via des `agents`,
+* *Préserver la cohérence du système*, même si la couche d’IA change radicalement (changement de modèle, de fournisseur, ou de stratégie d’intégration).
 
 Dans ce contexte, les design patterns *Strategy* et *Observer* s’avèrent particulièrement efficaces.
 
@@ -73,9 +73,9 @@ Cette approche est idéale pour intégrer plusieurs LLM ou approches (comme le `
 
 *Cas typique* : dans une application de support à la recherche et à la conformité réglementaire, l’objectif est d’automatiser l’analyse des documents légaux (textes de lois, contrats, normes, etc.) pour en extraire les points clés ou vérifier leur conformité. Selon le contexte, comme le volume du document, la sensibilité des données et le coût associé à l’analyse, il est possible d’opter pour l’une des trois approches suivantes :
 
-* Utilisation de GPT-4o : pour des documents volumineux nécessitant une analyse fine et détaillée, l’appel à GPT-4o permet d’obtenir un résumé précis et une interprétation contextualisée
-* Utilisation d'un modèle open source local (ex. Mistral, Llama) : lorsque les données sont sensibles ou que la confidentialité est primordiale, utiliser un modèle local garantit de ne pas transmettre d’informations critiques à un service externe tout en fournissant une analyse de qualité
-* Analyse heuristique : si le contexte ne justifie pas l’utilisation d’un LLM par exemple pour des documents courts ou moins complexes, une méthode heuristique basée sur des règles simples (comme la recherche de mots-clés) peut suffire à extraire les informations essentielles
+* Utilisation de GPT-4o : pour des documents volumineux nécessitant une analyse fine et détaillée, l’appel à GPT-4o permet d’obtenir un résumé précis et une interprétation contextualisée,
+* Utilisation d'un modèle open source local (ex. Mistral, Llama) : lorsque les données sont sensibles ou que la confidentialité est primordiale, utiliser un modèle local garantit de ne pas transmettre d’informations critiques à un service externe tout en fournissant une analyse de qualité,
+* Analyse heuristique : si le contexte ne justifie pas l’utilisation d’un LLM par exemple pour des documents courts ou moins complexes, une méthode heuristique basée sur des règles simples (comme la recherche de mots-clés) peut suffire à extraire les informations essentielles.
 
 *Implémentation type (extrait pseudo-code)* :
 
@@ -457,16 +457,12 @@ public class Pipeline {
     }
 
     public void execute(PipelineContext context) {
-        for (Command command : commands) {
-            command.execute(context);
-        }
+        commands.forEach(command -> command.execute(context));
     }
 
     public void undo(PipelineContext context) {
         // On annule dans l'ordre inverse
-        for (Command command : commands.reversed()) {
-            command.undo(context);
-        }
+        commands.forEach(command -> command.undo(context));
     }
 }
 
@@ -507,8 +503,8 @@ nous pouvons aussi définir des pipelines de type *RAG* : *naïve*, *modulaire*,
 
 Il est important de comprendre que les design patterns ne s'excluent pas mutuellement. Bien au contraire, ils sont souvent utilisés ensemble, dans des couches ou des rôles différents du système. Par exemple :
 
-* Le *pattern Strategy* peut être combiné avec une *Factory* pour créer dynamiquement la bonne stratégie selon le contexte.
-* Un *pattern Command* peut encapsuler des actions IA, chacune enrichie par un *Decorator* (ex. logs, métriques).
+* Le *pattern Strategy* peut être combiné avec une *Factory* pour créer dynamiquement la bonne stratégie selon le contexte,
+* Un *pattern Command* peut encapsuler des actions IA, chacune enrichie par un *Decorator* (ex. logs, métriques),
 * Une *Facade* peut regrouper plusieurs stratégies et commandes sous une interface unifiée, tout en notifiant des *Observers* à chaque étape importante.
 
 L’objectif n’est pas d’utiliser le plus de patterns possible, mais de les combiner de manière cohérente pour : réduire le couplage, améliorer la maintenabilité et augmenter la flexibilité.
