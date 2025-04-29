@@ -3,13 +3,15 @@
 :page-navtitle: Les nouveautés de Java 24 : partie 1
 :page-excerpt: Ce premier article sur les nouveautés de Java 24 détaille les fonctionnalités proposées via des JEPs dans la syntaxe et les API notamment par les projets Amber, Loom et Panama.
 :layout: post
-:page-tags: [Java, Java 24, Projet Amber, Projet Panama, Projet Loom, Projet Leyden, Projet Liliput]
+:page-tags: [Java, Java 24, Projet Amber, Projet Panama, Projet Loom, Projet Leyden, Projet Lilliput]
+
 :author: jeanmicheldoudoux
 :page-vignette: 2025/java-24.png
 :page-liquid:
 :page-categories: software news
 
-Ce premier article est consacré aux nouveautés de Java 24 et détaille les fonctionnalités proposées via des JEPs dans la syntaxe et les API notamment issues des projets https://openjdk.org/projects/amber/[Amber], https://openjdk.org/projects/jigsaw/[Jigsaw], https://openjdk.org/projects/loom/[Loom] et https://openjdk.org/projects/panama/[Panama] d’OpenJDK et pour le première fois deux de ces nouvelles fonctionnalités sont issues des projets https://openjdk.org/projects/leyden/[Leyden] et https://openjdk.org/projects/lilliput/[Lilipput].
+Ce premier article est consacré aux nouveautés de Java 24 et détaille les fonctionnalités proposées via des JEPs dans la syntaxe et les API notamment issues des projets https://openjdk.org/projects/amber/[Amber], https://openjdk.org/projects/jigsaw/[Jigsaw], https://openjdk.org/projects/loom/[Loom] et https://openjdk.org/projects/panama/[Panama] d’OpenJDK et pour le première fois deux de ces nouvelles fonctionnalités sont issues des projets https://openjdk.org/projects/leyden/[Leyden] et https://openjdk.org/projects/lilliput/[Lilliput].
+
 
 Le https://openjdk.org/projects/jdk/24/[JDK 24] est la troisième release publiée depuis le JDK 21, la version LTS courante. La version GA du JDK 24 a été publiée le 18 mars 2025.
 
