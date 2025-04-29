@@ -192,7 +192,7 @@ class ClasseFille extends ClasseMere {
     final int taille;
 
     ClasseFille(int taille) {
-        this.taille = taille;
+        this.taille = taille; // <1> 
         super();
     }
 
@@ -200,6 +200,7 @@ class ClasseFille extends ClasseMere {
     void afficher() { System.out.println("ClasseFille " + taille); }
 }
 ----
+<1> initialisation de la valeur de la variable d'instance avant l'invocation du super constructeur
 
 [source,plain]
 ----
@@ -276,10 +277,8 @@ public class TestClassFile {
             MethodTypeDesc.of(CD_long, CD_int, CD_int),
             ACC_PUBLIC | ACC_STATIC,
             codeBuilder -> codeBuilder.iload(0)
-
                 .i2l()
                 .iload(1)
-
                 .i2l()
                 .ladd()
                 .lreturn()));
@@ -295,9 +294,9 @@ C:\java\> javap -c .\EntierUtils.class
 public class EntierUtils {
   public static long ajouter(int, int);
     Code:
-       0: iload_1
+       0: iload_0
        1: i2l
-       2: iload_2
+       2: iload_1
        3: i2l
        4: ladd
        5: lreturn
