@@ -4,7 +4,6 @@
 :page-excerpt: Ce premier article sur les nouveautés de Java 24 détaille les fonctionnalités proposées via des JEPs dans la syntaxe et les API notamment par les projets Amber, Loom et Panama.
 :layout: post
 :page-tags: [Java, Java 24, Projet Amber, Projet Panama, Projet Loom, Projet Leyden, Projet Lilliput]
-
 :author: jeanmicheldoudoux
 :page-vignette: 2025/java-24.png
 :page-liquid:
