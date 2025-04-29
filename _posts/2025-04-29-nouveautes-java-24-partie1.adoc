@@ -10,7 +10,7 @@
 :page-liquid:
 :page-categories: software news
 
-Ce premier article est consacré aux nouveautés de Java 24 et détaille les fonctionnalités proposées via des JEPs dans la syntaxe et les API notamment issues des projets https://openjdk.org/projects/amber/[Amber], https://openjdk.org/projects/jigsaw/[Jigsaw], https://openjdk.org/projects/loom/[Loom] et https://openjdk.org/projects/panama/[Panama] d’OpenJDK et pour le première fois deux de ces nouvelles fonctionnalités sont issues des projets https://openjdk.org/projects/leyden/[Leyden] et https://openjdk.org/projects/lilliput/[Lilliput].
+Ce premier article est consacré aux nouveautés de Java 24 et détaille les fonctionnalités proposées via des JEPs dans la syntaxe et les API notamment issues des projets https://openjdk.org/projects/amber/[Amber], https://openjdk.org/projects/jigsaw/[Jigsaw], https://openjdk.org/projects/loom/[Loom] et https://openjdk.org/projects/panama/[Panama] d’OpenJDK et pour la première fois deux de ces nouvelles fonctionnalités sont issues des projets https://openjdk.org/projects/leyden/[Leyden] et https://openjdk.org/projects/lilliput/[Lilliput].
 
 
 Le https://openjdk.org/projects/jdk/24/[JDK 24] est la troisième release publiée depuis le JDK 21, la version LTS courante. La version GA du JDK 24 a été publiée le 18 mars 2025.
@@ -25,7 +25,7 @@ Ces JEPs sont proposées en standard (14), en preview (7), en incubation (1) ou 
 
 == Les JEPs relatives à la syntaxe
 
-Quatre fonctionnalités dans le JDK 24 concerne la syntaxe du langage Java, toutes pour une seconde, troisième ou quatrième preview :
+Quatre fonctionnalités dans le JDK 24 concernent la syntaxe du langage Java, toutes pour une seconde, troisième ou quatrième preview :
 
 * JEP 488 : https://openjdk.org/jeps/488[Primitive Types in Patterns&#44; instanceof&#44; and switch (Second Preview)]
 * JEP 492 : https://openjdk.org/jeps/492[Flexible Constructor Bodies (Third Preview)]
@@ -34,7 +34,7 @@ Quatre fonctionnalités dans le JDK 24 concerne la syntaxe du langage Java, tout
 
 === Primitive Types in Patterns, instanceof, and switch (Second Preview)
 
-Cette fonctionnalité étend les capacités des patterns, de l’opérateur `instanceof` et de l’instruction `switch` pour fonctionner avec tous les types primitifs, ce qui permet une exploitation plus uniforme des données et rend le code qui doit gérer différents types plus lisible et moins sujet aux erreurs.
+Cette fonctionnalité étend les capacités des patterns, de l’opérateur `instanceof` et de l’instruction `switch` pour fonctionner avec tous les types primitifs, ce qui permet une exploitation plus uniforme des données et rend le code qui doit gérer différents types, plus lisible et moins sujet aux erreurs.
 
 Elle a été proposée pour la première fois en tant que fonctionnalité en preview via la https://openjdk.org/jeps/455[JEP 455], délivrée dans le JDK 23. 
 Elle est à nouveau proposée pour une seconde preview, via la https://openjdk.org/jeps/488[JEP 488], sans changement.
@@ -79,7 +79,7 @@ Elle est à nouveau proposée pour une seconde preview, via la https://openjdk.o
 . Un module peut désormais déclarer une dépendance transitive vers `java.base`. Comme le module `java.se` déclare maintenant une dépendance transitive vers `java.base`, il est possible d’utiliser un `import` du module `java.se` dans des fichiers sources qui font partie de la définition d'un module explicite qui requière le module `java.se` dans sa description.
 
 +
-Dans un fichier source qui fait partie de la définition d'un module automatique, l’importation du module `java.se` fonctionnera si un autre module explicite résolu requière le module `java.se`.
+Dans un fichier source qui fait partie de la définition d'un module automatique, l’importation du module `java.se` fonctionnera si un autre module explicite résolu requiert le module `java.se`.
 +
 WARNING: Dans un fichier source en dehors d'un module, et en particulier dans un simple fichier source qui déclare implicitement une classe, l'utilisation de l’importation du module `java.se` échoue parce que `java.se` n'est pas dans l'ensemble par défaut des modules racines pour un unnamed module.
 
@@ -168,7 +168,7 @@ Le but est d’autoriser dans les constructeurs des instructions à apparaître 
 Elle a été proposée plusieurs fois en preview :
 
 * pour la première fois en tant que fonctionnalité en preview via la https://openjdk.org/jeps/447[JEP 447], délivrée dans le JDK 22 sous la dénomination « Instructions before super(...) »
-* une seconde preview via la https://openjdk.org/jeps/482[JEP 482], délivrée dans le JDK 23 avec une modification permettant aux traitements d’un constructeur de pouvoir désormais initialiser des champs de la même classe avant d’invoquer explicitement un constructeurs basées sur les retours et une nouvelle dénomination « Flexible Constructor Bodies »
+* une seconde preview via la https://openjdk.org/jeps/482[JEP 482], délivrée dans le JDK 23 avec une modification permettant aux traitements d’un constructeur de pouvoir désormais initialiser des champs de la même classe avant d’invoquer explicitement un constructeur basé sur les retours et une nouvelle dénomination « Flexible Constructor Bodies »
 * une troisième preview via la https://openjdk.org/jeps/492[JEP 492], délivrée dans le JDK 24 sans changement
 
 .Le fichier DemoJEP492.java
@@ -323,7 +323,7 @@ L’API permet aussi :
 
 === Vector API (Ninth Incubator)
 
-Cette fonctionnalité permet d’exprimer des calculs vectoriels qui, au moment de l'exécution, sont systématiquement compilés avec les meilleures instructions vectorielles possibles sur l’architectures CPU. Les SIMD sur les CPU supportées sont : x64 (SSE et AVX) et AArch64 (Neon)
+Cette fonctionnalité permet d’exprimer des calculs vectoriels qui, au moment de l'exécution, sont systématiquement compilés avec les meilleures instructions vectorielles possibles sur l’architecture CPU. Les SIMD sur les CPU supportés sont : x64 (SSE et AVX) et AArch64 (Neon)
 
 L’API Vector, introduite en incubation pour la première fois dans le JDK 16, est proposée pour une neuvième incubation via la https://openjdk.org/jeps/489[JEP 489] dans le JDK 24, avec quelques modifications dans l’API.
 
@@ -337,7 +337,7 @@ Cette fonctionnalité a pour but de simplifier la programmation multithread en r
 
 Elle propose un modèle qui permet une écriture du code dans un style synchrone avec une exécution en asynchrone. Le code est ainsi facile à écrire, à lire et à tester.
 
-La concurrence structurée (Structured Concurrency) a été proposée via la https://openjdk.org/jeps/428[JEP 428] livrée dans le JDK 19 en tant qu’API en incubation. Elle a été réincubée via la https://openjdk.org/jeps/437[JEP 437] dans le JDK 20 avec une mise à jour mineure pour que les threads utilisés héritent des Scoped values (JEP 429).
+La concurrence structurée (Structured Concurrency) a été proposée via la https://openjdk.org/jeps/428[JEP 428] livrée dans le JDK 19 en tant qu’API en incubation. Elle a été ré-incubée via la https://openjdk.org/jeps/437[JEP 437] dans le JDK 20 avec une mise à jour mineure pour que les threads utilisés héritent des Scoped values (JEP 429).
 
 Elle a été ensuite proposée dans plusieurs previews :
 
@@ -402,7 +402,7 @@ L’option `--enable-native-access` de la JVM, introduite dans le JDK 19 via la 
 
 * Pour les unnamed modules du classpath : +
 `java --enable-native-access=ALL-UNNAMED ...` +
-ou Enable-Native-Acces:ALL-UNAMED dans le fichier manifest
+ou `Enable-Native-Acces:ALL-UNAMED` dans le fichier manifest
 * Pour les modules nommés du module path +
 `java --enable-native-access=mod1,mod2 ...`
 
@@ -415,7 +415,7 @@ L’option `--illegal-native access` de la JVM permet de contrôler les opérati
 Pour l’API FFM, il y a un ajustement des restrictions concernant son l’utilisation. 
 Avant le JDK 24, si l’option `--enable-native-access` était utilisée alors toute invocation d’une méthode restreinte d’un autre module levait une `IllegalCallerException`
 
-A partir du JDK 24, il y a un alignement du comportement entre les API FFM et JNI. 
+À partir du JDK 24, il y a un alignement du comportement entre les API FFM et JNI. 
 Ces invocations émettent des avertissements plutôt que lever des exceptions. 
 Pour obtenir le comportement précédent ; il faut utiliser une combinaison des options : +
 `java --enable-native-access=module1,module2,… --illegal-native-access=deny ...`
@@ -458,7 +458,7 @@ Il est enregistré dans le `MBeanServer` de la JVM. L’ObjectName qui l’ident
 
 image::2025/nouveautes-java-24-partie1/nouveautes-java-24-partie1-01.png[MBEans Browser VirtualThreadSchedulerMXBean,width=100%]
 
-Il est possible de modifier le nombre de threads du pool `ForkJoin` utilisé pour associé un thread porteur à un thread virtuel. 
+Il est possible de modifier le nombre de threads du pool `ForkJoin` utilisé pour associer un thread porteur à un thread virtuel. 
 Par défaut, c’est le nombre de cœurs du système.
 
 
