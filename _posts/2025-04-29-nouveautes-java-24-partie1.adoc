@@ -1,0 +1,478 @@
+= Les nouveautés de Java 24 : Partie 1
+:showtitle:
+:page-navtitle: Les nouveautés de Java 24 : partie 1
+:page-excerpt: Ce premier article sur les nouveautés de Java 24 détaille les fonctionnalités proposées via des JEPs dans la syntaxe et les API notamment par les projets Amber, Loom et Panama.
+:layout: post
+:page-tags: [Java, Java 24, Projet Amber, Projet Panama, Projet Loom, Projet Leyden, Projet Lilliput]
+
+:author: jeanmicheldoudoux
+:page-vignette: 2025/java-24.png
+:page-liquid:
+:page-categories: software news
+
+Ce premier article est consacré aux nouveautés de Java 24 et détaille les fonctionnalités proposées via des JEPs dans la syntaxe et les API notamment issues des projets https://openjdk.org/projects/amber/[Amber], https://openjdk.org/projects/jigsaw/[Jigsaw], https://openjdk.org/projects/loom/[Loom] et https://openjdk.org/projects/panama/[Panama] d’OpenJDK et pour la première fois deux de ces nouvelles fonctionnalités sont issues des projets https://openjdk.org/projects/leyden/[Leyden] et https://openjdk.org/projects/lilliput/[Lilliput].
+
+
+Le https://openjdk.org/projects/jdk/24/[JDK 24] est la troisième release publiée depuis le JDK 21, la version LTS courante. La version GA du JDK 24 a été publiée le 18 mars 2025.
+
+Elle contient 24 JEPs que l’on peut regrouper en trois catégories :
+
+* Des évolutions dans le langage
+* Des évolutions dans les API
+* Des évolutions dans la JVM
+
+Ces JEPs sont proposées en standard (14), en preview (7), en incubation (1) ou en expérimental (2).
+
+== Les JEPs relatives à la syntaxe
+
+Quatre fonctionnalités dans le JDK 24 concernent la syntaxe du langage Java, toutes pour une seconde, troisième ou quatrième preview :
+
+* JEP 488 : https://openjdk.org/jeps/488[Primitive Types in Patterns&#44; instanceof&#44; and switch (Second Preview)]
+* JEP 492 : https://openjdk.org/jeps/492[Flexible Constructor Bodies (Third Preview)]
+* JEP 494 : https://openjdk.org/jeps/494[Module Import Declarations (Second Preview)]
+* JEP 495 : https://openjdk.org/jeps/495[Simple Source Files and Instance Main Methods (Fourth Preview)]
+
+=== Primitive Types in Patterns, instanceof, and switch (Second Preview)
+
+Cette fonctionnalité étend les capacités des patterns, de l’opérateur `instanceof` et de l’instruction `switch` pour fonctionner avec tous les types primitifs, ce qui permet une exploitation plus uniforme des données et rend le code qui doit gérer différents types, plus lisible et moins sujet aux erreurs.
+
+Elle a été proposée pour la première fois en tant que fonctionnalité en preview via la https://openjdk.org/jeps/455[JEP 455], délivrée dans le JDK 23. 
+Elle est à nouveau proposée pour une seconde preview, via la https://openjdk.org/jeps/488[JEP 488], sans changement.
+
+=== Module Import Declarations (Second Preview)
+
+Cette fonctionnalité propose d’améliorer le langage Java avec la possibilité d’importer tous les types publics des packages exportés par un module en une seule instruction au lieu d’importer explicitement les types utilisés.
+
+Elle a été proposée pour la première fois en tant que fonctionnalité en preview via la https://openjdk.org/jeps/476[JEP 476], délivrée dans le JDK 23.
+
+.Le fichier DemoJEP494.java
+[source,java]
+----
+import module java.base;
+
+public class DemoJEP494 {
+
+    public static void main(String[] args) {
+      List<Integer> nombres = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10); 
+      List<Integer> nombresPairesAuCarres = nombres.stream().filter(n -> n % 2 == 0)
+                         .map(n -> n * n).collect(Collectors.toList());
+      System.out.println(nombresPairesAuCarres);
+    }
+}
+----
+
+Ce code peut être compilé et exécuté avec l’activation des fonctionnalités en preview :
+
+[source,plain]
+----
+C:\java>javac --enable-preview --release 24 DemoJEP494.java
+Note: DemoJEP494.java uses preview features of Java SE 24.
+Note: Recompile with -Xlint:preview for details.
+
+C:\java>java --enable-preview DemoJEP494
+[4, 16, 36, 64, 100]
+----
+
+Elle est à nouveau proposée pour une seconde preview, via la https://openjdk.org/jeps/494[JEP 494], avec 2 changements.
+
+[arabic]
+. Un module peut désormais déclarer une dépendance transitive vers `java.base`. Comme le module `java.se` déclare maintenant une dépendance transitive vers `java.base`, il est possible d’utiliser un `import` du module `java.se` dans des fichiers sources qui font partie de la définition d'un module explicite qui requière le module `java.se` dans sa description.
+
++
+Dans un fichier source qui fait partie de la définition d'un module automatique, l’importation du module `java.se` fonctionnera si un autre module explicite résolu requiert le module `java.se`.
++
+WARNING: Dans un fichier source en dehors d'un module, et en particulier dans un simple fichier source qui déclare implicitement une classe, l'utilisation de l’importation du module `java.se` échoue parce que `java.se` n'est pas dans l'ensemble par défaut des modules racines pour un unnamed module.
+
++
+.Le fichier DemoJEP494.java
+[source,java]
+-----
+import module java.se;
+
+public class DemoJEP494 {
+    public static void main(String[] args) {
+        System.out.println("Hello "+Localdate.now());
+    }
+}
+-----
++
+[source,plain]
+----
+C:\java>java --enable-preview DemoJEP494.java
+DemoJEP494.java:1: error: unnamed module does not read: java.se
+import module java.se;
+^
+DemoJEP494.java:5: error: cannot find symbol
+        System.out.println("Hello "+Localdate.now());
+                                    ^
+  symbol:   variable Localdate
+  location: class DemoJEP494
+2 errors
+error: compilation failed
+----
+
+[arabic, start=2]
+. Les imports avec * sont plus spécifiques que les imports de module, ce qui permet de les utiliser pour la résolution d’une ambiguïté
++
+.Le fichier DemoJEP494.java
++
+[source,java]
+----
+import module java.base;
+import module java.desktop;
+import java.util.*;
+
+public class DemoJEP494 {
+    public static void main(String[] args) {
+        List liste = null;         // java.util.List est utilisé
+    }
+}
+----
+
+=== Simple Source Files and Instance Main Methods (Fourth Preview)
+
+Cette fonctionnalité propose de simplifier l’écriture d'un programme Java simple notamment en simplifiant son point d’entrée :
+
+
+.Le fichier DemoJEP495.java
+[source,java]
+----
+void main() {
+  println("Hello World");
+}
+----
+
+Ce code peut être compilé et exécuté avec l’activation des fonctionnalités en preview :
+
+[source,plain]
+----
+C:\java>java --enable-preview DemoJEP495.java
+Hello World
+----
+
+Elle a été proposée plusieurs fois en preview :
+
+* pour la première fois via la https://openjdk.org/jeps/445[JEP 445], délivrée dans le JDK 21 sous la dénomination « Unnamed Classes and Instance Main Methods »
+* une seconde fois via la https://openjdk.org/jeps/463[JEP 463], délivrée dans le JDK 22 avec des modifications basées sur les retours et une nouvelle dénomination « Implicitly declared classes and instance main »
+* une troisième fois via la https://openjdk.org/jeps/477[JEP 477], délivrée dans le JDK 23 avec 2 évolutions :
+** l’`import static` implicite des 3 méthodes de la nouvelle classe `java.io.IO` pour interagir avec la console : `print(Object)`, `println(Object)` et `readln(String prompt)`
+** l’import automatique du module `java.base` dans les classes implicites
+* une quatrième fois via la https://openjdk.org/jeps/495[JEP 495], délivrée dans le JDK 24 avec une nouvelle dénomination « Simple Source Files and Instance Main Methods » et des changements dans la terminologie
+
+=== Flexible Constructor Bodies (Second Preview)
+
+L’objectif de cette fonctionnalité est de réduire la verbosité et la complexité du code en permettant aux développeurs de placer des instructions avant l’appel explicite d’un constructeur.
+
+Le but est d’autoriser dans les constructeurs des instructions à apparaître avant un appel explicite du constructeur, en utilisant `super(..)` ou `this(..)`. Ces instructions ne peuvent pas référencer l’instance en cours d’initialisation, mais elles peuvent initialiser ses champs. L’initialisation des champs avant d’invoquer un autre constructeur rend une classe plus fiable lorsque les méthodes sont réimplémentées.
+
+Elle a été proposée plusieurs fois en preview :
+
+* pour la première fois en tant que fonctionnalité en preview via la https://openjdk.org/jeps/447[JEP 447], délivrée dans le JDK 22 sous la dénomination « Instructions before super(...) »
+* une seconde preview via la https://openjdk.org/jeps/482[JEP 482], délivrée dans le JDK 23 avec une modification permettant aux traitements d’un constructeur de pouvoir désormais initialiser des champs de la même classe avant d’invoquer explicitement un constructeur basé sur les retours et une nouvelle dénomination « Flexible Constructor Bodies »
+* une troisième preview via la https://openjdk.org/jeps/492[JEP 492], délivrée dans le JDK 24 sans changement
+
+.Le fichier DemoJEP492.java
+[source,java]
+----
+public class DemoJEP492 {
+
+    public static void main(String[] args) {
+        new ClasseFille(100);
+    }
+}
+
+class ClasseMere {
+
+    ClasseMere() { afficher(); }
+
+    void afficher() { System.out.println("ClasseMere"); }
+
+}
+
+class ClasseFille extends ClasseMere {
+
+    final int taille;
+
+    ClasseFille(int taille) {
+        this.taille = taille; // <1> 
+        super();
+    }
+
+    @Override
+    void afficher() { System.out.println("ClasseFille " + taille); }
+}
+----
+<1> initialisation de la valeur de la variable d'instance avant l'invocation du super constructeur
+
+[source,plain]
+----
+C:\java>javac --enable-preview --release 24 DemoJEP492.java
+Note: DemoJEP492.java uses preview features of Java SE 24.
+Note: Recompile with -Xlint:preview for details.
+
+C:\java>java --enable-preview DemoJEP492
+ClasseFille 100
+----
+
+NOTE: Cette fonctionnalité est requise par le projet Valhalla.
+
+
+== Les JEPs relatives aux APIs
+
+Cinq JEPS concernent des évolutions dans les APIs (certaines issues des projets Panama et Loom) :
+
+* JEP 484 : https://openjdk.org/jeps/484[Class-File API]
+* JEP 485 : https://openjdk.org/jeps/485[Stream Gatherers]
+* JEP 487 : https://openjdk.org/jeps/487[Scoped Values (Fourth Preview)]
+* JEP 489 : https://openjdk.org/jeps/489[Vector API (Ninth Incubator)]
+* JEP 499 : https://openjdk.org/jeps/499[Structured Concurrency (Fourth Preview)]
+
+=== L'API Stream Gatherers
+
+Initialement les Stream Gatherers ont été introduits en première preview via la https://openjdk.org/jeps/461[JEP 461] dans le JDK 22 et en seconde preview via la https://openjdk.org/jeps/473[JEP 473] dans le JDK 23.
+
+Cette fonctionnalité est promue standard via la https://openjdk.org/jeps/485[JEP 485] dans le JDK 24, sans modification.
+
+Le but est d’enrichir l’API Stream pour prendre en charge des opérations intermédiaires personnalisées en utilisant l’opération intermédiaire `Stream::gather(Gatherer)`. 
+
+Cela permet aux pipelines d’opérations de transformer les données d’une manière qui n’est pas facilement réalisable avec les opérations intermédiaires intégrées existantes.
+
+Cette fonctionnalité est détaillée dans l’article link:{% post_url 2025-04-03-gatherers-java24 %}[L’API Stream Gatherers dans Java 24^] de ce blog.
+
+=== L'API Class-File
+
+Cette fonctionnalité a pour objectif de fournir dans le JDK une API standard pour l’analyse, la génération et la transformation des fichiers de classe. 
+Cette API pourra évoluer en même temps que le format class-file et permettra aux composants de la plate-forme Java de s’appuyer sur cette API au lieu de bibliothèques tierces. 
+Elle peut aussi être utilisée par toute application Java.
+
+L’API Class-File a été introduite dans le JDK 22 via la https://openjdk.org/jeps/457[JEP 457] en tant que fonctionnalité en preview. 
+Elle a été proposée en seconde preview via la https://openjdk.org/jeps/466[JEP 466] dans le JDK 23. 
+Elle est proposée en standard via la https://openjdk.org/jeps/484[JEP 484] dans le JDK 24, avec des modifications dans l’API.
+
+Elle propose une API riche pour modéliser le byte code et permettre un accès random ou séquentiel. 
+C’est une API moderne qui utilise des fabriques, des types scellés, l’immutabilité et utilise des builders fournis en paramètre de Lambda pour la génération d’éléments.
+
+
+Exemple la génération d’un fichier .class pour une classe contenant une méthode statique permettant d’ajouter deux nombres
+
+
+.Le fichier TestClassFile.java
+[source,java]
+----
+import static java.lang.classfile.ClassFile.ACC_PUBLIC;
+import static java.lang.classfile.ClassFile.ACC_STATIC;
+import static java.lang.constant.ConstantDescs.CD_int;
+import static java.lang.constant.ConstantDescs.CD_long;
+
+import java.io.IOException;
+import java.lang.classfile.ClassFile;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
+import java.nio.file.Path;
+
+public class TestClassFile {
+
+  public static void main(String[] args) throws java.io.IOException {
+    ClassFile.of().buildTo(Path.of("EntierUtils.class"),
+        ClassDesc.of("EntierUtils"),
+        classBuilder -> classBuilder.withMethodBody("ajouter",
+            MethodTypeDesc.of(CD_long, CD_int, CD_int),
+            ACC_PUBLIC | ACC_STATIC,
+            codeBuilder -> codeBuilder.iload(0)
+                .i2l()
+                .iload(1)
+                .i2l()
+                .ladd()
+                .lreturn()));
+  }
+}
+----
+
+L’exécution de cette classe génère un fichier EntierUtils.class.
+
+[source,plain]
+----
+C:\java\> javap -c .\EntierUtils.class
+public class EntierUtils {
+  public static long ajouter(int, int);
+    Code:
+       0: iload_0
+       1: i2l
+       2: iload_1
+       3: i2l
+       4: ladd
+       5: lreturn
+}
+----
+
+Le code Java équivalent (sans le constructeur par défaut) est :
+
+[source,java]
+----
+public class EntierUtils {
+  public static long ajouter(int a, int b) {
+    return (long) a + (long) b;
+  }
+}
+----
+
+L’API permet aussi :
+
+* la lecture et l’analyse des fichiers de classe avec plusieurs formes de parcours proposées
+* la transformation de fichiers de classe de plusieurs manières
+
+=== Vector API (Ninth Incubator)
+
+Cette fonctionnalité permet d’exprimer des calculs vectoriels qui, au moment de l'exécution, sont systématiquement compilés avec les meilleures instructions vectorielles possibles sur l’architecture CPU. Les SIMD sur les CPU supportés sont : x64 (SSE et AVX) et AArch64 (Neon)
+
+L’API Vector, introduite en incubation pour la première fois dans le JDK 16, est proposée pour une neuvième incubation via la https://openjdk.org/jeps/489[JEP 489] dans le JDK 24, avec quelques modifications dans l’API.
+
+L’API Vector restera en incubation jusqu’à ce que les fonctionnalités nécessaires du projet Valhalla soient disponibles en tant que fonctionnalités en preview. 
+À ce moment-là, l’implémentation de l’API Vector pourra les utiliser et ainsi être promue d’incubation à preview.
+
+=== Structured Concurrency (Third Preview)
+
+Cette fonctionnalité a pour but de simplifier la programmation multithread en rationalisant la gestion des erreurs et l'annulation, et en améliorant la fiabilité et en renforçant l'observabilité.
+
+
+Elle propose un modèle qui permet une écriture du code dans un style synchrone avec une exécution en asynchrone. Le code est ainsi facile à écrire, à lire et à tester.
+
+La concurrence structurée (Structured Concurrency) a été proposée via la https://openjdk.org/jeps/428[JEP 428] livrée dans le JDK 19 en tant qu’API en incubation. Elle a été ré-incubée via la https://openjdk.org/jeps/437[JEP 437] dans le JDK 20 avec une mise à jour mineure pour que les threads utilisés héritent des Scoped values (JEP 429).
+
+Elle a été ensuite proposée dans plusieurs previews :
+
+
+* une première preview via la https://openjdk.org/jeps/453[JEP 453] dans le JDK 21 avec la méthode `StructuredTaskScope::fork` modifiée pour renvoyer une `SubTask` plutôt qu’une `Future`.
+* une seconde preview via la https://openjdk.org/jeps/462[JEP 462] dans JDK 22, sans modification
+* une troisième une troisième preview via la https://openjdk.org/jeps/480[JEP 480] dans le JDK 23, sans modification, afin d'obtenir plus de retours
+* une quatrième preview via la https://openjdk.org/jeps/499[JEP 499] dans le JDK 24, sans modification
+
+=== Scoped Values (Third Preview)
+
+Cette fonctionnalité permet de partager des données immuables à la fois dans un thread et des threads enfants. 
+
+Les Scoped Values sont plus sûres à utiliser que les `ThreadLocal` et elles requièrent moins de ressources, en particulier lorsqu’elles sont utilisées avec des threads virtuels et la concurrence structurée.
+
+Elle a été introduite en incubation dans le JDK20 via la https://openjdk.org/jeps/429[JEP 429].
+
+Elle a ensuite été proposée dans plusieurs previews :
+
+
+* une première preview dans le JDK 21 via la https://openjdk.org/jeps/446[JEP 446],
+* une seconde preview dans le JDK 22 via la https://openjdk.org/jeps/464[JEP 464],
+* une troisième preview dans le JDK 23 via la https://openjdk.org/jeps/481[JEP 481] avec une modification par rapport aux previews précédentes : une nouvelle interface fonctionnelle `ScopedValue.CallableOp`, utilisée pour le paramètre opération des méthodes `ScopedValue.callWhere()` et `ScopedValue.Carrier.call()`, a été introduite pour fournir les traitements à exécuter qui permet au compilateur Java de déduire si une checked exception peut être levée et si c’est le cas alors laquelle. Cela permet de traiter l’exception précise plutôt qu’une exception générique,
+* une quatrième preview dans le JDK 24 via la https://openjdk.org/jeps/487[JEP 487], avec des petits changements dans l’API
+
+Les méthodes `ScopedValue.callWhere()` et `ScopedValue.runWhere()` sont supprimées pour rendre l’interface complètement fluide. 
+Il faut invoquer la méthode `ScopedValue.where(ScopedValue<T>, T)` puis la méthode `call(ScopedValue.CallaleOp)` ou `run(Runnable)` du `ScopeValueCarrier` obtenu.
+
+[source,java]
+----
+public final static ScopedValue<String> VALEUR = ScopedValue.newInstance();
+  public static void main(String[] args) {
+    ScopedValue.where(VALEUR, "valeur-main-run").run(() -> { afficherValeur();});
+    try {
+      String valeur = ScopedValue.where(VALEUR, "valeur-main-call").call(TestScopedValue::traiter);
+      System.out.println("valeur=" + valeur);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+----
+
+== Les autres évolutions dans les API de Java Core
+
+2 JEPS concernent la préparation à de futures restrictions sur l’utilisation d’API de Java Core :
+
+* JEP 472 : https://openjdk.org/jeps/472[Prepare to Restrict the Use of JNI]
+* JEP 498 : https://openjdk.org/jeps/498[Warn upon Use of Memory-Access Methods in sun.misc.Unsafe]
+
+=== Prepare to Restrict the Use of JNI
+
+Le but de cette fonctionnalité, définie dans la https://openjdk.org/jeps/472[JEP 472], est de préparer les développeurs aux futures versions de Java où les interactions avec le code natif seront limitées par défaut.
+
+Elle fait partie d’un ensemble de modifications de la JVM en cours qui vont restreindre certaines fonctionnalités de la JVM par défaut, en obligeant à activer spécifiquement ces fonctionnalités dans le but d’avoir une JVM plus intègre et robuste (https://openjdk.org/jeps/8305968[JEP draft 8305968: Integrity by Default])
+
+La JVM émet désormais des avertissements lors de l’utilisation des API JNI et FFM. 
+Pour JNI, les méthodes concernées sont : `System::loadLibrary`, `System::load`, `Runtime::loadLibrary`, `Runtime::load` et les méthodes natives.
+
+
+L’option `--enable-native-access` de la JVM, introduite dans le JDK 19 via la https://openjdk.org/jeps/424[JEP 424], permet d’autoriser les accès et ainsi d’éviter les avertissements :
+
+
+* Pour les unnamed modules du classpath : +
+`java --enable-native-access=ALL-UNNAMED ...` +
+ou `Enable-Native-Acces:ALL-UNAMED` dans le fichier manifest
+* Pour les modules nommés du module path +
+`java --enable-native-access=mod1,mod2 ...`
+
+L’option `--illegal-native access` de la JVM permet de contrôler les opérations restreintes si l’accès natif n’est pas activé pour un module grâce à plusieurs valeurs :
+
+* `allow` : l’utilisation est autorisée
+* `warn` : par défaut en Java 24, un avertissement est émis par la JVM la première fois par module
+* `deny` : l’utilisation est interdite, une exception de type `IllegalCallerException` est levée
+
+Pour l’API FFM, il y a un ajustement des restrictions concernant son l’utilisation. 
+Avant le JDK 24, si l’option `--enable-native-access` était utilisée alors toute invocation d’une méthode restreinte d’un autre module levait une `IllegalCallerException`
+
+À partir du JDK 24, il y a un alignement du comportement entre les API FFM et JNI. 
+Ces invocations émettent des avertissements plutôt que lever des exceptions. 
+Pour obtenir le comportement précédent ; il faut utiliser une combinaison des options : +
+`java --enable-native-access=module1,module2,… --illegal-native-access=deny ...`
+
+=== Warn upon Use of Memory-Access Methods in sun.misc.Unsafe
+
+Les méthodes d'accès à la mémoire de `sun.misc.Unsafe` ont été dépréciées pour suppression dans le JDK 23 (https://openjdk.org/jeps/471[JEP 471])
+
+Le but de cette fonctionnalité, définie dans la https://openjdk.org/jeps/498[JEP 498], est de préparer les développeurs aux futures versions de Java où les interactions avec le code natif seront limitées par défaut.
+
+.Exemple
+[source,plain]
+----
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/C:/java-tools/apache-maven-3.8.6/lib/guava-25.1-android.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+----
+
+Des API standards de remplacement sont proposées :
+
+* `VarHandle` introduit dans le JDK 9 (https://openjdk.org/jeps/193[JEP 193])
+* Foreign Function & Memory dans le JDK 22 (https://openjdk.org/jeps/454[JEP 454])
+
+=== Les évolutions dans les autres API
+
+Le support de plusieurs standards est mis à niveau :
+
+* https://unicode.org/versions/Unicode16.0.0/[Unicode 16] (https://bugs.openjdk.org/browse/JDK-8319993[JDK-8319993])
+* IANA Time Zone Database 2024b (https://bugs.openjdk.org/browse/JDK-8339637[JDK-8339637])
+* CLDR Version 46 (https://bugs.openjdk.org/browse/JDK-8333582[JDK-8333582])
+
+La méthode `of(CharSequence)` est ajoutée à la classe `java.io.Reader`.
+
+La surcharge `waitFor(Duration)` est ajoutée à la classe `java.lang.Process`.
+
+Le nouveau MXBean `jdk.management.VirtualThreadSchedulerMXBean` est ajouté pour superviser le scheduler de threads virtuels.
+
+Il est enregistré dans le `MBeanServer` de la JVM. L’ObjectName qui l’identifie de manière unique dans le MBeanServer est : `jdk.management :type=VirtualThreadScheduler`.
+
+image::2025/nouveautes-java-24-partie1/nouveautes-java-24-partie1-01.png[MBEans Browser VirtualThreadSchedulerMXBean,width=100%]
+
+Il est possible de modifier le nombre de threads du pool `ForkJoin` utilisé pour associer un thread porteur à un thread virtuel. 
+Par défaut, c’est le nombre de cœurs du système.
+
+
+== Conclusion
+
+Java 24 est la troisième version non-LTS après la publication de la version LTS, Java 21. 
+Il n’y aura donc du support que durant 6 mois, jusqu’à la prochaine version de Java.
+
+C’est la version du JDK qui inclut le plus de JEPs, avec un total de 24 JEPs. 
+JDK 24 introduit 17 nouvelles fonctionnalités dont 14 en standard, 1 en preview et 2 en expérimental. 7 fonctionnalités restent en preview ou en incubation avec ou sans évolutions.
+
+Cette première partie est consacrée aux évolutions dans la syntaxe et les API. 
+Il est à noter que les String templates retirées dans le JDK 23 ne sont toujours pas reproposées dans le JDK 24.
+
+La seconde partie est consacrée aux autres fonctionnalités et évolutions dans le JDK 24.
+
+&nbsp;
