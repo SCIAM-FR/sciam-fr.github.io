@@ -411,9 +411,9 @@ public class TestClassFile {
         classBuilder -> classBuilder.withMethodBody("ajouter",
             MethodTypeDesc.of(CD_long, CD_int, CD_int),
             ACC_PUBLIC | ACC_STATIC,
-            codeBuilder -> codeBuilder.iload(1)
+            codeBuilder -> codeBuilder.iload(0)
                 .i2l()
-                .iload(2)
+                .iload(1)
                 .i2l()
                 .ladd()
                 .lreturn()));
@@ -429,9 +429,9 @@ C:\java\TestJava22> javap -c .\EntierUtils.class
 public class EntierUtils {
   public static long ajouter(int, int);
     Code:
-       0: iload_1
+       0: iload_0
        1: i2l
-       2: iload_2
+       2: iload_1
        3: i2l
        4: ladd
        5: lreturn
