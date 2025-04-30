@@ -401,11 +401,11 @@ L’option `--enable-native-access` de la JVM, introduite dans le JDK 19 via la 
 
 * Pour les unnamed modules du classpath : +
 `java --enable-native-access=ALL-UNNAMED ...` +
-ou `Enable-Native-Acces:ALL-UNAMED` dans le fichier manifest
+ou `Enable-Native-Access:ALL-UNAMED` dans le fichier manifest
 * Pour les modules nommés du module path +
 `java --enable-native-access=mod1,mod2 ...`
 
-L’option `--illegal-native access` de la JVM permet de contrôler les opérations restreintes si l’accès natif n’est pas activé pour un module grâce à plusieurs valeurs :
+L’option `--illegal-native-access` de la JVM permet de contrôler les opérations restreintes si l’accès natif n’est pas activé pour un module grâce à plusieurs valeurs :
 
 * `allow` : l’utilisation est autorisée
 * `warn` : par défaut en Java 24, un avertissement est émis par la JVM la première fois par module
