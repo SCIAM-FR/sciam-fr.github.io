@@ -344,7 +344,8 @@ ML-KEM a été normalisé dans le cadre de la norme FIPS 203 par le National Ins
 
 Le but de la https://openjdk.org/jeps/496[JEP 496^] est de fournir une implémentation du mécanisme d’encapsulation de clés basé sur ML-KEM.
 
-Les API permettent la mise en œuvre de ML-KEM dont le point d’entrée est la classe javax.crypto.KEM.
+Les API permettent la mise en œuvre de ML-KEM dont le point d’entrée est la classe `javax.crypto.KEM`.
+
 
 .Exemple de génération d’une paire de clés ML-KEM
 [source,java]
@@ -381,7 +382,8 @@ Les API permettent la mise en œuvre de ML-KEM dont le point d’entrée est la 
 
 Le but de la https://openjdk.org/jeps/478[JEP 478^] est d’introduire une API pour les fonctions de dérivation de clé, en anglais Key Derivation Function (KDF), qui font parties du standard PKCS #11.
 
-Les algorithmes cryptographiques permettent de dériver des clés à partir d’une clé secrète et d’autres données via la nouvelle classe `javax.crypto.KDF` avec un support de l’algorithme `HKDF`.
+Les algorithmes cryptographiques permettent de dériver des clés à partir d’une clé secrète et d’autres données via la nouvelle classe `javax.crypto.KDF` avec un support de l’algorithme HKDF.
+
 
 .Exemple : le fichier DemoJEP478.java
 [source,java]
@@ -413,7 +415,8 @@ key = e087bd361e13e35ad0532462db039eb1689491027127dad4e3ced04b680231a6
 
 Le JDK 24 propose aussi plusieurs autres évolutions relatives à la sécurité :
 
-* des dises à jour de certificats racines dans le truststore cacerts
+* des mises à jour de certificats racines dans le truststore cacerts
+
 * la nouvelle propriété système `jdk.tls.server.newSessionTicket` définit le nombre de tickets de reprise TLSv1.3 envoyés par un serveur JSSE par session. La valeur utilisable va de 0 à 10, avec 1 par défaut (https://bugs.openjdk.org/browse/JDK-8328608[JDK-8328608])
 * le support du pattern matching dans les algo TLS définis dans la propriété système `jdk.tls.disabledAlgorithms` (https://bugs.openjdk.org/browse/JDK-8341964[JDK-8341964])
 * la désactivation de la suite d’algorithmes TLS_RSA (https://bugs.openjdk.org/browse/JDK-8245545[JDK-8245545])
