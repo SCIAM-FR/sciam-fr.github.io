@@ -1,0 +1,418 @@
+= Article les nouveautés de Java 24 - partie 2
+:showtitle:
+:page-navtitle: Les nouveautés de Java 24 : partie 2
+:page-excerpt: Ce second article sur les nouveautés de Java 24 est consacré aux autres améliorations, que ce soit les évolutions dans les outils, les API et dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
+:layout: post
+:author: jeanmicheldoudoux
+:page-tags: [Java, Java 24, Projet Amber, Projet Panama, Projet Loom, Project Leyden, Projet Liliput]
+:page-vignette: 2025/java-24.png
+:page-liquid:
+:page-categories: software news
+
+Le link:{% post_url 2025-04-29-nouveautes-java-24-partie1 %}[premier article^] de cette série a détaillé les fonctionnalités proposées dans la syntaxe et les API dans le JDK 24. Comme pour les précédentes versions de Java, cette version 24 inclut des JEPs, mais aussi, et surtout, des évolutions et des améliorations sur la fiabilité (corrections de nombreux bugs), la performance et la sécurité.
+
+Ce second article est consacré aux autres améliorations, que ce soient les évolutions dans la JVM Hotspot et les outils du JDK, dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
+
+== Les fonctionnalités dépréciées
+
+Plusieurs fonctionnalités sont dépréciées dans le JDK 24.
+
+=== Deprecate the 32-bit x86 Port for Removal
+
+Les systèmes 32 bits x86 sont de moins en moins utilisés et le portage de nouvelles fonctionnalités requière beaucoup de ressources ou implique de trouver des solutions palliatives.
+
+Le but de la https://openjdk.org/jeps/501[JEP 501] est de rendre obsolète le port x86 32 bits de Linux qui est le seul port x86 32 bits restant dans le JDK.
+
+Ce portage devrait être supprimé dans le JDK 25.
+
+Le https://openjdk.org/projects/zero/[portage Zero], indépendant de l’architecture car ne contenant aucune ligne d’assembleur, sera alors le seul moyen d’exécuter des programmes Java sur des processeurs x86 32 bits.
+
+=== Les autres fonctionnalités dépréciées
+
+La classe java.util.zip.ZipError est dépréciée pour suppression (https://bugs.openjdk.org/browse/JDK-8336843[JDK-8336843]).
+
+Plusieurs outils du JDK sont dépréciés pour suppression :
+
+* jstatd (https://bugs.openjdk.org/browse/JDK-8327793[JDK-8327793]) pour réduire la dépendance à RMI
+* jhsdb (https://bugs.openjdk.org/browse/JDK-8338894[JDK-8338894]) pour réduire la dépendance à RMI
+* jrunscript (https://bugs.openjdk.org/browse/JDK-8341134[JDK-8341134]) qui n’est plus utile depuis que les JDK n’incluent plus de moteur de scripting Javascript
+
+L’option LockingMode et ses modes LM_LEGACY et LM_MONITOR sont dépréciés (https://bugs.openjdk.org/browse/JDK-8334299[JDK-8334299]).
+
+[source,plain]
+----
+C:\java>java -XX:+UnlockExperimentalVMOptions -XX:LockingMode=1 HelloWorld
+OpenJDK 64-Bit Server VM warning: Option LockingMode was deprecated in version 24.0 and will likely be removed in a future release.
+Hello World
+----
+
+Plusieurs options de la JVM sont dépréciées pour suppression (https://bugs.openjdk.org/browse/JDK-8286851[JDK-8286851]) :
+
+[width="100%",cols="42%,58%",options="header",]
+|===
+|Option dépréciée |Option de remplacement
+|-verbosegc |-verbose:gc
+|-noclassgc |-Xnoclassgc
+|-verify |-Xverify:all
+|-verifyremote |-Xverify:remote
+|-ss |-Xss
+|-ms |-Xms
+|-mx |-Xmx
+|===
+
+== Les fonctionnalités retirées
+
+Plusieurs fonctionnalités sont retirées du JDK 24.
+
+=== Remove the Windows 32-bit x86 Port +
+Dans le JDK 21, le support de Windows 32 bits a été déprécié pour suppression (https://openjdk.org/jeps/449[JEP 449]).
+
+Le but de la https://openjdk.org/jeps/479[JEP 479] est de supprimer le code source et la prise en charge de la compilation du JDK sur les systèmes Windows x86 32 bits.
+
+D’autant plus que le support de Windows 10 arrive à sa fin en octobre 2025 : c'est le dernier système d’exploitation Windows prenant en charge le support 32 bits.
+
+=== Permanently Disable the Security Manager
+
+Le Security Manager a été déprécié dans le JDK 17.
+
+Dans le JDK 24, via la https://openjdk.org/jeps/486[JEP 486], il est désactivé et ne peut plus être activé :
+
+* Ni au lancement de la JVM
++
+[source,plain]
+----
+C:\java>java -Djava.security.manager HelloWorld
+Error occurred during initialization of VM
+java.lang.Error: A command line option has attempted to allow or enable the Security Manager. Enabling a Security Manager is not supported.
+        at java.lang.System.initPhase3(java.base@24/System.java:1947)
+----
+
+* Ni via l’API dans une application en cours d’exécution
+
+L’API Security Manager n’est plus fonctionnelle même si elle reste pour des raisons de compatibilité. La suppression sera opérée dans une future version du JDK.
+
+=== Les autres fonctionnalités retirées
+
+Plusieurs fonctionnalités qui ne font pas l’objet d’une JEP sont retirées :
+
+* le support de GTK2 sous Linux est supprimé (https://bugs.openjdk.org/browse/JDK-8329471[JDK-8329471])
+* la suppression du comportement compatible JDK1.1 pour les fuseaux horaires « EST », « MST » et « HST » (https://bugs.openjdk.org/browse/JDK-8340477[JDK-8340477])
+* la propriété d’environnement JNDI `java.naming.rmi.security.manager` (https://bugs.openjdk.org/browse/JDK-8344299[JDK-8344299])
+* les options `-t`, `-tm`, `-Xfuture`, `-checksource`, `-cs` et `-noasyncgc` de la JVM (https://bugs.openjdk.org/browse/JDK-8339918[JDK-8339918])
+
+== Les évolutions dans la JVM HotSpot
+
+Différentes évolutions sont proposées dans la JVM HotSpot du JDK 24.
+
+=== Late Barrier Expansion for G1
+
+Une barrière est du code exécuté avant/après l’accès à un objet. Elles sont ajoutées lors du chargement des classes selon le GC utilisé.
+
+L’expansion est un pipeline utilisé par le compilateur C2 du JIT pour transformer du byte code en Intermediate Representation (IR) puis en assembleur optimisé pour la plateforme.
+
+G1 étant régional, ces barrières sont complexes. Initialement, l’implémentation des barrières de G1 est effectuée en début du pipeline pour profiter des optimisations du JIT : malheureusement cela s’est avéré peu efficace et complexe.
+
+Le but de la https://openjdk.org/jeps/475[JEP 475] est de simplifier l’implémentation des barrières de G1 qui enregistrent des informations sur les accès à la mémoire de l’application en déplaçant leur mise en œuvre du début du pipeline de compilation vers la fin pour injecter directement de l’assembleur optimisé réduisant de 10 à 20% la surcharge pour le compilateur C2 avec le même résultat.
+
+NOTE: ZGC utilise cette fonctionnalité depuis le JDK 14.
+
+=== ZGC: Remove the Non-Generational Mode
+
+ZGC (Z Garbage Collector) est un ramasse-miettes de la JVM HotSpot, développé par Oracle, hautement scalable et à faible latence (pause < 1ms) pour des heaps de très grande taille (jusqu’à 16 téraoctets).
+
+Le mode générationnel pour ZGC a été introduit dans le JDK 21 (https://openjdk.org/jeps/439[JEP 439]).
+
+Dans le JDK 23, le mode générationnel est utilisé par défaut pour ZGC.
+
+Dans le JDK 24, via la https://openjdk.org/jeps/490[JEP 490], le mode non-générationnel est retiré. ZGC ne fonctionne donc plus que dans le mode générationnel
+
+L’option -XX:+Zgenerationnel est inutile et marquée obsolète : son utilisation est ignorée.
+
+[source,plain]
+----
+C:\java>java -XX:+UseZGC -XX:-ZGenerational HelloWorld
+OpenJDK 64-Bit Server VM warning: Ignoring option ZGenerational; support was removed in 24.0
+Hello World
+----
+
+=== Synchronize Virtual Threads without Pinning
+
+Le but de la https://openjdk.org/jeps/491[JEP 491] est d’éliminer le cas le plus fréquent d’épinglage d’un thread virtuel à son thread porteur ce qui nuit à la scalabilité si de nombreuses opérations synchronized étaient exécutées grâce à une ré-implémentation du mot clé `synchronized` afin que les threads virtuels puissent acquérir et libérer des moniteurs indépendamment de leurs threads porteurs.
+
+Il n’est donc plus nécessaire de remplacer l’utilisation de `synchronized` par un `ReentrantLock`.
+
+La propriété système `jdk.tracePinnedThreads` est retirée.
+
+Les derniers cas de pinning restants sont toujours détectables avec l’événement JFR `jdk.VirtualThreadPinned`.
+
+=== Ahead-of-Time Class Loading & Linking
+
+C’est la première contribution dans le JDK du projet Leyden qui vise à réduire le temps de démarrage et celui nécessaire pour atteindre les performances maximales de la JVM, et l’empreinte mémoire.
+
+Les classes sont chargées à la demande via un ClassLoader avec un coût liés aux différentes opérations exécutées :
+
+* la recherche dans le classpath,
+* le chargement du .class,
+* la vérification du byte code,
+* la création d’une instance de type `Class`,
+* la liaison de la classe,
+* l'exécution des initialisations `static`
+
+De plus, la JVM est dynamique : la liste des classes à charger n’est pas fixe au démarrage, car les classes peuvent être créées dynamiquement : par exemple via des proxys dynamiques ou chargées dynamiquement par réflexion.
+
+Le but de la https://openjdk.org/jeps/483[JEP 483] est de réduire le temps de démarrage en rendant les classes d’une application instantanément disponibles, dans un état chargées et liées.
+
+NOTE: Cette fonctionnalité s’appuie sur AppCDS.
+
+La mise en œuvre se fait en 3 étapes :
+
+. L'exécution de l’application en mode enregistrement pour enregistrer les classes à charger dans un fichier de configuration avec les options `-XX:AOTMode=record -XX:AOTConfiguration=xxx`
++
+[source,plain]
+----
+java -XX:AOTMode=record -XX:AOTConfiguration=app.aotconf -cp monapp.jar fr.sciam.monapp.MainApp
+----
+
+. La création du cache à partir du fichier de configuration avec les options `-XX:AOTMode=create -XX:AOTConfiguration=xxx -XX:AOTCache=yyy`
++
+[source,plain]
+----
+java -XX:AOTMode=create -XX:AOTConfiguration=app.aotconf -XX:AOTCache=main.aot -cp monapp.jar
+----
+
+. L'exécution de l’application avec le cache avec l’option `-XX:AOTCache=yyy`
++
+[source,plain]
+----
+java -XX:AOTCache=main.aot -cp monapp.jar fr.sciam.monapp.MainApp
+----
+
+Cette mise en œuvre sera probablement simplifiée dans le futur.
+
+Contrairement à GraalVM Native Image qui propose le même type de fonctionnalités, mais dans un monde fermé, toutes les fonctionnalités de la JVM sont conservées : une classe non présente dans l’archive sera chargée dynamiquement par la JVM.
+
+Le mode enregistrement doit être similaire à prod : par exemple, il faut ne pas utiliser de classes de suite de tests, car les classes de tests seraient mises en cache.
+
+Il faut se concentrer sur l’exécution d’un large éventail de scénarios pour maximiser le nombre de classes mises en cache.
+
+Toutes les exécutions doivent :
+
+* utiliser la même version du JDK,
+* être sur la même architecture matérielle (par exemple, x64 ou aarch64),
+* et le même système d’exploitation
+
+Toutes les exécutions doivent avoir des options concernant les modules cohérentes et des graphes de modules cohérents :
+
+* Les arguments `-m`, `--module`, `-p`, `--module-path` et `--add-modules` doivent être identiques,
+* Les arguments `--limit-modules`, `--patch-module` et `--upgrade-module-path` ne doivent pas être utilisés
+
+Toutes les exécutions ne doivent pas utiliser d’agents JVMTI qui peuvent réécrire arbitrairement des fichiers de classe à l’aide de `ClassFileLoadHook`.
+
+WARNING: Cette fonctionnalité ne propose pas encore de support de ZGC.
+
+=== Generational Shenandoah (Experimental)
+
+Jusqu’à présent, le ramasse-miettes Shenandoah n’était pas générationnel et ne faisait donc pas de distinction entre les objets à durée de vie courte et longue.
+
+Le but de la https://openjdk.org/jeps/404[JEP 404^] est d’introduire un mode générationnel expérimental pour faire comme tous les GC de la JVM Hotspot qui récupèrent la mémoire.
+
+En tant que fonctionnalité expérimentale, elle doit être activée avec les options :
+
+`-XX:+UnlockExperimentalVMOptions -XX:ShenandoahGCMode=generational -XX:+UseShenandoahGC`
+
+WARNING: Attention tous les JDK avec une JVM HotSpot ne proposent pas Shenandoah, notamment les JDK d'Oracle.
+
+=== Compact Object Headers (Experimental)
+
+Cette fonctionnalité est issue des travaux du projet Lilliput.
+
+Le but de la https://openjdk.org/jeps/450[JEP 450^] est de réduire la taille des headers des objets à 64 bits (8 octets) sur les plateformes 64-bit x64 et AArch64 :
+
+* 22 bits pour le pointeur compressé de classe (activé par défaut)
+* 31 bits pour le hashcode
+* 4 bits pour les travaux du projet Valhalla
+* les bits restants pour les flags du GC et de la JVM
+
+En tant que fonctionnalité expérimentale, elle doit être activée avec les options :
+
+`-XX:+UnlockExperimentalVMOptions -XX:+UseCompactObjectHeaders`
+
+Des tests montrent une réduction de 10 à 20 % de la mémoire et de la consommation CPU lors de son utilisation.
+
+Dans le JDK 24, cette fonctionnalité présente quelques limitations :
+
+* le heap est limité à moins de 8 To sauf avec ZGC
+* et est limité à 4 millions de classes
+
+== Les évolutions dans les outils du JDK
+
+Le JDK 24 propose plusieurs évolutions dans différents outils.
+
+=== Linking Run-Time Images without JMODs
+
+Depuis le JDK 9, les modules sont contenus en double :
+
+* dans l’environnement d’exécution (lib/modules)
+* et sous la forme de fichiers jmods (/jmod) utilisés par jlink pour créer des JRE personnalisés
+
+Le but de la https://openjdk.org/jeps/493[JEP 493^] est de permettre aux fournisseurs de JDK de proposer un JDK sans jmods permettant de réduire la taille des JDK d’environ 25%.
+
+L’option n’est pas activée par défaut et doit l’être avec l’option `--enable-linkable-runtime` de l’outil `configure` avant le build du JDK.
+
+L’outil `jlink` d’un tel JDK peut extraire directement les modules de l’image d’exécution au lieu d’utiliser les fichiers JMOD tant que le module java.base est présent dans l’image d’exécution.
+
+=== Les autres évolutions
+
+Le JDK 24 propose diverses évolutions dans plusieurs de ses outils :
+
+* la nouvelle option `–C` ou `--dir` de l’outil `jar` pour extraire les fichiers dans le répertoire précisé
++
+[source,plain]
+----
+C:\java>jar -xf log4j-1.2.17.jar -C "temp\log4j"
+----
+
+* la nouvelle option `-k` ou `--keep-old-files` de l’outil `jar` pour ne pas écraser les fichiers existants
+* les commandes `Thread.vthread_scheduler` et `Thread.vthread_pollers` de `jcmd` sont ajoutées pour aider à diagnostiquer des problèmes avec les threads virtuels
+* l’outil `Javadoc` génère une nouvelle page de résumé pour les spécifications externes des APIs de Java SE et du JDK
++
+image::2025/nouveautes-java-24-partie2/nouveautes-java-24-partie2-01.png[La page External Specifications de la Javadoc de Java SE,width=100%]
+
+* l’outil `jpackage` supporte les versions 4 et 5 de https://github.com/wixtoolset[WiX Toolset^] sous Windows
+* l’utilisation de l’option `--add-modules ALL-MODULE-PATH` avec `jlink` impose explicitement l’option `--module-path` (https://bugs.openjdk.org/browse/JDK-8345259[JDK-8345259]).
+
+== Les évolutions relatives à la sécurité 
+
+Le JDK 24 propose des évolutions relatives à la sécurité. 
+Il propose notamment des premiers algorithmes de cryptographie post-quantique de type Module-Lattice-Based qui proposent une meilleure résistances face aux performances des ordinateurs quantiques qui vont être capables de mettre à mal les algorithmes existants.
+
+=== Quantum-Resistant Module-Lattice-Based Key Encapsulation Mechanism 
+
+Les algorithmes de signature numérique (DSA) sont utilisés pour détecter des modifications de données non autorisées.
+
+ML-DSA a été normalisé dans le cadre de la norme FIPS 204 par le National Institute of Standards and Technology (NIST) des États-Unis.
+
+Les algos de type ML (Module-Lattice) sont une classe d’algorithmes dit post-quantique basés sur un réseau de modules. Ils sont conçus pour offrir une résistance contre les attaques utilisant l’informatique quantique.
+
+Le but de la https://openjdk.org/jeps/497[JEP 497^] est de fournir une implémentation du mécanisme de signature numérique basé sur ML-DSA.
+
+.Exemple de génération d'une paire de clés ML-DSA
+[source,java]
+----
+  KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-DSA");
+  KeyPair keyPair = kpg.generateKeyPair();
+  
+  PublicKey publicKey = keyPair.getPublic();
+  PrivateKey privateKey = keyPair.getPrivate();
+----
+
+.Exemple de signature d'un message en utilisant la clé privée par l’émetteur
+[source,java]
+----
+  byte[] message = "Données à signer".getBytes(StandardCharsets.UTF_8);
+  Signature signer = Signature.getInstance("ML-DSA");
+  signer.initSign(privateKey);
+  signer.update(message);
+  byte[] signature = signer.sign();
+----
+
+.Exemple de vérification du message avec la clé publique par le receveur
+[source,java]
+----
+  Signature signatureVerifier = Signature.getInstance("ML-DSA");
+  signatureVerifier.initVerify(publicKey);
+  signatureVerifier.update(message);
+  boolean verified = signatureVerifier.verify(signature);
+----
+
+=== Quantum-Resistant Module-Lattice-Based Digital Signature Algorithm
+
+Les mécanismes d’encapsulation de clés (KEM) sont utilisés pour sécuriser les clés symétriques sur des canaux de communication non sécurisés à l’aide de chiffrement à clé publique.
+
+ML-KEM a été normalisé dans le cadre de la norme FIPS 203 par le National Institute of Standards and Technology (NIST) des États-Unis.
+
+Le but de la https://openjdk.org/jeps/496[JEP 496^] est de fournir une implémentation du mécanisme d’encapsulation de clés basé sur ML-KEM.
+
+Les API permettent la mise en œuvre de ML-KEM dont le point d’entrée est la classe javax.crypto.KEM.
+
+.Exemple de génération d’une paire de clés ML-KEM
+[source,java]
+----
+  KeyPairGenerator g = KeyPairGenerator.getInstance("ML-KEM");
+  g.initialize(NamedParameterSpec.ML_KEM_512);
+  KeyPair keyPair = g.generateKeyPair();
+  
+  PublicKey publicKey = keyPair.getPublic();
+  PrivateKey privateKey = keyPair.getPrivate();
+----
+
+
+.Exemple d’utilisation de KEM.Encapsulator et KEM.Encapsulated pour encapsuler une clé
+[source,java]
+----
+  KEM kem = KEM.getInstance("ML-KEM");
+  KEM.Encapsulator encapsulator = kem.newEncapsulator(publicKey);
+  KEM.Encapsulated encapsulated = encapsulator.encapsulate();
+  SecretKey sessionKey = encapsulated.key();
+  byte[] keyEncapsulationMessage = encapsulated.encapsulation();
+----
+
+.Exemple d’utilisation de KEM.Decapsulator pour désencapsuler une clé
+[source,java]
+----
+  KEM kr = KEM.getInstance("ML-KEM");
+  KEM.Decapsulator decapsulator = kr.newDecapsulator(privateKey);
+  SecretKey decapsulatedSessionKey = decapsulator.decapsulate(keyEncapsulationMessage);
+----
+
+
+=== Key Derivation Function API (Preview)
+
+Le but de la https://openjdk.org/jeps/478[JEP 478^] est d’introduire une API pour les fonctions de dérivation de clé, en anglais Key Derivation Function (KDF), qui font parties du standard PKCS #11.
+
+Les algorithmes cryptographiques permettent de dériver des clés à partir d’une clé secrète et d’autres données via la nouvelle classe `javax.crypto.KDF` avec un support de l’algorithme `HKDF`.
+
+.Exemple : le fichier DemoJEP478.java
+[source,java]
+----
+void main() throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
+    KDF hkdf = KDF.getInstance("HKDF-SHA256");
+  
+    AlgorithmParameterSpec params = HKDFParameterSpec.ofExtract()
+            .addIKM("phrase secrète".getBytes(StandardCharsets.UTF_8)) // byte[] ou SecretKey
+            .addSalt("mon salt".getBytes(StandardCharsets.UTF_8)) // byte[] ou SecretKey
+            .thenExpand("ma clé".getBytes(StandardCharsets.UTF_8), 32); // byte[] peut etre null
+  
+    // dérive une clé AES sur 32 octets
+    SecretKey key = hkdf.deriveKey("AES", params);
+  
+    System.out.println("key = " + HexFormat.of().formatHex(key.getEncoded()));
+  }
+----
+
+.Le résultat d’exécution de la classe
+[source,plain]
+----
+C:\java>java --enable-preview DemoJEP478.java
+
+key = e087bd361e13e35ad0532462db039eb1689491027127dad4e3ced04b680231a6
+----
+
+=== Les autres évolutions relatives à la sécurité
+
+Le JDK 24 propose aussi plusieurs autres évolutions relatives à la sécurité :
+
+* des dises à jour de certificats racines dans le truststore cacerts
+* la nouvelle propriété système `jdk.tls.server.newSessionTicket` définit le nombre de tickets de reprise TLSv1.3 envoyés par un serveur JSSE par session. La valeur utilisable va de 0 à 10, avec 1 par défaut (https://bugs.openjdk.org/browse/JDK-8328608[JDK-8328608])
+* le support du pattern matching dans les algo TLS définis dans la propriété système `jdk.tls.disabledAlgorithms` (https://bugs.openjdk.org/browse/JDK-8341964[JDK-8341964])
+* la désactivation de la suite d’algorithmes TLS_RSA (https://bugs.openjdk.org/browse/JDK-8245545[JDK-8245545])
+
+== Conclusion
+
+Java poursuit son évolution avec ce JDK 24 qui propose beaucoup de nouveautés et d’améliorations qui vont permettre à Java de rester pertinent aujourd’hui et demain.
+
+C’est aussi la dernière version avant la prochaine version LTS du JDK.
+
+N’hésitez donc pas à télécharger une distribution du JDK 24 auprès d’un fournisseur pour tester les fonctionnalités détaillées dans les deux articles de cette série afin d’anticiper la release de la prochaine version LTS de Java, disponible en septembre 2025.
+
+&nbsp;
