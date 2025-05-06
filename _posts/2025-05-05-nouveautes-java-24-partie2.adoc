@@ -27,7 +27,7 @@ Le but de la https://openjdk.org/jeps/501[JEP 501] est de rendre obsolète le po
 
 Ce portage devrait être supprimé dans le JDK 25.
 
-Le https://openjdk.org/projects/zero/[portage Zero], indépendant de l’architecture car ne contenant aucune ligne d’assembleur, sera alors le seul moyen d’exécuter des programmes Java sur des processeurs x86 32 bits.
+Le https://openjdk.org/projects/zero/[portage Zero], indépendant de l’architecture, car ne contenant aucune ligne d’assembleur, sera alors le seul moyen d’exécuter des programmes Java sur des processeurs x86 32 bits.
 
 === Les autres fonctionnalités dépréciées
 
@@ -295,7 +295,7 @@ image::2025/nouveautes-java-24-partie2/nouveautes-java-24-partie2-01.png[La page
 == Les évolutions relatives à la sécurité 
 
 Le JDK 24 propose des évolutions relatives à la sécurité. 
-Il propose notamment des premiers algorithmes de cryptographie post-quantique de type Module-Lattice-Based qui proposent une meilleure résistances face aux performances des ordinateurs quantiques qui vont être capables de mettre à mal les algorithmes existants.
+Il propose notamment des premiers algorithmes de cryptographie post-quantique de type Module-Lattice-Based qui proposent une meilleure résistance face aux performances des ordinateurs quantiques qui vont être capables de mettre à mal les algorithmes existants.
 
 === Quantum-Resistant Module-Lattice-Based Key Encapsulation Mechanism 
 
@@ -303,7 +303,7 @@ Les algorithmes de signature numérique (DSA) sont utilisés pour détecter des 
 
 ML-DSA a été normalisé dans le cadre de la norme FIPS 204 par le National Institute of Standards and Technology (NIST) des États-Unis.
 
-Les algos de type ML (Module-Lattice) sont une classe d’algorithmes dit post-quantique basés sur un réseau de modules. Ils sont conçus pour offrir une résistance contre les attaques utilisant l’informatique quantique.
+Les algos de type ML (Module-Lattice) sont une classe d’algorithmes dits post-quantique basés sur un réseau de modules. Ils sont conçus pour offrir une résistance contre les attaques utilisant l’informatique quantique.
 
 Le but de la https://openjdk.org/jeps/497[JEP 497^] est de fournir une implémentation du mécanisme de signature numérique basé sur ML-DSA.
 
@@ -418,7 +418,7 @@ Le JDK 24 propose aussi plusieurs autres évolutions relatives à la sécurité�
 * des mises à jour de certificats racines dans le truststore cacerts
 
 * la nouvelle propriété système `jdk.tls.server.newSessionTicket` définit le nombre de tickets de reprise TLSv1.3 envoyés par un serveur JSSE par session. La valeur utilisable va de 0 à 10, avec 1 par défaut (https://bugs.openjdk.org/browse/JDK-8328608[JDK-8328608])
-* le support du pattern matching dans les algo TLS définis dans la propriété système `jdk.tls.disabledAlgorithms` (https://bugs.openjdk.org/browse/JDK-8341964[JDK-8341964])
+* le support du pattern matching dans les algos TLS définis dans la propriété système `jdk.tls.disabledAlgorithms` (https://bugs.openjdk.org/browse/JDK-8341964[JDK-8341964])
 * la désactivation de la suite d’algorithmes TLS_RSA (https://bugs.openjdk.org/browse/JDK-8245545[JDK-8245545])
 
 == Conclusion
