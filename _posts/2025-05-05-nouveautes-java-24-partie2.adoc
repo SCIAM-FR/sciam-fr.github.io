@@ -11,7 +11,8 @@
 
 Le link:{% post_url 2025-04-29-nouveautes-java-24-partie1 %}[premier article^] de cette série a détaillé les fonctionnalités proposées dans la syntaxe et les API dans le JDK 24. Comme pour les précédentes versions de Java, cette version 24 inclut des JEPs, mais aussi, et surtout, des évolutions et des améliorations sur la fiabilité (corrections de nombreux bugs), la performance et la sécurité.
 
-Ce second article est consacré aux autres améliorations, que ce soient les évolutions dans la JVM Hotspot et les outils du JDK, dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
+Ce second article est consacré aux autres améliorations, que ce soient les évolutions dans la JVM HotSpot et les outils du JDK, dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
+
 
 == Les fonctionnalités dépréciées
 
@@ -19,7 +20,8 @@ Plusieurs fonctionnalités sont dépréciées dans le JDK 24.
 
 === Deprecate the 32-bit x86 Port for Removal
 
-Les systèmes 32 bits x86 sont de moins en moins utilisés et le portage de nouvelles fonctionnalités requière beaucoup de ressources ou implique de trouver des solutions palliatives.
+Les systèmes 32 bits x86 sont de moins en moins utilisés et le portage de nouvelles fonctionnalités requiert beaucoup de ressources ou implique de trouver des solutions palliatives.
+
 
 Le but de la https://openjdk.org/jeps/501[JEP 501] est de rendre obsolète le port x86 32 bits de Linux qui est le seul port x86 32 bits restant dans le JDK.
 
@@ -29,7 +31,8 @@ Le https://openjdk.org/projects/zero/[portage Zero], indépendant de l’archite
 
 === Les autres fonctionnalités dépréciées
 
-La classe java.util.zip.ZipError est dépréciée pour suppression (https://bugs.openjdk.org/browse/JDK-8336843[JDK-8336843]).
+La classe `java.util.zip.ZipError` est dépréciée pour suppression (https://bugs.openjdk.org/browse/JDK-8336843[JDK-8336843]).
+
 
 Plusieurs outils du JDK sont dépréciés pour suppression :
 
