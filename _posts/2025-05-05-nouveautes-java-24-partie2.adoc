@@ -198,7 +198,8 @@ Cette mise en œuvre sera probablement simplifiée dans le futur.
 
 Contrairement à GraalVM Native Image qui propose le même type de fonctionnalités, mais dans un monde fermé, toutes les fonctionnalités de la JVM sont conservées : une classe non présente dans l’archive sera chargée dynamiquement par la JVM.
 
-Le mode enregistrement doit être similaire à prod : par exemple, il faut ne pas utiliser de classes de suite de tests, car les classes de tests seraient mises en cache.
+Le mode enregistrement doit être similaire à prod : par exemple, il ne faut ne pas utiliser de classes de suite de tests, car les classes de tests seraient mises en cache.
+
 
 Il faut se concentrer sur l’exécution d’un large éventail de scénarios pour maximiser le nombre de classes mises en cache.
 
@@ -221,7 +222,8 @@ WARNING: Cette fonctionnalité ne propose pas encore de support de ZGC.
 
 Jusqu’à présent, le ramasse-miettes Shenandoah n’était pas générationnel et ne faisait donc pas de distinction entre les objets à durée de vie courte et longue.
 
-Le but de la https://openjdk.org/jeps/404[JEP 404^] est d’introduire un mode générationnel expérimental pour faire comme tous les GC de la JVM Hotspot qui récupèrent la mémoire.
+Le but de la https://openjdk.org/jeps/404[JEP 404^] est d’introduire un mode générationnel expérimental pour faire comme tous les GC de la JVM HotSpot qui récupèrent la mémoire.
+
 
 En tant que fonctionnalité expérimentale, elle doit être activée avec les options :
 
@@ -266,7 +268,8 @@ Le but de la https://openjdk.org/jeps/493[JEP 493^] est de permettre aux fournis
 
 L’option n’est pas activée par défaut et doit l’être avec l’option `--enable-linkable-runtime` de l’outil `configure` avant le build du JDK.
 
-L’outil `jlink` d’un tel JDK peut extraire directement les modules de l’image d’exécution au lieu d’utiliser les fichiers JMOD tant que le module java.base est présent dans l’image d’exécution.
+L’outil `jlink` d’un tel JDK peut extraire directement les modules de l’image d’exécution au lieu d’utiliser les fichiers JMOD tant que le module `java.base` est présent dans l’image d’exécution.
+
 
 === Les autres évolutions
 
@@ -281,7 +284,8 @@ C:\java>jar -xf log4j-1.2.17.jar -C "temp\log4j"
 
 * la nouvelle option `-k` ou `--keep-old-files` de l’outil `jar` pour ne pas écraser les fichiers existants
 * les commandes `Thread.vthread_scheduler` et `Thread.vthread_pollers` de `jcmd` sont ajoutées pour aider à diagnostiquer des problèmes avec les threads virtuels
-* l’outil `Javadoc` génère une nouvelle page de résumé pour les spécifications externes des APIs de Java SE et du JDK
+* l’outil `javadoc` génère une nouvelle page de résumé pour les spécifications externes des APIs de Java SE et du JDK
+
 +
 image::2025/nouveautes-java-24-partie2/nouveautes-java-24-partie2-01.png[La page External Specifications de la Javadoc de Java SE,width=100%]
 
