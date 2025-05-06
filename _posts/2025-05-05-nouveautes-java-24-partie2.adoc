@@ -127,9 +127,11 @@ Le mode générationnel pour ZGC a été introduit dans le JDK 21 (https://openj
 
 Dans le JDK 23, le mode générationnel est utilisé par défaut pour ZGC.
 
-Dans le JDK 24, via la https://openjdk.org/jeps/490[JEP 490], le mode non-générationnel est retiré. ZGC ne fonctionne donc plus que dans le mode générationnel
+Dans le JDK 24, via la https://openjdk.org/jeps/490[JEP 490], le mode non-générationnel est retiré. ZGC ne fonctionne donc plus que dans le mode générationnel.
 
-L’option -XX:+Zgenerationnel est inutile et marquée obsolète : son utilisation est ignorée.
+
+L’option `-XX:+ZGenerational` est inutile et marquée obsolète : son utilisation est ignorée.
+
 
 [source,plain]
 ----
