@@ -155,7 +155,8 @@ Les derniers cas de pinning restants sont toujours détectables avec l’événe
 
 C’est la première contribution dans le JDK du projet Leyden qui vise à réduire le temps de démarrage et celui nécessaire pour atteindre les performances maximales de la JVM, et l’empreinte mémoire.
 
-Les classes sont chargées à la demande via un ClassLoader avec un coût liés aux différentes opérations exécutées :
+Les classes sont chargées à la demande via un `ClassLoader` avec un coût lié aux différentes opérations exécutées :
+
 
 * la recherche dans le classpath,
 * le chargement du .class,
