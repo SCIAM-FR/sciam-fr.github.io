@@ -142,7 +142,8 @@ Hello World
 
 === Synchronize Virtual Threads without Pinning
 
-Le but de la https://openjdk.org/jeps/491[JEP 491] est d’éliminer le cas le plus fréquent d’épinglage d’un thread virtuel à son thread porteur ce qui nuit à la scalabilité si de nombreuses opérations synchronized étaient exécutées grâce à une ré-implémentation du mot clé `synchronized` afin que les threads virtuels puissent acquérir et libérer des moniteurs indépendamment de leurs threads porteurs.
+Le but de la https://openjdk.org/jeps/491[JEP 491] est d’éliminer le cas le plus fréquent d’épinglage d’un thread virtuel à son thread porteur qui nuit à la scalabilité si de nombreuses opérations synchronized étaient exécutées grâce à une ré-implémentation du mot clé `synchronized` afin que les threads virtuels puissent acquérir et libérer des moniteurs indépendamment de leurs threads porteurs.
+
 
 Il n’est donc plus nécessaire de remplacer l’utilisation de `synchronized` par un `ReentrantLock`.
 
