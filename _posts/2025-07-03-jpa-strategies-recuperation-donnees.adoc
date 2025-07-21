@@ -1,0 +1,196 @@
+= Stratégies de récupération JPA : JOIN FETCH, Entity Graph et Criteria API en contexte — avec Spring Boot & Quarkus
+:page-navtitle: Stratégies de récupération JPA : JOIN FETCH, Entity Graph et Criteria API en contexte — avec Spring Boot & Quarkus
+:page-excerpt: Avec JPA, la stratégie de chargement des données impacte directement les performances, la clarté du code et l'évolutivité. JOIN FETCH, Entity Graph et Criteria API ont chacun leurs forces. Comment sélectionner l'option qui correspond réellement à vos besoins ?
+:layout: post
+:author: rickenbazolo
+:page-tags: [Java, Jakarta Persistence API, Spring Boot, Quarkus, Hibernate, Entity Graph, Criteria API, JOIN FETCH, performance, optimisation, base de données]
+:docinfo: shared-footer
+:page-vignette:
+:page-vignette-licence: ''
+:page-liquid:
+:showtitle:
+:page-categories: software
+
+*Qu’il s’agisse de performance ou de maintenabilité, la manière dont les entités sont récupérées en JPA joue un rôle central dans la stabilité d’une application Java.*
+
+Cet article propose une exploration raisonnée de trois approches clés, `JOIN FETCH`, `Entity Graph` et `Criteria API` pour éclairer vos choix de conception, que vous travailliez avec **Spring Boot** ou **Quarkus**.
+
+== Le dilemme des stratégies de récupération en JPA
+
+Sans être l'unique option, l'approche https://jakarta.ee/specifications/persistence/[Jakarta Persistence API] (JPA) représente un choix fréquent pour interagir avec les bases relationnelles dans l'écosystème Java, combinant productivité et portabilité entre bases de données.
+Pourtant, au-delà des annotations et des mappings, un défi subsiste, **comment récupérer efficacement les associations sans faire exploser les performances ni sacrifier la maintenabilité ?**
+
+Derrière une entité `User` se cachent souvent des liens vers `roles`, `permissions`, `profils`, etc., dont le chargement de ces associations peut provoquer des **effets de bord coûteux**, tels que des
+requêtes N+1, temps de réponse dégradés, saturation mémoire, voire des exceptions bien connues comme `LazyInitializationException`.
+Pour **adresser ces enjeux de performance et de fiabilité**, plusieurs approches coexistent, chacune avec ses propres compromis. Encore faut-il savoir dans quel contexte les appliquer.
+
+Trois stratégies reviennent systématiquement pour gérer ces associations :
+
+- **`JOIN FETCH`** : forcer la jointure dans la requête JPQL.
+- **`Entity Graph`** : définir les chemins de chargement par annotation ou API.
+- **`Criteria API`** : composer dynamiquement des requêtes typées.
+
+Le but de cet article n’est pas de désigner un vainqueur, mais de comprendre *quand* et *pourquoi* utiliser chaque approche.
+
+NOTE: L'erreur `LazyInitializationException` survient lorsque vous tentez d'accéder à une association paresseuse `LAZY` en dehors du contexte de persistance, **après la fermeture de la session Hibernate**.
+
+== JOIN FETCH – La solution directe et efficace
+
+L’un des premiers réflexes lorsqu’on découvre les limites du chargement paresseux `LAZY` dans JPA est d’utiliser `JOIN FETCH`.
+Cette directive **Jakarta Persistence Query Language** (JPQL) permet de forcer le chargement immédiat des associations, supprimant le risque de `LazyInitializationException` et réduisant les allers-retours à la base de données.
+
+IMPORTANT: Utilisez `JOIN FETCH` lorsque vous devez **charger une relation immédiatement** dans un contexte transactionnel, notamment pour éviter les erreurs comme `LazyInitializationException`.
+Il convient particulièrement aux relations obligatoires (`@ManyToOne(optional = false)`), mais peut également s’appliquer aux collections (`@OneToMany`, `@ManyToMany`) à condition de maîtriser les **effets secondaires** tels que la duplication des résultats, la pagination complexe, et le volume potentiellement important des données chargées.
+
+=== Cas d'utilisation typique
+
+Dans un scénario où vous devez récupérer un utilisateur avec ses rôles pour appliquer une logique métier tel qu'un contrôle d’accès, `JOIN FETCH` permet de charger une entité `User` et son association `roles` en une seule requête, garantissant ainsi cohérence et performance dans un environnement transactionnel.
+
+==== Exemple de code - Spring Boot avec JPA Repository
+
+- Entité
+
+[source, java]
+----
+@Entity <1>
+public class User {
+    @Id <2>
+    @GeneratedValue(strategy = GenerationType.IDENTITY) <3>
+    private Long id;
+
+    private String email;
+
+    @ManyToMany(fetch = FetchType.LAZY) <4>
+    @JoinTable( <5>
+        name = "user_roles",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>(); <6>
+
+    // Getters / Setters
+}
+
+@Entity
+public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    // Getters / Setters
+}
+----
+
+<1> Indique que cette classe est une entité JPA, c’est-à-dire une table persistée en base de données.
+<2> Définit la clé primaire de l’entité.
+<3> Spécifie la stratégie de génération de la clé primaire, ici `IDENTITY` pour une auto-incrémentation.
+<4> Définit la relation `@ManyToMany` avec un chargement paresseux `LAZY`
+<5> Définit la table de jointure `user_roles` entre `User` et `Role`, avec les colonnes de jointure appropriées `user_id` et `role_id` contenant les clés étrangères.
+<6> Ensemble de rôles associés à l'utilisateur, initialisé avec un HashSet pour éviter les doublons.
+
+Nos entités `User` et `Role` sont définies avec une relation `@ManyToMany` unidirectionnelle, seul une `User` connaît ses `roles`.
+
+NOTE: Si vous voulez avoir une relation bidirectionnelle, il faudra ajouter une relation inverse, un champ `private Set<User> users = new HashSet<>()` avec `@ManyToMany(mappedBy = "roles")` dans l'entité `Role`.
+Cette relation inverse n'est pas obligatoire, mais elle peut être utile pour des opérations de navigation dans les deux sens et aussi ramener son lot de complexité dans la gestion des données.
+
+- Repository
+
+[source, java]
+----
+public interface UserRepository extends JpaRepository<User, Long> {
+
+    @Query("SELECT u FROM User u JOIN FETCH u.roles WHERE u.email = :email")
+    Optional<User> findByEmailWithRoles(@Param("email") String email);
+}
+----
+
+- Utilisation
+
+[source, java]
+----
+var user = userRepository.findByEmailWithRoles("user@example.com")
+                          .orElseThrow(() -> new UserNotFoundException("Utilisateur non trouvé"));
+// Accès aux rôles sans risque de LazyInitializationException
+var roles = user.getRoles();
+----
+
+==== Exemple de code - Quarkus avec Panache
+
+- Entité
+
+[source, java]
+----
+@Entity
+public class User extends PanacheEntity {
+    public String email;
+
+    @ManyToMany
+    @JoinTable(
+        name = "user_roles",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    public Set<Role> roles = new HashSet<>();
+}
+
+@Entity
+public class Role extends PanacheEntity {
+    public String name;
+}
+----
+
+- Service
+
+[source, java]
+----
+@ApplicationScoped
+public class UserService {
+
+    public Optional<User> findByEmailWithRoles(String email) {
+        return User.find("SELECT u FROM User u JOIN FETCH u.roles WHERE u.email = ?1", email)
+                   .firstResultOptional();
+    }
+}
+----
+
+- Utilisation
+
+[source, java]
+----
+var user = userService.findByEmailWithRoles("user@example.com")
+                       .orElseThrow(() -> new UserNotFoundException("Utilisateur non trouvé"));
+// Accès aux rôles sans risque de LazyInitializationException
+var roles = user.getRoles();
+----
+
+Dans les deux exemples :
+
+- La requête JPQL utilise `JOIN FETCH` pour charger immédiatement les rôles associés à l’utilisateur dans une seule requête.
+- Cela évite les requêtes N+1 et les exceptions `LazyInitializationException` dans les contextes transactionnels courts.
+
+NOTE: Un **contexte transactionnel court** désigne une période d'exécution pendant laquelle une transaction est ouverte pour accomplir une tâche ciblée comme une lecture, une mise à jour ou une suppression et se termine rapidement par un commit ou un rollback.
+
+Avant d’utiliser `JOIN FETCH`, il est essentiel d’évaluer la cardinalité et le volume de données de la relation.
+Réservez-le de préférence aux associations simples et à cardinalité unique (`@ManyToOne`, `@OneToOne`), et privilégiez pour les collections (`@OneToMany`, `@ManyToMany`) une requête dédiée ou un `EntityGraph` pour un chargement plus précis et maîtrisé.
+
+IMPORTANT: Utilisez `LEFT JOIN FETCH` si la relation est optionnelle (`nullable = true`), afin de conserver les entités principales même lorsqu’aucune association n’est présente.
+
+== Entity Graph – Une approche déclarative et modulaire
+
+Introduits avec **JPA 2.1**, les **Entity Graphs** offrent une alternative déclarative et découplée à `JOIN FETCH`, mieux adaptée aux architectures modulaires et évolutives.
+Ils permettent de spécifier explicitement les associations à charger, sans modifier la requête **JPQL** elle-même, ce qui réduit le couplage entre la logique métier et la stratégie de récupération.
+
+Un **Entity Graph** se définit au niveau de l'entité elle-même de façons statique via l’annotation `@NamedEntityGraph`, ou dynamiquement à l’exécution en utilisant l'API de l'`EntityManager`.
+Cette approche favorise une séparation claire des responsabilités, en externalisant les choix de chargement, tout en maintenant un code propre, réutilisable et plus facile à tester.
+
+=== Cas d'utilisation typique
+
+Charger un utilisateur avec ses rôles de manière déclarative, sans intégrer la stratégie de chargement directement dans la requête JPQL.
+Cela permet de centraliser la configuration des associations.
+Le même `Entity Graph` peut ainsi être réutilisé dans différents contextes fonctionnels tels que l’affichage des informations utilisateur, les contrôles d’accès (sécurité), ou les interfaces d’administration.
+
+==== Exemple de code - Spring Boot avec JPA Repository
+
+==== Exemple de code - Quarkus avec Panache
