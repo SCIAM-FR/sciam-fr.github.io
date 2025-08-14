@@ -13,7 +13,7 @@
 
 *Qu’il s’agisse de performance ou de maintenabilité, la manière dont les entités sont récupérées en JPA joue un rôle central dans la stabilité d’une application Java.*
 
-Cet article propose une exploration raisonnée de trois approches clés, `JOIN FETCH`, `Entity Graph` et `Criteria API` pour éclairer vos choix de conception, que vous travailliez avec **Spring Boot** ou **Quarkus**.
+Cet article propose une exploration raisonnée de trois approches clés, `JOIN FETCH`, `Entity Graph` et `Criteria API`, pour éclairer vos choix de conception, que vous travailliez avec **Spring Boot** ou **Quarkus**.
 
 == Le dilemme des stratégies de récupération en JPA
 
@@ -21,7 +21,7 @@ Sans être l'unique option, l'approche https://jakarta.ee/specifications/persist
 Pourtant, au-delà des annotations et des mappings, un défi subsiste, **comment récupérer efficacement les associations sans faire exploser les performances ni sacrifier la maintenabilité ?**
 
 Derrière une entité `User` se cachent souvent des liens vers `roles`, `permissions`, `profils`, etc., dont le chargement de ces associations peut provoquer des **effets de bord coûteux**, tels que des
-requêtes N+1, temps de réponse dégradés, saturation mémoire, voire des exceptions bien connues comme `LazyInitializationException`.
+requêtes N+1, temps de réponse dégradé, saturation mémoire, voire des exceptions bien connues comme `LazyInitializationException`.
 Pour **adresser ces enjeux de performance et de fiabilité**, plusieurs approches coexistent, chacune avec ses propres compromis. Encore faut-il savoir dans quel contexte les appliquer.
 
 Trois stratégies reviennent systématiquement pour gérer ces associations :
@@ -40,15 +40,15 @@ L’un des premiers réflexes lorsqu’on découvre les limites du chargement pa
 Cette directive **Jakarta Persistence Query Language** (JPQL) permet de forcer le chargement immédiat des associations, supprimant le risque de `LazyInitializationException` et réduisant les allers-retours à la base de données.
 
 IMPORTANT: Utilisez `JOIN FETCH` lorsque vous devez **charger une relation immédiatement** dans un contexte transactionnel, notamment pour éviter les erreurs comme `LazyInitializationException`.
-Il convient particulièrement aux relations obligatoires (`@ManyToOne(optional = false)`), mais peut également s’appliquer aux collections (`@OneToMany`, `@ManyToMany`) à condition de maîtriser les **effets secondaires** tels que la duplication des résultats, la pagination complexe, et le volume potentiellement important des données chargées.
+Il convient particulièrement aux relations obligatoires (`@ManyToOne(optional = false)`), mais peut également s’appliquer aux collections (`@OneToMany`, `@ManyToMany`) à condition de maîtriser les **effets secondaires** tels que la duplication des résultats, la pagination complexe et le volume potentiellement important des données chargées.
 
 === Cas d'utilisation typique
 
-Dans un scénario où vous devez récupérer un utilisateur avec ses rôles pour appliquer une logique métier tel qu'un contrôle d’accès, `JOIN FETCH` permet de charger une entité `User` et son association `roles` en une seule requête, garantissant ainsi cohérence et performance dans un environnement transactionnel.
+Dans un scénario où vous devez récupérer un utilisateur avec ses rôles pour appliquer une logique métier telle qu'un contrôle d’accès, `JOIN FETCH` permet de charger une entité `User` et son association `roles` en une seule requête, garantissant ainsi la cohérence et la performance dans un environnement transactionnel.
 
 ==== Exemple de code - Spring Boot avec JPA Repository
 
-- Entité
+===== Entité
 
 [source, java]
 ----
@@ -90,23 +90,26 @@ public class Role {
 <5> Définit la table de jointure `user_roles` entre `User` et `Role`, avec les colonnes de jointure appropriées `user_id` et `role_id` contenant les clés étrangères.
 <6> Ensemble de rôles associés à l'utilisateur, initialisé avec un HashSet pour éviter les doublons.
 
-Nos entités `User` et `Role` sont définies avec une relation `@ManyToMany` unidirectionnelle, seul une `User` connaît ses `roles`.
+Nos entités `User` et `Role` sont définies avec une relation `@ManyToMany` unidirectionnelle, seul un `User` connaît ses `roles`.
 
 NOTE: Si vous voulez avoir une relation bidirectionnelle, il faudra ajouter une relation inverse, un champ `private Set<User> users = new HashSet<>()` avec `@ManyToMany(mappedBy = "roles")` dans l'entité `Role`.
 Cette relation inverse n'est pas obligatoire, mais elle peut être utile pour des opérations de navigation dans les deux sens et aussi ramener son lot de complexité dans la gestion des données.
 
-- Repository
+===== Repository
 
 [source, java]
 ----
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("SELECT u FROM User u JOIN FETCH u.roles WHERE u.email = :email")
-    Optional<User> findByEmailWithRoles(@Param("email") String email);
+    @Query("SELECT u FROM User u JOIN FETCH u.roles WHERE u.email = :email") <1>
+    Optional<User> findByEmailWithRoles(@Param("email") String email); <2>
 }
 ----
 
-- Utilisation
+<1> Utilise une requête JPQL avec `JOIN FETCH` pour charger l'utilisateur et ses rôles en une seule requête.
+<2> Définit une méthode de recherche par email qui retourne un utilisateur avec ses rôles chargés.
+
+===== Utilisation
 
 [source, java]
 ----
@@ -118,7 +121,7 @@ var roles = user.getRoles();
 
 ==== Exemple de code - Quarkus avec Panache
 
-- Entité
+===== Entité
 
 [source, java]
 ----
@@ -141,11 +144,11 @@ public class Role extends PanacheEntity {
 }
 ----
 
-- Service
+===== Service
 
 [source, java]
 ----
-@ApplicationScoped
+@ApplicationScoped <1>
 public class UserService {
 
     public Optional<User> findByEmailWithRoles(String email) {
@@ -155,7 +158,9 @@ public class UserService {
 }
 ----
 
-- Utilisation
+<1> Indique que cette classe est un service CDI, gérée par le conteneur d'injection de dépendances de Quarkus, avec un cycle de vie défini par l'application et non par la requête.
+
+===== Utilisation
 
 [source, java]
 ----
@@ -182,15 +187,515 @@ IMPORTANT: Utilisez `LEFT JOIN FETCH` si la relation est optionnelle (`nullable 
 Introduits avec **JPA 2.1**, les **Entity Graphs** offrent une alternative déclarative et découplée à `JOIN FETCH`, mieux adaptée aux architectures modulaires et évolutives.
 Ils permettent de spécifier explicitement les associations à charger, sans modifier la requête **JPQL** elle-même, ce qui réduit le couplage entre la logique métier et la stratégie de récupération.
 
-Un **Entity Graph** se définit au niveau de l'entité elle-même de façons statique via l’annotation `@NamedEntityGraph`, ou dynamiquement à l’exécution en utilisant l'API de l'`EntityManager`.
+Un **Entity Graph** se définit au niveau de l'entité elle-même de façon statique via l’annotation `@NamedEntityGraph`, ou dynamiquement à l’exécution en utilisant l'API de l'`EntityManager`.
 Cette approche favorise une séparation claire des responsabilités, en externalisant les choix de chargement, tout en maintenant un code propre, réutilisable et plus facile à tester.
 
 === Cas d'utilisation typique
 
 Charger un utilisateur avec ses rôles de manière déclarative, sans intégrer la stratégie de chargement directement dans la requête JPQL.
 Cela permet de centraliser la configuration des associations.
-Le même `Entity Graph` peut ainsi être réutilisé dans différents contextes fonctionnels tels que l’affichage des informations utilisateur, les contrôles d’accès (sécurité), ou les interfaces d’administration.
+Le même `Entity Graph` peut ainsi être réutilisé dans différents contextes fonctionnels tels que l’affichage des informations utilisateur, les contrôles d’accès (sécurité) ou les interfaces d’administration.
 
 ==== Exemple de code - Spring Boot avec JPA Repository
 
+===== Entité
+
+[source, java]
+----
+@Entity
+@NamedEntityGraph(
+    name = "User.withRoles",
+    attributeNodes = @NamedAttributeNode("roles")
+)
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String email;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "user_roles",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
+    // Getters / Setters
+}
+
+@Entity
+public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    // Getters / Setters
+}
+----
+
+<1> Définit un Entity Graph nommé `User.withRoles` au niveau de l'entité.
+<2> Spécifie que l'attribut `roles` doit être chargé lorsque cet Entity Graph est utilisé.
+
+===== Repository
+
+Spring Data JPA fournit une intégration native des Entity Graphs via l’annotation `@EntityGraph`.
+Cela permet d’associer un graphe à une méthode de repository sans écrire de JPQL.
+
+[source, java]
+----
+public interface UserRepository extends JpaRepository<User, Long> {
+
+    @EntityGraph(value = "User.withRoles", type = EntityGraph.EntityGraphType.FETCH) <1>
+    Optional<User> findByEmail(String email);
+
+    @EntityGraph(attributePaths = {"roles"}) <2>
+    List<User> findAll();
+}
+----
+
+<1> Utilise l'Entity Graph nommé défini dans l'entité.
+<2> Définit un Entity Graph ad hoc directement dans la méthode (utilisation dynamique de l'Entity Graph).
+
+NOTE: Le paramètre **type** de l'annotation `@EntityGraph` permet de spécifier le type de chargement (`FETCH` ou `LOAD`), que nous allons voir plus en détail dans la section suivante.
+
+===== Utilisation
+
+[source, java]
+----
+// Utilisation de l'Entity Graph nommé
+var user = userRepository.findByEmail("user@example.com")
+                         .orElseThrow(() -> new UserNotFoundException("Utilisateur non trouvé"));
+// Accès aux rôles sans risque de LazyInitializationException
+var roles = user.getRoles();
+
+// Utilisation de l'Entity Graph ad-hoc
+var allUsers = userRepository.findAll();
+// Tous les utilisateurs ont leurs rôles chargés
+----
+
 ==== Exemple de code - Quarkus avec Panache
+
+===== Entité
+
+[source, java]
+----
+@Entity
+@NamedEntityGraph(
+    name = "User.withRoles",
+    attributeNodes = @NamedAttributeNode("roles")
+)
+public class User extends PanacheEntity {
+    public String email;
+
+    @ManyToMany
+    @JoinTable(
+        name = "user_roles",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    public Set<Role> roles = new HashSet<>();
+}
+
+@Entity
+public class Role extends PanacheEntity {
+    public String name;
+}
+----
+
+===== Repository / Service
+
+[source, java]
+----
+@ApplicationScoped
+public class UserService {
+
+    @Inject <1>
+    EntityManager entityManager;
+
+    // Méthode 1: Utilisation de l'Entity Graph nommé
+    public Optional<User> findByEmailWithRoles(String email) {
+        return entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+                .setParameter("email", email)
+                .setHint("jakarta.persistence.fetchgraph",
+                         entityManager.getEntityGraph("User.withRoles"))
+                .getResultStream()
+                .findFirst();
+    }
+
+    // Méthode 2: Création dynamique d'un Entity Graph
+    public List<User> findAllWithRoles() {
+        EntityGraph<?> graph = entityManager.createEntityGraph(User.class);
+        graph.addAttributeNodes("roles");
+
+        return entityManager.createQuery("SELECT u FROM User u", User.class)
+                .setHint("jakarta.persistence.fetchgraph", graph)
+                .getResultList();
+    }
+}
+----
+
+<1> Injecte l'`EntityManager` pour accéder aux fonctionnalités JPA.
+
+===== Le hint jakarta.persistence.fetchgraph
+
+Le hint `jakarta.persistence.fetchgraph` est un paramètre clé dans l'API JPA qui permet de contrôler précisément le chargement des associations lors de l'exécution d'une requête.
+Contrairement au chargement EAGER global ou aux requêtes JOIN FETCH, ce hint offre une approche plus flexible et contextuelle :
+
+1. *Fonctionnement* (fetchgraph) : il remplace temporairement toutes les stratégies de chargement définies sur l'entité pour la requête courante.
+   - Les attributs spécifiés dans l'Entity Graph sont chargés **EAGER** (immédiatement)
+   - Les attributs non spécifiés sont chargés **LAZY** (à la demande)
+   - Cela s'applique uniquement à la requête courante, sans modifier la configuration de l'entité
+
+2. *Différence avec jakarta.persistence.loadgraph* :
+   - `fetchgraph` : seuls les attributs spécifiés sont chargés **EAGER**, tous les autres deviennent **LAZY**
+   - `loadgraph` : les attributs spécifiés sont chargés **EAGER**, les autres conservent leur configuration d'origine (EAGER ou LAZY)
+
+3. *Avantages* :
+   - Contrôle précis du chargement **sans modifier les entités**
+   - Réduction des problèmes de performance liés au sur-chargement
+   - Séparation claire entre la **logique de requête** et la **stratégie de chargement**
+
+===== Extension Panache
+
+[source, java]
+----
+// Extension de PanacheRepository pour ajouter le support des Entity Graphs
+@ApplicationScoped
+public class UserRepository implements PanacheRepository<User> {
+
+    @Inject
+    EntityManager em;
+
+    // Méthode utilisant un Entity Graph
+    public Optional<User> findByEmailWithRoles(String email) {
+        // Obtenir l'Entity Graph nommé
+        EntityGraph<?> graph = em.getEntityGraph("User.withRoles");
+
+        // Utiliser l'Entity Graph avec une requête Panache
+        return find("email", email)
+                .withHint("jakarta.persistence.fetchgraph", graph)
+                .firstResultOptional();
+    }
+
+    // Méthode avec Entity Graph dynamique
+    public List<User> listAllWithRoles() {
+        // Créer un Entity Graph dynamique
+        EntityGraph<User> graph = em.createEntityGraph(User.class);
+        graph.addAttributeNodes("roles");
+
+        // Appliquer l'Entity Graph à la requête
+        return findAll()
+                .withHint("jakarta.persistence.fetchgraph", graph)
+                .list();
+    }
+}
+----
+
+===== Utilisation
+
+[source, java]
+----
+@Inject
+UserService userService;
+
+// Utilisation de l'Entity Graph nommé
+var user = userService.findByEmailWithRoles("user@example.com")
+                      .orElseThrow(() -> new NotFoundException("Utilisateur non trouvé"));
+// Accès aux rôles sans risque de LazyInitializationException
+var roles = user.roles;
+
+// Utilisation de l'Entity Graph dynamique
+var allUsers = userService.findAllWithRoles();
+// Tous les utilisateurs ont leurs rôles chargés
+----
+
+== Criteria API – Une approche dynamique et typée
+
+Introduite avec **JPA 2.0**, la **Criteria API** offre une alternative programmatique aux requêtes JPQL statiques.
+Elle permet de construire dynamiquement des requêtes typées et sécurisées à l'exécution, sans recourir à des concaténations de chaînes de caractères.
+
+Cette approche est particulièrement adaptée aux scénarios où les critères de recherche sont variables et déterminés par l'utilisateur,
+comme dans les interfaces de recherche avancée ou les tableaux de bord personnalisables.
+
+IMPORTANT: Privilégiez la Criteria API lorsque vous devez **construire des requêtes dynamiques** basées sur des conditions définies à l'exécution.
+Elle excelle dans les cas de filtres multi-critères, de tri dynamique, de pagination ou de jointures conditionnelles.
+Contrairement à JOIN FETCH ou Entity Graph, elle s'adresse aux situations où la structure de la requête ne peut être connue à l'avance.
+
+=== Cas d'utilisation typique
+
+Prenons un scénario classique avec un moteur de recherche utilisateur, filtré sur des attributs facultatifs **nom**, **rôle**, **date de création**, etc.
+Une approche JPQL nécessiterait une explosion de méthodes ; avec Criteria, on peut composer dynamiquement :
+
+[source, java]
+----
+CriteriaBuilder cb = em.getCriteriaBuilder();
+CriteriaQuery<User> cq = cb.createQuery(User.class);
+Root<User> user = cq.from(User.class);
+List<Predicate> predicates = new ArrayList<>();
+
+if (filter.getName() != null) {
+    predicates.add(cb.like(user.get("name"), "%" + filter.getName() + "%"));
+}
+if (filter.getRole() != null) {
+    Join<User, Role> roles = user.join("roles");
+    predicates.add(cb.equal(roles.get("name"), filter.getRole()));
+}
+
+cq.select(user).where(predicates.toArray(new Predicate[0]));
+return em.createQuery(cq).getResultList();
+----
+
+Cette flexibilité est particulièrement utile dans les interfaces où les critères sont choisis par l'utilisateur, ou dans les systèmes embarquant des moteurs de filtrage complexes.
+
+NOTE: La Criteria API est un excellent choix pour les systèmes à logique d’interrogation conditionnelle, comme les backoffices, les interfaces d’administration ou les API exposant des options de tri et de recherche.
+
+==== Une puissance qui a un coût
+
+Mais cette expressivité s'accompagne d'un niveau de verbosité important.
+Le code devient rapidement technique, parfois difficile à lire ou à maintenir.
+La logique métier se retrouve noyée dans une syntaxe typée souvent déroutante pour les développeurs moins expérimentés.
+Là où une requête JPQL prendrait trois lignes, une construction Criteria peut en nécessiter dix à quinze, avec peu de gain de lisibilité.
+
+Par ailleurs, la réutilisabilité reste limitée : chaque nouvelle construction nécessite de reprendre les blocs de construction et les assembler à nouveau,
+mais l'effort de conception reste plus élevé qu'avec un EntityGraph ou une requête JPQL bien ciblée.
+
+NOTE: Il existe des surcouches comme **QueryDSL**, **JPA Specifications** ou **Blaze-Persistence**, qui proposent une écriture plus concise ou plus expressive,
+tout en conservant la puissance du modèle Criteria.
+
+==== Intégration avec Spring (JPA Specification)
+
+Spring propose une surcouche très pratique via le pattern `Specification<T>`, qui encapsule la construction Criteria de manière réutilisable et testable :
+
+[source, java]
+----
+public class UserSpecifications {
+    public static Specification<User> hasName(String name) {
+        return (root, query, cb) ->
+            cb.like(root.get("name"), "%" + name + "%");
+    }
+
+    public static Specification<User> hasRole(String roleName) {
+        return (root, query, cb) -> {
+            Join<User, Role> roles = root.join("roles");
+            return cb.equal(roles.get("name"), roleName);
+        };
+    }
+}
+
+----
+
+Appel combiné dans le repository
+
+[source, java]
+----
+userRepository.findAll(
+    Specification.where(hasName("jhon")).and(hasRole("ADMIN"))
+);
+----
+
+==== Integration avec Quarkus
+
+Dans Quarkus, l’approche Criteria API est pleinement supportée via Hibernate ORM. On retrouve l’usage classique :
+
+[source, java]
+----
+// Exemple d'utilisation de Criteria API avec Quarkus
+@ApplicationScoped
+public class UserService {
+
+    @Inject
+    EntityManager em;
+
+    // Méthode de recherche avec critères dynamiques
+    public List<User> searchUsers(String email, String roleName) {
+        // Création du CriteriaBuilder et de la requête
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> query = cb.createQuery(User.class);
+        Root<User> user = query.from(User.class);
+
+        // Liste pour stocker les prédicats
+        List<Predicate> predicates = new ArrayList<>();
+
+        // Ajout conditionnel des critères
+        if (email != null && !email.isEmpty()) {
+            predicates.add(cb.like(user.get("email"), "%" + email + "%"));
+        }
+
+        if (roleName != null && !roleName.isEmpty()) {
+            // Jointure avec les rôles
+            Join<User, Role> roleJoin = user.join("roles");
+            predicates.add(cb.equal(roleJoin.get("name"), roleName));
+            query.distinct(true); // Évite les doublons
+        }
+
+        // Application des prédicats à la requête
+        if (!predicates.isEmpty()) {
+            query.where(predicates.toArray(new Predicate[0]));
+        }
+
+        // Tri par email
+        query.orderBy(cb.asc(user.get("email")));
+
+        // Exécution de la requête avec pagination
+        return em.createQuery(query)
+                .setMaxResults(20)
+                .getResultList();
+    }
+
+    // Exemple d'utilisation
+    public List<User> findAdmins() {
+        return searchUsers("jhone@exemple.com", "ADMIN");
+    }
+}
+----
+
+===== Approche inspirée des Specifications avec Panache
+
+Quarkus Panache permet également d'implémenter un pattern similaire aux Specifications de Spring, offrant une approche plus modulaire et réutilisable pour construire des requêtes dynamiques.
+
+[source, java]
+----
+// Classe utilitaire pour les critères de recherche d'utilisateurs
+public class UserCriteria {
+
+    // Interface fonctionnelle pour définir un critère
+    @FunctionalInterface
+    public interface Criterion {
+        void apply(CriteriaBuilder cb, CriteriaQuery<?> query, Root<User> root, List<Predicate> predicates);
+
+        // Méthodes par défaut pour combiner les critères
+        default Criterion and(Criterion other) {
+            return (cb, query, root, predicates) -> {
+                this.apply(cb, query, root, predicates);
+                other.apply(cb, query, root, predicates);
+            };
+        }
+
+        default Criterion or(Criterion other) {
+            return (cb, query, root, predicates) -> {
+                List<Predicate> thisPredicates = new ArrayList<>();
+                List<Predicate> otherPredicates = new ArrayList<>();
+
+                this.apply(cb, query, root, thisPredicates);
+                other.apply(cb, query, root, otherPredicates);
+
+                if (!thisPredicates.isEmpty() && !otherPredicates.isEmpty()) {
+                    predicates.add(cb.or(
+                        cb.and(thisPredicates.toArray(new Predicate[0])),
+                        cb.and(otherPredicates.toArray(new Predicate[0]))
+                    ));
+                } else if (!thisPredicates.isEmpty()) {
+                    predicates.addAll(thisPredicates);
+                } else if (!otherPredicates.isEmpty()) {
+                    predicates.addAll(otherPredicates);
+                }
+            };
+        }
+    }
+
+    // Critères réutilisables
+    public static Criterion hasEmail(String email) {
+        return (cb, query, root, predicates) -> {
+            if (email != null && !email.isEmpty()) {
+                predicates.add(cb.like(root.get("email"), "%" + email + "%"));
+            }
+        };
+    }
+
+    public static Criterion hasRole(String roleName) {
+        return (cb, query, root, predicates) -> {
+            if (roleName != null && !roleName.isEmpty()) {
+                Join<User, Role> roleJoin = root.join("roles");
+                predicates.add(cb.equal(roleJoin.get("name"), roleName));
+                query.distinct(true); // Évite les doublons
+            }
+        };
+    }
+}
+
+// Repository Panache avec support des critères
+@ApplicationScoped
+public class UserRepository implements PanacheRepository<User> {
+
+    @Inject
+    EntityManager em;
+
+    // Méthode générique pour appliquer des critères
+    public List<User> findByCriteria(UserCriteria.Criterion criterion) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> query = cb.createQuery(User.class);
+        Root<User> root = query.from(User.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        // Application du critère
+        if (criterion != null) {
+            criterion.apply(cb, query, root, predicates);
+        }
+
+        // Construction de la requête
+        if (!predicates.isEmpty()) {
+            query.where(predicates.toArray(new Predicate[0]));
+        }
+
+        // Tri par défaut
+        query.orderBy(cb.asc(root.get("email")));
+
+        // Exécution de la requête
+        return em.createQuery(query).getResultList();
+    }
+
+    // Exemple d'utilisation
+    public List<User> findAdmins() {
+        return findByCriteria(
+            UserCriteria.hasEmail("john").and(UserCriteria.hasRole("ADMIN"))
+        );
+    }
+}
+----
+
+Cette approche offre plusieurs avantages :
+
+1. *Réutilisabilité* : Les critères sont définis une seule fois et peuvent être combinés de différentes façons.
+2. *Lisibilité* : L'API fluide permet d'exprimer clairement l'intention des requêtes.
+3. *Testabilité* : Chaque critère peut être testé individuellement.
+4. *Extensibilité* : De nouveaux critères peuvent être ajoutés sans modifier le code existant.
+
+L'utilisation est similaire à celle des Specifications de Spring, mais adaptée au modèle Panache de Quarkus :
+
+[source, java]
+----
+// Exemple d'utilisation dans un service
+@ApplicationScoped
+public class UserService {
+
+    @Inject
+    UserRepository userRepository;
+
+    public List<User> findActiveAdmins() {
+        return userRepository.findByCriteria(
+            UserCriteria.hasRole("ADMIN").and(UserCriteria.hasEmail("active"))
+        );
+    }
+
+    public List<User> findSupportOrSalesUsers() {
+        return userRepository.findByCriteria(
+            UserCriteria.hasRole("SUPPORT").or(UserCriteria.hasRole("SALES"))
+        );
+    }
+}
+----
+
+=== Conclusion
+
+S’il est tentant de chercher une réponse unique à la question « quelle stratégie de récupération utiliser ? », l’expérience montre qu’il n’existe pas de solution universelle en JPA. Chaque approche `JOIN FETCH`, `Entity Graph`, `Criteria API` répond à un besoin précis, avec ses forces et ses compromis.
+
+**JOIN FETCH** offre une solution directe, efficace et prédictible, idéale dans des contextes simples ou orientés performance immédiate. Mais sa rigidité, son couplage fort avec la logique métier et sa faible réutilisabilité limitent son emploi dans des systèmes évolutifs.
+
+**Entity Graph** propose une voie plus déclarative, modulaire et réutilisable. Elle s’inscrit naturellement dans des architectures bien structurées, où l’on cherche à séparer les préoccupations métier et infrastructure. C’est une approche particulièrement pertinente pour les projets à long cycle de vie, sensibles à la maintenabilité.
+
+Quant à la **Criteria API**, elle devient incontournable dès que la requête dépend de critères dynamiques, choisis à l’exécution ou pilotés par l’utilisateur. Sa puissance n’a d’égale que sa complexité, et elle doit être maniée avec méthode pour ne pas compromettre la lisibilité ou la testabilité du code.
