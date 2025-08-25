@@ -21,10 +21,10 @@ Nous analyserons en détail les forces et faiblesses de chaque approche, leurs c
 
 == Le dilemme des stratégies de récupération en JPA
 
-Sans être l'unique option, l'approche https://jakarta.ee/specifications/persistence/[Jakarta Persistence API] (JPA) représente un choix fréquent pour interagir avec les bases relationnelles dans l'écosystème Java, combinant productivité et portabilité entre bases de données.
+Sans être l'unique option, l'approche https://jakarta.ee/specifications/persistence/[Jakarta Persistence API^] (JPA) représente un choix fréquent pour interagir avec les bases relationnelles dans l'écosystème Java, combinant productivité et portabilité entre bases de données.
 Pourtant, au-delà des annotations et des mappings, un défi subsiste, **comment récupérer efficacement les associations sans faire exploser les performances ni sacrifier la maintenabilité ?**
 
-Derrière une entité `User` se cachent souvent des liens vers `roles`, `permissions`, `profils`, etc., dont le chargement de ces associations peut provoquer des **effets de bord coûteux**, tels que des
+Derrière une entité `User` se cachent souvent des liens vers `roles`, `permissions`, `profils`, etc., dont le chargement des associations peut provoquer des **effets de bord coûteux**, tels que des
 requêtes N+1, temps de réponse dégradé, saturation mémoire, voire des exceptions bien connues comme `LazyInitializationException`.
 Pour **adresser ces enjeux de performance et de fiabilité**, plusieurs approches coexistent, chacune avec ses propres compromis. Encore faut-il savoir dans quel contexte les appliquer.
 
@@ -162,7 +162,7 @@ public class UserService {
 }
 ----
 
-<1> Indique que cette classe est un service CDI, gérée par le conteneur d'injection de dépendances de Quarkus, avec un cycle de vie défini par l'application et non par la requête.
+<1> Indique que cette classe est un bean CDI avec une seule instance pour toute l'application et non un bean instancié à chaque injection.
 
 ===== Utilisation
 
@@ -448,17 +448,17 @@ Optional<User> findByEmail(String email);
 
 Cette approche est particulièrement utile pour les écrans de détail ou les rapports qui nécessitent des données provenant de plusieurs entités liées.
 
-===== Le hint jakarta.persistence.fetchgraph
+===== Le hint `jakarta.persistence.fetchgraph`
 
 Le hint `jakarta.persistence.fetchgraph` est un paramètre clé dans l'API JPA qui permet de contrôler précisément le chargement des associations lors de l'exécution d'une requête.
-Contrairement au chargement EAGER global ou aux requêtes JOIN FETCH, ce hint offre une approche plus flexible et contextuelle :
+Contrairement au chargement `EAGER` global ou aux requêtes `JOIN FETCH`, ce hint offre une approche plus flexible et contextuelle :
 
 1. *Fonctionnement* (fetchgraph) : il remplace temporairement toutes les stratégies de chargement définies sur l'entité pour la requête courante.
    - Les attributs spécifiés dans l'Entity Graph sont chargés **EAGER** (immédiatement)
    - Les attributs non spécifiés sont chargés **LAZY** (à la demande)
    - Cela s'applique uniquement à la requête courante, sans modifier la configuration de l'entité
 
-2. *Différence avec jakarta.persistence.loadgraph* :
+2. *Différence avec `jakarta.persistence.loadgraph*` :
    - `fetchgraph` : seuls les attributs spécifiés sont chargés **EAGER**, tous les autres deviennent **LAZY**
    - `loadgraph` : les attributs spécifiés sont chargés **EAGER**, les autres conservent leur configuration d'origine (EAGER ou LAZY)
 
