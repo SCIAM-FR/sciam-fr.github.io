@@ -52,6 +52,13 @@ Dans un scénario où vous devez récupérer un utilisateur avec ses rôles pour
 
 ==== Exemple de code - Spring Boot avec JPA Repository
 
+Ce qui caractérise l'exemple Spring Data JPA Repository:
+
+- Pattern Repository: on définit une interface qui étend `JpaRepository` pour profiter des opérations CRUD, de la pagination et du tri out‑of‑the‑box.
+- Méthodes dérivées et `@Query`: vous pouvez générer des requêtes par nom de méthode (ex. `findByEmail`) ou écrire du JPQL/SQL avec `@Query`, y compris `JOIN FETCH` pour maîtriser le chargement.
+- Types de retour riches: `Optional&lt;T&gt;`, `List&lt;T&gt;`, `Page&lt;T&gt;`, `Slice&lt;T&gt;`, et projections (interfaces/DTO) pour limiter les données ramenées.
+- Séparation des responsabilités: la logique d’accès est centralisée dans le repository; évitez les `EAGER` globaux et préférez des requêtes ciblées ou `@EntityGraph` selon le besoin.
+
 ===== Entité
 
 [source, java]
@@ -124,6 +131,13 @@ var roles = user.getRoles();
 ----
 
 ==== Exemple de code - Quarkus avec Panache
+
+Voici ce qui change avec Panache par rapport à l'exemple JPA classique:
+
+- Modèle Active Record: les entités étendent `PanacheEntity`, héritent d'un identifiant et exposent des méthodes de persistance et de requête directement sur la classe (`User.find(...)`).
+- Champs publics pour la concision; les getters/setters sont optionnels mais peuvent être ajoutés si besoin (validation, encapsulation).
+- Pas d'interface Repository Spring Data: soit on interroge l'entité directement, soit on encapsule dans un service CDI (`@ApplicationScoped`) ou un repository Panache (implémente `PanacheRepository<T>`) pour structurer la logique d'accès.
+- Requêtes dynamiques avec `find`, `list`, `stream`, etc.
 
 ===== Entité
 
@@ -233,14 +247,21 @@ Le même `Entity Graph` peut ainsi être réutilisé dans différents contextes 
 
 ==== Exemple de code - Spring Boot avec JPA Repository
 
+Ce qui caractérise l'exemple Spring Data JPA avec Entity Graph:
+
+- Déclaration du graphe au niveau de l'entité via `@NamedEntityGraph` pour une configuration réutilisable et centralisée.
+- Activation au niveau du repository avec `@EntityGraph`, soit par nom (`value = "User.withRoles"`), soit ad hoc (`attributePaths = {"roles"}`).
+- Le paramètre `type` pilote la stratégie de chargement.
+- Pas de JPQL nécessaire: on conserve des méthodes idiomatiques (`findByEmail`, `findAll`) tout en contrôlant précisément le chargement.
+
 ===== Entité
 
 [source, java]
 ----
 @Entity
 @NamedEntityGraph(
-    name = "User.withRoles",
-    attributeNodes = @NamedAttributeNode("roles")
+    name = "User.withRoles", <1>
+    attributeNodes = @NamedAttributeNode("roles") <2>
 )
 public class User {
     @Id
@@ -272,7 +293,7 @@ public class Role {
 }
 ----
 
-<1> Définit un Entity Graph nommé `User.withRoles` au niveau de l'entité.
+<1> Définit un Entity Graph nommé `User.withRoles` au niveau de l'entité `User`.
 <2> Spécifie que l'attribut `roles` doit être chargé lorsque cet Entity Graph est utilisé.
 
 ===== Repository
@@ -292,7 +313,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 }
 ----
 
-<1> Utilise l'Entity Graph nommé défini dans l'entité.
+<1> Utilise l'Entity Graph nommé défini au niveau de l'entité `User`.
 <2> Définit un Entity Graph ad hoc directement dans la méthode (utilisation dynamique de l'Entity Graph).
 
 NOTE: Le paramètre **type** de l'annotation `@EntityGraph` permet de spécifier le type de chargement (`FETCH` ou `LOAD`), que nous allons voir plus en détail dans la section suivante.
@@ -313,6 +334,12 @@ var allUsers = userRepository.findAll();
 ----
 
 ==== Exemple de code - Quarkus avec Panache
+
+Voici ce qui change avec Panache pour l'usage des Entity Graphs par rapport à l'exemple Spring Data JPA:
+
+- Pas d'interface Repository Spring Data: on travaille soit en Active Record directement sur l'entité (méthodes Panache), soit via un service CDI (`@ApplicationScoped`), soit via un repository Panache (implémente `PanacheRepository&lt;T&gt;`) pour structurer la logique d'accès.
+- Graphes nommés vs dynamiques: on déclare des graphes avec `@NamedEntityGraph` sur l'entité ou on les construit à l'exécution (`entityManager.createEntityGraph(...)`).
+- Activation côté Quarkus/Panache: on applique le graphe via les hints JPA (`jakarta.persistence.fetchgraph` ou `jakarta.persistence.loadgraph`) soit avec l'`EntityManager#setHint(...)`, soit via l'API Panache avec `withHint(...)` sur les requêtes (`find(...)`, `findAll()`, etc.).
 
 ===== Entité
 
@@ -433,10 +460,11 @@ public class Department {
 ----
 
 Avec ce graphe nommé `User.withRolesAndDepartment`, vous pouvez charger en une seule requête :
-1. L'utilisateur
-2. Ses rôles
-3. Son département
-4. Le manager du département
+
+. L'utilisateur
+. Ses rôles
+. Son département
+. Le manager du département
 
 Utilisation dans le repository :
 
@@ -453,16 +481,16 @@ Cette approche est particulièrement utile pour les écrans de détail ou les ra
 Le hint `jakarta.persistence.fetchgraph` est un paramètre clé dans l'API JPA qui permet de contrôler précisément le chargement des associations lors de l'exécution d'une requête.
 Contrairement au chargement `EAGER` global ou aux requêtes `JOIN FETCH`, ce hint offre une approche plus flexible et contextuelle :
 
-1. *Fonctionnement* (fetchgraph) : il remplace temporairement toutes les stratégies de chargement définies sur l'entité pour la requête courante.
+. *Fonctionnement* (fetchgraph) : il remplace temporairement toutes les stratégies de chargement définies sur l'entité pour la requête courante.
    - Les attributs spécifiés dans l'Entity Graph sont chargés **EAGER** (immédiatement)
    - Les attributs non spécifiés sont chargés **LAZY** (à la demande)
    - Cela s'applique uniquement à la requête courante, sans modifier la configuration de l'entité
 
-2. *Différence avec `jakarta.persistence.loadgraph*` :
+. *Différence avec `jakarta.persistence.loadgraph*` :
    - `fetchgraph` : seuls les attributs spécifiés sont chargés **EAGER**, tous les autres deviennent **LAZY**
    - `loadgraph` : les attributs spécifiés sont chargés **EAGER**, les autres conservent leur configuration d'origine (EAGER ou LAZY)
 
-3. *Avantages* :
+. *Avantages* :
    - Contrôle précis du chargement **sans modifier les entités**
    - Réduction des problèmes de performance liés au sur-chargement
    - Séparation claire entre la **logique de requête** et la **stratégie de chargement**
@@ -727,11 +755,11 @@ public class UserSearchService {
 
 Cet exemple illustre plusieurs aspects avancés de la Criteria API :
 
-1. **Filtrage multi-critères** : application conditionnelle de plusieurs prédicats
-2. **Jointures dynamiques** : ajout de jointures uniquement si nécessaire
-3. **Pagination optimisée** : requête distincte pour le count total
-4. **Tri dynamique sécurisé** : validation des champs de tri pour éviter les injections
-5. **Retour paginé** : utilisation de l'API `Page` de Spring pour une pagination complète
+. **Filtrage multi-critères** : application conditionnelle de plusieurs prédicats
+. **Jointures dynamiques** : ajout de jointures uniquement si nécessaire
+. **Pagination optimisée** : requête distincte pour le count total
+. **Tri dynamique sécurisé** : validation des champs de tri pour éviter les injections
+. **Retour paginé** : utilisation de l'API `Page` de Spring pour une pagination complète
 
 Cette approche est particulièrement adaptée aux interfaces de recherche avancée où l'utilisateur peut sélectionner librement ses critères de filtrage et de tri.
 
@@ -898,10 +926,10 @@ public class UserRepository implements PanacheRepository<User> {
 
 Cette approche offre plusieurs avantages :
 
-1. *Réutilisabilité* : Les critères sont définis une seule fois et peuvent être combinés de différentes façons.
-2. *Lisibilité* : L'API fluide permet d'exprimer clairement l'intention des requêtes.
-3. *Testabilité* : Chaque critère peut être testé individuellement.
-4. *Extensibilité* : De nouveaux critères peuvent être ajoutés sans modifier le code existant.
+. *Réutilisabilité* : Les critères sont définis une seule fois et peuvent être combinés de différentes façons.
+. *Lisibilité* : L'API fluide permet d'exprimer clairement l'intention des requêtes.
+. *Testabilité* : Chaque critère peut être testé individuellement.
+. *Extensibilité* : De nouveaux critères peuvent être ajoutés sans modifier le code existant.
 
 L'utilisation est similaire à celle des Specifications de Spring, mais adaptée au modèle Panache de Quarkus :
 
