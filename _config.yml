@@ -66,13 +66,13 @@ plugins:
   - jekyll-auto-authors
   - jekyll-asciidoc
   - asciidoctor-diagram
-  - asciidoctor-diagram-plantuml
   - liquid_reading_time
   - liquid_pluralize
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
   - jekyll-toc
+  - jekyll-katex
  
 pagination:
   enabled: true

@@ -8,7 +8,6 @@ gem 'wdm', '~> 0.1.1', :install_if => Gem.win_platform?
 
 group :jekyll_plugins do
   gem 'asciidoctor-diagram'
-  gem 'asciidoctor-diagram-plantuml'
   gem 'jekyll-asciidoc'
   gem 'jekyll-paginate-v2'
   gem 'jekyll-auto-authors'
@@ -20,6 +19,7 @@ group :jekyll_plugins do
   gem 'jekyll-toc'
   gem 'kramdown-parser-gfm'
   gem 'jekyll-postcss-v2'
+  gem "jekyll-katex"
 end
 
 gem "webrick", "~> 1.8"

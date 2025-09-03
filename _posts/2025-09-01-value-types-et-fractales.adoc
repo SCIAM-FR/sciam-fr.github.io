@@ -1,0 +1,551 @@
+= Valhalla & Value types au pays des fractales
+:page-navtitle: Valhalla & Value types au pays des fractales
+:figure-caption!:
+:page-excerpt: L'ambitieux projet Valhalla propose d'enrichir la plateforme Java avec les "Value objects". Ce sont des objets sans identité et dont les champs sont `final`, mais pour lesquels la JVM peut réaliser un certain nombre d'optimisations.
+:layout: post
+:author: clementdetastes
+:docinfo: shared-footer
+:page-tags: [Java, Valhalla, Value, Fractal, Mandelbrot]
+:page-vignette: 2025/mandelbrot-full.png
+:page-liquid:
+:showtitle:
+:page-categories: software
+
+Nous vous proposons de faire un saut dans le futur de Java, plus particulièrement au travers d'améliorations que le projet Valhalla nous prépare.
+Nous en profiterons pour les mettre en pratique sur un exemple parlant : le calcul et la visualisation de l'ensemble de Mandelbrot.
+
+== Types objets vs primitifs
+
+Les programmes Java font cohabiter objets et types primitifs.
+Les premiers offrent la richesse de l'abstraction tandis que les seconds se démarquent par leur performance.
+
+Si l'on définit le type `Distance` comme étant une simple encapsulation d'un `double` :
+
+[source, java]
+----
+record Distance(double value) {}
+----
+
+On pourra bénéficier de certains avantages :
+
+* Une `Distance` n'est pas une `Speed` par exemple. En manipulant de simples `double` on pourrait accidentellement passer la mauvaise valeur à une méthode ou ajouter entre elles des données n'étant pas compatibles
+* On peut enrichir le type `Distance` de méthodes, par exemple `add(Distance other)` ou surcharger `toString()` pour afficher l'unité
+* Il est possible de réaliser un contrôle d'intégrité dans le constructeur, en levant par exemple une `IllegalArgumentException` si la valeur est négative
+* ...
+
+Mais ceci a un coût, prenons le cas de la méthode `add()` :
+
+[source, java]
+----
+record Distance(double value) {
+  public Distance add(Distance other) {
+    return new Distance(value + other.value);
+  }
+}
+----
+
+Une nouvelle instance de `Distance` est créée à chaque appel ce qui accentue la pression sur le Garbage Collector.
+
+Dans le cas d'un tableau, `Distance[]` pâtit de quelques surcoûts par rapport à `double`.
+Quand `double[]` est en mémoire un tableau contigu de valeurs primitives, `Distance[]` est un tableau d'objets, donc de pointeurs.
+Chaque objet référencé possède son propre header, ainsi que potentiellement quelques octets d'alignement. La densité mémoire est donc bien moins bonne, comme l'illustre ce schéma.
+
+image::2025/value-types-fractales/array-objects.png[]
+
+L'accès est également plus lent, car il passe par des références.
+Dans une boucle, le CPU doit suivre ces indirections une à une.
+Ce _pointer chasing_ est coûteux, parce que les objets référencés peuvent être dispersés en mémoire, ce qui entraîne des _cache misses_ et des lectures en RAM, beaucoup plus lentes.
+
+On a donc une perte sur les performances d'accès et sur l'empreinte mémoire.
+
+== Le projet Valhalla
+
+Projet ambitieux, https://openjdk.org/projects/valhalla/[Valhalla] a pour but de fournir une forme d'unification des types objets et primitifs par le biais d'une nouvelle famille d'objets : les _Value Types_.
+Il s'agit d'objets sans identité dont les champs sont `final`.
+Ce renoncement à l'identité va permettre à la JVM un certain nombre d'optimisations.
+
+Dire qu'il s'agit d'un projet au long cours est un euphémisme : Valhalla a été annoncé officiellement par Oracle en 2014 et est toujours en développement actif.
+Son échelonnement est composé de 5 grandes étapes successives :
+
+* https://openjdk.org/jeps/401[JEP 401: Value Classes and Objects] : introduction des _Value Types_
+* https://openjdk.org/jeps/8303099[JEP draft: Null-Restricted and Nullable Types] : ajout de la possibilité de déclarer qu'un _Value Type_ rejette ou accepte délibérément la valeur `null`
+* https://openjdk.org/jeps/8316779[JEP draft: Null-Restricted Value Class Types] : amélioration des performances des champs et tableaux utilisant des _Value Types_ non-nullables
+* https://openjdk.org/jeps/402[JEP 402: Enhanced Primitive Boxing] : permettre de traiter les types primitifs de manière plus proche de celle des objets
+* Parametric JVM : conserver et optimiser les paramétrages de classes et méthodes génériques à l'exécution
+
+La première étape, dont nous allons parler dans cet article, n'est encore dans aucune version du JDK standard, même en preview.
+On peut sans prendre de gros risques parier qu'il faudra encore plusieurs années avant de voir toutes ces fonctionnalités délivrées en standard.
+
+Il est néanmoins possible d'expérimenter ces fonctionnalités avec un build du JDK contenant les travaux de la branche Valhalla du projet.
+Pour cela, deux possibilités :
+
+* Utiliser un build early-access pour votre plateforme, par exemple depuis https://jdk.java.net/valhalla[] (version windows datée) ou https://builds.shipilev.net/openjdk-jdk-valhalla[] (linux uniquement)
+* Builder vous-même le JDK à partir des sources https://github.com/openjdk/valhalla[], branche `lworld`
+
+== Le mot clé `value`
+
+Un nouveau mot clé contextuel fait son apparition dans le langage : `value`.
+Il peut être positionné avant la déclaration d'une classe ou d'un record : `value class` ou `value record`.
+
+Pour modéliser un nombre complexe composé de sa partie réelle `re` et de sa partie imaginaire `im` :
+
+[source, java]
+----
+public value class Complex {
+
+  private double re;
+  private double im;
+
+  Complex(final double re, final double im) {
+    this.re = re;
+    this.im = im;
+  }
+
+  public double getRe() {
+    return re;
+  }
+
+  public double getIm() {
+    return im;
+  }
+}
+----
+
+Ou plus simplement avec un record :
+
+[source, java]
+----
+public value record Complex(double re, double im) {}
+----
+
+== Propriétés des _Value Types_
+
+Un _value object_ ne possède pas d'identité (pas d'adresse en mémoire, ni de header).
+Cela entraîne un certain nombre de conséquences.
+
+=== Immutabilité et interchangeabilité
+
+Il n'est pas possible de muter un _value object_ : ses champs sont implicitement `final`.
+Et à moins de le déclarer `abstract`, il est implicitement `final` : on ne peut pas l'étendre ni surcharger ses méthodes.
+
+Deux instances d'un _value type_ sont considérées comme étant interchangeables si leurs champs ont les mêmes valeurs.
+Leur état est fixé et immuable, elles représentent la même valeur de domaine, aussi bien maintenant que dans le futur.
+En termes de sémantique, l'une ou l'autre des deux instances peut être utilisée indifféremment.
+
+=== Synchronisation
+
+Une autre conséquence directe de cette absence d'identité est qu'il n'est pas possible d'utiliser un bloc `synchronized` sur un _value object_.
+
+[source, java]
+----
+var origin = new Complex(0, 0);
+synchronized (origin) {
+  //
+}
+----
+
+Un tel cas d'usage provoque l'erreur de compilation :
+
+[plain]
+----
+Unexpected type required: a type with identity.
+----
+
+Cela ne se limite pas à la compilation : au runtime, la JVM vérifie que le type possède une identité.
+
+[source, java]
+----
+var origin = new Complex(0, 0);
+Object o = origin;
+synchronized (o) {
+  //
+}
+----
+
+Ce code compile, mais lève une `java.lang.IdentityException` à l'exécution :
+
+[plain]
+----
+java.lang.IdentityException: Cannot synchronize on an instance of value class
+----
+
+=== Comparaison avec `==`
+
+La comparaison avec `==` prend un tout autre sens avec les _value types_.
+
+D'ordinaire, `==` compare les références des objets (les _identity objects_, objets habituels déclarés sans le mot clé `value`).
+
+Avec les _value types_, `==` effectue une comparaison sur tous les champs.
+
+Ainsi, le code suivant affichera "true" bien que l'on ait créé deux instances, car les champs sont comparés deux-à-deux :
+
+[source, java]
+----
+var c1 = new Complex(1, 2);
+var c2 = new Complex(1, 2);
+
+IO.println(c1 == c2); // <1>
+----
+<1> `java.lang.IO` permet d'intéragir avec la console un peu plus simplement que le traditionnel `System.out`, cf. https://openjdk.org/jeps/512[JEP 512: Compact Source Files and Instance Main Methods], standard en Java 25
+
+=== HashCode avec `System.identityHashCode()`
+
+La méthode `System.identityHashCode()` renvoie la valeur qu'aurait renvoyé un appel à la méthode `hashcode()`, que la méthode soit surchargée ou non.
+La JVM HotSpot génère et stocke cet _identity hash code_ dans le header de l'objet, une fois qu'il a été généré.
+
+Pour un _value object_, le comportement diffère, en toute logique : le calcul se base sur le contenu (la valeur des champs), sans pour autant renvoyer forcément une valeur identique à celle renvoyée par `hashCode()`.
+
+[source, java]
+----
+IO.println(c1.hashCode() + " " + System.identityHashCode(c1));
+IO.println(c2.hashCode() + " " + System.identityHashCode(c2));
+----
+
+.Affichage dans la console
+[plain]
+----
+-32505856 507117229
+-32505856 507117229
+----
+
+=== `WeakReference`
+
+Une `java.lang.ref.WeakReference` n'a de sens que si la référence cible possède une identité d'objet, que l'on peut pointer en mémoire et que le GC peut suivre.
+Il n'est donc pas possible de créer une instance de `WeakReference` à partir d'un _value object_.
+
+.Le code suivant lève une `java.lang.IdentityException`
+[source, java]
+----
+var c = new Complex(1, 2);
+var ref = new WeakReference<>(c1);
+----
+
+=== Initialisation stricte
+
+Avant de continuer à parler des _value objects_, faisons un pas de côté pour nous pencher sur une évolution récente du JDK.
+
+La https://openjdk.org/jeps/513[JEP 513 : Flexible Constructor Bodies], qui entre en standard dans Java 25, vient lever quelques restrictions liées à la construction des objets.
+
+Il est désormais possible, dans le corps d'un constructeur, d'insérer des instructions avant l'appel explicite à `super()` ou `this()`.
+Ces instructions ne peuvent pas faire référence à l'objet en cours de construction, mais elles peuvent initialiser ses champs ou effectuer d'autres traitements.
+
+On peut, par exemple, valider les arguments en amont et ne procéder à la création de l'objet que s'ils sont valides, évitant ainsi des traitements inutiles.
+
+[source, java]
+----
+public class Point3D extends Point2D {
+
+  private double z;
+
+  public Point3D(double x, double y, double z) {
+    // Prologue <1>
+    if (Double.isNaN(z)) {
+      throw new IllegalArgumentException("z shall be a number");
+    }
+    super(x, y);
+
+    // Epilogue <2>
+    this.z = z;
+  }
+}
+----
+<1> La partie située avant l'appel à `super` / `this` est appelée _prologue_
+<2> La partie située après l'appel à `super` / `this` est appelée _epilogue_
+
+Lorsqu'un champ est initialisé dans le prologue (avant l'appel à `super` / `this`) on dit que son initialisation est _stricte_.
+Il n'est pas possible d'observer un état non initialisé dans ce cas.
+
+Revenons aux _value types_ : cette initialisation stricte s'y impose : tous les champs doivent être initialisés au sein du prologue.
+
+.Le code suivant ne compile pas :
+[source, java]
+----
+public value class Complex {
+
+  private double re;
+  private double im;
+
+  Complex(final double re, final double im) {
+    super();
+    this.re = re;
+    this.im = im;
+  }
+}
+----
+
+.Erreur de compilation
+[plain]
+----
+strict field re is not initialized before the supertype constructor has been called
+----
+
+Si l'on omet l'appel explicite à `super()`, alors il sera implicitement appelé après les initialisations.
+
+=== Nouvelles API
+
+Quelques nouvelles API sont ajoutées au JDK :
+
+* `Class:isIdentity` et `Class:isValue` renvoient chacune un booléen qui indique s'il s'agit respectivement d'un _identity type_ ou d'un _value type_
+* `Objects::isValueObject` indique si l'instance passée en paramètres est un _value object_
+* `Objects::requireIdentity` lève une `IdentityException` si l'objet passé en paramètres ne possède pas d'identité (est un _value object_)
+
+[source, java]
+----
+var c = new Complex(3, 4);
+IO.println(c.getClass().isIdentity());  // false
+IO.println(c.getClass().isValue());     // true
+
+IO.println(Objects.isValueObject(c));   // true
+IO.println(Objects.requireIdentity(c)); // lève une IdentityException
+----
+
+=== Changements dans le JDK
+
+Depuis le JDK 8, un certain nombre de classes du JDK ont été annotées `@ValueBased`, indiquant de leur caractère `final`, immuable, et de la vigilance à avoir quant à ne pas se reposer sur leur identité (`==`, `synchronized`, ...), cf. https://docs.oracle.com/javase/8/docs/api/java/lang/doc-files/ValueBased.html[Value-Based Classes].
+
+Depuis le JDK 16 et la https://openjdk.org/jeps/390[JEP 390: Warnings for Value-Based Classes], le compilateur javac implémente une nouvelle catégorie d'avertissement qui identifie les utilisations de l'instruction `synchronized` avec un opérande d'un type de classe annoté `@ValueBased`, ou d'un type dont tous les sous-types sont spécifiés comme étant `@ValueBased`.
+
+.Depuis le JDK 16
+[source, java]
+----
+Integer i1 = 1_000;
+Integer i2 = 1_000;
+
+synchronized (i1) { // ⚠️ warning
+  //
+}
+----
+
+.Warning
+[plain]
+----
+Synchronization on instance of value-based class
+----
+
+Avec Valhalla, ce ne sont plus des warnings, mais des erreurs de compilation ou `IdentityException` levées au runtime, comme vu précédemment.
+Également, de nombreuses classes `@ValueBased` deviennent des _value classes_, parmi lesquelles :
+
+* Dans `java.lang`: `Integer, `Long`, `Float`, `Double`, `Character`, ...
+* Dans `java.util`: `Optional`, `OptionalInt`, ...
+* Dans `java.time`: `LocalDate`, `LocalDateTime`, ...
+
+Cette liste sera amenée à être étendue, avec notamment les implémentations de `List.of()`, `List.copyOf()`, `Set.of()`, ...
+
+.Avec Valhalla
+[source, java]
+----
+Integer i1 = 1_000;
+Integer i2 = 1_000;
+
+synchronized (i1) { // ❌ erreur
+  //
+}
+----
+
+.Erreur de compilation
+[plain]
+----
+unexpected type
+  required: a type with identity
+  found:    java.lang.Integer
+----
+
+== Mise en pratique
+
+Il est temps de mettre œuvre les _value types_ dans un exemple concret.
+
+Nous vous proposons de calculer et représenter l'ensemble de Mandelbrot, fractales célèbres, qui implique un calcul mathématique récursif sur les nombres complexes.
+Si vous êtes curieux, plus d'information est disponible sur cette page https://fr.wikipedia.org/wiki/Ensemble_de_Mandelbrot[Wikipedia].
+
+=== L'algorithme
+
+L'ensemble de Mandelbrot est défini de la façon suivante :
+
+[latexmath]
+++++
+\mathcal{M}=\left\{\, c\in\mathbb{C}\ \middle|\ \text{la suite }
+\begin{cases}
+z_0=0,\\
+z_{n+1}=z_n^2+c
+\end{cases}
+\text{ est bornée} \right\}.
+++++
+
+Pour des raisons pratiques, on limitera le calcul à un certain nombre d'itérations, par exemple `maxIterations = 255`.
+Il est démontré que dès lors que latexmath:[$|z_n|\gt 2$] (ou de manière équivalente latexmath:[$|z_n|^2 > 4$]), la suite n'est pas bornée, car la valeur du module tend vers l'infini.
+On considère par approximation dans notre algorithme qu'un nombre complexe appartient à l'ensemble de Mandelbrot si après les `maxIterations` itérations, latexmath:[$|z_n|^2\le 4$].
+
+==== Exemple de point appartenant à l'ensemble de Mandelbrot
+
+.On voit les itérations former successivement une spirale
+image::2025/value-types-fractales/escape-bound.png[]
+
+==== Exemple de point n'appartenant pas à l'ensemble de Mandelbrot
+
+.On voit les itérations "fuir", rapidement latexmath:[$|z_n|^2 > 4$]
+image::2025/value-types-fractales/escape-unlimited.png[]
+
+=== Calcul avec les types primitifs
+
+Si l'on veut un calcul efficace et rapide avec une faible empreinte mémoire, on utilise naturellement des primitifs, des `double` en l'occurrence.
+
+Voici le code que l'on peut écrire :
+
+[source, java]
+----
+public int compute(double re0, double im0, int maxIterations) {
+
+  double re = 0;
+  double im = 0;
+
+  // Squared values
+  double re2 = 0;
+  double im2 = 0;
+  double modulus2 = 0;
+
+  // Iteration
+  int i = 0;
+
+  // (a + ib)(a + ib) = a² − b² + 2iab
+  while (modulus2 <= 4 && i < maxIterations) {
+    im = 2 * re * im + im0;
+    re = re2 - im2 + re0;
+    re2 = re * re;
+    im2 = im * im;
+    modulus2 = re2 + im2;
+    i++;
+  }
+
+  return i; // <1>
+}
+----
+<1> On renvoie le nombre d'itérations, qui indique une "vitesse" de fuite, ce qui nous permettra de colorer l'ensemble en fonction lors du rendu
+
+=== Visualisation
+
+En appliquant l'algorithme sur les points du plan, on peut générer une visualisation (ici, avec JavaFX).
+
+==== Ensemble de Mandelbrot
+
+image::2025/value-types-fractales/mandelbrot-full.png[]
+
+==== Détails en [-0.082, 0.649]
+
+image::2025/value-types-fractales/mandelbrot-sub.png[]
+
+=== Abstraction et simplification du calcul
+
+On peut drastiquement simplifier l'algorithme en tirant profit de l'abstraction que nous offre la programmation orientée object.
+
+On peut définir un object `Complex` et des méthodes ad-hoc pour réaliser les calculs.
+On définit ainsi 3 méthodes :
+
+* `add()` pour ajouter la valeur d'un autre nombre complexe
+* `square()` pour élever le complexe au carré
+* `magnitudeSquared()` pour calculer le carré du module
+
+[source, java]
+----
+public record Complex(double re, double im) {
+
+  public Complex add(Complex other) {
+    return new Complex(re + other.re(), im + other.im());
+  }
+
+  public Complex square() {
+    return new Complex(re * re - im * im, 2 * re * im);
+  }
+
+  public double magnitudeSquared() {
+    return re * re + im * im;
+  }
+}
+----
+
+Une fois défini, on réécrit l'algorithme :
+
+[source, java]
+----
+public int compute(double re, double im, int maxIterations) {
+  Complex c = new Complex(re, im);
+  Complex z = new Complex(0, 0);
+  int i = 0;
+
+  while (z.magnitudeSquared() < 4 && i < maxIterations) {
+    z = z.square().add(c);
+    i++;
+  }
+
+  return i;
+}
+----
+
+L'algorithme est tout de suite nettement plus clair, lisible et maintenable.
+On voit apparaître clairement notre formule latexmath:[$z_{n+1} = z_n^2 + c$].
+
+== Performances
+
+Malheureusement, ce qui est beau est cher.
+Alors que sur notre machine de test, il faut environ *40ms* pour générer notre image avec les types primitifs, il faut plus de *400ms* soit plus de 10x plus de temps pour générer l'image avec l'objet `Complex`.
+Ceci impacte négativement l'expérience utilisateur lorsque l'on navigue dans l'ensemble (zoom, translation) puisqu'il faut sans cesse recalculer l'image.
+
+.Calculs avec types primitifs
+[plain]
+----
+Mandelbrot.update 48 - Rendered in : 35.3604ms
+Mandelbrot.update 49 - Rendered in : 37.9037ms
+Mandelbrot.update 50 - Rendered in : 38.235ms
+Mandelbrot.update 51 - Rendered in : 38.2597ms
+----
+
+.Calculs avec l'objet `Complex`
+[plain]
+----
+Mandelbrot.update 52 - Rendered in : 471.137ms
+Mandelbrot.update 53 - Rendered in : 454.612ms
+Mandelbrot.update 54 - Rendered in : 399.3353ms
+Mandelbrot.update 55 - Rendered in : 400.4051ms
+----
+
+L'allocation d'une nouvelle instance de `Complex` a chaque calcul induit un surcoût non négligeable.
+
+== Les _Values Types_ à la rescousse
+
+Notre object `Complex`, comme il est défini, est un très bon candidat pour devenir un _value type_.
+
+Modifions le en ajoutant simplement le mot clé `value` :
+
+[source, java]
+----
+public value record Complex(double re, double im) {
+  /* reste inchangé */
+}
+----
+
+.Calculs avec un `value record`
+----
+Mandelbrot.update 61 - Rendered in : 42.7773ms
+Mandelbrot.update 62 - Rendered in : 38.7922ms
+Mandelbrot.update 63 - Rendered in : 40.2715ms
+Mandelbrot.update 64 - Rendered in : 39.0684ms
+----
+
+On retrouve des performances analogues à celles des primitifs, tout en conservant notre abstraction.
+Le meilleur des deux mondes !
+
+== Java Flight Recorder
+
+Un enregistrement JFR
+
+== L'application MandelbrotFx
+
+L'application intégrale est disponible sur github : https://github.com/CodeSimcoe/MandelbrotFx[].
+
+La branche `valhalla` permet de tester les différentes approches à chaud en basculant dynamiquement sur l'algorithme utilisé (primitifs, `record` ou `value record`).
+La branche `main` se base sur un JDK standard et permet d'explorer l'ensemble de Mandelbrot et sa fascinante structure fractale.
+
+== Pour aller plus loin
+
+Arrays
+Null-restricted
+Generics
