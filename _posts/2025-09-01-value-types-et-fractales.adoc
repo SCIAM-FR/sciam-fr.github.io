@@ -19,7 +19,7 @@ Nous en profiterons pour les mettre en pratique sur un exemple parlant : le calc
 Les programmes Java font cohabiter objets et types primitifs.
 Les premiers offrent la richesse de l'abstraction tandis que les seconds se démarquent par leur performance.
 
-Si l'on définit le type `Distance` comme étant une simple encapsulation d'un `double` :
+Si l'on définit le type `Distance` comme étant une simple encapsulation d'un `float` :
 
 [source, java]
 ----
@@ -28,7 +28,8 @@ record Distance(float value) {}
 
 On pourra bénéficier de certains avantages :
 
-* Une `Distance` n'est pas une `Speed` par exemple. En manipulant de simples `float` on pourrait accidentellement passer la mauvaise valeur à une méthode ou ajouter entre elles des données n'étant pas compatibles
+* Une `Distance` n'est pas une `Speed` par exemple.
+En manipulant de simples `float` on pourrait accidentellement passer la mauvaise valeur à une méthode ou ajouter entre elles des données n'étant pas compatibles
 * On peut enrichir le type `Distance` de méthodes, par exemple `add(Distance other)` ou surcharger `toString()` pour afficher l'unité
 * Il est possible de réaliser un contrôle d'intégrité dans le constructeur, en levant par exemple une `IllegalArgumentException` si la valeur est négative
 * ...
@@ -68,8 +69,8 @@ Dire qu'il s'agit d'un projet au long cours est un euphémisme : Valhalla a ét�
 Son échelonnement est composé de 5 grandes étapes successives :
 
 * https://openjdk.org/jeps/401[JEP 401: Value Classes and Objects] : introduction des _Value Types_
-* https://openjdk.org/jeps/8303099[JEP draft: Null-Restricted and Nullable Types] : ajout de la possibilité de déclarer qu'un _Value Type_ rejette ou accepte délibérément la valeur `null`
-* https://openjdk.org/jeps/8316779[JEP draft: Null-Restricted Value Class Types] : amélioration des performances des champs et tableaux utilisant des _Value Types_ non-nullables
+* https://openjdk.org/jeps/8303099[JDK-8303099: Null-Restricted and Nullable Types] : ajout de la possibilité de déclarer qu'un _Value Type_ rejette ou accepte délibérément la valeur `null`
+* https://openjdk.org/jeps/8316779[JDK-8316779: Null-Restricted Value Class Types] : amélioration des performances des champs et tableaux utilisant des _Value Types_ non-nullables
 * https://openjdk.org/jeps/402[JEP 402: Enhanced Primitive Boxing] : permettre de traiter les types primitifs de manière plus proche de celle des objets
 * Parametric JVM : conserver et optimiser les paramétrages de classes et méthodes génériques à l'exécution
 
@@ -588,8 +589,6 @@ Une optimisation que la JVM peut effectuer avec les _value types_ est l'aplatiss
 Dans ce cas, la "référence" n'est plus un pointeur vers une zone mémoire distincte : l'objet est alors dit "aplati" _(flattened_).
 Cela donne un stockage plus dense (pas de header), sans indirection.
 
-== _Value Types_ et tableaux
-
 Reprenons notre type `Distance` qui encapsule un `float` :
 
 [source, java]
@@ -609,10 +608,86 @@ Distance[] array = new Distance[] { ... };
 
 Comme `Distance` est un _identity type_, le tableau contient pour chaque élément une référence vers une instance de `Distance`, ou éventuellement `null`.
 
-image::2025/value-types-fractales/array-distance.png[]
+image::2025/value-types-fractales/array-distance.png[width=500]
 
+Si l'on utilise plutôt un _value record_ : `value record Distance(float value) { ... }`, l'absence d'identité permettra alors à la JVM "d'aplatir" nos données.
 
-== Pour aller plus loin
+La structure de données en mémoire pourrait revêtir la forme suivante, bien plus dense :
 
-Null-restricted
-Generics
+image::2025/value-types-fractales/array-value-distance.png[width=125]
+
+Mais... ce n'est pas aussi simple que cela.
+Qu'en est-il de la possible valeur `null` de notre `Distance` ?
+En plus des 32 bits de notre `float`, il faudrait un bit supplémentaire pour indiquer si l'instance est `null`, ou non.
+Il est même probable que les contraintes liées au hardware contraignent de devoir utiliser 64 bits au total, soit donc 32 bits rien que pour le bit de "nullité".
+Alors, la structure de données serait plus proche d'une telle représentation :
+
+image::2025/value-types-fractales/array-value-distance-bit.png[width=125]
+
+Si l'on impose, pour un cas d'usage donné, que l'instance du _value type_ n'est jamais nulle, alors on peut s'affranchir du bit supplémentaire et encoder directement les valeurs.
+C'est ce que proposent de traiter les JEP draft https://openjdk.org/jeps/8303099[JDK-8303099: Null-Restricted and Nullable Types] et https://openjdk.org/jeps/8316779[JDK-8316779: Null-Restricted Value Class Types] en deux temps.
+Le langage se verrait alors enrichi d'une nouvelle possibilité : la capacité de pouvoir exprimer si les valeurs d'un type acceptent la valeur `null`, ou pas.
+La syntaxe préssentie (non définitive) est l'utilisation du point d'exclamation `!` après le type.
+
+Il serait donc possible, à terme, de définir notre tableau d'objets `Distance` de la manière suivante :
+
+[source, java]
+----
+Distance![] distances = {
+  new Distance(100f),
+  new Distance(200f)
+};
+----
+
+Un tel tableau pourrait ainsi être stocké de la même manière que : `float[]`, chaque instance de `Distance` n'étant représentée que par le `float` qu'elle encapsule, sans information de nullité.
+
+Une autre contrainte arrive aussi rapidement, celle de l'intégrité de nos données.
+Dès lors que la taille du _value object_ à stocker dépasse celle de la capacité du processeur — supposons 64 bits — il n'y a plus d'atomicité garantie : il est alors possible d'observer une instance incohérente.
+Prenons l'exemple suivant :
+
+[source, java]
+----
+var Complex c1 = new Complex(1, 2);
+var Complex c2 = new Complex(3, 4);
+----
+
+Dans un cas de concurrence en écriture, il serait possible de créer un `Complex` ayant pour valeurs `re = 1, im = 4` par exemple, ce qui ne correspond à aucune de nos deux instances, mais à un mix de certaines de leurs valeurs.
+Dans une philosophie d'une JVM qui assure une intégrité par défaut, cela n'est pas souhaitable, et limite ainsi la façon dont les objets peuvent être aplatis.
+
+Si l'on considère la classe `LocalDateTime` (un type candidat pour devenir _value type_), son contenu excède 64 bits.
+On pourrait néanmoins le stocker de manière partiellement optimisée en conservant un pointeur vers l'instance, mais dont le stockage serait aplati de la manière suivante :
+
+* 64 bits pour sa partie `LocalDate`
+* 64 bits pour sa partie `LocalTime`
+
+[plain]
+----
+LocalDate
++-------------------------------------------------------------+
+| year                             month    day               |
+| YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY MMMMMMMM DDDDDDDD ________ |
+| int                              byte     byte              |
++-------------------------------------------------------------+
+
+LocalTime
++-------------------------------------------------------------+
+| HHHHHHHH MMMMMMMM SSSSSSSS NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN |
+| hour     minute   second   nano                             |
+| byte     byte     byte     int                              |
++-------------------------------------------------------------+
+----
+
+Il serait néanmoins possible de renoncer à l'atomicité, de manière explicite uniquement.
+La JEP propose d'activer ce choix via l'implémentation d'une interface `LooselyConsistentValue` : c'est une proposition à l'état d'ébauche, mais la philosophie souhaitée est claire : intégrité par défaut.
+
+== La route est encore longue
+
+Ces quelques exemples illustrent certaines des futures fonctionnalités apportées par le projet Valhalla.
+
+Mais les étages de la fusée Valhalla sont nombreux : la https://openjdk.org/jeps/402[JEP 402: Enhanced Primitive Boxing] prévoit de rapprocher les types primitifs un peu plus des types objets : un `int` serait presque un `Integer!`.
+On pourrait accéder aux champs d'un `int i` comme `i.SIZE` ou appeler une méthode telle que `i.doubleValue()`...
+
+Enfin, Valhalla devra s'attaquer au _type erasure_ : les types génériques étant effacés au runtime, il n'est pas possible d'optimiser les conteneurs génériques comme `Optional<T>` ou les collections telles que `java.util.List<T>`.
+Il faudra une évolution qui permette de conserver l'information nécessaire à l'optimisation.
+
+Toutes ces fonctionnalités devront encore longuement maturer, mais la https://openjdk.org/jeps/401[JEP 401: Value Classes and Objects]
