@@ -72,7 +72,6 @@ plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
   - jekyll-toc
-  - jekyll-katex
  
 pagination:
   enabled: true

@@ -23,12 +23,12 @@ Si l'on définit le type `Distance` comme étant une simple encapsulation d'un `
 
 [source, java]
 ----
-record Distance(double value) {}
+record Distance(float value) {}
 ----
 
 On pourra bénéficier de certains avantages :
 
-* Une `Distance` n'est pas une `Speed` par exemple. En manipulant de simples `double` on pourrait accidentellement passer la mauvaise valeur à une méthode ou ajouter entre elles des données n'étant pas compatibles
+* Une `Distance` n'est pas une `Speed` par exemple. En manipulant de simples `float` on pourrait accidentellement passer la mauvaise valeur à une méthode ou ajouter entre elles des données n'étant pas compatibles
 * On peut enrichir le type `Distance` de méthodes, par exemple `add(Distance other)` ou surcharger `toString()` pour afficher l'unité
 * Il est possible de réaliser un contrôle d'intégrité dans le constructeur, en levant par exemple une `IllegalArgumentException` si la valeur est négative
 * ...
@@ -37,7 +37,7 @@ Mais ceci a un coût, prenons le cas de la méthode `add()` :
 
 [source, java]
 ----
-record Distance(double value) {
+record Distance(float value) {
   public Distance add(Distance other) {
     return new Distance(value + other.value);
   }
@@ -46,8 +46,8 @@ record Distance(double value) {
 
 Une nouvelle instance de `Distance` est créée à chaque appel ce qui accentue la pression sur le Garbage Collector.
 
-Dans le cas d'un tableau, `Distance[]` pâtit de quelques surcoûts par rapport à `double`.
-Quand `double[]` est en mémoire un tableau contigu de valeurs primitives, `Distance[]` est un tableau d'objets, donc de pointeurs.
+Dans le cas d'un tableau, `Distance[]` pâtit de quelques surcoûts par rapport à `float`.
+Quand `float[]` est en mémoire un tableau contigu de valeurs primitives, `Distance[]` est un tableau d'objets, donc de pointeurs.
 Chaque objet référencé possède son propre header, ainsi que potentiellement quelques octets d'alignement. La densité mémoire est donc bien moins bonne, comme l'illustre ce schéma.
 
 image::2025/value-types-fractales/array-objects.png[]
@@ -121,7 +121,7 @@ public value record Complex(double re, double im) {}
 == Propriétés des _Value Types_
 
 Un _value object_ ne possède pas d'identité (pas d'adresse en mémoire, ni de header).
-Cela entraîne un certain nombre de conséquences.
+Cela reste un `java.lang.Object` qui peut implémenter des interfaces ou fournir des méthodes, mais néanmoins, cette absence d'identité entraîne un certain nombre de conséquences.
 
 === Immutabilité et interchangeabilité
 
@@ -208,7 +208,7 @@ IO.println(c2.hashCode() + " " + System.identityHashCode(c2));
 -32505856 507117229
 ----
 
-=== `WeakReference`
+=== Utilisation de `WeakReference`
 
 Une `java.lang.ref.WeakReference` n'a de sens que si la référence cible possède une identité d'objet, que l'on peut pointer en mémoire et que le GC peut suivre.
 Il n'est donc pas possible de créer une instance de `WeakReference` à partir d'un _value object_.
@@ -325,7 +325,7 @@ Synchronization on instance of value-based class
 Avec Valhalla, ce ne sont plus des warnings, mais des erreurs de compilation ou `IdentityException` levées au runtime, comme vu précédemment.
 Également, de nombreuses classes `@ValueBased` deviennent des _value classes_, parmi lesquelles :
 
-* Dans `java.lang`: `Integer, `Long`, `Float`, `Double`, `Character`, ...
+* Dans `java.lang`: `Integer`, `Long`, `Float`, `Double`, `Character`, ...
 * Dans `java.util`: `Optional`, `OptionalInt`, ...
 * Dans `java.time`: `LocalDate`, `LocalDateTime`, ...
 
@@ -354,7 +354,7 @@ unexpected type
 
 Il est temps de mettre œuvre les _value types_ dans un exemple concret.
 
-Nous vous proposons de calculer et représenter l'ensemble de Mandelbrot, fractales célèbres, qui implique un calcul mathématique récursif sur les nombres complexes.
+Nous vous proposons de calculer et représenter l'ensemble de Mandelbrot, aux motifs fractales célèbres, qui implique un calcul mathématique récursif sur les nombres complexes.
 Si vous êtes curieux, plus d'information est disponible sur cette page https://fr.wikipedia.org/wiki/Ensemble_de_Mandelbrot[Wikipedia].
 
 === L'algorithme
@@ -368,7 +368,7 @@ L'ensemble de Mandelbrot est défini de la façon suivante :
 z_0=0,\\
 z_{n+1}=z_n^2+c
 \end{cases}
-\text{ est bornée} \right\}.
+\text{ est bornée} \right\}
 ++++
 
 Pour des raisons pratiques, on limitera le calcul à un certain nombre d'itérations, par exemple `maxIterations = 255`.
@@ -377,13 +377,15 @@ On considère par approximation dans notre algorithme qu'un nombre complexe appa
 
 ==== Exemple de point appartenant à l'ensemble de Mandelbrot
 
+À partir du complexe `[re0, im0]`, on calcule `n` itérations que l'on représente.
+
 .On voit les itérations former successivement une spirale
-image::2025/value-types-fractales/escape-bound.png[]
+image::2025/value-types-fractales/escape-in.png[]
 
 ==== Exemple de point n'appartenant pas à l'ensemble de Mandelbrot
 
-.On voit les itérations "fuir", rapidement latexmath:[$|z_n|^2 > 4$]
-image::2025/value-types-fractales/escape-unlimited.png[]
+.On voit les itérations "fuir", puis rapidement latexmath:[$|z_n|^2 > 4$]
+image::2025/value-types-fractales/escape-out.png[]
 
 === Calcul avec les types primitifs
 
@@ -486,7 +488,7 @@ On voit apparaître clairement notre formule latexmath:[$z_{n+1} = z_n^2 + c$].
 == Performances
 
 Malheureusement, ce qui est beau est cher.
-Alors que sur notre machine de test, il faut environ *40ms* pour générer notre image avec les types primitifs, il faut plus de *400ms* soit plus de 10x plus de temps pour générer l'image avec l'objet `Complex`.
+Alors que sur notre machine de test, il faut un peu moins de *40ms* pour générer notre image avec les types primitifs, il faut plus de *400ms* soit plus de 10x plus de temps pour générer l'image avec l'objet `Complex`.
 Ceci impacte négativement l'expérience utilisateur lorsque l'on navigue dans l'ensemble (zoom, translation) puisqu'il faut sans cesse recalculer l'image.
 
 .Calculs avec types primitifs
@@ -511,7 +513,7 @@ L'allocation d'une nouvelle instance de `Complex` a chaque calcul induit un surc
 
 == Les _Values Types_ à la rescousse
 
-Notre object `Complex`, comme il est défini, est un très bon candidat pour devenir un _value type_.
+Notre objet `Complex`, comme il est défini, est un très bon candidat pour devenir un _value type_.
 
 Modifions le en ajoutant simplement le mot clé `value` :
 
@@ -535,17 +537,82 @@ Le meilleur des deux mondes !
 
 == Java Flight Recorder
 
-Un enregistrement JFR
+Réalisons un enregistrement JFR afin de comparer les allocations mémoire des différents cas d'utilisation.
+On réalise pour cela 3 enregistrements distincts qui exécutent la même exacte séquence de calculs afin que la comparaison soit représentative.
+On pourra ainsi comparer :
+
+* l'utilisation des primitifs
+* l'utilisation d'un `record`
+* l'utilisation d'un `value` `record`
+
+=== Calculs avec types primitifs (`double`)
+
+image::2025/value-types-fractales/prim-jfr.png[]
+
+L'utilisation des types primitifs est notre étalon.
+On constate, sans surprise, qu'il n'y a pas particulièrement d'allocations d'objets, on n'en utilise pas dans l'algorithme, ni d'activité notable du garbage collector.
+C'est ce que l'on attendait et c'est de cela que découlent les bonnes performances de l'algorithme.
+
+=== Calculs avec un `record`
+
+image::2025/value-types-fractales/id-record-jfr.png[]
+
+Ici, notre algorithme est extrêmement gourmand (à dessein).
+Pour chaque pixel que l'on souhaite calculer, on réalise plusieurs itérations de notre algorithme, qui lui-même alloue plusieurs instances de notre `record` à chacune de ces itérations.
+Les allocations sur le tas (heap) sont nombreuses et on atteint un total de plus de *100Go* en même pas 20 secondes d'utilisation.
+Le garbage collector est en tout logique soumis à forte contribution.
+
+=== Calculs avec un `value` `record`
+
+image::2025/value-types-fractales/va-record-jfr.png[]
+
+La magie de Valhalla opère : on retrouve un profil semblable au cas d'usage avec les types primitifs.
+C'est la _scalarization_ qui permet cela : optimisation par laquelle les champs du _value type_ sont décomposés en leurs variables primitives indépendantes pour éviter l'allocation d'un objet sur le tas (heap).
+
+NOTE: On note quand même quelques allocations, marginales.
+Cela est dû au fait que cette optimisation est effectuée au runtime par le compilateur JIT.
+Il y a donc quelques allocations avant de voir l'optimisation intégrée.
 
 == L'application MandelbrotFx
 
 L'application intégrale est disponible sur github : https://github.com/CodeSimcoe/MandelbrotFx[].
 
-La branche `valhalla` permet de tester les différentes approches à chaud en basculant dynamiquement sur l'algorithme utilisé (primitifs, `record` ou `value record`).
-La branche `main` se base sur un JDK standard et permet d'explorer l'ensemble de Mandelbrot et sa fascinante structure fractale.
+La branche `valhalla` permet de tester les différentes approches à chaud en basculant dynamiquement sur l'algorithme utilisé (primitifs, `record` ou `value` `record`).
+
+La branche `main` quant à elle se base sur un JDK standard et permet d'explorer l'ensemble de Mandelbrot et sa fascinante structure fractale, ainsi que certaines variantes (Julia, Burning Ship, ...).
+
+== L'aplatissement _(Flattening)_
+
+Une optimisation que la JVM peut effectuer avec les _value types_ est l'aplatissement (_flattening_).
+À l'exécution, la JVM peut optimiser le stockage des _value objects_ en les représentant sous des formes plus compactes que les objets classiques avec identité : lorsqu'un champ ou un élément de tableau devrait être une référence vers un autre objet, la JVM peut stocker directement les valeurs de cet objet à la place.
+Dans ce cas, la "référence" n'est plus un pointeur vers une zone mémoire distincte : l'objet est alors dit "aplati" _(flattened_).
+Cela donne un stockage plus dense (pas de header), sans indirection.
+
+== _Value Types_ et tableaux
+
+Reprenons notre type `Distance` qui encapsule un `float` :
+
+[source, java]
+----
+record Distance(float value) {
+  public Distance add(Distance other) {
+    return new Distance(value + other.value);
+  }
+}
+----
+
+Considérons un tableau d'objets `Distance` :
+
+----
+Distance[] array = new Distance[] { ... };
+----
+
+Comme `Distance` est un _identity type_, le tableau contient pour chaque élément une référence vers une instance de `Distance`, ou éventuellement `null`.
+
+image::2025/value-types-fractales/array-distance.png[]
+
 
 == Pour aller plus loin
 
-Arrays
 Null-restricted
 Generics
