@@ -690,4 +690,4 @@ On pourrait accéder aux champs d'un `int i` comme `i.SIZE` ou appeler une méth
 Enfin, Valhalla devra s'attaquer au _type erasure_ : les types génériques étant effacés au runtime, il n'est pas possible d'optimiser les conteneurs génériques comme `Optional<T>` ou les collections telles que `java.util.List<T>`.
 Il faudra une évolution qui permette de conserver l'information nécessaire à l'optimisation.
 
-Toutes ces fonctionnalités devront encore longuement maturer, mais la https://openjdk.org/jeps/401[JEP 401: Value Classes and Objects]
+Toutes ces fonctionnalités devront encore longuement maturer, mais la https://openjdk.org/jeps/401[JEP 401: Value Classes and Objects] n'a jamais été aussi proche d'atterrir en preview dans une prochaine version du JDK !
