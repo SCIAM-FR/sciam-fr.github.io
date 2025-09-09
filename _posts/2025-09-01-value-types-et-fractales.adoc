@@ -69,7 +69,7 @@ Dire qu'il s'agit d'un projet au long cours est un euphémisme : Valhalla a ét�
 Son échelonnement est composé de 5 grandes étapes successives :
 
 * https://openjdk.org/jeps/401[JEP 401: Value Classes and Objects] : introduction des _Value Types_
-* https://openjdk.org/jeps/8303099[JDK-8303099: Null-Restricted and Nullable Types] : ajout de la possibilité de déclarer qu'un _Value Type_ rejette ou accepte délibérément la valeur `null`
+* https://openjdk.org/jeps/8303099[JDK-8303099: Null-Restricted and Nullable Types] : ajout de la possibilité de déclarer qu'un type rejette ou accepte délibérément la valeur `null`
 * https://openjdk.org/jeps/8316779[JDK-8316779: Null-Restricted Value Class Types] : amélioration des performances des champs et tableaux utilisant des _Value Types_ non-nullables
 * https://openjdk.org/jeps/402[JEP 402: Enhanced Primitive Boxing] : permettre de traiter les types primitifs de manière plus proche de celle des objets
 * Parametric JVM : conserver et optimiser les paramétrages de classes et méthodes génériques à l'exécution
@@ -252,8 +252,8 @@ public class Point3D extends Point2D {
   }
 }
 ----
-<1> La partie située avant l'appel à `super` / `this` est appelée _prologue_
-<2> La partie située après l'appel à `super` / `this` est appelée _epilogue_
+<1> La partie située *avant* l'appel à `super` / `this` est appelée _prologue_
+<2> La partie située *après* l'appel à `super` / `this` est appelée _epilogue_
 
 Lorsqu'un champ est initialisé dans le prologue (avant l'appel à `super` / `this`) on dit que son initialisation est _stricte_.
 Il n'est pas possible d'observer un état non initialisé dans ce cas.
