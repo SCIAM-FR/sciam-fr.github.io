@@ -74,10 +74,10 @@ Son échelonnement est composé de 5 grandes étapes successives :
 * https://openjdk.org/jeps/402[JEP 402: Enhanced Primitive Boxing] : permettre de traiter les types primitifs de manière plus proche de celle des objets
 * Parametric JVM : conserver et optimiser les paramétrages de classes et méthodes génériques à l'exécution
 
-La première étape, dont nous allons parler dans cet article, n'est encore dans aucune version du JDK standard, même en preview.
-On peut sans prendre de gros risques parier qu'il faudra encore plusieurs années avant de voir toutes ces fonctionnalités délivrées en standard.
+La première étape, dont nous allons parler dans cet article, n'est encore dans aucune version du JDK standard, ni même en preview.
+On peut sans prendre de gros risques parier qu'il faudra encore plusieurs années avant de voir toutes ces fonctionnalités délivrées en standard, et possiblement sous une forme différente que celle présentée.
 
-Il est néanmoins possible d'expérimenter ces fonctionnalités avec un build du JDK contenant les travaux de la branche Valhalla du projet.
+Il est néanmoins possible d'expérimenter une partie de ces fonctionnalités avec un build du JDK contenant les travaux de la branche Valhalla du projet OpenJDK.
 Pour cela, deux possibilités :
 
 * Utiliser un build early-access pour votre plateforme, par exemple depuis https://jdk.java.net/valhalla[] (version windows datée) ou https://builds.shipilev.net/openjdk-jdk-valhalla[] (linux uniquement)
@@ -132,6 +132,7 @@ Et à moins de le déclarer `abstract`, il est implicitement `final` : on ne peu
 Deux instances d'un _value type_ sont considérées comme étant interchangeables si leurs champs ont les mêmes valeurs.
 Leur état est fixé et immuable, elles représentent la même valeur de domaine, aussi bien maintenant que dans le futur.
 En termes de sémantique, l'une ou l'autre des deux instances peut être utilisée indifféremment.
+La JVM est d'ailleurs libre de n'utiliser qu'une seule instance dans ce cas.
 
 === Synchronisation
 
@@ -149,7 +150,8 @@ Un tel cas d'usage provoque l'erreur de compilation :
 
 [plain]
 ----
-Unexpected type required: a type with identity.
+Unexpected type
+    required: a type with identity.
 ----
 
 Cela ne se limite pas à la compilation : au runtime, la JVM vérifie que le type possède une identité.
@@ -309,10 +311,9 @@ Depuis le JDK 16 et la https://openjdk.org/jeps/390[JEP 390: Warnings for Value-
 .Depuis le JDK 16
 [source, java]
 ----
-Integer i1 = 1_000;
-Integer i2 = 1_000;
+Integer i1000 = 1_000;
 
-synchronized (i1) { // ⚠️ warning
+synchronized (i1000) { // ⚠️ warning
   //
 }
 ----
@@ -335,10 +336,9 @@ Cette liste sera amenée à être étendue, avec notamment les implémentations 
 .Avec Valhalla
 [source, java]
 ----
-Integer i1 = 1_000;
-Integer i2 = 1_000;
+Integer i1000 = 1_000;
 
-synchronized (i1) { // ❌ erreur
+synchronized (i1000) { // ❌ erreur
   //
 }
 ----
@@ -356,7 +356,7 @@ unexpected type
 Il est temps de mettre œuvre les _value types_ dans un exemple concret.
 
 Nous vous proposons de calculer et représenter l'ensemble de Mandelbrot, aux motifs fractales célèbres, qui implique un calcul mathématique récursif sur les nombres complexes.
-Si vous êtes curieux, plus d'information est disponible sur cette page https://fr.wikipedia.org/wiki/Ensemble_de_Mandelbrot[Wikipedia].
+Si vous êtes curieux, plus d'informations sont disponibles sur la https://fr.wikipedia.org/wiki/Ensemble_de_Mandelbrot[page Wikipedia] qui lui est consacrée.
 
 === L'algorithme
 
@@ -438,9 +438,9 @@ image::2025/value-types-fractales/mandelbrot-sub.png[]
 
 === Abstraction et simplification du calcul
 
-On peut drastiquement simplifier l'algorithme en tirant profit de l'abstraction que nous offre la programmation orientée object.
+On peut drastiquement simplifier l'algorithme en tirant profit de l'abstraction que nous offre la programmation orientée objet.
 
-On peut définir un object `Complex` et des méthodes ad-hoc pour réaliser les calculs.
+On peut définir un objet `Complex` et des méthodes ad-hoc pour réaliser les calculs.
 On définit ainsi 3 méthodes :
 
 * `add()` pour ajouter la valeur d'un autre nombre complexe
