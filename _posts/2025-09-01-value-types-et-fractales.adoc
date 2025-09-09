@@ -97,7 +97,7 @@ public value class Complex {
   private double re;
   private double im;
 
-  Complex(final double re, final double im) {
+  public Complex(final double re, final double im) {
     this.re = re;
     this.im = im;
   }
