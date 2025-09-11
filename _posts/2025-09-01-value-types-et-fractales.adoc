@@ -112,7 +112,7 @@ public value class Complex {
 }
 ----
 
-Ou plus simplement avec un record :
+Ou autrement avec un record :
 
 [source, java]
 ----
@@ -121,7 +121,8 @@ public value record Complex(double re, double im) {}
 
 == Propriétés des _Value Types_
 
-Un _value object_ ne possède pas d'identité (pas d'adresse en mémoire, ni de header).
+Un _value object_ ne possède pas d'identité.
+Contrairement à un objet standard pour lequel on possède une référence qui "l'identifie", un _value object_ est caractérisé par ses valeurs.
 Cela reste un `java.lang.Object` qui peut implémenter des interfaces ou fournir des méthodes, mais néanmoins, cette absence d'identité entraîne un certain nombre de conséquences.
 
 === Immutabilité et interchangeabilité
@@ -283,6 +284,20 @@ strict field re is not initialized before the supertype constructor has been cal
 ----
 
 Si l'on omet l'appel explicite à `super()`, alors il sera implicitement appelé après les initialisations.
+
+=== Sérialisation
+
+La sérialisation fonctionne nativement avec les types `value record`.
+Mais pour les types `value class`, elle nécessite une attention particulière.
+Concrètement, les _value classes_ qui implémentent `Serializable` doivent définir les méthodes `writeReplace()` et `readResolve()`.
+Ces méthodes permettent de sérialiser et désérialiser un objet de remplacement à la place du _value object_ lui-même.
+Sans leur implémentation, toute tentative de sérialisation ou déserialisation échouera en levant une `InvalidClassException`.
+
+La nécessité de ces méthodes vient du fait que les _value classes_ ont leurs champs strictement initialisés, et que la déserialisation ne garantit pas l'initialisation sûre de ces champs.
+Un _value object_ ne peut être créé et initialisé que via un constructeur.
+À l'avenir, des améliorations du mécanisme de sérialisation devraient permettre de sérialiser et désérialiser automatiquement une _value class_ qui implémente `Serializable`.
+
+NOTE: Si le sujet vous intéresse, Brian Goetz et Viktor Klang ont présenté lors de Devoxx 2024 le chemin vers une refonte des mécanismes de sérialisation, dont Valhalla pourrait bénéficier. La conférence est disponible via ce https://www.youtube.com/watch?v=mIbA2ymCWDs[lien].
 
 === Nouvelles API
 
