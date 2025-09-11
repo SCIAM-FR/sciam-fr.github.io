@@ -51,7 +51,7 @@ layout: default
                   author.name }}</a></span>
               <div class="flex">
                 <span class="text-base font-normal text-navysciam">{{ post.date | date: "%d/%m/%Y" }}</span>
-                <p class="text-navysciam pl-2">• {{ post.content | strip_html | reading_time | pluralize: "min" }} de
+                <p class="text-navysciam pl-2">• {{ post.content | reading_time | pluralize: "min" }} de
                   lecture</p>
               </div>
             </div>
