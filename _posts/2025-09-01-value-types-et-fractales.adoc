@@ -45,7 +45,7 @@ record Distance(float value) {
 }
 ----
 
-Une nouvelle instance de `Distance` est créée à chaque appel ce qui accentue la pression sur le Garbage Collector.
+Une nouvelle instance de `Distance` est créée à chaque appel ce qui accentue la pression sur le garbage collector.
 
 Dans le cas d'un tableau, `Distance[]` pâtit de quelques surcoûts par rapport à `float`.
 Quand `float[]` est en mémoire un tableau contigu de valeurs primitives, `Distance[]` est un tableau d'objets, donc de pointeurs.
@@ -94,21 +94,15 @@ Pour modéliser un nombre complexe composé de sa partie réelle `re` et de sa p
 ----
 public value class Complex {
 
-  private double re;
-  private double im;
+  private final double re;
+  private final double im;
 
   public Complex(final double re, final double im) {
     this.re = re;
     this.im = im;
   }
 
-  public double getRe() {
-    return re;
-  }
-
-  public double getIm() {
-    return im;
-  }
+  /* Getters, hashCode, equals, ... */
 }
 ----
 
