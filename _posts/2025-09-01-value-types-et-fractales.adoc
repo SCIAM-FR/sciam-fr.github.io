@@ -80,7 +80,7 @@ On peut sans prendre de gros risques parier qu'il faudra encore plusieurs année
 Il est néanmoins possible d'expérimenter une partie de ces fonctionnalités avec un build du JDK contenant les travaux de la branche Valhalla du projet OpenJDK.
 Pour cela, deux possibilités :
 
-* Utiliser un build early-access pour votre plateforme, par exemple depuis https://jdk.java.net/valhalla[] (version windows datée) ou https://builds.shipilev.net/openjdk-jdk-valhalla[] (linux uniquement)
+* Utiliser un build early-access pour votre plateforme, par exemple depuis https://jdk.java.net/valhalla[] (version Windows datée) ou https://builds.shipilev.net/openjdk-jdk-valhalla[] (Linux uniquement)
 * Builder vous-même le JDK à partir des sources https://github.com/openjdk/valhalla[], branche `lworld`
 
 == Le mot clé `value`
@@ -119,7 +119,7 @@ Ou autrement avec un record :
 public value record Complex(double re, double im) {}
 ----
 
-== Propriétés des _Value Types_
+== Caractéristiques des _Value Types_
 
 Un _value object_ ne possède pas d'identité.
 Contrairement à un objet standard pour lequel on possède une référence qui "l'identifie", un _value object_ est caractérisé par ses valeurs.
@@ -190,11 +190,11 @@ var c2 = new Complex(1, 2);
 
 IO.println(c1 == c2); // <1>
 ----
-<1> `java.lang.IO` permet d'intéragir avec la console un peu plus simplement que le traditionnel `System.out`, cf. https://openjdk.org/jeps/512[JEP 512: Compact Source Files and Instance Main Methods], standard en Java 25
+<1> `java.lang.IO` permet d'interagir avec la console un peu plus simplement que le traditionnel `System.out`, cf. https://openjdk.org/jeps/512[JEP 512: Compact Source Files and Instance Main Methods], standard en Java 25
 
 === HashCode avec `System.identityHashCode()`
 
-La méthode `System.identityHashCode()` renvoie la valeur qu'aurait renvoyé un appel à la méthode `hashcode()`, que la méthode soit surchargée ou non.
+La méthode `System.identityHashCode()` renvoie la valeur qu'aurait renvoyé un appel à la méthode `hashCode()`, que la méthode soit surchargée ou non.
 La JVM HotSpot génère et stocke cet _identity hash code_ dans le header de l'objet, une fois qu'il a été généré.
 
 Pour un _value object_, le comportement diffère, en toute logique : le calcul se base sur le contenu (la valeur des champs), sans pour autant renvoyer forcément une valeur identique à celle renvoyée par `hashCode()`.
@@ -303,7 +303,7 @@ NOTE: Si le sujet vous intéresse, Brian Goetz et Viktor Klang ont présenté lo
 
 Quelques nouvelles API sont ajoutées au JDK :
 
-* `Class:isIdentity` et `Class:isValue` renvoient chacune un booléen qui indique s'il s'agit respectivement d'un _identity type_ ou d'un _value type_
+* `Class::isIdentity` et `Class::isValue` renvoient chacune un booléen qui indique s'il s'agit respectivement d'un _identity type_ ou d'un _value type_
 * `Objects::isValueObject` indique si l'instance passée en paramètres est un _value object_
 * `Objects::requireIdentity` lève une `IdentityException` si l'objet passé en paramètres ne possède pas d'identité (est un _value object_)
 
@@ -342,9 +342,9 @@ Synchronization on instance of value-based class
 Avec Valhalla, ce ne sont plus des warnings, mais des erreurs de compilation ou `IdentityException` levées au runtime, comme vu précédemment.
 Également, de nombreuses classes `@ValueBased` deviennent des _value classes_, parmi lesquelles :
 
-* Dans `java.lang`: `Integer`, `Long`, `Float`, `Double`, `Character`, ...
-* Dans `java.util`: `Optional`, `OptionalInt`, ...
-* Dans `java.time`: `LocalDate`, `LocalDateTime`, ...
+* Dans `java.lang` : `Integer`, `Long`, `Float`, `Double`, `Character`, ...
+* Dans `java.util` : `Optional`, `OptionalInt`, ...
+* Dans `java.time` : `LocalDate`, `LocalDateTime`, ...
 
 Cette liste sera amenée à être étendue, avec notamment les implémentations de `List.of()`, `List.copyOf()`, `Set.of()`, ...
 
@@ -576,7 +576,7 @@ image::2025/value-types-fractales/id-record-jfr.png[]
 Ici, notre algorithme est extrêmement gourmand (à dessein).
 Pour chaque pixel que l'on souhaite calculer, on réalise plusieurs itérations de notre algorithme, qui lui-même alloue plusieurs instances de notre `record` à chacune de ces itérations.
 Les allocations sur le tas (heap) sont nombreuses et on atteint un total de plus de *100Go* en même pas 20 secondes d'utilisation.
-Le garbage collector est en tout logique soumis à forte contribution.
+Le garbage collector est en toute logique soumis à forte contribution.
 
 === Calculs avec un `value` `record`
 
@@ -642,7 +642,7 @@ image::2025/value-types-fractales/array-value-distance-bit.png[width=125]
 Si l'on impose, pour un cas d'usage donné, que l'instance du _value type_ n'est jamais nulle, alors on peut s'affranchir du bit supplémentaire et encoder directement les valeurs.
 C'est ce que proposent de traiter les JEP draft https://openjdk.org/jeps/8303099[JDK-8303099: Null-Restricted and Nullable Types] et https://openjdk.org/jeps/8316779[JDK-8316779: Null-Restricted Value Class Types] en deux temps.
 Le langage se verrait alors enrichi d'une nouvelle possibilité : la capacité de pouvoir exprimer si les valeurs d'un type acceptent la valeur `null`, ou pas.
-La syntaxe préssentie (non définitive) est l'utilisation du point d'exclamation `!` après le type.
+La syntaxe pressentie (non définitive) est l'utilisation du point d'exclamation `!` après le type.
 
 Il serait donc possible, à terme, de définir notre tableau d'objets `Distance` de la manière suivante :
 
