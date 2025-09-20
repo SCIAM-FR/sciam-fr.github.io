@@ -49,12 +49,13 @@ Une nouvelle instance de `Distance` est créée à chaque appel ce qui accentue 
 
 Dans le cas d'un tableau, `Distance[]` pâtit de quelques surcoûts par rapport à `float`.
 Quand `float[]` est en mémoire un tableau contigu de valeurs primitives, `Distance[]` est un tableau d'objets, donc de pointeurs.
-Chaque objet référencé possède son propre header, ainsi que potentiellement quelques octets d'alignement. La densité mémoire est donc bien moins bonne, comme l'illustre ce schéma.
+Chaque objet référencé possède son propre header, ainsi que potentiellement quelques octets d'alignement.
+La densité mémoire est donc bien moins bonne, comme l'illustre ce schéma.
 
 image::2025/value-types-fractales/array-objects.png[]
 
 L'accès est également plus lent, car il passe par des références.
-Dans une boucle, le CPU doit suivre ces indirections une à une.
+Dans une boucle par exemple, le CPU doit suivre ces indirections une à une.
 Ce _pointer chasing_ est coûteux, parce que les objets référencés peuvent être dispersés en mémoire, ce qui entraîne des _cache misses_ et des lectures en RAM, beaucoup plus lentes.
 
 On a donc une perte sur les performances d'accès et sur l'empreinte mémoire.
@@ -94,10 +95,10 @@ Pour modéliser un nombre complexe composé de sa partie réelle `re` et de sa p
 ----
 public value class Complex {
 
-  private final double re;
-  private final double im;
+  private double re;
+  private double im;
 
-  public Complex(final double re, final double im) {
+  public Complex(double re, double im) {
     this.re = re;
     this.im = im;
   }
