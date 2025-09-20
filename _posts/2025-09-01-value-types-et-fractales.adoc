@@ -209,7 +209,7 @@ IO.println(c2.hashCode() + " " + System.identityHashCode(c2));
 
 === Utilisation de `WeakReference`
 
-Une `java.lang.ref.WeakReference` n'a de sens que si la référence cible possède une identité d'objet, que l'on peut pointer en mémoire et que le GC peut suivre.
+Une `java.lang.ref.WeakReference` n'a de sens que si la référence cible possède une identité d'objet, que l'on peut pointer en mémoire et que le garbage collector peut suivre.
 Il n'est donc pas possible de créer une instance de `WeakReference` à partir d'un _value object_.
 
 .Le code suivant lève une `java.lang.IdentityException`
@@ -264,7 +264,7 @@ public value class Complex {
   private double re;
   private double im;
 
-  Complex(final double re, final double im) {
+  Complex(double re, double im) {
     super();
     this.re = re;
     this.im = im;
@@ -688,7 +688,9 @@ LocalTime
 ----
 
 Il serait néanmoins possible de renoncer à l'atomicité, de manière explicite uniquement.
-La JEP propose d'activer ce choix via l'implémentation d'une interface `LooselyConsistentValue` : c'est une proposition à l'état d'ébauche, mais la philosophie souhaitée est claire : intégrité par défaut.
+La JEP propose d'activer ce choix via l'implémentation d'une interface `LooselyConsistentValue` : c'est une proposition à l'état d'ébauche (cela pourrait être une annotation, ou un nouveau mot clé par exemple).
+Auquel cas, le _flattening_ pourrait être réalisé au-delà de la limite des 64bits.
+Mais la philosophie souhaitée est claire : intégrité par défaut.
 
 == La route est encore longue
 
