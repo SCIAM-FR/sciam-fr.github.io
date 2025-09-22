@@ -1,4 +1,4 @@
-= Valhalla & Value types au pays des fractales
+= Valhalla & Value Types au pays des fractales
 :page-navtitle: Valhalla & Value types au pays des fractales
 :figure-caption!:
 :page-excerpt: L'ambitieux projet Valhalla propose d'enrichir la plateforme Java avec les "Value objects". Ce sont des objets sans identité et dont les champs sont `final`, mais pour lesquels la JVM peut réaliser un certain nombre d'optimisations.
