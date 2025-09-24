@@ -47,9 +47,6 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5.0.0
-      - name: install node packages
-        run:
-          npm install
       - name: Build with Jekyll
         run: 
           bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
