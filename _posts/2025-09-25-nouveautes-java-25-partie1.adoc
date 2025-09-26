@@ -183,8 +183,10 @@ Cette JEP est co-développée avec la JEP 512 : Compact Source Files and Instanc
 ----
 void main() {
   List<Integer> nombres = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-  List<Integer> nombresPairesAuCarres = nombres.stream().filter(n -> n % 2 == 0)
-      .map(n -> n * n).collect(Collectors.toList());
+  List<Integer> nombresPairesAuCarres = nombres.stream()
+                                               .filter(n -> n % 2 == 0)
+                                               .map(n -> n * n)
+                                               .collect(Collectors.toList());
       System.out.println(nombresPairesAuCarres);
 }
 ----
@@ -580,7 +582,7 @@ NOTE: L’utilisation du `Stream<SubTask>` est particulièrement utile si toutes
   }
 ----
 
-La fabrique `allUntil()` renvoie un nouveau `Joiner` qui renvoie un nouvel objet `Joiner` qui permet d’obtenir un `Stream` de toutes les sous-tâches lorsque toutes les sous-tâches sont terminées ou que le `Predicate` renvoie la valeur `true` pour annuler la portée. 
+La fabrique `allUntil()` renvoie un nouveau `Joiner` qui permet d’obtenir un `Stream` de toutes les sous-tâches lorsque toutes les sous-tâches sont terminées ou que le `Predicate` renvoie la valeur `true` pour annuler la portée. 
 La méthode `onComplete(Subtask)` du `Joiner` invoque la méthode `test()` du `Predicate` avec la sous-tâche qui s'est terminée avec succès ou qui a échoué avec une exception. 
 Si la méthode `test()` renvoie la valeur `true`, la portée est annulée.
 
