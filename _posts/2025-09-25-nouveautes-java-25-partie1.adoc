@@ -1,0 +1,945 @@
+= Article les nouveautés de Java 25 - partie 1
+:showtitle:
+:page-navtitle: Les nouveautés de Java 25 : partie 1
+:page-excerpt: Ce premier article sur les nouveautés de Java 25 détaille les fonctionnalités proposées via des JEPs dans la syntaxe et les API notamment par les projets Amber, Loom et Panama.
+:layout: post
+:page-tags: [Java, Java 25, Projet Amber, Projet Panama, Projet Loom, Projet Leyden]
+:author: jeanmicheldoudoux
+:page-vignette: 2025/java-25.png
+:page-liquid:
+:page-categories: software news
+
+Ce premier article est consacré aux nouveautés de Java 25 et détaille les fonctionnalités proposées via des JEPs dans la syntaxe et les API notamment issues des projets https://openjdk.org/projects/amber/[Amber], https://openjdk.org/projects/loom/[Loom], https://openjdk.org/projects/panama/[Panama] et https://openjdk.org/projects/leyden/[Leyden] d’OpenJDK.
+
+Le https://openjdk.org/projects/jdk/25/[JDK 25] est la version LTS courante. La version GA du JDK 25 a été publiée le 16 septembre 2025.
+
+Elle contient 18 JEPs que l’on peut regrouper en trois catégories :
+
+* Des évolutions dans le langage
+* Des évolutions dans les API
+* Des évolutions dans la JVM
+
+Ces JEPs sont proposées en standard (12), en preview (4), en incubation (1) ou en expérimental (1).
+
+== Les JEPs relatives à la syntaxe 
+
+4 fonctionnalités dans le JDK 25 concerne la syntaxe du langage Java, 3 sont promues standard et une reste en preview :
+
+* JEP 511 : https://openjdk.org/jeps/511[Module Import Declarations]
+* JEP 512 : https://openjdk.org/jeps/512[Compact Source Files and Instance Main Methods]
+* JEP 513 : https://openjdk.org/jeps/513[Flexible Constructor Bodies]
+* JEP 507 : https://openjdk.org/jeps/507[Primitive Types in Patterns&#44; instanceof&#44; and switch (Third Preview)]
+
+=== JEP 511 : Module Import Declarations
+
+Cette fonctionnalité propose d’améliorer le langage Java avec la possibilité d’importer tous les types publics des packages exportés par un module en une seule instruction au lieu d’importer explicitement les types utilisés.
+
+Elle a été proposée en tant que fonctionnalité en preview via la https://openjdk.org/jeps/476[JEP 476], délivrée dans le JDK 23 et via la https://openjdk.org/jeps/494[JEP 494], délivrée dans le JDK 24.
+
+Elle est proposée en standard dans le JDK 25 via la https://openjdk.org/jeps/511[JEP 511] sans changement.
+
+Par exemple, au lieu de :
+
+.Le fichier DemoJEP511.java
+[source,java]
+----
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.*;
+import java.util.stream.Collectors;
+
+public class DemoJEP511 {
+
+  public static void main(String[] args) {
+    List<Integer> nombres = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+    List<Integer> nombresPairesAuCarres = nombres.stream()
+                                                 .filter(n -> n % 2 == 0)
+                                                 .map(n -> n * n)
+                                                 .collect(Collectors.toList());
+      System.out.println(nombresPairesAuCarres);
+    }
+}
+----
+
+Ce code peut être compilé et exécuté :
+
+[source,plain]
+----
+C:\java>javac DemoJEP511.java
+
+C:\java>java DemoJEP511
+[4, 16, 36, 64, 100]
+----
+
+Il est possible de simplifier le code puisque que les imports concernent des packages du module `java.base` :
+
+.Le fichier DemoJEP511.java
+[source,java]
+----
+import module java.base;
+
+public class DemoJEP511 {
+
+  public static void main(String[] args) {
+    List<Integer> nombres = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+    List<Integer> nombresPairesAuCarres = nombres.stream()
+                                                 .filter(n -> n % 2 == 0)
+                                                 .map(n -> n * n)
+                                                 .collect(Collectors.toList());
+      System.out.println(nombresPairesAuCarres);
+    }
+}
+----
+
+Ce code peut être compilé et exécuté :
+
+[source,plain]
+----
+C:\java>javac DemoJEP511.java
+
+C:\java>java DemoJEP511
+[4, 16, 36, 64, 100]
+----
+
+
+==== Les imports ambigus
+
+Comme l’importation d’un module peut avoir pour effet d’importer plusieurs packages, il est possible d’avoir des collisions de noms de classe et d’importer des classes avec le même nom simple de différents packages. 
+Le nom simple est alors ambigu, donc son utilisation provoquera une erreur de compilation.
+
+Par exemple, dans ce fichier source, le nom de classe List est ambigu :
+
+.Le fichier DemoJEP511.java
+[source,java]
+----
+import module java.base;
+import module java.desktop;
+
+public class DemoJEP511 {
+
+  public static void main(String[] args) {
+    List liste = null;         // Erreur car le nom du type est ambigu
+  }
+}
+----
+
+Ce code est compilé avec une erreur :
+
+[source,plain]
+----
+C:\java>javac DemoJEP511.java
+DemoJEP511.java:7: error: reference to List is ambiguous
+        List liste = null;         // Erreur car le nom est ambigu
+        ^
+  both class java.awt.List in java.awt and interface java.util.List in java.util match
+1 error
+----
+
+Le module `java.base` exporte le package `java.util` qui contient l’interface publique `List`.
+
+Le module `java.desktop` exporte le package `java.awt` qui contient la classe publique `List`.
+
+Pour résoudre les ambiguïtés, il suffit d’utiliser une déclaration d’importation de type unique. 
+Par exemple, pour résoudre le type `List` ambigu de l’exemple précédent :
+
+.Le fichier DemoJEP511.java
+[source,java]
+----
+import module java.base;
+import module java.desktop;
+import java.util.List;
+
+public class DemoJEP511 {
+
+  public static void main(String[] args) {
+    List liste = null;         // Le type List utilisé est java.util.List
+  }
+}
+----
+
+Les imports avec `*` sont plus spécifiques que les imports de module, ce qui permet de les utiliser pour la résolution d’une ambiguïté.
+
+.Le fichier xxx.java
+[source,java]
+----
+import module java.base;
+import module java.desktop;
+import java.util.*;
+
+public class DemoJEP511 {
+
+  public static void main(String[] args) {
+    List liste = null;         // Le type List utilisé est java.util.List
+  }
+}
+----
+
+==== Les classes déclarées implicitement
+
+Cette JEP est co-développée avec la JEP 512 : Compact Source Files and Instance Main Methods, qui spécifie que toutes les classes et interfaces publiques de niveau supérieur dans tous les packages exportés par le module `java.base` sont automatiquement importées dans les classes implicitement déclarées. Donc c’est comme si `import module java.base` apparaissait au début de chaque classe implicite, par opposition à `import java.lang.*` au début de chaque classe ordinaire.
+
+.Le fichier DemoJEP511.java
+[source,java]
+----
+void main() {
+  List<Integer> nombres = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+  List<Integer> nombresPairesAuCarres = nombres.stream().filter(n -> n % 2 == 0)
+      .map(n -> n * n).collect(Collectors.toList());
+      System.out.println(nombresPairesAuCarres);
+}
+----
+
+Ce code peut être exécuté directement par la JVM :
+
+[source,plain]
+----
+C:\java>java DemoJEP511.java
+[4, 16, 36, 64, 100]
+
+C:\java>
+----
+
+=== JEP 512 : Compact Source Files and Instance Main Methods
+
+Cette fonctionnalité propose de simplifier l’écriture de programme Java basique notamment en permettant de définir implicitement une classe et de simplifier selon les besoins son point d’entrée :
+
+Exemple :
+
+.Le fichier DemoJEP512.java
+[source,java]
+----
+void main() {
+  System.out.println("Hello World");
+}
+----
+
+Ce code peut être exécuté directement par la JVM, sans compilation explicite préalable :
+
+[source,plain]
+----
+C:\java>java DemoJEP512.java
+Hello World
+----
+
+Elle a été proposée plusieurs fois en preview :
+
+* pour la première fois en tant que fonctionnalité en preview via la https://openjdk.org/jeps/445[JEP 445], délivrée dans le JDK 21 sous la dénomination « Unnamed Classes and Instance Main Methods »
+* proposée pour une seconde preview via la https://openjdk.org/jeps/463[JEP 463], délivrée dans le JDK 22 avec des modifications basées sur les retours et une nouvelle dénomination « Implicitly declared classes and instance main »
+* proposée pour une troisième preview via la https://openjdk.org/jeps/477[JEP 477], délivrée dans le JDK 23 avec 2 évolutions :
+** l’`import static` implicite des 3 méthodes de la nouvelle `classe java.io.IO` pour interagir avec la console : `print(Object)`, `println(Object)` et `readln(String prompt)`
+** l’import automatique du module `java.base` dans les classes implicites
+* proposée pour une quatrième preview via la https://openjdk.org/jeps/495[JEP 495], délivrée dans le JDK 24 avec une nouvelle dénomination « Simple Source Files and Instance Main Methods » et des changements dans la terminologie
+
+Elle est introduite en standard via la https://openjdk.org/jeps/512[JEP 512] dans le JDK 25 avec une nouvelle dénomination « Compact Source Files and Instance Main Methods ».
+
+Plusieurs améliorations mineures basées sur l’expérience et les retours sont apportés :
+
+* La nouvelle classe IO pour les E/S basiques à la console se trouve désormais dans le package `java.lang` plutôt que dans le package `java.io`. 
+Ainsi, il est implicitement importé par chaque fichier source.
+* Les méthodes statiques de la classe `IO` ne sont plus importées implicitement dans des fichiers sources compacts. 
+Ainsi, les invocations de ces méthodes doivent nommer la classe, par exemple, `IO.println("Hello, world")`, à moins que les méthodes ne soient explicitement importées. +
++
+[source,java]
+----
+void main() {
+  println("Hello World");
+}
+----
++
+[source,plain]
+----
+C:\java>java DemoJEP512.java
+DemoJEP512.java:2: error: cannot find symbol
+  println("Hello World");
+  ^
+  symbol:   method println(String)
+  location: class DemoJEP512
+1 error
+error: compilation failed
+----
+Ainsi, les invocations de ces méthodes doivent nommer la classe. +
++
+[source,java]
+----
+void main() {
+  IO.println("Hello World");
+}
+----
++
+[source,plain]
+----
+C:\java>java DemoJEP512.java
+
+Hello World
+----
++
+Il est aussi possible d’importer explicitement les méthodes statiques de la classe `java.lang.IO`.
+
+* L’implémentation de la classe `IO` est désormais basée sur `System.out` et `System.in` plutôt que sur la classe `java.io.Console`.
+
+=== JEP 513 : Flexible Constructor Bodies
+
+L’objectif de cette fonctionnalité est de réduire la verbosité et la complexité du code en permettant aux développeurs de placer des instructions avant l’appel explicite d’un constructeur.
+
+Le but est d’autoriser dans les constructeurs des instructions à apparaître avant un appel explicite du constructeur, en utilisant `super(..)` ou `this(..)`. 
+Ces instructions ne peuvent pas référencer l’instance en cours d’initialisation, mais elles peuvent initialiser ses champs. 
+L’initialisation des champs avant d’invoquer un autre constructeur rend une classe plus fiable lorsque les méthodes sont réimplémentées.
+
+Elle a été proposée plusieurs fois en preview :
+
+* pour la première fois en tant que fonctionnalité en preview via la https://openjdk.org/jeps/447[JEP 447], délivrée dans le JDK 22 sous la dénomination « Instructions before super(...) »
+* proposée pour une seconde preview via la https://openjdk.org/jeps/482[JEP 482], délivrée dans le JDK 23 avec une modification permettant aux traitements d’un constructeur de pouvoir désormais initialiser des champs de la même classe avant d’invoquer explicitement un constructeurs basées sur les retours et une nouvelle dénomination « Flexible Constructor Bodies »
+* proposée pour une troisième preview via la https://openjdk.org/jeps/492[JEP 492], délivrée dans le JDK 24 sans changement
+
+Elle est introduite en standard via la https://openjdk.org/jeps/513[JEP 513] dans le JDK 25 sans changement.
+
+Exemple :
+
+.Le fichier DemoJEP513.java
+[source,java]
+----
+public class DemoJEP513 {
+
+    public static void main(String[] args) {
+        new ClasseFille(100);
+    }
+}
+
+class ClasseMere {
+
+    ClasseMere() { afficher(); }
+
+    void afficher() { System.out.println("ClasseMere"); }
+}
+
+class ClasseFille extends ClasseMere {
+
+    final int taille;
+
+    ClasseFille(int taille) {
+        this.taille = taille;
+        super();
+    }
+
+    @Override
+    void afficher() { System.out.println("ClasseFille " + taille); }
+}
+----
+
+La classe peut être compilée et exécutée :
+
+[source,plain]
+----
+C:\java>javac DemoJEP513.java
+
+C:\java>java DemoJEP513
+ClasseFille 100
+----
+
+Remarque : cette fonctionnalité est requise par le projet Valhala
+
+=== JEP 507 : Primitive Types in Patterns, instanceof, and switch (Third Preview)
+
+Cette fonctionnalité étend les capacités des patterns, de l’opérateur `instanceof` et de l’instruction `switch` pour fonctionner avec tous les types primitifs, ce qui permet une exploitation plus uniforme des données et rend le code qui doit gérer différents types plus lisible et moins sujet aux erreurs.
+
+Elle a été proposée en tant que fonctionnalité en preview via la https://openjdk.org/jeps/455[JEP 455], délivrée dans le JDK 23, et via la https://openjdk.org/jeps/488[JEP 488], délivrée dans le JDK 24. 
+Elle est à nouveau proposée pour une troisième preview, via la https://openjdk.org/jeps/507[JEP 507], sans changement.
+
+== Les JEPs relatives aux APIs
+
+Quatre JEPS concernent des évolutions dans les API (certaines issues des projets Panama et Loom) dont une est promue standard :
+
+* JEP 506 : https://openjdk.org/jeps/506[Scoped Values]
+* JEP 502 : https://openjdk.org/jeps/502[Stable Values (Preview)]
+* JEP 505 : https://openjdk.org/jeps/505[Structured Concurrency (Fifth Preview)]
+* JEP 508 : https://openjdk.org/jeps/508[Vector API (Tenth Incubator)]
+
+=== JEP 506 : Scoped Values
+
+Cette fonctionnalité permet de partager des données immuables à la fois dans le thread et dans certains threads enfants. Elle permet de stocker une valeur immuable pour une durée limitée afin que seul le thread qui a écrit la valeur puisse la lire.
+
+Elle a été introduite en incubation dans le JDK20 via la https://openjdk.org/jeps/429[JEP 429].
+
+Elle a ensuite été proposée dans plusieurs preview :
+
+* une première preview dans le JDK 21 via la https://openjdk.org/jeps/446[JEP 446],
+* une seconde preview dans le JDK 22 via la https://openjdk.org/jeps/464[JEP 464],
+* une troisième preview dans le JDK 23 via la https://openjdk.org/jeps/481[JEP 481] avec une modification par rapport aux previews précédentes : une nouvelle interface fonctionnelle `ScopedValue.CallableOp`, utilisée pour le paramètre opération des méthodes `ScopedValue.callWhere()` et `ScopedValue.Carrier.call()`, a été introduite pour fournir les traitements à exécuter qui permet au compilateur Java de déduire si une checked exception peut être levée et si c’est le cas alors laquelle. 
+Cela permet de traiter l’exception précise plutôt qu’une exception générique,
+* une quatrième preview dans le JDK 24 via la https://openjdk.org/jeps/487[JEP 487], avec des petits changements dans l’API : les méthodes `ScopedValue.callWhere()` et `ScopedValue.runWhere()` sont supprimées pour rendre l’interface complètement fluide
+
+Elle est proposée en standard dans le JDK 25 via la JEP https://openjdk.org/jeps/506[JEP 506], avec un changement mineur : la méthode `ScopedValue.orElse()` n’accepte plus la valeur `null` comme argument.
+
+Les Scoped Values sont plus sûres à utiliser que les ThreadLocal et elles requièrent moins de ressources, en particulier lorsqu’elles sont utilisées avec des threads virtuels et la concurrence structurée.
+
+Exemple : 
+
+.Le fichier DemoJEP506.java
+[source,java]
+----
+public class DemoJEP506 {
+
+  public final static ScopedValue<String> VALEUR = ScopedValue.newInstance();
+
+  public static void main(String[] args) {
+
+    Runnable tache = () -> System.out.println(Thread.currentThread() + " (id=" 
+        + Thread.currentThread().threadId() 
+        + ") - " 
+        + (VALEUR.isBound() ? VALEUR.get() : "non definie"));
+
+    tache.run();
+    ScopedValue.where(VALEUR, "valeur1").run(tache);
+    ScopedValue.where(VALEUR, "valeur2").run(tache);
+    tache.run();
+  }
+}
+----
+
+La classe peut être compilée et exécutée
+
+[source,plain]
+----
+C:\java>javac DemoJEP506.java
+
+C:\java>java DemoJEP506
+Thread[#3,main,5,main] (id=3) - non definie
+Thread[#3,main,5,main] (id=3) - valeur1
+Thread[#3,main,5,main] (id=3) - valeur2
+Thread[#3,main,5,main] (id=3) - non definie
+----
+
+=== JEP 502 : Stable Values (Preview)
+
+Le but de la https://openjdk.org/jeps/502[JEP 502] est de proposer une API dédiée aux "valeurs stables" (Stable Values), qui sont des objets contenant une valeur immuable. 
+Cette valeur est considérée comme une constante par la JVM, ce qui lui permet de mettre en œuvre certaines optimisations par le JIT de manière similaire à l’utilisation de champs déclarés `final`. 
+Cependant, contrairement aux champs déclarés `final`, les valeurs stables offrent une plus grande souplesse concernant le moment de leur initialisation qui peut être différée.
+
+L’API permet en autre :
+
+* de découpler la création de valeurs stables de leur initialisation, sans pénalités de performance significatives
+* de garantir que les valeurs stables sont initialisées au plus une fois, même dans les programmes multithread, de manière fiable avant toute première utilisation
+* de permettre au code de profiter des optimisations de type constant-folding
+
+Les cas d’utilisation typiques sont notamment les objets qui implémentent les design patterns Singleton, les loggers, des ressources partagées, …
+
+Une valeur stable est un objet, de type `StableValue<T>`, qui encapsule une valeur sous la forme d’un objet. 
+Une valeur stable ne sera initialisée qu’avant que son contenu ne soit obtenu pour la première fois, et elle est immuable par la suite. 
+Ainsi, une valeur stable est un moyen d’obtenir simplement une immuabilité différée.
+
+==== L’obtention d’une instance avec `StableValue::of`
+
+L’obtention d’une instance se fait en invoquant la fabrique `StableValue::of`. 
+A ce moment la valeur encapsulée n’est pas définie.
+
+L’obtention de la valeur se fait en invoquant la méthode `orElseGet(Supplier)` qui attend en paramètre un `Supplier` qui sera invoqué une seule fois pour créer l’instance encapsulée. 
+Les invocations suivantes retourneront l’instance obtenue. 
+Le plus simple est de proposer une méthode qui factorise ce code.
+
+[source,java]
+----
+  private final StableValue<MonService> service = StableValue.of();
+
+  MonService getService() {
+    return service.orElseSet(MonService::new);
+  }
+----
+
+Ainsi la valeur du `StableValue` est garantie d’être initialisée uniquement à la première invocation et après elle est immuable.
+
+Dans l’implémentation de la classe `StableValue`, la valeur est encapsulée dans un champ non `final` annoté avec l’annotation `@Stable` interne au JDK. 
+Cette annotation indique que, même si le champ n’est pas `final`, la JVM peut être sûre que la valeur du champ ne changera pas après la mise à jour initiale et unique du champ. 
+Cela permet à la JVM de traiter le contenu d’une valeur stable comme une constante et ainsi effectuer des optimisations de type constant-folding.
+
+==== L’utilisation d’un `Supplier`
+
+Il est aussi possible de préciser comment initialiser la valeur au moment de la déclaration de la `StableValue`, sans l’initialiser concrètement en utilisation un `Supplier`.
+
+L’obtention d’une telle instance de `Supplier` se fait en utilisant la fabrique `StableValue::Supplier`.
+
+[source,java]
+----
+  private final Supplier<MonService> serviceSupplier = StableValue.supplier(MonService::new);
+----
+
+À ce moment, l’instance de la valeur n’est pas encore créée.
+
+Pour obtenir l’instance, il suffit d’invoquer la méthode `get()` du `Supplier`. 
+Lors du premier appel à la méthode `get()`, l’instance est créée en invoquant le Supplier passé en paramètre de la fabrique `StableVue::supplier`. 
+Lors des invocations suivantes, c’est l’instance créée qui est retournée.
+
+[source,java]
+----
+    MonService service = serviceSupplier.get();
+----
+
+==== Les StableValue pour `List` et `Map`
+
+L’API permet aussi de gérer des collections dont les éléments sont eux-mêmes des données immuables différées, partageant une logique d’initialisation similaire.
+
+Pour une `List`, il faut utiliser la fabrique `StableValue::list`. 
+Elle attend en paramètre le nombre d’éléments de la List (car la taille de la collection doit être fixe) et une fonction qui permet de créer l’instance de l’élément dont l’indice est passé en paramètre.
+
+[source,java]
+----
+  private static final int NB_SERVICES = 10;
+
+  static final List<MonService> SERVICES = StableValue.list(NB_SERVICES, (n) -> new MonService(n));
+----
+
+À ce moment, aucun élément de la `List` n’est créé. 
+Lors du premier accès à un élément de la `List`, l’instance sera créée en invoquant la fonction et sera retournée. 
+Les accès suivants avec le même indice retourneront l’instance créée.
+
+Pour une `Map`, il faut utiliser la fabrique `StableValue::map`. 
+Elle attend en paramètre un `Set` des clés de la `Map` (car elle est immuable) et une fonction qui permet de créer l’instance de l’élément dont la clé est passée en paramètre.
+
+[source,java]
+----
+  static final Map<String, MonService> SERVICES_MAP = StableValue.map(Set.of("service1","service2"), (k) -> new MonService(k));
+----
+
+L’API StableValue est préposée en preview.
+
+=== JEP 505 : Structured Concurrency (Fifth Preview)
+
+Cette fonctionnalité a pour but de simplifier la programmation multithread en rationalisant la gestion des erreurs et l'annulation et en améliorant la fiabilité et en renforçant l'observabilité.
+
+Elle propose un modèle qui permet une écriture du code dans un style synchrone avec une exécution en asynchrone. 
+Le code est ainsi facile à écrire, à lire et à tester
+
+La concurrence structurée (Structured Concurrency) a été proposée via la https://openjdk.org/jeps/428[JEP 428] livrée dans le JDK 19 en tant qu’API en incubation. 
+Elle a été réincubée via la https://openjdk.org/jeps/437[JEP 437] dans le JDK 20 avec une mise à jour mineure pour que les threads utilisés héritent des Scoped values (JEP 429).
+
+Elle a été ensuite proposée dans plusieurs previews :
+
+* une première preview via la https://openjdk.org/jeps/453[JEP 453] dans le JDK 21 avec la méthode `StructuredTaskScope::fork` modifiée pour renvoyer une `SubTask` plutôt qu’une `Future`
+* une seconde preview via la https://openjdk.org/jeps/462[JEP 462] dans JDK 22, sans modification
+* une troisième une troisième preview via la https://openjdk.org/jeps/480[JEP 480] dans le JDK 23, sans modification, afin d'obtenir plus de retours
+* une quatrième preview via la https://openjdk.org/jeps/499[JEP 499] dans le JDK 24, sans modification
+
+La https://openjdk.org/jeps/505[JEP 505] propose une cinquième preview de cette fonctionnalité avec de grosses modifications dans l’API.
+
+Le type `StructureTaskScope` est désormais une interface scellée. 
+Ce n’est donc plus une classe qu’il est possible d’étendre.
+
+L’obtention d’une instance se fait en invoquant une des surcharges de la fabrique statique `open()`.
+
+La fabrique `open()` sans paramètre couvre le cas courant en retournant une instance de type `StructuredTaskScope` qui attend que toutes les sous-tâches réussissent ou qu’une sous-tâche échoue.
+D’autres politiques et format de résultats peuvent être mis en œuvre en fournissant une instance de type `Joiner` appropriée à l’une des surcharges de la méthode `open()`.
+
+La méthode `close()` de l’instance `StructuredTaskScope` doit être invoquée : le plus simple est de déclarer l’instance dans une instruction try-with-ressource.
+
+Les sous-tâches sont toujours soumises en invoquant la méthode `fork()`.
+
+La méthode `join()` permet toujours d’attendre la fin de l’exécution de toutes les sous-tâches. 
+Par défaut, la politique de la portée échoue rapidement : si une sous-tâche lève une exception, les autres sont interrompues et `join()` lève une exception.
+
+Deux méthodes ont été retirées car elles n’ont plus lieux d’être :
+
+. la méthode `joinUntil()` car le timeout est maintenant géré au travers d’une configuration
+. La méthode `throwIfFailed()` car une exception est levée par la méthode `join()`
+
+Exemple :
+[source,java]
+----
+  Facture getFacture(String codeClient, long idCommande) throws InterruptedException {
+    Facture resultat = null;
+    try (var scope = StructuredTaskScope.open()) {
+      Subtask<Client> clientFuture = scope.fork(() -> this.getClient(codeClient));
+      Subtask<Commande> commandeFuture = scope.fork(() -> this.getCommande(idCommande));
+      scope.join();
+      resultat = this.genererFacture(clientFuture.get(), commandeFuture.get());
+    }
+    return resultat;
+  }
+----
+
+==== Le comportement de la portée
+
+Il est possible de fournir une politique personnalisée via la surcharge de la méthode `open(Joiner)`. 
+L’interface `Joiner` propose plusieurs fabriques pour des politiques courantes.
+
+La fabrique `allSuccessfulOrThrow()` renvoie un nouveau `Joiner` qui produit un `Stream<Subtask>` lorsque toutes les sous-tâches se terminent avec succès ou lève une exception de type `FailedException` si une des sous-tâches échoue.
+
+C’est le type de `Joiner` utilisé par défaut par la fabrique `open()`.
+
+NOTE: L’utilisation du `Stream<SubTask>` est particulièrement utile si toutes les tâches retournent le même type.
+
+[source,java]
+----
+  void verifierStatus() throws InterruptedException {
+    try (var scope = StructuredTaskScope.open(Joiner.<Statut>allSuccessfulOrThrow())) {
+      serviceStatuts.forEach(service -> {
+        scope.fork(() -> service.get());
+      });
+
+      Stream<Subtask<Statut>> status = scope.join();
+      status.map(Subtask::get).filter(s -> s.code() < 30 ).forEach(System.out::println);
+    }    
+  }
+----
+
+La fabrique `allUntil()` renvoie un nouveau `Joiner` qui renvoie un nouvel objet `Joiner` qui permet d’obtenir un `Stream` de toutes les sous-tâches lorsque toutes les sous-tâches sont terminées ou que le `Predicate` renvoie la valeur `true` pour annuler la portée. 
+La méthode `onComplete(Subtask)` du `Joiner` invoque la méthode `test()` du `Predicate` avec la sous-tâche qui s'est terminée avec succès ou qui a échoué avec une exception. 
+Si la méthode `test()` renvoie la valeur `true`, la portée est annulée.
+
+La fabrique `awaitAll()` renvoie un nouveau `Joiner` qui attend que toutes les sous-tâches soient terminées, avec succès ou non, avant de continuer. 
+Ce `Joiner` est très basique : il attend la fin de l’exécution des sous-tâches. 
+En cas d’échec d’une des sous-tâches aucune exception de type `FailedException` n’est levée. 
+C’est au code de traiter chaque résultat des sous-tâches selon leur état et d’obtenir les données retournées.
+
+[source,java]
+----
+  Facture getFactureAvecAwaitAll(String codeClient, long idCommande) throws InterruptedException {
+    Facture resultat = null;
+    try (var scope = StructuredTaskScope.open(Joiner.awaitAll())) {
+      Subtask<Client> clientFuture = scope.fork(() -> this.getClient(codeClient));
+      Subtask<Commande> commandeFuture = scope.fork(() -> this.getCommande(idCommande));
+      scope.join();
+
+      var client = switch (clientFuture.state()) {
+        case FAILED -> throw new RuntimeException(clientFuture.exception());
+        case SUCCESS -> clientFuture.get();
+        case UNAVAILABLE -> throw new IllegalStateException();
+      };
+
+      var commande = switch (commandeFuture.state()) {
+        case FAILED -> throw new RuntimeException(clientFuture.exception());
+        case SUCCESS -> commandeFuture.get();
+        case UNAVAILABLE -> throw new IllegalStateException();
+      };
+
+      resultat = this.genererFacture(client, commande);
+    }
+    return resultat;
+  }
+----
+
+Il est possible de définir ses propres implémentations de l’interface `Joiner` qui ne définit que trois méthodes : `onFork()`, `onComplete()` et `result()`.
+
+WARNING: Ces implémentations doivent être thread-safe, car l’achèvement des sous-tâches peut se produire dans plusieurs threads en même temps.
+
+==== La configuration de la portée
+
+Une troisième surcharge de la méthode `open()` accepte un `Joiner` avec une `Function` qui attend en paramètre et retourne un objet de type `Configuration` permettant selon les besoins de définir :
+
+* un nom à la portée permettant de faciliter la surveillance et de gestion en utilisant la méthode `withName()`
+* le timeout de la portée en utilisant la méthode `withTimeout()`
+* la fabrique de threads à utiliser par la méthode `fork()` de la portée pour créer des threads en utilisant la méthode `withThreadFactory()`
+
+[source,java]
+----
+  Facture getFactureAvecTimeout(String codeClient, long idCommande) throws InterruptedException {
+    Facture resultat = null;
+    try (
+        var scope = StructuredTaskScope.open(Joiner.allSuccessfulOrThrow(), config -> config.withName("obtenir-facture")
+            .withTimeout(Duration.ofSeconds(1)))) {
+      Subtask<Client> clientFuture = scope.fork(() -> this.getClient(codeClient));
+      Subtask<Commande> commandeFuture = scope.fork(() -> this.getCommande(idCommande));
+      scope.join();
+      resultat = this.genererFacture(clientFuture.get(), commandeFuture.get());
+    }
+    return resultat;
+  }
+----
+
+NOTE: La configuration par défaut utilise une fabrique de threads virtuels, sans nom pour la portée et sans timeout.
+
+=== JEP 508 : Vector API (Tenth Incubator)
+
+Cette fonctionnalité permet d’exprimer des calculs vectoriels qui, au moment de l'exécution, sont systématiquement compilés avec les meilleures instructions vectorielles possibles sur l’architectures CPU. 
+Les SIMD sur les CPU supportées sont : x64 (SSE et AVX) et AArch64 (Neon).
+
+L’API Vector, introduite en incubation pour la première fois dans le JDK 16, est proposée pour une dixième incubation via la https://openjdk.org/jeps/508[JEP 508] dans le JDK 25, avec un changement dans l’API et 2 changements dans l’implémentation.
+
+L’API Vector restera en incubation jusqu’à ce que les fonctionnalités nécessaires du projet Valhalla soient disponibles en tant que fonctionnalités en preview. 
+À ce moment-là, l’implémentation de l’API Vector pour les utiliser, et elle pourra être promue d’incubation à preview.
+
+== Les autres évolutions dans les API de Java Core
+
+Le JDK 25 propose différentes évolutions dans les API du JDK qui ne font pas l’objet d’une JEP.
+
+=== La lecture de tous les caractères restants d’un Reader (https://bugs.openjdk.org/browse/JDK-8354724[*JDK-8354724*])
+
+Deux nouvelles méthodes ont été ajoutées à la classe `java.io.Reader` pour lire tous les caractères restants :
+
+* la méthode `Reader::readAllAsString` lit tous les caractères restants dans une chaîne
+* la méthode `Reader::readAllLines` lit tous les caractères restants sous forme de lignes de texte représentées sous forme d'une `List<String>`
+
+Ces méthodes sont destinées aux cas simples où il est approprié de lire tout le contenu restant.
+
+=== La nouvelle propriété système standard stdin.encoding *(https://bugs.openjdk.org/browse/JDK-8350703[JDK-8350703])*
+
+Une nouvelle propriété système `stdin.encoding` a été ajoutée. 
+Cette propriété contient le nom du jeu de caractères recommandé pour la lecture des données sous la forme de caractères à partir de `System.in`, par exemple, lors de l’utilisation d’`InputStreamReader` ou de `Scanner`.
+
+Par défaut, la propriété est définie d’une manière spécifique au système en fonction de l’interrogation du système d’exploitation et de l’environnement utilisateur.
+
+NOTE: Sa valeur peut différer de la valeur de la propriété `file.encoding`, du jeu de caractères par défaut et de la valeur de la propriété `native.encoding`.
+
+La valeur de `stdin.encoding` peut être remplacée par exemple par `UTF-8` en fournissant l’argument `-Dstdin.encoding=UTF-8` sur la ligne de commande.
+
+=== La nouvelle méthode `default getChars(int, int, char[], int)` dans `CharSequence` et `CharBuffer` (https://bugs.openjdk.org/browse/JDK-8343110[*JDK-8343110*])
+
+La méthode `getChars(int, int, char[], int)` a été ajoutée à l’interface `java.lang.CharSequence` et à la classe `java.nio.CharBuffer` pour lire en bloc les caractères d’une région d’un `CharSequence` dans une région d’un `char[]`.
+
+Le code, qui fonctionne sur une `CharSequence`, ne devrait plus avoir besoin d’être convertie en chaîne lorsqu’il est nécessaire de lire en bloc à partir d’une séquence. 
+Cette nouvelle méthode peut être plus efficace qu’une boucle sur les caractères de la séquence.
+
+=== La nouvelle méthode `java.net.http.HttpResponse::connectionLabel` (https://bugs.openjdk.org/browse/JDK-8350279[*JDK-8350279*])
+
+La méthode `default Optional<String> connectionLabel()` a été ajoutée à l’interface `java.net.http.HttpResponse`.
+
+Cette nouvelle méthode renvoie une étiquette de connexion si présente que les appelants peuvent utiliser pour associer une réponse à la connexion sur laquelle elle est effectuée. 
+Ceci peut être utile pour diagnostiquer des problèmes ou pour déterminer si des requêtes ont été transportées sur la même connexion ou sur des connexions différentes.
+
+=== De nouvelles méthodes dans `BodyHandlers` et `BodySubscribers` pour limiter le nombre d’octets du corps de la réponse acceptés par le `HttpClient` (https://bugs.openjdk.org/browse/JDK-8328919[*JDK-8328919*])
+
+Deux nouvelles méthodes ont été ajoutées sont ajoutées à l’API `HttpClient` :
+
+* `java.net.http.HttpResponse.BodyHandlers.limiting(BodyHandler downstreamHandler, long capacity)`
+* et `java.net.http.HttpResponse.BodySubsribers.limiting(BodySubscriber downstreamSubscriber, long capacity)`
+
+Ces méthodes retournent un `BodyHandler` ou un `BodySubscriber` existant avec la possibilité de limiter le nombre d’octets de corps de réponse que le client est disposée à accepter en réponse à une requête HTTP.
+
+Lorsque la limite est atteinte lors de la lecture du corps de la réponse, une `IOException` est levée et signalée au `Subscriber`. 
+La souscription sera alors annulée et tous les autres octets du corps de la réponse seront ignorés. 
+Cela permet au client de contrôler la quantité maximale d’octets qu’il souhaite accepter du serveur.
+
+=== Nouvelle propriété pour construire le système de fichiers ZIP en lecture seule (https://bugs.openjdk.org/browse/JDK-8350880[*JDK-8350880*])
+
+Le fournisseur de système de fichiers `ZIP` a été mis à jour pour permettre la création d’un système de fichiers ZIP en tant que système de fichiers en lecture seule ou en lecture-écriture.
+
+Lors de la création d’un système de fichiers ZIP, la propriété nommée `accessMode` peut être utilisée avec la valeur `readOnly` ou `readWrite` pour spécifier le mode souhaité.
+
+Si la propriété n’est pas fournie, le système de fichiers est créé en tant que système de fichiers en lecture-écriture si possible.
+
+L’exemple pour créer un système de fichiers en lecture seule :
+
+[source,java]
+----
+    FileSystem zipfs = FileSystems.newFileSystem(cheminFichierZip, Map.of("accessMode","readOnly"));
+----
+
+=== La classe `ForkJoinPool` implémente l’interface `ScheduledExecutorService` (https://bugs.openjdk.org/browse/JDK-8319447[*JDK-8319447*])
+
+La classe `java.util.concurrent.forkJoinPool` est mis à jour pour implémenter l’interface `ScheduledExecutorService`. 
+Cette mise à jour de l’API peut améliorer les performances de la gestion des tâches différées dans le réseau et d’autres applications où les tâches retardées sont utilisées pour la gestion des timeouts et où la plupart des délais d’expiration sont annulés.
+
+En plus des méthodes de planification définies par `ScheduledExecutorService`, `ForkJoinPool` définit désormais une nouvelle méthode `submitWithTimeout()` pour soumettre une tâche qui sera annulée (ou une autre action exécutée) si le timeout expire avant la fin de la tâche.
+
+Dans le cadre de cette mise à jour, `CompletableFuture` et `SubmissionPublisher` sont modifiées afin que toutes les méthodes asynchrones sans `Executor` explicite soient exécutées à l’aide du pool commun `ForkJoinPool`. 
+Cela diffère des versions précédentes où un nouveau thread était créé pour chaque tâche asynchrone lorsque le pool commun `ForkJoinPool` était configuré avec un parallélisme inférieur à `2`.
+
+=== Les classes `java.util.zip.Inflater` et `java.util.zip.Deflater` implémentent `AutoCloseable` (https://bugs.openjdk.org/browse/JDK-8225763[*JDK-8225763*])
+
+Les classes `java.util.zip.Inflater` et `java.util.zip.Deflater` implémentent désormais l’interface `AutoCloseable` et peuvent donc être utilisées avec l’instruction try-with-resources.
+
+Auparavant, il fallait invoquer la méthode `end()` pour libérer les ressources détenues par l’instance de type `Inflater`/`Deflater`. 
+Maintenant, la méthode `end()` ou la méthode `close()` peut être invoquée pour faire la même chose.
+
+=== Améliorations des thread dumps générés par `HotSpotDiagnosticMXBean.dumpThreads` et `jcmd Thread.dump_to_file` (https://bugs.openjdk.org/browse/JDK-8356870[*JDK-8356870*])
+
+Le threaddump généré par l’API `com.sun.management.HotSpotDiagnosticMXBean.dumpThreads` et la commande de diagnostic `jcmd <pid> Thread.dump_to_file` inclut désormais des informations sur les verrous.
+
+L’API `HotSpotDiagnosticMXBean.dumpThreads` est également mise à jour pour être liée à un schéma JSON qui décrit le threaddump au format JSON. 
+Le threaddump au format JSON est destiné à être lu et traité par des outils de diagnostic.
+
+=== Nouvelle annotation JFR pour les informations contextuelles (https://bugs.openjdk.org/browse/JDK-8356698[*JDK-8356698*])
+
+La nouvelle annotation `@jdk.jfr.Contextual` a été introduite pour marquer les champs dans les événements JFR personnalisés qui contiennent des informations contextuelles pertinentes pour d’autres événements se produisant dans le même thread. 
+Ces informations sont purement informatives.
+
+Par exemple, les champs d’un événement de requête HTTP défini par l’utilisateur peuvent être annotés avec `@Contextual` pour associer son URL et son ID de trace à des événements qui se produisent lors de son exécution.
+
+Les outils peuvent désormais associer des informations de niveau supérieur, telles que les ID de trace, avec des événements de niveau inférieur.
+
+La commande `print` de l’outil `jfr`, inclus dans le JDK, affiche ces informations contextuelles aux côtés des événements, par exemple, dans les événements de contention de verrou, d’E/S ou d’exceptions qui se produisent au cours d’un événement de requête HTTP.
+
+=== Les constructeurs de `java.net.Socket` ne permettent plus de créer des sockets pour datagrammes (https://bugs.openjdk.org/browse/JDK-8356154[*JDK-8356154*])
+
+Les deux constructeurs dépréciés de la classe `java.net.Socket` qui acceptent le paramètre `stream` ont été modifiés pour lever une exception `IllegalArgumentException` si `stream` a la valeur `false`.
+
+Ces constructeurs ne peuvent donc plus être utilisés pour créer des sockets pour datagrammes. 
+Il faut utiliser la classe `java.net.DatagramSocket` pour cela. 
+Ces deux constructeurs seront supprimés dans une prochaine version.
+
+=== Suppression du constructeur par défaut de `BasicSliderUI` (https://bugs.openjdk.org/browse/JDK-8334581[*JDK-8334581*])
+
+Le constructeur par défaut de la classe `BasicSliderUI` qui a été déprécié dans le JDK 23 et est supprimé dans le JDK 25.
+
+=== Les opérations de `File` avec un nom qui se termine par un espace échouent désormais systématiquement sous Windows (https://bugs.openjdk.org/browse/JDK-8354450[*JDK-8354450*])
+
+Avant le JDK 25, les opérations de la classe `java.io.File` sur un chemin d’accès illégal se terminant par un espace de fin dans un répertoire ou un nom de fichier pouvaient sembler réussir alors qu’en fait, ce n’était pas le cas.
+
+Dans le JDK 25, les opérations dans ce contexte échouent désormais systématiquement sous Windows car de tels chemins d’accès ne sont pas légaux sur ce système d’exploitation.
+
+Par exemple : `File::mkdir` renverra false ou `File::createNewFile` lèvera `IOException` si un élément du chemin se termine par un espace de fin.
+
+=== `java.io.File::delete` ne supprime plus les fichiers en lecture seule sous Windows (https://bugs.openjdk.org/browse/JDK-8355954[*JDK-8355954*])
+
+Avant le JDK 25, `File::delete` supprimait les fichiers en lecture seule en supprimant l’attribut DOS en lecture seule avant de tenter de les supprimer. 
+Comme la suppression de l’attribut et la suppression du fichier ne comprennent pas une seule opération atomique, le fichier peut toujours exister mais avec des attributs modifiés en cas d’échec de la suppression.
+
+Dans le JDK 25, la méthode `File::delete` est modifiée sous Windows de sorte qu’elle échoue et renvoie `false` pour les fichiers lorsque l’attribut DOS en lecture seule est défini.
+
+Les applications qui dépendent du comportement historique doivent être modifiées pour effacer les attributs de fichier avant la suppression.
+
+Dans le cadre de cette modification, une propriété système a été introduite pour restaurer le comportement historique. 
+L’exécution de la JVM avec l’option `-Djdk.io.File.allowDeleteReadOnlyFiles=true` rétablit le comportement historique de sorte que `File::delete` supprime l’attribut DOS en lecture seule avant de tenter de supprimer le fichier.
+
+=== L’implémentation par défaut de `Console` n’est plus basée sur JLine (https://bugs.openjdk.org/browse/JDK-8351435[*JDK-8351435*])
+
+Depuis le JDK 20, le JDK a inclus une implémentation de `Console` basée sur JLine, offrant une expérience utilisateur plus riche et une meilleure prise en charge des environnements de terminaux virtuels, tels que les IDE. 
+Cette implémentation était initialement opt-in via une propriété système dans les JDK 20 et 21 et est devenue la valeur par défaut dans le JDK 22. 
+Cependant, la maintenance de la `Console` basée sur JLine s’est avérée difficile.
+
+Dans le JDK 25, l’instance de type `Console` par défaut obtenue en invoquant `System.console()` n’est plus basée sur JLine. 
+L’obtention d’une instance basée sur JLine est redevenu opt-in, comme c’était le cas dans les JDK 20 et 21.
+
+[source,plain]
+----
+java -Djdk.console=jdk.internal.le DemoConsole.java
+----
+
+
+=== `java.io.File` traite les chemins vides comme le répertoire courant de l'utilisateur (https://bugs.openjdk.org/browse/JDK-8024695[*JDK-8024695*])
+
+La classe `java.io.File` a été modifiée de sorte qu’une instance de `File` créée à partir du chemin d’accès abstrait vide se comporte désormais de manière cohérente comme un `File` créé à partir du répertoire utilisateur actuel.
+
+Le comportement de longue date était que certaines méthodes échouaient avec un chemin d’accès vide. 
+Cette modification signifie que les méthodes `canRead()`, `exists()` et `isDirectory()` renvoient `true` au lieu d’échouer avec `false`, et que les méthodes `getFreeSpace()`, `lastModified()` et `length()` renvoient les valeurs attendues au lieu de zéro. 
+Des méthodes telles que `setReadable()` et `setLastModified()` tenteront de modifier les attributs du fichier au lieu d’échouer. 
+Grâce à ce changement, `java.io.File` correspond désormais au comportement de l’API du package `java.nio.file`.
+
+=== Assouplissement des exigences de création de String dans `StringBuilder` et `StringBuffer`
+
+Les spécifications des méthodes `substring()`, `subSequence()` et `toString()` des classes `StringBuilder` et `StringBuffer` ont été modifiées pour ne pas exiger le renvoi d’une nouvelle instance de `String` à chaque fois.
+
+Cela permet aux implémentations d’améliorer les performances en renvoyant une chaîne déjà existante, telle que la chaîne vide, lorsque cela est approprié. 
+Dans tous les cas, une chaîne contenant la valeur attendue sera renvoyée. 
+Toutefois, les applications ne doivent plus attendre de ces méthodes qu’elles retournent une nouvelle instance de `String` à chaque fois.
+
+=== La méthode `BigDecimal.sqrt()` peut lever une exception avec des puissances de 100 et d’énormes précisions (https://bugs.openjdk.org/browse/JDK-8341402[*JDK-8341402*])
+
+La méthode `BigDecimal.sqrt()` a été réimplémentée pour être beaucoup plus performante. 
+Cependant, dans certains cas très rares et assez artificiels impliquant des puissances de 100 et d’énormes précisions, la nouvelle implémentation lève une exception alors que l’ancienne renvoyait un résultat.
+
+Exemple :
+
+.Le fichier DemoSqrt.java
+[source,java]
+----
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+
+public class DemoSqrt {
+    public static void main(String[] args) {
+        calculer(100);
+        calculer(121);
+    }
+
+    private static void calculer(long valeur) {
+        try {
+        System.out.println(BigDecimal.valueOf(valeur).sqrt(new MathContext(1_000_000_000, RoundingMode.UP)));
+        } catch (ArithmeticException e) {
+            System.out.println(e);
+        }
+    }
+}
+----
+
+L’exécution avec un JDK 24
+
+[source,plain]
+----
+C:\java>java -version
+openjdk version "24" 2025-03-18
+OpenJDK Runtime Environment (build 24+36-3646)
+OpenJDK 64-Bit Server VM (build 24+36-3646, mixed mode, sharing)
+
+C:\java>java DemoSqrt.java
+10
+java.lang.ArithmeticException: BigInteger would overflow supported range
+----
+
+L’implémentation dans le JDK 24 traite les puissances de 100 comme des cas particuliers. 
+Les autres carrés exacts sont traités normalement, alors qu’il lève un exception lorsque la précision demandée est trop élevée. 
+Ce comportement spécial pour les puissances de 100 n’est pas recommandé, car il est plus déroutant qu’utile par rapport à d’autres carrés exactes.
+
+Avec un JDK 25, l’exécution du code lève une `ArithmeticException` dans les deux cas.
+
+[source,plain]
+----
+C:\java>java -version
+openjdk version "25" 2025-09-16
+OpenJDK Runtime Environment (build 25+36-3489)
+OpenJDK 64-Bit Server VM (build 25+36-3489, mixed mode, sharing)
+
+C:\java>java DemoSqrt.java
+java.lang.ArithmeticException: BigInteger would overflow supported range
+java.lang.ArithmeticException: BigInteger would overflow supported range
+----
+
+La nouvelle implémentation est agnostique sur les puissances de 100, et lève une exception chaque fois que les résultats intermédiaires internes dépassent les plages prises en charge.
+
+=== Enrichissement du filtre sur les données sensible dans les exceptions réseau (https://bugs.openjdk.org/browse/JDK-8348986[*JDK-8348986*])
+
+L’utilisation de la propriété système `jdk.includeInExceptions` a été étendue pour inclure davantage d’informations sensibles dans les exceptions relatives au réseau et davantage de catégories pouvant être configurées comme activées ou désactivées.
+
+Une catégorie est modifiée :
+
+* `hostInfo` : toutes les exceptions liées au réseau qui vont contenir des informations dans les messages d’erreur
+
+Deux nouvelles catégories sont ajoutées :
+
+* `hostInfoExclSocket` : la catégorie `hostInfo` définie ci-dessus, à l’exclusion des IOExceptions levées par `java.net.Socket` et des types `NetworkChannel` dans le package `java.nio.channels` qui vont contenir des informations dans les messages d’erreur
+* `userInfo` - active des informations plus détaillées dans les exceptions qui peuvent contenir des informations concernant l’identité de l’utilisateur
+
+Dans le JDK 25, la valeur de la propriété est maintenant par défaut :
+
+[source,plain]
+----
+jdk.includeInExceptions=hostInfoExclSocket
+----
+
+Elle implique que la catégorie `hostInfoExclSocket` n’est pas restreinte.
+
+La valeur est toujours modifiable dans le fichier de configuration `conf/security/java.security` du JDK ou en utilisant la propriété système du même nom.
+
+=== `java.net.http.HttpClient` est modifiée pour rejeter les réponses avec des en-têtes interdits (https://bugs.openjdk.org/browse/JDK-8354276[*JDK-8354276*])
+
+La clase `java.net.http.HttpClient` rejette désormais les réponses HTTP/2 qui contiennent des champs d’en-tête interdits par la spécification HTTP/2 (RFC 9113). 
+Il s’agit d’un détail d’implémentation qui doit être transparent pour les utilisateurs de l’API `HttpClient`, mais qui peut entraîner l’échec des requêtes en cas de connexion à un serveur HTTP/2 non conforme.
+
+Les en-têtes qui sont maintenant rejetés dans les réponses HTTP/2 sont :
+
+* champs d’en-tête spécifiques à la connexion (`Connection`, `Proxy-Connection`, `Keep-Alive`, `Transfer-Encoding` et `Upgrade`)
+* champs de pseudo-en-tête de requête (`:method`, `:authority`, `:path` et `:scheme`)
+
+=== La solution de secours vers FTP pour les URL de fichiers non locaux est désactivée par défaut (https://bugs.openjdk.org/browse/JDK-8353440[*JDK-8353440*])
+
+La solution non spécifiée de longue date, vers les connexions FTP de secours pour les URL de fichiers non locaux est désactivée par défaut.
+
+La méthode `URL::openConnection` appelée pour les URL de fichiers non locaux de la forme `file:&#47;&#47;server[/path]`, où `server` est n’importe quoi sauf `localhost`, ne bascule plus sur le protocole FTP et ne renvoie plus de connexion URL utilisant FTP. 
+Dans de tels cas, une `MalformedURLException` est désormais levée par la méthode `URL::openConnection`.
+
+Le code qui s’attend à ce que l’`URL::openConnection` réussisse mais qu’une exception plus tardive soit levée lors de l’utilisation de la connexion, comme une `UnknownHostException` lors de la lecture de flux, peut avoir besoin d’être adapté pour gérer le rejet immédiat avec la levée d’une `MalformedURLException`.
+
+Le comportement de secours historique vers FTP peut être réactivé en définissant la propriété système `-Djdk.net.file.ftpfallback=true` sur la ligne de commande `java`. 
+La prise en charge de la résolution des chemins UNC existants non locaux sous Windows n’est pas affectée par cette modification.
+
+== Conclusion
+
+Java 25 succède en tant que version LTS à Java 21 : elle est donc une cible pour les entreprises dans un futur plus ou moins proche.
+
+Le JDK 25 introduit :
+
+* 8 nouvelles fonctionnalités dont 5 en standard, 2 en preview et 1 en expérimental,
+* 7 fonctionnalités sont promues en standard,
+* 3 fonctionnalités restent en preview ou en incubation avec ou sans évolutions.
+
+Cette première partie est consacrée aux évolutions dans la syntaxe et les API. 
+La seconde partie est consacrée aux autres fonctionnalités et évolutions dans le JDK 25.
