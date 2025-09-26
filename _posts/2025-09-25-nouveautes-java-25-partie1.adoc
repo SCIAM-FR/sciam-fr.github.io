@@ -1,4 +1,5 @@
-= Article les nouveautés de Java 25 - partie 1
+= Les nouveautés de Java 25 - partie 1
+
 :showtitle:
 :page-navtitle: Les nouveautés de Java 25 : partie 1
 :page-excerpt: Ce premier article sur les nouveautés de Java 25 détaille les fonctionnalités proposées via des JEPs dans la syntaxe et les API notamment par les projets Amber, Loom et Panama.
@@ -23,7 +24,8 @@ Ces JEPs sont proposées en standard (12), en preview (4), en incubation (1) ou 
 
 == Les JEPs relatives à la syntaxe 
 
-4 fonctionnalités dans le JDK 25 concerne la syntaxe du langage Java, 3 sont promues standard et une reste en preview :
+4 fonctionnalités dans le JDK 25 concernent la syntaxe du langage Java, 3 sont promues standard et une reste en preview :
+
 
 * JEP 511 : https://openjdk.org/jeps/511[Module Import Declarations]
 * JEP 512 : https://openjdk.org/jeps/512[Compact Source Files and Instance Main Methods]
@@ -71,7 +73,8 @@ C:\java>java DemoJEP511
 [4, 16, 36, 64, 100]
 ----
 
-Il est possible de simplifier le code puisque que les imports concernent des packages du module `java.base` :
+Il est possible de simplifier le code puisque les imports concernent des packages du module `java.base` :
+
 
 .Le fichier DemoJEP511.java
 [source,java]
@@ -107,7 +110,8 @@ C:\java>java DemoJEP511
 Comme l’importation d’un module peut avoir pour effet d’importer plusieurs packages, il est possible d’avoir des collisions de noms de classe et d’importer des classes avec le même nom simple de différents packages. 
 Le nom simple est alors ambigu, donc son utilisation provoquera une erreur de compilation.
 
-Par exemple, dans ce fichier source, le nom de classe List est ambigu :
+Par exemple, dans ce fichier source, le nom de classe `List` est ambigu :
+
 
 .Le fichier DemoJEP511.java
 [source,java]
@@ -236,7 +240,8 @@ Elle est introduite en standard via la https://openjdk.org/jeps/512[JEP 512] da
 
 Plusieurs améliorations mineures basées sur l’expérience et les retours sont apportés :
 
-* La nouvelle classe IO pour les E/S basiques à la console se trouve désormais dans le package `java.lang` plutôt que dans le package `java.io`. 
+* La nouvelle classe `IO` pour les E/S basiques à la console se trouve désormais dans le package `java.lang` plutôt que dans le package `java.io`. 
+
 Ainsi, il est implicitement importé par chaque fichier source.
 * Les méthodes statiques de la classe `IO` ne sont plus importées implicitement dans des fichiers sources compacts. 
 Ainsi, les invocations de ces méthodes doivent nommer la classe, par exemple, `IO.println("Hello, world")`, à moins que les méthodes ne soient explicitement importées. +
@@ -290,7 +295,8 @@ L’initialisation des champs avant d’invoquer un autre constructeur rend une 
 Elle a été proposée plusieurs fois en preview :
 
 * pour la première fois en tant que fonctionnalité en preview via la https://openjdk.org/jeps/447[JEP 447], délivrée dans le JDK 22 sous la dénomination « Instructions before super(...) »
-* proposée pour une seconde preview via la https://openjdk.org/jeps/482[JEP 482], délivrée dans le JDK 23 avec une modification permettant aux traitements d’un constructeur de pouvoir désormais initialiser des champs de la même classe avant d’invoquer explicitement un constructeurs basées sur les retours et une nouvelle dénomination « Flexible Constructor Bodies »
+* proposée pour une seconde preview via la https://openjdk.org/jeps/482[JEP 482], délivrée dans le JDK 23 avec une modification permettant aux traitements d’un constructeur de pouvoir désormais initialiser des champs de la même classe avant d’invoquer explicitement un constructeur basé sur les retours et une nouvelle dénomination « Flexible Constructor Bodies »
+
 * proposée pour une troisième preview via la https://openjdk.org/jeps/492[JEP 492], délivrée dans le JDK 24 sans changement
 
 Elle est introduite en standard via la https://openjdk.org/jeps/513[JEP 513] dans le JDK 25 sans changement.
@@ -338,7 +344,8 @@ C:\java>java DemoJEP513
 ClasseFille 100
 ----
 
-Remarque : cette fonctionnalité est requise par le projet Valhala
+Remarque : cette fonctionnalité est requise par le projet Valhalla
+
 
 === JEP 507 : Primitive Types in Patterns, instanceof, and switch (Third Preview)
 
@@ -372,7 +379,8 @@ Cela permet de traiter l’exception précise plutôt qu’une exception génér
 
 Elle est proposée en standard dans le JDK 25 via la JEP https://openjdk.org/jeps/506[JEP 506], avec un changement mineur : la méthode `ScopedValue.orElse()` n’accepte plus la valeur `null` comme argument.
 
-Les Scoped Values sont plus sûres à utiliser que les ThreadLocal et elles requièrent moins de ressources, en particulier lorsqu’elles sont utilisées avec des threads virtuels et la concurrence structurée.
+Les Scoped Values sont plus sûres à utiliser que les `ThreadLocal` et elles requièrent moins de ressources, en particulier lorsqu’elles sont utilisées avec des threads virtuels et la concurrence structurée.
+
 
 Exemple : 
 
@@ -467,7 +475,8 @@ L’obtention d’une telle instance de `Supplier` se fait en utilisant la fabri
 À ce moment, l’instance de la valeur n’est pas encore créée.
 
 Pour obtenir l’instance, il suffit d’invoquer la méthode `get()` du `Supplier`. 
-Lors du premier appel à la méthode `get()`, l’instance est créée en invoquant le Supplier passé en paramètre de la fabrique `StableVue::supplier`. 
+Lors du premier appel à la méthode `get()`, l’instance est créée en invoquant le `Supplier` passé en paramètre de la fabrique `StableValue::supplier`. 
+
 Lors des invocations suivantes, c’est l’instance créée qui est retournée.
 
 [source,java]
@@ -480,7 +489,8 @@ Lors des invocations suivantes, c’est l’instance créée qui est retournée.
 L’API permet aussi de gérer des collections dont les éléments sont eux-mêmes des données immuables différées, partageant une logique d’initialisation similaire.
 
 Pour une `List`, il faut utiliser la fabrique `StableValue::list`. 
-Elle attend en paramètre le nombre d’éléments de la List (car la taille de la collection doit être fixe) et une fonction qui permet de créer l’instance de l’élément dont l’indice est passé en paramètre.
+Elle attend en paramètre le nombre d’éléments de la `List` (car la taille de la collection doit être fixe) et une fonction qui permet de créer l’instance de l’élément dont l’indice est passé en paramètre.
+
 
 [source,java]
 ----
@@ -501,23 +511,27 @@ Elle attend en paramètre un `Set` des clés de la `Map` (car elle est immuable)
   static final Map<String, MonService> SERVICES_MAP = StableValue.map(Set.of("service1","service2"), (k) -> new MonService(k));
 ----
 
-L’API StableValue est préposée en preview.
+L’API StableValue est proposée en preview.
+
 
 === JEP 505 : Structured Concurrency (Fifth Preview)
 
 Cette fonctionnalité a pour but de simplifier la programmation multithread en rationalisant la gestion des erreurs et l'annulation et en améliorant la fiabilité et en renforçant l'observabilité.
 
 Elle propose un modèle qui permet une écriture du code dans un style synchrone avec une exécution en asynchrone. 
-Le code est ainsi facile à écrire, à lire et à tester
+Le code est ainsi facile à écrire, à lire et à tester.
+
 
 La concurrence structurée (Structured Concurrency) a été proposée via la https://openjdk.org/jeps/428[JEP 428] livrée dans le JDK 19 en tant qu’API en incubation. 
 Elle a été réincubée via la https://openjdk.org/jeps/437[JEP 437] dans le JDK 20 avec une mise à jour mineure pour que les threads utilisés héritent des Scoped values (JEP 429).
 
 Elle a été ensuite proposée dans plusieurs previews :
 
-* une première preview via la https://openjdk.org/jeps/453[JEP 453] dans le JDK 21 avec la méthode `StructuredTaskScope::fork` modifiée pour renvoyer une `SubTask` plutôt qu’une `Future`
+* une première preview via la https://openjdk.org/jeps/453[JEP 453] dans le JDK 21 avec la méthode `StructuredTaskScope::fork` modifiée pour renvoyer une `Subtask` plutôt qu’une `Future`
+
 * une seconde preview via la https://openjdk.org/jeps/462[JEP 462] dans JDK 22, sans modification
-* une troisième une troisième preview via la https://openjdk.org/jeps/480[JEP 480] dans le JDK 23, sans modification, afin d'obtenir plus de retours
+* une troisième preview via la https://openjdk.org/jeps/480[JEP 480] dans le JDK 23, sans modification, afin d'obtenir plus de retours
+
 * une quatrième preview via la https://openjdk.org/jeps/499[JEP 499] dans le JDK 24, sans modification
 
 La https://openjdk.org/jeps/505[JEP 505] propose une cinquième preview de cette fonctionnalité avec de grosses modifications dans l’API.
@@ -530,14 +544,16 @@ L’obtention d’une instance se fait en invoquant une des surcharges de la fab
 La fabrique `open()` sans paramètre couvre le cas courant en retournant une instance de type `StructuredTaskScope` qui attend que toutes les sous-tâches réussissent ou qu’une sous-tâche échoue.
 D’autres politiques et format de résultats peuvent être mis en œuvre en fournissant une instance de type `Joiner` appropriée à l’une des surcharges de la méthode `open()`.
 
-La méthode `close()` de l’instance `StructuredTaskScope` doit être invoquée : le plus simple est de déclarer l’instance dans une instruction try-with-ressource.
+La méthode `close()` de l’instance `StructuredTaskScope` doit être invoquée : le plus simple est de déclarer l’instance dans une instruction try-with-resource.
+
 
 Les sous-tâches sont toujours soumises en invoquant la méthode `fork()`.
 
 La méthode `join()` permet toujours d’attendre la fin de l’exécution de toutes les sous-tâches. 
 Par défaut, la politique de la portée échoue rapidement : si une sous-tâche lève une exception, les autres sont interrompues et `join()` lève une exception.
 
-Deux méthodes ont été retirées car elles n’ont plus lieux d’être :
+Deux méthodes ont été retirées car elles n’ont plus lieu d’être :
+
 
 . la méthode `joinUntil()` car le timeout est maintenant géré au travers d’une configuration
 . La méthode `throwIfFailed()` car une exception est levée par la méthode `join()`
@@ -566,7 +582,8 @@ La fabrique `allSuccessfulOrThrow()` renvoie un nouveau `Joiner` qui produit un 
 
 C’est le type de `Joiner` utilisé par défaut par la fabrique `open()`.
 
-NOTE: L’utilisation du `Stream<SubTask>` est particulièrement utile si toutes les tâches retournent le même type.
+NOTE: L’utilisation du `Stream<Subtask>` est particulièrement utile si toutes les tâches retournent le même type.
+
 
 [source,java]
 ----
@@ -651,12 +668,14 @@ NOTE: La configuration par défaut utilise une fabrique de threads virtuels, san
 === JEP 508 : Vector API (Tenth Incubator)
 
 Cette fonctionnalité permet d’exprimer des calculs vectoriels qui, au moment de l'exécution, sont systématiquement compilés avec les meilleures instructions vectorielles possibles sur l’architectures CPU. 
-Les SIMD sur les CPU supportées sont : x64 (SSE et AVX) et AArch64 (Neon).
+Les SIMD sur les CPU supportés sont : x64 (SSE et AVX) et AArch64 (Neon).
+
 
 L’API Vector, introduite en incubation pour la première fois dans le JDK 16, est proposée pour une dixième incubation via la https://openjdk.org/jeps/508[JEP 508] dans le JDK 25, avec un changement dans l’API et 2 changements dans l’implémentation.
 
 L’API Vector restera en incubation jusqu’à ce que les fonctionnalités nécessaires du projet Valhalla soient disponibles en tant que fonctionnalités en preview. 
-À ce moment-là, l’implémentation de l’API Vector pour les utiliser, et elle pourra être promue d’incubation à preview.
+À ce moment-là, l’implémentation de l’API Vector pourra les utiliser, et elle pourra être promue d’incubation à preview.
+
 
 == Les autres évolutions dans les API de Java Core
 
@@ -701,7 +720,8 @@ Ceci peut être utile pour diagnostiquer des problèmes ou pour déterminer si d
 Deux nouvelles méthodes ont été ajoutées sont ajoutées à l’API `HttpClient` :
 
 * `java.net.http.HttpResponse.BodyHandlers.limiting(BodyHandler downstreamHandler, long capacity)`
-* et `java.net.http.HttpResponse.BodySubsribers.limiting(BodySubscriber downstreamSubscriber, long capacity)`
+* et `java.net.http.HttpResponse.BodySubscribers.limiting(BodySubscriber downstreamSubscriber, long capacity)`
+
 
 Ces méthodes retournent un `BodyHandler` ou un `BodySubscriber` existant avec la possibilité de limiter le nombre d’octets de corps de réponse que le client est disposée à accepter en réponse à une requête HTTP.
 
@@ -726,7 +746,8 @@ L’exemple pour créer un système de fichiers en lecture seule :
 
 === La classe `ForkJoinPool` implémente l’interface `ScheduledExecutorService` (https://bugs.openjdk.org/browse/JDK-8319447[*JDK-8319447*])
 
-La classe `java.util.concurrent.forkJoinPool` est mis à jour pour implémenter l’interface `ScheduledExecutorService`. 
+La classe `java.util.concurrent.ForkJoinPool` est mis à jour pour implémenter l’interface `ScheduledExecutorService`. 
+
 Cette mise à jour de l’API peut améliorer les performances de la gestion des tâches différées dans le réseau et d’autres applications où les tâches retardées sont utilisées pour la gestion des timeouts et où la plupart des délais d’expiration sont annulés.
 
 En plus des méthodes de planification définies par `ScheduledExecutorService`, `ForkJoinPool` définit désormais une nouvelle méthode `submitWithTimeout()` pour soumettre une tâche qui sera annulée (ou une autre action exécutée) si le timeout expire avant la fin de la tâche.
@@ -739,7 +760,8 @@ Cela diffère des versions précédentes où un nouveau thread était créé pou
 Les classes `java.util.zip.Inflater` et `java.util.zip.Deflater` implémentent désormais l’interface `AutoCloseable` et peuvent donc être utilisées avec l’instruction try-with-resources.
 
 Auparavant, il fallait invoquer la méthode `end()` pour libérer les ressources détenues par l’instance de type `Inflater`/`Deflater`. 
-Maintenant, la méthode `end()` ou la méthode `close()` peut être invoquée pour faire la même chose.
+Maintenant, la méthode `end()` ou la méthode `close()` peuvent être invoquées pour faire la même chose.
+
 
 === Améliorations des thread dumps générés par `HotSpotDiagnosticMXBean.dumpThreads` et `jcmd Thread.dump_to_file` (https://bugs.openjdk.org/browse/JDK-8356870[*JDK-8356870*])
 
@@ -798,7 +820,8 @@ Cette implémentation était initialement opt-in via une propriété système da
 Cependant, la maintenance de la `Console` basée sur JLine s’est avérée difficile.
 
 Dans le JDK 25, l’instance de type `Console` par défaut obtenue en invoquant `System.console()` n’est plus basée sur JLine. 
-L’obtention d’une instance basée sur JLine est redevenu opt-in, comme c’était le cas dans les JDK 20 et 21.
+L’obtention d’une instance basée sur JLine est redevenue opt-in, comme c’était le cas dans les JDK 20 et 21.
+
 
 [source,plain]
 ----
@@ -845,7 +868,8 @@ public class DemoSqrt {
 
     private static void calculer(long valeur) {
         try {
-        System.out.println(BigDecimal.valueOf(valeur).sqrt(new MathContext(1_000_000_000, RoundingMode.UP)));
+            System.out.println(BigDecimal.valueOf(valeur).sqrt(new MathContext(1_000_000_000, RoundingMode.UP)));
+
         } catch (ArithmeticException e) {
             System.out.println(e);
         }
@@ -868,8 +892,10 @@ java.lang.ArithmeticException: BigInteger would overflow supported range
 ----
 
 L’implémentation dans le JDK 24 traite les puissances de 100 comme des cas particuliers. 
-Les autres carrés exacts sont traités normalement, alors qu’il lève un exception lorsque la précision demandée est trop élevée. 
-Ce comportement spécial pour les puissances de 100 n’est pas recommandé, car il est plus déroutant qu’utile par rapport à d’autres carrés exactes.
+Les autres carrés exacts sont traités normalement, alors qu’il lève une exception lorsque la précision demandée est trop élevée. 
+
+Ce comportement spécial pour les puissances de 100 n’est pas recommandé, car il est plus déroutant qu’utile par rapport à d’autres carrés exacts.
+
 
 Avec un JDK 25, l’exécution du code lève une `ArithmeticException` dans les deux cas.
 
@@ -913,7 +939,8 @@ La valeur est toujours modifiable dans le fichier de configuration `conf/securit
 
 === `java.net.http.HttpClient` est modifiée pour rejeter les réponses avec des en-têtes interdits (https://bugs.openjdk.org/browse/JDK-8354276[*JDK-8354276*])
 
-La clase `java.net.http.HttpClient` rejette désormais les réponses HTTP/2 qui contiennent des champs d’en-tête interdits par la spécification HTTP/2 (RFC 9113). 
+La classe `java.net.http.HttpClient` rejette désormais les réponses HTTP/2 qui contiennent des champs d’en-tête interdits par la spécification HTTP/2 (RFC 9113). 
+
 Il s’agit d’un détail d’implémentation qui doit être transparent pour les utilisateurs de l’API `HttpClient`, mais qui peut entraîner l’échec des requêtes en cas de connexion à un serveur HTTP/2 non conforme.
 
 Les en-têtes qui sont maintenant rejetés dans les réponses HTTP/2 sont :
