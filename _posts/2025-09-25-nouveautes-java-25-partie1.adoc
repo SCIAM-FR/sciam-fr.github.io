@@ -1,5 +1,4 @@
 = Les nouveautés de Java 25 - partie 1
-
 :showtitle:
 :page-navtitle: Les nouveautés de Java 25 : partie 1
 :page-excerpt: Ce premier article sur les nouveautés de Java 25 détaille les fonctionnalités proposées via des JEPs dans la syntaxe et les API notamment par les projets Amber, Loom et Panama.
