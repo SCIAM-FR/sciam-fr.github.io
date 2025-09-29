@@ -971,3 +971,4 @@ Le JDK 25 introduit :
 
 Cette première partie est consacrée aux évolutions dans la syntaxe et les API. 
 La seconde partie est consacrée aux autres fonctionnalités et évolutions dans le JDK 25.
+
