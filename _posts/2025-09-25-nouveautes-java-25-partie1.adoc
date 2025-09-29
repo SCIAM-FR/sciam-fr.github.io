@@ -348,7 +348,7 @@ Remarque : cette fonctionnalité est requise par le projet Valhalla
 
 === JEP 507 : Primitive Types in Patterns, instanceof, and switch (Third Preview)
 
-Cette fonctionnalité étend les capacités des patterns, de l’opérateur `instanceof` et de l’instruction `switch` pour fonctionner avec tous les types primitifs, ce qui permet une exploitation plus uniforme des données et rend le code qui doit gérer différents types plus lisible et moins sujet aux erreurs.
+Cette fonctionnalité étend les capacités des patterns, de l’opérateur `instanceof` et de l’instruction `switch` pour fonctionner avec tous les types primitifs, ce qui permet une exploitation plus uniforme des données et rend le code qui doit gérer différents types, plus lisible et moins sujet aux erreurs.
 
 Elle a été proposée en tant que fonctionnalité en preview via la https://openjdk.org/jeps/455[JEP 455], délivrée dans le JDK 23, et via la https://openjdk.org/jeps/488[JEP 488], délivrée dans le JDK 24. 
 Elle est à nouveau proposée pour une troisième preview, via la https://openjdk.org/jeps/507[JEP 507], sans changement.
@@ -439,7 +439,7 @@ Ainsi, une valeur stable est un moyen d’obtenir simplement une immuabilité di
 ==== L’obtention d’une instance avec `StableValue::of`
 
 L’obtention d’une instance se fait en invoquant la fabrique `StableValue::of`. 
-A ce moment la valeur encapsulée n’est pas définie.
+À ce moment la valeur encapsulée n’est pas définie.
 
 L’obtention de la valeur se fait en invoquant la méthode `orElseGet(Supplier)` qui attend en paramètre un `Supplier` qui sera invoqué une seule fois pour créer l’instance encapsulée. 
 Les invocations suivantes retourneront l’instance obtenue. 
@@ -551,7 +551,7 @@ Les sous-tâches sont toujours soumises en invoquant la méthode `fork()`.
 La méthode `join()` permet toujours d’attendre la fin de l’exécution de toutes les sous-tâches. 
 Par défaut, la politique de la portée échoue rapidement : si une sous-tâche lève une exception, les autres sont interrompues et `join()` lève une exception.
 
-Deux méthodes ont été retirées car elles n’ont plus lieu d’être :
+Deux méthodes ont été retirées, car elles n’ont plus lieu d’être :
 
 
 . la méthode `joinUntil()` car le timeout est maintenant géré au travers d’une configuration
@@ -666,7 +666,7 @@ NOTE: La configuration par défaut utilise une fabrique de threads virtuels, san
 
 === JEP 508 : Vector API (Tenth Incubator)
 
-Cette fonctionnalité permet d’exprimer des calculs vectoriels qui, au moment de l'exécution, sont systématiquement compilés avec les meilleures instructions vectorielles possibles sur l’architectures CPU. 
+Cette fonctionnalité permet d’exprimer des calculs vectoriels qui, au moment de l'exécution, sont systématiquement compilés avec les meilleures instructions vectorielles possibles sur l’architecture CPU. 
 Les SIMD sur les CPU supportés sont : x64 (SSE et AVX) et AArch64 (Neon).
 
 
@@ -796,7 +796,7 @@ Le constructeur par défaut de la classe `BasicSliderUI` qui a été déprécié
 
 Avant le JDK 25, les opérations de la classe `java.io.File` sur un chemin d’accès illégal se terminant par un espace de fin dans un répertoire ou un nom de fichier pouvaient sembler réussir alors qu’en fait, ce n’était pas le cas.
 
-Dans le JDK 25, les opérations dans ce contexte échouent désormais systématiquement sous Windows car de tels chemins d’accès ne sont pas légaux sur ce système d’exploitation.
+Dans le JDK 25, les opérations dans ce contexte échouent désormais systématiquement sous Windows, car de tels chemins d’accès ne sont pas légaux sur ce système d’exploitation.
 
 Par exemple : `File::mkdir` renverra false ou `File::createNewFile` lèvera `IOException` si un élément du chemin se termine par un espace de fin.
 
@@ -912,7 +912,7 @@ java.lang.ArithmeticException: BigInteger would overflow supported range
 
 La nouvelle implémentation est agnostique sur les puissances de 100, et lève une exception chaque fois que les résultats intermédiaires internes dépassent les plages prises en charge.
 
-=== Enrichissement du filtre sur les données sensible dans les exceptions réseau (https://bugs.openjdk.org/browse/JDK-8348986[*JDK-8348986*])
+=== Enrichissement du filtre sur les données sensibles dans les exceptions réseau (https://bugs.openjdk.org/browse/JDK-8348986[*JDK-8348986*])
 
 L’utilisation de la propriété système `jdk.includeInExceptions` a été étendue pour inclure davantage d’informations sensibles dans les exceptions relatives au réseau et davantage de catégories pouvant être configurées comme activées ou désactivées.
 
