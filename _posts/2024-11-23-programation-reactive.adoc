@@ -194,7 +194,7 @@ Si un client appelle l'API /numbers, il recevra chaque nombre (de 1 à 10) avec 
 
 'WebClient' est une classe fournie par Spring WebFlux pour effectuer des appels HTTP non bloquants (client HTTP réactif).
 
-Nous allons initialiser un `WebClient` en invoquant la méthode `create("http://example.com")` en lui passant en paramètre l'URL de base `http://example.com`.
+Nous allons initialiser un `WebClient` en invoquant la méthode `create()` en lui passant en paramètre l'URL de base `http://example.com`.
 
 La méthode `get()` initie une requête HTTP de type `GET` et la méthode `uri("/api/data")` spécifie le chemin relatif de l'API 
 cible (ajouté à l'URL de base du `WebClient`). La méthode `retrieve()` exécute la requête et récupère la réponse pour être traitée. 
