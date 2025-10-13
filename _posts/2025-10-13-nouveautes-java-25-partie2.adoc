@@ -1,0 +1,1106 @@
+= Les nouveautés de Java 25 - partie 2
+:showtitle:
+:page-navtitle: Les nouveautés de Java 25 : partie 1
+:page-excerpt: Ce second article sur les nouveautés de Java 25 est consacré aux autres améliorations, que ce soit les évolutions dans les outils, les API et dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
+:layout: post
+:page-tags: [Java, Java 25, Projet Amber, Projet Panama, Projet Loom, Projet Leyden]
+:author: jeanmicheldoudoux
+:page-vignette: 2025/java-25.png
+:page-liquid:
+:page-categories: software news
+
+Le link:{% post_url 2025-09-29-nouveautes-java-25-partie1 %}[premier article^] de cette série a détaillé les fonctionnalités proposées dans la syntaxe et les API dans le JDK 25. 
+Comme pour les précédentes versions de Java, cette version 25 inclut des JEPs, mais aussi, et surtout, des évolutions et des améliorations sur la fiabilité (corrections de nombreux bugs), la performance et la sécurité.
+
+Ce second article est consacré aux autres améliorations, que ce soient les évolutions dans la JVM Hotspot et les outils du JDK, dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
+
+== Les fonctionnalités dépréciées
+
+Plusieurs fonctionnalités sont dépréciées dans le JDK 25.
+
+=== Le mécanisme de lancement VFORK sous Linux (https://bugs.openjdk.org/browse/JDK-8357179[JDK-8357179])
+
+Sous Linux, l’option `-Djdk.lang.Process.launchMechanism=VFORK` a été dépréciée car elle était intrinsèquement dangereuse. 
+Elle sera supprimée dans une prochaine version.
+
+Il est conseillé d’éviter d’utiliser cette propriété. 
+Si possible, ils devraient le supprimer et utiliser le mécanisme de lancement par défaut basé sur posix_spawn. 
+Au cas où ce n’est pas possible, il faudrait utiliser `-Djdk.lang.Process.launchMechanism=FORK` à la place.
+
+=== La dépréciation de la propriété système `java.locale.useOldISOCodes` (https://bugs.openjdk.org/browse/JDK-8353118[JDK-8353118])
+
+La propriété système `java.locale.useOldISOCodes` est dépréciée.
+Elle a été introduite dans le JDK 17 pour permettre de revenir aux codes de langue ISO 639 hérités pour l’hébreu, l’indonésien et le yiddish le temps de mettre à jour le code.
+
+Dans le JDK 25, elle est dépréciée : la définition de cette propriété sur `true` n’a aucun effet, et un avertissement concernant sa suppression future s’affiche au moment de l’exécution.
+
+[source,plain]
+----
+C:\java>java -Djava.locale.useOldISOCodes=true MonApp.java
+WARNING: The use of the system property "java.locale.useOldISOCodes" is deprecated. It will be removed in a future release of the JDK.
+----
+
+=== La dépréciation pour suppression de l’échange en XML de `DescriptorSupport` (https://bugs.openjdk.org/browse/JDK-8347433[JDK-8347433])
+
+La classe `javax.management.modelmbean.DescriptorSupport` de l’API JMX représente les métadonnées de MBean. 
+Il dispose d’un constructeur et d’une méthode permettant de créer et d’exporter vers XML. 
+Ceux-ci ne sont pas utilisés dans le JDK et n’ont pas d’utilisation plus large connue : elles sont dépréciées pour suppression.
+
+La classe `javax.management.modelmbean.XMLParseException`, qui n’est levée que par la classe `DescriptorSupport`, est également dépréciée pour suppression.
+
+=== L’option `UseCompressedClassPointers` est dépréciée (https://bugs.openjdk.org/browse/JDK-8350753[JDK-8350753])
+
+L’option UseCompressedClassPointers était utilisée pour basculer entre deux modes :
+
+* Le mode de pointeur de classe compressé (`-XX:+UseCompressedClassPointers`, par défaut si le commutateur n’est pas spécifié)
+* Le mode de pointeur de classe non compressé (`-XX:-UseCompressedClassPointers`)
+
+Le mode de pointeur de classe non compressé entraîne l’utilisation de plus de mémoire par la JVM. 
+Il sert à très peu de choses aujourd’hui. 
+Il sera supprimé dans une future version de Java. 
+Étant donné que cela ne laisse que le mode de pointeur de classe compressé par défaut, l’option sera également supprimée.
+
+Le mode de pointeur de classe compressé par défaut permet à la JVM de placer des classes dans l’espace de classes qui est limité par défaut à 1Go. 
+Dans les rares cas où une application doit charger plus que cela, l’espace de classe peut être étendu jusqu’à 4 Go avec l’option `-XX:CompressedClassSpaceSize`.
+
+L’option `UseCompressedClassPointers` est dépréciée dans le JDK 25 et sera supprimée dans une future version de Java :
+
+* Si une application utilise l’option `-XX:+UseCompressedClassPointers`, il faut la supprimer car l’activation des pointeurs de classe compressés est la valeur par défaut.
+* Si une application utilise l’option `-XX:-UseCompressedClassPointers`, il faut la supprimer car elle continuera simplement à fonctionner. 
+Si l’application épuise l’espace de classe, il faut investiguer les causes si cette situation est pathologique (fuite de class loader) ou sinon il faut augmenter l’espace de classe en utilisant l’option `-XX:CompressedClassSpaceSize`.
+
+=== Différentes classes d'autorisation sont dépréciées pour suppression (https://bugs.openjdk.org/browse/JDK-8348967[JDK-8348967], https://bugs.openjdk.org/browse/JDK-8353641[JDK-8353641], https://bugs.openjdk.org/browse/JDK-8353642[JDK-8353642], https://bugs.openjdk.org/browse/JDK-8353856[JDK-8353856], https://bugs.openjdk.org/browse/JDK-8347985[JDK-8347985], https://bugs.openjdk.org/browse/JDK-8351224[JDK-8351224], https://bugs.openjdk.org/browse/JDK-8351310[JDK-8351310])
+
+Dans le JDK 25, différentes classes d'autorisation ont été dépréciées pour suppression :
+
+* `java.security.UnresolvedPermission`
+* `javax.net.ssl.SSLPermission`
+* `javax.security.auth.AuthPermission`
+* `javax.security.auth.PrivateCredentialPermission`
+* `javax.security.auth.kerberos.DelegationPermission`
+* `javax.security.auth.kerberos.ServicePermission`
+* `com.sun.security.jgss.InquireSecContextPermission`
+* `java.lang.RuntimePermission`
+* `java.lang.reflect.ReflectPermission`
+* `java.io.FilePermission`
+* `java.io.SerializablePermission`
+* `java.nio.file.LinkPermission`
+* `java.util.logging.LoggingPermission`
+* `java.util.PropertyPermission`
+* `jdk.jfr.FlightRecorderPermission`
+* `java.net.NetPermission`
+* `java.net.URLPermission`
+* `jdk.net.NetworkPermission`
+* `com.sun.tools.attach.AttachPermission`
+* `com.sun.jdi.JDIPermission`
+* `java.lang.management.ManagementPermission`
+* `javax.management.MBeanPermission`
+* `javax.management.MBeanTrustPermission`
+* `javax.management.MBeanServerPermission`
+* `javax.management.remote.SubjectDelegationPermission`
+
+De plus, la méthode `getPermission()` définie dans la classe `java.net.URLConnection` et sa sous-classe `java.net.HttpURLConnection` ont été dépréciées pour suppression.
+
+Ces classes d’autorisation et les méthodes associées n’étaient utiles qu’en conjonction avec le Security Manager, qui n’est plus pris en charge.
+
+== Les fonctionnalités retirées
+
+Plusieurs fonctionnalités sont retirées du JDK 25.
+
+=== JEP 503 : Remove the 32-bit x86 Port
+
+Le but de la https://openjdk.org/jeps/503[JEP 503] est de supprimer le code source et le build du portage x86 32 bits.
+
+Ce portage a été déprécié pour suppression dans le JDK 24 (https://openjdk.org/jeps/501[JEP 501]) avec l’intention de le supprimer dans une version ultérieure.
+
+=== Les autres fonctionnalités retirées
+
+Plusieurs fonctionnalités qui ne font pas l’objet d’une JEP sont retirées.
+
+=== La suppression de l'échantillonnage PerfData (https://bugs.openjdk.org/browse/JDK-8241678[JDK-8241678])
+
+La fonctionnalité d’échantillonnage périodique PerfData a été supprimée, y compris le StatSampler et son flag de contrôle `-XX:PerfDataSamplingInterval`.
+
+L’échantillonnage PerfData était un mécanisme rarement utilisé qui mettait régulièrement à jour un petit ensemble de compteurs dans le fichier PerfData. 
+Pour la plupart des ramasse-miettes, comme pour G1 et ZGC, il n’enregistrait qu’un horodatage.
+
+Avec ce changement :
+
+* Les compteurs d’utilisation du tas dans PerfData pour les GC Serial et Parallel ne sont désormais mis à jour qu’après chaque cycle de nettoyage de la mémoire. 
+Par conséquent, le compteur d’utilisation de l’espace Eden (`sun.gc.generation.0.space.0.used`) affichera toujours zéro, car l’espace est vide après la collecte. 
+Des valeurs précises sont toujours disponibles grâce à des outils tels que Java Flight Recorder (JFR) et Java Management Extensions (JMX)
+* Le compteur `sun.os.hrt.ticks` a supprimé le temps de suivi depuis le démarrage de la JVM. Il peut être dérivé de `sun.rt.createVmBeginTime`.
+* Le flag `-XX:PerfDataSamplingInterval` a été rendu obsolète et sera supprimé dans une version ultérieure.
+
+Cette modification ne concerne que les outils qui lisent les données directement à partir du fichier PerfData. 
+Les autres programmes et outils de surveillance ne sont pas impactés.
+
+=== La suppression des compteurs de performance `sun.rt._sync*` (https://bugs.openjdk.org/browse/JDK-8348829[JDK-8348829])
+
+Les anciens compteurs de performances du moniteur d’objets, exposés dans l’espace de noms `sun.rt._sync*` sont supprimés. 
+Ces compteurs étaient rarement utilisés et ils contribuaient à des problèmes de performances dans le code VM associé. 
+Il est conseillé aux utilisateurs qui souhaitent suivre les performances du moniteur d’utiliser à la place des événements JFR associés.
+
+Les remplacements suggérés sont les suivants :
+
+* `_sync_ContendedLockAttempts` : l’événement JFR `JavaMonitorEnter`
+* `_sync_FutileWakeups` : pas de remplacement
+* `_sync_Parks` : l’événement JFR `JavaMonitorWait`
+* `_sync_Notifications` : l’événement JFR `JavaMonitorNotify`
+* `_sync_Inflations` : l’événement JFR `JavaMonitorInflate`
+* `_sync_Deflations` : l’événement JFR `JavaMonitorDeflate`
+* `_sync_MonExtant` : l’événement JFR `JavaMonitorStatistics`
+
+=== La suppression des anciennes propriétés système de JMX (https://bugs.openjdk.org/browse/JDK-8344966[JDK-8344966], https://bugs.openjdk.org/browse/JDK-8344969[JDK-8344969], https://bugs.openjdk.org/browse/JDK-8344976[JDK-8344976], https://bugs.openjdk.org/browse/JDK-8345045[JDK-8345045], https://bugs.openjdk.org/browse/JDK-8345048[JDK-8345048], https://bugs.openjdk.org/browse/JDK-8345049[JDK-8345049])
+
+Certaines anciennes propriétés système de JMX permettant d’aider à la compatibilité durant une période transition sont supprimées :
+
+* `jmx.extend.open.types`
+* `jmx.invoke.getters`
+* `jdk.jmx.mbeans.allowNonPublic`
+* `jmx.mxbean.multiname`
+* `jmx.tabular.data.hash.map`
+* `jmx.remote.x.buffer.size`
+* `jmx.remote.x.notification.buffer.size`
+
+==== La suppression des implémentations `SecretKeyFactory` liées au PBE du fournisseur SunPKCS11 (https://bugs.openjdk.org/browse/JDK-8348732[JDK-8348732])
+
+Dans le JDK 21, le fournisseur SunPKCS11 a ajouté plusieurs implémentations de `SecretKeyFactory` basées sur des mots de passe, telles que :
+
+* `SecretKeyFactory.PBEWithHmac[MD]AndAES_128`
+* `SecretKeyFactory.PBEWithHmac[MD]AndAES_256`
+* `SecretKeyFactory.HmacPBE[MD]`
+
+où [MD] est l'un des algorithmes SHA1, SHA224, SHA256, SHA384 et SHA512.
+
+Cependant, les objets Key produits par ces implémentations utilisent les valeurs dérivées de PBKDF2 comme encodages de clés. 
+Ceci est différent de ses homologues SunJCE qui utilisent les octets de mot de passe comme encodages de clé. 
+Ces différences peuvent être très déroutantes et peuvent causer des problèmes d’interopérabilité car les deux clés ont le même algorithme et le même format, mais des encodages différents.
+
+Ainsi dans le JDK 25, par souci de cohérence, ces implémentations `SecretKeyFactory` basées sur un mot de passe SunPKCS11 ont été supprimées.
+
+== Les évolutions dans la JVM HotSpot
+
+Différentes évolutions sont proposées dans la JVM HotSpot du JDK 25.
+
+=== JEP 509 : JFR CPU-Time Profiling (Experimental)
+
+JDK Flight Recorder (JFR) peut déjà profiler la consommation de deux ressources d’un programme :
+
+* le heap de la mémoire : le profilage du heap de la mémoire indique les éléments de programme qui allouent des objets qui consomment une partie importante du heap et de quels types d’objets il s’agit
+* et le temps d’exécution : le profilage du temps d’exécution montre quels éléments de programme consomment beaucoup de temps réel écoulé
+
+Le but de la https://openjdk.org/jeps/509[JEP 509] est d’améliorer le JFR pour capturer les informations de profilage du temps CPU sous Linux uniquement. 
+Il s’agit d’une fonctionnalité expérimentale.
+
+La capacité de mesurer avec précision la consommation des cycles CPU a été ajoutée au noyau Linux dans la version 2.6.12 via un timer qui émet des signaux à des intervalles fixes de temps CPU plutôt qu’à des intervalles fixes de temps réel écoulé. 
+La plupart des profilers sous Linux utilisent ce mécanisme pour produire des profilages du temps CPU.
+
+JFR utilise le mécanisme CPU-timer de Linux pour échantillonner la pile de chaque thread exécutant du code Java à des intervalles fixes de temps CPU. 
+Chacun de ces échantillons est enregistré dans un nouveau type d’événement, `jdk.CPUTimeSample`. 
+Cet événement n’est pas activé par défaut.
+
+[source,plain]
+----
+$ java -XX:StartFlightRecording=jdk.CPUTimeSample#enabled=true,filename=monapp.jfr -jar monapp.jar
+----
+
+Un rendu textuel des méthodes chaude en CPU, c’est-à-dire celles qui consomment de nombreux cycles CPU dans leur propre corps plutôt que dans les appels à d’autres méthodes, peut être obtenu comme suit :
+
+[source,plain]
+----
+$ jfr view cpu-time-hot-methods monapp.jfr
+----
+
+Le taux d’échantillonnage de cet événement peut être défini via la propriété throttle de l’événement.
+
+Autre nouvel événement, `jdk.CPUTimeSampleLoss` est émis lorsque des échantillons sont perdus en raison de contraintes d’implémentation.
+
+=== JEP 514 : Ahead-of-Time Command-Line Ergonomics
+
+Les caches ahead-of-time, introduits via la https://openjdk.org/jeps/483[JEP 483] dans le JDK 24, permettent d’accélérer le démarrage des applications Java.
+
+Dans le JDK 24, la création d’un cache AOT se faisait en deux étapes, en utilisant la commande java dans deux modes AOT distincts :
+
+* Le premier appel spécifie le mode d’enregistrement (`-XX:AOTMode=record`), indiquant à la JVM d’observer la dynamique d’une exécution d’entraînement de l’application et de les enregistrer dans une configuration AOT
+* Le deuxième appel spécifie le mode de création (`-XX:AOTMode=create`), indiquant à la JVM de créer un cache AOT basé sur la configuration enregistrée lors de l’exécution de l’entraînement
+
+Le but de la https://openjdk.org/jeps/514[JEP 514] est de faciliter la création de caches ahead-of-time en simplifiant les commandes requises pour les cas d’utilisation courants.
+
+Une nouvelle option de la commande java, `AOTCacheOutput`, permet de spécifier un fichier de sortie de cache AOT. 
+Lorsqu’elle est utilisée seule, sans autres options AOT*, cette option oblige la JVM à diviser son invocation en deux sous-invocations : la première effectue une exécution d’entraînement (`AOTMode=record`), puis la seconde crée le cache AOT (`AOTMode=create`).
+
+[source,plain]
+----
+java -XX:AOTCacheOutput=main.aot -cp monapp.jar fr.sciam.monapp.MainApp
+----
+
+Lors de l’utilisation de cette option, la JVM crée un fichier temporaire pour la configuration AOT et supprime ce fichier une fois terminé.
+
+Une nouvelle variable d’environnement, `JDK_AOT_VM_OPTIONS`, peut être utilisée pour passer des options de ligne de commande qui s’appliquent spécifiquement à la création de cache (`AOTMode=create`), sans affecter l’exécution de l’entraînement (`AOTMode=record`). 
+La syntaxe est la même que pour la variable d’environnement `JAVA_TOOL_OPTIONS` existante. 
+Cela permet au flux de travail en une étape de s’appliquer même dans les cas d’utilisation où il peut sembler que deux étapes sont nécessaires en raison de différences dans les options de ligne de commande.
+
+Il est aussi toujours possible pour certains cas d’utilisation, où il peut être préférable d’utiliser deux étapes pour créer un cache AOT, de spécifier explicitement le mode AOT à chaque fois.
+
+=== JEP 515 : Ahead-of-Time Method Profiling
+
+La JVM HotSpot exécute le byte code en utilisation plusieurs modes, notamment :
+
+* Interprété (C0) : le code est juste interprété
+* Compilation client (C1) : le code est compilé basiquement en code natif avec des optimisations limitées
+* Compilation serveur (C2) : le code est compilé avec des optimisations agressives, plus longue à déterminer et à réaliser
+
+Au démarrage, la JVM interprète le bytecode. La mise en œuvre des modes C1 et C2 requiert un délai initial nommé temps de chauffe (warmup) pendant lequel le code est exécuté en mode interprété et la JVM capture des informations sous la forme de profils d’exécution de méthodes. 
+Le JIT analyse le code exécuté et identifie les portions de code fréquemment exécutées, appelées « points chauds » (hotspots d’où le nom de la JVM). 
+Lorsque ces portions atteignent un certain seuil, elles sont compilées dynamiquement en code natif, permettant ainsi d’améliorer grandement les performances d’exécution tout en gardant un compromis sur le temps de démarrage. 
+Malheureusement ces mécanisme consomme de la ressource et du temps et doivent être réexécuté à chaque démarrage de la JVM
+
+Le but de la https://openjdk.org/jeps/515[JEP 515] est d’améliorer le temps de préchauffage (warmup) de l’exécution d’une application dans une JVM Hotspot en rendant instantanément disponibles les profils d’exécution de méthodes, d’une exécution précédente de l’application, au démarrage de la JVM HotSpot. 
+Cela permet au compilateur JIT de générer du code natif immédiatement au démarrage de l’application, plutôt que d’avoir à attendre que les profils soient collectés durant le temps de préchauffage.
+
+Pour cela le cache AOT, introduit par la https://openjdk.org/jeps/483[JEP 483], est enrichi pour collecter des profils d’exécutions de méthodes lors du temps de préchauffage. 
+Tout comme le cache AOT stocke actuellement les classes que la JVM aurait autrement besoin de charger et de lier au démarrage, le cache AOT stocke désormais également les profils de méthodes que la JVM aurait autrement besoin de collecter dans la première partie de l’exécution d’une application. 
+Par conséquent, les exécutions de l’application sont à la fois plus rapides au démarrage et plus rapides pour atteindre des performances optimales.
+
+Les profils mis en cache utilisés au démarrage n’empêchent pas le profilage supplémentaire pendant les exécutions de l’application. 
+C’est essentiel, car le comportement d’une application peut diverger de ce qui a été observé précédemment. 
+Même avec des profils mis en cache, la JVM HotSpot continue de profiler et d’optimiser l’application au fur et à mesure de son exécution, en fusionnant les avantages des profils AOT, du profilage en ligne et de la compilation JIT.
+
+L’effet des profils mis en cache est que le JIT s’exécute plus tôt et avec plus de précision, en utilisant les profils pour optimiser les méthodes chaudes (hot methods) afin que l’application connaisse une période de préchauffage plus courte. 
+Les tâches du JIT sont intrinsèquement parallèles, de sorte que le temps de préchauffage peut être court lorsque suffisamment de ressources matérielles sont disponibles.
+
+=== JEP 518 : JFR Cooperative Sampling
+
+Le but de la https://openjdk.org/jeps/518[JEP 518] est d’améliorer la stabilité du JDK Flight Recorder (JFR) lorsqu’il échantillonne de manière asynchrone des piles de threads Java.
+
+Le mécanisme d’échantillonnage de JFR a été repensé pour éviter de s’appuyer sur des heuristiques d’analyse de stacks risquées. 
+Pour cela, il parcourt les stacks d’appels uniquement aux safepoints, tout en minimisant les biais induit par les safepoints.
+
+Pour éviter le problème de biais des safepoints, des échantillons sont prélevés en coopération par un thread d’échantillonnage de JFR qui suspend le thread cible. 
+Plutôt que d’essayer d’analyser la pile immédiatement, il enregistre simplement des informations dans une queue du thread local et reprend l’exécution thread.
+
+La cible s’exécute normalement jusqu’à son prochain safepoints. À ce moment-là, le code de gestion du safepoint inspecte la queue. 
+S’il trouve des informations d’échantillonnage, il reconstruit pour chacune d’entre elles une stacktrace, en ajustant le biais des safepoints, et émet un événement JFR d’échantillonnage.
+
+En plus d'être plus sûre, cette approche présente plusieurs autres avantages :
+
+* La création d’une requête d’échantillon ne nécessite pratiquement aucun travail et peut être effectuée en réponse à un événement matériel ou à l’intérieur d’un gestionnaire de signaux
+* Le code permettant de créer des stacktraces et d’émettre des événements est plus simple
+* Le thread d’échantillonnage a moins de travail à faire, car il n’a pas besoin de prendre en compte des heuristiques, ce qui améliore l’évolutivité
+
+Cette approche fonctionne bien lorsque le thread cible exécute du code Java, qu’il soit interprété ou compilé, mais pas lorsque le thread cible exécute du code natif. Dans ce cas, JFR continue d’utiliser l’approche précédente.
+
+=== JEP 519 : Compact Object Headers
+
+Les headers compacts d’objets ont été intégrés à titre expérimental via la https://openjdk.org/jeps/450[JEP 450] dans le JDK 24. 
+Leur but est de réduire la taille des headers des objets à 64 bits (8 octets) sur les plateformes 64-bit x64 et AArch64. 
+L’activation de cette fonctionnalité réduit l’encombrement du heap Java et offre potentiellement des avantages en termes de performances.
+
+Le but de la https://openjdk.org/jeps/519[JEP 519] est de modifier le statut de la fonctionnalité d’expérimentale à produit. 
+Il n’est donc plus nécessaire d’utiliser l’option `-XX:+UnlockExperimentalVMOptions` pour demander son activation qui doit toujours être faite de manière explicite.
+
+La fonctionnalité reste cependant désactivée par défaut dans cette version, mais pourrait devenir par défaut dans une version ultérieure.
+
+[source,plain]
+----
+C:\java>java -XX:+UseCompactObjectHeaders MonApp.java
+----
+
+Pour prendre en charge l’utilisation des en-têtes d’objets compacts, deux archives CDS supplémentaires pour l’image JDK appelées `classes_coh.jsa` et `classes_nocoops_coh.jsa` sont fournies pour permettre des performances de démarrage équivalentes lorsque l’option `UseCompactObjectHeaders` est activé.
+
+=== JEP 520 : JFR Method Timing & Tracing
+
+Le but de la https://openjdk.org/jeps/520[JEP 520] est d’enrichir le JDK Flight Recorder (JFR) avec des fonctionnalités pour le chronométrage et le traçage des méthodes via l’instrumentation du bytecode :
+
+* Pour les invocations de méthodes, enregistrement de statistiques complètes et exactes plutôt que des statistiques incomplètes et inexactes basées sur des échantillons
+* Permettre d’enregistrer les temps d’exécution et les stacktraces pour des méthodes spécifiques sans nécessiter de modifications du code source
+* Permettre la sélection des méthodes concernées via des arguments en ligne de commande, des fichiers de configuration, l’outil `jcmd` et via le réseau avec l’API Java Management Extensions (JMX)
+
+Deux nouveaux événements JFR sont ajoutés : `jdk.MethodTiming` et `jdk.MethodTrace`. Ils acceptent tous deux un filtre pour sélectionner les méthodes à chronométrer et à tracer.
+
+Le filtre est spécifié sous la forme utilisant la même syntaxe que celle d’une référence de méthode dans le code source. 
+Au démarrage, la JVM instrumente cette méthode en injectant du bytecode pour émettre les événements.
+
+Exemple pour tracer les exécutions de la méthode `traiter()` de la classe `DemoJEP520`
+
+[source,plain]
+----
+C:\java>java -XX:StartFlightRecording:method-timing=DemoJEP520::traiter,filename=DemoJEP520.jfr DemoJEP520
+[0.407s][info][jfr,startup] Started recording 1. No limit specified, using maxsize=250MB as default.
+[0.407s][info][jfr,startup]
+[0.407s][info][jfr,startup] Use jcmd 26740 JFR.dump name=1 to copy recording data to file.
+Traitement durant 2646 ms
+Traitement durant 2998 ms
+Traitement durant 1740 ms
+Traitement durant 2497 ms
+Traitement durant 1675 ms
+Traitement durant 1560 ms
+----
+
+Il est possible d’afficher les événements émis dans l’enregistrement par exemple avec la commande `jfr` du JDK en filtrant sur ceux de type `jdk.MethodTrace`.
+
+[source,plain]
+----
+C:\java>jfr print --events jdk.MethodTrace --stack-depth 10 DemoJEP520.jfr
+jdk.MethodTrace {
+  startTime = 15:01:53.265 (2025-10-06)
+  duration = 2,14 s
+  method = DemoJEP520.traiter()
+  eventThread = "main" (javaThreadId = 3)
+  stackTrace = [
+    DemoJEP520.main(String[]) line: 11
+  ]
+}
+
+jdk.MethodTrace {
+  startTime = 15:01:55.409 (2025-10-06)
+  duration = 2,07 s
+  method = DemoJEP520.traiter()
+  eventThread = "main" (javaThreadId = 3)
+  stackTrace = [
+    DemoJEP520.main(String[]) line: 11
+  ]
+}
+----
+
+Les fichier de configuration `default.jfc` et `profile.jfc` sont enrichis avec deux nouvelles options, `method-timing` et `method-trace`, qui contrôlent les paramètres de filtre pour les événements `jdk.MethodTiming` et `jdk.MethodTrace` :
+
+* L’option `method-timing` compte le nombre d’appels et calcule le temps d’exécution moyen des méthodes qui correspondent au filtre
+* L’option `method-trace` enregistre les stacktraces pour les méthodes qui correspondent au filtre
+
+
+[source,plain]
+----
+C:\java>java -XX:StartFlightRecording:method-timing=DemoJEP520::traiter,filename=DemoJEP520.jfr DemoJEP520
+[0.407s][info][jfr,startup] Started recording 1. No limit specified, using maxsize=250MB as default.
+[0.407s][info][jfr,startup]
+[0.407s][info][jfr,startup] Use jcmd 26740 JFR.dump name=1 to copy recording data to file.
+Traitement durant 2646 ms
+Traitement durant 2998 ms
+Traitement durant 1740 ms
+Traitement durant 2497 ms
+Traitement durant 1675 ms
+Traitement durant 1560 ms
+----
+
+Les commandes `jfr view` et `jcmd <pid> JFR.view` sont améliorées pour afficher les résultats de chronométrage et de traçage des méthodes.
+
+[source,plain]
+----
+C:\java>jfr view method-timing DemoJEP520.jfr
+
+                                 Method Timing
+
+Timed Method                 Invocations Minimum Time Average Time Maximum Time
+---------------------------- ----------- ------------ ------------ ------------
+DemoJEP520.traiter()                   5       1,68 s       2,31 s       3,00 s
+----
+
+Il est possible de filtrer sur les blocs d’initialisation statique en utilisant `::<clinit>`.
+
+En plus d’une méthode, un filtre peut nommer une classe, auquel cas toutes les méthodes de la classe sont chronométrées ou tracées.
+
+Un filtre peut également concerner une annotation. Cela fait que toutes les méthodes annotées avec l’annotation, et toutes les méthodes de toutes les classes annotées avec l’annotation, sont chronométrées ou tracées.
+
+Par exemple, pour voir le nombre de fois qu’un endpoint REST invoqué via le verbe `GET` et développé avec JAX-RS est appelé et mesurer le temps d’exécution :
+
+[source,plain]
+----
+C:\java>java -XX:StartFlightRecording:method-timing=@jakarta.ws.rs.GET,filename=DemoJEP520.jfr DemoJEP520
+----
+
+S’il y a besoin de chronométrer ou de tracer plusieurs méthodes, il est possible de créer un fichier de configuration distinct pour les configurer toutes :
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration version="2.0">
+  <event name="jdk.MethodTiming">
+    <setting name="enabled">true</setting>
+    <setting name="filter">
+      fr.sciam.app.UnService::obtenirTous;
+      fr.sciam.app.UnComposant::traiter;
+      ...
+      fr.sciam.app.UnDao::getAll
+    </setting>
+  </event>
+</configuration>
+----
+
+Il est ensuite possible de l’utiliser en conjonction avec la configuration par défaut :
+
+[source,plain]
+----
+$ java -XX:StartFlightRecording:settings=timing.jfc,settings=default ...
+----
+
+=== JEP 521 : Generational Shenandoah
+
+Le mode générationnel de Shenandoah a été intégré à titre expérimental via la https://openjdk.org/jeps/404[JEP 404] dans le JDK 24.
+
+Le but de la https://openjdk.org/jeps/521[JEP 521] est de modifier le mode générationnel du ramasse-miettes Shenandoah d’une fonctionnalité expérimentale à une fonctionnalité produit.
+
+Il n’est donc plus nécessaire d’utiliser l’option `-XX:+UnlockExperimentalVMOptions` pour demander l’activation du mode générationnel de Shenandoah.
+
+[source,plain]
+----
+C:\java>java -XX:+UseShenandoahGC -XX:ShenandoahGCMode=generational MonApp.java
+----
+
+WARNING: Les JDK d’Oracle n’intègrent pas le GC Shenandoah. Pour utiliser ce GC, il faut utiliser le JDK d’un autre fournisseur.
+
+[source,plain]
+----
+C:\java>java -version
+openjdk version "25" 2025-09-16
+OpenJDK Runtime Environment (build 25+36-3489)
+OpenJDK 64-Bit Server VM (build 25+36-3489, mixed mode, sharing)
+
+C:\java>java -XX:+UseShenandoahGC MonApp.java
+Error occurred during initialization of VM
+Option -XX:+UseShenandoahGC not supported
+----
+
+=== Les autres fonctionnalités dans la JVM HotSpot
+
+D’autres fonctionnalités ou évolutions dans des fonctionnalités de la JVM HotSpot ne faisant pas l’objet d’une JEP sont proposées dans le JVM HotSpot du JDK 25.
+
+==== G1 réduit la mémoire des Remembered Set en regroupant les régions dans des Shared Card Sets partagés (https://bugs.openjdk.org/browse/JDK-8343782[JDK-8343782])
+
+Le ramasse-miettes G1 réduit encore la consommation de mémoire et le temps de pause de la gestion du Remembered Set en permettant à plusieurs régions de partager une seule structure interne (G1CardSet) lorsqu’elles sont susceptibles d’être collectées ensemble lors d’une collection mixte.
+
+Auparavant, chaque région conservait son propre G1CardSet, ce qui entraînait une surcharge de mémoire élevée et un suivi redondant des références entre les régions qui étaient finalement collectées en tant que groupe. 
+Dans la nouvelle implémentation, les régions qui devraient être évacuées ensemble sont regroupées après la phase de Remark et se voient attribuer un G1CardSet partagé, ce qui élimine la nécessité de suivre les références entre elles individuellement.
+
+Cela améliore l'efficacité de la mémoire et réduit le temps de fusion pendant les pauses de collecte.
+
+==== ZGC évite désormais la déduplication des chaînes de courte durée (https://bugs.openjdk.org/browse/JDK-8347337[JDK-8347337])
+
+La fonction de déduplication des chaînes de ZGC a été mise à jour pour ignorer la déduplication des chaînes à courte durée de vie. Cette modification réduit le traitement inutile et peut améliorer les performances des applications qui allouent fréquemment des chaînes temporaires.
+
+==== G1 réduit les pics de temps de pause en améliorant la sélection des régions (https://bugs.openjdk.org/browse/JDK-8351405[JDK-8351405])
+
+Le ramasse-miettes G1 réduit désormais les pics de temps de pause pendant les GC mixtes en améliorant la sélection des régions de mémoire à récupérer pendant ceux-ci. 
+Les régions dont la collecte devrait être coûteuse en raison du nombre élevé de références interrégionales peuvent être exclues de cette sélection de régions.
+
+À l’aide d’informations supplémentaires recueillies lors de la phase de marquage, G1 peut mieux estimer le coût de la collecte de chaque région et éviter celles qui auraient un impact significatif sur les temps de pause. 
+Il en résulte une réduction des pics de temps de pause, en particulier vers la fin d’un cycle GC mixte, ce qui améliore les performances globales de l’application.
+
+==== Serial/Parallel GC ne lèvent plus d' `OutOfMemoryError` dues à JNI (https://bugs.openjdk.org/browse/JDK-8192647[JDK-8192647])
+
+Les ramasse-miettes Serial et Parallel s’assurent désormais qu’aucun thread Java ne se trouve dans une région critique JNI avant de lancer une collection, éliminant ainsi les erreurs inutiles de type `OutOfMemoryErrors`.
+
+Auparavant, le nettoyage de la mémoire pouvait revenir prématurément sans récupérer de mémoire si un thread restait dans une telle région. 
+Cela pouvait entraîner des erreurs de type `OutOfMemoryError` inattendues, car le ramasse-miettes n’avait peut-être pas eu la possibilité de récupérer de la mémoire, même après quelques tentatives. 
+L’augmentation de `GCLockerRetryAllocationCount` a souvent été suggérée comme solution de contournement pour éviter ce type d’`OOME` prématuré.
+
+Avec cette modification, une demande de nettoyage de la mémoire en attente attendra que tous les threads Java quittent les régions critiques JNI et bloquent les nouvelles entrées. 
+Cela garantit qu’une fois à l’intérieur d’une safepoint, aucun thread ne reste dans les régions critiques et que le nettoyage de la mémoire peut toujours se poursuivre jusqu’à la fin. 
+Par conséquent, le flag de diagnostic `GCLockerRetryAllocationCount` a été supprimé, car il n’est plus nécessaire.
+
+==== Le bytecode fourni avec `ClassFileLoadHook` de JVMTI sont vérifiés (https://bugs.openjdk.org/browse/JDK-8351654[JDK-8351654])
+
+Lors de la fourniture d’une classe avec `ClassFileLoadHook` de JVMTI, les nouveaux bytecodes sont vérifiés avec Class File Verifier, même s’ils sont fournis sur le bootclass path, et quel que soit la valeur de l’option obsolète `-Xverify`.
+
+== Les évolutions dans les outils du JDK
+
+Le JDK 25 propose diverses évolutions dans plusieurs de ses outils.
+
+=== La validation améliorée des fichiers jar (https://bugs.openjdk.org/browse/JDK-8345431[JDK-8345431])
+
+La commande `jar --validate` a été améliorée pour identifier et générer un message d’avertissement pour :
+
+* Les noms d’entrée en double
+* Les noms d’entrée qui :
+** contienne une lettre de lecteur ou de périphérique
+** contienne un slash au début (chemin absolu)
+** contiennent un backslash
+** contiennent « `.` » ou « `..` »
+* Les incohérences dans l’ordre des entrées entre les en-têtes LOC et CEN
+
+=== `javac` ne modifie plus les fichier JAR dans le classpath (https://bugs.openjdk.org/browse/JDK-8338675[_JDK-8338675_])
+
+Sous certaines conditions, le compilateur `javac` pouvait modifier des fichiers jar ou zip sur le chemin d’accès aux classes, en y écrivant des classfiles.
+
+Ces conditions sont :
+
+* Aucun répertoire de sortie spécifié avec l’option `-d`
+* L’option `-sourcepath` n’est pas utilisée
+* Le fichier jar ou zip dans le classpath contient des fichiers sources, qui sont compilés explicitement
+
+Ce n’est plus le cas dans le JDK 25. 
+Les fichiers .class ne seront jamais écrits dans des fichiers jar ou zip. 
+Ceux qui auraient dû être écrits dans un fichier jar ou zip seront placés dans le répertoire de travail actuel. 
+Cela imite le comportement du JDK 8.
+
+=== `javac` émet une erreur en cas de présence d’un caractère supplémentaire dans les caractères littéraux (https://bugs.openjdk.org/browse/JDK-8354908[JDK-8354908])
+
+Dans le code source Java, les caractères littéraux de ne peuvent contenir qu’un seul caractère UTF-16. 
+Le compilateur `javac` acceptait à tort les caractères littéraux composés de deux caractères de substitution UTF-16, n’utilisant que le premier caractère et ignorant le second caractère.
+
+Exemple : le fichier DemoSurrogateUFT16.java
+.Le fichier .java
+[source,java]
+----
+public class DemoSurrogateUTF16 {
+    public static void main(String[] args) {
+        char car = '𠃮';  // \ud840
+        System.out.println(car);
+        System.out.println("Code Point : " + Integer.toHexString(car));
+    }
+}
+----
+
+Ce fichier compile correctement avec un JDK24
+
+[source,plain]
+----
+C:\java>javac -version
+javac 24
+
+C:\java>javac DemoSurrogateUTF16.java
+
+C:\java>java DemoSurrogateUTF16
+?
+Code Point : d840
+----
+
+Cela a été corrigé dans le JDK 25 : le compilateur `javac` produira une erreur de compilation lorsqu’il détectera un caractère littéral composé de deux caractères de substitution UTF-16.
+
+[source,plain]
+----
+C:\java>javac -version
+javac 25	
+
+C:\java>javac DemoSurrogateUTF16.java
+DemoSurrogateUTF16.java:3: error: character literal contains more than one UTF-16 code unit
+        char car = '?';  // \ud840
+                   ^
+1 error
+----
+
+
+=== Le flag du compilateur `-xlint:none` n’implique plus `-nowarn` (https://bugs.openjdk.org/browse/JDK-8352612[JDK-8352612])
+
+Le flag `-Xlint` de `javac` est utilisé pour activer ou désactiver les catégories d’avertissements générés lors de la compilation.
+
+Par exemple :
+
+* -Xlint:all,-serial active toutes les catégories, puis désactive la catégorie serial
+* -Xlint:none,serial désactive toutes les catégories, puis active la catégorie deprecation
+
+Historiquement, l’utilisation du flag `-Xlint:none` a également comme effet de bord invisible de désactiver tous les avertissements non obligatoires, exactement comme si le flag `-nowarn` était également utilisé.
+
+En conséquence, l’effet d’un flag comme `-Xlint:none,serial` était simplement de désactiver tous les avertissements non obligatoires. 
+En particulier, aucun avertissement dans la catégorie `serial` n’était généré.
+
+Exemple : la classe DemoXlintNone.java
+.Le fichier .java
+[source,java]
+----
+import java.io.Serializable;
+
+public class DemoXlintNone implements Serializable {
+}
+----
+
+Exemple : compilation avec un JDK 24
+
+[source,plain]
+----
+C:\java>javac -version
+javac 24
+
+C:\java>javac -Xlint:none,serial DemoXlintNone.java
+----
+
+Dans le JDK 25, `-Xlint:none` désactive simplement toutes les catégories, et un flag comme `-Xlint:none,serial` permet aux avertissements de type `serial` d’apparaître comme prévu.
+
+Exemple : compilation avec un JDK 25
+
+[source,plain]
+----
+C:\java>javac -version
+javac 25
+
+C:\java>javac -Xlint:none,serial DemoXlintNone.java
+DemoXlintNone.java:3: warning: [serial] serializable class DemoXlintNone has no definition of serialVersionUID
+public class DemoXlintNone implements Serializable {
+       ^
+1 warning
+----
+
+=== Le compilateur `javac` ne doit pas accepter un type d’expression Lambda incluant une classe autre qu' `Object` (https://bugs.openjdk.org/browse/JDK-8322810[JDK-8322810])
+
+Avant le JDK 25, le compilateur `javac` permettait dans certains cas d’utiliser des classes dans le type pour des expressions Lambda.
+
+Exemple : le fichier DemoLambdaClasse.java
+.Le fichier .java
+[source,java]
+----
+public class DemoLambdaClasse {
+    public static void main(String[] args) {
+        var dlc = (DemoLambdaClasse & Runnable) () -> System.out.println("Hello World");
+        dlc.run();
+    }
+}
+----
+
+Ce code compile avec le JDK 24 mais une exception est levée à l’exécution puisque le type de la Lambda n’est pas une interface fonctionnelle.
+
+[source,plain]
+----
+C:\java>javac -version
+javac 24
+
+C:\java>javac DemoLambdaClasse.java
+
+C:\java>java DemoLambdaClasse
+Exception in thread "main" java.lang.BootstrapMethodError: bootstrap method initialization exception
+        at java.base/java.lang.invoke.BootstrapMethodInvoker.invoke(BootstrapMethodInvoker.java:187)
+        at java.base/java.lang.invoke.CallSite.makeSite(CallSite.java:316)
+        at java.base/java.lang.invoke.MethodHandleNatives.linkCallSiteImpl(MethodHandleNatives.java:275)
+        at java.base/java.lang.invoke.MethodHandleNatives.linkCallSite(MethodHandleNatives.java:265)
+        at DemoLambdaClasse.main(DemoLambdaClasse.java:3)
+Caused by: java.lang.invoke.LambdaConversionException: DemoLambdaClasse is not an interface
+        at java.base/java.lang.invoke.AbstractValidatingLambdaMetafactory.<init>(AbstractValidatingLambdaMetafactory.java:201)
+        at java.base/java.lang.invoke.InnerClassLambdaMetafactory.<init>(InnerClassLambdaMetafactory.java:147)
+        at java.base/java.lang.invoke.LambdaMetafactory.altMetafactory(LambdaMetafactory.java:535)
+        at java.base/java.lang.invoke.BootstrapMethodInvoker.invoke(BootstrapMethodInvoker.java:143)
+        ... 4 more
+----
+
+À partir du JDK 25, le compilateur `javac` générera une erreur pour les expressions Lambda dont le type contient une classe.
+
+[source,plain]
+----
+C:\java>javac -version
+javac 25
+
+C:\java>javac DemoLambdaClasse.java
+DemoLambdaClasse.java:3: error: incompatible types: bad intersection type target for lambda or method reference
+        var dlc = (DemoLambdaClasse & Runnable) () -> System.out.println("Hello World");
+                                                ^
+    component type DemoLambdaClasse is not an interface or java.lang.Object
+1 error
+----
+
+Comme l’indique le message d’erreur du compilateur, il est cependant toujours possible d’utiliser le type `Object` avec une intersection avec une interface fonctionnelle.
+
+Exemple : le fichier DemoLambdaClasse.java
+.Le fichier .java
+[source,java]
+----
+public class DemoLambdaClasse {
+    public static void main(String[] args) {
+        var dlc = (Object & Runnable) () -> System.out.println("Hello World");
+        dlc.run();
+    }
+}
+----
+
+Ce code compile et s’exécute correctement.
+
+[source,plain]
+----
+C:\java>javac DemoLambdaClasse.java
+
+C:\java>java DemoLambdaClasse
+Hello World
+----
+
+=== L’option `-Xprint` inclut les limites des types génériques et les supertypes `Object` annotés (https://bugs.openjdk.org/browse/JDK-8356057[JDK-8356057])
+
+L’option `-Xprint` de la commande `javac` a été mise à jour pour inclure les limites des types génériques et `java.lang.Object` en tant que supertype si le supertype est annoté.
+
+.Le fichier DemoXprint.java
+[source,java]
+----
+import fr.sciam.MonAnnotation;
+
+public class DemoXprint<T extends CharSequence> extends @fr.sciam.MonAnnotation Object {
+}
+----
+
+Avec un JDK 24, l’utilisation de l’option `-Xprint` de `javac` sur ce fichier affiche :
+
+[source,plain]
+----
+C:\java>javac -version
+javac 24
+
+C:\java>javac -Xprint -cp . DemoXprint.java
+
+public class DemoXprint<T> {
+
+  public DemoXprint();
+}
+----
+
+Avec un JDK 24, l’utilisation de l’option `-Xprint` de `javac` sur ce fichier affiche :
+
+[source,plain]
+----
+C:\java>javac -version
+javac 25
+
+C:\java>javac -Xprint -cp . DemoXprint.java
+
+public class DemoXprint<T extends java.lang.CharSequence> extends java.lang.@fr.sciam.MonAnnotation Object {
+
+  public DemoXprint();
+}
+----
+
+NOTE: De manière surprenante, le nom pleinement qualifié de l’annotation est préfixé par `java.lang`.
+
+=== Les classes internes ne doivent pas avoir `null` comme instance immédiatement englobante (https://bugs.openjdk.org/browse/JDK-8164714[JDK-8164714])
+
+Dans les programmes Java, chaque instance d’une classe interne a une instance qui l’englobe immédiatement. 
+Lorsqu’une classe interne est instanciée avec le mot-clé `new`, l’instance immédiatement englobante est passée au constructeur de la classe interne via un paramètre non visible dans le code source. 
+La spécification du langage Java (§15.9.4) exige que l’instance englobante immédiate ne soit pas `null`.
+
+Avant le JDK 25, `javac` insérait une vérification de la valeur non `null` sur l’instance immédiatement englobante avant qu’elle ne soit transmise au constructeur de la classe interne. 
+Aucune vérification de la valeur non `null` n’était effectuée dans le corps du constructeur de la classe interne. 
+En conséquence, il était possible d’utiliser l’API Reflection, par exemple `java.lang.reflect.Constructor::newInstance`, ou des fichiers de classe spécialement conçus pour invoquer le constructeur d’une classe interne avec `null` comme instance immédiatement englobante. 
+Cela peut entraîner des erreurs inattendus du programme.
+
+À partir du JDK 25, `javac` insère une vérification de la valeur non `null` supplémentaire sur l’instance qui l’englobe immédiatement dans le corps du constructeur de la classe interne. 
+Par conséquent, il n’y a aucun moyen d’instancier une classe interne avec `null` comme instance immédiatement englobante.
+
+Dans le cas rare où il est nécessaire d’exécuter du code hérité qui passe `null` en tant qu’instance immédiatement englobante, il possible d’utiliser, à ses risques et périls, er l’option non prise en charge `-XDnullCheckOuterThis=false`. 
+Cela empêche `javac` d’insérer la vérification de valeur non `null` supplémentaire dans les corps des constructeurs de la classe interne.
+
+=== La navigation au clavier dans la Javadoc (https://bugs.openjdk.org/browse/JDK-8350638[JDK-8350638])
+
+La documentation API générée par l’outil `javadoc` ne définit plus le focus du clavier sur le champ de saisie de recherche lors du chargement de la page.
+
+Au lieu de cela, il fournit des raccourcis clavier pour gérer le focus du clavier :
+
+* la touche `/` permet de mettre le focus sur l’entrée de recherche,
+* la touche `.` permet de mettre le focus sur l’entrée du filtre dans la barre latérale,
+* et la touche `Échap` permet de libérer le focus de l’un ou l’autre des champs de saisie.
+
+De plus, le contenu de la barre latérale et de la page de recherche peut désormais être parcouru à l’aide de la touche `Tab` et des touches fléchées.
+
+=== La coloration syntaxique pour les fragments de code dans la Javadoc (https://bugs.openjdk.org/browse/JDK-8348282[JDK-8348282])
+
+L’outil `javaDoc` propose une nouvelle option `--syntax-highlight` pour activer la coloration syntaxique dans les balises `\{@snippet}` et les éléments HTML `<pre>`.
+
+.Le fichier DemoJavaDocSyntaxHighlight.java
+[source,java]
+----
+/**
+ * Classe de demonstration de la syntaxe des commentaires JavaDoc avec exemple de code
+ * et coloration syntaxique.
+ * <pre>{@code
+ *   // un commentaire Java simple
+ *   for (int i = 0; i < 10; i++) {
+ *     System.out.println("Hello World");
+ *   }
+ * }</pre>
+ */
+public class DemoJavaDocSyntaxHighlight {
+}
+----
+
+La Javadoc peut être générée avec la coloration syntaxique du code :
+
+[source,plain]
+----
+C:\java>javadoc -d .\docs -sourcepath . --syntax-highlight DemoJavaDocSyntaxHighlight.java
+----
+
+image::2025/nouveautes-java-25-partie2/nouveautes-java-25-partie2-01.png[Exemple de code avec coloration syntaxique la Javadoc générée,width=100%]
+
+L’option ne prend aucun argument et ajoute la bibliothèque `Highlight.js` à la documentation générée dans une configuration qui prend en charge les fragments de code Java, Properties, JSON, HTML et XML.
+
+=== Les superclasses des packages exportés sous condition dans la Javadoc sont masquées (https://bugs.openjdk.org/browse/JDK-8254622[JDK-8254622])
+
+JavaDoc traite désormais les classes et les interfaces des packages qui ne sont pas exportés ou exportés avec un export qualifié comme cachées, à moins qu’elles ne soient explicitement incluses dans la documentation.
+
+Ces classes et interfaces n’apparaissent pas dans la documentation générée, même si elles sont étendues ou implémentées par un type documenté. D’autres instances de types cachés sont les types `private` ou `package-private`, ou les types marqués avec le tag `@hidden` de JavaDoc.
+
+=== La normalisation des espaces dans les commentaires de documentation traditionnelle (https://bugs.openjdk.org/browse/JDK-8352249[JDK-8352249])
+
+JavaDoc supprime désormais l’indentation accessoire dès le début des lignes dans les commentaires de documentation traditionnels, comme il le fait déjà dans les commentaires de documentation en Markdown. 
+Cela permet d’éviter les caractères d’espacement involontaires dans les exemples de code préformatés avec le tag HTML `<pre>` en préservant l’indentation relative des lignes.
+
+=== `jpackage` n'inclut plus les liaisons de service par défaut pour les images de runtime générées (https://bugs.openjdk.org/browse/JDK-8345185[JDK-8345185])
+
+Avant le JDK 25, `jpackage` incluait des liaisons de service pour les images de runtime.
+
+À partir du JDK 25, `jpackage` n’inclut plus les liaisons de service pour une image de runtime qu’il crée. 
+Par conséquent, les images de runtime générées par `jpackage` peuvent ne pas inclure le même ensemble de modules que dans les versions précédentes.
+
+Le comportement précédent peut être obtenu en ajoutant l’option `--bind-services` aux options de `jlink` utilisées par `jpackage` :
+
+[source,plain]
+----
+jpackage [...] --jlink-options "--strip-native-commands --strip-debug --no-man-pages --no-header-files --bind-services"
+----
+
+== Les évolutions relatives à la sécurité
+
+Le JDK 25 propose des évolutions relatives à la sécurité.
+
+=== JEP 510 : Key Derivation Function API
+
+Le but est d’introduire une API pour les fonctions de dérivation de clé, en anglais Key Derivation Function (KDF), qui font parties du standard PKCS # 11.
+
+Les algorithmes cryptographiques permettent de dériver des clés à partir d’une clé secrète et d’autres données via la nouvelle classe `javax.crypto.KDF` avec un support de l’algorithme HKDF.
+
+Elle a été introduite en preview dans le JDK 24 via la https://openjdk.org/jeps/478[JEP 478].
+
+Elle est proposée en standard dans le JDK 25 via la JEP https://openjdk.org/jeps/510[JEP 510], sans changement.
+
+.Le fichier DemoJEP510.java
+[source,java]
+----
+void main() throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
+    KDF hkdf = KDF.getInstance("HKDF-SHA256");
+  
+    AlgorithmParameterSpec params = HKDFParameterSpec.ofExtract()
+            .addIKM("phrase secrète".getBytes(StandardCharsets.UTF_8)) // byte[] ou SecretKey
+            .addSalt("mon salt".getBytes(StandardCharsets.UTF_8)) // byte[] ou SecretKey
+            .thenExpand("ma clé".getBytes(StandardCharsets.UTF_8), 32); // byte[] peut etre null
+  
+    // dérive une clé AES sur 32 octets
+    SecretKey key = hkdf.deriveKey("AES", params);
+  
+    System.out.println("key  	= " + HexFormat.of().formatHex(key.getEncoded()));
+  }
+
+----
+
+Le résultat de l’exécution de la classe :
+
+[source,plain]
+----
+C:\java>java DemoJEP510.java
+key = e087bd361e13e35ad0532462db039eb1689491027127dad4e3ced04b680231a6
+----
+
+=== JEP 470 : PEM Encodings of Cryptographic Objects (Preview)
+
+Le but de la https://openjdk.org/jeps/470[JEP 470] est d’introduire en preview une API facile à utiliser pour l’encodage d’objets qui représentent des clés cryptographiques, des certificats et des listes de révocation de certificats dans le format de transport PEM (Privacy-Enhanced Mail) largement utilisé, et pour le décodage de ce format en objets.
+
+Les formats standards utilisés sont :
+
+* PKCS#8 pour les clés privées,
+* X.509 pour les clés publiques, les certificats et les listes de révocation de certificats
+* PKCS#8 v2.0 pour les clés privées chiffrées et les clés asymétriques
+
+PEM est un format textuel pour les données binaires. 
+Un texte PEM contient une représentation en Base64 de la représentation binaire d’objet cryptographique : par exemple pour une clé publique, elle est entourée d’un en-tête contenant `BEGIN PUBLIC KEY` et d’un pied contenant `END PUBLIC KEY`.
+
+L’API proposés contient notamment :
+
+* L’interface scellée `DEREncodable` pour représenter des objets cryptographiques du JDK (clés ou certificats) encodables en binaire
+* La classe `PEMEncoder` pour encoder des objets cryptographiques au format PEM
+* La classe `PEMDecoder` pour décoder le format PEM vers des objets Java
+* La classe `PEMRecord` pour encoder et décoder des textes PEM représentant des objets cryptographiques pour lesquels il n'existe aucune API dans le JDK
+
+Exemple :
+
+Le fichier DemoJEP470PEMClePrivee.java
+.Le fichier .java
+[source,java]
+----
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PEMDecoder;
+import java.security.PrivateKey;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.PEMEncoder; 
+
+// Nécessite le flag --enable-preview à la compilation et à l'exécution avec un JDK 25
+public class DemoJEP470PEMClePrivee {
+    private static final String NOM_FICHIER_PEM = "cle-privee.pem";
+
+    public static void main(String[] args) throws Exception {
+        PrivateKey privateKey = encoderClePrivee();
+        decoderClePrivee(privateKey);
+    }
+
+    private static void decoderClePrivee(PrivateKey clePriveeOriginale) throws IOException {
+        PEMDecoder decoder = PEMDecoder.of();
+
+        // Lire la clé privée depuis le fichier PEM
+        String contenuDuFichierString = Files.readString(Path.of(NOM_FICHIER_PEM));
+
+        // Décoder la clé privée
+        PrivateKey clePriveeDuPEM = decoder.decode(contenuDuFichierString, PrivateKey.class);
+        
+        System.out.println("Clé privée lue depuis le fichier PEM : " + clePriveeDuPEM);
+        System.out.println("Clé privée originale : " + clePriveeOriginale);
+        System.out.println("Les clés sont égales : " + clePriveeOriginale.equals(clePriveeDuPEM) );
+        System.out.println("Les clés sont identiques : " + (clePriveeOriginale == clePriveeDuPEM));
+    }
+
+    private static PrivateKey encoderClePrivee() throws NoSuchAlgorithmException, IOException {
+        // Générer une paire de clés RSA
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+        keyGen.initialize(2048);
+        KeyPair keyPair = keyGen.generateKeyPair();
+        PrivateKey privateKey = keyPair.getPrivate();
+
+        // Encoder la clé privée au format PEM
+        String pem = PEMEncoder.of().encodeToString(privateKey);
+
+        // Enregistrer dans un fichier
+        Files.writeString(Path.of(NOM_FICHIER_PEM), pem);
+        return privateKey;
+    }
+}
+----
+
+Résultat de l’exécution
+
+[source,plain]
+----
+C:\java>java --enable-preview DemoJEP470PEMClePrivee.java
+Clé privée lue depuis le fichier PEM : sun.security.rsa.RSAPrivateCrtKeyImpl@869cafd2
+Clé privée originale : sun.security.rsa.RSAPrivateCrtKeyImpl@869cafd2
+Les clés sont égales : true
+Les clés sont identiques : false
+
+C:\java>type cle-privee.pem
+-----BEGIN PRIVATE KEY-----
+MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQD2E5LlCt6zMWH9
+EyW1BAep4SsQlQ3TQqIu9lQPVDrFu8s9CWTkeA8g7rAazyO/Ouru8I7bRs32sbY4
+ZEqnEySMZRo0/mnYUzYvK+Ral4nQLh5DhRF7UBmrDmxipwTOITDozLiZIFZXoi0X
+yVZh72m4a+HtRjOTQD3/3SSQ60A1JoV78Gf23Eu4zL1ZycLhvc5LJu15mcI/AJfE
+FP2L10HCShV0/HOA9Df8mURyL+AjSead2C0zf0lIZPZYq/ctscjzQOodFCGhzh9W
+pSB8fd8yvk7INxDuelicQikkZVUWbJ+mPexjlGlbO/KsRE5BZvX5lcIWwEbqkiPu
+BVV3yu1lAgMBAAECggEAD3VZVAQjy1P92N0cEEwJgzV+9BK5BJ15/MNCspfS/Vr3
+wITXjrawFJyJ+ZUrpLa5zXrVLpc7FxVA4jgCrI46TIuJYuzcj1di3wG93acJZEeR
+ZSJ1364/foxwaJ4fYieZn/ZEXnI2mli4xnbCc3KLzKcSUUqIsOZnPqyQwH3W0b/T
+N5Nq448F4sQE/39AAupggEIBzI3h5TomRiP0IQSNjVl+NHJCpduA/kO+NzR5AJOz
+eq8w1cpjSLvENImj09dT+XszRoQX8qSDAVRdSCW3czAz1AcViPUBCY16Y0qF6Eor
+mmguHcPxWhlDTu+iNxttTCHzEoMnaV88oti0L/XeIQKBgQD4UKc3wxosJvujUzJ8
+Bum04Retd0//lne3xLahPm9s4sC4yJYxsEezEmIJSK5BPUqOHHzFI7W6dezp8NsZ
+IorIUXBgoAfOKlmCNvS3HTtDraAF6V/gay3J3+Ku4ZGvJE2WiPKz3x+mQsq/F1sq
+l1T5AY7CKvNP/aVvZcDVQZAG+QKBgQD9sS9KwUnGajaYmDQwxSpRli03xCBxsQz6
+l9KfZcznGSz9CuLM2FAQpoROUTKDaUfIiCfDiAgrcvSZ6Tl+4FytInTlqJ092A54
+0eCgTvgD3a+Z4NX5G1xaGI491dQiIh7LJWQPixsW6cSfk/tJbKhRMIjiK3XKjr3x
+xo1QGr4YzQKBgQCCs/FQqKFeHCbYETLBleHuE40jAWpaXhkl4aU/ul1sMu6+VNa5
+0M/ssgBoYplWPazAoL4MBn/hZbEOcnjhAg2K41MDiTiSjDgRElw9BmXrebiBZBXT
+SpcPa4kmBBVq2vD8C5m0k/1UxlNxwhl6ka1oZCmAipsHv7sUp7qYhaoKAQKBgQC7
+Ar1g9wFicXOTo0d92CotAG6O2FYuWRy/MeICvLGCfi2Kz1aHOMI0s/t+HB8Hfjl7
+WtstKX8UQGaNer52h//pZSgVD+nx5+4rJFPY+L2dY/MJlRNG0eOPSuC4NoNtMgfP
+Kt4LEzlB98uI8zZfVujxCL0vNGhdjEH7E6miLkSJ1QKBgQCpKh03RNqgcWwFwRtz
+F1zUWgMJAFkAvP3kSbom3NqTlgeR/B1gXuFlOG331E9fLyGHESFtwg8BsuAdFEfc
+t7hlmKRNdsY8uSPHFHktxqQ19B5ObcqPk4PNdCsOaTBpG+WWFr2mRwsOrXN0LBl7
+nEqypfOiEIB+CfADh2aIiD7aGw==
+-----END PRIVATE KEY-----
+----
+
+Pour une clé privée, il est possible et recommandé de la chiffrer en utilisant la méthode `PEMEncoder::withEncryption` et de déchiffrer avec `PEMDecoder::withDecryption` qui attendent en paramètre le mot de passe à utiliser.
+
+La méthode `PEMDEcoder::withFactory` retourne une copie de l’instance de `PEMDecoder` qui utilise les implémentations `KeyFactory` et `CertificateFactory` du `Provider` fourni en paramètre pour produire les objets cryptographiques.
+
+=== Les autres évolutions relatives à la sécurité
+
+Le JDK 25 propose aussi plusieurs autres évolutions relatives la sécurité :
+
+* des mises à jour de certificats racines dans le truststore cacerts
+* diverses évolutions qui ne sont pas proposées au travers de JEPs
+
+==== Le mécanisme de désactivation des schémas de signature en fonction de leur utilisation dans TLS (https://bugs.openjdk.org/browse/JDK-8349583[JDK-8349583])
+
+Les contraintes d’utilisation spécifiques au protocole TLS sont désormais prises en charge par la propriété `jdk.tls.disabledAlgorithms` dans le fichier de configuration `java.security`, comme suit :
+
+[source,plain]
+----
+UsageConstraint:
+usage UsageType { UsageType }
+UsageType:
+HandshakeSignature | CertificateSignature
+----
+
+`HandshakeSignature` restreint l’utilisation de l’algorithme dans les signatures de négociation TLS. 
+`CertificateSignature` restreint l’utilisation de l’algorithme dans les signatures de certificat. 
+Un algorithme avec cette contrainte ne peut pas inclure d’autres types d’utilisation définis dans la propriété `jdk.certpath.disabledAlgorithms`. 
+Le type d’utilisation suit le mot-clé et plusieurs types d’utilisation peuvent être spécifiés à l’aide d’un caractère d’espacement comme délimiteur.
+
+Exemple
+
+[source,plain]
+----
+jdk.tls.disabledAlgorithms=SSLv3, TLSv1, TLSv1.1, DTLSv1.0, RC4, DES, \
+    MD5withRSA, DH keySize < 1024, EC keySize < 224, 3DES_EDE_CBC, anon, NULL, \
+    ECDH, TLS_RSA_*, rsa_pkcs1_sha1 usage HandshakeSignature, \
+    ecdsa_sha1 usage HandshakeSignature, dsa_sha1 usage HandshakeSignature
+----
+
+==== L’ajout d’informations fournies par la propriété `java.security.debug` (https://bugs.openjdk.org/browse/JDK-8350689[JDK-8350689])
+
+La sortie de débogage de la propriété système `java.security.debug` inclut désormais l’ID du thread, les informations sur l’appelant et les informations d’horodatage selon le format :
+
+`componentValue[threadId|threadName|sourceCodeLocation|timestamp]: <debug statement>`
+
+où:
+
+* `componentValue` est la valeur du composant de sécurité
+* `threadId` est la valeur hexadécimale de l’ID du thread
+* `threadName` est le nom du thread qui exécute le code
+* `sourceCodeLocation` est le fichier source et le numéro de ligne qui journalise, au format « `filename:lineNumber` »
+* `timestamp` est la date et l’heure au format «`yyyy-MM-dd kk:mm:ss.SSS`»
+* `<debug statement>` correspond à la sortie de débogage du composant de sécurité.
+
+Les options `+thread` et `+timestamp` introduites dans JDK 23 n’auront plus d’impact et seront donc ignorées.
+
+==== L’ajout du support pour les Keying Material Exporters pour TLS aux fournisseurs JSSE et SunJSSE (https://bugs.openjdk.org/browse/JDK-8341346[JDK-8341346])
+
+Cette amélioration ajoute la prise en charge des exportateurs de clés (Keying Material Exporters) pour TLS, qui permettent aux applications de générer des éléments de clé supplémentaires au niveau de l’application à partir des clés TLS négociées par une connexion.
+
+Elle permet la prise en charge de plusieurs protocoles supplémentaires, y compris les étiquettes enregistrées dans le document https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#exporter-labels[IANA TLS Parameters-Exporter Label].
+
+Cette fonctionnalité est décrite dans la https://www.rfc-editor.org/rfc/rfc5705.html[RFC 5705] pour TLSv1-TLSv1.2 et la https://www.rfc-editor.org/rfc/rfc8446.html[RFC 8446] pour TLSv1.3. 
+La fonctionnalité est accessible via deux nouvelles méthodes dans la classe `javax.net.ssl.ExtendedSSLSession` :
+
+* `public SecretKey exportKeyingMaterialKey(String keyAlg, String label, byte[] context, int length) throws SSLKeyException`
+* `public byte[] exportKeyingMaterialData(String label, byte[] context, int length) throws SSLKeyException`
+
+==== L’ajout des algorithmes de type MessageDigest SHAKE128-256 et SHAKE256-512 (https://bugs.openjdk.org/browse/JDK-8354305[JDK-8354305])
+
+Deux nouveaux algorithmes de type MessageDigest, SHAKE128-256 et SHAKE256-512, ont été ajoutés dans le fournisseur SUN. 
+Il s’agit de versions de longueur fixe des fonctions SHAKE128 et SHAKE256 Extendable-Output (XOF) définies dans la norme NIST FIPS 202.
+
+==== La prise en charge de HKDF dans SunPKCS11 (https://bugs.openjdk.org/browse/JDK-8328119[JDK-8328119])
+
+Le fournisseur de sécurité SunPKCS11 prend désormais en charge les algorithmes suivants pour la nouvelle API de fonction de dérivation de clé : HKDF-SHA256, HKDF-SHA384 et HKDF-SHA512.
+
+==== La mise à jour de XML Security for Java vers 3.0.5 (https://bugs.openjdk.org/browse/JDK-8344137[JDK-8344137])
+
+L’implémentation Santuario d’Apache XML Security for Java library a été mise à jour vers la version 3.0.5.
+
+La prise en charge de quatre nouveaux algorithmes ECDSA basés sur SHA-3 a été ajoutée :
+
+* `SignatureMethod.ECDSA_SHA3_224`,
+* `SignatureMethod.ECDSA_SHA3_256`,
+* `SignatureMethod.ECDSA_SHA3_384`,
+* et `SignatureMethod.ECDSA_SHA3_512`.
+
+==== La classe `JarInputStream` traite les fichiers JAR signés avec plusieurs `MANIFEST.MF` comme non signés (JDK-8337494 (non publique))
+
+La classe `JarInputStream` traite désormais un fichier JAR signé comme non signé si elle détecte un deuxième fichier manifest dans les deux premières entrées du fichier JAR.
+
+Un message d’avertissement « WARNING: Multiple MANIFEST.MF found. Treat JAR file as unsigned. » est journalisé si la propriété système `-Djava.security.debug=jar` est définie.
+
+== Conclusion
+
+Java poursuit son évolution avec ce JDK 25 qui propose beaucoup de nouveautés et d’améliorations qui vont permettre à Java de rester pertinent aujourd’hui et demain.
+
+Cette version 25 est une version LTS du JDK, donc une cible pour les entreprises dans un futur plus ou moins proche.
+
+Toutes les évolutions proposées dans le JDK 25 sont détaillées dans les https://www.oracle.com/java/technologies/javase/25-relnote-issues.html[releases notes].
+
+N’hésitez donc pas à télécharger une distribution du JDK 25 auprès d’un fournisseur pour tester les fonctionnalités détaillées dans les deux articles de cette série.
+
+&nbsp;
