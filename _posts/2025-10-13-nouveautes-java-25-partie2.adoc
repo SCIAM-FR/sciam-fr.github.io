@@ -845,13 +845,13 @@ L’option ne prend aucun argument et ajoute la bibliothèque `Highlight.js` à 
 
 === Les superclasses des packages exportés sous condition dans la Javadoc sont masquées (https://bugs.openjdk.org/browse/JDK-8254622[JDK-8254622])
 
-JavaDoc traite désormais les classes et les interfaces des packages qui ne sont pas exportés ou exportés avec un export qualifié comme cachées, à moins qu’elles ne soient explicitement incluses dans la documentation.
+L'outil `javadoc` traite désormais les classes et les interfaces des packages qui ne sont pas exportés ou exportés avec un export qualifié comme cachées, à moins qu’elles ne soient explicitement incluses dans la documentation.
 
 Ces classes et interfaces n’apparaissent pas dans la documentation générée, même si elles sont étendues ou implémentées par un type documenté. D’autres instances de types cachés sont les types `private` ou `package-private`, ou les types marqués avec le tag `@hidden` de JavaDoc.
 
 === La normalisation des espaces dans les commentaires de documentation traditionnelle (https://bugs.openjdk.org/browse/JDK-8352249[JDK-8352249])
 
-JavaDoc supprime désormais l’indentation accessoire dès le début des lignes dans les commentaires de documentation traditionnels, comme il le fait déjà dans les commentaires de documentation en Markdown. 
+L'outil `javadoc` supprime désormais l’indentation accessoire dès le début des lignes dans les commentaires de documentation traditionnels, comme il le fait déjà dans les commentaires de documentation en Markdown. 
 Cela permet d’éviter les caractères d’espacement involontaires dans les exemples de code préformatés avec le tag HTML `<pre>` en préservant l’indentation relative des lignes.
 
 === `jpackage` n'inclut plus les liaisons de service par défaut pour les images de runtime générées (https://bugs.openjdk.org/browse/JDK-8345185[JDK-8345185])
