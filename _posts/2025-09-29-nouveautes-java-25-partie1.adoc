@@ -963,12 +963,12 @@ La prise en charge de la résolution des chemins UNC existants non locaux sous W
 
 Java 25 succède en tant que version LTS à Java 21 : elle est donc une cible pour les entreprises dans un futur plus ou moins proche.
 
-Le JDK 25 introduit :
+Le JDK 25 introduit :
 
 * 8 nouvelles fonctionnalités dont 5 en standard, 2 en preview et 1 en expérimental,
 * 7 fonctionnalités sont promues en standard,
 * 3 fonctionnalités restent en preview ou en incubation avec ou sans évolutions.
 
 Cette première partie est consacrée aux évolutions dans la syntaxe et les API. 
-La seconde partie est consacrée aux autres fonctionnalités et évolutions dans le JDK 25.
+La link:{% post_url 2025-10-13-nouveautes-java-25-partie2 %}[seconde partie^] est consacrée aux autres fonctionnalités et évolutions dans le JDK 25.
 
