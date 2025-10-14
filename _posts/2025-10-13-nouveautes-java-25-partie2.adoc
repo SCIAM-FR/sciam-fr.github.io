@@ -27,7 +27,7 @@ Sous Linux, l’option `-Djdk.lang.Process.launchMechanism=VFORK` a été dépr�
 Elle sera supprimée dans une prochaine version.
 
 Il est conseillé d’éviter d’utiliser cette propriété. 
-Si possible, ils devraient la supprimer et utiliser le mécanisme de lancement par défaut basé sur posix_spawn. 
+Si possible, il faut la supprimer et utiliser le mécanisme de lancement par défaut basé sur posix_spawn. 
 
 Au cas où ce n’est pas possible, il faudrait utiliser `-Djdk.lang.Process.launchMechanism=FORK` à la place.
 
