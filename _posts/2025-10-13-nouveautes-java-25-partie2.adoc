@@ -1,6 +1,7 @@
 = Les nouveautés de Java 25 - partie 2
 :showtitle:
-:page-navtitle: Les nouveautés de Java 25 : partie 1
+:page-navtitle: Les nouveautés de Java 25 : partie 2
+
 :page-excerpt: Ce second article sur les nouveautés de Java 25 est consacré aux autres améliorations, que ce soit les évolutions dans les outils, les API et dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
 :layout: post
 :page-tags: [Java, Java 25, Projet Amber, Projet Panama, Projet Loom, Projet Leyden]
@@ -21,7 +22,8 @@ Plusieurs fonctionnalités sont dépréciées dans le JDK 25.
 
 === Le mécanisme de lancement VFORK sous Linux (https://bugs.openjdk.org/browse/JDK-8357179[JDK-8357179])
 
-Sous Linux, l’option `-Djdk.lang.Process.launchMechanism=VFORK` a été dépréciée car elle était intrinsèquement dangereuse. 
+Sous Linux, l’option `-Djdk.lang.Process.launchMechanism=VFORK` a été dépréciée car, elle était intrinsèquement dangereuse. 
+
 Elle sera supprimée dans une prochaine version.
 
 Il est conseillé d’éviter d’utiliser cette propriété. 
@@ -70,8 +72,9 @@ Dans les rares cas où une application doit charger plus que cela, l’espace de
 
 L’option `UseCompressedClassPointers` est dépréciée dans le JDK 25 et sera supprimée dans une future version de Java :
 
-* Si une application utilise l’option `-XX:+UseCompressedClassPointers`, il faut la supprimer car l’activation des pointeurs de classe compressés est la valeur par défaut.
-* Si une application utilise l’option `-XX:-UseCompressedClassPointers`, il faut la supprimer car elle continuera simplement à fonctionner. 
+* Si une application utilise l’option `-XX:+UseCompressedClassPointers`, il faut la supprimer, car l’activation des pointeurs de classe compressés est la valeur par défaut.
+* Si une application utilise l’option `-XX:-UseCompressedClassPointers`, il faut la supprimer, car elle continuera simplement à fonctionner. 
+
 Si l’application épuise l’espace de classe, il faut investiguer les causes si cette situation est pathologique (fuite de class loader) ou sinon il faut augmenter l’espace de classe en utilisant l’option `-XX:CompressedClassSpaceSize`.
 
 === Différentes classes d'autorisation sont dépréciées pour suppression (https://bugs.openjdk.org/browse/JDK-8348967[JDK-8348967], https://bugs.openjdk.org/browse/JDK-8353641[JDK-8353641], https://bugs.openjdk.org/browse/JDK-8353642[JDK-8353642], https://bugs.openjdk.org/browse/JDK-8353856[JDK-8353856], https://bugs.openjdk.org/browse/JDK-8347985[JDK-8347985], https://bugs.openjdk.org/browse/JDK-8351224[JDK-8351224], https://bugs.openjdk.org/browse/JDK-8351310[JDK-8351310])
@@ -181,7 +184,7 @@ où [MD] est l'un des algorithmes SHA1, SHA224, SHA256, SHA384 et SHA512.
 
 Cependant, les objets Key produits par ces implémentations utilisent les valeurs dérivées de PBKDF2 comme encodages de clés. 
 Ceci est différent de ses homologues SunJCE qui utilisent les octets de mot de passe comme encodages de clé. 
-Ces différences peuvent être très déroutantes et peuvent causer des problèmes d’interopérabilité car les deux clés ont le même algorithme et le même format, mais des encodages différents.
+Ces différences peuvent être très déroutantes et peuvent causer des problèmes d’interopérabilité, car les deux clés ont le même algorithme et le même format, mais des encodages différents.
 
 Ainsi dans le JDK 25, par souci de cohérence, ces implémentations `SecretKeyFactory` basées sur un mot de passe SunPKCS11 ont été supprimées.
 
@@ -419,7 +422,8 @@ En plus d’une méthode, un filtre peut nommer une classe, auquel cas toutes le
 
 Un filtre peut également concerner une annotation. Cela fait que toutes les méthodes annotées avec l’annotation, et toutes les méthodes de toutes les classes annotées avec l’annotation, sont chronométrées ou tracées.
 
-Par exemple, pour voir le nombre de fois qu’un endpoint REST invoqué via le verbe `GET` et développé avec JAX-RS est appelé et mesurer le temps d’exécution :
+Par exemple, pour voir le nombre de fois qu’un endpoint REST invoqué via le verbe `GET` et développé avec JAX-RS est appelé, et mesurer le temps d’exécution :
+
 
 [source,plain]
 ----
@@ -519,7 +523,8 @@ Par conséquent, le flag de diagnostic `GCLockerRetryAllocationCount` a été su
 
 ==== Le bytecode fourni avec `ClassFileLoadHook` de JVMTI sont vérifiés (https://bugs.openjdk.org/browse/JDK-8351654[JDK-8351654])
 
-Lors de la fourniture d’une classe avec `ClassFileLoadHook` de JVMTI, les nouveaux bytecodes sont vérifiés avec Class File Verifier, même s’ils sont fournis sur le bootclass path, et quel que soit la valeur de l’option obsolète `-Xverify`.
+Lors de la fourniture d’une classe avec `ClassFileLoadHook` de JVMTI, les nouveaux bytecodes sont vérifiés avec Class File Verifier, même s’ils sont fournis sur le bootclass path, et quelle que soit la valeur de l’option obsolète `-Xverify`.
+
 
 == Les évolutions dans les outils du JDK
 
@@ -670,7 +675,8 @@ public class DemoLambdaClasse {
 }
 ----
 
-Ce code compile avec le JDK 24 mais une exception est levée à l’exécution puisque le type de la Lambda n’est pas une interface fonctionnelle.
+Ce code compile avec le JDK 24, mais une exception est levée à l’exécution puisque le type de la Lambda n’est pas une interface fonctionnelle.
+
 
 [source,plain]
 ----
