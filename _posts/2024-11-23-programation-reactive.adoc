@@ -89,6 +89,26 @@ Les principales interfaces de Reactive Streams sont{nbsp}:
 
 * `Processor<T, R>` : combine les fonctionnalités d'un 'Publisher' et d'un 'Subscriber'. Un 'Processor' reçoit des éléments, les traite, et les renvoie sous forme d'un autre flux. 
 
+L’approche réactive au-delà de Spring{nbsp}:
+
+La programmation réactive ne se limite pas à l’écosystème Spring.
+C’est un paradigme transversal, adopté dans plusieurs langages et frameworks modernes qui partagent les mêmes objectifs : l’asynchronisme, la non-blocage, et l’efficacité dans la gestion des ressources.
+Ainsi, des environnements comme JavaScript, Quarkus et Vert.x ont également adopté ces concepts.
+
+En JavaScript : l’approche RxJS
+
+JavaScript a été historiquement conçu autour d’un modèle asynchrone grâce à sa boucle d’événements (event loop).
+Cependant, les promesses (Promises) ne suffisent pas toujours pour traiter des flux continus de données (clics, WebSocket, streaming HTTP…).
+C’est pourquoi la bibliothèque RxJS (Reactive Extensions for JavaScript) a été créée, en s’inspirant du modèle ReactiveX déjà utilisé côté Java avec RxJava.
+
+En Java : Quarkus et Vert.x, alternatives réactives à Spring WebFlux
+
+Dans le monde Java, il existe plusieurs façons de faire de la programmation réactive, et Quarkus ou Vert.x sont deux excellentes alternatives à Spring WebFlux.
+
+Vert.x est une boîte à outils conçue pour créer des applications rapides et non bloquantes. Elle fonctionne un peu comme Node.js, en utilisant une boucle d’événements pour traiter les requêtes sans attendre qu’une opération se termine avant de passer à la suivante. Grâce à cela, Vert.x peut gérer des milliers de connexions en même temps avec très peu de ressources, ce qui le rend idéal pour les microservices, les API ou les applications temps réel.
+
+Quarkus, quant à lui, s’appuie sur Vert.x mais apporte une couche de simplification. Il introduit une API appelée Mutiny, qui rend le code réactif plus lisible et plus facile à écrire, avec deux types principaux : Uni pour les résultats uniques et Multi pour les flux de données multiples. En plus d’être réactif, Quarkus est conçu pour le cloud et les applications natives avec GraalVM, ce qui lui permet de démarrer très vite et de consommer peu de mémoire.
+
 == Le Project Reactor : 
 
 Reactor est une bibliothèque réactive pour Java développée par Pivotal (maintenant Broadcom) et intégrée dans l'écosystème Spring. Elle fournit une implémentation de Reactive Streams et permet de 
@@ -173,6 +193,8 @@ Nous allons utiliser un contrôleur contient deux méthodes :
 
 Si un client appelle l'API /numbers, il recevra chaque nombre (de 1 à 10) avec un intervalle de 100 millisecondes entre eux.
  
+si un erreur se produit le flux s'arreete imediatement et le reste d'information ne serons pas retourner et un erreur HTTP 500 (Internal Server Error) sera renvoyer par spring webFlux. 
+
 [source,java]
 ----
 
@@ -240,8 +262,22 @@ arrivée. Ce code est adapté au traitement de grandes quantités de données de
     });
 ----
 
-== Conclusion: 
+== Conclusion
 
-Spring Reactor propulse le développement d'applications modernes vers de nouveaux sommets en leur conférant réactivité, performance et résilience. En s'alignant 
-sur le Reactive Manifesto, cette technologie ouvre la voie à des systèmes distribués agiles et efficaces. Toutefois, son adoption implique une courbe d'apprentissage 
-plus prononcée, en particulier pour comprendre les concepts de la programmation réactive.
+J’ai eu l’occasion de travailler avec Reactor, la bibliothèque réactive utilisée dans Spring WebFlux, et je souhaite partager mon retour d’expérience.
+
+Dans certaines situations, Reactor est vraiment puissant et pratique. Il permet de gérer des flux de données asynchrones très facilement, comme des appels HTTP, des requêtes à une base de données ou des événements utilisateurs, sans bloquer le thread principal. Les types Mono (pour 0 ou 1 élément) et Flux (pour 0 à N éléments) rendent la composition des opérations fluide et lisible grâce à des méthodes comme map, flatMap ou filter.
+
+Cependant, dans l’environnement Java, nous avons parfois rencontré des difficultés ou des questions. Par exemple :
+
+Comprendre comment enchaîner correctement les flux pour éviter des comportements inattendus,
+
+Gérer le backpressure lorsque les producteurs sont plus rapides que les consommateurs,
+
+Traiter les erreurs asynchrones de manière cohérente.
+
+En résumé, Reactor offre une approche moderne et efficace pour construire des applications réactives et scalables en Java, mais elle nécessite une bonne compréhension des flux et de leurs mécanismes. Une fois ces concepts maîtrisés, elle devient un outil très puissant pour créer des applications performantes et non bloquantes.
+
+
+
+
