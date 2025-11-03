@@ -69,8 +69,6 @@ réseau, et d'autres opérations asynchrones dans des applications interactives.
  de données asynchrones, en définissant un ensemble minimal d'interfaces pour garantir une gestion cohérente et efficace des flux de données
   entre différentes bibliothèques réactives dans l'écosystème JVM. Les implémentations connues sont Akka, Reactor, Vert.x et RxJAVA2.
 
-Dans cet article, on va s'intéresser à Reactor qui est une implémentation de Reactive streams. 
-
 Les objectifs principaux de Reactive Streams sont{nbsp}: 
 
 * Asynchronisme : gérer les flux de données de manière non bloquante et asynchrone. 
@@ -108,6 +106,8 @@ Dans le monde Java, il existe plusieurs façons de faire de la programmation ré
 Vert.x est une boîte à outils conçue pour créer des applications rapides et non bloquantes. Elle fonctionne un peu comme Node.js, en utilisant une boucle d’événements pour traiter les requêtes sans attendre qu’une opération se termine avant de passer à la suivante. Grâce à cela, Vert.x peut gérer des milliers de connexions en même temps avec très peu de ressources, ce qui le rend idéal pour les microservices, les API ou les applications temps réel.
 
 Quarkus, quant à lui, s’appuie sur Vert.x mais apporte une couche de simplification. Il introduit une API appelée Mutiny, qui rend le code réactif plus lisible et plus facile à écrire, avec deux types principaux : Uni pour les résultats uniques et Multi pour les flux de données multiples. En plus d’être réactif, Quarkus est conçu pour le cloud et les applications natives avec GraalVM, ce qui lui permet de démarrer très vite et de consommer peu de mémoire.
+
+Dans cet article, on va s'intéresser à Reactor qui est une implémentation de Reactive streams. 
 
 == Le Project Reactor : 
 
