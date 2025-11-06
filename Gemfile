@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'jekyll'
+gem 'jekyll', '~> 4.3.0'
 #gem "github-pages", "~> 228", group: :jekyll_plugins
 # gem 'rake-jekyll'
 gem 'rake', '~> 13.0'
