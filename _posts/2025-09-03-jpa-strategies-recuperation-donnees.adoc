@@ -9,7 +9,7 @@
 :page-vignette-licence: 'Image générée par l'IA'
 :page-liquid:
 :showtitle:
-:page-categories: software
+:page-categories: software news
 
 Dans le contexte des applications JPA, le choix de la stratégie de chargement des associations est déterminant pour l'équilibre entre performance, lisibilité du code et évolutivité de l'application.
 Trois approches majeures se distinguent par leurs caractéristiques complémentaires : `JOIN FETCH` offre un contrôle explicite et direct des requêtes,

@@ -7,7 +7,7 @@
 :page-tags: [Java, Java 24, Projet Amber, Projet Panama, Projet Loom, Project Leyden, Projet Liliput]
 :page-vignette: 2025/java-24.png
 :page-liquid:
-:page-categories: software news
+:page-categories: software
 
 Le link:{% post_url 2025-04-29-nouveautes-java-24-partie1 %}[premier article^] de cette série a détaillé les fonctionnalités proposées dans la syntaxe et les API dans le JDK 24. Comme pour les précédentes versions de Java, cette version 24 inclut des JEPs, mais aussi, et surtout, des évolutions et des améliorations sur la fiabilité (corrections de nombreux bugs), la performance et la sécurité.
 

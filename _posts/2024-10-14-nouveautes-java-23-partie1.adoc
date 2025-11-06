@@ -7,7 +7,7 @@
 :page-tags: [Java, Java 23, Projet Amber, Projet Panama, Projet Loom]
 :page-vignette: java-23.png
 :page-liquid:
-:page-categories: software news
+:page-categories: software
 
 Ce premier article est consacré aux nouveautés de Java 23 et détaille les fonctionnalités proposées via des JEPs dans la syntaxe et les API notamment par les projets https://openjdk.org/projects/amber/[Amber], https://openjdk.org/projects/loom/[Loom] et https://openjdk.org/projects/panama/[Panama] d’OpenJDK.
 

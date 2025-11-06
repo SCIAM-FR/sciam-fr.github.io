@@ -9,7 +9,7 @@
 :page-vignette-licence: 'Image générée par l'IA'
 :page-liquid:
 :showtitle:
-:page-categories: software llm
+:page-categories: software llm news
 
 De nombreuses implémentations se contentent d'ajouter un modèle *LLM* comme une brique isolée, sans réelle intégration dans l’architecture logicielle globale. Pour surmonter ces limites, il est essentiel de traiter l'IA comme un *composant logiciel à part entière*. Cela implique d'appliquer les principes de *l'ingénierie logicielle* et d'utiliser des outils éprouvés comme les *design patterns* (ou patrons de conception).
 

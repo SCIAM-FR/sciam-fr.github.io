@@ -9,7 +9,7 @@
 :page-vignette-licence: 'Image générée par l'IA'
 :page-liquid:
 :showtitle:
-:page-categories: software llm news
+:page-categories: software llm
 
 Le Function Calling introduit une capacité clé pour les LLM link:{% post_url 2024-08-28-function-calling-llm-partie1 %}[(Partie 1)^], leur permettant d'interagir directement avec les données et les systèmes d'entreprise. 
 Grâce à cette fonctionnalité, les développeurs peuvent créer des applications plus interactives et fonctionnelles. 

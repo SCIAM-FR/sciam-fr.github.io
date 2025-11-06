@@ -7,7 +7,7 @@
 :page-tags: [Java, Java 23, Projet Amber, Projet Panama, Projet Loom]
 :page-vignette: java-23.png
 :page-liquid:
-:page-categories: software news
+:page-categories: software
 
 Le link:{% post_url 2024-10-14-nouveautes-java-23-partie1 %}[premier article^] de cette série a détaillé les fonctionnalités proposées via des JEPs relatives à la syntaxe et aux API dans le JDK 23. 
 

@@ -9,7 +9,7 @@
 :page-vignette: 2025/mandelbrot-full.png
 :page-liquid:
 :showtitle:
-:page-categories: software
+:page-categories: software news
 
 Nous vous proposons de faire un saut dans le futur de Java, plus particulièrement au travers d'améliorations que le projet Valhalla nous prépare.
 Nous en profiterons pour les mettre en pratique sur un exemple parlant : le calcul et la visualisation de l'ensemble de Mandelbrot.
