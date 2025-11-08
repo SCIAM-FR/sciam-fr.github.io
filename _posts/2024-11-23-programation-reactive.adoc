@@ -241,7 +241,7 @@ public class WebClientExample {
 Le backpressure est une composante essentielle dans les systèmes réactifs pour gérer le flux de données entre les producteurs et les consommateurs. 
 Avec Reactor, vous pouvez contrôler le backpressure via des opérateurs comme `limitRate`. 
 
-Exemple d'utilisation de `limitRate` pour réguler la consommation des données : 
+==== Exemple d'utilisation de `limitRate` pour réguler la consommation des données
 
 La methode `limitRate(5)` applique un mécanisme de contrôle du flux (backpressure) pour limiter la consommation à un maximum de 5 éléments à la fois. Enfin, 
 un abonné est attaché au flux avec `subscribe()`, qui affiche chaque élément reçu via un callback, permettant de traiter les données au fur et à mesure de leur
