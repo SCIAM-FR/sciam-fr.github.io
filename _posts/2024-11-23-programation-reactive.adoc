@@ -57,7 +57,7 @@ Les principes de la programmation réactive sont décrits dans le "Manifeste Ré
 
 * Message-Driven (Basé sur les Messages) : les systèmes réactifs communiquent par la transmission de messages asynchrones, facilitant la connexion et le découplage des composants.
 
-== Les bibliotheques de la programmation réactive
+== Les bibliothèques de la programmation réactive
 
 Les bibliotheques de la programmation réactive sont basés sur deux modèles qui ont été portées dans le JDK 9 avec l'API Flow 
 
