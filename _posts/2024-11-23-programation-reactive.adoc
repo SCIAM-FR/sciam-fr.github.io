@@ -193,7 +193,7 @@ Nous allons utiliser un contrôleur contient deux méthodes :
 
 Si un client appelle l'API /numbers, il recevra chaque nombre (de 1 à 10) avec un intervalle de 100 millisecondes entre eux.
  
-si un erreur se produit le flux s'arreete imediatement et le reste d'information ne serons pas retourner et un erreur HTTP 500 (Internal Server Error) sera renvoyer par spring webFlux. 
+Si une erreur se produit, le flux s'arrrête imediatement, l'infromation restante ne sera pas transmise et une erreur HTTP 500 (Internal Server Error) sera retrounée par spring webFlux. 
 
 [source,java]
 ----
