@@ -220,7 +220,7 @@ Nous allons initialiser un `WebClient` en invoquant la méthode `create("http://
 
 La méthode `get()` initie une requête HTTP de type `GET` et la méthode `uri("/api/data")` spécifie le chemin relatif de l'API.
 cible (ajouté à l'URL de base du `WebClient`). La méthode `retrieve()` exécute la requête et récupère la réponse pour être traitée. 
-Enfin, `bodyToMono(String.class)` extrait le corps de la réponse HTTP et le convertit en un objet de type Mono<String>,
+Enfin, `bodyToMono(String.class)` extrait le corps de la réponse HTTP et le convertit en un objet de type `Mono<String>`,
 permettant de manipuler la réponse asynchrone dans un pipeline réactif. Si la requête réussit, le contenu de la réponse sera 
 disponible sous forme de chaîne dans le `Mono`.
 
