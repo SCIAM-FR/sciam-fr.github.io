@@ -59,7 +59,7 @@ Les principes de la programmation réactive sont décrits dans le "Manifeste Ré
 
 == Les bibliothèques de la programmation réactive
 
-Les bibliotheques de la programmation réactive sont basés sur deux modèles qui ont été portées dans le JDK 9 avec l'API Flow 
+Les bibliothèques de la programmation réactive sont basées sur deux modèles qui ont été portés dans le JDK 9 avec l'API Flow 
 
 * ReactiveX : ReactiveX a été conçu pour fournir une API unifiée pour le traitement de collections asynchrones, en s'inspirant des méthodes 
 des collections synchrones (comme map, filter, reduce). Il est souvent utilisé pour gérer des événements utilisateur, des requêtes 
