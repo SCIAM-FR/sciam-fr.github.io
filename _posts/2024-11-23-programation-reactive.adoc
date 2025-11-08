@@ -218,7 +218,7 @@ si un erreur se produit le flux s'arreete imediatement et le reste d'information
 
 Nous allons initialiser un `WebClient` en invoquant la méthode `create("http://example.com")` en lui passant en paramètre l'URL de base `http://example.com`.
 
-La méthode `get()` initie une requête HTTP de type `GET` et la méthode `uri("/api/data")` spécifie le chemin relatif de l'API.
+La méthode `get()` initie une requête HTTP de type `GET` et la méthode `uri("/api/data")` spécifie le chemin relatif de l'API 
 cible (ajoutée à l'URL de base du `WebClient`). La méthode `retrieve()` exécute la requête et récupère la réponse pour être traitée. 
 Enfin, `bodyToMono(String.class)` extrait le corps de la réponse HTTP et le convertit en un objet de type `Mono<String>`,
 permettant de manipuler la réponse asynchrone dans un pipeline réactif. Si la requête réussit, le contenu de la réponse sera 
