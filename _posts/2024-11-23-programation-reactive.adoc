@@ -47,7 +47,11 @@ des ressources. Ils permettent de créer des applications qui sont plus réactiv
 
 == Les principes de la programmation réactive   
 
+<<<<<<< HEAD
 Les principes de la programmation réactive sont décrites dans le "Manifeste Réactif", qui énonce quatre caractéristiques clés{nbsp}:
+=======
+Les principes de la programmation réactive sont décrits dans le "Manifeste Réactif", qui énonce quatre caractéristiques clés{nbsp}:
+>>>>>>> 567d98653f943542fbfec098f46805d8f5ebe082
 
 * Responsive (Réactif) : les systèmes réactifs répondent rapidement aux utilisateurs pour garantir une expérience fluide et interactive.
 
@@ -57,9 +61,15 @@ Les principes de la programmation réactive sont décrites dans le "Manifeste R�
 
 * Message-Driven (Basé sur les Messages) : les systèmes réactifs communiquent par la transmission de messages asynchrones, facilitant la connexion et le découplage des composants.
 
+<<<<<<< HEAD
 == Les bibliotheques de la programmation réactive
 
 Les bibliotheques de la programmation réactive sont basés sur deux modèles qui ont été portées dans le JDK 9 avec l'API Flow 
+=======
+== Les bibliothèques de la programmation réactive
+
+Les bibliothèques de la programmation réactive sont basées sur deux modèles qui ont été portés dans le JDK 9 avec l'API Flow 
+>>>>>>> 567d98653f943542fbfec098f46805d8f5ebe082
 
 * ReactiveX : ReactiveX a été conçu pour fournir une API unifiée pour le traitement de collections asynchrones, en s'inspirant des méthodes 
 des collections synchrones (comme map, filter, reduce). Il est souvent utilisé pour gérer des événements utilisateur, des requêtes 
@@ -193,7 +203,11 @@ Nous allons utiliser un contrôleur contient deux méthodes :
 
 Si un client appelle l'API /numbers, il recevra chaque nombre (de 1 à 10) avec un intervalle de 100 millisecondes entre eux.
  
+<<<<<<< HEAD
 si un erreur se produit le flux s'arreete imediatement et le reste d'information ne serons pas retourner et un erreur HTTP 500 (Internal Server Error) sera renvoyer par spring webFlux. 
+=======
+Si une erreur se produit, le flux s'arrrête imediatement, l'infromation restante ne sera pas transmise et une erreur HTTP 500 (Internal Server Error) sera retrounée par spring webFlux. 
+>>>>>>> 567d98653f943542fbfec098f46805d8f5ebe082
 
 [source,java]
 ----
@@ -218,9 +232,15 @@ si un erreur se produit le flux s'arreete imediatement et le reste d'information
 
 Nous allons initialiser un `WebClient` en invoquant la méthode `create("http://example.com")` en lui passant en paramètre l'URL de base `http://example.com`.
 
+<<<<<<< HEAD
 La méthode `get()` initie une requête HTTP de type `GET` et la méthode `uri("/api/data")` spécifie le chemin relatif de l'API.
 cible (ajouté à l'URL de base du `WebClient`). La méthode `retrieve()` exécute la requête et récupère la réponse pour être traitée. 
 Enfin, `bodyToMono(String.class)` extrait le corps de la réponse HTTP et le convertit en un objet de type Mono<String>,
+=======
+La méthode `get()` initie une requête HTTP de type `GET` et la méthode `uri("/api/data")` spécifie le chemin relatif de l'API 
+cible (ajoutée à l'URL de base du `WebClient`). La méthode `retrieve()` exécute la requête et récupère la réponse pour être traitée. 
+Enfin, `bodyToMono(String.class)` extrait le corps de la réponse HTTP et le convertit en un objet de type `Mono<String>`,
+>>>>>>> 567d98653f943542fbfec098f46805d8f5ebe082
 permettant de manipuler la réponse asynchrone dans un pipeline réactif. Si la requête réussit, le contenu de la réponse sera 
 disponible sous forme de chaîne dans le `Mono`.
 
@@ -241,7 +261,11 @@ public class WebClientExample {
 Le backpressure est une composante essentielle dans les systèmes réactifs pour gérer le flux de données entre les producteurs et les consommateurs. 
 Avec Reactor, vous pouvez contrôler le backpressure via des opérateurs comme `limitRate`. 
 
+<<<<<<< HEAD
 Exemple d'utilisation de `limitRate` pour réguler la consommation des données : 
+=======
+==== Exemple d'utilisation de `limitRate` pour réguler la consommation des données
+>>>>>>> 567d98653f943542fbfec098f46805d8f5ebe082
 
 La methode `limitRate(5)` applique un mécanisme de contrôle du flux (backpressure) pour limiter la consommation à un maximum de 5 éléments à la fois. Enfin, 
 un abonné est attaché au flux avec `subscribe()`, qui affiche chaque élément reçu via un callback, permettant de traiter les données au fur et à mesure de leur

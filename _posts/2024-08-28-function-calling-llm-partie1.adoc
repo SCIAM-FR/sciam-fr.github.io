@@ -9,7 +9,7 @@
 :page-vignette-licence: 'Image générée par l'IA'
 :page-liquid:
 :showtitle:
-:page-categories: software llm news
+:page-categories: software llm
 
 L’IA générative et les modèles de langage de grande taille (*LLM*) sont au cœur de l'évolution actuelle de l'intelligence artificielle, jouant un rôle déterminant dans l'innovation technologique et ayant un impact croissant sur l'industrie et la société.
 

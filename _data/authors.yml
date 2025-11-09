@@ -52,7 +52,7 @@ loichermann:
   name: "Loic Hermann"
   job: "CTO"
   picture: loichermann.png
-  
+
 samuelberrien:
   name: "Samuel Berrien"
   bio: "Samuel porte un intérêt particulier aux enjeux liés à la science des données et à l'ingénierie logiciel. Diplômé d'un Master 2 à l'Université Paris-Saclay, il mène à bien des projets de traitement du langage naturel et de vision par ordinateur. Très tôt passionné et intrigué par la technologie, il tente aujourd'hui avec enthousiasme d’apporter des réponses aux problématiques de ses clients. Les balades en nature et la batterie rythment sa vie, lui permettant de réfléchir au prochain algorithme à développer."
@@ -137,7 +137,7 @@ oliviersans:
 rickenbazolo:
   name: "Ricken Bazolo"
   bio: "Diplômé d'une licence professionnelle en réseau et télécommunication, Ricken a enchainé avec un certificat Professionnel en Électronique Numérique et Programmable obtenu en 2012 à l'African House en République démocratique du Congo. Il a beaucoup travaillé pour la communauté en formant les débutants et les professionnels dans les différentes techniques de programmation, d’application métier ou encore orienté objet (embarqué du code dans du matériel). Cette dernière année, Ricken a contribué dans des projets open source dans différents secteurs, Santé, Éducation, etc. et aussi il a travaillé pour des startups et grands groupes dans le domaine de la finance, industrie. Il est passionné dans tout ce qu'il entreprend et aime partager ce qu'il sait faire avec la communauté, à l’initiative du projet https://autourducode.net."
-  job: "Tech Lead"
+  job: "Référent technique"
   pagesciam: "https://www.sciam.fr/equipe/ricken-bazolo"
   website: "https://rickenbazolo.com"
   picture: rickenbazolo.png
@@ -163,7 +163,7 @@ pcheucle:
   picture: pcheucle.jpg
   socials:
     linkedin: "pierre-cheucle"
-    
+
 kostiantynkompaniiets:
   name: "Kostiantyn Kompaniiets"
   bio: "Diplômé d'un master en Économie Internationale de l'Université nationale d'économie Simon Kuznets de Kharkiv, en Ukraine, en 2014. Il a lancé sa carrière en tant qu'ingénieur logiciel en 2016. Au fil des huit dernières années, il a perfectionné ses compétences en développement Java et JavaScript/TypeScript, intervenant dans divers secteurs tels que les sciences de la vie, la pharmacie, la bio-informatique, ainsi que dans la manipulation de vastes ensembles de données complexes. Forte d'un mélange d'excellence technique et d'une passion pour l'innovation, il est confiant dans sa capacité à contribuer de manière significative aux projets clients de SCIAM."
@@ -255,6 +255,20 @@ Passionné de sport, il aime tout particulièrement le volley qu'il a pratiqué 
   socials:
     linkedin: "chaker-fezai-31436318"
 
+<<<<<<< HEAD
+=======
+saidboudjelda:
+  name: "Said BOUDJELDA"
+  bio: "Ingénieur en informatique depuis 2007, Said n’a pas arrêté d’exercer sa passion pour le développement software. Il a travaillé sur plusieurs projets dans plusieurs domaines tels que l’industrie, le B2B, l’assurance, l’audit et comptabilité, les télécoms et surtout les banques. Said a cette soif aiguë pour les challenges, et SCIAM est le terrain fertile qui lui permettra d’en avoir plus. Il est fasciné par la nature, la marche et les balades. Il adore notamment les voyages. "
+
+  job: "Référent technique"
+  pagesciam: "https://www.sciam.fr/equipe/said-boudjelda"
+  picture: saidboudjelda.png
+  socials:
+    linkedin: "bmscomp"
+    github: "bmscomp"
+
+>>>>>>> 567d98653f943542fbfec098f46805d8f5ebe082
 khairikhadhraoui:
   name: "Khairi Khadhraoui"
   bio: "Diplômé en 2015 d’un diplôme d’ingénieur en spécialité système d’information à l’école polytechnique centrale de Tunis.

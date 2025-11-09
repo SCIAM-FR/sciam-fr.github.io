@@ -1,0 +1,79 @@
+= JChateau 2025 - Un excellent cru
+:page-navtitle: JChateau 2025 - Un excellent cru
+:figure-caption!:
+:page-excerpt: L'unconference JChateau a eu lieu du 27 ou 29 mars 2025, réunissant des passionnés de l'ecosystème Java pour partager leurs expériences et leurs connaissances. Comme les 2 années précédentes SCIAM a participé à cet événement assez unique. Ce post présente un florilège des sujets présentés auxquels nous avons participé.
+:layout: post
+:page-auteurs: [clementdetastes,antoinesabotdurand]
+:page-tags: [Java, unconference, JChateau]
+:page-vignette: 2025/jchateau.png
+:page-liquid:
+:page-categories: software
+
+Cette année encore, SCIAM a envoyé quelques un de ses consultants à l'excellente unconférence organisée par le Paris Jug : JChateau.
+Pour vous donner un petit aperçu du genre de sujets abordés dans cet événement, nous avons décidé de faire un petit compte rendu de nos 3 jours de débats pour vous donner envie de venir participer l'année prochaine.
+
+== Qu'est-ce qu'une unconférence ?
+
+Une unconference est un événement ouvert et participatif, où les conférenciers conçoivent ensemble le programme. Ce format original évite les hiérarchies typiques des conférences traditionnelles favorise la mise en réseau, les discussions ouvertes et la participation de toutes et tous.
+
+Ça, c'est pour la théorie, en pratique JChateau est un mélange de discussion ouverte et de présentation informelles par des développeurs ou serial speakers qui cherchent du feedback.
+
+== Le programme de JChateau
+
+Ce sont les participants qui le construisent : ceux qui le souhaitent proposent un sujet (pas besoin de s'y connaître, il suffit juste d'être intéressé par une discussion s'y rapportant) puis tout le monde vote.
+Le vote permet de déterminer le programme de la journée en selectionnant 9 sujets qui seront repartis dans 3 salles différentes.
+Les 3 jours de JChateau ont donné lieu au programme suivant :
+
+image::2025/jchateau/prog1.png[jour 1,width=60%]
+
+image::2025/jchateau/prog2.png[jour 2,width=60%]
+
+image::2025/jchateau/prog3.png[jour 3,width=60%]
+
+
+Pour vous donner un aperçu voici quelques résumés de sessions auxquelles nous avons participé
+
+=== Échange sur les "Stable Values"
+
+Les “Stable Values” est une future fonctionnalité du JDK qui devrait faire son apparition en preview dans le JDK 25. Cela offre une alternative concise et optimisée de l'idiome « Double Check Locking » dont le but est d'initialiser une valeur une seule et unique fois, même dans un contexte de concurrence. Cela a permis d'en dresser les contours, mais aussi de se plonger plus profondément dans les entrailles de la JVM avant que cette feature ne soit rendue accessible au plus grand nombre.
+
+=== Point d'étape sur "Valhalla"
+
+Valhalla est un projet au long cours de l'OpenJDK (et c'est un euphémisme de le dire) qui vise à réduire le gap entre primitifs et objets en introduisant la notion de "Values Classes". Son slogan “Codes like a class, works like an int” en est l'illustration. En sacrifiant quelques propriétés propres aux objets comme l'identité (et la possibilité de synchroniser sur l'objet), on bénéficie de gains majeurs en termes de performances. Bien que le projet soit encore loin d'aboutir, cela a permis de nombreux échanges enrichissants ainsi qu'un état des lieux de la progression du projet.
+
+=== Java est-il pertinent sur les projets IA (vs Python)
+
+Discussion sur la culture Python autour de l'IA et le manque de vision sur l'exploitation des LLM en production. La conclusion est que si Python se prête très bien à la phase recherche, expérimentation et création des LLM, Java est plus économe et performant pour exploiter les LLM dans une application en production. Les deux univers sont complémentaires.
+
+
+=== Retour sur les Gatherers
+
+Les « gatherers » viennent tout juste de faire leur entrée en standard dans le JDK 24. Il n'en fallait pas plus d'une nouvelle API et d'un parterre de passionnés pour expliquer, débattre et torturer l'API dans tous les sens. Des résultats, notamment de benchmark, ont parfois surpris l'assemblée. Comme quoi, il faut mesurer plutôt que de supposer lorsque les performances sont critiques !
+
+=== 45 minutes pour monter un RAG
+
+Présentation de la création d'un petit RAG sur la doc de maven avec une application Java / Spring un LLM léger et une base vectoriel (Postgre). Bonne introduction pratique sur le sujet.
+Beaucoup de questions et d'échange sur la mise en œuvre des différentes briques.
+
+=== Nullness en Java
+
+Que serait Java sans NullPointerException ? Une hypothèse qui a très vite montré ses limites et ses contradictions. Cependant, l'exercice de pensée est intéressant, notamment dans la définition de valeurs par défaut.
+
+=== Onboarding des juniors sur les projets
+
+Constat que les juniors (sortant d'école) n'ont pas de formation sur l'outillage d'ingénierie logicielle. Nous avons évoqué la mise en place d'un projet open source de doc permettant à des jeunes de se former sur l'outillage de CI/CD, de tests ou de bonnes pratiques pour arriver mieux armés et opérationnels sur les projets.
+
+=== l'architecture hexagonal
+
+L'architecture hexagonale est bien installée dans le paysage IT. Cela a été l'occasion d'effectuer un rappel des concepts clés, qui parfois mènent à débat sur les limites de son applicabilité, ainsi que le partage de riches retours d'expérience et des compromis qu'il faut parfois effectuer pour en tirer la quintessence.
+
+=== Gestion de la neurodiversité dans l'IT
+
+Séance assez populaire ayant ouvert beaucoup de débat en amont et aval de la session. Il était question d'arriver à détecter les profils TSA (Trouble du Syndrome Autistique) et à les aider, motiver ou protéger.
+La session comportait pas mal de témoignages de manager et de personnes atteintes de TSA sur leur quotidien face à cet atout qui peut aussi s'avérer compliqué à gérer s'il n'est que subi.
+
+== Conclusion
+
+Cette unconférence bien que centrée sur Java, brille par l'éclectisme de ses participants et donc des sujets abordés.
+Au-delà de Java, on aura donc parlé du quotidien des devs, de l'avenir de l'IT ou de la santé mentale au travail.
+Idéal pour discuter des détails techniques ou prendre du recul.

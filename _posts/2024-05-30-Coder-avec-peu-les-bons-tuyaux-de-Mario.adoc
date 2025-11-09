@@ -1,5 +1,5 @@
 = Video - Coder avec peu, les bons tuyaux de Mario
-:page-excerpt: Découvrez comment Nintendo a fait pour faire tenir mario dans 64Ko de mémoire.
+:page-excerpt: Découvrez comment Nintendo a fait pour faire tenir mario dans 40Ko de mémoire.
 :page-layout: post
 :author: clementdetastes
 :page-tags: [Dev,jeux,Conférence]
@@ -11,4 +11,4 @@
 
 Le développement logiciel est souvent un challenge, d'autant plus quand on a de fortes contraintes matérielles : peu de CPU, peu de RAM, peu voire pas de stockage...
 
-L'industrie du jeu vidéo a parfois su se montrer très inventive, voire déroutante pour outrepasser certaines de ces limitations. Nous passerons en revue certaines des techniques utilisées dans de célèbres titres tels que Super Mario Bros. ou Quake III. Mais parfois, les contraintes ne proviennent pas du matériel mais de challenges imposés par défi entre développeurs : nous en parcourrons quelques exemples et réalisations.
+L'industrie du jeu vidéo a parfois su se montrer très inventive, voire déroutante pour outrepasser certaines de ces limitations. Nous passerons en revue certaines des techniques utilisées dans de célèbres titres tels que Super Mario Bros. ou Quake III.
