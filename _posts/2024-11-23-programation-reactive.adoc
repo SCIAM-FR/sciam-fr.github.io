@@ -47,7 +47,7 @@ des ressources. Ils permettent de créer des applications qui sont plus réactiv
 
 == Les principes de la programmation réactive   
 
-Les principes de la programmation réactive sont décrits dans le "Manifeste Réactif"(accessible en ligne à l’adresse suivante : https://www.reactivemanifesto.org/), qui énonce quatre caractéristiques clés{nbsp}:
+Les principes de la programmation réactive sont décrits dans le "Manifeste Réactif" accessible en ligne à l’adresse suivante : https://www.reactivemanifesto.org/ , ce Manifeste énonce quatre caractéristiques clés{nbsp}:
 
 * Responsive (Réactif) : les systèmes réactifs répondent rapidement aux utilisateurs pour garantir une expérience fluide et interactive.
 
