@@ -1,0 +1,810 @@
+= Model Context Protocol (MCP) : une interface cognitive, pas une API
+:page-navtitle: Model Context Protocol (MCP) : une interface cognitive, pas une API
+:page-excerpt: Dans le contexte de l'intégration des Grands modèles de langage dans les applications d'entreprise, le choix de l'interface d'exposition des services devient une question architecturale déterminante. Deux paradigmes se distinguent par leurs philosophies radicalement différentes.
+:layout: post
+:author: rickenbazolo
+:page-tags: [LLM, MCP, API, OpenAPI, Ingénierie logicielle, Architecture logicielle]
+:docinfo: shared-footer
+:page-vignette: api-vs-mcp.png
+:page-vignette-licence: 'Image générée par l'IA'
+:page-liquid:
+:showtitle:
+:page-categories: software llm
+
+Dans le contexte de l'intégration des Grands modèles de langage (*LLM*) dans les applications d'entreprise, le choix de l'interface d'exposition des services devient une question architecturale déterminante.
+Deux paradigmes se distinguent par leurs philosophies radicalement différentes :
+
+- Les **API d'entreprise** (REST, GraphQL, gRPC) : offrent des contrats statiques et une logique transactionnelle éprouvée pour la communication entre systèmes.
+- Le **Model Context Protocol** (MCP) : lancé par https://www.anthropic.com/news/model-context-protocol[Anthropic^] en novembre 2024, introduit une découverte dynamique et une interprétation contextuelle spécifiquement conçues pour les LLM.
+
+Au premier abord, un serveur MCP peut ressembler à une API REST classique, il expose des fonctionnalités, accepte des requêtes et retourne des résultats.
+Pourtant, cette similarité de surface masque une différence fondamentale, là où une API décrit des ressources et des opérations, un serveur MCP décrit des capacités sémantiques que les modèles peuvent découvrir, comprendre et invoquer selon le contexte d'une conversation.
+
+Face à cette émergence, comment distinguer véritablement ces deux approches et identifier les implications architecturales de ce changement de paradigme ?
+
+Cet article propose une exploration approfondie de ces deux modèles avec des exemples en Java et le MCP Java SDK, pour éclairer leurs différences conceptuelles et architecturales.
+Nous analyserons pourquoi https://www.openapis.org/[OpenAPI^] ne peut pas décrire un serveur *MCP*, comment le rôle du développeur évolue de l'intégrateur à l'architecte d'outils, et fournirons des implémentations réelles pour vous aider à comprendre la coexistence de ces paradigmes complémentaires dans l'ingénierie logicielle.
+
+== L'API d'entreprise : un contrat statique pour des échanges déterministes
+
+Dans l'écosystème des systèmes d'information, les API d'entreprise, qu'elles soient REST, GraphQL ou gRPC, reposent sur un principe fondamental : le *contrat explicite*.
+Une spécification OpenAPI, un schéma GraphQL ou des fichiers Protocol Buffers décrivent exhaustivement les endpoints, les structures de données et les comportements attendus.
+
+=== Caractéristiques essentielles
+
+Une API d'entreprise est :
+
+*Spécifiée* : le contrat est défini à l'avance, documenté (OpenAPI, https://www.asyncapi.com/[AsyncAPI^]) et versionné.
+Les clients connaissent les endpoints avant l'exécution.
+
+*Transactionnelle* : chaque appel produit un effet métier mesurable (création, lecture, modification, suppression d'une ressource).
+
+*Déterministe* : pour une requête donnée, la réponse suit toujours la même structure.
+Un `GET /articles?type=TECHNICAL` retourne systématiquement le même format JSON.
+
+*Orientée ressource* : l'architecture REST, par exemple, organise les interactions autour de ressources identifiées par des URI (`/articles`, `/articles/{id}`).
+
+*Stable* : les modifications du contrat nécessitent un versionnement explicite pour préserver la compatibilité avec les clients existants.
+
+Voici un exemple minimaliste d'une API REST en Spring Boot :
+
+[source,java]
+----
+@RestController
+@RequestMapping("/api/articles")
+public class ArticleController {
+
+    @GetMapping
+    public List<ArticleDto> getArticles(@RequestParam(required = false) ArticleType type) {
+        return type != null
+            ? articleService.getArticlesByType(type)
+            : articleService.getAllArticles();
+    }
+
+    @PostMapping
+    public ArticleDto createArticle(@Valid @RequestBody ArticleInputDto input) {
+        return articleService.createArticle(input);
+    }
+}
+----
+
+Cette approche a fait ses preuves pour l'intégration de systèmes d'information.
+Elle garantit cohérence, traçabilité et prévisibilité dans des architectures avec lesquelles les clients (humains ou logiciels) consomment des services selon des conventions partagées.
+
+Mais cette logique n'a jamais été conçue pour des acteurs capables de raisonnement contextuel comme les LLM.
+
+== Le serveur MCP : une interface contextuelle pour les LLM
+
+Le **Model Context Protocol** (MCP), répond à un problème différent, comment permettre aux LLM d'accéder à des outils et des données de manière *contextuelle et dynamique*, sans multiplier les intégrations personnalisées pour chaque combinaison LLM × outil.
+
+=== Une architecture client-serveur repensée pour les LLM
+
+MCP adopte une architecture client-serveur, mais avec une inversion conceptuelle : le *client* est généralement une application d'IA (Claude Desktop, un IDE, un agent), tandis que le *serveur* expose des capacités que le modèle peut découvrir et invoquer.
+
+Le protocole repose sur trois primitives fondamentales côté serveur :
+
+*Tools* : fonctions exécutables que le LLM peut appeler pour effectuer des actions (rechercher dans une base de données, envoyer un e-mail, lire un fichier, etc.)
+
+*Resources* : données structurées que le LLM peut consulter pour enrichir son contexte (documents, états système, logs, etc.)
+
+*Prompts* : templates d'instructions préconfigurés que les utilisateurs peuvent invoquer via l'application cliente.
+
+La communication s'effectue via des messages *JSON-RPC*, transportés soit par stdio (processus locaux), soit par HTTP Streamable (services distants).
+
+Exemples des méssages envoyées du client au serveur ou vice versa, afin d'initier une opération
+
+Messages du client au serveur :
+
+[source,json]
+----
+{
+  "jsonrpc": "2.0",
+  "method": "notifications/initialized"
+}
+----
+
+[source,json]
+----
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/list",
+  "params": {}
+}
+----
+
+[source,json]
+----
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "prompts/list",
+  "params": {}
+}
+----
+
+[source,json]
+----
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "method": "resources/list",
+  "params": {}
+}
+----
+
+Message du serveur MCP au client :
+
+Le serveur répond avec une description sémantique de chaque tool, prompts et ressources.
+
+[source,json]
+----
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "tools": [
+      {
+        "name": "search_articles",
+        "description": "Recherche des articles de blog par type ou mot-clé",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Mot-clé à rechercher dans les articles"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["TECHNICAL", "SCIENTIFIC"],
+              "description": "Filtrer par type d'article"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_article",
+        "description": "Crée un nouvel article de blog avec le titre et le contenu fournis",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "content": { "type": "string" },
+            "type": { "type": "string", "enum": ["TECHNICAL", "SCIENTIFIC"] }
+          },
+          "required": ["title", "content", "type"]
+        }
+      }
+    ]
+  }
+}
+----
+
+[source,json]
+----
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "prompts": []
+  }
+}
+----
+
+[source,json]
+----
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "resources": []
+  }
+}
+----
+
+Le modèle analyse ces descriptions en langage naturel et décide, selon le contexte de la conversation, quel tool invoquer.
+L'invocation elle-même est un message JSON-RPC :
+
+[source,json]
+----
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "search_articles",
+    "arguments": {
+      "query": "architecture hexagonale",
+      "type": "TECHNICAL"
+    }
+  },
+  "id": 2
+}
+----
+
+=== Un protocole conversationnel, pas transactionnel
+
+L'implémentation d'un serveur MCP avec le MCP Java SDK illustre cette différence de paradigme.
+Ajoutons d'abord la dépendance Maven :
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.modelcontextprotocol.sdk</groupId>
+    <artifactId>mcp</artifactId>
+    <version>0.16.0</version>
+</dependency>
+----
+
+Voici un exemple de serveur MCP synchrone exposant des tools pour gérer des articles :
+
+[source,java]
+----
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.modelcontextprotocol.json.McpJsonMapper;
+import io.modelcontextprotocol.server.McpServer;
+import io.modelcontextprotocol.server.McpServerFeatures;
+import io.modelcontextprotocol.server.McpSyncServer;
+import io.modelcontextprotocol.server.transport.StdioServerTransportProvider;
+import io.modelcontextprotocol.spec.McpSchema;
+
+import java.util.*;
+import java.util.logging.Logger;
+
+public class BlogMcpServer {
+
+    private static final Logger logger = Logger.getLogger(BlogMcpServer.class.getName());
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    public static void main(String[] args) {
+        try {
+
+            StdioServerTransportProvider transport = new StdioServerTransportProvider(McpJsonMapper.getDefault()); <1>
+
+            McpSyncServer server = McpServer.sync(transport) <2>
+                    .serverInfo("blog-mcp-server", "1.0.0")
+                    .capabilities(McpSchema.ServerCapabilities.builder()
+                            .tools(true)
+                            .resources(false, false)
+                            .prompts(false)
+                            .build())
+                    .build();
+
+            McpServerFeatures.SyncToolSpecification searchTool = <3>
+                    new McpServerFeatures.SyncToolSpecification(
+                            McpSchema.Tool.builder()
+                                    .name("search_articles")
+                                    .description("Rechercher des articles de blog par type ou mot-clé")
+                                    .inputSchema(McpJsonMapper.getDefault(), """
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "query": {
+                                                  "type": "string",
+                                                  "description": "Mot-clé à rechercher"
+                                                },
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": ["TECHNICAL", "SCIENTIFIC"],
+                                                  "description": "Filtrer par type"
+                                                }
+                                              }
+                                            }
+                                            """)
+                                    .build(),
+                            null,
+                            (exchange, request) -> {
+                                Map<String, Object> arguments = request.arguments();
+                                String query = (String) arguments.get("query");
+                                String type = (String) arguments.get("type");
+
+                                // Logique métier : recherche dans la base de données
+                                List<Article> results = ArticleRepository.search(query, type);
+
+                                String jsonResults;
+                                try {
+                                    jsonResults = objectMapper.writeValueAsString(results);
+                                } catch (JsonProcessingException e) {
+                                    logger.severe("Erreur lors de la sérialisation des résultats de recherche : " + e.getMessage());
+                                    return McpSchema.CallToolResult.builder()
+                                            .addTextContent("Erreur : " + e.getMessage())
+                                            .isError(true)
+                                            .build();
+                                }
+
+                                return McpSchema.CallToolResult.builder()
+                                        .addTextContent(jsonResults)
+                                        .isError(false)
+                                        .build();
+                            }
+                    );
+
+            McpServerFeatures.SyncToolSpecification createTool = <4>
+                    new McpServerFeatures.SyncToolSpecification(
+                            McpSchema.Tool.builder()
+                                    .name("create_article")
+                                    .description("Créer un nouvel article de blog")
+                                    .inputSchema(McpJsonMapper.getDefault(), """
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "title": { "type": "string" },
+                                                "content": { "type": "string" },
+                                                "type": {
+                                                  "type": "string",
+                                                  "enum": ["TECHNICAL", "SCIENTIFIC"]
+                                                }
+                                              },
+                                              "required": ["title", "content", "type"]
+                                            }
+                                            """)
+                                    .build(),
+                            null,
+                            (exchange, request) -> {
+                                Map<String, Object> arguments = request.arguments();
+                                String title = (String) arguments.get("title");
+                                String content = (String) arguments.get("content");
+                                String type = (String) arguments.get("type");
+
+                                // Logique métier : création dans la base de données
+                                Article created = ArticleRepository.create(title, content, type);
+
+                                return McpSchema.CallToolResult.builder()
+                                        .addTextContent("Article créé avec succès : " + created.id())
+                                        .isError(false)
+                                        .build();
+                            }
+                    );
+
+            server.addTool(searchTool); <5>
+            server.addTool(createTool); <6>
+
+            // Le serveur est prêt à recevoir des connexions
+            logger.info("Serveur MCP Blog démarré et en attente de connexions");
+
+            // Maintenir le serveur actif - il écoute automatiquement sur stdin/stdout
+            Thread.currentThread().join();
+
+        } catch (Exception e) {
+            logger.severe("Erreur lors du démarrage du serveur MCP : " + e.getMessage());
+            System.exit(1);
+        }
+    }
+}
+----
+
+<1> Créer le transport (stdio pour communication locale)
+<2> Créer le serveur MCP synchrone
+<3> Définir l'outil de recherche d'articles
+<4> Définir l'outil de création d'article
+<5> Enregistrer l'outil de recherche d'article
+<6> Enregistrer l'outil de création d'article
+
+Exemple de communication client/serveur :
+
+Client : <Trouve moi 1 article Spring>
+
+[source,json]
+----
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "search_articles",
+    "arguments": {
+      "query": "Spring",
+      "type": "TECHNICAL"
+    }
+  }
+}
+----
+
+Réponse du serveur MCP
+
+[source,json]
+----
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "content": [
+      {
+        "type": "json",
+        "data": [
+          {
+            "id": "0923340b-872b-4551-ad88-6cf1ea8ff5c5",
+            "title": "Créer des API RESTful avec Spring Boot",
+            "content": "Apprenez à créer des API REST prêtes pour la production en utilisant le framework Spring Boot...",
+            "type": "TECHNICAL"
+          }
+        ]
+      }
+    ],
+    "isError": false
+  }
+}
+----
+
+Le serveur ne gère pas d'endpoints HTTP comme `/articles` ou `/articles/{id}`.
+Il répond à des messages JSON-RPC décrivant des *intentions* (`tools/list`, `tools/call`), pas des opérations CRUD sur des ressources.
+Le modèle raisonne sur les descriptions pour décider quoi appeler et comment construire les arguments.
+
+=== L'absence de contrat figé
+
+Un serveur MCP n'impose pas de schéma global.
+Les tools peuvent être ajoutés, modifiés ou retirés sans casser les clients, car *le modèle s'adapte dynamiquement aux capacités disponibles*.
+Cette flexibilité est fondamentale : MCP est conçu pour des systèmes où le contexte évolue en temps réel, où les outils disponibles dépendent de l'environnement d'exécution, et où l'interprétation sémantique remplace la validation syntaxique stricte.
+
+*C'est ce décalage conceptuel qui rend impossible de décrire un serveur MCP avec une spécification OpenAPI classique*.
+
+== Pourquoi OpenAPI ne peut pas décrire un serveur MCP
+
+À première vue, on pourrait penser qu'une spécification OpenAPI pourrait documenter un serveur MCP.
+Après tout, les deux systèmes échangent des messages structurés et exposent des fonctionnalités.
+Pourtant, cette similarité de surface masque des différences architecturales fondamentales qui rendent OpenAPI inadapté pour décrire MCP.
+
+=== Le tableau des divergences
+
+Voici une comparaison systématique des caractéristiques des deux approches :
+
+[cols="1,2,2", options="header"]
+|===
+| Aspect
+| API OpenAPI
+| Serveur MCP
+
+| *Contrat*
+| Statique, défini à l'avance via spécification YAML/JSON
+| Dynamique, découvert à l'exécution via `tools/list`
+
+| *Documentation*
+| Spécification OpenAPI exhaustive avant déploiement
+| Description sémantique minimale des tools
+
+| *Découverte*
+| Endpoints connus avant l'invocation
+| Capacités interrogées dynamiquement
+
+| *Typage*
+| Schémas JSON rigides avec validation stricte
+| Schémas adaptatifs interprétés contextuellement
+
+| *Invocation*
+| Requêtes HTTP (GET, POST, PUT, DELETE) sur des URI
+| Messages JSON-RPC (`tools/call`) avec arguments
+
+| *Sémantique*
+| Orientée ressource (`/articles`, `/articles/{id}`)
+| Orientée intention (`search_articles`, `create_article`)
+
+| *Acteur principal*
+| Client HTTP (humain ou application)
+| Grand Modèle de langage (LLM)
+
+| *Objectif*
+| Exposer un service métier transactionnel
+| Étendre les capacités cognitives d'un LLM
+
+| *Adaptabilité*
+| Changements = nouveau versionnement du contrat
+| Tools ajoutés/retirés sans impact client
+
+| *Réponse*
+| Structure JSON prédéfinie
+| Contenu textuel ou structuré selon contexte
+
+| *Validation*
+| Syntaxique stricte (JSON Schema)
+| Sémantique par le modèle
+|===
+
+=== Le fossé conceptuel : syntaxe vs sémantique
+
+La différence fondamentale réside dans la manière dont les deux systèmes traitent l'information.
+
+*OpenAPI décrit la syntaxe* : une API REST avec OpenAPI spécifie exactement quels endpoints existent, quelles méthodes HTTP sont supportées, quelles structures JSON sont attendues en entrée et en sortie.
+Un client REST doit connaître ces détails avant d'invoquer l'API.
+Par exemple :
+
+[source,yaml]
+----
+paths:
+  /articles/{id}:
+    get:
+      summary: Récupère un article par son ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Article trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '404':
+          description: Article non trouvé
+----
+
+Ce contrat est figé, le client sait qu'il doit faire un `GET /articles/{id}` avec un ID valide, et il recevra soit un objet `Article` en JSON, soit une erreur 404.
+
+*MCP décrit la sémantique* : un serveur MCP expose des tools avec des descriptions en langage naturel.
+Le modèle interprète ces descriptions pour décider quand et comment utiliser chaque tool.
+Par exemple :
+
+[source,json]
+----
+{
+  "name": "get_article",
+  "description": "Récupère un article de blog spécifique en utilisant son identifiant unique",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "article_id": {
+        "type": "string",
+        "description": "L'identifiant UUID de l'article à récupérer"
+      }
+    },
+    "required": ["article_id"]
+  }
+}
+----
+
+Le modèle analyse cette description et détermine contextuellement si ce tool est approprié pour répondre à une question de l'utilisateur comme « Montre-moi l'article sur l'architecture hexagonale ».
+Le LLM pourrait d'abord chercher l'ID avec `search_articles`, puis invoquer `get_article` avec l'ID trouvé.
+
+=== L'impossibilité de capturer le contexte conversationnel
+
+Une API OpenAPI décrit des opérations *isolées*.
+Chaque requête est autonome, sans mémoire du contexte précédent (sauf via des tokens/sessions gérés explicitement).
+Le client construit chaque requête indépendamment.
+
+Un serveur MCP, en revanche, fonctionne dans un *contexte conversationnel*.
+Bien que les LLM soient intrinsèquement stateless, (ils ne conservent pas de mémoire entre les appels), l'application cliente (le host MCP) maintient l'historique de la conversation et le réinjecte dans le contexte à chaque nouvelle requête.
+Cette architecture permet au modèle de comprendre les références implicites et d'enchaîner plusieurs appels de tools pour répondre à une seule question de l'utilisateur, en s'appuyant sur les échanges précédents.
+
+Exemple de conversation :
+
+----
+Utilisateur : "Trouve-moi les articles techniques sur Spring"
+[Host MCP] → Contexte : [historique vide]
+LLM : [appelle search_articles avec query="Spring", type="TECHNICAL"]
+LLM : "J'ai trouvé 3 articles : Spring Boot Security, Spring AI, Spring MVC"
+
+Utilisateur : "Montre-moi le premier"
+[Host MCP] → Contexte : [historique incluant la recherche précédente et ses résultats]
+LLM : [comprend que "le premier" fait référence à "Spring Boot Security"]
+LLM : [appelle get_article avec l'ID correspondant]
+LLM : "Voici l'article Spring Boot Security : [contenu]"
+----
+
+Cette continuité contextuelle, orchestrée par le client MCP qui réinjecte l'historique à chaque tour, n'existe pas dans une API REST classique.
+OpenAPI ne peut pas décrire comment un tool s'insère dans un flux conversationnel multi-tours où chaque appel dépend potentiellement des résultats précédents conservés en mémoire par l'application cliente.
+
+=== L'absence de notion de « resource » au sens REST
+
+Dans REST, une ressource est une entité identifiable par une URI (`/articles/123`).
+Les opérations CRUD sont standardisées via les verbes HTTP.
+
+Dans MCP, il n'y a pas de notion de ressource REST.
+Les *tools* sont des actions arbitraires que le modèle peut invoquer.
+Rien n'oblige un serveur MCP à suivre une logique CRUD.
+Un tool pourrait être `analyze_sentiment`, `generate_summary` ou `send_notification`, des opérations qui ne correspondent à aucune ressource REST.
+
+Même la primitive *Resources* de MCP (différente des ressources REST) représente des données accessibles via des URI templates, mais elles ne sont pas manipulées via des verbes HTTP.
+Elles sont simplement *consultées* pour enrichir le contexte du modèle.
+
+=== Le rôle de l'interprétation humaine (LLM)
+
+OpenAPI est conçu pour être consommé par des développeurs ou des outils automatisés (générateurs de code, validateurs).
+La spécification est lue par des humains ou des machines qui génèrent des clients typés.
+
+MCP est conçu pour être *interprété par des LLM*.
+Les descriptions des tools sont rédigées en langage naturel précisément pour que le LLM puisse raisonner sur leur utilité.
+Aucune génération de code n'est nécessaire : le modèle décide dynamiquement, à chaque conversation, quels tools appeler et dans quel ordre.
+
+Cette différence rend OpenAPI fondamentalement inadapté, une spécification OpenAPI est trop rigide pour capturer l'adaptabilité sémantique que MCP requiert.
+
+== De l'architecture RESTful à l'architecture contextuelle
+
+Le passage des API d'entreprise aux serveurs MCP ne se résume pas à un simple changement de protocole.
+Il s'agit d'un *changement de paradigme architectural* qui transforme profondément la manière dont nous concevons les interfaces logicielles.
+
+=== Du client traditionnel au modèle intelligent
+
+Dans une architecture API classique, la relation est claire : un *client* (application web, mobile ou système tiers) envoie des requêtes à un *serveur* qui expose des ressources. Le client connaît les endpoints, construit les requêtes selon le contrat défini et traite les réponses structurées.
+
+[source,java]
+----
+// Architecture classique : le client pilote explicitement
+RestTemplate client = new RestTemplate();
+ResponseEntity<List<Article>> response = client.exchange(
+    "https://api.blog.com/articles?type=TECHNICAL",
+    HttpMethod.GET,
+    null,
+    new ParameterizedTypeReference<List<Article>>() {}
+);
+List<Article> articles = response.getBody();
+----
+
+Nous écrivons explicitement chaque appel, connaissons la structure des réponses et gérons les erreurs selon les codes HTTP.
+
+Avec MCP, la relation devient : un *LLM* découvre et invoque dynamiquement des *outils* mis à sa disposition.
+Le modèle n'a pas de connaissance préalable des endpoints.
+Il découvre les capacités disponibles, lit les descriptions et décide contextuellement quoi appeler.
+
+[source,java]
+----
+// Architecture MCP : le modèle raisonne et décide
+ChatClient chatClient = ChatClient.builder()
+    .defaultSystem("""
+        Tu es un assistant qui aide à rechercher et analyser des articles techniques.
+        Utilise les outils à ta disposition pour répondre aux questions.
+    """)
+    .defaultToolCallbacks(tools)
+    .build();
+
+String response = chatClient.prompt()
+    .user("Quels sont les articles sur Spring publiés récemment ?")
+    .call()
+    .content();
+----
+
+Le modèle a automatiquement :
+
+1. Compris qu'il devait chercher des articles
+2. Invoqué search_articles avec les bons paramètres
+3. Analysé les résultats
+4. Formulé une réponse naturelle
+
+Nous ne spécifions pas _comment_ obtenir l'information.
+Nous fournissons des outils (tools), et le modèle décide de leur utilisation.
+
+=== De la spécification impérative à l'intention déclarative
+
+Dans une API REST, nous devons spécifier *impérativement* les opérations :
+
+[source,java]
+----
+// 1. Chercher les articles techniques
+List<Article> technicalArticles = articleClient.getArticles("TECHNICAL");
+
+// 2. Filtrer par date récente
+List<Article> recentArticles = technicalArticles.stream()
+    .filter(a -> a.getPublishedDate().isAfter(LocalDate.now().minusMonths(3)))
+    .toList();
+
+// 3. Trier par popularité
+List<Article> sortedArticles = recentArticles.stream()
+    .sorted(Comparator.comparing(Article::getViews).reversed())
+    .limit(5)
+    .toList();
+----
+
+Chaque étape est explicite.
+Nous orchestrons manuellement la logique.
+
+Avec MCP, nous exprimons une *intention déclarative* :
+
+[source,java]
+----
+String response = chatClient.prompt()
+    .user("Donne-moi les 5 articles techniques les plus populaires publiés ces 3 derniers mois")
+    .call()
+    .content();
+----
+
+Le modèle interprète l'intention et identifie les outils à utiliser (peut-être `search_articles` avec filtres, ou plusieurs appels successifs).
+L'exécution effective de ces tools reste sous le contrôle de l'application cliente (le host MCP), qui décide d'autoriser ou non chaque appel avant de communiquer avec le serveur MCP via le protocole défini.
+
+IMPORTANT: Dans l'architecture MCP, le LLM identifie les tools appropriés et propose leur invocation, mais c'est le client MCP (l'application host) qui a le contrôle final sur leur exécution.
+Pour les tools locaux, l'application peut implémenter des mécanismes d'autorisation pour décider si un tool doit être exécuté ou non.
+Pour les tools distants, le client gère également l'autorisation de la communication avec les serveurs MCP selon les règles de sécurité définies.
+Cette séparation entre identification (par le LLM) et exécution (par l'application) garantit la gouvernance et la sécurité du système.
+
+=== Les implications pour la conception
+
+Ce changement de paradigme a des conséquences directes sur la conception des interfaces.
+
+==== 1. Les descriptions deviennent critiques
+
+Dans une API REST, la documentation est importante, mais le contrat reste le code (les endpoints, les schémas). Nous pouvons comprendre une API mal documentée en lisant le code ou en testant les endpoints.
+
+Dans MCP, les descriptions sont *essentielles* car elles guident directement les décisions du modèle. Une description imprécise ou ambiguë entraîne des invocations incorrectes.
+
+[source,text]
+----
+// Mauvaise description
+name = "search" description = "Cherche des trucs" // Trop vague
+
+// Bonne description
+name = "search_articles" description = "Recherche des articles de blog par mot-clé et/ou type (TECHNICAL/SCIENTIFIC)."
+----
+
+==== 2. Les outils doivent être composables
+
+Les tools MCP sont conçus pour être *combinés* par le modèle.
+Un outil ne doit pas essayer de tout faire.
+Il vaut mieux exposer plusieurs tools simples que le modèle peut enchaîner.
+
+Exemple Tool monolithique difficile à utiliser :
+
+[source,text]
+----
+name = "manage_articles" description = "Crée, recherche, met à jour ou supprime des articles selon l'action spécifiée"
+----
+
+Exemple Tools granulaires composables :
+
+[source,text]
+----
+name = "search_articles" description = "Recherche des articles"
+name = "get_article" description = "Récupère un article par ID"
+name = "create_article" description = "Crée un nouvel article"
+name = "update_article" description = "Modifie un article existant"
+----
+
+Le modèle peut ainsi composer `search_articles` puis `get_article` pour répondre à « Montre-moi le dernier article sur Spring ».
+
+==== 3. Les erreurs deviennent des informations
+
+Dans une API REST, une erreur 404 ou 500 est souvent finale pour le client.
+Il doit gérer l'exception et éventuellement alerter l'utilisateur.
+
+Dans MCP, une erreur peut être *informative* pour le modèle.
+Si un tool échoue, le modèle peut tenter une autre approche, reformuler sa requête ou demander plus d'informations à l'utilisateur.
+
+[source,java]
+----
+@Override
+public McpSchema.CallToolResult call(Map<String, Object> arguments) {
+    String articleId = (String) arguments.get("article_id");
+
+    Optional<Article> article = repository.findById(articleId);
+
+    if (article.isEmpty()) {
+        // Au lieu d'une exception, on retourne une information
+        return McpSchema.CallToolResult.builder()
+                .addTextContent("""
+                Aucun article trouvé avec l'ID %s
+                L'article a peut-être été supprimé ou l'ID est incorrect.
+                """.formatted(articleId))
+                .isError(true)
+                .build();
+    }
+
+    return McpSchema.CallToolResult.builder()
+                .addTextContent(article.get().toJson())
+                .isError(false)
+                .build();
+}
+----
+
+Le modèle peut interpréter ce message et suggérer à l'utilisateur de chercher l'article autrement.
+
+=== Le rôle du développeur évolue
+
+Avec les API REST, nous sommes des *intégrateurs* : nous connaissons les endpoints, écrivons le code d'orchestration, gérons les erreurs explicitement.
+
+Avec MCP, nous devenons des *architectes d'outils* : nous concevons des tools bien délimités, rédigeons des descriptions claires et laissons le modèle orchestrer leur utilisation selon le contexte conversationnel.
+
+Cette évolution ne rend pas les API obsolètes.
+Elle introduit une nouvelle couche d'abstraction où les LLM deviennent les nouveaux clients, capables de raisonnement et d'adaptation contextuelle.
+
+== Conclusion
+
+Le *Model Context Protocol* n'est pas une alternative à *OpenAPI* ou aux *API* d'entreprise.
+Il représente un *nouveau niveau d'abstraction* dans l'ingénierie logicielle, conçu spécifiquement pour l'ère des LLM.
+Là où OpenAPI structure la communication entre systèmes avec des contrats statiques et des endpoints prédéfinis, MCP structure la collaboration entre modèles et outils avec des capacités découvertes dynamiquement et des descriptions sémantiques.
+Là où une API expose des ressources manipulées via des verbes HTTP, un serveur MCP expose des intentions exécutées par raisonnement contextuel.
+
+Cette différence de paradigme ne signifie pas l'obsolescence des API d'entreprise.
+Les deux approches sont *complémentaires* et coexistent naturellement dans les architectures modernes.
+Les API REST continueront d'exceller pour l'intégration système-à-système, les transactions critiques et les clients traditionnels.
+MCP, quant à lui, résout le problème spécifique de l'accès contextuel aux outils pour les LLM.
+Un serveur MCP peut d'ailleurs s'appuyer sur des API REST internes pour récupérer des données, puis exposer ces capacités sous forme de tools que les LLM peuvent invoquer intelligemment.
