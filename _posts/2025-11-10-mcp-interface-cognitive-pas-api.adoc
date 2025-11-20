@@ -480,7 +480,7 @@ Voici une comparaison systématique des caractéristiques des deux approches :
 
 | *Acteur principal*
 | Client HTTP (humain ou application)
-| Grand Modèle de langage (LLM)
+| Grand Modèle de Langage (LLM)
 
 | *Objectif*
 | Exposer un service métier transactionnel
