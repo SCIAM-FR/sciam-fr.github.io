@@ -1,6 +1,6 @@
 = Model Context Protocol (MCP) : une interface cognitive, pas une API
 :page-navtitle: Model Context Protocol (MCP) : une interface cognitive, pas une API
-:page-excerpt: Dans le contexte de l'intégration des Grands modèles de langage dans les applications d'entreprise, le choix de l'interface d'exposition des services devient une question architecturale déterminante. Deux paradigmes se distinguent par leurs philosophies radicalement différentes.
+:page-excerpt: Dans le contexte de l'intégration des Grands Modèles de Langage dans les applications d'entreprise, le choix de l'interface d'exposition des services devient une question architecturale déterminante. Deux paradigmes se distinguent par leurs philosophies radicalement différentes.
 :layout: post
 :author: rickenbazolo
 :page-tags: [LLM, MCP, API, OpenAPI, Ingénierie logicielle, Architecture logicielle]
@@ -11,7 +11,7 @@
 :showtitle:
 :page-categories: software llm
 
-Dans le contexte de l'intégration des Grands modèles de langage (*LLM*) dans les applications d'entreprise, le choix de l'interface d'exposition des services devient une question architecturale déterminante.
+Dans le contexte de l'intégration des Grands Modèles de Langage (*LLM*) dans les applications d'entreprise, le choix de l'interface d'exposition des services devient une question architecturale déterminante.
 Deux paradigmes se distinguent par leurs philosophies radicalement différentes :
 
 - Les **API d'entreprise** (REST, GraphQL, gRPC) : offrent des contrats statiques et une logique transactionnelle éprouvée pour la communication entre systèmes.
@@ -23,7 +23,7 @@ Pourtant, cette similarité de surface masque une différence fondamentale, là 
 Face à cette émergence, comment distinguer véritablement ces deux approches et identifier les implications architecturales de ce changement de paradigme ?
 
 Cet article propose une exploration approfondie de ces deux modèles avec des exemples en Java et le MCP Java SDK, pour éclairer leurs différences conceptuelles et architecturales.
-Nous analyserons pourquoi https://www.openapis.org/[OpenAPI^] ne peut pas décrire un serveur *MCP*, comment le rôle du développeur évolue de l'intégrateur à l'architecte d'outils, et fournirons des implémentations réelles pour vous aider à comprendre la coexistence de ces paradigmes complémentaires dans l'ingénierie logicielle.
+Nous analyserons pourquoi https://www.openapis.org/[OpenAPI^] ne peut pas décrire un serveur *MCP*, comment le rôle du développeur évolue de l'intégrateur à l'architecte d'outils et fournirons des implémentations réelles pour vous aider à comprendre la coexistence de ces paradigmes complémentaires dans l'ingénierie logicielle.
 
 == L'API d'entreprise : un contrat statique pour des échanges déterministes
 
@@ -91,9 +91,9 @@ Le protocole repose sur trois primitives fondamentales côté serveur :
 
 La communication s'effectue via des messages *JSON-RPC*, transportés soit par stdio (processus locaux), soit par HTTP Streamable (services distants).
 
-Exemples des méssages envoyées du client au serveur ou vice versa, afin d'initier une opération
+Exemples de messages envoyés du client au serveur ou vice versa, afin d'initier une opération
 
-Messages du client au serveur :
+Messages du client au serveur MCP :
 
 [source,json]
 ----
@@ -221,7 +221,7 @@ L'invocation elle-même est un message JSON-RPC :
 }
 ----
 
-=== Un protocole conversationnel, pas transactionnel
+=== Un protocole conversationnel, mais pas transactionnel
 
 L'implémentation d'un serveur MCP avec le MCP Java SDK illustre cette différence de paradigme.
 Ajoutons d'abord la dépendance Maven :
@@ -434,11 +434,11 @@ Le modèle raisonne sur les descriptions pour décider quoi appeler et comment c
 
 Un serveur MCP n'impose pas de schéma global.
 Les tools peuvent être ajoutés, modifiés ou retirés sans casser les clients, car *le modèle s'adapte dynamiquement aux capacités disponibles*.
-Cette flexibilité est fondamentale : MCP est conçu pour des systèmes où le contexte évolue en temps réel, où les outils disponibles dépendent de l'environnement d'exécution, et où l'interprétation sémantique remplace la validation syntaxique stricte.
+Cette flexibilité est fondamentale : MCP est conçu pour des systèmes où le contexte évolue en temps réel, où les outils disponibles dépendent de l'environnement d'exécution et où l'interprétation sémantique remplace la validation syntaxique stricte.
 
 *C'est ce décalage conceptuel qui rend impossible de décrire un serveur MCP avec une spécification OpenAPI classique*.
 
-== Pourquoi OpenAPI ne peut pas décrire un serveur MCP
+== Pourquoi OpenAPI ne peut pas décrire un serveur MCP ?
 
 À première vue, on pourrait penser qu'une spécification OpenAPI pourrait documenter un serveur MCP.
 Après tout, les deux systèmes échangent des messages structurés et exposent des fonctionnalités.
@@ -565,7 +565,7 @@ Chaque requête est autonome, sans mémoire du contexte précédent (sauf via de
 Le client construit chaque requête indépendamment.
 
 Un serveur MCP, en revanche, fonctionne dans un *contexte conversationnel*.
-Bien que les LLM soient intrinsèquement stateless, (ils ne conservent pas de mémoire entre les appels), l'application cliente (le host MCP) maintient l'historique de la conversation et le réinjecte dans le contexte à chaque nouvelle requête.
+Bien que les LLM soient intrinsèquement stateless, (ils ne conservent pas de mémoire entre les appels), l'application cliente (l'host MCP) maintient l'historique de la conversation et le réinjecte dans le contexte à chaque nouvelle requête.
 Cette architecture permet au modèle de comprendre les références implicites et d'enchaîner plusieurs appels de tools pour répondre à une seule question de l'utilisateur, en s'appuyant sur les échanges précédents.
 
 Exemple de conversation :
@@ -583,10 +583,10 @@ LLM : [appelle get_article avec l'ID correspondant]
 LLM : "Voici l'article Spring Boot Security : [contenu]"
 ----
 
-Cette continuité contextuelle, orchestrée par le client MCP qui réinjecte l'historique à chaque tour, n'existe pas dans une API REST classique.
-OpenAPI ne peut pas décrire comment un tool s'insère dans un flux conversationnel multi-tours où chaque appel dépend potentiellement des résultats précédents conservés en mémoire par l'application cliente.
+Cette continuité contextuelle, orchestrée par le client MCP qui réinjecte l'historique à chaque appel, n'existe pas dans une API REST classique.
+OpenAPI ne peut pas décrire comment un tool s'insère dans un flux conversationnel multi-appels où chaque appel dépend potentiellement des résultats précédents conservés en mémoire par l'application cliente.
 
-=== L'absence de notion de « resource » au sens REST
+=== L'absence de notion de « ressource » au sens REST
 
 Dans REST, une ressource est une entité identifiable par une URI (`/articles/123`).
 Les opérations CRUD sont standardisées via les verbes HTTP.
@@ -594,10 +594,10 @@ Les opérations CRUD sont standardisées via les verbes HTTP.
 Dans MCP, il n'y a pas de notion de ressource REST.
 Les *tools* sont des actions arbitraires que le modèle peut invoquer.
 Rien n'oblige un serveur MCP à suivre une logique CRUD.
-Un tool pourrait être `analyze_sentiment`, `generate_summary` ou `send_notification`, des opérations qui ne correspondent à aucune ressource REST.
+Un tool pourrait être `analyze_sentiment`, `generate_summary` ou `send_notification`, des opérations qui ne correspondent pas une logique standardisée de manipulation de ressource comme en REST.
 
 Même la primitive *Resources* de MCP (différente des ressources REST) représente des données accessibles via des URI templates, mais elles ne sont pas manipulées via des verbes HTTP.
-Elles sont simplement *consultées* pour enrichir le contexte du modèle.
+Elles peuvent simplement être *consultées* pour enrichir le contexte du modèle.
 
 === Le rôle de l'interprétation humaine (LLM)
 
@@ -608,7 +608,7 @@ MCP est conçu pour être *interprété par des LLM*.
 Les descriptions des tools sont rédigées en langage naturel précisément pour que le LLM puisse raisonner sur leur utilité.
 Aucune génération de code n'est nécessaire : le modèle décide dynamiquement, à chaque conversation, quels tools appeler et dans quel ordre.
 
-Cette différence rend OpenAPI fondamentalement inadapté, une spécification OpenAPI est trop rigide pour capturer l'adaptabilité sémantique que MCP requiert.
+Cette différence rend OpenAPI fondamentalement inadapté : une spécification OpenAPI est trop rigide pour capturer l'adaptabilité sémantique que MCP requiert.
 
 == De l'architecture RESTful à l'architecture contextuelle
 
@@ -700,7 +700,7 @@ String response = chatClient.prompt()
 ----
 
 Le modèle interprète l'intention et identifie les outils à utiliser (peut-être `search_articles` avec filtres, ou plusieurs appels successifs).
-L'exécution effective de ces tools reste sous le contrôle de l'application cliente (le host MCP), qui décide d'autoriser ou non chaque appel avant de communiquer avec le serveur MCP via le protocole défini.
+L'exécution effective de ces tools reste sous le contrôle de l'application cliente (l'host MCP), qui décide d'autoriser ou non chaque appel avant de communiquer avec le serveur MCP via le protocole défini.
 
 IMPORTANT: Dans l'architecture MCP, le LLM identifie les tools appropriés et propose leur invocation, mais c'est le client MCP (l'application host) qui a le contrôle final sur leur exécution.
 Pour les tools locaux, l'application peut implémenter des mécanismes d'autorisation pour décider si un tool doit être exécuté ou non.
@@ -732,14 +732,14 @@ Les tools MCP sont conçus pour être *combinés* par le modèle.
 Un outil ne doit pas essayer de tout faire.
 Il vaut mieux exposer plusieurs tools simples que le modèle peut enchaîner.
 
-Exemple Tool monolithique difficile à utiliser :
+Exemple de Tool monolithique difficile à utiliser :
 
 [source,text]
 ----
 name = "manage_articles" description = "Crée, recherche, met à jour ou supprime des articles selon l'action spécifiée"
 ----
 
-Exemple Tools granulaires composables :
+Exemple de Tools granulaires composables :
 
 [source,text]
 ----
