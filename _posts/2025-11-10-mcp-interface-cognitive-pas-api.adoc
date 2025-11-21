@@ -22,7 +22,7 @@ Pourtant, cette similarité de surface masque une différence fondamentale, là 
 
 Face à cette émergence, comment distinguer véritablement ces deux approches et identifier les implications architecturales de ce changement de paradigme ?
 
-Cet article propose une exploration approfondie de ces deux modèles avec des exemples en Java et le MCP Java SDK, pour éclairer leurs différences conceptuelles et architecturales.
+Cet article propose une exploration approfondie de ces deux modèles avec des exemples en Java et le https://modelcontextprotocol.io/sdk/java/mcp-overview[MCP Java SDK^], pour éclairer leurs différences conceptuelles et architecturales.
 Nous analyserons pourquoi https://www.openapis.org/[OpenAPI^] ne peut pas décrire un serveur *MCP*, comment le rôle du développeur évolue de l'intégrateur à l'architecte d'outils et fournirons des implémentations réelles pour vous aider à comprendre la coexistence de ces paradigmes complémentaires dans l'ingénierie logicielle.
 
 == L'API d'entreprise : un contrat statique pour des échanges déterministes
@@ -73,6 +73,8 @@ Elle garantit cohérence, traçabilité et prévisibilité dans des architecture
 
 Mais cette logique n'a jamais été conçue pour des acteurs capables de raisonnement contextuel comme les LLM.
 
+NOTE: Le code source du mcp-server est disponible sur https://github.com/SCIAM-FR/server-mcp[github^]
+
 == Le serveur MCP : une interface contextuelle pour les LLM
 
 Le **Model Context Protocol** (MCP), répond à un problème différent, comment permettre aux LLM d'accéder à des outils et des données de manière *contextuelle et dynamique*, sans multiplier les intégrations personnalisées pour chaque combinaison LLM × outil.
@@ -83,11 +85,11 @@ MCP adopte une architecture client-serveur, mais avec une inversion conceptuelle
 
 Le protocole repose sur trois primitives fondamentales côté serveur :
 
-*Tools* : fonctions exécutables que le LLM peut appeler pour effectuer des actions (rechercher dans une base de données, envoyer un e-mail, lire un fichier, etc.)
+1. *Tools* : fonctions exécutables que le LLM peut appeler pour effectuer des actions (rechercher dans une base de données, envoyer un e-mail, lire un fichier, etc.)
 
-*Resources* : données structurées que le LLM peut consulter pour enrichir son contexte (documents, états système, logs, etc.)
+2. *Resources* : données structurées que le LLM peut consulter pour enrichir son contexte (documents, états système, logs, etc.)
 
-*Prompts* : templates d'instructions préconfigurés que les utilisateurs peuvent invoquer via l'application cliente.
+3. *Prompts* : templates d'instructions préconfigurés que les utilisateurs peuvent invoquer via l'application cliente.
 
 La communication s'effectue via des messages *JSON-RPC*, transportés soit par stdio (processus locaux), soit par HTTP Streamable (services distants).
 
@@ -467,7 +469,7 @@ Voici une comparaison systématique des caractéristiques des deux approches :
 | Capacités interrogées dynamiquement
 
 | *Typage*
-| Schémas JSON rigides avec validation stricte
+| Possibilité d'utiliser des schémas JSON pour validation stricte
 | Schémas adaptatifs interprétés contextuellement
 
 | *Invocation*
@@ -491,11 +493,11 @@ Voici une comparaison systématique des caractéristiques des deux approches :
 | Tools ajoutés/retirés sans impact client
 
 | *Réponse*
-| Structure JSON prédéfinie
+| Structure JSON/XML/... prédéfinie
 | Contenu textuel ou structuré selon contexte
 
 | *Validation*
-| Syntaxique stricte (JSON Schema)
+| Possibilité d'utiliser des schémas JSON pour validation Syntaxique stricte
 | Sémantique par le modèle
 |===
 
@@ -503,7 +505,7 @@ Voici une comparaison systématique des caractéristiques des deux approches :
 
 La différence fondamentale réside dans la manière dont les deux systèmes traitent l'information.
 
-*OpenAPI décrit la syntaxe* : une API REST avec OpenAPI spécifie exactement quels endpoints existent, quelles méthodes HTTP sont supportées, quelles structures JSON sont attendues en entrée et en sortie.
+*OpenAPI décrit la syntaxe* : une API REST avec OpenAPI spécifie exactement quels endpoints existent, quels verbes sont supportées, quels formats de données sont attendus (JSON, XML, ...) en entrée et en sortie.
 Un client REST doit connaître ces détails avant d'invoquer l'API.
 Par exemple :
 
@@ -558,40 +560,83 @@ Par exemple :
 Le modèle analyse cette description et détermine contextuellement si ce tool est approprié pour répondre à une question de l'utilisateur comme « Montre-moi l'article sur l'architecture hexagonale ».
 Le LLM pourrait d'abord chercher l'ID avec `search_articles`, puis invoquer `get_article` avec l'ID trouvé.
 
-=== L'impossibilité de capturer le contexte conversationnel
+=== Des serveurs stateless, mais avec des stratégies de contexte différentes
 
-Une API OpenAPI décrit des opérations *isolées*.
-Chaque requête est autonome, sans mémoire du contexte précédent (sauf via des tokens/sessions gérés explicitement).
-Le client construit chaque requête indépendamment.
+Les serveurs API REST et les serveurs MCP sont tous deux *stateless*.
+Cependant, ils ne le sont pas de la même manière, et le rôle du contexte diffère profondément.
 
-Un serveur MCP, en revanche, fonctionne dans un *contexte conversationnel*.
-Bien que les LLM soient intrinsèquement stateless, (ils ne conservent pas de mémoire entre les appels), l'application cliente (l'host MCP) maintient l'historique de la conversation et le réinjecte dans le contexte à chaque nouvelle requête.
-Cette architecture permet au modèle de comprendre les références implicites et d'enchaîner plusieurs appels de tools pour répondre à une seule question de l'utilisateur, en s'appuyant sur les échanges précédents.
+==== Le contexte dans les APIs REST : authentification et paramètres explicites
 
-Exemple de conversation :
+Dans une API REST, le contexte sert principalement à l'*authentification et l'autorisation*.
+Les tokens (JWT, OAuth), cookies ou sessions permettent d'identifier l'utilisateur et ses permissions, mais **chaque requête doit contenir explicitement tous les paramètres nécessaires** pour l'opération.
+
+Exemple avec une API REST utilisant un token JWT :
+
+[source,http]
+----
+GET /api/articles/a3f5b8e2-1234-5678-90ab-cdef12345678?type=TECHNICAL
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+----
+
+Le token identifie l'utilisateur et ses droits, mais le client doit toujours fournir :
+
+- L'ID exact de l'article : `a3f5b8e2-1234-5678-90ab-cdef12345678`
+- Le type souhaité : `TECHNICAL`
+
+Le serveur ne peut pas interpréter une demande comme « Montre-moi le premier article sur Spring ».
+
+==== Le contexte dans MCP : historique conversationnel et résolution sémantique
+
+Un serveur MCP est également stateless, mais l'*application cliente* (l'host MCP) maintient l'historique complet de la conversation et le réinjecte dans le contexte du LLM à chaque échange.
+Cette architecture permet au modèle de :
+
+1. Comprendre les *références implicites* (« le premier », « celui-là », « l'article précédent »)
+2. *Résoudre sémantiquement* les intentions sans que l'utilisateur fournisse les paramètres techniques
+3. *Enchaîner automatiquement* plusieurs appels de tools pour répondre à une demande
+
+Exemple de conversation MCP :
 
 ----
 Utilisateur : "Trouve-moi les articles techniques sur Spring"
-[Host MCP] → Contexte : [historique vide]
-LLM : [appelle search_articles avec query="Spring", type="TECHNICAL"]
-LLM : "J'ai trouvé 3 articles : Spring Boot Security, Spring AI, Spring MVC"
+[Host MCP] → Contexte LLM : [historique vide]
+LLM → Serveur MCP : tools/call search_articles(query="Spring", type="TECHNICAL")
+LLM → Utilisateur : "J'ai trouvé 3 articles : Spring Boot Security, Spring AI, Spring MVC"
 
 Utilisateur : "Montre-moi le premier"
-[Host MCP] → Contexte : [historique incluant la recherche précédente et ses résultats]
-LLM : [comprend que "le premier" fait référence à "Spring Boot Security"]
-LLM : [appelle get_article avec l'ID correspondant]
-LLM : "Voici l'article Spring Boot Security : [contenu]"
+[Host MCP] → Contexte LLM : [historique incluant la recherche et ses résultats]
+LLM : [interprète "le premier" = "Spring Boot Security" avec ID a3f5b8e2-...]
+LLM → Serveur MCP : tools/call get_article(article_id="a3f5b8e2-1234-5678-90ab-cdef12345678")
+LLM → Utilisateur : "Voici l'article Spring Boot Security : [contenu]"
 ----
 
-Cette continuité contextuelle, orchestrée par le client MCP qui réinjecte l'historique à chaque appel, n'existe pas dans une API REST classique.
-OpenAPI ne peut pas décrire comment un tool s'insère dans un flux conversationnel multi-appels où chaque appel dépend potentiellement des résultats précédents conservés en mémoire par l'application cliente.
+Le message JSON-RPC correspondant à cet appel serait :
+
+[source,json]
+----
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "get_article",
+    "arguments": {
+      "article_id": "a3f5b8e2-1234-5678-90ab-cdef12345678"
+    }
+  }
+}
+----
+
+Le serveur MCP reçoit des appels explicites (`get_article` avec un ID précis), tout comme une API REST.
+La différence est que **le LLM résout automatiquement la référence implicite** « le premier » en extrayant l'ID du contexte conversationnel maintenu par le client MCP.
+
+NOTE:  Un serveur MCP peut être entièrement sécurisé avec les mêmes mécanismes qu’une API REST classique, mais la sémantique d’exécution reste MCP.
 
 === L'absence de notion de « ressource » au sens REST
 
-Dans REST, une ressource est une entité identifiable par une URI (`/articles/123`).
-Les opérations CRUD sont standardisées via les verbes HTTP.
+Dans REST, une ressource est une entité identifiable par des URI (`/articles/123`).
+Les opérations sont définies et utilisent des verbes standardisés.
 
-Dans MCP, il n'y a pas de notion de ressource REST.
+Dans MCP, il n'y a pas de notion de ressource au sens REST.
 Les *tools* sont des actions arbitraires que le modèle peut invoquer.
 Rien n'oblige un serveur MCP à suivre une logique CRUD.
 Un tool pourrait être `analyze_sentiment`, `generate_summary` ou `send_notification`, des opérations qui ne correspondent pas une logique standardisée de manipulation de ressource comme en REST.
@@ -599,7 +644,7 @@ Un tool pourrait être `analyze_sentiment`, `generate_summary` ou `send_notifica
 Même la primitive *Resources* de MCP (différente des ressources REST) représente des données accessibles via des URI templates, mais elles ne sont pas manipulées via des verbes HTTP.
 Elles peuvent simplement être *consultées* pour enrichir le contexte du modèle.
 
-=== Le rôle de l'interprétation humaine (LLM)
+=== La consommation d'une API vs l'interprétation par un LLM
 
 OpenAPI est conçu pour être consommé par des développeurs ou des outils automatisés (générateurs de code, validateurs).
 La spécification est lue par des humains ou des machines qui génèrent des clients typés.
@@ -671,15 +716,15 @@ Dans une API REST, nous devons spécifier *impérativement* les opérations :
 
 [source,java]
 ----
-// 1. Chercher les articles techniques
+// Methode 1. Chercher les articles techniques
 List<Article> technicalArticles = articleClient.getArticles("TECHNICAL");
 
-// 2. Filtrer par date récente
+// Methode 2. Filtrer par date récente
 List<Article> recentArticles = technicalArticles.stream()
     .filter(a -> a.getPublishedDate().isAfter(LocalDate.now().minusMonths(3)))
     .toList();
 
-// 3. Trier par popularité
+// Methode 3. Trier par popularité
 List<Article> sortedArticles = recentArticles.stream()
     .sorted(Comparator.comparing(Article::getViews).reversed())
     .limit(5)
