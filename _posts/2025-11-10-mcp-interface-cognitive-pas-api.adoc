@@ -497,7 +497,7 @@ Voici une comparaison systématique des caractéristiques des deux approches :
 | Contenu textuel ou structuré selon contexte
 
 | *Validation*
-| Possibilité d'utiliser des schémas JSON pour validation Syntaxique stricte
+| Possibilité d'utiliser des schémas JSON pour validation syntaxique stricte
 | Sémantique par le modèle
 |===
 
@@ -505,7 +505,7 @@ Voici une comparaison systématique des caractéristiques des deux approches :
 
 La différence fondamentale réside dans la manière dont les deux systèmes traitent l'information.
 
-*OpenAPI décrit la syntaxe* : une API REST avec OpenAPI spécifie exactement quels endpoints existent, quels verbes sont supportées, quels formats de données sont attendus (JSON, XML, ...) en entrée et en sortie.
+*OpenAPI décrit la syntaxe* : une API REST avec OpenAPI spécifie exactement quels endpoints existent, quels verbes sont supportés, quels formats de données sont attendus (JSON, XML, ...) en entrée et en sortie.
 Un client REST doit connaître ces détails avant d'invoquer l'API.
 Par exemple :
 
@@ -633,7 +633,7 @@ NOTE:  Un serveur MCP peut être entièrement sécurisé avec les mêmes mécani
 
 === L'absence de notion de « ressource » au sens REST
 
-Dans REST, une ressource est une entité identifiable par des URI (`/articles/123`).
+Dans REST, une ressource est une entité identifiable par une URI (`/articles/123`).
 Les opérations sont définies et utilisent des verbes standardisés.
 
 Dans MCP, il n'y a pas de notion de ressource au sens REST.
