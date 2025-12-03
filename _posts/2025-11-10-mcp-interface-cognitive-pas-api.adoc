@@ -9,7 +9,7 @@
 :page-vignette-licence: 'Image générée par l'IA'
 :page-liquid:
 :showtitle:
-:page-categories: software llm
+:page-categories: software llm news
 
 Dans le contexte de l'intégration des Grands Modèles de Langage (*LLM*) dans les applications d'entreprise, le choix de l'interface d'exposition des services devient une question architecturale déterminante.
 Deux paradigmes se distinguent par leurs philosophies radicalement différentes :
@@ -89,7 +89,7 @@ Le protocole repose sur trois primitives fondamentales côté serveur :
 
 2. *Resources* : données structurées que le LLM peut consulter pour enrichir son contexte (documents, états système, logs, etc.)
 
-3. *Prompts* : templates d'instructions préconfigurés que les utilisateurs peuvent invoquer via l'application cliente.
+3. *Prompts* : templates d'instructions préconfigurées que les utilisateurs peuvent invoquer via l'application cliente.
 
 La communication s'effectue via des messages *JSON-RPC*, transportés soit par stdio (processus locaux), soit par HTTP Streamable (services distants).
 
@@ -760,7 +760,7 @@ Ce changement de paradigme a des conséquences directes sur la conception des in
 
 Dans une API REST, la documentation est importante, mais le contrat reste le code (les endpoints, les schémas). Nous pouvons comprendre une API mal documentée en lisant le code ou en testant les endpoints.
 
-Dans MCP, les descriptions sont *essentielles* car elles guident directement les décisions du modèle. Une description imprécise ou ambiguë entraîne des invocations incorrectes.
+Dans MCP, les descriptions sont *essentielles*, car elles guident directement les décisions du modèle. Une description imprécise ou ambiguë entraîne des invocations incorrectes.
 
 [source,text]
 ----
