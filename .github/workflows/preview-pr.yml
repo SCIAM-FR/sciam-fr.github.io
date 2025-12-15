@@ -74,6 +74,29 @@ jobs:
         env:
           JEKYLL_ENV: production
 
+      - name: Check SURGE_TOKEN
+        env:
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+        run: |
+          if [ -z "$SURGE_TOKEN" ]; then
+            echo "❌ ERROR: SURGE_TOKEN is not set!"
+            echo ""
+            echo "SURGE_TOKEN is mandatory to deploy to surge.sh with an account."
+            echo ""
+            echo "To generate a token:"
+            echo "  1. Install surge: npm install -g surge"
+            echo "  2. Login: surge login"
+            echo "  3. Generate token: surge token"
+            echo ""
+            echo "Then add the token as a secret in GitHub Actions settings:"
+            echo "  Repository Settings > Secrets and variables > Actions > New repository secret"
+            echo "  Name: SURGE_TOKEN"
+            echo "  Value: <your token from 'surge token' command>"
+            echo ""
+            exit 1
+          fi
+          echo "✓ SURGE_TOKEN is set"
+
       - name: Deploy to Surge
         env:
           SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
