@@ -2,12 +2,11 @@
 layout: post
 title: "GitHub Issues Driven Development : terminer ses side projects pendant ses pauses café"
 author: suntan
-date: 2025-12-12 10:00:00 +0100
 toc: true
 tags: ['GitHub Copilot', 'IA', 'Développement assisté par IA', 'PWA', 'Productivité']
 excerpt: "Découvrez comment j'ai enfin terminé un side project grâce à GitHub Copilot et une méthode que j'appelle GitHub Issues Driven Development. Un workflow où l'IA devient un véritable binôme de développement."
 vignette: coffee_hourglass.png
-categories: software
+categories: software news
 ---
 
 # GitHub Issues Driven Development : terminer ses side projects pendant ses pauses café
@@ -46,7 +45,7 @@ J'ai décidé de tenter le coup. J'ai créé une issue avec mes besoins et je l'
 > - Fonctionner hors ligne
 > - S'installer comme une application mobile
 
-Et ensuite… j'ai attendu. Copilot s'est mis au travail. Il a créé une structure de projet, mis en place l'infrastructure PWA, implémenté les fonctionnalités de base, le tout dans une Pull Request. C'était comme avoir un développeur junior qui travaillait incroyablement vite mais avait parfois besoin d'assistance.
+Et ensuite… j'ai attendu. Copilot s'est mis au travail. Il a créé une structure de projet, mis en place l'infrastructure PWA, implémenté les fonctionnalités de base, le tout dans une Pull Request. C'était comme avoir un développeur junior qui travaillait incroyablement vite, mais avait parfois besoin d'assistance.
 
 ![Assigner une issue à Copilot](/images/2025/github-issue-driven-development/copilot-issue-assignment.png)
 *Quand vous assignez une issue à Copilot, il crée immédiatement une Pull Request "[WIP]" et commence à travailler.*
