@@ -266,6 +266,15 @@ saidboudjelda:
     linkedin: "bmscomp"
     github: "bmscomp"
 
+yannblazart:
+  name: "Yann Blazart"
+  bio: "Architecte/TechLead Jakarta EE/MP, Yann aime passer d'un domaine à l'autre au cours de ses différentes missions. Véritable passionné de la stack Jakarta EE, il aime étudier le code des projets open source et propose régulièrement des contributions, notamment LangChain4j-CDI dont il est co-créateur. Yann a participé à plusieurs reprises à Devoxx France en tant que conférencier sur Jakarta EE et CDI, ainsi qu'à JavaOne, Paris JUG et Devoxx Belgium."
+  job: "Senior Tech Lead"
+  pagesciam: "https://www.sciam.fr/equipe/yann-blazart"
+  picture: yannblazart.jpg
+  socials:
+    linkedin: "yann-blazart"
+
 suntan:
   name: "Sun Tan"
   bio: "Sun est un ingénieur logiciel et tech lead expérimenté avec plus de 15 ans d'expertise dans le développement d'applications Java et de solutions cloud-native. Anciennement chez Red Hat, il a contribué à des projets open-source majeurs tels que Eclipse JKube, Fabric8 Kubernetes Java Client, Eclipse Che et Eclipse Theia. Actif dans la communauté Java, Sun fait partie de l'équipe ParisJUG depuis 2015 et a occupé le rôle de JUG Leader de 2019 à 2023. En 2024, Sun rejoint Sciam en tant que consultant tech lead, apportant son expertise dans l'accompagnement des entreprises vers des solutions innovantes et performantes. Passionné par l'apprentissage continu et le partage de connaissances, Sun intervient régulièrement lors de conférences et reste impliqué dans de nombreux projets open-source. Pendant son temps libre, Sun brasse sa propre bière dans sa cuisine, combinant sa passion pour la technologie et la création artisanale."
