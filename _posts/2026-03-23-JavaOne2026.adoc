@@ -1,6 +1,6 @@
 = JavaOne 2026 : quand Java entre dans l'ère de l'IA — et SCIAM était là
 :page-navtitle: JavaOne 2026 : quand Java entre dans l'ère de l'IA — et SCIAM était là
-:page-excerpt: Retour sur JavaOne 2026 à Redwood Shores : Java prend officiellement le virage de l'IA, LangChain4j-CDI s'impose dans l'écosystème enterprise, et SCIAM était au cœur de l'événement avec un Hack Lab dédié.
+:page-excerpt: Retour sur JavaOne 2026 à Redwood Shores : Java prend officiellement le virage de l'IA, LangChain4j s'impose dans l'écosystème enterprise, et SCIAM était au cœur de l'événement avec un Hack Lab dédié à Langchain4j-CDI.
 :layout: post
 :author: yannblazart
 :page-tags: [Java, JavaOne, LangChain4j, CDI, IA, MCP, Jakarta EE, MicroProfile, Open Source, Conférence]
