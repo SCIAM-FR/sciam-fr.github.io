@@ -126,9 +126,9 @@ Rentré de Redwood Shores, quelques convictions se sont consolidées.
 
 *Le MCP (Model Context Protocol) change la donne.* Dans pratiquement toutes les sessions architecture, MCP apparaît comme le standard émergent pour connecter les agents IA aux systèmes externes. LangChain4j-CDI travaille activement sur un module MCP server en pur CDI/JAX-RS — c'est la prochaine étape du projet.
 
-== La direction SCIAM
+== La stratégie SCIAM
 
-Chez SCIAM, nous prenons ce tournant au sérieux — pas comme une tendance à suivre, mais comme une transformation profonde de la façon dont nous construisons les Systèmes d'Information.
+Chez SCIAM, nous avons pris ce tournant au sérieux — pas comme une tendance à suivre, mais comme une transformation profonde de la façon dont nous construisons les Systèmes d'Information.
 
 Les projets sur lesquels nous travaillons avec nos clients — des SI complexes, avec des contraintes de conformité, de volumétrie et de sécurité très élevées — ne vont pas être remplacés par l'IA. Ils vont être augmentés : validation intelligente, détection d'anomalies, assistance à la réconciliation de données, génération de rapports contextuels...
 
