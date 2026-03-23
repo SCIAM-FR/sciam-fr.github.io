@@ -64,9 +64,9 @@ La présence simultanée de LangChain4j et de Spring AI à JavaOne 2026 mérite 
 
 *Spring AI* s'adresse naturellement aux équipes qui font déjà du Spring Boot. Son modèle est cohérent avec l'écosystème Spring : annotations, auto-configuration, starters. C'est une entrée IA fluide pour les projets Spring existants.
 
-*LangChain4j*, lui, est framework-agnostic. Il fonctionne avec Spring, Quarkus, Helidon, TomEE, WildFly, ou n'importe quel runtime Java. Et c'est précisément là que *LangChain4j-CDI* joue son rôle : apporter une intégration native, idiomatique, aux applications Jakarta EE et MicroProfile, sans dépendance Spring, sans compromis sur les standards d'entreprise.
+*LangChain4j*, lui, est framework-agnostic. Il tourne avec Spring, Quarkus, Helidon, TomEE, WildFly, ou n'importe quel runtime Java. C'est là que *LangChain4j-CDI* entre en jeu : une intégration native pour les applications Jakarta EE et MicroProfile. Pas de dépendance Spring, pas de compromis sur les standards.
 
-Pour les équipes qui ne sont pas dans l'univers Spring, et elles sont nombreuses dans les SI enterprise critiques, LangChain4j-CDI est aujourd'hui la réponse la plus naturelle.
+Et des équipes qui ne font pas de Spring, il y en a beaucoup dans les SI enterprise critiques. Pour elles, LangChain4j-CDI est aujourd'hui le chemin le plus naturel vers l'IA.
 
 == Mercredi matin : le Hack Lab LangChain4j-CDI
 
@@ -103,7 +103,7 @@ Le déroulé : partir de zéro avec WildFly en mode dev, ajouter la dépendance 
 
 === L'IA intégrée au modèle de programmation CDI
 
-Ce qui a frappé les participants, c'est à quel point LangChain4j-CDI fait de l'IA un citoyen de première classe du modèle de programmation CDI. L'idée fondamentale est que l'IA ne devrait pas être un corps étranger dans votre application, elle doit s'exprimer avec les mêmes concepts que le reste de votre code.
+Ce qui a frappé les participants du lab, c'est qu'il n'y a rien de nouveau à apprendre. Un AI Service, dans LangChain4j-CDI, c'est un bean CDI. On le déclare, on l'injecte, on le configure, comme tout le reste.
 
 Concrètement, un AI Service devient un bean CDI comme un autre. Vous le déclarez via une interface annotée, et CDI se charge de tout le cycle de vie : instanciation, injection des dépendances, gestion du scope. Pas de factory manuelle, pas de builder pattern, pas de `new`. Juste de l'injection.
 
@@ -117,7 +117,7 @@ public interface ConversationService {
 }
 ----
 
-Le `ChatMemoryProvider` est la clé de la mémoire conversationnelle : c'est lui qui fournit un `ChatMemory` par utilisateur, permettant au LLM de conserver le contexte d'une conversation. Et comme le provider est lui-même un bean CDI, il peut injecter un cache, un store persistant ou tout autre mécanisme de votre SI pour gérer le cycle de vie de cette mémoire.
+Le `ChatMemoryProvider` gère la mémoire conversationnelle, un `ChatMemory` par utilisateur. Et comme c'est un bean CDI, il peut injecter votre cache Redis, votre store JPA, ce que vous voulez.
 
 Les outils (tools) que le LLM peut invoquer sont eux aussi des beans CDI. Il suffit d'annoter une méthode `@Tool` dans n'importe quel bean, et LangChain4j-CDI le découvre automatiquement via le mécanisme CDI de scan de beans :
 
@@ -136,9 +136,9 @@ public class InventoryTools {
 }
 ----
 
-Le LLM peut appeler `checkStock`, et derrière, c'est CDI qui injecte le `Repository`, gère la transaction, applique les intercepteurs. L'outil IA bénéficie de toute l'infrastructure enterprise sans aucun câblage spécifique.
+Quand le LLM appelle `checkStock`, c'est CDI qui résout le `Repository`, qui gère la transaction. L'outil IA vit dans le même conteneur que le reste de votre application.
 
-Et c'est là que la convergence avec MicroProfile devient particulièrement élégante. Parce que votre AI Service est un bean CDI, vous pouvez lui appliquer directement les intercepteurs MicroProfile :
+Et la résilience ? Vous la connaissez déjà. Parce que l'AI Service est un bean CDI, les intercepteurs MicroProfile Fault Tolerance s'appliquent directement dessus :
 
 [source,java]
 ----
@@ -148,18 +148,13 @@ public interface ResilientAssistant {
     @Retry(maxRetries = 3, delay = 500)
     @Timeout(5000)
     @CircuitBreaker(requestVolumeThreshold = 10)
-    @Fallback(fallbackMethod = "fallbackAnswer")
     String answer(@UserMessage String question);
-
-    default String fallbackAnswer(String question) {
-        return "Service temporairement indisponible, veuillez réessayer.";
-    }
 }
 ----
 
-Pas de wrapper, pas de proxy custom : c'est le mécanisme standard d'intercepteurs CDI qui s'applique. La résilience, l'observabilité via MicroProfile Telemetry, la configuration via MicroProfile Config, tout fonctionne nativement parce que l'AI Service *est* un bean CDI.
+`@Retry` sur un appel LLM, ça a du sens, les providers tombent, les quotas se remplissent, les latences varient. Et c'est le même `@Retry` que vous utilisez déjà sur vos appels REST ou vos accès base. L'observabilité via MicroProfile Telemetry fonctionne aussi, vos appels LLM remontent dans les mêmes dashboards que le reste.
 
-C'est exactement le pari de LangChain4j-CDI : il n'y a pas de rupture paradigmatique entre le CDI que vous pratiquez et l'IA que vous voulez intégrer. L'IA dans le SI enterprise ne devrait pas nécessiter une révolution de stack, mais une évolution naturelle du modèle de programmation que vous maîtrisez déjà.
+C'est ça qui a marqué les participants : pas de nouveau paradigme à intégrer. Le CDI qu'ils connaissent, appliqué à l'IA.
 
 == Un projet open source soutenu par SCIAM
 
@@ -175,11 +170,11 @@ C'est cette philosophie que je défends dans chaque conférence : l'open source 
 
 Rentré de Redwood Shores, quelques convictions se sont consolidées.
 
-*L'IA n'est plus un sujet de R&D.* À JavaOne 2026, on ne parlait plus de POC ou d'expérimentation. On parlait de patterns de production, de scalabilité d'agents, de coût d'inférence, de gouvernance des appels LLM. Des systèmes en production depuis 18 mois avec 99,9% d'uptime et des dizaines de milliers d'utilisateurs concurrents, tout Java, tout LangChain4j.
+*L'IA n'est plus un sujet de R&D.* À JavaOne 2026, personne ne parlait de POC. Les discussions portaient sur des patterns de production, la scalabilité d'agents, le coût d'inférence, la gouvernance des appels LLM. J'ai croisé des équipes avec des systèmes en production depuis 18 mois, 99,9% d'uptime, des dizaines de milliers d'utilisateurs concurrents. Tout en Java, tout en LangChain4j.
 
-*Java est un premier choix pour l'IA enterprise.* Le typage statique, la concurrence (virtual threads), la maturité des outils de monitoring, la robustesse de l'écosystème de build, ce sont des super-pouvoirs quand on passe de l'expérimentation à la production IA. L'écosystème commence à se structurer autour de ça.
+*Java a les bons atouts pour l'IA enterprise.* Le typage statique, les virtual threads, le monitoring mature, l'outillage de build solide, quand on passe de l'expérimentation à la production IA, ce sont de vrais avantages. L'écosystème commence à se structurer autour de ça.
 
-*Le MCP (Model Context Protocol) change la donne.* Dans pratiquement toutes les sessions architecture, MCP apparaît comme le standard émergent pour connecter les agents IA aux systèmes externes. LangChain4j-CDI travaille activement sur un module MCP server en pur CDI/JAX-RS, c'est la prochaine étape du projet.
+*Le MCP (Model Context Protocol) est partout.* Dans quasiment toutes les sessions architecture, MCP revenait comme le standard émergent pour connecter les agents IA aux systèmes externes. C'est d'ailleurs la prochaine étape pour LangChain4j-CDI : un module MCP server en pur CDI/JAX-RS.
 
 == La stratégie SCIAM
 
@@ -189,9 +184,9 @@ Les projets sur lesquels nous travaillons avec nos clients, des SI complexes, av
 
 Ce que LangChain4j-CDI permet, et que JavaOne a confirmé, c'est que cette augmentation est accessible sans réarchitecturer ce qui fonctionne. On injecte l'IA là où elle apporte de la valeur, avec les mêmes garanties de résilience et d'observabilité que le reste du SI.
 
-Et c'est là que la force de SCIAM prend tout son sens : nous ne sommes pas qu'une équipe de spécialistes techniques. SCIAM compte aussi dans ses rangs des docteurs en IA, capables d'intervenir sur les dimensions algorithmiques, scientifiques et méthodologiques de l'adoption de l'IA. De la recherche de modèles à l'intégration dans le SI, de la définition de la stratégie data à la transformation des pratiques de travail, l'ensemble du spectre est couvert. C'est ce qui permet à SCIAM d'accompagner les entreprises de bout en bout dans leur virage IA, sans jamais opposer la rigueur scientifique et l'excellence technique.
+Et c'est là que SCIAM a une carte à jouer. On n'est pas que des techs. On a aussi des docteurs en IA dans l'équipe, des gens qui bossent sur le choix des modèles, la stratégie data, les méthodes d'adoption. Quand un client veut intégrer de l'IA dans un SI critique, on peut intervenir sur toute la chaîne, du choix du modèle jusqu'au `@Inject` en production.
 
-C'est la vision que nous défendons, open source d'abord, et que nous avons eu la chance de partager avec la communauté Java mondiale cette semaine à Redwood Shores.
+C'est cette vision qu'on a partagée à Redwood Shores cette semaine. Open source d'abord, enterprise toujours.
 
 == Liens et ressources
 
