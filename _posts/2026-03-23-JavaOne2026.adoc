@@ -199,3 +199,5 @@ C'est cette vision qu'on a partagée à Redwood Shores cette semaine. Open sourc
 * https://github.com/langchain4j/langchain4j-cdi[LangChain4j-CDI sur GitHub^]
 * https://dev.java/community/javaone-2026/sessions/[Sessions JavaOne 2026^]
 * https://www.sciam.fr/[SCIAM^]
+
+_Cet article a été rédigé à partir de mes notes et retours personnels et premiers jets de JavaOne 2026, avec l'aide de Claude (Anthropic) pour la structuration et la mise en forme du texte. Il a été revu et retravaillé plusieurs fois jusqu'à obtenir ce résultat._
