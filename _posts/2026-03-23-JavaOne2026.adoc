@@ -1,0 +1,203 @@
+= JavaOne 2026 : quand Java entre dans l'ère de l'IA, et SCIAM était là
+:page-navtitle: JavaOne 2026 : quand Java entre dans l'ère de l'IA, et SCIAM était là
+:page-excerpt: Retour sur JavaOne 2026 à Redwood Shores : Java prend officiellement le virage de l'IA, LangChain4j s'impose dans l'écosystème enterprise, et SCIAM était au cœur de l'événement avec un Hack Lab dédié à Langchain4j-CDI.
+:layout: post
+:author: yannblazart
+:page-tags: [Java, JavaOne, LangChain4j, CDI, IA, MCP, Jakarta EE, MicroProfile, Open Source, Conférence]
+:docinfo: shared-footer
+:page-vignette: 2026/javaone/javaone2026.png
+:page-liquid:
+:showtitle:
+:page-categories: software news
+
+
+== Redwood Shores, 17-19 mars 2026
+
+image::/images/2026/javaone/IMG_0616.jpeg[JavaOne 2026 à Redwood Shores]
+
+Il y a des conférences qu'on visite. Il y a des conférences auxquelles on appartient. JavaOne, c'est la deuxième catégorie. Depuis sa résurrection en 2025 dans la baie de San Francisco, l'événement a retrouvé ce que les anciens rappellent avec nostalgie : cette densité humaine unique, ce croisement improbable de légendes du langage, de contributeurs open source, d'architectes en mission et de passionnés qui ont fait de Java leur maison professionnelle depuis parfois trente ans.
+
+Cette édition 2026 était la deuxième depuis le retour à Redwood Shores. Une conférence « boutique » comparée aux grandes années d'antan, mais d'une intensité par mètre carré qui dépasse n'importe quel événement mainstream. Et surtout, une édition qui a marqué un tournant : *Java a officiellement pris le virage de l'IA.*
+
+== Le Luminaries event : avant le rideau
+
+La veille de l'ouverture, Oracle réunit traditionnellement un cercle restreint : les Java Champions et les leaders des Java User Groups du monde entier. C'est ce qu'on appelle le *Luminaries event*, un moment de huis clos, loin des scènes et des badges, où la communauté se parle vraiment.
+
+image::/images/2026/javaone/IMG_0617.jpeg[Le Luminaries event]
+
+Ces échanges ont une saveur particulière. Pas de keynote corporate, pas de slide deck. Juste des gens qui font le bilan, partagent leurs retours du terrain, débattent des directions futures du langage et de son écosystème.
+
+C'est lors de ce Luminaries event que j'ai pu retrouver, ou rencontrer pour certains, quelques figures qui comptent vraiment dans la communauté Java mondiale.
+
+*Sharat Chander*, directeur du Developer Engagement Java chez Oracle, président du comité de programme de JavaOne depuis dix ans. C'est lui qui a co-orchestré la résurrection de JavaOne, lui qui écrit l'annonce officielle de chaque release Java. Parler avec lui, c'est toucher directement la ligne éditoriale de l'écosystème. Croiser l'œil du cyclone, en quelque sorte.
+
+image::/images/2026/javaone/IMG_0624.jpeg[Sharat Chander]
+
+*Bruno Souza*, le « JavaMan » du Brésil, Java Champion, leader de SouJava, membre du JCP Executive Committee. Bruno a reçu en 2022 la première Java Community Lifetime Achievement jamais décernée, sur la scène même de JavaOne. C'est une figure qui incarne ce que la communauté Java peut produire de mieux quand elle décide de s'organiser à l'échelle mondiale. Nos échanges ont tourné autour du rôle des JUGs dans la diffusion des pratiques IA enterprise,un sujet sur lequel nous partageons des convictions très proches, mais aussi sur son mentoring dans la gestion de nos carrières ;)
+
+*Ivar Grimstad*, Java Champion norvégien, Jakarta EE Developer Advocate à l'Eclipse Foundation, membre du JCP Executive Committee. Ivar est l'une des chevilles ouvrières de Jakarta EE et de MicroProfile. Le retrouver dans ce format Luminaries, puis le revoir dans les couloirs tout au long de la conférence, c'est avoir accès à une perspective de première main sur la roadmap Jakarta EE, perspective précieuse quand on construit LangChain4j-CDI au-dessus de ce socle.
+
+*Adam Bien*, enfin, Java Champion, multiple JavaOne Rock Star, créateur du podcast airhacks.fm. Adam présente à JavaOne 2026 une session intitulée "Java EE heavyweight or lightweight, Mythbusters", une comparaison directe avec Spring. Le voir sur scène défendre l'élégance du Jakarta EE sans compromis, et pouvoir l'en remercier dans les couloirs en lui parlant de LangChain4j-CDI, c'est un de ces moments qui donnent du sens à la présence physique à une conférence.
+
+image::/images/2026/javaone/IMG_0774.jpeg[Rencontres à JavaOne]
+
+Je ne peux hélas pas tous les citer, la densité de rencontres sur ces quelques heures est précisément ce qui rend le Luminaries event unique. Mais il y a dans ce moment quelque chose d'irremplaçable : le fait que ces conversations ne soient pas des interviews ou des Q&A de scène. Ce sont des discussions entre pairs, sur le fond, sur le long terme. C'est là, au fond, que se tissent les collaborations qui finissent dans vos `pom.xml`.
+
+== JavaOne 2026 : Java for an AI World
+
+image::/images/2026/javaone/IMG_0690.jpeg[Keynote JavaOne 2026]
+
+Le keynote d'ouverture donnait le ton dès son titre : "*Java for an AI World*". Et cette fois, ce n'était pas un vœu pieux ou une posture marketing. L'écosystème a bougé concrètement.
+
+Parmi les annonces qui ont fait le plus de bruit :
+
+* Le *Java Verified Portfolio*, une collection officielle Oracle de frameworks, bibliothèques et outils supportés commercialement, dont Helidon (avec intégration LangChain4j et support MCP pour les agents IA), JavaFX (de retour sous support commercial, porté par les besoins en visualisation IA), et l'extension VS Code Java.
+* *Project Detroit*, ressuscité : l'objectif est d'embarquer les runtimes V8 (JavaScript) et CPython directement dans la JVM via l'API FFM, ouvrant la voie à l'accès natif aux bibliothèques IA Python depuis du code Java.
+* *LangChain4j omniprésent*, cité dans pratiquement toutes les sessions architecture IA, depuis les sessions Helidon jusqu'aux showcases Microsoft Azure.
+* *Spring AI très présent* également, avec Josh Long (Broadcom) en keynote et plusieurs sessions dédiées, notamment "Designing Production-Ready Multi-Agent Systems with Spring AI". Spring AI 2.0 apporte ChatClient, advisors, tool calling, vector stores et un support MCP mature. C'est clairement le pendant Spring de ce que LangChain4j fait côté pur Java, les deux projets convergent vers les mêmes patterns d'agents, avec leurs philosophies respectives.
+
+Le message d'Oracle est structuré en trois couches : le développement agentique (assistants IA, agents autonomes), l'intégration de modèles dans les applications Java existantes, et l'entraînement/déploiement de modèles via les futurs projets Panama, Valhalla et Babylon. La couche du milieu, intégrer l'IA dans vos SI Java existants, est celle qui concerne 95% des équipes enterprise dès aujourd'hui.
+
+== LangChain4j vs Spring AI : deux visions, un même objectif
+
+La présence simultanée de LangChain4j et de Spring AI à JavaOne 2026 mérite qu'on s'y arrête une seconde.
+
+*Spring AI* s'adresse naturellement aux équipes qui font déjà du Spring Boot. Son modèle est cohérent avec l'écosystème Spring : annotations, auto-configuration, starters. C'est une entrée IA fluide pour les projets Spring existants.
+
+*LangChain4j*, lui, est framework-agnostic. Il tourne avec Spring, Quarkus, Helidon, TomEE, WildFly, ou n'importe quel runtime Java. C'est là que *LangChain4j-CDI* entre en jeu : une intégration native pour les applications Jakarta EE et MicroProfile. Pas de dépendance Spring, pas de compromis sur les standards.
+
+Et des équipes qui ne font pas de Spring, il y en a beaucoup dans les SI enterprise critiques. Pour elles, LangChain4j-CDI est aujourd'hui le chemin le plus naturel vers l'IA.
+
+== Mercredi matin : le Hack Lab LangChain4j-CDI
+
+C'est là que les choses sont devenues personnelles.
+
+image::/images/2026/javaone/IMG_0736.jpeg[Hack Lab LangChain4j-CDI à JavaOne]
+
+Le mercredi matin, dans l'espace Hack Haus de JavaOne, Emmanuel Hugonnet (IBM, anciennement Red Hat) et moi avons animé un hands-on lab dédié à LangChain4j-CDI, le projet open source que nous co-créons ensemble, désormais projet officiel de l'organisation LangChain4j sur GitHub.
+
+=== Pourquoi LangChain4j-CDI ?
+
+LangChain4j est devenu la référence Java pour intégrer des LLMs dans vos applications. Mais son usage natif demande de construire et câbler manuellement les composants : les `ChatLanguageModel`, les `AiService`, les outils de RAG...
+
+LangChain4j-CDI supprime ce câblage. L'idée directrice est simple et elle parle immédiatement à tout développeur Jakarta EE ou MicroProfile : vous injectez un service IA exactement comme vous injectez un `EntityManager`. Annotez une interface avec `@RegisterAIService`, configurez votre modèle via MicroProfile Config, et CDI fait le reste.
+
+[source,java]
+----
+@RegisterAIService
+public interface AssistantService {
+    String chat(String userMessage);
+}
+
+@Inject
+AssistantService assistant;
+----
+
+Plus besoin de code de glue. La résilience via MicroProfile Fault Tolerance (`@Retry`, `@Timeout`, `@CircuitBreaker`) et l'observabilité via MicroProfile Telemetry/OpenTelemetry sont disponibles nativement, parce que vous restez dans l'écosystème enterprise Java que vous maîtrisez déjà.
+
+=== Le lab en pratique
+
+Nous avons accueilli des participants de tous horizons, des développeurs curieux qui découvraient LangChain4j pour la première fois, et des architectes enterprise qui cherchaient précisément le chaînon manquant entre leur stack Jakarta EE et l'IA générative.
+
+Le déroulé : partir de zéro avec WildFly en mode dev, ajouter la dépendance `langchain4j-cdi-portable-ext`, configurer un provider (OpenAI, Ollama, Anthropic Claude...) via `microprofile-config.properties`, et en moins d'une heure avoir un AI Service injectable, résilient, observable, prêt pour la production.
+
+=== L'IA intégrée au modèle de programmation CDI
+
+Ce qui a frappé les participants du lab, c'est qu'il n'y a rien de nouveau à apprendre. Un AI Service, dans LangChain4j-CDI, c'est un bean CDI. On le déclare, on l'injecte, on le configure, comme tout le reste.
+
+Concrètement, un AI Service devient un bean CDI comme un autre. Vous le déclarez via une interface annotée, et CDI se charge de tout le cycle de vie : instanciation, injection des dépendances, gestion du scope. Pas de factory manuelle, pas de builder pattern, pas de `new`. Juste de l'injection.
+
+[source,java]
+----
+@RegisterAIService(chatMemoryProviderSupplier = SessionChatMemoryProvider.class)
+public interface ConversationService {
+
+    @SystemMessage("Tu es un assistant spécialisé en droit des affaires.")
+    String answer(@UserMessage String question);
+}
+----
+
+Le `ChatMemoryProvider` gère la mémoire conversationnelle, un `ChatMemory` par utilisateur. Et comme c'est un bean CDI, il peut injecter votre cache Redis, votre store JPA, ce que vous voulez.
+
+Les outils (tools) que le LLM peut invoquer sont eux aussi des beans CDI. On crée un bean avec des méthodes annotées `@Tool`, et on le référence dans `@RegisterAIService` via l'attribut `tools` :
+
+[source,java]
+----
+@ApplicationScoped
+public class InventoryTools {
+
+    @Inject
+    InventoryRepository repository;
+
+    @Tool("Recherche le stock disponible pour un produit donné")
+    public int checkStock(String productId) {
+        return repository.getAvailableStock(productId);
+    }
+}
+
+@RegisterAIService(tools = InventoryTools.class)
+public interface StockAssistant {
+
+    String answer(@UserMessage String question);
+}
+----
+
+Quand le LLM décide d'appeler `checkStock`, c'est CDI qui résout le `Repository` et gère la transaction derrière. L'outil IA vit dans le même conteneur que le reste de votre application.
+
+Et la résilience ? Parce que l'AI Service est un bean CDI, les intercepteurs MicroProfile Fault Tolerance s'appliquent dessus :
+
+[source,java]
+----
+@RegisterAIService(tools = InventoryTools.class)
+@Retry(maxRetries = 3, delay = 500)
+@Timeout(5000)
+@CircuitBreaker(requestVolumeThreshold = 10)
+public interface StockAssistant {
+
+    String answer(@UserMessage String question);
+}
+----
+
+`@Retry` sur un appel LLM, ça a du sens, les providers tombent, les quotas se remplissent, les latences varient. Et c'est le même `@Retry` que vous utilisez déjà sur vos appels REST ou vos accès base. L'observabilité via MicroProfile Telemetry fonctionne aussi, vos appels LLM remontent dans les mêmes dashboards que le reste.
+
+C'est ça qui a marqué les participants : pas de nouveau paradigme à intégrer. Le CDI qu'ils connaissent, appliqué à l'IA.
+
+== Un projet open source soutenu par SCIAM
+
+Ce qui rend cette participation à JavaOne particulièrement significative, c'est qu'elle ne se fait pas en solo.
+
+SCIAM soutient activement le développement de LangChain4j-CDI. Pas comme un sponsor qui appose son logo, comme un partenaire qui comprend l'enjeu stratégique de ce que nous construisons. SCIAM me libère du temps pour contribuer au projet, me permet de le présenter dans les conférences, et porte avec moi la conviction que l'IA dans le SI enterprise est un différenciateur compétitif durable.
+
+Ce soutien n'est pas anodin. Développer un projet open source à ce niveau d'ambition, intégration dans l'organisation officielle LangChain4j, module MCP en cours, présentations à JavaOne, Devoxx, Paris JUG, demande du temps, de la régularité, et une vision à moyen terme. SCIAM fait le pari que cet investissement dans la communauté Java se traduit directement en expertise et en valeur pour ses clients.
+
+C'est cette philosophie que je défends dans chaque conférence : l'open source n'est pas une activité annexe au travail d'un consultant. C'est là où se fabrique la compétence de demain.
+
+== Ce que JavaOne 2026 dit de notre métier
+
+Rentré de Redwood Shores, quelques convictions se sont consolidées.
+
+*L'IA n'est plus un sujet de R&D.* À JavaOne 2026, personne ne parlait de POC. Les discussions portaient sur des patterns de production, la scalabilité d'agents, le coût d'inférence, la gouvernance des appels LLM. Un talk présentait SkillsPilot, un SaaS IA en production depuis 18 mois avec 99,9% d'uptime et plus de 10 000 utilisateurs concurrents, tout en Java et LangChain4j (https://dev.java/community/javaone-2026/sessions/lrn1312/[session^]). Et Microsoft confirme des centaines de clients en production avec LangChain4j. On n'est plus dans l'expérimentation.
+
+*Java a les bons atouts pour l'IA enterprise.* Le typage statique, les virtual threads, le monitoring mature, l'outillage de build solide, quand on passe de l'expérimentation à la production IA, ce sont de vrais avantages. L'écosystème commence à se structurer autour de ça.
+
+*Le MCP (Model Context Protocol) est partout.* Dans quasiment toutes les sessions architecture, MCP revenait comme le standard émergent pour connecter les agents IA aux systèmes externes. C'est d'ailleurs la prochaine étape pour LangChain4j-CDI : un module MCP server en pur CDI/JAX-RS.
+
+== La stratégie SCIAM
+
+Chez SCIAM, nous avons pris ce tournant au sérieux, pas comme une tendance à suivre, mais comme une transformation profonde de la façon dont nous construisons les Systèmes d'Information.
+
+Les projets sur lesquels nous travaillons avec nos clients, des SI complexes, avec des contraintes de conformité, de volumétrie et de sécurité très élevées, ne vont pas être remplacés par l'IA. Ils vont être augmentés : validation intelligente, détection d'anomalies, assistance à la réconciliation de données, génération de rapports contextuels...
+
+Ce que LangChain4j-CDI permet, et que JavaOne a confirmé, c'est que cette augmentation est accessible sans réarchitecturer ce qui fonctionne. On injecte l'IA là où elle apporte de la valeur, avec les mêmes garanties de résilience et d'observabilité que le reste du SI.
+
+Et c'est là que SCIAM a une carte à jouer. On n'est pas que des techs. On a aussi des docteurs en IA dans l'équipe, des gens qui bossent sur le choix des modèles, la stratégie data, les méthodes d'adoption. Quand un client veut intégrer de l'IA dans un SI critique, on peut intervenir sur toute la chaîne, du choix du modèle jusqu'au `@Inject` en production.
+
+C'est cette vision qu'on a partagée à Redwood Shores cette semaine. Open source d'abord, enterprise toujours.
+
+== Liens et ressources
+
+* https://github.com/langchain4j/langchain4j-cdi[LangChain4j-CDI sur GitHub^]
+* https://dev.java/community/javaone-2026/sessions/[Sessions JavaOne 2026^]
+* https://www.sciam.fr/[SCIAM^]
+
+_Cet article a été rédigé à partir de mes notes et retours personnels et premiers jets de JavaOne 2026, avec l'aide de Claude (Anthropic) pour la structuration et la mise en forme du texte. Il a été revu et retravaillé plusieurs fois jusqu'à obtenir ce résultat._
