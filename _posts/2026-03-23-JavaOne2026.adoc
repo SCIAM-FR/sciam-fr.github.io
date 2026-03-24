@@ -176,7 +176,7 @@ C'est cette philosophie que je défends dans chaque conférence : l'open source 
 
 Rentré de Redwood Shores, quelques convictions se sont consolidées.
 
-*L'IA n'est plus un sujet de R&D.* À JavaOne 2026, personne ne parlait de POC. Les discussions portaient sur des patterns de production, la scalabilité d'agents, le coût d'inférence, la gouvernance des appels LLM. Un talk présentait SkillsPilot, un SaaS IA en production depuis 18 mois avec 99,9% d'uptime et plus de 10 000 utilisateurs concurrents, tout en Java et LangChain4j. Et Microsoft confirme des centaines de clients en production avec LangChain4j. On n'est plus dans l'expérimentation.
+*L'IA n'est plus un sujet de R&D.* À JavaOne 2026, personne ne parlait de POC. Les discussions portaient sur des patterns de production, la scalabilité d'agents, le coût d'inférence, la gouvernance des appels LLM. Un talk présentait SkillsPilot, un SaaS IA en production depuis 18 mois avec 99,9% d'uptime et plus de 10 000 utilisateurs concurrents, tout en Java et LangChain4j (https://dev.java/community/javaone-2026/sessions/lrn1312/[session^]). Et Microsoft confirme des centaines de clients en production avec LangChain4j. On n'est plus dans l'expérimentation.
 
 *Java a les bons atouts pour l'IA enterprise.* Le typage statique, les virtual threads, le monitoring mature, l'outillage de build solide, quand on passe de l'expérimentation à la production IA, ce sont de vrais avantages. L'écosystème commence à se structurer autour de ça.
 
