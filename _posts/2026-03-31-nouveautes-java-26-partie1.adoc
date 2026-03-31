@@ -25,9 +25,9 @@ Ces JEPs sont proposées en standard (5), en preview (4), ou en incubation (1).
 
 == Les fonctionnalités relatives à la syntaxe
 
-Une seule fonctionnalité, qui reste en preview, dans le JDK 26 concerne la syntaxe du langage Java :
+Une seule fonctionnalité, qui reste en preview dans le JDK 26, concerne la syntaxe du langage Java :
 
-* JEP 530 : https://openjdk.org/jeps/530[Primitive Types in Patterns&#44; instanceof&#44; and switch (Fourth Preview)]
+* JEP 530 : https://openjdk.org/jeps/530[Primitive Types in Patterns, instanceof, and switch (Fourth Preview)]
 
 === JEP 530 : Primitive Types in Patterns, instanceof, and switch (Fourth Preview)
 
@@ -266,7 +266,7 @@ Le code qui mute les champs finaux via la réflexion profonde est généralement
 Pour identifier précisément quel code mute les champs finaux, il est possible de :
 
 * Démarrer l'exécution de la JVM avec l'option `--illegal-final-field-mutation=debug`
-* µUtiliser le JDK Flight Recorder (JFR). Lorsque JFR est activé, la JVM enregistre un événement de type `jdk.FinalFieldMutation` chaque fois que le code mute un champ `final` ou utilise `Lookup.unreflectSetter()` pour obtenir un `MethodHandle` avec l'accès en écriture à un champ `final` via la réflexion. 
+* Utiliser le JDK Flight Recorder (JFR). Lorsque JFR est activé, la JVM enregistre un événement de type `jdk.FinalFieldMutation` chaque fois que le code mute un champ `final` ou utilise `Lookup.unreflectSetter()` pour obtenir un `MethodHandle` avec l'accès en écriture à un champ `final` via la réflexion. 
 Cet événement identifie la classe déclarant le champ `final`, le nom du champ `final` et la trace de la pile pour montrer d'où vient la mutation du champ `final`.
 
 De nombreuses bibliothèques Java utilisent la mutation réflexive pour désérialiser des objets immuables. 
@@ -395,7 +395,7 @@ HTTP_2
 
 Deux requêtes HTTP/3 sont envoyées sur deux domaines : le premier répond en HTTP/3 et le second répond en HTTP/2.
 
-Comme HTTP/3 n'utilise pas le protocole TCP, il n'est pas possible d'utiliser le mécanisme d'upgrade d'HTTP : une nouvelle requête doit être envoyée par l'API en utilisant la version 2 protocole HTTP. 
+Comme HTTP/3 n'utilise pas le protocole TCP, il n'est pas possible d'utiliser le mécanisme d'upgrade d'HTTP : une nouvelle requête doit être envoyée par l'API en utilisant la version 2 du protocole HTTP. 
 C'est la raison pour laquelle HTTP/2 est utilisée par défaut. 
 L'implémentation doit donc découvrir quelle version utiliser, une tâche non triviale qui peut être réalisée de plusieurs manières, chacune avec des avantages et des inconvénients selon les cas.
 
@@ -506,15 +506,15 @@ Exemple : +
   }
 ----
 
-* La méthode statique `open()` qui prend un Joiner et une fonction pour modifier la configuration par défaut prend maintenant un `UnaryOperator<Configuration>` au lieu d'une `Function<Configuration, Configuration>`
+* La méthode statique `open()` qui prend un `Joiner` et une fonction pour modifier la configuration par défaut prend maintenant un `UnaryOperator<Configuration>` au lieu d'une `Function<Configuration, Configuration>`
 * la nouvelle méthode `onTimeout()` dans l'interface `Joiner` permet de définir le comportement lorsqu'un délai d'expiration est atteint dans un `Joiner` personnalisé. Cette méthode est appelée par `StructuredTaskScope.join()` en cas de délai d'attente dépassé et lève, par défaut, une exception de type `TimeoutException`. Cependant, il est possible de redéfinir cette méthode dans un `Joiner` personnalisé pour gérer alternativement ce comportement
 
 Si un `StructuredTaskScope` est utilisé avec un timeout, et que le timeout expire avant ou pendant l'attente dans `join()`, alors la portée est annulée, et la méthode `onTimeout()` du `Joiner` est invoquée par `StructuredTaskScope.join()`.
 
-L'implémentation par défaut de la méthode onTimeout() est de lever une exception de type `TimeoutException`. 
+L'implémentation par défaut de la méthode `onTimeout()` est de lever une exception de type `TimeoutException`. 
 Cependant, il est possible de redéfinir des méthodes dans un `Joiner` personnalisé pour gérer alternativement ce comportement
 
-Si la méthode `onTimeout()` ne lève pas d'exception, alors la méthode join() invoquera la méthode `result()` pour produire le résultat. 
+Si la méthode `onTimeout()` ne lève pas d'exception, alors la méthode `join()` invoquera la méthode `result()` pour produire le résultat. 
 Ce résultat peut être basé sur le résultat des sous-tâches qui ont été complétées avant l'expiration du délai d'expiration.
 
 Exemple : un `Joiner` qui en cas de timeout atteint renvoie les résultats déjà obtenus
@@ -535,7 +535,7 @@ Exemple : un `Joiner` qui en cas de timeout atteint renvoie les résultats déj
 
     @Override
     public void onTimeout() {
-      IO.println("délai d'attente dépassé : renvoie des résultats partiels");
+      IO.println("délai d'attente dépassé : renvoi des résultats partiels");
     }
 
     @Override
@@ -562,7 +562,7 @@ Exemple : un `Joiner` qui en cas de timeout atteint renvoie les résultats déj
 
 Le but est de proposer une API dédiée à des objets contenant une valeur immuable dont l'initialisation peut être déférée dans le temps.
 Ces valeurs sont considérées comme constantes par la JVM, ce qui lui permet de mettre en œuvre certaines optimisations par le JIT de manière similaire à l'utilisation de champs déclarés `final`. 
-Cependant, contrairement aux champs déclarés `final`x, les lazy constants offrent une plus grande souplesse concernant le moment de leur initialisation qui peut être différée.
+Cependant, contrairement aux champs déclarés `final`, les lazy constants offrent une plus grande souplesse concernant le moment de leur initialisation qui peut être différée.
 
 L'API permet en autre :
 
@@ -681,9 +681,9 @@ L'API Vector restera en incubation jusqu'à ce que les fonctionnalités nécessa
 
 Le JDK 26 propose différentes évolutions dans les API du JDK qui ne font pas l'objet d'une JEP.
 
-=== L'ajout des méthodes `rootn()` et `rootnAndRemainder(`) dans la classe `BigInteger`
+=== L'ajout des méthodes `rootn()` et `rootnAndRemainder()` dans la classe `BigInteger`
 
-Deux nouvelles méthodes sont ajoutées à la classe `BigInteger` pour calculer la racine n-ième. Elle lève une `ArithmeticException` si `n <= 0` ou si `n` est pair et que `this` est négatif.
+Deux nouvelles méthodes sont ajoutées à la classe `BigInteger` pour calculer la racine n-ième. Elle lève une `ArithmeticException` si `n` <= `0` ou si `n` est pair et que `this` est négatif.
 
 La méthode `BigInteger rootn(int n)` retourne un `BigInteger` qui est la racine n-ième du `BigInteger`. Ainsi, l'invocation de `rootn(2)` est équivalente à invoquer `sqrt()`.
 
@@ -780,7 +780,7 @@ Le case folding est une transformation des chaînes de caractères qui supprime 
 
 Ainsi lors de la comparaison de 2 chaînes, le case folding est l'étape qui met les deux textes dans une forme canonique sans casse et adaptée à Unicode afin de faire une comparaison fiable et vraiment insensible à la casse.
 
-La méthode `int compareToFoldCase(String)` est l'alternative conforme à Unicode à `compareToIgnoreCase(String)`. Elle retourne un entier négatif, zéro ou un entier positif selon que la chaîne spécifiée est supérieure, égale ou inférieure à la chaîne, en ignorant les considérations de cas de repliement.
+La méthode `int compareToFoldCase(String)` est l'alternative conforme à Unicode à `compareToIgnoreCase(String)`. Elle retourne respectivement un entier négatif, zéro ou un entier positif selon que la chaîne spécifiée est supérieure, égale ou inférieure à la chaîne, en ignorant les considérations de cas de repliement.
 
 Elle implémente le case folding défini par la norme Unicode (spécification https://www.unicode.org/versions/latest/core-spec/chapter-5/#G21790[Unicode Caseless Matching]), ce qui peut donner des résultats différents de `compareToIgnoreCase()`.
 
@@ -852,7 +852,7 @@ Max: Boite[contenance=100]
 
 === `java.lang.Process` implémente `AutoCloseable` et `Closeable` (https://bugs.openjdk.org/browse/JDK-8364361[JDK-8364361])
 
-La classe java.lang.Process implémente les interfaces `Closeable` et `AutoCloseable`. L'implémentation de la méthode `close()` permet de définir des traitements à la fermeture du processus pour, par exemple, libérer les ressources sous-jacentes.
+La classe `java.lang.Process` implémente les interfaces `Closeable` et `AutoCloseable`. L'implémentation de la méthode `close()` permet de définir des traitements à la fermeture du processus pour, par exemple, libérer les ressources sous-jacentes.
 
 === Le support d'Unicode 17.0 (https://bugs.openjdk.org/browse/JDK-8346944[JDK-8346944])
 
@@ -978,7 +978,7 @@ Leur taille reste sur 128 bits : ils sont donc compatibles avec les précédent
 
 === L'ajout de la méthode `MemoryPoolMXBean.getTotalGcCpuTime()` (https://bugs.openjdk.org/browse/JDK-8368527[JDK-8368527])
 
-La méthode `getTotalGcCpuTime()` est ajoutée dans l'interface MemoryMXBean. Elle renvoie le temps CPU cumulé approximatif consacré aux activités du GC.
+La méthode `getTotalGcCpuTime()` est ajoutée dans l'interface `MemoryMXBean`. Elle renvoie le temps CPU cumulé approximatif consacré aux activités du GC.
 
 Elle renvoie `-1` si la plateforme ne supporte pas cette opération ou si l'information n'est pas disponible.
 
@@ -992,7 +992,7 @@ Historiquement, cette exception entraînait la mise en état interrupted du thre
 === L'API Class-File rejette les valeurs entières non représentables (https://bugs.openjdk.org/browse/JDK-8361614[JDK-8361614], https://bugs.openjdk.org/browse/JDK-8361635[JDK-8361635])
 
 Dans le format de fichier .class, la plage représentable de nombreuses valeurs entières est plus étroite que celle du type primitif int dans le langage Java. 
-Actuellement, l'API Class-File tronque les octets les plus significatifs d'une valeur int fournie par l'utilisateur lors de l'écriture dans un fichier .class. 
+Actuellement, l'API Class-File tronque les octets les plus significatifs d'une valeur `int` fournie par l'utilisateur lors de l'écriture dans un fichier .class. 
 À la lecture, la valeur tronquée est zéro ou signe étendu, selon le type, pour revenir à un `int`, ce qui peut donner une valeur différente de celle fournie par l'utilisateur. 
 Par exemple, une valeur `int` `65536` deviendrait `0` après cette écriture-lecture en une valeur u2.
 
