@@ -122,7 +122,7 @@ Techniquement, un champ `final` est supposé :
 * ne plus jamais changer,
 * permettant des optimisations par la JVM via le constant folding et l'inlining,
 
-Cependant, l'API Reflexion permet de contourner ces garanties en permettant de modifier la valeur d'un champ `final`.
+Cependant, l'API Reflection permet de contourner ces garanties en permettant de modifier la valeur d'un champ `final`.
 
 Exemple :
 
@@ -255,7 +255,7 @@ Conteneur[taille=100, nom='standard']
 Conteneur[taille=200, nom='standard']
 ----
 
-Cela évite les warnings et permettra, dans les futurs JDK, de permettre la mutation des champs finaux uniquement si elle est explicitement activée.
+Cela évite les warnings et permettra, dans les futurs JDK, la mutation des champs finaux uniquement si elle est explicitement activée.
 
 Dans les futures versions du JDK, un appel à `Field::set` sur un champ `final` lèvera une exception, sauf si une autorisation explicite via `--enable-final-field-mutation` est fournie pour les modules concernés.
 
@@ -408,6 +408,12 @@ Aucun code n'est nécessaire pour gérer ce comportement implémenté dans l'API
 
 Un mécanisme configurable, `H3_DISCOVERY`, permet d'ajuster la stratégie de découverte des capacités HTTP/3 du serveur. 
 L'implémentation prend en charge cette complexité : le développeur n'a aucun code spécifique à écrire.
+Il faut utiliser la méthode `setOption()` de la classe `HttpRequest.Builder` pour définir l'option `HttpOption.H3_DISCOVERY` avec une des valeurs de l'énumération `HttpOption.Http3DiscoveryMode` :
+
+* `HTTP_3_URI_ONLY` : le client tente d'établir une connexion QUIC uniquement pour les URI explicitement configurées pour HTTP/3. Une exception est levée en cas d'échec de la connexion QUIC
+* `ALT_SVC` : le client utilise la découverte HTTP/3 basée sur les en-têtes Alt-Svc (https://www.rfc-editor.org/rfc/rfc7838[HTTP Alternative Services]).
+* `ÀNY` : le client utilise la stratégie fournie par son implémentation
+  
 
 Exemple :
 
@@ -663,7 +669,9 @@ public class DemoJEP526LazyMap {
 
 === JEP 529 : Vector API (Eleventh Incubator)
 
-Cette fonctionnalité permet d'exprimer des calculs vectoriels qui, au moment de l'exécution, sont systématiquement compilés avec les meilleures instructions vectorielles possibles sur l'architecture CPU. Les SIMD sur les CPU supportées sont : x64 (SSE et AVX) et AArch64 (Neon)
+Cette fonctionnalité permet d'exprimer des calculs vectoriels qui, au moment de l'exécution, sont systématiquement compilés avec les meilleures instructions vectorielles possibles sur l'architecture CPU. 
+Les SIMD (Single Instruction, Multiple Data) permettent de traiter en parallèle, sans threads, un tableau de données pour appliquer une même opération sur plusieurs valeurs en un seul cycle de traitement CPU.
+Les SIMD sur les CPU supportées sont : x64 (SSE et AVX) et AArch64 (Neon).
 
 L'API Vector, introduite en incubation pour la première fois dans le JDK 16, est proposée pour une onzième incubation via la https://openjdk.org/jeps/529[JEP 529] dans le JDK 25, avec un changement dans l'API et 2 changements dans l'implémentation.
 
@@ -717,6 +725,51 @@ jshell> var valeur = BigInteger.TEN
 valeur ==> 10
 jshell> var racineNieme = valeur.rootnAndRemainder(4)
 racineNieme ==> BigInteger[2] { 1, 9 }
+----
+
+=== La gestion correcte de l'échelle par `BigDecimal.sqrt` (https://bugs.openjdk.org/browse/JDK-8370057[JDK-8370057])
+
+En raison d'un oubli lors de l'ajout de `BigDecimal.sqrt` dans le JDK, son échelle préférée a été définie comme `argumentScale / 2` plutôt que `ceilDiv(argumentScale, 2)`. 
+Pour de nombreuses échelles, ces expressions sont équivalentes, mais pour les échelles impaires et positives, elles diffèrent de `1`. 
+Cette dernière définition s'aligne avec le concept analogue pour les types décimaux en virgule flottante spécifié par la norme IEEE 754 et dans le JDK 26, elle est modifiée pour utiliser cette dernière définition.
+
+Avant et après ce changement, des résultats numériquement égaux seront retournés. 
+Si les résultats diffèrent, ils ne différeront que dans leur représentation (par exemple `10` vs `1e1`).
+
+Exemple avec le JDK 25
+
+[source,plain]
+----
+C:\java>jshell
+|  Welcome to JShell -- Version 25
+|  For an introduction type: /help intro
+
+jshell> var val = new BigDecimal(BigInteger.TEN, 3);
+val ==> 0.010
+
+jshell> MathContext mc = new MathContext(6);
+mc ==> precision=6 roundingMode=HALF_UP
+
+jshell> var resultat = val.sqrt(mc);
+resultat ==> 0.1
+----
+
+Exemple avec le JDK 26
+
+[source,plain]
+----
+C:\java>jshell
+|  Welcome to JShell -- Version 26
+|  For an introduction type: /help intro
+
+jshell> var val = new BigDecimal(BigInteger.TEN, 3);
+val ==> 0.010
+
+jshell> MathContext mc = new MathContext(6);
+mc ==> precision=6 roundingMode=HALF_UP
+
+jshell> var resultat = val.sqrt(mc);
+resultat ==> 0.10
 ----
 
 === L'ajout des méthodes `compareToFoldCase()` et `equalsToFoldCase()` dans la classe `String`
@@ -952,56 +1005,11 @@ Les méthodes d'accès aux annotation déclarées dans la classe `java.lang.refl
 Dans les versions précédentes, les implémentations de `java.lang.reflect.AnnotatedType` et de ses sous-interfaces ne levaient pas une `NullPointerException` pour les méthodes `isAnnotationPresent()`, `getAnnotation()` et `getDeclaredAnnotation()`. 
 Ces méthodes lèvent désormais une `NullPointerException` au lieu de retourner `false` ou `null` pour un argument `null`.
 
-=== La gestion correcte de l'échelle par `BigDecimal.sqrt` (https://bugs.openjdk.org/browse/JDK-8370057[JDK-8370057])
-
-En raison d'un oubli lors de l'ajout de `BigDecimal.sqrt` dans le JDK, son échelle préférée a été définie comme `argumentScale / 2` plutôt que `ceilDiv(argumentScale, 2)`. 
-Pour de nombreuses échelles, ces expressions sont équivalentes, mais pour les échelles impaires et positives, elles diffèrent de `1`. 
-Cette dernière définition s'aligne avec le concept analogue pour les types décimaux en virgule flottante spécifié par la norme IEEE 754 et dans le JDK 26, elle est modifiée pour utiliser cette dernière définition.
-
-Avant et après ce changement, des résultats numériquement égaux seront retournés. 
-Si les résultats diffèrent, ils ne différeront que dans leur représentation (par exemple `10` vs `1e1`).
-
-Exemple avec le JDK 25
-
-[source,plain]
-----
-C:\java>jshell
-|  Welcome to JShell -- Version 25
-|  For an introduction type: /help intro
-
-jshell> var val = new BigDecimal(BigInteger.TEN, 3);
-val ==> 0.010
-
-jshell> MathContext mc = new MathContext(6);
-mc ==> precision=6 roundingMode=HALF_UP
-
-jshell> var resultat = val.sqrt(mc);
-resultat ==> 0.1
-----
-
-Exemple avec le JDK 26
-
-[source,plain]
-----
-C:\java>jshell
-|  Welcome to JShell -- Version 26
-|  For an introduction type: /help intro
-
-jshell> var val = new BigDecimal(BigInteger.TEN, 3);
-val ==> 0.010
-
-jshell> MathContext mc = new MathContext(6);
-mc ==> precision=6 roundingMode=HALF_UP
-
-jshell> var resultat = val.sqrt(mc);
-resultat ==> 0.10
-----
-
 === L'implémentation de `getURIs()` et `get(URI)` de `java.net.CookieStore` retourne une `List` immuable (https://bugs.openjdk.org/browse/JDK-8365086[JDK-8365086])
 
 L'implémentation de l'interface `java.net.CookieStore` par le JDK a été modifiée pour que les méthodes `getURIs()` et `get(URI)` retournent une `java.util.List` immuable pour respecter les spécifications de ces deux méthodes.
 
-=== La portée du timeout d'une requête `HttpClient` est étendu pour inclure la réception du body (https://bugs.openjdk.org/browse/JDK-8208693[JDK-8208693]) (ok)
+=== La portée du timeout d'une requête `HttpClient` est étendu pour inclure la réception du body (https://bugs.openjdk.org/browse/JDK-8208693[JDK-8208693]) 
 
 Le délai d'expiration d'une requête HTTP défini via `java.net.http.HttpRequest.Builder::timeout` s'appliquait auparavant uniquement jusqu'à la réception des en-têtes de la réponse.
 
