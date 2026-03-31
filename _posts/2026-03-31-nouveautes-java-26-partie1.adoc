@@ -681,6 +681,32 @@ L'API Vector restera en incubation jusqu'à ce que les fonctionnalités nécessa
 
 Le JDK 26 propose différentes évolutions dans les API du JDK qui ne font pas l'objet d'une JEP.
 
+=== Le support de la création d'UUID Type 7 (https://bugs.openjdk.org/browse/JDK-8334015[JDK-8334015])
+
+La méthode `ofEpochMillis(long)` dans la classe `java.util.UUID` a été ajoutée pour créer un UUID de type 7 (UUIDv7) à partir d'un timestamp Unix depuis l'epoch.
+
+L'UUID retourné aura le timestamp fourni dans les 6 premiers octets, suivi des 4 bits de version et de 2 bits de variantes représentant l'UUIDv7, et les bits restants contiendront des données aléatoires provenant d'un générateur de nombres pseudo-aléatoires cryptographiquement fort.
+
+La méthode lève une exception de type `IllegalArgumentException` si le timestamp ne rentrent pas dans 48 bits.
+
+La caractéristique principale de l'UUIDv7 est que les valeurs produites sont monotones (chaque valeur suivante est supérieure à la valeur précédente). 
+Cela s'explique par le fait que la valeur de l'horodatage fait partie de l'UUID.
+
+Le grand avantage de l'UUIDv7 est que les valeurs sont naturellement triables, ce qui en fait un bon choix pour les identifiants de base de données et comblent une des lacunes des versions précédentes d'UUID. 
+Leur taille reste sur 128 bits : ils sont donc compatibles avec les précédents champs de type UUID.
+
+=== Le support de JDBC 4.5 (https://bugs.openjdk.org/browse/JDK-8369432[JDK-8369432])
+
+JDK 26 prend en charge le support de la spécification JDBC 4.5, qui apporte plusieurs évolutions :
+
+* Dépréciation pour suppression de la classe `java.sql.SQLPermission`
+* Ajout de nouveaux types SQL : `DECFLOAT` et `JSON` dans l'énumération `java.sql.JDBCType` et dans la classe `java.sql.Types`
+* Les interfaces `Array`, `Blob`, `Clob`, `Nclob` et `SQLXML` implémentent l'interface `AutoCloseable`, avec leur méthode `close()` par défaut appelant leur méthode `free()`
+* Dans l'interface `Connection`, ajout des méthodes par défaut de gestion des identifiants SQL précédemment héritées de l'interface `Statement`,
+** `enquoteIdentifier()` dont l'implémentation lève une `SQLException` si la méthode `DatabaseMetaData::getIdentifierQuoteString` ne renvoie pas de double guillemet
+** `isSimpleIdentifier()` dont l'implémentation par défaut retourne false pour les mots réservés SQL. +
+Cette mise à jour peut entraîner des incompatibilités avec certains pilotes JDBC si leurs implémentations internes de méthodes par défaut entrent en conflit ou si plusieurs interfaces fournissent des implémentations différentes d'une même méthode.
+
 === L'ajout des méthodes `rootn()` et `rootnAndRemainder()` dans la classe `BigInteger`
 
 Deux nouvelles méthodes sont ajoutées à la classe `BigInteger` pour calculer la racine n-ième. Elle lève une `ArithmeticException` si `n` <= `0` ou si `n` est pair et que `this` est négatif.
@@ -910,18 +936,6 @@ public class DemoOfFileChannel {
 }
 ----
 
-=== Le support de JDBC 4.5 (https://bugs.openjdk.org/browse/JDK-8369432[JDK-8369432])
-
-JDK 26 prend en charge le support de la spécification JDBC 4.5, qui apporte plusieurs évolutions :
-
-* Dépréciation pour suppression de la classe `java.sql.SQLPermission`
-* Ajout de nouveaux types SQL : `DECFLOAT` et `JSON` dans l'énumération `java.sql.JDBCType` et dans la classe `java.sql.Types`
-* Les interfaces `Array`, `Blob`, `Clob`, `Nclob` et `SQLXML` implémentent l'interface `AutoCloseable`, avec leur méthode `close()` par défaut appelant leur méthode `free()`
-* Dans l'interface `Connection`, ajout des méthodes par défaut de gestion des identifiants SQL précédemment héritées de l'interface `Statement`,
-** `enquoteIdentifier()` dont l'implémentation lève une `SQLException` si la méthode `DatabaseMetaData::getIdentifierQuoteString` ne renvoie pas de double guillemet
-** `isSimpleIdentifier()` dont l'implémentation par défaut retourne false pour les mots réservés SQL. +
-Cette mise à jour peut entraîner des incompatibilités avec certains pilotes JDBC si leurs implémentations internes de méthodes par défaut entrent en conflit ou si plusieurs interfaces fournissent des implémentations différentes d'une même méthode.
-
 === Le parsing plus souple du motif du signe moins dans `DecimalFormat`/`CompactNumberFormat` (https://bugs.openjdk.org/browse/JDK-8363972[JDK-8363972])
 
 La classe `NumberFormat` prend désormais en charge un parsing plus souple des signes « moins » lorsque le mode `strict` est désactivé (`NumberFormat.isStrict()` renvoie `false`).
@@ -961,20 +975,6 @@ Deux nouvelles constantes sont ajoutées dans `java.time.Duration`, `Duration.MI
 === L'ajout de la méthode `plusSaturing()` dans Instant (https://bugs.openjdk.org/browse/JDK-8368856[JDK-8368856])
 
 La méthode `plusSaturating(Duration)` est ajoutée dans la classe `java.time.Instant` : elle ajoute une durée en utilisant une arithmétique saturée. Au lieu de lever une exception en cas de dépassement, l'opération renvoie automatiquement `Instant.MIN` ou `Instant.MAX`.
-
-=== Le support de la création d'UUID Type 7 (https://bugs.openjdk.org/browse/JDK-8334015[JDK-8334015])
-
-La méthode `ofEpochMillis(long)` dans la classe `java.util.UUID` a été ajoutée pour créer un UUID de type 7 (UUIDv7) à partir d'un timestamp Unix depuis l'epoch.
-
-L'UUID retourné aura le timestamp fourni dans les 6 premiers octets, suivi des 4 bits de version et de 2 bits de variantes représentant l'UUIDv7, et les bits restants contiendront des données aléatoires provenant d'un générateur de nombres pseudo-aléatoires cryptographiquement fort.
-
-La méthode lève une exception de type `IllegalArgumentException` si le timestamp ne rentrent pas dans 48 bits.
-
-La caractéristique principale de l'UUIDv7 est que les valeurs produites sont monotones (chaque valeur suivante est supérieure à la valeur précédente). 
-Cela s'explique par le fait que la valeur de l'horodatage fait partie de l'UUID.
-
-Le grand avantage de l'UUIDv7 est que les valeurs sont naturellement triables, ce qui en fait un bon choix pour les identifiants de base de données et comblent une des lacunes des versions précédentes d'UUID. 
-Leur taille reste sur 128 bits : ils sont donc compatibles avec les précédents champs de type UUID.
 
 === L'ajout de la méthode `MemoryPoolMXBean.getTotalGcCpuTime()` (https://bugs.openjdk.org/browse/JDK-8368527[JDK-8368527])
 
