@@ -1,0 +1,1097 @@
+= Les nouveautés de Java 26 - partie 1
+:showtitle:
+:page-navtitle: Les nouveautés de Java 26 : partie 1
+:page-excerpt: Ce premier article sur les nouveautés de Java 26 détaille les fonctionnalités proposées via des JEPs concernant la syntaxe et les API.
+:layout: post
+:page-tags: [Java, Java 26]
+:author: jeanmicheldoudoux
+:page-vignette: 2026/java-26.png
+:page-liquid:
+:page-categories: software news
+
+Ce premier article est consacré aux nouveautés de Java 26 et détaille les fonctionnalités proposées dans la syntaxe et les API notamment issues des projets d'OpenJDK.
+
+Le https://openjdk.org/projects/jdk/26/[JDK 26] est une version non-version LTS. La version GA du JDK 26 a été publiée le 17 mars 2026.
+
+Elle contient 10 JEPs que l'on peut regrouper en plusieurs catégories :
+
+* Des évolutions dans le langage
+* Des évolutions dans les API
+* Des évolutions dans la JVM
+* Des fonctionnalités dépréciée et retirées
+* Des fonctionnalités dans la sécurité
+
+Ces JEPs sont proposées en standard (5), en preview (4), ou en incubation (1).
+
+== Les fonctionnalités relatives à la syntaxe
+
+Une seule fonctionnalité, qui reste en preview, dans le JDK 26 concerne la syntaxe du langage Java :
+
+* JEP 530 : https://openjdk.org/jeps/530[Primitive Types in Patterns&#44; instanceof&#44; and switch (Fourth Preview)]
+
+=== JEP 530 : Primitive Types in Patterns, instanceof, and switch (Fourth Preview)
+
+Cette fonctionnalité étend les capacités des patterns, de l'opérateur `instanceof` et de l'instruction `switch` pour fonctionner avec tous les types primitifs, ce qui permet une exploitation plus uniforme des données et rend le code qui doit gérer différents types plus lisible et moins sujet aux erreurs.
+
+Elle a été proposée en tant que fonctionnalité en preview via la https://openjdk.org/jeps/455[JEP 455] délivrée dans le JDK 23, via la https://openjdk.org/jeps/488[JEP 488] délivrée dans le JDK 24 et via la https://openjdk.org/jeps/507[JEP 507] délivrée dans le JDK 25.
+
+Elle est à nouveau proposée pour une quatrième preview, via la https://openjdk.org/jeps/530[JEP 530], avec deux changements.
+
+. Une définition améliorée des conversions inconditionnellement exactes (unconditional exactness) qui définit les règles permettant au compilateur de déterminer si une conversion primitive est garantie sûre et exacte, sans perte d'information au moment de la compilation, par exemple :
+  * `byte` ou `short` vers `int`
+  * `int` vers `double`
+  * une constante littérale pouvant être représentée exactement dans un autre type
+. Des vérifications de dominance plus strictes dans les switchs afin de détecter et rejeter davantage de cas inatteignables à la compilation.
+
+Avant le JDK 26, certains `switch` ambigus ou contradictoires étaient acceptés avec les primitives patterns.
+
+Désormais dans le JDK 26, le compilateur utilisera des règles plus strictes dans les switchs utilisant des primitive patterns pour détecter des cas inatteignables : si un `case` couvre tout ce que couvre un `case` suivant, ce dernier est considéré dominé, donc inatteignable et le compilateur émet une erreur.
+
+Exemple
+
+.Le fichier DemoJEP530.java
+[source,java]
+----
+public class DemoJEP530 {
+  public static void main(String[] args) {
+    byte b = 23;
+
+    switch (b) {
+      case short s -> IO.println("short: " + s); // couvre toutes les valeurs de byte convertibles en short
+      case 23 -> IO.println("23");               // jamais atteint, car `case short s` correspond à la valeur 23
+    }
+  }
+}
+
+----
+
+Résultat d'exécution avec un JDK 25
+
+[source,plain]
+----
+C:\java>java -version
+openjdk version "25" 2025-09-16
+OpenJDK Runtime Environment (build 25+36-3489)
+OpenJDK 64-Bit Server VM (build 25+36-3489, mixed mode, sharing)
+
+C:\java>java --enable-preview DemoJEP530.java
+short: 23
+----
+
+Résultat d'exécution avec un JDK 26
+
+[source,plain]
+----
+C:\java>java -version
+openjdk version "26" 2026-03-17
+OpenJDK Runtime Environment (build 26+35-2893)
+OpenJDK 64-Bit Server VM (build 26+35-2893, mixed mode, sharing)
+
+C:\java>java --enable-preview DemoJEP530.java
+DemoJEP530.java:7: error: this case label is dominated by a preceding case label
+            case 23 -> IO.println("23");               // jamais atteint, car `case short s` correspond à la valeur 23
+                 ^
+1 error
+error: compilation failed
+----
+
+Le compilateur détecte que la valeur peut être convertie exactement en `short` donc case `short s` capture déjà cette valeur, rendant la clause `case 23` inatteignable.
+
+Le compilateur devient donc plus rigoureux et identifie davantage d'erreurs de programmation potentielles pour prévenir les cas inatteignables et certaines conversions dangereuses. 
+Ceci rend certains switchs auparavant valides dans les previews précédentes désormais illégaux.
+
+== Les JEPs relatives aux APIs
+
+Cinq JEPS concernent des évolutions dans les API dont deux standards et les autres qui restent en preview ou en incubation :
+
+* JEP 500 : https://openjdk.org/jeps/500[Prepare to Make Final Mean Final]
+* JEP 517 : https://openjdk.org/jeps/517[HTTP/3 for the HTTP Client API]
+* JEP 525 : https://openjdk.org/jeps/525[Structured Concurrency (Sixth Preview)]
+* JEP 526 : https://openjdk.org/jeps/526[Lazy Constants (Second Preview)]
+* JEP 529 : https://openjdk.org/jeps/529[Vector API (Eleventh Incubator)]
+
+=== JEP 500 : Prepare to Make Final Mean Final
+
+La JEP 500 fait partie d'un ensemble plus large de fonctionnalités introduites progressivement afin d'améliorer l'intégrité par défaut dans la JVM.
+
+Son but est de préparer progressivement l'impossibilité par défaut de muter des champs `final` via la réflexion profonde (deep reflection), une fonctionnalité introduite depuis le JDK 5 via l'API Reflection qui permet, entre-autre, de contourner la sémantique du mot‑clé `final`.
+
+Techniquement, un champ `final` est supposé :
+
+* n'être assigné qu'une seule fois soit dans un constructeur ou soit dans un bloc d'initialisation,
+* ne plus jamais changer,
+* permettant des optimisations par la JVM via le constant folding et l'inlining,
+
+Cependant, l'API Reflexion permet de contourner ces garanties en permettant de modifier la valeur d'un champ `final`.
+
+Exemple :
+
+.Le fichier DemoJEP500.java
+[source,java]
+----
+import java.lang.reflect.Field;
+
+public class DemoJEP500 {
+  public static void main(String[] args) throws Exception {
+    Conteneur conteneur = new Conteneur("standard", 100);
+    IO.println(conteneur);
+
+    Field f = Conteneur.class.getDeclaredField("taille");
+    f.setAccessible(true);
+    f.set(conteneur, 200);
+
+    IO.println(conteneur);
+  }
+}
+
+class Conteneur {
+
+  private final int taille;
+  private String nom;
+
+  public Conteneur(String nom, int taille) {
+    this.nom = nom;
+    this.taille = taille;
+  }
+
+  @Override
+  public String toString() {
+    return "Conteneur[" + "taille=" + taille + ", nom='" + nom + '\'' + ']';
+  }
+}
+----
+
+L'exécution avec un JDK 25
+
+[source,plain]
+----
+C:\java>java DemoJEP500.java
+Conteneur[taille=100, nom='standard']
+Conteneur[taille=200, nom='standard']
+----
+
+La mutation des champs finaux est problématique, car la JVM doit supposer qu'un champ `final` pourrait être modifié à tout moment, ce qui :
+
+* empêche l'immuabilité,
+* peut induire des risques de sécurité,
+* empêche des optimisations possibles par la JVM
+
+La JEP prépare les développeurs à de futurs changements de comportement sur la mutation des champs finaux avec des restrictions par défaut dont le comportement est modifiable via l'utilisation explicite d'options de la JVM.
+
+Ainsi, l'exécution de la classe avec un JDK 26 affiche un avertissement la première fois qu'une mutation d'un champ `final` est effectuée.
+
+[source,plain]
+----
+C:\java>java DemoJEP500.java
+Conteneur[taille=100, nom='standard']
+WARNING: Final field taille in class Conteneur has been mutated reflectively by class DemoJEP500 in unnamed module @52e677af (file:/C:/java/DemoJEP500.java)
+WARNING: Use --enable-final-field-mutation=ALL-UNNAMED to avoid a warning
+WARNING: Mutating final fields will be blocked in a future release unless final field mutation is enabled
+Conteneur[taille=200, nom='standard']
+----
+
+Le résultat de l'exécution est le même, mais la JVM vous prévient que l'utilisation de cette fonctionnalité va changer dans le futur.
+
+Pour préparer la transition, la JEP 500 introduit une nouvelle option de la JVM nommée `--illegal-final-field-mutation` pour contrôler le comportement, dont les valeurs possibles sont :
+
+* `allow` : mutation autorisée sans avertissement (comportement avant le JDK 26)
+* `warn` : avertissement lors de la première mutation (par défaut dans le JDK 26)
+* `debug` : avertissement avec la stacktrace à chaque mutation
+* `deny` : mutation interdite avec la levée d'une IllegalAccessException (par défaut dans une future version du JDK)
+
+Exemple avec le mode `allow` :
+
+[source,plain]
+----
+C:\java>java --illegal-final-field-mutation=allow DemoJEP500.java
+Conteneur[taille=100, nom='standard']
+Conteneur[taille=200, nom='standard']
+----
+
+Exemple avec le mode `debug` :
+
+[source,plain]
+----
+C:\java>java --illegal-final-field-mutation=debug DemoJEP500.java
+Conteneur[taille=100, nom='standard']
+Final field taille in class Conteneur has been mutated reflectively by class DemoJEP500 in unnamed module @1e67a849 (file:/C:/java/DemoJEP500.java)
+        at java.base/java.lang.reflect.Field.postSetFinal(Field.java:1534)
+        at java.base/java.lang.reflect.Field.setFinal(Field.java:1449)
+        at java.base/java.lang.reflect.Field.set(Field.java:909)
+        at DemoJEP500.main(DemoJEP500.java:10)
+        at jdk.compiler/com.sun.tools.javac.launcher.SourceLauncher.execute(SourceLauncher.java:264)
+        at jdk.compiler/com.sun.tools.javac.launcher.SourceLauncher.run(SourceLauncher.java:138)
+        at jdk.compiler/com.sun.tools.javac.launcher.SourceLauncher.main(SourceLauncher.java:76)
+Conteneur[taille=200, nom='standard']
+----
+
+Exemple avec le mode `deny` :
+
+[source,plain]
+----
+C:\java>java --illegal-final-field-mutation=deny DemoJEP500.java
+Conteneur[taille=100, nom='standard']
+Exception in thread "main" java.lang.IllegalAccessException: class DemoJEP500 (in unnamed module @57d5872c) cannot set final field Conteneur.taille (in unnamed module @57d5872c), unnamed module @57d5872c is not allowed to mutate final fields
+        at java.base/java.lang.reflect.Field.preSetFinal(Field.java:1504)
+        at java.base/java.lang.reflect.Field.setFinal(Field.java:1447)
+        at java.base/java.lang.reflect.Field.set(Field.java:909)
+        at DemoJEP500.main(DemoJEP500.java:10)
+----
+
+Comme indiqué dans le warning avec le JDK 26, il est possible d'autoriser explicitement des modules à muter des champs finaux avec la nouvelle option `--enable-final-field-mutation`, même après que le comportement par défaut passera à `deny` dans un futur JDK :
+
+`--enable-final-field-mutation=un.module,autre.module`
+
+ou pour les unnamed modules :
+
+`--enable-final-field-mutation=ALL-UNNAMED`
+
+Exemple :
+
+[source,plain]
+----
+C:\java>java --illegal-final-field-mutation=deny --enable-final-field-mutation=ALL-UNNAMED DemoJEP500.java
+Conteneur[taille=100, nom='standard']
+Conteneur[taille=200, nom='standard']
+----
+
+Cela évite les warnings et permettra, dans les futurs JDK, de permettre la mutation des champs finaux uniquement si elle est explicitement activée.
+
+Dans les futures versions du JDK, un appel à `Field::set` sur un champ `final` lèvera une exception, sauf si une autorisation explicite via `--enable-final-field-mutation` est fournie pour les modules concernés.
+
+Il est aussi possible d'ajouter la propriété `Enable-Final-Field-Mutation` dans le fichier manifeste d'un fichier JAR exécutable. 
+La seule valeur supportée par `Enable-Final-Field-Mutation` dans le manifeste est `ALL-UNNAMED` : toutes les autres valeurs font lever une exception.
+
+Le code qui mute les champs finaux via la réflexion profonde est généralement du code de bibliothèques utilisées, pas du code de l'application. 
+Pour identifier précisément quel code mute les champs finaux, il est possible de :
+
+* Démarrer l'exécution de la JVM avec l'option `--illegal-final-field-mutation=debug`
+* µUtiliser le JDK Flight Recorder (JFR). Lorsque JFR est activé, la JVM enregistre un événement de type `jdk.FinalFieldMutation` chaque fois que le code mute un champ `final` ou utilise `Lookup.unreflectSetter()` pour obtenir un `MethodHandle` avec l'accès en écriture à un champ `final` via la réflexion. 
+Cet événement identifie la classe déclarant le champ `final`, le nom du champ `final` et la trace de la pile pour montrer d'où vient la mutation du champ `final`.
+
+De nombreuses bibliothèques Java utilisent la mutation réflexive pour désérialiser des objets immuables. 
+La JEP recommande d'utiliser l'API `sun.reflect.ReflectionFactory` qui permet d'obtenir un `MethodHandle` spécial qui initialise un objet en attribuant directement ses champs d'instance, y compris les champs finaux. 
+Ce code, qui est généré dynamiquement par le JDK, propose les mêmes fonctionnalités que les mécanismes de sérialisation du JDK.
+
+Cette approche évite complètement la mutation réflexive de champs `final` : il n'y a donc pas d'avertissements avec le JDK 26 et elle est compatible avec les futures versions où la mutation sera interdite par défaut. 
+Il ne sera ainsi pas nécessaire de permettre une mutation des champs finaux par le module utilisant cette API.
+
+Ce changement améliorera la sécurité du runtime et les performances via des optimisations effectuées par la JVM pour de nouveau rétablir la garantie que `final` signifie `final` par défaut.
+
+=== JEP 517 : HTTP/3 for the HTTP Client API
+
+L'API `HttpClient` propose la prise en charge du protocole HTTP/3 avec un impact minimal dans l'API, tout en conservant, par défaut, une compatibilité transparente avec HTTP/2 et HTTP/1.1 si nécessaire.
+
+==== HTTP/1.1 et 2 vs HTTP/3
+
+HTTP/3 n'est pas une évolution d'HTTP/2 :
+
+* HTTP/2 repose sur le protocole TCP et utilise TLS de manière optionnelle avec un mécanisme de handshake supplémentaire
+* HTTP/3 repose sur QUIC, une couche de transport moderne différente, chiffrée nativement, fonctionnant sur UDP avec un multiplexage, et conçue pour résoudre les limitations fondamentales de TCP
+
+HTTP/1.1 et HTTP/2 reposent sur TCP, qui souffre de limitations :
+
+* connexions coûteuses (3-way handshake),
+* congestion et perte de paquets impactant tous les flux,
+* inefficacité en changement de réseau (changement d'adresse IP).
+
+QUIC a été conçu pour contourner ces limites, en proposant un transport
+
+. Utilisant le protocole UDP : QUIC encapsule un protocole de transport équivalent à TCP mais au-dessus d'UDP
+. chiffré par défaut : contrairement à HTTP/2, QUIC intègre TLS 1.3 dans la couche transport. Il n'existe aucune version non chiffrée de QUIC.
+
+Le handshake QUIC combine :
+
+* établissement de connexion,
+* chiffrement TLS 1.3,
+* négociation des versions,
+* paramètres du transport,
+
+en un seul échange, ce qui réduit la latence, car il n'y aucune latence additionnelle liée à un handshake TLS séparé.
+
+QUIC permet de conserver une session même si l'adresse IP change (changement de réseau ou d'interface réseau). 
+Ceci est impossible avec TCP sans rompre la connexion.
+
+La mise en œuvre du multiplexage avec TCP présente aussi des limitations. 
+TCP impose un ordre strict des paquets : la perte d'un paquet bloque tous les flux multiplexés (Head of Line blocking).
+
+QUIC supprime le problème et introduit des flux séparés :
+
+* chacun est ordonné indépendamment,
+* chacun peut retransmettre sans bloquer les autres flux,
+* pas de dépendance au transport sous-jacent.
+
+HTTP/3 propose donc une latence plus faible, des débits plus stables et un meilleur comportement en situation de changement de réseau (Wi-Fi, mobile). 
+C'est ce qui rend HTTP/3 plus performant dans les environnements modernes.
+
+==== Les évolutions dans l'API HttpClient
+
+L'impact sur l'API est minimal : toute la complexité (support de QUIC, gestion UDP, négociation de version, détection des capacités du serveur) est entièrement encapsulée dans l'implémentation du client.
+
+HTTP/2 est toujours utilisé comme version par défaut pour garantir une compatibilité maximale. 
+Le support d'HTTP/3 est donc opt-in. 
+Il suffit de préciser d'utiliser la version 3 du protocole HTTP :
+
+* au niveau du client, pour toutes les requêtes qu'il émet
+
+[source,java]
+----
+    var client = HttpClient.newBuilder()
+        .version(HttpClient.Version.HTTP_3)
+        .build();
+----
+
+* au niveau de la requête
+
+[source,java]
+----
+    var request = HttpRequest.newBuilder(URI.create(url))
+        .version(HttpClient.Version.HTTP_3)
+        .GET()
+        .build();
+----
+
+Exemple :
+
+.Le fichier DemoJEP517.java
+[source,java]
+----
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class DemoJEP517 {
+  public static void main(String[] args) throws Exception {
+    var client = HttpClient.newHttpClient();
+    getResponse(client, "https://www.google.fr/");
+    getResponse(client, "https://openjdk.org/");
+  }
+
+  private static void getResponse(HttpClient client, String url) throws IOException, InterruptedException {
+    IO.println(url);
+    var request = HttpRequest.newBuilder(URI.create(url))
+        .version(HttpClient.Version.HTTP_3)
+        .GET()
+        .build();
+
+    var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    IO.println(response.version());
+  }
+}
+----
+
+Résultat
+
+[source,plain]
+----
+C:\java>java DemoJEP517.java
+https://www.google.fr/
+HTTP_3
+https://openjdk.org/
+HTTP_2
+----
+
+Deux requêtes HTTP/3 sont envoyées sur deux domaines : le premier répond en HTTP/3 et le second répond en HTTP/2.
+
+Comme HTTP/3 n'utilise pas le protocole TCP, il n'est pas possible d'utiliser le mécanisme d'upgrade d'HTTP : une nouvelle requête doit être envoyée par l'API en utilisant la version 2 protocole HTTP. 
+C'est la raison pour laquelle HTTP/2 est utilisée par défaut. 
+L'implémentation doit donc découvrir quelle version utiliser, une tâche non triviale qui peut être réalisée de plusieurs manières, chacune avec des avantages et des inconvénients selon les cas.
+
+Par défaut, pour chaque requête ou client configuré en HTTP/3 :
+
+* Le client tente d'établir une connexion QUIC,
+* Si le serveur ne supporte pas HTTP/3, le client se replie automatiquement vers HTTP/2 ou HTTP/1.1 selon ce que le serveur prend en charge.
+
+Aucun code n'est nécessaire pour gérer ce comportement implémenté dans l'API `HttpClient` qui implique que si le serveur n'accepte pas HTTP/3, les traitements basculent silencieusement vers HTTP/2 ou HTTP/1.
+
+Un mécanisme configurable, `H3_DISCOVERY`, permet d'ajuster la stratégie de découverte des capacités HTTP/3 du serveur. 
+L'implémentation prend en charge cette complexité : le développeur n'a aucun code spécifique à écrire.
+
+Exemple :
+
+.Le fichier DemoJEP517.java
+[source,java]
+----
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpOption;
+
+public class DemoJEP517 {
+  public static void main(String[] args) throws Exception {
+    var client = HttpClient.newHttpClient();
+    getResponse(client, "https://www.google.fr/");
+    getResponse(client, "https://openjdk.org/");
+  }
+
+  private static void getResponse(HttpClient client, String url) throws IOException, InterruptedException {
+    IO.println(url);
+    var request = HttpRequest.newBuilder(URI.create(url))
+            .version(HttpClient.Version.HTTP_3)
+            // .setOption(HttpOption.H3_DISCOVERY, HttpOption.Http3DiscoveryMode.HTTP_3_URI_ONLY)
+            .setOption(HttpOption.H3_DISCOVERY, HttpOption.Http3DiscoveryMode.ALT_SVC)
+            .GET()
+            .build();
+     var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    IO.println(response.version());
+  }
+}
+----
+
+=== JEP 525 : Structured Concurrency (Sixth Preview)
+
+Cette fonctionnalité a pour but de simplifier la programmation multithread en rationalisant la gestion des erreurs et l'annulation et en améliorant la fiabilité et en renforçant l'observabilité pour un ensemble de tâches concurrentes gérées comme une unité.
+
+Elle propose un modèle qui permet une écriture du code dans un style synchrone avec une exécution en asynchrone. 
+Le code est ainsi facile à écrire, à lire et à tester.
+
+La concurrence structurée (Structured Concurrency) a été proposée via la https://openjdk.org/jeps/428[JEP 428] livrée dans le JDK 19 en tant qu'API en incubation. 
+Elle a été réincubée via la https://openjdk.org/jeps/437[JEP 437] dans le JDK 20 avec une mise à jour mineure pour que les threads utilisés héritent des Scoped values (JEP 429).
+
+Elle a été ensuite proposée dans plusieurs previews :
+
+* une première preview via la https://openjdk.org/jeps/453[JEP 453] dans le JDK 21 avec la méthode StructuredTaskScope::fork modifiée pour renvoyer une SubTask plutôt qu'une Future.
+* une seconde preview via la https://openjdk.org/jeps/462[JEP 462] dans JDK 22, sans modification
+* une troisième preview via la https://openjdk.org/jeps/480[JEP 480] dans le JDK 23, sans modification, afin d'obtenir plus de retours
+* une quatrième preview via la https://openjdk.org/jeps/499[JEP 499] dans le JDK 24, sans modification
+* une cinquième preview via la https://openjdk.org/jeps/505[JEP 505] dans le JDK 25 avec de grosses modifications dans l'API
+
+La https://openjdk.org/jeps/525[JEP 525] propose une sixième preview de cette fonctionnalité avec des modifications mineures dans l'API :
+
+* La méthode `Joiner::allSuccessfulOrThrow` renvoie maintenant une liste de résultats (`List<T>`) plutôt qu'un `Stream<Subtask<T>>` +
+Exemple : +
++
+[source,java]
+----
+  void verifierStatus() throws InterruptedException {
+    try (var scope = StructuredTaskScope.open(Joiner.<Statut>allSuccessfulOrThrow())) {
+      serviceStatuts.forEach(service -> {
+        scope.fork(() -> service.get());
+      });
+
+      List<Statut> status = scope.join();
+      status.stream().filter(s -> s.code() < 30 ).forEach(System.out::println);
+    }  
+  }
+----
+
+* La méthode `Joiner::anySuccessfulResultOrThrow()` est maintenant nommée `anySuccessfulOrThrow()` +
++
+Exemple : +
++
+.Le fichier DemoJEP530.java
+[source,java]
+----
+  Temperature getTemperature(String ville) throws InterruptedException, ExecutionException {
+    Temperature resultat = null;
+
+    try (var scope = StructuredTaskScope.open(Joiner.<Temperature>anySuccessfulOrThrow())) {
+      serviceMeteos.forEach(f -> {
+        scope.fork(() -> f.getTemperature(ville));
+      });
+
+      resultat = scope.join();
+    }
+    return resultat;
+  }
+----
+
+* La méthode statique `open()` qui prend un Joiner et une fonction pour modifier la configuration par défaut prend maintenant un `UnaryOperator<Configuration>` au lieu d'une `Function<Configuration, Configuration>`
+* la nouvelle méthode `onTimeout()` dans l'interface `Joiner` permet de définir le comportement lorsqu'un délai d'expiration est atteint dans un `Joiner` personnalisé. Cette méthode est appelée par `StructuredTaskScope.join()` en cas de délai d'attente dépassé et lève, par défaut, une exception de type `TimeoutException`. Cependant, il est possible de redéfinir cette méthode dans un `Joiner` personnalisé pour gérer alternativement ce comportement
+
+Si un `StructuredTaskScope` est utilisé avec un timeout, et que le timeout expire avant ou pendant l'attente dans `join()`, alors la portée est annulée, et la méthode `onTimeout()` du `Joiner` est invoquée par `StructuredTaskScope.join()`.
+
+L'implémentation par défaut de la méthode onTimeout() est de lever une exception de type `TimeoutException`. 
+Cependant, il est possible de redéfinir des méthodes dans un `Joiner` personnalisé pour gérer alternativement ce comportement
+
+Si la méthode `onTimeout()` ne lève pas d'exception, alors la méthode join() invoquera la méthode `result()` pour produire le résultat. 
+Ce résultat peut être basé sur le résultat des sous-tâches qui ont été complétées avant l'expiration du délai d'expiration.
+
+Exemple : un `Joiner` qui en cas de timeout atteint renvoie les résultats déjà obtenus
+
+[source,java]
+----
+  @SuppressWarnings("preview")
+  class JoinerPartiel<T> implements StructuredTaskScope.Joiner<T, List<T>> {
+    private final Queue<T> resultats = new ConcurrentLinkedQueue<>();
+
+    @Override
+    public boolean onComplete(StructuredTaskScope.Subtask<T> subtask) {
+      if (subtask.state() == StructuredTaskScope.Subtask.State.SUCCESS) {
+        resultats.add(subtask.get());
+      }
+      return false;
+    }
+
+    @Override
+    public void onTimeout() {
+      IO.println("délai d'attente dépassé : renvoie des résultats partiels");
+    }
+
+    @Override
+    public List<T> result() {
+      return List.copyOf(resultats);
+    }
+  }
+
+  @SuppressWarnings("preview")
+  void getClientsAvecOnTimeout(String codeClient) throws InterruptedException {
+    Facture resultat = null;
+    var joiner = new JoinerPartiel<Client>();
+    try (var scope = StructuredTaskScope.open(joiner, config -> config.withName("obtenir-facture-ontimeout")
+        .withTimeout(Duration.ofSeconds(1)))) {
+      scope.fork(() -> this.getClient(codeClient));
+      scope.fork(() -> this.getClient("ok"));
+      List<Client> clients = scope.join();
+      clients.forEach(IO::println);
+    }
+  }
+----
+
+=== JEP 526 : Lazy Constants (Second Preview)
+
+Le but est de proposer une API dédiée à des objets contenant une valeur immuable dont l'initialisation peut être déférée dans le temps.
+Ces valeurs sont considérées comme constantes par la JVM, ce qui lui permet de mettre en œuvre certaines optimisations par le JIT de manière similaire à l'utilisation de champs déclarés `final`. 
+Cependant, contrairement aux champs déclarés `final`x, les lazy constants offrent une plus grande souplesse concernant le moment de leur initialisation qui peut être différée.
+
+L'API permet en autre :
+
+* de découpler la création de lazy constants de leur initialisation, sans pénalités de performance significatives
+* de garantir que les valeurs sont initialisées au plus une fois, même dans les programmes multithread, de manière fiable avant toute première utilisation
+* de permettre au code de profiter des optimisations de type constant-folding
+
+Les cas d'utilisation typiques sont notamment les objets qui implémentent les design patterns Singleton, les loggers, des ressources partagées,…
+
+L'API a été proposée comme une fonctionnalité en preview par la https://openjdk.org/jeps/470[JEP 502] sous le nom « Stable Values » et livrée dans le https://openjdk.org/projects/jdk/25/[JDK 25]. 
+Elle est de nouveau proposée en preview par la https://openjdk.org/jeps/526[JEP 526] sous le nom « Lazy Constants » avec des modifications dans son API :
+
+* La classe `StableValue` est renommée en `LazyConstant`
+* La suppression des méthodes de bas niveau (`orElseSet()`, `setOrThrow()`, `trySet()`) de l'API pour ne conserver que le style fabrique avec fonction de calcul de la valeur et la méthode `get()` pour l'obtenir
+* Les fabriques pour les `List` et les `Map` paresseuses ont été déplacées vers `List.ofLazy()` et `Map.ofLazy()`
+* `null` n'est plus autorisée comme valeur calculée : si une fonction retourne `null` comme valeur alors une `NullPointerException` est levée
+* Les fabriques `function()` et `intFunction()` sont supprimées
+
+==== Les constantes paresseuses
+
+Une constante paresseuse est un objet, de type `java.lang.LazyConstant<T>`, qui encapsule une valeur sous la forme d'un objet. 
+Une valeur ne sera initialisée qu'avant que son contenu ne soit obtenu pour la première fois, et elle est immuable par la suite. 
+Ainsi, elle propose un moyen d'obtenir simplement une immuabilité différée.
+
+L'obtention d'une instance se fait en invoquant la fabrique `LazyConstant::of` qui attend en paramètre un `Supplier` qui sera invoqué une seule fois pour créer l'instance encapsulée. 
+À ce moment, l'instance de la valeur n'est pas encore créée.
+
+Pour obtenir l'instance, il suffit d'invoquer la méthode `get()` de l'instance de type `LazyConstant`. 
+Lors du premier appel à la méthode `get()`, l'instance est créée en invoquant le `Supplier` passé en paramètre de la fabrique. 
+Lors des invocations suivantes, c'est l'instance créée qui est retournée.
+Ainsi la valeur du `LazyConstant` est garantie d'être initialisée uniquement à la première invocation et après elle est immuable.
+
+Exemple :
+
+.Le fichier DemoJEP526.java
+[source,java]
+----
+public class DemoJEP526 {
+
+  static private final LazyConstant<MonService> SERVICE = LazyConstant.of(MonService::new);
+
+  public static MonService service() {
+    return SERVICE.get();
+  }
+
+  public static void main(String[] args) {
+    service().afficher("Execution des traitements");
+  }
+}
+----
+
+Dans l'implémentation de `Lazyconstant`, la valeur est encapsulée dans un champ non `final` annoté avec l'annotation `@jdk.internal.vm.annotation.Stable` interne au JDK. 
+Cette annotation indique que, même si le champ n'est pas `final`, la JVM peut être sûre que la valeur du champ ne changera pas après la mise à jour initiale et unique du champ. 
+Cela permet à la JVM de traiter le contenu d'une lazy constant comme une constante et ainsi effectuer des optimisations de type constant-folding.
+
+==== Les List et Map paresseuses
+
+L'API permet aussi de gérer des collections dont les éléments sont eux-mêmes des données immuables différées, partageant une logique d'initialisation similaire.
+
+Pour une `List`, il faut utiliser la fabrique `List::ofLazy`. 
+Elle attend en paramètre le nombre d'éléments de la `List` (car la taille de la collection doit être fixe) et une fonction qui permet de créer l'instance de l'élément dont l'indice est passé en paramètre.
+
+À ce moment, aucun élément de la `List` n'est créé. 
+Lors du premier accès à un élément de la `List`, l'instance sera créée en invoquant la fonction et sera retournée. 
+Les accès suivants avec le même indice retourneront l'instance créée.
+
+Exemple :
+
+.Le fichier DemoJEP526LazyList.java
+[source,java]
+----
+import java.util.List;
+
+public class DemoJEP526LazyList {
+
+  private static final int NB_SERVICES = 10;
+  static final List<MonService> SERVICES  = List.ofLazy(NB_SERVICES, (n) -> new MonService(n));
+
+  public static void main(String[] args) {
+    SERVICES.get(3).afficher("Execution des traitements");
+  }
+}
+----
+
+Pour une `Map`, il faut utiliser la fabrique `Map::ofLazy`. Elle attend en paramètre un `Set` des clés de la `Map` (car elle est immuable) et une fonction qui permet de créer l'instance de l'élément dont la clé est passée en paramètre.
+
+Exemple :
+
+.Le fichier DemoJEP526LazyMap.java
+[source,java]
+----
+import java.util.Map;
+import java.util.Set;
+
+public class DemoJEP526LazyMap {
+
+  static final Map<String, MonService> SERVICES = Map.ofLazy(Set.of("service1","service2"), (k) -> new MonService(k));
+
+  public static void main(String[] args) {
+    SERVICES.get("service2").afficher("Execution des traitements");
+  }
+}
+----
+
+=== JEP 529 : Vector API (Eleventh Incubator)
+
+Cette fonctionnalité permet d'exprimer des calculs vectoriels qui, au moment de l'exécution, sont systématiquement compilés avec les meilleures instructions vectorielles possibles sur l'architecture CPU. Les SIMD sur les CPU supportées sont : x64 (SSE et AVX) et AArch64 (Neon)
+
+L'API Vector, introduite en incubation pour la première fois dans le JDK 16, est proposée pour une onzième incubation via la https://openjdk.org/jeps/529[JEP 529] dans le JDK 25, avec un changement dans l'API et 2 changements dans l'implémentation.
+
+L'API Vector restera en incubation jusqu'à ce que les fonctionnalités nécessaires du projet Valhalla soient disponibles en tant que fonctionnalités en preview. À ce moment-là, l'implémentation de l'API Vector pour les utiliser, et elle pourra être promue d'incubation à preview.
+
+== Les autres évolutions dans les API de Java Core
+
+Le JDK 26 propose différentes évolutions dans les API du JDK qui ne font pas l'objet d'une JEP.
+
+=== L'ajout des méthodes `rootn()` et `rootnAndRemainder(`) dans la classe `BigInteger`
+
+Deux nouvelles méthodes sont ajoutées à la classe `BigInteger` pour calculer la racine n-ième. Elle lève une `ArithmeticException` si `n <= 0` ou si `n` est pair et que `this` est négatif.
+
+La méthode `BigInteger rootn(int n)` retourne un `BigInteger` qui est la racine n-ième du `BigInteger`. Ainsi, l'invocation de `rootn(2)` est équivalente à invoquer `sqrt()`.
+
+Exemple :
+
+[source,plain]
+----
+jshell> var valeur = BigInteger.TEN
+valeur ==> 10
+
+jshell> var racineNieme = valeur.rootn(3)
+racineNieme ==> 2
+
+jshell> var racineNieme = valeur.rootn(-3)
+|  Exception java.lang.ArithmeticException: Non-positive root degree
+|        at BigInteger.checkRootDegree (BigInteger.java:2818)
+|        at BigInteger.rootn (BigInteger.java:2780)
+|        at do_it$Aux (#7:1)
+|        at (#7:1)
+
+jshell> var valeur = BigInteger.valueOf(-10)
+valeur ==> -10
+
+jshell> var racineNieme = valeur.rootn(2)
+|  Exception java.lang.ArithmeticException: Negative BigInteger
+|        at BigInteger.sqrt (BigInteger.java:2715)
+|        at BigInteger.rootn (BigInteger.java:2778)
+|        at do_it$Aux (#14:1)
+|        at (#14:1)
+----
+
+La méthode `BigInteger.rootnAndRemainder(int n)` retourne un tableau de deux `BigInteger` contenant respectivement la racine entière n-ième `r` de `this` et son reste `this - r^n^`. Ainsi, l'invocation de `rootnAndRemainder(2)` est équivalente à invoquer `sqrtAndRemainder()`.
+
+Exemple :
+
+[source,plain]
+----
+jshell> var valeur = BigInteger.TEN
+valeur ==> 10
+jshell> var racineNieme = valeur.rootnAndRemainder(4)
+racineNieme ==> BigInteger[2] { 1, 9 }
+----
+
+=== L'ajout des méthodes `compareToFoldCase()` et `equalsToFoldCase()` dans la classe `String`
+
+Deux nouvelles méthodes `compareToFoldCase()` et `equalsToFoldCase()` qui implémentent respectivement la comparaison et l'égalité en utilisant le case folding Unicode.
+
+Le case folding est une transformation des chaînes de caractères qui supprime toutes les différences de casse (majuscules/minuscules) de manière uniforme et compatible Unicode, afin de pouvoir les comparer sans tenir compte de la casse.
+
+Ainsi lors de la comparaison de 2 chaînes, le case folding est l'étape qui met les deux textes dans une forme canonique sans casse et adaptée à Unicode afin de faire une comparaison fiable et vraiment insensible à la casse.
+
+La méthode `int compareToFoldCase(String)` est l'alternative conforme à Unicode à `compareToIgnoreCase(String)`. Elle retourne un entier négatif, zéro ou un entier positif selon que la chaîne spécifiée est supérieure, égale ou inférieure à la chaîne, en ignorant les considérations de cas de repliement.
+
+Elle implémente le case folding défini par la norme Unicode (spécification https://www.unicode.org/versions/latest/core-spec/chapter-5/#G21790[Unicode Caseless Matching]), ce qui peut donner des résultats différents de `compareToIgnoreCase()`.
+
+Attention : cette méthode ne prend pas en compte la `Locale` et peut produire des résultats différents de l'ordre sensible à la `Locale`. Dans ce cas, il faut utiliser la classe `Collator` pour une comparaison sensible à la `Locale`.
+
+Exemple :
+
+[source,plain]
+----
+jshell> String chaine1 = "Straße";
+chaine1 ==> "Straße"
+
+jshell> String chaine2 = "STRASSE";
+chaine2 ==> "STRASSE"
+
+jshell> int cmpFoldCase = chaine1.compareToFoldCase(chaine2);
+cmpFoldCase ==> 0
+
+jshell> int cmpIgnoreCase = chaine1.compareToIgnoreCase(chaine2);
+cmpIgnoreCase ==> 108
+
+jshell> var equalsFoldCase = chaine1.equalsFoldCase(chaine2);
+equalsFoldCase ==> true
+----
+
+=== Les attributs HttpContext ne sont plus partagés par défaut avec `HttpExchange` (https://bugs.openjdk.org/browse/JDK-7105350[JDK-7105350])
+
+L'implémentation par défaut du serveur HTTP fournie dans le module `jdk.httpserver` est destinée à des usages simples tels que les tests locaux, le développement et le débogage.
+
+Avant le JDK 26, dans l'implémentation par défaut du serveur HTTP du JDK, la `Map` d'attributs `HttpExchange` était partagée avec l'instance de type `HttpContext` qui l'encapsule.
+
+Dans le JDK 26, par défaut, les attributs de contexte ne sont plus partagés avec tous leurs échanges. Au lieu de cela, chaque échange possède sa propre `Map` d'attributs. Les attributs de contexte doivent être consultés en appelant `getHttpContext().getAttributes()` de la classe `HttpExchange`.
+
+Ce comportement par défaut peut revenir à celui d'avant JDK 26 en définissant la propriété système `jdk.httpserver.attributes` avec la valeur `"context"`.
+
+=== L'ajout des méthodes par défaut `min(T, T)` et `max(T, T)` dans l'interface Comparator (https://bugs.openjdk.org/browse/JDK-8356995[JDK-8356995])
+
+Deux nouvelles méthodes par défaut `min()` et `max()` sont ajoutées à l'interface `java.util.Comparator` : elles permettent respectivement de trouver le plus petit ou le plus grand objet parmi les deux objets selon ce comparateur.
+
+Exemple
+
+.Le fichier DemoMinMaxJDK26.java
+[source,java]
+----
+import java.util.Comparator;
+
+public class DemoMinMaxJDK26 {
+  public static void main(String[] args) {
+    Boite a = new Boite(50);
+    Boite b = new Boite(100);
+
+    Comparator<Boite> comparatorContenance = Comparator.comparingInt(Boite::contenance);
+    IO.println("Min: " + comparatorContenance.min(a,b));
+    IO.println("Max: " + comparatorContenance.max(a,b));
+  }
+}
+
+record Boite(int contenance) {}
+----
+
+Résultat :
+
+[source,plain]
+----
+C:\java>java DemoMinMaxJDK26.java
+Min: Boite[contenance=50]
+Max: Boite[contenance=100]
+----
+
+=== `java.lang.Process` implémente `AutoCloseable` et `Closeable` (https://bugs.openjdk.org/browse/JDK-8364361[JDK-8364361])
+
+La classe java.lang.Process implémente les interfaces `Closeable` et `AutoCloseable`. L'implémentation de la méthode `close()` permet de définir des traitements à la fermeture du processus pour, par exemple, libérer les ressources sous-jacentes.
+
+=== Le support d'Unicode 17.0 (https://bugs.openjdk.org/browse/JDK-8346944[JDK-8346944])
+
+Le JDK 26 support https://unicode.org/versions/Unicode17.0.0/[Unicode 17.0], intégrant les dernières évolutions de la base de caractères Unicode et des annexes normalisées #9, #15 et #29.
+
+La classe `java.lang.Character` reconnaît désormais 159 801 caractères, soit 4 803 de plus qu'auparavant, incluant quatre nouveaux systèmes d'écriture : Sidetic, Tolong Siki, Beria Erfe et Tai Yo.
+
+Les classes `java.text.Bidi` et `java.text.Normalizer` assurent le support des annexes #9 (Bidirectionnel) et #15 (Normalisation). Quant au package `java.util.regex`, il gère désormais correctement les Extended Grapheme Clusters définis dans l'annexe #29.
+
+=== Les ServerSockets acceptent désormais un backlog supérieur à 200 sous Windows (https://bugs.openjdk.org/browse/JDK-8330940[JDK-8330940])
+
+Sous Windows, la configuration d'un backlog supérieur à 200 dans les classes `java.net.ServerSocket`, `java.nio.channels.ServerSocketChannel` et `java.nio.channels.AsynchronousServerSocketChannel` est désormais supporté.
+
+Auparavant, la valeur était limitée à 200 par le système. Pour augmenter cette valeur il faut passer une valeur négative, mais cela n'était pas possible dans les API Java qui dans ce cas utilisait la valeur 50.
+
+Avec cette amélioration, les serveurs peuvent désormais mettre en file d'attente davantage de connexions entrantes au niveau du système d'exploitation, réduisant ainsi le risque de refus lors de pics de charge.
+
+=== La nouvelle méthode `ofFileChannel()` dans `HttpHttpRequest.BodyPublishers` pour l'upload d'une région d'un fichier (https://bugs.openjdk.org/browse/JDK-8329829[JDK-8329829])
+
+Une nouvelle méthode statique `ofFileChannel(FileChannel channel, long offset, long length)` a été ajoutée à la classe `HttpRequest.BodyPublishers`.
+
+Elle permet de créer un `HttpRequest.BodyPublisher` permettant d'uploader une portion spécifique d'un fichier à partir d'un `FileChannel`.
+
+L'implémentation ne modifie pas l'état du canal, upload les données à la volée sans charger l'intégralité du fichier en mémoire, et facilite donc la mise en œuvre d'upload partiel ou segmenté (sliced uploads).
+
+Exemple :
+
+.Le fichier DemoFileChannel.java
+[source,java]
+----
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
+import java.nio.channels.FileChannel;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+
+public class DemoOfFileChannel {
+
+  public static void main(String[] args) throws Exception {
+    try (FileChannel fileChannel = FileChannel.open(Path.of("donnees.bin"), StandardOpenOption.READ);
+            HttpClient client = HttpClient.newHttpClient()) {
+
+      HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("https://www.sciam.fr/services/upload"))
+            .POST(BodyPublishers.ofFileChannel(fileChannel, 512L, 1024L))
+            .build();
+
+      HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
+      IO.println("Code réponse : " + response.statusCode());
+    }
+  }
+}
+----
+
+=== Le support de JDBC 4.5 (https://bugs.openjdk.org/browse/JDK-8369432[JDK-8369432])
+
+JDK 26 prend en charge le support de la spécification JDBC 4.5, qui apporte plusieurs évolutions :
+
+* Dépréciation pour suppression de la classe `java.sql.SQLPermission`
+* Ajout de nouveaux types SQL : `DECFLOAT` et `JSON` dans l'énumération `java.sql.JDBCType` et dans la classe `java.sql.Types`
+* Les interfaces `Array`, `Blob`, `Clob`, `Nclob` et `SQLXML` implémentent l'interface `AutoCloseable`, avec leur méthode `close()` par défaut appelant leur méthode `free()`
+* Dans l'interface `Connection`, ajout des méthodes par défaut de gestion des identifiants SQL précédemment héritées de l'interface `Statement`,
+** `enquoteIdentifier()` dont l'implémentation lève une `SQLException` si la méthode `DatabaseMetaData::getIdentifierQuoteString` ne renvoie pas de double guillemet
+** `isSimpleIdentifier()` dont l'implémentation par défaut retourne false pour les mots réservés SQL. +
+Cette mise à jour peut entraîner des incompatibilités avec certains pilotes JDBC si leurs implémentations internes de méthodes par défaut entrent en conflit ou si plusieurs interfaces fournissent des implémentations différentes d'une même méthode.
+
+=== Le parsing plus souple du motif du signe moins dans `DecimalFormat`/`CompactNumberFormat` (https://bugs.openjdk.org/browse/JDK-8363972[JDK-8363972])
+
+La classe `NumberFormat` prend désormais en charge un parsing plus souple des signes « moins » lorsque le mode `strict` est désactivé (`NumberFormat.isStrict()` renvoie `false`).
+
+Ce comportement est activé par défaut, permettant à `DecimalFormat` et `CompactNumberFormat` de reconnaître automatiquement des variantes Unicode du signe moins grâce aux données https://unicode.org/reports/tr35/tr35-general.html#Character_Parse_Lenient[parseLenient] du CLDR.
+
+Exemple avec un texte utilisant le signe moins (`U+2212`)
+
+[source,plain]
+----
+jshell> var valeur = NumberFormat.getNumberInstance().parse("\u221299")
+valeur ==> -99
+----
+
+Pour le désactiver, il faut mettre le mode `strict` à `true`.
+
+Exemple :
+
+[source,plain]
+----
+jshell> var nf = NumberFormat.getNumberInstance()
+nf ==> DecimalFormat [locale: "français (France)", pattern: "#,##0.###"]
+
+jshell> nf.setStrict(true)
+
+jshell> var valeur = nf.parse("\u221299")
+|  Exception java.text.ParseException: Unparseable number: "?99"
+|        at NumberFormat.parse (NumberFormat.java:510)
+|        at do_it$Aux (#4:1)
+|        at (#4:1)
+----
+
+=== L'ajout des constantes `MIN` et `MAX` dans `java.time.Duration` (https://bugs.openjdk.org/browse/JDK-8366829[JDK-8366829])
+
+Deux nouvelles constantes sont ajoutées dans `java.time.Duration`, `Duration.MIN` et `Duration.MAX`, pour représenter respectivement la durées minimale (négative) et maximale (positive) possibles.
+
+=== L'ajout de la méthode `plusSaturing()` dans Instant (https://bugs.openjdk.org/browse/JDK-8368856[JDK-8368856])
+
+La méthode `plusSaturating(Duration)` est ajoutée dans la classe `java.time.Instant` : elle ajoute une durée en utilisant une arithmétique saturée. Au lieu de lever une exception en cas de dépassement, l'opération renvoie automatiquement `Instant.MIN` ou `Instant.MAX`.
+
+=== Le support de la création d'UUID Type 7 (https://bugs.openjdk.org/browse/JDK-8334015[JDK-8334015])
+
+La méthode `ofEpochMillis(long)` dans la classe `java.util.UUID` a été ajoutée pour créer un UUID de type 7 (UUIDv7) à partir d'un timestamp Unix depuis l'epoch.
+
+L'UUID retourné aura le timestamp fourni dans les 6 premiers octets, suivi des 4 bits de version et de 2 bits de variantes représentant l'UUIDv7, et les bits restants contiendront des données aléatoires provenant d'un générateur de nombres pseudo-aléatoires cryptographiquement fort.
+
+La méthode lève une exception de type `IllegalArgumentException` si le timestamp ne rentrent pas dans 48 bits.
+
+La caractéristique principale de l'UUIDv7 est que les valeurs produites sont monotones (chaque valeur suivante est supérieure à la valeur précédente). 
+Cela s'explique par le fait que la valeur de l'horodatage fait partie de l'UUID.
+
+Le grand avantage de l'UUIDv7 est que les valeurs sont naturellement triables, ce qui en fait un bon choix pour les identifiants de base de données et comblent une des lacunes des versions précédentes d'UUID. 
+Leur taille reste sur 128 bits : ils sont donc compatibles avec les précédents champs de type UUID.
+
+=== L'ajout de la méthode `MemoryPoolMXBean.getTotalGcCpuTime()` (https://bugs.openjdk.org/browse/JDK-8368527[JDK-8368527])
+
+La méthode `getTotalGcCpuTime()` est ajoutée dans l'interface MemoryMXBean. Elle renvoie le temps CPU cumulé approximatif consacré aux activités du GC.
+
+Elle renvoie `-1` si la plateforme ne supporte pas cette opération ou si l'information n'est pas disponible.
+
+=== `PrintStream` et `PrintWriter` Mark Stream sont en erreur si l'écriture échoue avec `InterruptedIOException` (https://bugs.openjdk.org/browse/JDK-8370387[JDK-8370387])
+
+Le comportement de `java.io.PrintStream` et `java.io.PrintWriter` a changé lors de l'écriture sur un flux de sortie personnalisé qui lève une `InterruptedIOException`.
+
+Si la méthode d'écriture du flux de sortie personnalisée lève une `InterruptedIOException`, alors le `PrintStream` ou `PrintWriter` est marqué comme étant en erreur, de sorte que `checkError()` renvoie `true`. 
+Historiquement, cette exception entraînait la mise en état interrupted du thread d'écriture, sans marquer le flux en erreur.
+
+=== L'API Class-File rejette les valeurs entières non représentables (https://bugs.openjdk.org/browse/JDK-8361614[JDK-8361614], https://bugs.openjdk.org/browse/JDK-8361635[JDK-8361635])
+
+Dans le format de fichier .class, la plage représentable de nombreuses valeurs entières est plus étroite que celle du type primitif int dans le langage Java. 
+Actuellement, l'API Class-File tronque les octets les plus significatifs d'une valeur int fournie par l'utilisateur lors de l'écriture dans un fichier .class. 
+À la lecture, la valeur tronquée est zéro ou signe étendu, selon le type, pour revenir à un `int`, ce qui peut donner une valeur différente de celle fournie par l'utilisateur. 
+Par exemple, une valeur `int` `65536` deviendrait `0` après cette écriture-lecture en une valeur u2.
+
+Pour éviter ce fonctionnement aussi sujet aux erreurs, l'API Class-File effectue désormais une validation rapide des valeurs de type `int` qui seraient perdues après une troncature, y compris la taille des listes. De telles données non représentables entraîneront la levée d'un `IllegalArgumentException`. 
+Il faut donc modifier le code pour ne plus reposer sur une troncature silencieuse, mais migrer vers une troncature explicite avant de fournir les données.
+
+=== Les méthodes de la classe `AnnotatedType` lèvent une `NullPointerException` si leur paramètre est `null` (https://bugs.openjdk.org/browse/JDK-8371960[JDK-8371960])
+
+Les méthodes d'accès aux annotation déclarées dans la classe `java.lang.reflect.AnnotatedElement` spécifient qu'elles lèvent une `NullPointerException` si leur argument est null. 
+Dans les versions précédentes, les implémentations de `java.lang.reflect.AnnotatedType` et de ses sous-interfaces ne levaient pas une `NullPointerException` pour les méthodes `isAnnotationPresent()`, `getAnnotation()` et `getDeclaredAnnotation()`. 
+Ces méthodes lèvent désormais une `NullPointerException` au lieu de retourner `false` ou `null` pour un argument `null`.
+
+=== La gestion correcte de l'échelle par `BigDecimal.sqrt` (https://bugs.openjdk.org/browse/JDK-8370057[JDK-8370057])
+
+En raison d'un oubli lors de l'ajout de `BigDecimal.sqrt` dans le JDK, son échelle préférée a été définie comme `argumentScale / 2` plutôt que `ceilDiv(argumentScale, 2)`. 
+Pour de nombreuses échelles, ces expressions sont équivalentes, mais pour les échelles impaires et positives, elles diffèrent de `1`. 
+Cette dernière définition s'aligne avec le concept analogue pour les types décimaux en virgule flottante spécifié par la norme IEEE 754 et dans le JDK 26, elle est modifiée pour utiliser cette dernière définition.
+
+Avant et après ce changement, des résultats numériquement égaux seront retournés. 
+Si les résultats diffèrent, ils ne différeront que dans leur représentation (par exemple `10` vs `1e1`).
+
+Exemple avec le JDK 25
+
+[source,plain]
+----
+C:\java>jshell
+|  Welcome to JShell -- Version 25
+|  For an introduction type: /help intro
+
+jshell> var val = new BigDecimal(BigInteger.TEN, 3);
+val ==> 0.010
+
+jshell> MathContext mc = new MathContext(6);
+mc ==> precision=6 roundingMode=HALF_UP
+
+jshell> var resultat = val.sqrt(mc);
+resultat ==> 0.1
+----
+
+Exemple avec le JDK 26
+
+[source,plain]
+----
+C:\java>jshell
+|  Welcome to JShell -- Version 26
+|  For an introduction type: /help intro
+
+jshell> var val = new BigDecimal(BigInteger.TEN, 3);
+val ==> 0.010
+
+jshell> MathContext mc = new MathContext(6);
+mc ==> precision=6 roundingMode=HALF_UP
+
+jshell> var resultat = val.sqrt(mc);
+resultat ==> 0.10
+----
+
+=== L'implémentation de `getURIs()` et `get(URI)` de `java.net.CookieStore` retourne une `List` immuable (https://bugs.openjdk.org/browse/JDK-8365086[JDK-8365086])
+
+L'implémentation de l'interface `java.net.CookieStore` par le JDK a été modifiée pour que les méthodes `getURIs()` et `get(URI)` retournent une `java.util.List` immuable pour respecter les spécifications de ces deux méthodes.
+
+=== La portée du timeout d'une requête `HttpClient` est étendu pour inclure la réception du body (https://bugs.openjdk.org/browse/JDK-8208693[JDK-8208693]) (ok)
+
+Le délai d'expiration d'une requête HTTP défini via `java.net.http.HttpRequest.Builder::timeout` s'appliquait auparavant uniquement jusqu'à la réception des en-têtes de la réponse.
+
+Dans le JDK 26, sa portée a été étendue pour couvrir également la consommation du body de la réponse, s'il est présent.
+
+=== La classe `HttpClient` n'envoie plus le header `Content-Length` pour des requêtes sans body (https://bugs.openjdk.org/browse/JDK-8358942[JDK-8358942])
+
+Pour respecter les recommandations de la RFC 9110, la classe `java.net.HttpClient` a été modifiée pour ne plus envoyer l'en-tête `Content-Length` sur les requêtes HTTP/1.1 en utilisant une méthode autre que `POST` ou `PUT` lorsqu'un `BodyPublisher` est fourni avec un `contentLength()` de zéro octet.
+
+Les utilisateurs ayant besoin de l'en-tête peuvent l'ajouter en construisant la requête avec `HttpRequest.Builder`. L'en-tête est restreint par défaut, et doit être autorisé en définissant la propriété système `jdk.httpclient.allowRestrictedHeaders` pour inclure la longueur du contenu.
+
+=== La classe `HttpCookie` gère correctement la présence des attributs `Expires` et `Max-Age` (https://bugs.openjdk.org/browse/JDK-8351983[JDK-8351983])
+
+La classe `java.net.HttpCookie` a été mis à jour pour gérer correctement les cookies avec les attributs `Expires` et `Max-Age`. 
+La RFC 6265 spécifie que l'attribut `Max-Age` doit avoir priorité sur l'attribut `Expires` si les deux sont présents dans le même cookie. 
+Ce changement de comportement est appliqué dans la méthode `HttpCookie.getMaxAge()`.
+
+=== La levée d'une `FileNotFoundException` est rendue plus consistante dans `BodyPublishers.ofFile` (https://bugs.openjdk.org/browse/JDK-8358688[JDK-8358688])
+
+Auparavant, la méthode `ofFile(Path)` de la classe `java.net.http.HttpRequest.BodyPublishers` pouvait lever une exception de type `java.nio.file.NoSuchFileException` lorsque le chemin fourni n'était pas associé au système de fichiers par défaut.
+
+Cette incohérence a été supprimée en alignant la levée de l'exception `java.io.FileNotFoundException`, conformément à la spécification de la méthode `ofFile()`.
+
+=== La classe `java.nio.ByteOrder` est convertie en `Enum` (https://bugs.openjdk.org/browse/JDK-8362637[JDK-8362637])
+La classe `java.nio.ByteOrder` est convertie en `Enum` pour permettre son utilisation dans un switch ou une expression switch
+
+L'enum `ByteOrder` est entièrement compatible avec l'implémentation de la classe. Les valeurs `BIG_ENDIAN`, `LITTLE_ENDIAN` et `ByteOrder.nativeOrder()` restent un moyen simple et efficace de tester l'ordre des octets.
+
+=== `java.text.DecimalFormat` utilise les algorithmes de `Double.toString(double)` et `java.util.Formatter` pour formater des valeurs (https://bugs.openjdk.org/browse/JDK-8362448[JDK-8362448])
+
+La classe `java.text.DecimalFormat` utilise désormais l'algorithme implémenté dans `Double.toString(double)` et dans `java.util.Formatter` pour formater des valeurs en virgule flottante.
+
+En conséquence, dans de rares cas, le résultat peut être légèrement différent de celui de l'ancien algorithme.
+
+Exemple avec le JDK 25
+
+[source,plain]
+----
+C:\java>jshell
+|  Welcome to JShell -- Version 25
+|  For an introduction type: /help intro
+
+jshell> var libelle = new DecimalFormat("#.#").format(7.4321E20)
+libelle ==> "743209999999999900000"
+----
+
+Exemple avec le JDK 26
+
+[source,plain]
+----
+C:\java>jshell
+|  Welcome to JShell -- Version 26
+|  For an introduction type: /help intro
+
+jshell> var libelle = new DecimalFormat("#.#").format(7.4321E20)
+libelle ==> "743210000000000000000"
+----
+
+Pour aider les applications susceptibles d'être affectées par ce changement, pour quelques releases futures, l'ancien algorithme sera toujours disponible pour `DecimalFormat` et les classes qui en dépendent, comme `NumberFormat`. 
+L'ancien algorithme peut être activé avec l'option `-Djdk.compat.DecimalFormat=true` sur la ligne de commande de la JVM.
+
+=== Le support de la version 48 de CLDR (https://bugs.openjdk.org/browse/JDK-8354548[JDK-8354548])
+
+Les données locales basées sur le CLDR du Consortium Unicode ont été mises à jour à la https://cldr.unicode.org/downloads/cldr-48[version 48].
+
+En plus de l'ajout habituel de nouvelles données locales et les changements de traduction, plusieurs modifications du CLDR affectent les formats de date/heure/numéro dont certaines concernent le continent européen : https://unicode-org.atlassian.net/browse/CLDR-16439[CLDR-16439] https://unicode-org.atlassian.net/browse/CLDR-16665[CLDR-16665], https://unicode-org.atlassian.net/browse/CLDR-13688[CLDR-13688], https://unicode-org.atlassian.net/browse/CLDR-18464[CLDR-18464], https://unicode-org.atlassian.net/browse/CLDR-18572[CLDR-18572], https://unicode-org.atlassian.net/browse/CLDR-18253[CLDR-18253], https://unicode-org.atlassian.net/browse/CLDR-18603[CLDR-18603], https://unicode-org.atlassian.net/browse/CLDR-18538[CLDR-18538], https://unicode-org.atlassian.net/browse/CLDR-9814[CLDR-9814], https://unicode-org.atlassian.net/browse/CLDR-18788[CLDR-18788] et https://unicode-org.atlassian.net/browse/CLDR-13542[CLDR-13542].
+
+=== La modification de l'exception levée par `MBeanServer::registerMBean` si `null` en paramètre (https://bugs.openjdk.org/browse/JDK-8364227[JDK-8364227])
+
+La méthode `registerMBean()` de la classe `javax.management.MBeanServer` lève désormais une `RuntimeOperationsException` au lieu d'une `NullPointerException` lorsqu'elle est invoquée avec un paramètre `object` ayant la valeur `null`.
+
+Cette correction aligne l'implémentation avec la spécification, et devient la même que pour les autres méthodes de la classe.
+
+=== `AttributeList`, `RoleList` et `RoleUnresolvedList` n'acceptent plus le mauvais type d'objet (https://bugs.openjdk.org/browse/JDK-8359809[JDK-8359809])
+
+Les classes `javax.management.AttributeList`, `javax.management.relation.RoleList` et `RoleUnresolvedList`, ont historiquement accepté des objets du mauvais type, et ne vérifiaient les types qu'après l'invocation de la méthode `asList()`. 
+Cette fonctionnalité a été supprimée, et ces classes n'acceptent plus le mauvais type d'Objet.
+
+=== La classe `JMXServiceURL` exige un protocole explicite (https://bugs.openjdk.org/browse/JDK-8347114[JDK-8347114])
+
+La classe `javax.management.remote.JMXServiceURL` exige qu'un protocole soit spécifié lors de l'utilisation de son constructeur attendant une chaîne de caractères en paramètre, et lèvera une `MalformedURLException` si le protocole manque.
+
+Ce comportement est désormais étendu aux autres constructeurs qui prennent des paramètres individuels, et le retour historique par défaut au protocole `jmxmp` est supprimé.
+
+== Conclusion
+
+Java 26 est la première version non-LTS à être diffusée après Java 25 qui est une version LTS.
+
+Le JDK 26 contient 10 JEPS dont 5 en standard, 4 en preview et 1 en incubation ainsi que de nombreuses évolutions et corrections.
+
+Cette première partie est consacrée aux évolutions dans la syntaxe et les API. La seconde partie est consacrée aux autres fonctionnalités et évolutions dans le JDK 26.
+
+&nbsp;
