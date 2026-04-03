@@ -18,7 +18,7 @@ Elle contient 10 JEPs que l'on peut regrouper en plusieurs catégories :
 * Des évolutions dans le langage
 * Des évolutions dans les API
 * Des évolutions dans la JVM
-* Des fonctionnalités dépréciée et retirées
+* Des fonctionnalités dépréciées et retirées
 * Des fonctionnalités dans la sécurité
 
 Ces JEPs sont proposées en standard (5), en preview (4), ou en incubation (1).
@@ -238,7 +238,7 @@ Exception in thread "main" java.lang.IllegalAccessException: class DemoJEP500 (i
         at DemoJEP500.main(DemoJEP500.java:10)
 ----
 
-Comme indiqué dans le warning avec le JDK 26, il est possible d'autoriser explicitement des modules à muter des champs finaux avec la nouvelle option `--enable-final-field-mutation`, même après que le comportement par défaut passera à `deny` dans un futur JDK :
+Comme indiqué dans le warning avec le JDK 26, il est possible d'autoriser explicitement des modules à muter des champs finaux avec la nouvelle option `--enable-final-field-mutation`, même après que le comportement par défaut soit passé à `deny` dans un futur JDK :
 
 `--enable-final-field-mutation=un.module,autre.module`
 
