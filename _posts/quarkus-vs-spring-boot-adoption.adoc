@@ -83,6 +83,7 @@ Enfin, Quarkus est conçu dès le départ pour fonctionner dans des environnemen
 
 Spring est cloud-compatible. Quarkus est cloud-native par conception.
 
+
 == Build-time vs runtime : une différence qui change vraiment le quotidien
 
 Dans beaucoup de comparaisons entre Spring Boot et Quarkus, on parle de performance ou de cloud native.  
@@ -93,26 +94,27 @@ Mais sur le terrain, la différence la plus impactante est ailleurs : *le moment
 Spring Boot repose largement sur le runtime.  
 Grâce à l’auto-configuration, au classpath scanning et aux mécanismes implicites, une application peut démarrer même si certaines parties sont incomplètes ou ambiguës.
 
-Cela permet d’aller vite au démarrage, surtout dans des environnements complexes.  
-En revanche, certaines incohérences ne sont détectées que plus tard :
-
-* lors d’un appel réel
-* en phase d’intégration
-* ou sous charge
-
-Autrement dit, *l’application fonctionne jusqu’à ce qu’elle ne fonctionne plus*.
-
-Quarkus adopte une approche différente en déplaçant un maximum de vérifications au moment du build :
+Quarkus adopte une approche opposée en déplaçant un maximum de vérifications au moment du build :
 
 * injection (CDI / ArC)
 * configuration
 * wiring des composants
 * intégrations (REST, JPA, sécurité)
 
-Ces validations s’appuient sur des mécanismes comme l’indexation des classes et la génération de bytecode.  
-L’objectif est simple : *réduire au maximum le travail effectué au runtime*.
+Ces validations s’appuient sur des mécanismes comme :
 
-Le résultat est direct : *ce qui serait une erreur runtime en Spring devient une erreur de build en Quarkus*.
+* indexation des classes (remplace le scanning dynamique)
+* génération de bytecode au build
+* réduction de la reflection
+
+Conséquence directe :
+
+* Spring valide tard, au runtime
+* Quarkus valide tôt, au build
+
+Cela change complètement la dynamique du système.
+
+---
 
 === Exemple concret
 
@@ -147,77 +149,129 @@ PaymentService service;
 // Build error immédiate : ambiguïté
 ----
 
-Cette logique s’applique aussi à des cas fréquents :
+Comparaison directe :
 
-* configuration manquante
-* datasource incorrecte
-* mapping JPA invalide
-* bean non résolu
+* Spring accepte l’ambiguïté et la gère tard
+* Quarkus bloque immédiatement et impose une correction
 
-Spring tolère davantage et reporte certaines validations.  
-Quarkus impose une cohérence dès le départ.
+---
+
+=== Types d’erreurs concernées
+
+Ce comportement ne se limite pas à l’injection :
+
+[cols="1,1"]
+|===
+|Spring Boot |Quarkus
+
+|Configuration manquante tolérée |Erreur au build
+|Datasource mal définie détectée tard |Erreur immédiate
+|Mapping JPA invalide runtime |Validation au build
+|Bean manquant parfois implicite |Blocage explicite
+|===
+
+Spring reporte, Quarkus anticipe.
+
+---
 
 === Impact sur le développement
 
-Ce changement modifie directement la manière de travailler.
+Le cycle de développement est directement impacté.
 
-Le debugging ne se fait plus principalement en runtime, mais beaucoup plus tôt dans le cycle.
+[cols="1,1"]
+|===
+|Spring Boot |Quarkus
 
-* En Spring, une application peut sembler stable jusqu’au premier usage réel
-* Avec Quarkus, si l’application démarre, elle est généralement déjà cohérente
+|Debug souvent tardif |Debug anticipé
+|Erreurs en intégration ou prod |Erreurs dès le build
+|Investigation complexe |Correction localisée
+|Feedback progressif |Feedback immédiat
+|===
 
-Les erreurs deviennent visibles plus tôt, dans un contexte maîtrisé.
+En pratique :
+
+* Spring peut masquer des problèmes jusqu’à un cas réel
+* Quarkus expose les incohérences immédiatement
+
+---
 
 === Impact côté architecture
 
-Sur le plan architectural, les effets sont concrets :
+Les effets dépassent le code et touchent l’architecture.
 
-* comportement plus déterministe
-* réduction des effets liés à l’environnement
-* meilleure maîtrise des dépendances
-* diminution des écarts entre local et production
+[cols="1,1"]
+|===
+|Spring Boot |Quarkus
 
-L’approche build-time permet également de limiter :
+|Comportement dépendant du contexte |Comportement déterministe
+|Forte dépendance runtime |Logique déplacée au build
+|Écarts possibles entre environnements |Cohérence renforcée
+|Usage important de reflection |Reflection limitée
+|===
 
-* la reflection
-* les résolutions dynamiques tardives
+Quarkus réduit :
+
 * les comportements implicites
+* les résolutions dynamiques tardives
+* les surprises liées à l’environnement
 
-En contrepartie :
+---
 
-* moins de tolérance
-* plus d’exigence dès le développement
+=== Impact runtime
+
+Le modèle influence directement l’exécution.
+
+[cols="1,1"]
+|===
+|Spring Boot |Quarkus
+
+|Runtime plus riche |Runtime minimal
+|Initialisation au démarrage |Préparation au build
+|Consommation mémoire plus élevée |Empreinte réduite
+|Démarrage plus lent |Démarrage rapide
+|===
+
+Quarkus exécute moins de logique au runtime car elle a déjà été résolue au build.
+
+---
 
 === Modèle de programmation
 
-Quarkus ne se limite pas au build-time.  
-Il apporte aussi une flexibilité dans le modèle de programmation.
+Les deux approches diffèrent aussi dans le modèle de programmation.
 
-Une application peut combiner :
+[cols="1,1"]
+|===
+|Spring Boot |Quarkus
 
-* impératif (blocking)
-* réactif (asynchrone)
-* virtual threads
+|Majoritairement impératif |Impératif + réactif + virtual threads
+|Reactive séparé (WebFlux) |Reactive intégré nativement
+|Transition parfois complexe |Adoption progressive
+|===
 
-Le choix dépend du besoin :
+Quarkus permet d’adapter le modèle selon le besoin sans rupture.
 
-* simplicité pour les cas standards
-* scalabilité pour les charges importantes
-* compromis avec les threads virtuels
-
-Cela permet une adoption progressive sans rupture technique.
+---
 
 === Expérience développeur
 
-L’expérience développeur est un autre point structurant.
+Le feedback loop est également différent.
 
-Le mode de développement permet :
+[cols="1,1"]
+|===
+|Spring Boot |Quarkus
 
-* modification du code sans redémarrage complet
-* rechargement rapide
-* feedback immédiat
+|Redémarrages fréquents |Hot reload rapide
+|Feedback plus lent |Feedback immédiat
+|Cycle de dev plus long |Cycle court
+|===
 
-Cela réduit fortement les cycles de développement et améliore la productivité.
+Cela a un impact direct sur :
+
+* la productivité
+* la rapidité d’itération
+* la compréhension du système
+
+---
 
 === Synthèse
 
@@ -229,15 +283,24 @@ Cela réduit fortement les cycles de développement et améliore la productivit�
 |Gestion des erreurs |Immédiate |Parfois tardive
 |Auto-configuration |Contrôlée |Très forte
 |Tolérance |Faible |Élevée
-|Feedback dev |Rapide |Progressif
+|Feedback dev |Rapide et déterministe |Progressif
 |Risque production |Réduit |Plus élevé
 |Comportement |Prévisible |Parfois implicite
+|Runtime |Minimal |Plus chargé
 |===
 
-Le gain principal n’est pas uniquement la performance, mais la *prévisibilité du système*.
+Le point clé n’est pas uniquement la performance.
 
-En pratique, cela se traduit par moins d’effets de bord et moins de surprises en production.
- 
+C’est le changement de modèle :
+
+* Spring privilégie la flexibilité
+* Quarkus privilégie la prévisibilité
+
+En pratique :
+
+* moins d’effets de bord
+* moins de bugs tardifs
+* meilleure maîtrise du système
 
 == Fail Fast : là ou Quarkus change vraiment la donne 
 
@@ -384,18 +447,16 @@ Sur un projet simple, l’écart reste limité. Mais dès que le système devien
 
 - la stabilité du système s’améliore 
 
+
 == Persistance : Panache vs Hibernate 
 
-Sur la persistance, Quarkus et Spring Boot utilisent tous les deux Hibernate/JPA. 
-
-La vraie différence ne vient pas du moteur, mais de la façon de l’utiliser.  
+Sur la persistance, Quarkus et Spring Boot utilisent tous les deux Hibernate/JPA. La vraie différence ne vient pas du moteur, mais de la façon de l’utiliser.  
 
 Spring Boot reste sur une approche classique, souvent avec Spring Data JPA. C’est structuré, connu, et très flexible, mais ça implique plusieurs couches et un peu de boilerplate. 
 
-  
-
 Quarkus propose Panache, qui simplifie fortement tout ça. L’idée est simple : réduire le code au minimum pour les cas courants. 
-Panache supporte également plusieurs modèles : active record, repository pattern et même des approches adaptées aux bases NoSQL comme MongoDB.
+
+Panache supporte également plusieurs modèles : `active record`, `repository pattern` et même des approches adaptées aux bases NoSQL comme MongoDB.
 
 Quarkus propose aussi une version réactive avec Hibernate Reactive, permettant d’adapter la persistance au modèle non bloquant.
  
@@ -999,6 +1060,7 @@ public String secure() {
 |===
 
 
+
 == Ce que j’en ai appris
 
 Avec le recul, le choix entre Spring Boot et Quarkus ne se limite pas à un choix de framework, mais reflète une manière différente de concevoir et de maîtriser un système.
@@ -1010,6 +1072,7 @@ Quarkus adopte une approche plus stricte et plus explicite. En déplaçant une p
 Le principal bénéfice n’est pas tant la performance que la prévisibilité. Le système devient plus lisible, les dépendances sont mieux maîtrisées et le comportement global est plus facile à anticiper, notamment à mesure que l’application évolue.
 
 En contrepartie, cette approche demande davantage de rigueur. Certains concepts, comme le non-bloquant ou la compilation native, nécessitent une bonne compréhension pour être utilisés correctement. Sans cette discipline, les gains peuvent être rapidement annulés.
+
 
 == Conclusion
 
