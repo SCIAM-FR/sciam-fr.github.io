@@ -522,7 +522,7 @@ Ces tailles peuvent changer lorsque la taille de la jeune génération est mise 
 Après ce changement, si heap est presque plein, Serial GC essaiera d’étendre l'Eden afin de satisfaire la demande d’allocation. 
 Cela peut faire croître la taille de l’Eden au-delà de la limite définie par `SurvivorRatio`.
 
-Ce nouveau comportement peut éviter les exceptions de type `OutOfMemoryException` dans des situations de heap très restreintes qui auparavant terminaient souvent la JVM.
+Ce nouveau comportement peut éviter les erreurs de type `OutOfMemoryError` dans des situations de heap très restreintes qui auparavant terminaient souvent la JVM.
 
 == Les évolutions dans les outils du JDK
 
@@ -534,11 +534,11 @@ La documentation générée par l’outil `javadoc` propose désormais un thème
 
 Le thème clair est toujours celui par défaut, mais le nouveau thème sombre peut être sélectionné via le bouton nouveau thème dans la barre de navigation.
 
-image:/images/2026/nouveautes-java-26-partie2/article_java_26_partie_ 2_001.png[image,width=605,height=171]
-
-Il est possible de sélectionner le thème sombre (dark).
-
-image:/images/2026/nouveautes-java-26-partie2/article_java_26_partie_ 2_002.png[image,width=605,height=187]
+image:/images/2026/nouveautes-java-26-partie2/article_java_26_partie_2_001.png[image,width=605,height=171]
+
+Il est possible de sélectionner le thème sombre (dark).
+
+image:/images/2026/nouveautes-java-26-partie2/article_java_26_partie_2_002.png[image,width=605,height=187]
 
 === Les dumps de threads générés par `HotSpotDiagnosticMXBean` et `jcmd` incluent le propriétaire du verrou (https://bugs.openjdk.org/browse/JDK-8365057[JDK-8365057])
 
@@ -589,7 +589,7 @@ class DemoJavacJDK26 {
   static <R> Fournisseur<R> creer(Supplier<? extends R> supplier) {return null;}  
         
   static Fournisseur<Fournisseur<?>> methodRef() {
-    return create(DemoJavacJDK26::instance).get();
+    return creer(DemoJavacJDK26::instance).get();
   }
 }
 ----
@@ -630,9 +630,9 @@ DemoJavacJDK26.java:13: error: incompatible types: Fournisseur<Fournisseur<CAP#1
 C:\java>
 ----
 
-=== La vérification plus strict de la version par `jlink` lors du cross linking (https://bugs.openjdk.org/browse/JDK-8347831[JDK-8347831])
+=== La vérification plus stricte de la version par `jlink` lors du cross linking (https://bugs.openjdk.org/browse/JDK-8347831[JDK-8347831])
 
-L’outil `jlink` peut être utilisé pour assembler un ensemble de modules et leurs dépendances en un runtime d’exécution personnalisée pour un système d’exploitation, une architecture ou une version du JDK différente de celle contenant l’outil `jlink`. Cette fonctionnlaité est appelée « cross linking ».
+L’outil `jlink` peut être utilisé pour assembler un ensemble de modules et leurs dépendances en un runtime d’exécution personnalisée pour un système d’exploitation, une architecture ou une version du JDK différente de celle contenant l’outil `jlink`. Cette fonctionnalité est appelée « cross linking ».
 
 Dans les versions précédentes, la vérification de la version était moins stricte et permettait à `jlink` exécuté d’un JDK $N.0.$U du fournisseur $X de créer une image d’exécution à partir d’un ensemble de modules pour un JDK $N.0.$V d'un fournisseur $Y.
 
@@ -1086,7 +1086,7 @@ Plusieurs algorithmes PBES2 définis dans la https://www.rfc-editor.org/rfc/rfc8
 
 Java poursuit son évolution avec ce JDK 26 qui propose quelques nouveautés et améliorations.
 
-Toutes les évolutions proposées dans le JDK 26 sont recencées dans les https://www.oracle.com/java/technologies/javase/26u-relnotes.html[releases notes].
+Toutes les évolutions proposées dans le JDK 26 sont recensées dans les https://www.oracle.com/java/technologies/javase/26u-relnotes.html[releases notes].
 
 N’hésitez donc pas à télécharger une distribution du JDK 26 auprès d’un fournisseur pour tester les fonctionnalités détaillées dans les deux articles de cette série.
 
