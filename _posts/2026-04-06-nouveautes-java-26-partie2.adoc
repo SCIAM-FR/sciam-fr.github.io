@@ -1,4 +1,4 @@
-= Article les nouveautés de Java 26 - partie 2
+= Les nouveautés de Java 26 - partie 2
 :showtitle:
 :page-navtitle: Les nouveautés de Java 26 : partie 2
 :page-excerpt: Ce second article sur les nouveautés de Java 26 est consacré aux autres améliorations, que ce soit les évolutions dans les outils, les API, la JVM et dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
@@ -11,7 +11,7 @@
 
 Le link:{% post_url 2026-03-31-nouveautes-java-26-partie1 %}[premier article^] de cette série a détaillé les fonctionnalités proposées dans la syntaxe et les API dans le JDK 26. Comme pour les précédentes versions de Java, cette version 26 inclut des JEPs, mais aussi, et surtout, des évolutions et des améliorations sur la fiabilité (corrections de nombreux bugs), la performance et la sécurité.
 
-Ce second article est consacré aux autres améliorations, que ce soient les évolutions dans la JVM Hotspot et les outils du JDK, dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
+Ce second article est consacré aux autres améliorations, que ce soient les évolutions dans la JVM HotSpot et les outils du JDK, dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
 
 == Les fonctionnalités dépréciées
 
@@ -115,7 +115,7 @@ Pour contrôler directement la taille du heap, il est préférable d’utiliser 
 
 === Les options `-AlwaysActAsServerClassMachine` et `-NeverActAsServerClassMachine` sont dépréciées (https://bugs.openjdk.org/browse/JDK-8370843[JDK-8370843])
 
-Les options `-AlwaysActAsServerClassMachine` et `-NeverActAsServerClassMachine` sont utilisés pour influencer deux comportements :
+Les options `-AlwaysActAsServerClassMachine` et `-NeverActAsServerClassMachine` sont utilisées pour influencer deux comportements :
 
 . quel GC est choisi par défaut
 
@@ -535,9 +535,12 @@ La documentation générée par l’outil `javadoc` propose désormais un thème
 Le thème clair est toujours celui par défaut, mais le nouveau thème sombre peut être sélectionné via le bouton nouveau thème dans la barre de navigation.
 
 image:/images/2026/nouveautes-java-26-partie2/article_java_26_partie_2_001.png[image,width=605,height=171]
-
-Il est possible de sélectionner le thème sombre (dark).
-
+
+
+Il est possible de sélectionner le thème sombre (dark).
+
+
+
 image:/images/2026/nouveautes-java-26-partie2/article_java_26_partie_2_002.png[image,width=605,height=187]
 
 === Les dumps de threads générés par `HotSpotDiagnosticMXBean` et `jcmd` incluent le propriétaire du verrou (https://bugs.openjdk.org/browse/JDK-8365057[JDK-8365057])
