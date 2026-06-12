@@ -337,38 +337,215 @@ En pratique, le choix dépend du niveau de complexité :
 
 Le vrai conseil n’est pas de “toujours prendre le plus gros modèle”, mais de choisir un modèle cohérent avec la tâche et d’éviter de changer en permanence au milieu du même workflow. 
 
-== 10. Workflow recommandé : analyse, plan, exécution, validation 
+Autrement dit, le modèle a son importance, mais la qualité de la collaboration avec l’agent en a probablement davantage.
 
-La meilleure manière d’utiliser Claude Code n’est pas de lui demander de tout faire d’un coup. La meilleure manière est de travailler par phases. 
+Ce qui nous amène au point suivant.
 
-=== Étape 1 : cadrer 
+== 10. Les prompts : apprendre à collaborer avec Claude plutôt qu’à lui donner des ordres
 
-Commence par demander une analyse : 
+Lorsqu’on découvre Claude Code, on a souvent tendance à penser que tout se joue dans le modèle utilisé.
 
-Analyse ce module et identifie les problèmes d’architecture, de couplage et de testabilité. 
+En réalité, l’un des facteurs qui influence le plus la qualité des réponses est beaucoup plus simple : la manière de formuler les demandes.
 
-=== Étape 2 : planifier 
+Un même modèle peut produire une réponse médiocre ou au contraire une analyse remarquable, simplement selon la façon dont le problème est présenté.
 
-Passe ensuite à un plan clair : 
+Le vrai changement de perspective consiste à comprendre qu’un prompt n’est pas une commande. C’est une manière de collaborer avec l’agent.
 
-Propose un plan de refactor en étapes courtes, compatibles avec une architecture hexagonale. 
+=== Le piège du prompt trop court
 
-=== Étape 3 : exécuter une seule étape 
+L’erreur la plus fréquente consiste à écrire des instructions très vagues :
 
-Puis seulement : 
+---
 
-Exécute l’étape 1 uniquement. 
+## Refactor this code
 
-=== Étape 4 : valider 
+ou :
 
-Enfin : 
+---
 
-Explique les changements réalisés, les risques éventuels et les tests à lancer. 
+## Improve this project
 
-Cette progression est bien plus fiable que le classique : 
+ou encore :
 
-Refactor all of this. 
+---
 
+## Fix the bug
+
+Ces demandes paraissent simples, mais elles laissent énormément de place à l’interprétation. Claude doit alors deviner :
+
+* ce qui doit être amélioré ;
+* quelles contraintes respecter ;
+* jusqu’où modifier le code ;
+* quels compromis effectuer.
+
+Parfois le résultat sera excellent, parfois beaucoup moins.
+
+=== Donner un objectif, un cadre et une limite
+
+En pratique, Claude travaille beaucoup mieux lorsqu’on lui fournit :
+
+* l’objectif recherché ;
+* les contraintes à respecter ;
+* les étapes attendues ;
+* les limites de son intervention.
+
+Par exemple, au lieu de :
+
+---
+
+## Refactor this authentication module.
+
+on obtient souvent de meilleurs résultats avec :
+
+---
+
+Analyse le module d’authentification actuel.
+
+Identifie les dépendances importantes et les violations éventuelles des principes SOLID.
+
+Propose plusieurs options de refactor compatibles avec une architecture hexagonale.
+
+Compare les avantages et les inconvénients de chaque solution.
+
+## Attends ma validation avant toute modification.
+
+Cette manière de travailler se rapproche davantage d’une discussion avec un collègue expérimenté que d’une simple génération automatique de code.
+
+=== Séparer l’analyse de l’exécution
+
+Une autre bonne pratique consiste à ne pas demander immédiatement du code.
+
+Très souvent, il est préférable de commencer par :
+
+---
+
+## Explique-moi le fonctionnement de ce module.
+
+puis :
+
+---
+
+## Identifie les problèmes potentiels.
+
+ensuite :
+
+---
+
+## Propose un plan de migration.
+
+et enfin :
+
+---
+
+## Exécute uniquement la première étape.
+
+Cette approche réduit considérablement les modifications hasardeuses et permet de garder le contrôle sur les changements effectués.
+
+=== Demander à Claude de raisonner
+
+Claude n’est pas seulement capable d’écrire du code. Il est particulièrement performant lorsqu’on lui demande d’expliquer son raisonnement.
+
+Quelques formulations donnent souvent d’excellents résultats :
+
+---
+
+## Explique ton raisonnement étape par étape.
+
+---
+
+## Propose plusieurs solutions et compare-les.
+
+---
+
+## Quels sont les risques de cette approche ?
+
+---
+
+## Cherche les effets de bord possibles.
+
+---
+
+## Quelle serait la solution la plus simple à maintenir ?
+
+Cette manière de travailler transforme progressivement Claude Code en partenaire d’analyse et non plus seulement en générateur de code.
+
+=== Le pattern "Analyse → Plan → Exécution"
+
+Avec l’expérience, un schéma revient très souvent :
+
+1. Comprendre ;
+2. Planifier ;
+3. Exécuter ;
+4. Vérifier.
+
+Par exemple :
+
+---
+
+Analyse cette classe.
+
+Explique les problèmes de couplage et de testabilité.
+
+Propose un plan de refactor en plusieurs étapes.
+
+## N'effectue aucune modification avant ma validation.
+
+Puis :
+
+---
+
+## Exécute uniquement l’étape 1.
+
+Enfin :
+
+---
+
+## Explique les changements réalisés et les tests à lancer.
+
+Cette approche apporte plusieurs bénéfices :
+
+* moins de régressions ;
+* davantage de contrôle ;
+* une meilleure conformité à l’architecture ;
+* des réponses plus cohérentes ;
+* une collaboration plus proche d’une revue technique que d’une génération brute.
+
+=== Le meilleur prompt est souvent le plus structuré
+
+Il n’existe pas de "prompt magique".
+
+En revanche, on constate qu’un bon prompt contient généralement quatre éléments :
+
+* le contexte ;
+* l’objectif ;
+* les contraintes ;
+* le résultat attendu.
+
+Autrement dit, au lieu de demander :
+
+---
+
+## Optimise cette classe.
+
+on peut préciser :
+
+---
+
+Analyse cette classe Java.
+
+L'objectif est d'améliorer sa testabilité et de réduire le couplage.
+
+Respecte les principes SOLID et l'architecture hexagonale du projet.
+
+## Propose plusieurs solutions et attends ma validation avant toute modification.
+
+La différence ne vient pas seulement du modèle utilisé.
+
+Elle vient surtout de la qualité de la collaboration mise en place avec l’agent.
+
+Au fond, écrire un bon prompt revient moins à savoir parler à une IA qu’à savoir formuler clairement un problème d’ingénierie.
+
+Et c’est probablement cette compétence, plus que n’importe quelle autre, qui fait réellement la différence dans l’utilisation quotidienne de Claude Code.
 
 
 == 11. Anti-patterns à éviter 
