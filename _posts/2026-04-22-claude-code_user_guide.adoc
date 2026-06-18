@@ -1,11 +1,12 @@
-= Maitriser Claude code
+= Maîtriser Claude Code
 :showtitle:
-:page-navtitle: le guide pour développeurs
+:page-navtitle: Maîtriser Claude Code
 :page-excerpt: Transformer Claude Code en véritable copilote d’architecture — et pas seulement en générateur de code. 
 :layout: post
-:page-tags: [claude code]
+:page-tags: [Claude, IA]
 :author: katiaouameurali
 :page-vignette: claude.png
+:page-liquid:
 :page-categories: software news
 
 == Introduction 
@@ -15,35 +16,37 @@ Le constat était mitigé. Les réponses étaient parfois bonnes, parfois incoh�
 
 Le déclic est venu quand j’ai compris une idée simple : Claude Code n’est pas juste un outil de génération de texte. C’est un agent de développement. Et comme tout agent, il a besoin de trois choses : 
 
-* Un contexte propre,  
-
-* Des règles explicites,  
-
+* Un contexte propre,
+* Des règles explicites,
 * Une méthode de travail.  
 
 Bien configuré, Claude Code ne sert plus seulement à “coder plus vite”. Il devient un véritable copilote d’ingénierie : il comprend ton projet, respecte tes conventions, suit ton architecture, et t’aide à travailler de façon plus structurée. 
 
-== 1. Installation et intégration
+// Numérotation auto des titre de niv 2
+:sectnums:
+:sectnumlevels: 1
+
+== Installation et intégration
 La manière la plus simple de commencer est de suivre la documentation officielle https://code.claude.com/docs/en/overview#terminal. 
 
 Pour mon cas, Sur Windows, Anthropic recommande une installation native, avec des commandes distinctes selon que tu es dans PowerShell ou dans CMD. Il faut aussi avoir Git for Windows installé, car Claude Code s’appuie dessus sur Windows.  
 
-Exemples : 
+
+Exemples :
 
 * Windows PowerShell : 
-irm https://claude.ai/install.ps1 | iex 
+``irm https://claude.ai/install.ps1 | iex ``
 
 * Windows CMD :
-curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd 
+``curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd ``
 
 Une fois installé, tu ouvres simplement un terminal à la racine de ton projet puis tu lances : 
 
-*claude* 
+`claude`
 
 Claude Code est disponible dans le terminal, mais aussi dans des environnements intégrés selon l’outil utilisé. La logique reste la même : il travaille mieux quand il part du bon répertoire, avec le bon contexte de projet.  
 
-
-== 2. Le vrai changement de posture : Claude Code n’est pas un chatbot 
+== Le vrai changement de posture : Claude Code n’est pas un chatbot
 
 C’est probablement l’erreur la plus fréquente. 
 
@@ -54,7 +57,7 @@ Pourquoi ? Parce que Claude Code est conçu pour agir. Il explore, lit les fichi
 La bonne posture n’est donc pas de “lancer une requête”. La bonne posture est de lui donner un cadre de travail. 
 
 
-== 3. CLAUDE.md : la pièce maîtresse du projet 
+== CLAUDE.md : la pièce maîtresse du projet
 
 Le fichier CLAUDE.md est l’un des éléments les plus importants de Claude Code. C’est là que tu poses le cadre stable du projet : architecture, conventions, stack, règles de conception, attentes sur les tests, workflow, contraintes métier, etc. La documentation officielle précise que ces fichiers sont lus au démarrage de chaque session et servent de mémoire persistante pour guider Claude.  
 
@@ -62,7 +65,9 @@ Autrement dit, CLAUDE.md joue le rôle d’un contrat de collaboration entre ton
 
 Sans lui, Claude improvise. Avec lui, il comprend l’architecture et s’y conforme. 
 
-Exemple de CLAUDE.md 
+_Exemple de CLAUDE.md :_
+
+[listing]
 ----
 # Projet : Core Spring 
  
@@ -91,6 +96,7 @@ Application Java 25 basée sur Spring Boot.
 - Générer des tests unitaires pour toute logique métier 
 - Éviter les tests inutiles sur getters/setters 
 ----
+
 *Ce qu’il faut y mettre* 
 
 Un bon CLAUDE.md contient surtout des éléments stables : 
@@ -107,19 +113,19 @@ Un bon CLAUDE.md contient surtout des éléments stables :
 
 * les décisions structurantes du projet.  
 
-**Ce qu’il ne faut pas y mettre :
-**
+**Ce qu’il ne faut pas y mettre :**
 Il ne doit pas devenir une décharge de documentation interminable. Plus il est long, plus il consomme de contexte et moins il reste efficace. La doc officielle insiste d’ailleurs sur l’importance d’instructions spécifiques et concises.  
 
-En pratique, CLAUDE.md. doit contenir les invariants du projet, pas tout l’historique de l’équipe. 
+En pratique, `CLAUDE.md` doit contenir les invariants du projet, pas tout l’historique de l’équipe.
 
-Il arrive que CLAUDE.md, ne soit pas charger automatiquement, on peut faire un test simple, pour mon cas lui demander quelle architecture utilise mon projet ?  
 
-* Réponse vague → contexte non chargé , redémarrer la session avec la commande  /clear et ensuite la commande claude 
+Il arrive que `CLAUDE.md` ne soit pas chargé automatiquement : on peut faire un test simple. Dans mon cas, je lui demande quelle architecture utilise mon projet ?
 
+
+* Réponse vague → contexte non chargé → redémarrer la session avec la commande `/clear`, puis relancer `claude`
 * Réponse précise → configuration correcte 
 
-== 4. Comprendre le contexte : la vraie ressource rare 
+== Comprendre le contexte : la vraie ressource rare
 
 À chaque requête, Claude Code reconstruit une fenêtre de contexte avec ce qu’il juge nécessaire : conversation en cours, instructions, mémoire, extraits de fichiers, résultats d’outils, etc. La documentation rappelle qu’une session commence avec une fenêtre fraîche, puis se remplit progressivement à mesure que le travail avance.  
 
@@ -138,49 +144,42 @@ Quand une session devient trop longue :
 La bonne pratique est simple : *une session = un objectif clair*. 
 
 Par exemple : 
-----
-une session pour analyser une architecture,  
 
-une session pour préparer un refactor,  
+* une session pour analyser une architecture,
+* une session pour préparer un refactor,
+* une session pour implémenter une étape précise,
+* une session pour déboguer un bug complexe.
 
-une session pour implémenter une étape précise,  
+Claude Code fournit justement des commandes utiles pour surveiller et gérer cela, comme `/context`, `/compact` et `/clear`. `/context` permet de visualiser l’utilisation du contexte, `/compact` résume l’historique en conservant l’essentiel, et `/clear` repart sur une conversation neuve.
 
-une session pour déboguer un bug complexe.  
-----
-Claude Code fournit justement des commandes utiles pour surveiller et gérer cela, comme /context, /compact et /clear. /context permet de visualiser l’utilisation du contexte, /compact résume l’historique en conservant l’essentiel, et /clear repart sur une conversation neuve.  
+Aujourd’hui, le modèle Opus 4.6 a environ 1 million de tokens, soit approximativement 750 000 mots.
 
-Aujourd’hui, le modèle OPUS4.6 à environ 1million de token soit approximativement 750 000 mots. 
+Les retours des utilisateurs font état d’une dégradation de la qualité des réponses et d’hallucinations de Claude aux environs de 200k tokens utilisés.
 
-Le feedback des utilisateurs parlent d’une dégradation de qualité des réponses et hallucination de claude aux environs de 200k de token utilisés.  
-== 5. SKILL.md : quand CLAUDE.md ne suffit plus 
+== `SKILL.md` : quand `CLAUDE.md` ne suffit plus
 
-Quand on découvre Claude Code, on a tendance à vouloir tout mettre dans CLAUDE.md. C’est une erreur. 
+Quand on découvre Claude Code, on a tendance à vouloir tout mettre dans `CLAUDE.md`. C’est une erreur.
 
-La documentation officielle introduit les skills, définies via un fichier SKILL.md. Une skill sert à encapsuler une procédure réutilisable : audit de sécurité, check-list de release, protocole de debugging, workflow de migration, génération de documentation, etc. Claude peut les charger quand elles deviennent pertinentes, ou tu peux les invoquer directement. Surtout, le contenu complet d’une skill n’est chargé qu’au moment de son utilisation, ce qui évite d’alourdir inutilement le contexte principal.  
+La documentation officielle introduit les skills, définies via un fichier `SKILL.md`. Une skill sert à encapsuler une procédure réutilisable : audit de sécurité, check-list de release, protocole de debugging, workflow de migration, génération de documentation, etc. Claude peut les charger quand elles deviennent pertinentes, ou tu peux les invoquer directement. Surtout, le contenu complet d’une skill n’est chargé qu’au moment de son utilisation, ce qui évite d’alourdir inutilement le contexte principal.
 
 **Règle simple **
 
-* CLAUDE.md = faits stables et règles globales  
+* ``CLAUDE.m``d = faits stables et règles globales
 
-* SKILL.md = procédures, playbooks, workflows récurrents  
+* `SKILL.md` = procédures, playbooks, workflows récurrents
 
-**Exemple de cas d’usage 
-**
-Tu peux créer une skill debug-prod/SKILL.md qui décrit comment : 
+**Exemple de cas d’usage**
+Tu peux créer une skill `debug-prod/SKILL.md` qui décrit comment :
 
-1. collecter les logs,  
-
-2. vérifier les endpoints,  
-
-3. lancer les tests ciblés,  
-
-4. proposer des hypothèses,  
-
-5. produire un plan de correction minimal.  
+. collecter les logs,
+. vérifier les endpoints,
+. lancer les tests ciblés,
+. proposer des hypothèses,
+. produire un plan de correction minimal.
 
 C’est beaucoup plus propre que de répéter la même méthode dans chaque session. 
 
-== 6. Plan Mode vs exécution : la pratique qui change tout 
+== Plan Mode vs exécution : la pratique qui change tout
 
 Une autre excellente pratique consiste à ne pas demander immédiatement à Claude d’éditer le code. 
 
@@ -189,10 +188,10 @@ La documentation le recommande pour les changements multi-fichiers, les explorat
 En Plan Mode, Claude pose aussi des questions de clarification avant de proposer un plan.  
 
 On peut l’activer en lançant la session avec : 
----
-claude --permission-mode plan 
----
-Ou en basculant de mode pendant une session.  
+
+``claude --permission-mode plan ``
+
+Ou en basculant de mode pendant une session.
 
 Pourquoi c’est si puissant 
 
@@ -204,13 +203,19 @@ Parce que cela force une séparation saine entre :
 
 * l’exécution.  
 
-Au lieu de dire : 
+Au lieu de dire :
 
-Refactor this authentication module. 
+[source,prompt]
+Refactor this authentication module.
 
-on obtient de meilleurs résultats avec : 
+on obtient de meilleurs résultats avec :
 
-Analyse l’implémentation actuelle de l’authentification, identifie les dépendances, propose un plan de migration vers une architecture hexagonale, puis attends ma validation avant toute modification. 
+[source,prompt]
+----
+Analyse l’implémentation actuelle de l’authentification, identifie les dépendances,
+propose un plan de migration vers une architecture hexagonale,
+puis attends ma validation avant toute modification.
+----
 
 Cette approche apporte plusieurs bénéfices : 
 
@@ -222,9 +227,7 @@ Cette approche apporte plusieurs bénéfices :
 
 * collaboration plus proche d’une revue technique que d’une génération brute.  
 
- 
-
-== 7. La configuration : comprendre les vrais niveaux de priorité 
+== La configuration : comprendre les vrais niveaux de priorité
 
 Claude Code repose sur une configuration hiérarchique. C’est indispensable pour distinguer ce qui relève : 
 
@@ -244,11 +247,11 @@ Les configurations sont appliquées selon l’ordre de priorité suivant :
 
 La doc officielle indique notamment : 
 
-* user settings : ~/.claude/settings.json  sur ton poste  
+* user settings : `~/.claude/settings.json`  sur ton poste
 
-* project settings : .claude/settings.json  
+* project settings : `.claude/settings.json`
 
-* local project settings : .claude/settings.local.json  
+* local project settings : `.claude/settings.local.json`
 
 Donc oui, dans l’usage courant : 
 
@@ -260,7 +263,9 @@ mais ce n’est pas toute l’histoire.
 
 Structure recommandée 
 
-```text
+[source,text]
+----
+
 project-root/
 ├── .claude/
 │   ├── settings.json
@@ -269,39 +274,36 @@ project-root/
 ├── src/
 ├── tests/
 └── README.md
-```
+----
 
 *Bon usage des trois niveaux*
 
 Le niveau utilisateur sert aux préférences personnelles réutilisables partout. 
-Le niveau projet sert aux règles communes de l’équipe, versionné sur GIT. 
-Le niveau local sert aux ajustements non partagés, aux expérimentations ou à des permissions temporaires. La doc précise d’ailleurs que settings.local.json est destiné à ne pas être versionné. 
+Le niveau projet sert aux règles communes de l’équipe, versionné sur `git`.
+Le niveau local sert aux ajustements non partagés, aux expérimentations ou à des permissions temporaires. La doc précise d’ailleurs que settings.local.json est destiné à ne pas être versionné.
 
-
-
-
-## 8. Permissions : la sécurité avant tout 
+== Permissions : la sécurité avant tout
 
 Claude Code peut lire des fichiers, exécuter des commandes et modifier le code. Il faut donc appliquer un principe simple : *le moindre privilège*. 
 
-La documentation officielle recommande d’utiliser permissions.deny pour empêcher l’accès à des fichiers sensibles comme les secrets, fichiers d’environnement ou credentials. Les exemples actuels utilisent une syntaxe explicite du type Read(...) ou Bash(...), et non de simples chemins nus.  
+La documentation officielle recommande d’utiliser `permissions.deny` pour empêcher l’accès à des fichiers sensibles comme les secrets, fichiers d’environnement ou credentials. Les exemples actuels utilisent une syntaxe explicite du type `Read(...)` ou `Bash(...)`, et non de simples chemins nus.
 
  
-```text
-Exemple correct 
+[source,json]
+----
+{
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(./config/credentials.json)",
+      "Bash(curl *)"
+    ]
+  }
+}
+----
 
-{ 
-  "permissions": { 
-    "deny": [ 
-      "Read(./.env)", 
-      "Read(./.env.*)", 
-      "Read(./secrets/**)", 
-      "Read(./config/credentials.json)", 
-      "Bash(curl *)" 
-    ] 
-  } 
-} 
-```
 
 === Pourquoi c’est important 
 
@@ -309,30 +311,22 @@ Parce qu’un agent efficace est aussi un agent potentiellement dangereux si on 
 
 Il faut protéger : 
 
-* les secrets,  
-
-* les certificats,  
-
-* les clés privées,  
-
-* les configurations de production,  
-
-* les dumps de base,  
-
-* les données personnelles,  
-
+* les secrets,
+* les certificats,
+* les clés privées,
+* les configurations de production,
+* les dumps de base,
+* les données personnelles,
 * certaines commandes shell trop risquées.  
 
-== 9. Choisir le bon modèle 
+== Choisir le bon modèle
 
-Claude Code permet de changer de modèle via les commandes intégrées, notamment /model, parmi d’autres commandes slash comme /clear, /compact, /context ou /config.  
+Claude Code permet de changer de modèle via les commandes intégrées, notamment `/model`, parmi d’autres commandes slash comme `/clear`, `/compact`, `/context` ou `/config`.
 
 En pratique, le choix dépend du niveau de complexité : 
 
-* *Opus* pour les sujets complexes, les raisonnements délicats, les arbitrages d’architecture,  
-
-* *Sonnet* pour l’usage quotidien,  
-
+* *Opus* pour les sujets complexes, les raisonnements délicats, les arbitrages d’architecture,
+* *Sonnet* pour l’usage quotidien,
 * *Haiku* pour des tâches rapides et légères. Les documents Anthropic sur le prompting et les modèles actuels mentionnent notamment Opus 4.6, Sonnet 4.6 et Haiku 4.5.  
 
 Le vrai conseil n’est pas de “toujours prendre le plus gros modèle”, mais de choisir un modèle cohérent avec la tâche et d’éviter de changer en permanence au milieu du même workflow. 
@@ -341,7 +335,7 @@ Autrement dit, le modèle a son importance, mais la qualité de la collaboration
 
 Ce qui nous amène au point suivant.
 
-== 10. Les prompts : apprendre à collaborer avec Claude plutôt qu’à lui donner des ordres
+== Les prompts : apprendre à collaborer avec Claude plutôt qu’à lui donner des ordres
 
 Lorsqu’on découvre Claude Code, on a souvent tendance à penser que tout se joue dans le modèle utilisé.
 
@@ -355,21 +349,16 @@ Le vrai changement de perspective consiste à comprendre qu’un prompt n’est 
 
 L’erreur la plus fréquente consiste à écrire des instructions très vagues :
 
----
-
-## Refactor this code
+[source,prompt]
+Refactor this code
 
 ou :
-
----
-
-## Improve this project
+[source,prompt]
+Improve this project
 
 ou encore :
-
----
-
-## Fix the bug
+[source,prompt]
+Fix the bug
 
 Ces demandes paraissent simples, mais elles laissent énormément de place à l’interprétation. Claude doit alors deviner :
 
@@ -391,14 +380,12 @@ En pratique, Claude travaille beaucoup mieux lorsqu’on lui fournit :
 
 Par exemple, au lieu de :
 
----
-
-## Refactor this authentication module.
+[source,prompt]
+Refactor this authentication module.
 
 on obtient souvent de meilleurs résultats avec :
-
----
-
+[source,prompt]
+----
 Analyse le module d’authentification actuel.
 
 Identifie les dépendances importantes et les violations éventuelles des principes SOLID.
@@ -407,7 +394,8 @@ Propose plusieurs options de refactor compatibles avec une architecture hexagona
 
 Compare les avantages et les inconvénients de chaque solution.
 
-## Attends ma validation avant toute modification.
+Attends ma validation avant toute modification.
+----
 
 Cette manière de travailler se rapproche davantage d’une discussion avec un collègue expérimenté que d’une simple génération automatique de code.
 
@@ -417,27 +405,21 @@ Une autre bonne pratique consiste à ne pas demander immédiatement du code.
 
 Très souvent, il est préférable de commencer par :
 
----
-
-## Explique-moi le fonctionnement de ce module.
+[source,prompt]
+Explique-moi le fonctionnement de ce module.
 
 puis :
 
----
-
-## Identifie les problèmes potentiels.
+[source,prompt]
+Identifie les problèmes potentiels.
 
 ensuite :
-
----
-
-## Propose un plan de migration.
+[source,prompt]
+Propose un plan de migration.
 
 et enfin :
-
----
-
-## Exécute uniquement la première étape.
+[source,prompt]
+Exécute uniquement la première étape.
 
 Cette approche réduit considérablement les modifications hasardeuses et permet de garder le contrôle sur les changements effectués.
 
@@ -447,25 +429,20 @@ Claude n’est pas seulement capable d’écrire du code. Il est particulièreme
 
 Quelques formulations donnent souvent d’excellents résultats :
 
----
+[source,prompt]
+Explique ton raisonnement étape par étape.
 
-## Explique ton raisonnement étape par étape.
+[source,prompt]
+Propose plusieurs solutions et compare-les.
 
----
+[source,prompt]
+Quels sont les risques de cette approche ?
 
-## Propose plusieurs solutions et compare-les.
+[source,prompt]
+Cherche les effets de bord possibles.
 
----
-
-## Quels sont les risques de cette approche ?
-
----
-
-## Cherche les effets de bord possibles.
-
----
-
-## Quelle serait la solution la plus simple à maintenir ?
+[source,prompt]
+Quelle serait la solution la plus simple à maintenir ?
 
 Cette manière de travailler transforme progressivement Claude Code en partenaire d’analyse et non plus seulement en générateur de code.
 
@@ -473,34 +450,33 @@ Cette manière de travailler transforme progressivement Claude Code en partenair
 
 Avec l’expérience, un schéma revient très souvent :
 
-1. Comprendre ;
-2. Planifier ;
-3. Exécuter ;
-4. Vérifier.
+. Comprendre ;
+. Planifier ;
+. Exécuter ;
+. Vérifier.
 
 Par exemple :
 
----
-
+[source,prompt]
+----
 Analyse cette classe.
 
 Explique les problèmes de couplage et de testabilité.
 
 Propose un plan de refactor en plusieurs étapes.
 
-## N'effectue aucune modification avant ma validation.
+N'effectue aucune modification avant ma validation.
+----
 
 Puis :
 
----
-
-## Exécute uniquement l’étape 1.
+[source,prompt]
+Exécute uniquement l’étape 1.
 
 Enfin :
 
----
-
-## Explique les changements réalisés et les tests à lancer.
+[source,prompt]
+Explique les changements réalisés et les tests à lancer.
 
 Cette approche apporte plusieurs bénéfices :
 
@@ -523,21 +499,21 @@ En revanche, on constate qu’un bon prompt contient généralement quatre élé
 
 Autrement dit, au lieu de demander :
 
----
-
-## Optimise cette classe.
+[source,prompt]
+Optimise cette classe.
 
 on peut préciser :
 
----
-
+[source,prompt]
+----
 Analyse cette classe Java.
 
 L'objectif est d'améliorer sa testabilité et de réduire le couplage.
 
 Respecte les principes SOLID et l'architecture hexagonale du projet.
 
-## Propose plusieurs solutions et attends ma validation avant toute modification.
+Propose plusieurs solutions et attends ma validation avant toute modification.
+----
 
 La différence ne vient pas seulement du modèle utilisé.
 
@@ -548,7 +524,7 @@ Au fond, écrire un bon prompt revient moins à savoir parler à une IA qu’à 
 Et c’est probablement cette compétence, plus que n’importe quelle autre, qui fait réellement la différence dans l’utilisation quotidienne de Claude Code.
 
 
-== 11. Anti-patterns à éviter 
+== Anti-patterns à éviter
 
 Il y a quelques erreurs récurrentes qui dégradent fortement les résultats. 
 
@@ -562,18 +538,14 @@ Le quatrième, c’est *un CLAUDE.md absent ou mal conçu* : trop court, trop va
 
 Le cinquième, c’est *la sécurité négligée*, avec des permissions trop larges et aucun filtrage des fichiers sensibles. 
 
- 
-
-== 12. Quelques conseils pratiques qui changent vraiment le quotidien 
+== Quelques conseils pratiques qui changent vraiment le quotidien
 
 Un bon réflexe consiste à ouvrir une nouvelle session pour chaque objectif important. Cela garde le contexte propre et évite les dérives. 
 
-Autre astuce très utile : utiliser /context pour comprendre ce qui consomme la fenêtre de contexte, puis /compact quand il faut préserver l’essentiel sans tout perdre. La doc recommande aussi d’ajouter des instructions de compaction ciblées quand on veut conserver certains points en priorité.  
+Autre astuce très utile : utiliser `/context` pour comprendre ce qui consomme la fenêtre de contexte, puis `/compact` quand il faut préserver l’essentiel sans tout perdre. La doc recommande aussi d’ajouter des instructions de compaction ciblées quand on veut conserver certains points en priorité.
 
-Enfin, dès qu’une pratique revient souvent, il faut se demander : est-ce que cela doit vivre dans CLAUDE.md, dans une skill? 
+Enfin, dès qu’une pratique revient souvent, il faut se demander : est-ce que cela doit vivre dans CLAUDE.md, dans une skill ?
 C’est ce passage d’un usage improvisé à un usage structuré qui fait vraiment monter en qualité. 
-
- 
 
 == Conclusion
 Claude Code n’est pas magique. Il est même assez exigeant. 
