@@ -59,7 +59,7 @@ La bonne posture n’est donc pas de “lancer une requête”. La bonne posture
 
 == CLAUDE.md : la pièce maîtresse du projet
 
-Le fichier CLAUDE.md est l’un des éléments les plus importants de Claude Code. C’est là que tu poses le cadre stable du projet : architecture, conventions, stack, règles de conception, attentes sur les tests, workflow, contraintes métier, etc. La documentation officielle précise que ces fichiers sont lus au démarrage de chaque session et servent de mémoire persistante pour guider Claude.  
+Le fichier CLAUDE.md est l'un des éléments les plus importants de Claude Code. C'est là que l'on pose le cadre stable du projet : architecture, conventions, stack, règles de conception, attentes sur les tests, workflow, contraintes métier, etc. La documentation officielle précise que ces fichiers sont lus au démarrage de chaque session et servent de mémoire persistante pour guider Claude.  
 
 Autrement dit, CLAUDE.md joue le rôle d’un contrat de collaboration entre ton projet et l’agent. 
 
