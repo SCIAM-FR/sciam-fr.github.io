@@ -160,7 +160,7 @@ Les retours des utilisateurs font état d’une dégradation de la qualité des 
 
 Quand on découvre Claude Code, on a tendance à vouloir tout mettre dans `CLAUDE.md`. C’est une erreur.
 
-La documentation officielle introduit les skills, définies via un fichier `SKILL.md`. Une skill sert à encapsuler une procédure réutilisable : audit de sécurité, check-list de release, protocole de debugging, workflow de migration, génération de documentation, etc. Claude peut les charger quand elles deviennent pertinentes, ou tu peux les invoquer directement. Surtout, le contenu complet d’une skill n’est chargé qu’au moment de son utilisation, ce qui évite d’alourdir inutilement le contexte principal.
+La documentation officielle introduit les skills, définies via un fichier `SKILL.md`. Une skill sert à encapsuler une procédure réutilisable : audit de sécurité, check-list de release, protocole de debugging, workflow de migration, génération de documentation, etc. Claude peut les charger quand elles deviennent pertinentes, ou on peut les invoquer directement. Surtout, le contenu complet d'une skill n'est chargé qu'au moment de son utilisation, ce qui évite d'alourdir inutilement le contexte principal.
 
 **Règle simple **
 
