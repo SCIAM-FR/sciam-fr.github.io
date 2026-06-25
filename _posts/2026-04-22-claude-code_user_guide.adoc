@@ -231,7 +231,7 @@ Cette approche apporte plusieurs bénéfices :
 
 Claude Code repose sur une configuration hiérarchique. C’est indispensable pour distinguer ce qui relève : 
 
-* de tes préférences personnelles,  
+* de préférences personnelles,  
 
 * des règles d’équipe,  
 
