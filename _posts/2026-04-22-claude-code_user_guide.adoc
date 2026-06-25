@@ -247,7 +247,7 @@ Les configurations sont appliquées selon l’ordre de priorité suivant :
 
 La doc officielle indique notamment : 
 
-* user settings : `~/.claude/settings.json`  sur ton poste
+* user settings : `~/.claude/settings.json`  sur le poste
 
 * project settings : `.claude/settings.json`
 
@@ -550,7 +550,7 @@ C’est ce passage d’un usage improvisé à un usage structuré qui fait vraim
 == Conclusion
 Claude Code n’est pas magique. Il est même assez exigeant. 
 
-Sa qualité dépend directement de la qualité du cadre que tu lui fournis : le contexte, les règles, les permissions, la structure du workflow, la clarté des objectifs. 
+Sa qualité dépend directement de la qualité du cadre fourni : le contexte, les règles, les permissions, la structure du workflow, la clarté des objectifs. 
 
 Utilisé de façon naïve, il produit parfois du code acceptable. 
 Utilisé de façon rigoureuse, il devient autre chose : un véritable copilote d’architecture et de développement. 
