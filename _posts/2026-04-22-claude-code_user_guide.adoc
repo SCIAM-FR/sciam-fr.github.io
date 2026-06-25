@@ -29,7 +29,7 @@ Bien configuré, Claude Code ne sert plus seulement à "coder plus vite". Il dev
 == Installation et intégration
 La manière la plus simple de commencer est de suivre la documentation officielle https://code.claude.com/docs/en/overview#terminal. 
 
-Pour mon cas, Sur Windows, Anthropic recommande une installation native, avec des commandes distinctes selon que tu es dans PowerShell ou dans CMD. Il faut aussi avoir Git for Windows installé, car Claude Code s’appuie dessus sur Windows.  
+Pour mon cas, Sur Windows, Anthropic recommande une installation native, avec des commandes distinctes selon qu'on est dans PowerShell ou dans CMD. Il faut aussi avoir Git for Windows installé, car Claude Code s'appuie dessus sur Windows. 
 
 
 Exemples :
