@@ -169,7 +169,7 @@ La documentation officielle introduit les skills, définies via un fichier `SKIL
 * `SKILL.md` = procédures, playbooks, workflows récurrents
 
 **Exemple de cas d’usage**
-Tu peux créer une skill `debug-prod/SKILL.md` qui décrit comment :
+On peut créer une skill `debug-prod/SKILL.md` qui décrit comment :
 
 . collecter les logs,
 . vérifier les endpoints,
