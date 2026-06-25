@@ -555,4 +555,4 @@ Sa qualité dépend directement de la qualité du cadre que tu lui fournis : le 
 Utilisé de façon naïve, il produit parfois du code acceptable. 
 Utilisé de façon rigoureuse, il devient autre chose : un véritable copilote d’architecture et de développement. 
 
-La différence ne vient pas seulement du modèle. Elle vient surtout de ta manière de travailler avec lui. 
+La différence ne vient pas seulement du modèle. Elle vient surtout de la manière de travailler avec lui. 
