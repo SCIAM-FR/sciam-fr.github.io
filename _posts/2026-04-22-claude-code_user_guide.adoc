@@ -20,7 +20,7 @@ Le déclic est venu quand j’ai compris une idée simple : Claude Code n’est 
 * Des règles explicites,
 * Une méthode de travail.  
 
-Bien configuré, Claude Code ne sert plus seulement à “coder plus vite”. Il devient un véritable copilote d’ingénierie : il comprend ton projet, respecte tes conventions, suit ton architecture, et t’aide à travailler de façon plus structurée. 
+Bien configuré, Claude Code ne sert plus seulement à "coder plus vite". Il devient un véritable copilote d'ingénierie : il comprend le projet, respecte les conventions, suit l'architecture, et aide à travailler de façon plus structurée. 
 
 // Numérotation auto des titre de niv 2
 :sectnums:
