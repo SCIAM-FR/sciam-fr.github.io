@@ -40,7 +40,7 @@ Exemples :
 * Windows CMD :
 ``curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd ``
 
-Une fois installé, tu ouvres simplement un terminal à la racine de ton projet puis tu lances : 
+Une fois installé, il suffit d'ouvrir un terminal à la racine du projet et de lancer : 
 
 `claude`
 
