@@ -1,0 +1,99 @@
+= Le paradoxe Java
+:page-excerpt: En 2002
+:page-layout: post
+:author: antoinesabotdurand
+:page-tags: [Java, Analyse, Opinion]
+:page-vignette:
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: software
+
+
+En août 2004, Paul Graham publiait un article intitulé https://www.paulgraham.com/pypar.html[_The Python Paradox_]. L'argument tenait en deux phrases. Si une entreprise choisit d'écrire son logiciel dans un langage relativement confidentiel, elle attirera de meilleurs développeurs, précisément parce que seuls les passionnés, ceux qui sont assez curieux pour apprendre un langage qui ne leur garantit pas un job, se donnent cette peine. Et pour le développeur, le paradoxe est encore plus prononcé : le langage à apprendre, si on veut un bon poste, est celui qu'on n'apprend justement pas pour décrocher un poste.
+
+À l'époque, ce langage confidentiel, c'était Python. Java était le langage dominant, celui des cours d'informatique, celui des fiches de poste en SSII. Apprendre Java n'était pas un signal de passion, c'était un signal de conformité. Apprendre Python relevait du choix délibéré, presque de la coquetterie intellectuelle.
+
+L'essai de Graham n'est pas vraiment un essai sur Python. C'est un essai sur le rapport entre la difficulté et le signal. Quand quelque chose devient facile et largement accessible, le fait de savoir le faire cesse d'être une information utile sur la personne qui le fait. Inversement, ce qui reste difficile devient un marqueur d'autant plus fiable. C'est cette idée, et pas le langage Python lui-même, qui a vingt ans plus tard quelque chose à nous dire. À condition de la prendre au sérieux jusqu'au bout.
+
+== Le retournement
+
+Vingt ans plus tard, la situation s'est totalement inversée.
+
+Python est devenu le langage dominant du moment, porté par la vague du machine learning et de la data science, enseigné au lycée, promu dans tous les MOOCs, réclamé dans toutes les annonces. Apprendre Python en 2026, c'est exactement ce qu'était apprendre Java en 2004 : le choix raisonnable, conforme, qui ouvre des portes.
+
+Et Java, dans ce paysage, est devenu «&#160;mort&#160;». On le dit, on l'écrit, on le poste sur LinkedIn avec des emojis funèbres. Java ne fait plus rêver les étudiants. Les conférences spécialisées sur Java se sont diversifiées et aujourd'hui, il y est pardois citoyen de seconde zone. Java a quitté la catégorie hype pour rejoindre celle, beaucoup moins glorieuse en apparence, des technologies qu'on n'apprend plus par enthousiasme.
+
+C'est précisément là que le paradoxe de Graham, retourné, opère. Si en 2004 Python était le langage de ceux qui aimaient programmer pour de vrai, alors en 2026 il faut chercher ce langage ailleurs. Et il y a un candidat sérieux, un peu inattendu : Java lui-même. Non pas le Java qu'on découvre en suivant un tutoriel sur Spring Initializr, mais le Java qu'on maîtrise vraiment, dans sa profondeur de langage, de plateforme et d'écosystème. Celui-là ne s'apprend plus parce que c'est tendance. Il s'apprend parce qu'on aime ce métier.
+
+Avant de défendre cette thèse, réglons son compte au "cadavre".
+
+== Java est mort, longue vie à Java
+
+Commençons par les faits, ce qu'on ne fait jamais assez dans les débats techniques.
+
+Le terme Java recouvre 4 réalités :
+
+* un langage : souvent la seule partie connue (et encore) par les influenceurs-fossoyeurs
+* une plateforme d'éxécution (jvm) : qui constitue le socle de nombreux langages comme Kotlin, Groovy, Clojure ou Scala. C'est également plateforme polyglotte qui permet d'exécuter JavaScript, Python, Ruby, R et des DSL personnalisés avec perfois de meilleures performance que leur runtime d'origine
+* un sdk (le JDK) : d'une richesse assez exemplaire et qui, bien qu'ayant connu quelques erreurs, a su évoluer et gagner en performance et en ergonomie au fil des décénies.
+* un ecosysteme foisonnant de bibliothèques, de frameworks, d'outils et de communautés. On n'aurait pas assez de 10 articles pour explorer ne serait-ce que la partie émergée des icebergs Spring ou Quarkus/Microprofile.
+
+Ces 4 aspects sont en progression et mutation permanente depuis 30 ans. Le seul moment où la progression s'est un peu ralentie c'était il y 15 ans au moment du rachat de Sun par Oracle. Mais depuis 2017, la cadence de release semestrielle a permis à Java de se réinventer et de se moderniser à un rythme soutenu. Le langage a gagné des fonctionnalités majeures (records, pattern matching, virtual threads, scoped values), la JVM a gagné en performance et en ergonomie (ZGC, JEP 376, JEP 391), le JDK a gagné en richesse et en cohérence (JEP 330, JEP 353, JEP 358) et l'écosystème a continué à se développer avec des frameworks modernes comme Quarkus, Micronaut ou Helidon.
+
+Inutile d'épiloguer davantage sur la vitalité de Java et sur le niveau de désinformation et d'inculture crasse qui règne sur LinkedIn.
+
+Java reste donc l'un des langages les plus utilisés au monde selon tous les indices sérieux (TIOBE, l'enquête Stack Overflow, GitHub). La JVM tourne dans des milliards d'environnements de production. Kafka, Elasticsearch, Cassandra, Spark, Hadoop, Jenkins, Gradle : autant de briques critiques de l'infrastructure logicielle mondiale écrites en Java ou sur la JVM.
+
+Évacuons également l'argument "Java est le nouveau Cobol" car «&#160;Cobol aussi fait tourner la Terre entière, les banques, les assurances, les systèmes de paie, et personne n'oserait prétendre que Cobol est vivant. Il survit par dépendance, stratégie assumée de vendor lock-in et par coût de migration, pas par vitalité.&#160;». Un langage qui ne survit que par inertie ne sort pas une version majeure tous les six mois. Or Java tient depuis des années une cadence de release semestrielle qui a apporté les records, le pattern matching, les virtual threads, le `StructuredTaskScope`, les `ScopedValue`. Cobol subit le présent. Java continue de se réécrire lui-même et d'inspirer des communautés de développeurs à travers le monde.
+
+Ce qu'on peut dire honnêtement, en revanche, c'est que Java n'est plus le langage hype. Nuance de taille, car c'est exactement cette perte de prestige superficiel qui réactive le paradoxe. Un langage qu'on apprend pour faire comme tout le monde ne dit plus rien de celui qui l'apprend. Un langage (et une plateforme) qu'on maîtrise alors qu'on pourrait faire carrière sans, ça en dit beaucoup.
+
+== Le faux expert, ou le paradoxe à l'envers
+
+Il faut tout de suite poser un bémol, sans quoi la thèse s'effondre.
+
+Le paradoxe ne fonctionne que pour les vrais experts Java. Or le marché a produit, en quinze ans, une catégorie particulièrement répandue de faux experts : l'utilisateur de frameworks. Celui qui assemble Spring Boot, ou n'importe quelle autre pile, sans rien comprendre de ce qui se passe en dessous. Celui qui ne sait pas ce qu'est un ClassLoader. Qui ignore ce que recouvre la visibilité de module au sens du JPMS. Qui ne comprend pas pourquoi son application tombe en `OutOfMemoryError` et délègue le diagnostic à un outil qui produit des graphes colorés. Qui confond un EJB et un bean Spring parce que les deux portent des annotations. Qui pense que Jakarta EE et J2EE sont la même chose et que les deux sont mauvais.
+
+Ce développeur-là n'est pas le bénéficiaire du paradoxe. Il en est la négation vivante. Il a appris à utiliser un framework comme on apprenait Java en 2004 : parce que ça embauche. Le framework est devenu, pour lui, exactement ce que Java était à l'époque de Graham, un signal de conformité et non de compétence.
+
+Et c'est là que tout se joue. La vraie ligne de partage n'a jamais été entre les langages. Elle est entre ceux qui comprennent ce qu'ils manipulent et ceux qui récitent un protocole. L'expertise Java authentique, c'est connaître l'histoire des spécifications et les raisons des choix de conception, comprendre les compromis entre stateful et stateless, savoir distinguer un module automatique d'un module nommé, anticiper ce qu'une compilation native GraalVM fait à la réflexivité d'un framework. C'est savoir choisir et régler un garbage collector, comprendre pourquoi un G1 et un ZGC ne font pas les mêmes promesses, lire une pause GC dans un log et en déduire ce qu'il faut changer. C'est maîtriser le modèle mémoire Java et les pièges du multithreading, savoir ce qu'une `race condition` coûte vraiment en production, comprendre ce que les virtual threads changent et, surtout, ce qu'ils ne changent pas aux problèmes de concurrence. Rien de tout cela n'est glamour. Rien de tout cela n'est promptable. Et c'est exactement pour cela que ça a de la valeur. La différence entre un expert Java et un utilisateur de frameworks, c'est à peu près celle qui sépare le chirurgien qui comprend l'anatomie de celui qui sait suivre un protocole opératoire : les deux sont utiles, mais un seul sait quoi faire quand l'imprévu survient.
+
+Retenons cette idée, car elle est la charnière de tout l'article : ce qui a de la valeur, c'est la profondeur, et la profondeur se mesure à la capacité de faire face à ce qui n'était pas prévu. Voyons maintenant ce que l'IA vient faire dans ce tableau. La réponse, c'est qu'elle ne change pas la règle. Elle la rejoue, en plus grand.
+
+== Et puis, il y a l'IA
+
+On ne peut pas écrire un article tech en 2026 sans aborder le sujet. Allons-y franchement.
+
+Il existe sur LinkedIn, et ailleurs, une catégorie de personnages que j'appellerai les prophètes du prompt-positivisme. On les reconnaît à leur prose, scandée de petites icônes : un cerveau pour signaler la pensée disruptive, une cible pour le mot «&#160;stratégie&#160;», un billet vert à chaque fois qu'il est question de «&#160;ROI&#160;» ou de «&#160;réduction des coûts&#160;». Leur métier semble consister à convaincre les directions IT que le développement logiciel tel qu'on le connaissait est terminé. L'IA agentique va remplacer les équipes. Le vibe coding va permettre à n'importe quel product owner motivé de livrer une application d'entreprise au terme de quelques heures de conversation avec un LLM. Les développeurs seniors sont une espèce en sursis, bientôt remplacés par des «&#160;orchestrateurs de prompts&#160;». Le message est séduisant, il se partage bien, et il récolte beaucoup d'approbation de la part de gens qui ont toujours trouvé que l'IT coûtait trop cher et prenait trop de temps.
+
+Or regardons ce que l'IA fait réellement, à travers la grille de Graham. L'IA rend trivialement accessible quelque chose qui était difficile : produire du code qui compile et qui tourne. C'est exactement la situation de 2004, transposée et amplifiée. Quand générer du code devient facile, le fait de savoir générer du code cesse d'être une information utile sur la valeur d'une personne. Le signal se dévalue, comme s'était dévalué le «&#160;je connais Java&#160;» de 2004. Et par conséquent, la prime se déplace, mécaniquement, vers ce que l'IA ne sait pas faire : comprendre pourquoi tel choix d'architecture engage la disponibilité du système dans trois ans, savoir quelle question le métier n'a pas su formuler, diagnostiquer la panne que personne n'avait anticipée. La profondeur, encore. Le paradoxe Java et le paradoxe de l'IA ne sont pas deux phénomènes voisins. C'est le même phénomène.
+
+Reste la question de fond, celle de la boîte noire. Pendant des décennies, le travail des développeurs et des architectes a constitué une boîte noire pour les managers et pour le métier. On voyait entrer des specs, sortir parfois du logiciel, et entre les deux s'étendait une zone mystérieuse peuplée de réunions techniques incompréhensibles et de Post-its sur des tableaux blancs. Cette opacité a nourri des tensions réelles et des défauts de confiance bien compréhensibles. Aujourd'hui, ces mêmes organisations croient pouvoir s'affranchir de cette frustration en changeant de boîte noire : remplacer l'équipe d'experts par un agent qui génère du code. Sauf que la boîte noire n'a pas disparu. Elle a changé de nature et de responsable. Et l'ancienne, au moins, on pouvait l'interroger, la former, l'auditer, lui demander des comptes.
+
+== Ce que le code généré sait faire, et ce qu'il ne sait pas faire
+
+Parlons du code généré lui-même, puisque c'est là que les prophètes du prompt-positivisme entretiennent la confusion la plus rentable.
+
+Les benchmarks actuels de génération de code par LLM affichent des résultats impressionnants sur des problèmes isolés, bien délimités, à faible dépendance contextuelle. C'est précisément le profil du script de 200 lignes qui parse un CSV, produit un rapport et envoie un email. Ce n'est pas le profil d'une application de gestion avec des centaines d'entités métier, des contraintes transactionnelles entremêlées, des règles de sécurité à plusieurs niveaux, des exigences de disponibilité industrielle et une dette technique accumulée sur dix ans. Confondre les deux, c'est confondre le prototype et le produit.
+
+Et puisqu'il est question de prototype, rendons justice à Python, dont l'enthousiasme ambiant déforme autant l'image que l'antijavaïsme déforme celle de Java. Python est un langage remarquable pour la data science, le prototypage, le scripting et le machine learning. On y produit vite du code lisible sur des problèmes bien définis. Mais pour une application d'entreprise soumise à des contraintes industrielles de performance et de disponibilité, Python doit souvent s'appuyer sur des bindings C ou C++ pour ses parties critiques, compose avec des défis de concurrence bien documentés (le fameux GIL, que Python 3.13 commence seulement à desserrer), et son absence de typage statique natif rend les grandes bases de code coûteuses à maintenir sans tout un arsenal d'outils complémentaires. Ce n'est pas un procès, c'est une description honnête de ses cas d'usage optimaux.
+
+Le point est le suivant. La facilité avec laquelle un LLM génère du Python correct sur un problème simple est réelle, et elle ne dit rigoureusement rien de sa capacité à architecturer et maintenir un système d'entreprise complexe. C'est le même glissement que l'utilisateur de frameworks : prendre la maîtrise apparente d'un outil pour la compréhension de ce que cet outil manipule. L'IA n'a pas inventé cette confusion. Elle l'a industrialisée.
+
+== Le développement augmenté, pas le développeur augmenté
+
+C'est ici que je veux conclure, parce que c'est ici que la question devient vraiment intéressante.
+
+Le discours dominant tourne autour d'une figure : le développeur augmenté. Celui qui, grâce à l'IA, code dix fois plus vite, produit seul ce qu'une équipe produisait avant, et remplace au passage la moitié de cette équipe. C'est une vision centrée sur l'individu et sur la productivité brute mesurée en lignes de code. C'est, au fond, la version 2026 de l'illusion du signal : croire que produire plus de code, plus vite, est ce qui compte.
+
+Je lui oppose une autre vision : le développement augmenté.
+
+Un projet logiciel d'ampleur ne se résume pas à la génération de code. Il mobilise une chaîne de responsabilités et de compétences qui reste, fondamentalement, pertinente : des experts métier qui comprennent les processus à modéliser, des product owners qui arbitrent entre des besoins contradictoires, des architectes qui définissent les contraintes non fonctionnelles et les frontières entre composants, des développeurs experts qui savent pourquoi une décision technique en vaut une autre, des spécialistes de la sécurité, des profils ops et SRE qui garantissent que tout cela tourne en production. Ces rôles existaient avant l'IA et leur raison d'être ne disparaît pas avec elle.
+
+L'IA peut augmenter chacun de ces rôles, et souvent de façon spectaculaire. Elle aide l'architecte à explorer plus vite l'espace des solutions. Elle aide le développeur expert à générer la plomberie répétitive en lui laissant les décisions de fond. Elle aide le product owner à structurer ses user stories. Mais (et c'est tout l'enjeu) aucun de ces rôles ne peut être correctement augmenté par quelqu'un qui ne le maîtrise pas déjà. Un LLM entre les mains d'un expert Java produit quelque chose d'utile. Le même LLM entre les mains de quelqu'un qui ne comprend pas ce qu'il lit dans la sortie produit une jolie illusion de compétence, jusqu'au jour de la mise en production.
+
+Le vrai défi de l'ère de l'IA dans le développement logiciel n'est donc pas de supprimer des postes en espérant que l'outil comble le vide. C'est de décider, rôle par rôle et tâche par tâche, quand l'IA apporte de la valeur, quand elle ne fait que déplacer le risque, et quand l'expertise humaine reste irremplaçable. Décider quand ne pas utiliser l'IA est une compétence aussi décisive que savoir l'utiliser, et cette compétence-là exige précisément la profondeur que l'IA ne fournit pas.
+
+'''
+
+On revient toujours au même endroit. En 2004, les meilleurs développeurs apprenaient Python parce qu'ils aimaient programmer, et le langage facile à apprendre, Java, ne disait rien de personne. En 2026, le langage facile a changé de nom, l'IA a rendu le code lui-même facile à produire, et la seule chose qui ait vraiment de la valeur reste ce qui était déjà précieux à l'époque de Graham : comprendre en profondeur ce qu'on fait. Le paradoxe Java n'est pas une histoire de langage. C'est ce que la facilité fait à la valeur de l'expertise. Et il n'est pas près de se résoudre.
