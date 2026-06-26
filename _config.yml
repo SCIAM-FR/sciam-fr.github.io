@@ -8,7 +8,7 @@ permalink: pretty
 #baseurl: "/"
 twitter:
   username: SCIAM_FR
-  card: summary
+  card: summary_large_image
 highlighter: rouge
 
 defaults:
