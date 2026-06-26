@@ -285,3 +285,12 @@ suntan:
     linkedin: "sun-seng-david-tan-b05a684"
     github: "sunix"
 
+katiaouameurali:
+  name: "Katia Ouameur-Ali"
+  bio: "Katia est une ingénieure logicielle expérimentée, avec plus de 8 ans d’expertise dans le développement d’applications Java/Spring. Elle a évolué dans des environnements exigeants, notamment dans les secteurs de l’énergie, des télécommunications et du service public. Attentive à la qualité, aux fondations solides et à l’évolution progressive des systèmes, elle voit dans l’ingénierie logicielle un travail proche de sa deuxieme passion qui est le jardinage : préparer le terrain, prendre soin de ce que l’on construit, et laisser les choses grandir silencieusement."
+  job: "Consultant Senior"
+  pagesciam: "https://www.sciam.fr/equipe/katia-ouameur-ali"
+  picture: katia.png
+  socials:
+    linkedin: "katia-ouameur-ali"
+
