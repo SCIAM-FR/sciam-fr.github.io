@@ -1,21 +1,21 @@
-= Vidocq : comment Claude Code a construit un runtime Java complet, spec par spec
-:showtitle:
-:page-navtitle: Les nouveautés de Java 26 : partie 2
-:page-excerpt: Ce second article sur les nouveautés de Java 26 est consacré aux autres améliorations, que ce soit les évolutions dans les outils, les API, la JVM et dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
+= Vidocq : quand Le dev augmenté implémente tout MicroProfile
+:page-navtitle: Vidocq : Le dev augmenté face aux TCK Microprofile
+:page-excerpt: Et si on demandait à Claude Code d'implémenter l'intégralité du Core Profile Jakarta EE et de MicroProfile, sans aucune dépendance externe ni manipulation de bytecode ? Récit d'une expérience de spec-driven development poussée à l'extrême, où le TCK joue les arbitres impitoyables : 15 modules, 180 000 lignes de Java et 5 650 tests d'acceptance au vert.
 :layout: post
-:page-tags: [Java, Java 26]
+:page-tags: [Java, Jakarta EE, MicroProfile, CDI, IA]
 :page-auteurs: [yannblazart,antoinesabotdurand]
-:page-vignette: 2026/java-26.png
+:page-vignette: 2026/vidocq.png
 :page-liquid:
 :page-categories: software news
 
 [NOTE]
+.Mais qui était Vidocq ?
 ====
-Ce texte est une première trame construite à partir des éléments disponibles dans le dépôt.
-Les sections marquées `// TODO` sont des invitations à compléter avec les anecdotes, le contexte et les détails que vous seuls connaissez.
+Eugène-François Vidocq (1775–1857) fut d'abord un bagnard et un hors-la-loi avant de devenir le premier directeur de la Sûreté nationale, l'ancêtre de la police judiciaire française. Maître du déguisement et de l'infiltration, il connaissait le crime de l'intérieur, ce qui en faisait le mieux placé pour le combattre. Il est aussi considéré comme le père de la criminalistique moderne et l'inspirateur de nombreux personnages de fiction, de Vautrin chez Balzac à Sherlock Holmes.
+
+Le nom s'imposait pour ce projet : comme son homonyme, ce runtime connaît les spécifications de l'intérieur, déjoue leurs pièges et applique une méthode d'enquête rigoureuse, le TCK jouant le rôle de l'enquêteur impitoyable qui ne laisse passer aucune approximation.
 ====
 
-'''
 
 == Tout a commencé par une discussion sur le Spec Driven Development
 
@@ -46,7 +46,7 @@ Dans les faits, si Antoine s'est mis à la tâche le soir même et a obtenu un d
 
 === Des contraintes inédites
 
-Là où d'autres implémentations comme Weld (Red Hat) ou ArC (Quarkus) reposent sur des bibliothèques de manipulation de bytecode — ASM, Byte Buddy — la règle du jeu imposée à l'implémentation de Vidocq a été radicalement différente :
+Là où d'autres implémentations comme Weld (Red Hat) ou ArC (Quarkus) reposent sur des bibliothèques de manipulation de bytecode, ASM, Byte Buddy, la règle du jeu imposée à l'implémentation de Vidocq a été radicalement différente :
 
 * *Zéro dépendance externe* : pas de framework tiers, uniquement les APIs Jakarta/MicroProfile concernées
 * *Pas de manipulation de bytecode à l'exécution* : aucun proxy dynamique, aucun agent, aucun `setAccessible(true)` en production
@@ -61,19 +61,19 @@ Ces contraintes ne sont pas des caprices d'architecte. Elles définissent ce que
 
 L'implémentation de chaque spec a suivi le même rituel. Cette méthode n'a pas été inventée d'un coup, elle s'est construite au fur et à mesure de l'avancement de l'expérience CDI et a ensuite été propagée aux autres modules de Vidocq
 
-=== Phase 1 — Contraintes et plan
+=== Phase 1, Contraintes et plan
 
 Avant d'écrire une ligne de code, on soumet à Claude Code la spécification et les contraintes. On lui demande de proposer un plan d'implémentation : architecture des modules, découpage des responsabilités, stratégies de génération de code.
 
-Ce plan est le vrai travail intellectuel du début. On le relit, on le questionne, on le pousse dans ses retranchements. Peut-on vraiment ne pas utiliser de réflexion ici ? Comment va-t-on gérer les scopes CDI sans proxy dynamique ? La réponse de l'IA est rarement la bonne du premier coup — c'est la confrontation entre sa proposition et notre connaissance des specs qui produit le plan final.
+Ce plan est le vrai travail intellectuel du début. On le relit, on le questionne, on le pousse dans ses retranchements. Peut-on vraiment ne pas utiliser de réflexion ici ? Comment va-t-on gérer les scopes CDI sans proxy dynamique ? La réponse de l'IA est rarement la bonne du premier coup, c'est la confrontation entre sa proposition et notre connaissance des specs qui produit le plan final.
 
-=== Phase 2 — L'exécution guidée
+=== Phase 2, L'exécution guidée
 
 Une fois le plan validé, on le déroule. Claude Code implémente la spec section par section, test par test. Le rôle humain est celui du guide : orienter, corriger le cap quand l'IA dérive, signaler une incohérence avec une section de spec lue en parallèle.
 
-C'est une collaboration, pas une délégation. L'IA n'est pas autonome — elle est précise et rapide là où une lecture exhaustive de la spec prendrait des semaines.
+C'est une collaboration, pas une délégation. L'IA n'est pas autonome, elle est précise et rapide là où une lecture exhaustive de la spec prendrait des semaines.
 
-=== Phase 3 — Le TCK comme arbitre absolu
+=== Phase 3, Le TCK comme arbitre absolu
 
 C'est la phase la plus longue, et de loin. Une fois l'implémentation « théoriquement correcte », on la confronte au TCK de la spécification.
 
@@ -82,42 +82,38 @@ _Le TCK est l'arbitre absolu : pas de triche possible, chaque test est un contra
 Les premiers passages sont rarement brillants. Un test rouge révèle une subtilité de la spec mal interprétée. L'IA corrige, parfois réécrit une portion entière de son implémentation. On relance. On progresse. La courbe typique ressemble à ça : 40 % verts au premier run, 70 % après une journée, les 30 % restants peuvent prendre autant de temps que tout le reste.
 
 Il est arrivé triche un peu sur les règles en utilisant de la manipulation de bytecode plutôt que l'écrite de fichiers Java.
-C'était probablement du aux données d'entraiement du modèle qui devait comporter beaucoup plus d'exemple de manipulation de bytecode que de génération de fichiers Java.
-Certains exemple de ce contrournement ont été apperçus durant l'écriture de l'impléméntation, d'autres plus tard dans une analyse plus poussée ou lors de l'implementation de nouvelles specification dépéndantes de  CDI.
+C'était probablement dû aux données d'entraiement du modèle qui devait comporter beaucoup plus d'exemple de manipulation de bytecode que de génération de fichiers Java.
+Certains exemples de ce contrournement ont été apperçus durant l'écriture de l'impléméntation, d'autres plus tard dans une analyse plus poussée ou lors de l'implementation de nouvelles specification dépéndantes de  CDI.
 
 
 == Vauban : la première victoire
 
-Sébastien Le Prestre de Vauban était l'ingénieur militaire de Louis XIV — le bâtisseur de fortifications inexpugnables. Le nom s'imposait pour le container CDI : solide, sans faille, conçu pour tenir.
+Sébastien Le Prestre de Vauban était l'ingénieur militaire de Louis XIV, le bâtisseur de fortifications inexpugnables. Le nom s'imposait pour le container CDI : solide, sans faille, conçu pour tenir.
 
-Le besoin pour MicroProfile était de n'implémenter que la partie Lite de la spec qui exclu les features liées aux EJB et au système d'extension legacy au profit des nouvelles Build Time Compatible Extensions apparues dans CDI 3.0.
+Le besoin pour MicroProfile était de n'implémenter que la partie Lite de la spec qui exclue les features liées aux EJB et au système d'extension legacy au profit des nouvelles Build Time Compatible Extensions apparues dans CDI 3.0.
 
-*Vauban — CDI 4.1 Lite : 774/774 tests TCK. 100 %.*
+*Vauban, CDI 4.1 Lite : 774/774 tests TCK. 100 %.*
 
 La "forteresse" Vauban a mis une dizaine de jours à céder.
 
 Lorsque le774ème test est passé au vert, L'équipe a compris que le "jeu" de départ allait devenir plus sérieux.
 En effet, ce résultat validait tout le pari. Une IA pouvait implémenter une spécification Java Enterprise complexe, avec des contraintes inédites, et passer la suite officielle de tests sans une seule défaillance. Ce n'était plus une hypothèse.
 
-'''
-
 == L'expansion : de CDI à une stack complète
 
 La question naturelle après Vauban était : si ça marche pour CDI, jusqu'où peut-on aller ?
 
-La réponse, construite module par module au fil des mois, c'est Vidocq dans son état actuel : *quinze modules indépendants* couvrant l'intégralité du Core Profile et de MicroProfile.
+La réponse, construite module par module au fil des semaines, c'est Vidocq dans son état actuel : *dix-neuf repos dont quinze modules indépendants* couvrant l'intégralité du Core Profile et de MicroProfile.
 
 === Les briques fondamentales
 
-*Chappe* est né de la nécessité : pour implémenter Servlet et REST, il fallait un serveur HTTP. Plutôt que de dépendre de Netty ou Jetty — ce qui aurait brisé la règle zéro-dépendance — Chappe a été écrit from scratch. Le nom rend hommage à Claude Chappe (1763–1805), inventeur du télégraphe sémaphore, ce réseau de tours optiques qui couvrit toute la France. Le projet Chappe est son héritier numérique : un réseau de communication en Java pur.
+*Chappe* est né de la nécessité : pour implémenter Servlet et REST, il fallait un serveur HTTP. Plutôt que de dépendre de Netty ou Jetty, ce qui aurait brisé la règle zéro-dépendance, Chappe a été écrit from scratch. Le nom rend hommage à Claude Chappe (1763–1805), inventeur du télégraphe sémaphore, ce réseau de tours optiques qui couvrit toute la France. Le projet Chappe est son héritier numérique : un réseau de communication en Java pur.
 
-*Champollion* gère JSON-P et JSON-B. Jean-François Champollion a déchiffré les hiéroglyphes — le projet décode JSON. *Ravel* (MicroProfile Config) porte le nom du compositeur Maurice Ravel, qui savait orchestrer la configuration d'une partition complexe.
+*Champollion* gère JSON-P, JSON-B et une nouvelle implémentation protobuf. Jean-François Champollion a déchiffré les hiéroglyphes, le projet est la pierre de Rosette des échanges interservices. *Ravel* (MicroProfile Config) porte le nom du compositeur Maurice Ravel, qui savait orchestrer la configuration d'une partition complexe.
 
 === Jakarta EE
 
-Avec Chappe, Vauban et Champollion en place, *Cassini* (Jakarta REST 4.0) et *Foy* (Jakarta Servlet 6.1) pouvaient s'appuyer sur des fondations solides. Cassini — du nom de la célèbre famille d'astronomes français et cartographes — totalise aujourd'hui *2 535 tests TCK* tous au vert.
-
-// TODO : la famille Cassini a un lien particulier avec la cartographie et la précision. Y a-t-il une anecdote sur le choix de ce nom ou sur la difficulté de cette implémentation ?
+Avec Chappe, Vauban et Champollion en place, *Cassini* (Jakarta REST 4.0) et *Foy* (Jakarta Servlet 6.1) pouvaient s'appuyer sur des fondations solides. Cassini, du nom de la célèbre famille d'astronomes français et cartographes, totalise aujourd'hui *2 535 tests TCK* tous au vert.
 
 === MicroProfile : huit spécifications
 
@@ -132,7 +128,7 @@ Une fois le Core Profile établi, l'expansion vers MicroProfile était logique. 
 
 | *Heisenberg*
 | MicroProfile Fault Tolerance 4.1
-| Werner Heisenberg — l'incertitude est inhérente aux appels réseau
+| Werner Heisenberg, l'incertitude est inhérente aux appels réseau
 | 463/463
 
 | *Cervantes*
@@ -142,42 +138,40 @@ Une fois le Core Profile établi, l'expansion vers MicroProfile était logique. 
 
 | *Cyrano*
 | MicroProfile Rest Client 4.0
-| Cyrano de Bergerac — l'éloquence au service d'un autre
+| Cyrano de Bergerac, l'éloquence au service d'un autre
 | 168/168
 
 | *Dirac*
 | MicroProfile Metrics 5.1.1
-| Paul Dirac — physique quantique et mesure
+| Paul Dirac, physique quantique et mesure
 | 127/127
 
 | *Grimm*
 | MicroProfile OpenAPI 4.1
-| Les frères Grimm — raconter des histoires (documenter une API)
+| Jacob Grimm, célèbre pour ses travaux en linguistique et classification des langues (documenter une API)
 | 349/349
 
 | *Humboldt*
 | MicroProfile Telemetry 2.1
-| Alexander von Humboldt — observer, mesurer, corréler à toutes les couches
+| Alexander von Humboldt, observer, mesurer, corréler à toutes les couches
 | 85/85
 
 | *Knock*
 | MicroProfile Health 4.0
-| Le Docteur Knock — qui trouve tout le monde malade, ou en bonne santé
+| Le Docteur Knock, qui trouve tout le monde malade, ou en bonne santé
 | 28/28
 
 | *Ravel*
 | MicroProfile Config 3.1
-| Maurice Ravel — orchestrer la configuration
+| Maurice Ravel, orchestrer la configuration
 | 349/349
 |===
 
-// TODO : quelle spec MicroProfile a été la plus surprenante à implémenter ? La plus facile ? La plus difficile ?
 
 === La couche persistence
 
-*Mansart* (Jakarta Data 1.0 + Transactions 2.0) complète l'ensemble côté persistence. Jules Hardouin-Mansart, l'architecte de Versailles, pose les fondations de données. Jakarta Persistence 3.2 reste en suspens — une décision consciente d'aller jusqu'au bout du possible sans sacrifier les principes.
+*Mansart* (Jakarta Data 1.0 + Transactions 2.0) complète l'ensemble côté persistence. Jules Hardouin-Mansart, l'architecte de Versailles, pose les fondations de données. Jakarta Persistence 3.2 reste en suspens, une décision consciente d'aller jusqu'au bout du possible sans sacrifier les principes.
 
-'''
 
 == Les chiffres finaux
 
@@ -210,26 +204,25 @@ Quinze modules. Une seule règle : passer la TCK.
 
 Aucun test TCK désactivé. Aucune dépendance externe non justifiée. Aucune manipulation de bytecode à l'exécution.
 
-'''
 
 == Ce que Vidocq démontre
 
-// TODO : votre perspective sur ce que cette expérience change dans la façon de voir le développement logiciel, la relation à l'IA, la reproductibilité de la méthode.
+Même si la stack a démarrée sous forme de défi, Vidocq est allé au delà de la simple démonstration. C'est une implémentation production-grade de l'ensemble du Core Profile Jakarta EE et de MicroProfile, avec des contraintes architecturales que les frameworks mainstream n'ont pas encore posé.
 
-Vidocq n'est pas un démonstrateur de jouet. C'est une implémentation de production-grade de l'ensemble du Core Profile Jakarta EE et de MicroProfile, avec des contraintes architecturales que les frameworks mainstream n'ont pas osé poser.
-
-La méthode — contraintes fortes + plan + guidage + TCK comme arbitre — est reproductible. Elle impose à l'IA une rigueur que les tests unitaires classiques ne garantissent pas. La TCK ne ment pas, ne tolère pas les approximations, ne s'adapte pas à ce que l'implémentation a envie de faire.
+La méthode, contraintes fortes + plan + guidage + TCK comme arbitre, est reproductible. Elle impose à l'IA une rigueur que les tests unitaires classiques ne garantissent pas. La TCK ne ment pas, ne tolère pas les approximations, ne s'adapte pas à ce que l'implémentation a envie de faire.
 
 C'est peut-être la leçon la plus importante de Vidocq : l'IA est d'autant plus performante qu'elle a un juge objectif, externe, et inflexible. La spécification est ce juge.
 
-'''
 
 == Et maintenant ?
 
-// TODO : vos perspectives pour Vidocq. Qu'est-ce qui vient après ? Y a-t-il d'autres specs dans le viseur ? Une mise en production ? Un projet open source formalisé ? Un article de recherche ?
+Vidocq est à présen mis à disposition de la communauté avec une triple licence EUPL 1.2, EPL 2 et GPL 3.0. Il est possible de l'utiliser pour des projets personnels ou professionnels, de l'étudier, de le modifier et de le redistribuer.
 
-Le code est disponible sur link:https://codeberg.org/Vidocq[Codeberg]. La méthode est documentée. L'expérience est reproductible.
+Nous allons continuer à faire évoluer la stack en ajoutant au module d'intégration des outils facilitant la vie des développeurs.
+Une roadmap est en cours de construction pour les prochaines spécifications Jakarta EE, MicroProfile et le tooling.
+Vos idées et contribution son bienvenues pour alimenter ces réflexions et leur futures réalisation.
+Une opportunité pour vous mettre le pied à l'étrier sur le développement augmenté ?
 
-'''
+Le code est disponible sur link:https://codeberg.org/Vidocq[Codeberg]. La méthode est documentée et réutilisable pour développer d'autres briques.
 
-_Yann Blazart & Antoine Sabot-Durand sont consultants chez link:https://www.sciam.fr[SCIAM], cabinet de conseil en architecture et innovation logicielle._
+Bienvenue chez Vidocq !
