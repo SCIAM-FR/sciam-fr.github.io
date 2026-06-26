@@ -152,7 +152,7 @@ Par exemple :
 
 Claude Code fournit justement des commandes utiles pour surveiller et gérer cela, comme `/context`, `/compact` et `/clear`. `/context` permet de visualiser l’utilisation du contexte, `/compact` résume l’historique en conservant l’essentiel, et `/clear` repart sur une conversation neuve.
 
-Aujourd’hui, le modèle Opus 4.6 a environ 1 million de tokens, soit approximativement 750 000 mots.
+Aujourd’hui, le modèle Opus 4.8 a environ 1 million de tokens, soit approximativement 750 000 mots.
 
 Les retours des utilisateurs font état d’une dégradation de la qualité des réponses et d’hallucinations de Claude aux environs de 200k tokens utilisés.
 
