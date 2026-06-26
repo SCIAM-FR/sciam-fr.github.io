@@ -1,11 +1,11 @@
 = Maîtriser Claude Code
 :showtitle:
 :page-navtitle: Maîtriser Claude Code
-:page-excerpt: Transformer Claude Code en véritable copilote d’architecture — et pas seulement en générateur de code. 
+:page-excerpt: Quand on commence à utiliser Claude Code, on fait comme tout le monde : on pose des questions et on attend. Les résultats sont inégaux. Pas parce que l'outil est mauvais, mais parce qu'on l'utilise mal. Dans cet article, nous découvrirons comment dépasser ce stade initial et en faire un véritable copilote d'architecture.
 :layout: post
-:page-tags: [Claude, IA]
+:page-tags: [Claude, IA, Dev Augmenté]
 :author: katiaouameurali
-:page-vignette: claude.png
+:page-vignette: 2026/claude.png
 :page-liquid:
 :page-categories: software news
 
