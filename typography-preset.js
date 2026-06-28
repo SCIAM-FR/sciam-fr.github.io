@@ -338,6 +338,9 @@ module.exports = {
                 'table > tbody > tr > td p': {
                   textAlign: 'center',
                 },
+                '.admonitionblock td.content p': {
+                  textAlign: 'start',
+                },
 
                 '.content> pre': {
                     width: '100%',
@@ -354,7 +357,7 @@ module.exports = {
                 },
 
                 '.highlight> pre': {
-                    backgrounColor: `${theme('colors.lightgrey')} !important`,
+                    backgroundColor: `${theme('colors.lightgrey')} !important`,
                 },
 
                 'td code::before': {

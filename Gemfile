@@ -8,7 +8,7 @@ gem 'wdm', '~> 0.1.1', :install_if => Gem.win_platform?
 
 group :jekyll_plugins do
   gem 'asciidoctor-diagram'
-  gem 'asciidoctor-diagram-plantuml'
+  gem 'asciidoctor-diagram-plantuml', '1.2024.8' # pinned: newer PlantUML draws a deprecation banner for skinparam handwritten (sketchy)
   gem 'jekyll-asciidoc'
   gem 'jekyll-paginate-v2'
   gem 'jekyll-auto-authors'
