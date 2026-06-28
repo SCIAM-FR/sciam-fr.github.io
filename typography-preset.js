@@ -357,7 +357,7 @@ module.exports = {
                 },
 
                 '.highlight> pre': {
-                    backgrounColor: `${theme('colors.lightgrey')} !important`,
+                    backgroundColor: `${theme('colors.lightgrey')} !important`,
                 },
 
                 'td code::before': {
