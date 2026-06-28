@@ -78,4 +78,4 @@ Le code, la documentation et la méthode sont disponibles dès maintenant sur ht
 
 *SCIAM est fière d'être sponsor de Vidocq.* Soutenir un runtime Java ouvert, conforme aux standards et pensé pour la souveraineté européenne, c'est investir dans une informatique que l'on peut comprendre, auditer et maîtriser.
 
-Et si vous voulez savoir comment une stack aussi exigeante a vu le jour, du prototype griffonné lors d'une unconférence jusqu'aux 5 650 tests au vert, ne manquez pas le récit complet de l'aventure : link:{% post_url 2026-06-25-lhistoire de Vidocq %}[l'histoire de Vidocq^].
+Et si vous voulez savoir comment une stack aussi exigeante a vu le jour, du prototype griffonné lors d'une unconférence jusqu'aux 5 650 tests au vert, ne manquez pas le récit complet de l'aventure : link:{% post_url 2026-06-25-lhistoire-de-vidocq %}[l'histoire de Vidocq^].
