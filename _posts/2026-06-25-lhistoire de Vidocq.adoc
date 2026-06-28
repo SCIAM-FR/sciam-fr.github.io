@@ -19,7 +19,7 @@ Le nom s'imposait pour ce projet : comme son homonyme, ce runtime connaît les s
 
 == Tout a commencé par une discussion sur le Spec Driven Development
 
-C'est à l'excellente unconférence https://www.jchateau.org[JChateau], le 7 mars 2026, qu'a débuté l'aventure Vidocq.
+C'est durant l'excellente unconférence https://www.jchateau.org[JChateau^], le 7 mars 2026, qu'a débuté l'aventure Vidocq.
 Les discussions allaient bon train sur l'IA (entre les débats sur la souveraineté et les nouveautés de Java 26) et sur l'arrivée d'un "nouveau" concept : le spec-driven development.
 Après avoir plaisanté sur la réinvention du cycle en V par la communauté dev, nous avons réalisé que des projets avec des spécifications en béton, il y en avait un gisement conséquent dans l'écosystème Java avec Jakarta EE et MicroProfile.
 
@@ -42,7 +42,7 @@ Ajoutons à ça que CDI est la colonne vertébrale de Jakarta EE et de MicroProf
 
 C'était le pari le plus ambitieux et, en même temps, le plus révélateur. Si l'expérience fonctionnait ici, elle pouvait fonctionner partout.
 
-Dans les faits, Antoine s'est mis à la tâche le soir même, le 7 mars 2026, sur place à JChateau. Cette toute première expérimentation, baptisée _Capsule_, vit encore sur GitHub dans le dépôt pass:[<a href="https://github.com/Modilius/capsule/compare/main...copilot/create-cdi-lite-implementation">Modilius/capsule</a>] : 33 commits entre le 7 et le 12 mars 2026, une implémentation de CDI 4.1 Lite (package `org.modilius`) générée avec l'agent, qui atteint rapidement un début de résultat (60 % du TCK passé).
+Dans les faits, Antoine s'est mis à la tâche le soir même, le 7 mars 2026, sur place à JChateau. Cette toute première expérimentation, baptisée _Capsule_, vit encore sur GitHub dans le dépôt https://github.com/Modilius/capsule/tree/copilot/create-cdi-lite-implementation[Modilius/capsule^] : 33 commits entre le 7 et le 12 mars 2026, une implémentation de CDI 4.1 Lite (package `org.modilius`) générée avec l'agent, qui atteint rapidement un début de résultat (60 % du TCK passé).
 
 C'est ensuite Yann qui a industrialisé la tâche et l'a menée au bout. Le 29 mars 2026, le projet repart sur des bases propres avec _Vauban_, le futur conteneur CDI : cette étape a transformé une expérimentation en bootstrap de vrai projet.
 
@@ -52,7 +52,7 @@ Là où d'autres implémentations comme Weld (Red Hat) ou ArC (Quarkus) reposent
 
 * *Zéro dépendance externe* : pas de framework tiers, uniquement les APIs Jakarta/MicroProfile concernées
 * *Pas de manipulation de bytecode à l'exécution* : aucun proxy dynamique, aucun agent, aucun `setAccessible(true)` en production
-* *Génération statique au moment de la compilation* : toute la « magie » CDI (factories, proxies, intercepteurs) produite par la link:https://openjdk.org/jeps/484[Class-File API] de JDK 25 et APT
+* *Génération statique au moment de la compilation* : toute la « magie » CDI (factories, proxies, intercepteurs) produite par la https://openjdk.org/jeps/484[Class-File API^] de JDK 25 et APT
 * *JPMS strict* : chaque module a son propre `module-info.java`, les exports sont au minimum
 * *Virtual Threads* partout pour les I/O
 * *AOT-compatible* : le résultat doit pouvoir tourner sous GraalVM et Leyden CDS
@@ -297,6 +297,6 @@ Une roadmap est en cours de construction pour les prochaines spécifications Jak
 Vos idées et contributions sont bienvenues pour alimenter ces réflexions et leurs futures réalisations.
 Une opportunité pour vous mettre le pied à l'étrier sur le développement augmenté ?
 
-Le code est disponible sur link:https://codeberg.org/Vidocq[Codeberg]. La méthode est documentée et réutilisable pour développer d'autres briques.
+Le code est disponible sur https://codeberg.org/Vidocq[Codeberg^]. La méthode est documentée et réutilisable pour développer d'autres briques.
 
 Bienvenue chez Vidocq !
