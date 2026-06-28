@@ -279,6 +279,16 @@ Quinze modules. Une seule règle : passer la TCK.
 Aucun test TCK désactivé. Aucune dépendance externe non justifiée. Aucune manipulation de bytecode à l'exécution.
 
 
+== Sur les épaules de géants
+
+Ces chiffres impressionnent, mais ils en cachent un autre, bien plus grand et bien plus ancien : celui des femmes et des hommes qui ont écrit, débattu et affiné ces spécifications pendant près de vingt ans. Vidocq n'invente rien de ce qu'il implémente ; il exécute, fidèlement et à toute vitesse, des contrats mûris par une communauté entière.
+
+Les briques du Core Profile ne datent pas d'hier. CDI naît au milieu des années 2000 (JSR 299, finalisée fin 2009 avec Java EE 6), Jakarta REST (ex-JAX-RS) démarre en 2007, et JSON-P, JSON-B ou les annotations communes suivent dans les années 2010. Tout ce travail, d'abord mené au sein du Java Community Process, passe ensuite sous la gouvernance ouverte de la Fondation Eclipse à partir de 2017-2018. MicroProfile, lui, est fondé en 2016 pour porter cet héritage vers les microservices, et n'a cessé de s'enrichir depuis. Le Core Profile tel que l'implémente Vidocq est formalisé en 2022 avec Jakarta EE 10.
+
+Rien que sur les dépôts publics de ces quinze spécifications, on dénombre près de 200 contributeurs identifiables, et ce décompte ignore les groupes d'experts JCP des années 2000, antérieurs à GitHub. Derrière ces noms : Red Hat, IBM, Oracle, Payara, Tomitribe, Microsoft et une communauté open source mondiale qui, release après release, a transformé des intentions en contrats vérifiables.
+
+C'est tout le paradoxe heureux de Vidocq : une stack assemblée en quelques semaines par des développeurs augmentés ne tient debout que parce qu'elle s'appuie sur près de vingt ans de spécifications collectives. Le TCK qui sert d'arbitre, les API que l'on implémente, les contrats que l'on respecte : tout cela est l'héritage d'un travail colossal. Sans ces géants, Vidocq n'existerait tout simplement pas. S'il voit si loin, c'est qu'il se tient sur leurs épaules.
+
 == Ce que Vidocq démontre
 
 Même si la stack a démarré sous forme de défi, Vidocq est allé au-delà de la simple démonstration. C'est une implémentation production-grade de l'ensemble du Core Profile Jakarta EE et de MicroProfile, avec des contraintes architecturales que les frameworks mainstream n'ont pas encore posées.
