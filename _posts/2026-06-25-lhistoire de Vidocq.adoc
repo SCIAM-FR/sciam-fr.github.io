@@ -1,5 +1,5 @@
-= Vidocq : quand Le dev augmenté implémente tout MicroProfile
-:page-navtitle: Vidocq : Le dev augmenté face aux TCK Microprofile
+= Vidocq : quand le dev augmenté implémente tout MicroProfile
+:page-navtitle: Vidocq : le dev augmenté face aux TCK MicroProfile
 :page-excerpt: Et si on demandait à Claude Code d'implémenter l'intégralité du Core Profile Jakarta EE et de MicroProfile, sans aucune dépendance externe ni manipulation de bytecode ? Récit d'une expérience de spec-driven development poussée à l'extrême, où le TCK joue les arbitres impitoyables : 15 modules, 180 000 lignes de Java et 5 650 tests d'acceptance au vert.
 :layout: post
 :page-tags: [Java, Jakarta EE, MicroProfile, CDI, IA]
@@ -19,13 +19,13 @@ Le nom s'imposait pour ce projet : comme son homonyme, ce runtime connaît les s
 
 == Tout a commencé par une discussion sur le Spec Driven Development
 
-C'est a l'excellente unconférence https://www.jchateau.org[JChateau] qu'a débuté l'aventure Vidocq.
+C'est à l'excellente unconférence https://www.jchateau.org[JChateau] qu'a débuté l'aventure Vidocq.
 Les discussions allaient bon train sur l'IA (entre les débats sur la souveraineté et les nouveautés de Java 26) et sur l'arrivée d'un "nouveau" concept : le spec-driven development.
-Après avoir plaisanté sur la réinvention du cycle en V par la communeauté dev, nous avons réalisé que des projets avec des specifications en béton, il y en avait un gisement conséquent dans l'écosystème Java avec Jakarta EE et MicroProfile.
+Après avoir plaisanté sur la réinvention du cycle en V par la communauté dev, nous avons réalisé que des projets avec des spécifications en béton, il y en avait un gisement conséquent dans l'écosystème Java avec Jakarta EE et MicroProfile.
 
-Contrairement à la plupart des frameworks qui posent leurs propres règles (genre Spring), ces specs définissent des contrats précis, vérifiables, et sont chacune assortis d'un harnais de tests d'acceptance redoutable : le TCK (Technology Compatibility Kit).
-Les documents de spécification plus les API plus les TCK constituent quelque chose d'asez unique dans le monde développement.
-Ce mix constituait la spec ultime pour valider le spec-driven development avec un cas très concret : l'implémentation d'une des spécifications les plus ambitieuse de Jakarta EE : Contexts and Dependency Injection (CDI).
+Contrairement à la plupart des frameworks qui posent leurs propres règles (genre Spring), ces specs définissent des contrats précis, vérifiables, et sont chacune assorties d'un harnais de tests d'acceptance redoutable : le TCK (Technology Compatibility Kit).
+Les documents de spécification plus les API plus les TCK constituent quelque chose d'assez unique dans le monde du développement.
+Ce mix constituait la spec ultime pour valider le spec-driven development avec un cas très concret : l'implémentation d'une des spécifications les plus ambitieuses de Jakarta EE : Contexts and Dependency Injection (CDI).
 
 C'est de cette idée d'expérimentation qu'est né Vidocq.
 
@@ -42,7 +42,7 @@ Ajoutons à ça que CDI est la colonne vertébrale de Jakarta EE et de MicroProf
 
 C'était le pari le plus ambitieux et, en même temps, le plus révélateur. Si l'expérience fonctionnait ici, elle pouvait fonctionner partout.
 
-Dans les faits, si Antoine s'est mis à la tâche le soir même et a obtenu un début de résultat au bout de quelques jours (60% du TCK passé), c'est Yann qui a industrialisé la tâche et l'a menée au bout. Cette étape a transformé une expérimentation en boostrap de vrai projet.
+Dans les faits, si Antoine s'est mis à la tâche le soir même et a obtenu un début de résultat au bout de quelques jours (60% du TCK passé), c'est Yann qui a industrialisé la tâche et l'a menée au bout. Cette étape a transformé une expérimentation en bootstrap de vrai projet.
 
 === Des contraintes inédites
 
@@ -81,22 +81,22 @@ _Le TCK est l'arbitre absolu : pas de triche possible, chaque test est un contra
 
 Les premiers passages sont rarement brillants. Un test rouge révèle une subtilité de la spec mal interprétée. L'IA corrige, parfois réécrit une portion entière de son implémentation. On relance. On progresse. La courbe typique ressemble à ça : 40 % verts au premier run, 70 % après une journée, les 30 % restants peuvent prendre autant de temps que tout le reste.
 
-Il est arrivé triche un peu sur les règles en utilisant de la manipulation de bytecode plutôt que l'écrite de fichiers Java.
-C'était probablement dû aux données d'entraiement du modèle qui devait comporter beaucoup plus d'exemple de manipulation de bytecode que de génération de fichiers Java.
-Certains exemples de ce contrournement ont été apperçus durant l'écriture de l'impléméntation, d'autres plus tard dans une analyse plus poussée ou lors de l'implementation de nouvelles specification dépéndantes de  CDI.
+Il lui est arrivé de tricher un peu sur les règles en utilisant de la manipulation de bytecode plutôt que l'écriture de fichiers Java.
+C'était probablement dû aux données d'entraînement du modèle qui devait comporter beaucoup plus d'exemples de manipulation de bytecode que de génération de fichiers Java.
+Certains exemples de ce contournement ont été aperçus durant l'écriture de l'implémentation, d'autres plus tard dans une analyse plus poussée ou lors de l'implémentation de nouvelles spécifications dépendantes de CDI.
 
 
 == Vauban : la première victoire
 
 Sébastien Le Prestre de Vauban était l'ingénieur militaire de Louis XIV, le bâtisseur de fortifications inexpugnables. Le nom s'imposait pour le container CDI : solide, sans faille, conçu pour tenir.
 
-Le besoin pour MicroProfile était de n'implémenter que la partie Lite de la spec qui exclue les features liées aux EJB et au système d'extension legacy au profit des nouvelles Build Time Compatible Extensions apparues dans CDI 3.0.
+Le besoin pour MicroProfile était de n'implémenter que la partie Lite de la spec qui exclut les features liées aux EJB et au système d'extension legacy au profit des nouvelles Build Time Compatible Extensions apparues dans CDI 3.0.
 
 *Vauban, CDI 4.1 Lite : 774/774 tests TCK. 100 %.*
 
 La "forteresse" Vauban a mis une dizaine de jours à céder.
 
-Lorsque le774ème test est passé au vert, L'équipe a compris que le "jeu" de départ allait devenir plus sérieux.
+Lorsque le 774ème test est passé au vert, l'équipe a compris que le "jeu" de départ allait devenir plus sérieux.
 En effet, ce résultat validait tout le pari. Une IA pouvait implémenter une spécification Java Enterprise complexe, avec des contraintes inédites, et passer la suite officielle de tests sans une seule défaillance. Ce n'était plus une hypothèse.
 
 == L'expansion : de CDI à une stack complète
@@ -207,7 +207,7 @@ Aucun test TCK désactivé. Aucune dépendance externe non justifiée. Aucune ma
 
 == Ce que Vidocq démontre
 
-Même si la stack a démarrée sous forme de défi, Vidocq est allé au delà de la simple démonstration. C'est une implémentation production-grade de l'ensemble du Core Profile Jakarta EE et de MicroProfile, avec des contraintes architecturales que les frameworks mainstream n'ont pas encore posé.
+Même si la stack a démarré sous forme de défi, Vidocq est allé au-delà de la simple démonstration. C'est une implémentation production-grade de l'ensemble du Core Profile Jakarta EE et de MicroProfile, avec des contraintes architecturales que les frameworks mainstream n'ont pas encore posées.
 
 La méthode, contraintes fortes + plan + guidage + TCK comme arbitre, est reproductible. Elle impose à l'IA une rigueur que les tests unitaires classiques ne garantissent pas. La TCK ne ment pas, ne tolère pas les approximations, ne s'adapte pas à ce que l'implémentation a envie de faire.
 
@@ -216,11 +216,11 @@ C'est peut-être la leçon la plus importante de Vidocq : l'IA est d'autant plus
 
 == Et maintenant ?
 
-Vidocq est à présen mis à disposition de la communauté avec une triple licence EUPL 1.2, EPL 2 et GPL 3.0. Il est possible de l'utiliser pour des projets personnels ou professionnels, de l'étudier, de le modifier et de le redistribuer.
+Vidocq est à présent mis à disposition de la communauté avec une triple licence EUPL 1.2, EPL 2 et GPL 3.0. Il est possible de l'utiliser pour des projets personnels ou professionnels, de l'étudier, de le modifier et de le redistribuer.
 
 Nous allons continuer à faire évoluer la stack en ajoutant au module d'intégration des outils facilitant la vie des développeurs.
 Une roadmap est en cours de construction pour les prochaines spécifications Jakarta EE, MicroProfile et le tooling.
-Vos idées et contribution son bienvenues pour alimenter ces réflexions et leur futures réalisation.
+Vos idées et contributions sont bienvenues pour alimenter ces réflexions et leurs futures réalisations.
 Une opportunité pour vous mettre le pied à l'étrier sur le développement augmenté ?
 
 Le code est disponible sur link:https://codeberg.org/Vidocq[Codeberg]. La méthode est documentée et réutilisable pour développer d'autres briques.
