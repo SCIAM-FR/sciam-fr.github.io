@@ -132,7 +132,7 @@ Project starts 2026-03-02
 saturday are open
 sunday are open
 
--- Genese --
+-- Genèse --
 [JChateau] happens 2026-03-07
 [JChateau] is colored in #ffec3f
 [Capsule : prototype CDI Lite] as [CAPS] starts 2026-03-07 and ends 2026-03-12
@@ -187,7 +187,7 @@ sunday are open
 === Jakarta EE
 
 Avec Chappe, Vauban et Champollion en place, *Cassini* (Jakarta REST 4.0) et *Foy* (Jakarta Servlet 6.1) pouvaient s'appuyer sur des fondations solides. Cassini, du nom de la célèbre famille d'astronomes français et cartographes, totalise aujourd'hui *2 535 tests TCK* tous au vert.
-A ce jour, *Foy* est toujours en cours de développement. En effet, cette spécification ne faisant pas partie du Core Profile, elle n'était pas prioritaire. Mais elle est en bonne voie : 1 261 tests TCK sont déjà passés au vert.
+À ce jour, *Foy* est toujours en cours de développement. En effet, cette spécification ne faisant pas partie du Core Profile, elle n'était pas prioritaire. Mais elle est en bonne voie : 1 261 tests TCK sont déjà passés au vert.
 
 === MicroProfile : huit spécifications
 
