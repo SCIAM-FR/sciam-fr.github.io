@@ -338,6 +338,9 @@ module.exports = {
                 'table > tbody > tr > td p': {
                   textAlign: 'center',
                 },
+                '.admonitionblock td.content p': {
+                  textAlign: 'start',
+                },
 
                 '.content> pre': {
                     width: '100%',
