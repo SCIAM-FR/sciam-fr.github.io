@@ -19,11 +19,11 @@ Le nom s'imposait pour ce projet : comme son homonyme, ce runtime connaît les s
 
 == Tout a commencé par une discussion sur le Spec Driven Development
 
-C'est à l'excellente unconférence https://www.jchateau.org[JChateau] qu'a débuté l'aventure Vidocq.
+C'est à l'excellente unconférence https://www.jchateau.org[JChateau], le 7 mars 2026, qu'a débuté l'aventure Vidocq.
 Les discussions allaient bon train sur l'IA (entre les débats sur la souveraineté et les nouveautés de Java 26) et sur l'arrivée d'un "nouveau" concept : le spec-driven development.
 Après avoir plaisanté sur la réinvention du cycle en V par la communauté dev, nous avons réalisé que des projets avec des spécifications en béton, il y en avait un gisement conséquent dans l'écosystème Java avec Jakarta EE et MicroProfile.
 
-Contrairement à la plupart des frameworks qui posent leurs propres règles (genre Spring), ces specs définissent des contrats précis, vérifiables, et sont chacune assorties d'un harnais de tests d'acceptance redoutable : le TCK (Technology Compatibility Kit).
+Contrairement à la plupart des frameworks qui posent leurs propres règles (comme Spring), ces specs définissent des contrats précis, vérifiables, et sont chacune assorties d'un harnais de tests d'acceptance redoutable : le TCK (Technology Compatibility Kit).
 Les documents de spécification plus les API plus les TCK constituent quelque chose d'assez unique dans le monde du développement.
 Ce mix constituait la spec ultime pour valider le spec-driven development avec un cas très concret : l'implémentation d'une des spécifications les plus ambitieuses de Jakarta EE : Contexts and Dependency Injection (CDI).
 
@@ -32,7 +32,7 @@ C'est de cette idée d'expérimentation qu'est né Vidocq.
 
 == L'expérience fondatrice : CDI 4.1
 
-=== Pourquoi CDI ?
+=== Pourquoi partir de CDI ?
 
 Pour les moins attentifs des lecteurs, rappelons que nous sommes tombés dans la marmite [.line-through]#J2EE#, [.line-through]#Java EE#, Jakarta EE quand nous étions petits.
 
@@ -42,7 +42,9 @@ Ajoutons à ça que CDI est la colonne vertébrale de Jakarta EE et de MicroProf
 
 C'était le pari le plus ambitieux et, en même temps, le plus révélateur. Si l'expérience fonctionnait ici, elle pouvait fonctionner partout.
 
-Dans les faits, si Antoine s'est mis à la tâche le soir même et a obtenu un début de résultat au bout de quelques jours (60% du TCK passé), c'est Yann qui a industrialisé la tâche et l'a menée au bout. Cette étape a transformé une expérimentation en bootstrap de vrai projet.
+Dans les faits, Antoine s'est mis à la tâche le soir même, le 7 mars 2026, sur place à JChateau. Cette toute première expérimentation, baptisée _Capsule_, vit encore sur GitHub dans le dépôt pass:[<a href="https://github.com/Modilius/capsule/compare/main...copilot/create-cdi-lite-implementation">Modilius/capsule</a>] : 33 commits entre le 7 et le 12 mars 2026, une implémentation de CDI 4.1 Lite (package `org.modilius`) générée avec l'agent, qui atteint rapidement un début de résultat (60 % du TCK passé).
+
+C'est ensuite Yann qui a industrialisé la tâche et l'a menée au bout. Le 29 mars 2026, le projet repart sur des bases propres avec _Vauban_, le futur conteneur CDI : cette étape a transformé une expérimentation en bootstrap de vrai projet.
 
 === Des contraintes inédites
 
@@ -105,6 +107,77 @@ La question naturelle après Vauban était : si ça marche pour CDI, jusqu'où p
 
 La réponse, construite module par module au fil des semaines, c'est Vidocq dans son état actuel : *dix-neuf repos dont quinze modules indépendants* couvrant l'intégralité du Core Profile et de MicroProfile.
 
+La frise ci-dessous retrace cette construction, du prototype _Capsule_ né à JChateau jusqu'à la sortie open source. Les dates correspondent au premier et au dernier commit de chaque dépôt.
+
+.Frise historique de Vidocq : du prototype Capsule (JChateau) à la sortie open source
+[plantuml, "frise-vidocq", "svg", width="100%"]
+----
+@startgantt
+skinparam handwritten true
+<style>
+ganttDiagram {
+  task {
+    LineColor #2e3a56
+    LineThickness 2
+  }
+  milestone {
+    LineColor #2e3a56
+    LineThickness 2
+  }
+}
+</style>
+title Frise historique de Vidocq (mars - juin 2026)
+printscale weekly zoom 2
+Project starts 2026-03-02
+saturday are open
+sunday are open
+
+-- Genese --
+[JChateau] happens 2026-03-07
+[JChateau] is colored in #ffec3f
+[Capsule : prototype CDI Lite] as [CAPS] starts 2026-03-07 and ends 2026-03-12
+[CAPS] is colored in #9abcc3
+
+-- Core Profile --
+[Vauban : CDI 4.1] as [VAUBAN] starts 2026-03-29 and ends 2026-06-17
+[VAUBAN] is colored in #9abcc3
+[Vidocq : orchestrateur runtime] as [VIDOCQ] starts 2026-04-10 and ends 2026-06-21
+[VIDOCQ] is colored in #9abcc3
+[Chappe : serveur HTTP] as [CHAPPE] starts 2026-04-16 and ends 2026-06-14
+[CHAPPE] is colored in #9abcc3
+[Cassini : Jakarta REST 4.0] as [CASSINI] starts 2026-04-27 and ends 2026-06-15
+[CASSINI] is colored in #9abcc3
+[Foy : Jakarta Servlet 6.1] as [FOY] starts 2026-04-30 and ends 2026-06-14
+[FOY] is colored in #d1d5db
+[Champollion : JSON-P / JSON-B] as [CHAMP] starts 2026-05-01 and ends 2026-06-16
+[CHAMP] is colored in #9abcc3
+[Mansart : Jakarta Data + Tx] as [MANSART] starts 2026-05-04 and ends 2026-06-14
+[MANSART] is colored in #9abcc3
+[Ravel : MP Config] as [RAVEL] starts 2026-05-07 and ends 2026-06-14
+[RAVEL] is colored in #9abcc3
+
+-- MicroProfile --
+[Knock : MP Health] as [KNOCK] starts 2026-05-10 and ends 2026-06-15
+[KNOCK] is colored in #cdd8ea
+[Cyrano : MP Rest Client] as [CYR] starts 2026-05-12 and ends 2026-06-14
+[CYR] is colored in #cdd8ea
+[Heisenberg : MP Fault Tolerance] as [HEIS] starts 2026-05-16 and ends 2026-06-14
+[HEIS] is colored in #cdd8ea
+[Humboldt : MP Telemetry] as [HUMB] starts 2026-05-20 and ends 2026-06-14
+[HUMB] is colored in #cdd8ea
+[Dirac : MP Metrics] as [DIRAC] starts 2026-05-22 and ends 2026-06-15
+[DIRAC] is colored in #cdd8ea
+[Cervantes : MP JWT] as [CERV] starts 2026-05-26 and ends 2026-06-14
+[CERV] is colored in #cdd8ea
+[Grimm : MP OpenAPI] as [GRIMM] starts 2026-05-26 and ends 2026-06-14
+[GRIMM] is colored in #cdd8ea
+
+-- Publication --
+[Open source] happens 2026-06-25
+[Open source] is colored in #ffec3f
+@endgantt
+----
+
 === Les briques fondamentales
 
 *Chappe* est né de la nécessité : pour implémenter Servlet et REST, il fallait un serveur HTTP. Plutôt que de dépendre de Netty ou Jetty, ce qui aurait brisé la règle zéro-dépendance, Chappe a été écrit from scratch. Le nom rend hommage à Claude Chappe (1763–1805), inventeur du télégraphe sémaphore, ce réseau de tours optiques qui couvrit toute la France. Le projet Chappe est son héritier numérique : un réseau de communication en Java pur.
@@ -114,6 +187,7 @@ La réponse, construite module par module au fil des semaines, c'est Vidocq dans
 === Jakarta EE
 
 Avec Chappe, Vauban et Champollion en place, *Cassini* (Jakarta REST 4.0) et *Foy* (Jakarta Servlet 6.1) pouvaient s'appuyer sur des fondations solides. Cassini, du nom de la célèbre famille d'astronomes français et cartographes, totalise aujourd'hui *2 535 tests TCK* tous au vert.
+A ce jour, *Foy* est toujours en cours de développement. En effet, cette spécification ne faisant pas partie du Core Profile, elle n'était pas prioritaire. Mais elle est en bonne voie : 1 261 tests TCK sont déjà passés au vert.
 
 === MicroProfile : huit spécifications
 
@@ -216,7 +290,7 @@ C'est peut-être la leçon la plus importante de Vidocq : l'IA est d'autant plus
 
 == Et maintenant ?
 
-Vidocq est à présent mis à disposition de la communauté avec une triple licence EUPL 1.2, EPL 2 et GPL 3.0. Il est possible de l'utiliser pour des projets personnels ou professionnels, de l'étudier, de le modifier et de le redistribuer.
+Vidocq est à présent mis à disposition de la communauté avec une triple licence EUPL 1.2, EPL 2 et GPL 2.0. Il est possible de l'utiliser pour des projets personnels ou professionnels, de l'étudier, de le modifier et de le redistribuer.
 
 Nous allons continuer à faire évoluer la stack en ajoutant au module d'intégration des outils facilitant la vie des développeurs.
 Une roadmap est en cours de construction pour les prochaines spécifications Jakarta EE, MicroProfile et le tooling.
