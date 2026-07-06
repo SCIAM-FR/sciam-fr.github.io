@@ -7,7 +7,7 @@
 :author: jeanmicheldoudoux
 :page-vignette: 2025/java-25.png
 :page-liquid:
-:page-categories: software news
+:page-categories: software
 
 Le link:{% post_url 2025-09-29-nouveautes-java-25-partie1 %}[premier article^] de cette série a détaillé les fonctionnalités proposées dans la syntaxe et les API dans le JDK 25. 
 Comme pour les précédentes versions de Java, cette version 25 inclut des JEPs, mais aussi, et surtout, des évolutions et des améliorations sur la fiabilité (corrections de nombreux bugs), la performance et la sécurité.

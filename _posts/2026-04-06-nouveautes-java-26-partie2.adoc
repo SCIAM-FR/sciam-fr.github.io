@@ -1,0 +1,1096 @@
+= Les nouveautés de Java 26 - partie 2
+:showtitle:
+:page-navtitle: Les nouveautés de Java 26 : partie 2
+:page-excerpt: Ce second article sur les nouveautés de Java 26 est consacré aux autres améliorations, que ce soit les évolutions dans les outils, les API, la JVM et dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
+:layout: post
+:page-tags: [Java, Java 26]
+:author: jeanmicheldoudoux
+:page-vignette: 2026/java-26.png
+:page-liquid:
+:page-categories: software news
+
+Le link:{% post_url 2026-03-31-nouveautes-java-26-partie1 %}[premier article^] de cette série a détaillé les fonctionnalités proposées dans la syntaxe et les API dans le JDK 26. Comme pour les précédentes versions de Java, cette version 26 inclut des JEPs, mais aussi, et surtout, des évolutions et des améliorations sur la fiabilité (corrections de nombreux bugs), la performance et la sécurité.
+
+Ce second article est consacré aux autres améliorations, que ce soient les évolutions dans la JVM HotSpot et les outils du JDK, dans la sécurité, ainsi que les fonctionnalités dépréciées et retirées.
+
+== Les fonctionnalités dépréciées
+
+Plusieurs fonctionnalités sont dépréciées dans le JDK 26.
+
+=== La classe `SocketPermission` est dépréciée pour suppression (https://bugs.openjdk.org/browse/JDK-8356557[JDK-8356557])
+
+La classe `java.net.SocketPermission` est dépréciée pour suppression. Cette permission ne peut pas être utilisée pour contrôler l’accès aux ressources, car le Security Manager n’est plus pris en charge.
+
+=== La méthode `java.net.Socket::setPerformancePreferences` est dépréciée pour suppression (https://bugs.openjdk.org/browse/JDK-8366577[JDK-8366577])
+La méthode `setPerformancePreferences()` dans les classes `java.net.Socket`, `java.net.SocketImpl` et `java.net.ServerSocket` a été introduite dans Java 1.5 dans le but de fournir une API déclarative pour configurer les caractéristiques de performance du socket sous-jacent, mais son implémentation est toujours restée vide.
+
+Ces méthodes sont dépréciées pour suppression sans aucun remplacement.
+
+=== La dépréciation de l’option `-Xmaxjitcodesize` (https://bugs.openjdk.org/browse/JDK-8213762[JDK-8213762])
+
+L’option `-Xmaxjitcodesize` sert actuellement d’alias pour `-XX:ReservedCodeCacheSize`, en définissant la taille du cache de code réservée en octets, c’est-à-dire la taille maximale du cache de code compilé par le JIT.
+
+Étant obsolète depuis le JDK 1.4, elle aurait dû être dépréciée depuis ce temps. Pour simplifier la configuration de la JVM, cette option redondante est désormais marquée comme dépréciée, dans l’intention d’être supprimée dans une future version du JDK.
+
+Exemple :
+
+[source,dos]
+----
+C:\java>java -Xmaxjitcodesize10M Hello.java
+OpenJDK 64-Bit Server VM warning: Option -Xmaxjitcodesize was deprecated in JDK 26 and will likely be removed in a future release.
+Hello world
+----
+
+L’utilisation de `-Xmaxjitcodesize` doit être remplacée par `-XX:ReservedCodeCacheSize`.
+
+=== L’option `-ParallelRefProcEnabled` est dépréciée (https://bugs.openjdk.org/browse/JDK-8359924[JDK-8359924])
+
+L’option `ParallelRefProcEnabled` permet de contrôler si le traitement des références doit être parallélisé par les ramasse-miettes ParallelGC et G1GC.
+
+Cette option est activée par défaut depuis de nombreuses versions et il y a peu de raison de vouloir désactiver cette fonctionnalité. 
+Pour faciliter la maintenance, elle est dépréciée en vue d’une suppression dans une future release.
+
+Exemple :
+
+[source,dos]
+----
+C:\java>java -XX:-ParallelRefProcEnabled Hello.java
+OpenJDK 64-Bit Server VM warning: Option ParallelRefProcEnabled was deprecated in version 26.0 and will likely be removed in a future release.
+Hello world
+----
+
+Le parallélisme peut toujours être contrôlé via `-XX:ParallelReferencesPerThread`, jusqu’à rendre cette phase à utiliser un seul thread.
+
+=== L’option `-MaxRAM` est dépréciée (https://bugs.openjdk.org/browse/JDK-8369346[JDK-8369346])
+
+Pour simplifier la taille du heap et réduire la confusion des utilisateurs, l’option `MaxRAM` a été marquée comme obsolète dans l’intention d’être supprimée dans une future version du JDK. 
+Une configuration explicite de `MaxRAM` est rarement nécessaire, car la JVM détecte avec précision la mémoire physique disponible et les limites de validation système. 
+Définir `MaxRAM` avec une valeur supérieure à la mémoire physique réelle peut entraîner une mauvaise taille du heap mais ce n’est pas un cas d’usage courant.
+
+Exemple :
+
+[source,dos]
+----
+C:\java>java -XX:MaxRAM=64M Hello.java
+OpenJDK 64-Bit Server VM warning: Option MaxRAM was deprecated in version 26.0 and will likely be removed in a future release.
+Hello world
+----
+
+De plus, la valeur par défaut de `MaxRAM` a été supprimée. 
+Dorénavant, les calculs de taille du heap sont basés sur la mémoire disponible sur le système plutôt que sur la valeur par défaut de `MaxRAM`, sauf si `MaxRAM` est explicitement définie par l’utilisateur.
+
+Exemple avec un JDK 25 sur un laptop avec 32Go de RAM :
+
+[source,dos]
+----
+C:\java
+λ java -version
+openjdk version "25" 2025-09-16
+OpenJDK Runtime Environment (build 25+36-3489)
+OpenJDK 64-Bit Server VM (build 25+36-3489, mixed mode, sharing)
+                                                                                                                    
+C:\java 
+λ java -XX:+PrintFlagsFinal --version | grep MaxRAM 
+ uint64_t MaxRAM                     = 137438953472  {pd product} {default}  
+   double MaxRAMPercentage           = 25.000000        {product} {default}  
+----
+
+Exemple avec un JDK 26 sur un laptop avec 32Go de RAM :
+
+[source,dos]
+----
+C:\java 
+λ java -version 
+openjdk version "26" 2026-03-17 
+OpenJDK Runtime Environment (build 26+35-2893) 
+OpenJDK 64-Bit Server VM (build 26+35-2893, mixed mode, sharing) 
+                                                                                                                    
+C:\java 
+λ java -XX:+PrintFlagsFinal --version | grep MaxRAM 
+ uint64_t MaxRAM                     = 34010619904    {product} {ergonomic}
+   double MaxRAMPercentage           = 25.000000      {product} {default}
+----
+
+Pour contrôler directement la taille du heap, il est préférable d’utiliser les options `-Xms` et `-Xmx` à la place.
+
+=== Les options `-AlwaysActAsServerClassMachine` et `-NeverActAsServerClassMachine` sont dépréciées (https://bugs.openjdk.org/browse/JDK-8370843[JDK-8370843])
+
+Les options `-AlwaysActAsServerClassMachine` et `-NeverActAsServerClassMachine` sont utilisées pour influencer deux comportements :
+
+. quel GC est choisi par défaut
+
+. si le mode d’émulation client est sélectionné
+
+Le mode d’émulation client était utilisé pour émuler une compilation client sur des plateformes avec un espace d’adressage virtuel réduit, principalement Windows 32 bits. 
+Avec la dépréciation de Windows 32 bits dans le JDK 24 (https://openjdk.org/jeps/479[JEP 479]), l’intérêt à maintenir le mode d’émulation client a disparu, et donc la méthode pour influencer son activation n’est plus nécessaire.
+
+Les deux options ont été marquées comme obsolètes dans l’intention d’être supprimées dans une future version.
+
+Exemple :
+
+[source,dos]
+----
+C:\java>java -XX:+AlwaysActAsServerClassMachine Hello.java
+OpenJDK 64-Bit Server VM warning: Option AlwaysActAsServerClassMachine was deprecated in version 26.0 and will likely be removed in a future release.
+Hello world
+
+C:\java>java -XX:+NeverActAsServerClassMachine Hello.java
+OpenJDK 64-Bit Server VM warning: Option NeverActAsServerClassMachine was deprecated in version 26.0 and will likely be removed in a future release.
+Hello world
+----
+
+Les utilisateurs qui comptent sur le choix d’un GC spécifique via les flags `-AlwaysActAsServerClassMachine` et `-NeverActAsServerClassMachine` doivent plutôt configurer explicitement le GC qu’ils souhaitent, par exemple en utilisant `-XX:+UseSerialGC` ou `-XX:+UseG1GC`.
+
+Lorsque ces options seront supprimées, il ne sera plus possible d’influencer l’activation du mode d’émulation client.
+
+=== L’option `-AggressiveHeap` est dépréciée (https://bugs.openjdk.org/browse/JDK-8370813[JDK-8370813])
+
+L’option `-AggressiveHeap` a été initialement introduite pour optimiser les performances dans des scénarios de benchmarking spécifiques, mais son manque de transparence et son applicabilité limitée ont entraîné de la confusion et des résultats incohérents pour les charges de travail générales.
+
+Pour simplifier la configuration de la JVM et encourager les utilisateurs à sélectionner explicitement les options d’ajustement qui correspondent le mieux aux besoins de l’application, cette option est désormais marquée comme dépréciée dans l’intention d’être supprimée dans une future version.
+
+Exemple :
+
+[source,dos]
+----
+C:\java>java -XX:+AggressiveHeap Hello.java
+OpenJDK 64-Bit Server VM warning: Option AggressiveHeap was deprecated in version 26.0 and will likely be removed in a future release.
+Hello world
+----
+
+Pour qu’une application continue d’être exécutée avec un comportement similaire, il faut utiliser plusieurs options :
+
+`-XX:+UseParallelGC -XX:+UseLargePages -XX:-ResizeTLAB -XX:TLABSize=256K -XX:YoungPLABSize=256K -XX:OldPLABSize=8K -XX:ThresholdTolerance=100`
+
+Et configurer plusieurs valeurs relatives au heap :
+
+* `-Xmx` et `-Xms` avec la valeur de la moitié de la mémoire physique
+* `-XX:NewSize` avec la valeur de 3/8 of de la mémoire
+* `-XX:MaxNewSize` avec la valeur de `-XX:NewSize`
+
+== Les fonctionnalités retirées
+
+Plusieurs fonctionnalités sont retirées du JDK 26.
+
+=== JEP 504 : Remove the Applet API
+
+Les applets ont en leur temps contribué au succès initial de Java, en permettant de dynamiser les pages web avant l’utilisation de JavaScript.
+
+Les applets sont devenues inutilisables depuis que tous les navigateurs modernes ont abandonné le support du connecteur permettant d’exécution de plugins et que le JDK ne propose plus aucun moyen de les exécuter.
+
+Ainsi, l’API Applet a suivi un long cycle de dépréciation :
+
+* JDK 9 (2017) : dépréciation initiale des applets et de l’outil `appletviewer` (https://openjdk.org/jeps/289[JEP 289])
+* JDK 11 (2018) : suppression de l’outil `appletviewer`, rendant les applets impossibles à exécuter via le JDK
+* JDK 17 (2021) : l’API Applet est marquée deprecated for removal (https://openjdk.org/jeps/398[JEP 398])
+* JDK 24 (2025) : désactivation permanente du Security Manager (https://openjdk.org/jeps/486[JEP 486]), fonctionnalité indispensable au sandboxing des applets
+
+Tous les éléments relatifs aux applets sont retirés définitivement du JDK 26 en supprimant l'API Applet et les classes Java liées aux applets, ainsi que les méthodes faisant référence à l'API Applet :
+
+* Le package complet `java.applet`
+** `Applet`, `AppletContext`, `AppletStub`, `AudioClip`
+* Des classes annexes :
+** `java.beans.AppletInitializer`
+** `javax.swing.JApplet`
+* Tous les éléments d'API restants qui référencent les classes et interfaces ci-dessus, notamment les méthodes et les champs dans :
+** `java.beans.Beans`
+** `javax.swing.RepaintManager`
+
+Leur suppression dans le JDK 26 tourne une page de l’histoire du web et de Java.
+
+=== Les autres fonctionnalités retirées
+
+Plusieurs fonctionnalités qui ne font pas l’objet d’une JEP sont retirées.
+
+=== Les classes de `javax.imageio.stream` ne supportent plus le mécanisme de finalisation (https://bugs.openjdk.org/browse/JDK-8277585[JDK-8277585])
+
+Le support de la finalisation des objets sera retiré dans une future version du JDK. 
+En prévision de cela, l’utilisation de ce mécanisme a été retirée de la classe `javax.imageio.stream.ImageInputStreamImpl` et de toutes ses sous-classes.
+
+=== La méthode `Thread::stop` est supprimée (https://bugs.openjdk.org/browse/JDK-8368226[JDK-8368226])
+
+La méthode `stop()` de la classe `java.lang.Thread`, intrinsèquement dangereuse, a été dépréciée dans le JDK 1.2 (décembre 1998, soit plus de 27 ans) car elle pouvait entraîner des états incohérents et des comportements imprévisibles. 
+Dans le JDK 18, elle a été marquée comme dépréciée pour suppression, et depuis le JDK 20, elle a été respécifiée pour lever systématiquement une exception de type `UnsupportedOperationException`.
+
+Dans le JDK 26, cette méthode est supprimée et le code l’utilisant ne compilera plus. 
+Le code utilisant cette méthode et compilé dans les versions antérieures lèvera une `NoSuchMethodError` au lieu d’une `UnsupportedOperationException` s’il est exécuté sur un JDK 26 ou plus récent.
+
+=== Plusieurs méthodes de `MulticastSocket` et `DatagramSocketImpl` sont supprimées (https://bugs.openjdk.org/browse/JDK-8332623[JDK-8332623]) 
+
+Plusieurs méthodes, dépréciées pour suppression, ont été supprimées.
+
+Dans la classe `java.net.MulticastSocket` :
+
+* `public void setTTL(byte ttl) throws IOException`
+* `public byte getTTL() throws IOException`
+* `public void send(DatagramPacket p, byte ttl) throws IOException`
+
+Dans la classe `java.net.DatagramSocketImpl` :
+
+* `protected void setTTL(byte ttl) throws IOException`
+* `protected byte getTTL() throws IOException`
+
+=== Le support d’InfiniBand Sockets Direct Protocol (SDP) est supprimé (https://bugs.openjdk.org/browse/JDK-8366575[JDK-8366575])
+
+Le support intégré dans le JDK du protocole InfiniBand Sockets Direct (SDP) sous Linux a été supprimé.
+
+Le SDP est obsolète depuis de nombreuses années et n’est plus soutenu par aucune distribution grand public.
+
+La propriété système `com.sun.sdp.conf` qui pouvait être utilisée pour configurer l’utilisation du SDP dans le fichier fourni comme valeur, ainsi que le fichier de configuration d’exemple `$JAVA_HOME/conf/sdp/sdp.conf.template`, sont également supprimés.
+
+=== La propriété de normalisation Unicode Format D n’est plus prise en charge (macOS) (https://bugs.openjdk.org/browse/JDK-8366911[JDK-8366911])
+
+La normalisation des noms de fichiers n’est pas effectuée par APFS, qui a succédé à HFS+ en tant que système de fichiers sous macOS en septembre 2017.
+
+Pour permettre la rétrocompatibilité, la propriété système `jdk.nio.path.useNormalizationFormD` de la JVM, ajoutée dans le JDK 20, précise la façon dont les chemins de fichiers sont normalisés au niveau Unicode (forme composée (NFC) sur un seul caractère ou forme décomposée (NFD) : caractère de base + accent) dans l’API NIO (`java.nio.file`).
+
+Étant donné qu’aucune version actuellement prise en charge de macOS n’effectue la normalisation des chemins de fichiers, le support de cette propriété a été supprimé.
+
+=== Le support des fonctionnalités d’échange XML dans la classe `DescriptorSupport` sont supprimées (JDK-8351413)
+
+Le support des fonctionnalités d’échange XML dans la classe `javax.management.modelmbean.DescriptorSupport` est retiré : cela concerne le constructeur `DescriptorSupport(String)` et la méthode `toXMLString()` qui sont supprimés.
+
+De plus, la classe `javax.management.modelmbean.XMLParseException` est supprimée.
+
+=== Le module `jdk.jsobject` est retiré (https://bugs.openjdk.org/browse/JDK-8359760[JDK-8359760])
+
+Le module `jdk.jsobject` a été retiré du JDK : il est inclus avec JavaFX 24 et versions ultérieures.
+
+=== L’outil `jrunscript` du JDK est retiré (https://bugs.openjdk.org/browse/JDK-8367157[JDK-8367157])
+
+L’outil expérimental et non supporté `jrunscript` a été retiré du JDK.
+
+== Les évolutions dans la JVM HotSpot
+
+Différentes évolutions sont proposées dans la JVM HotSpot du JDK 26, notamment au travers de 2 JEPs.
+
+* JEP 516 : Ahead-of-Time Object Caching with Any GC
+* JEP 522 : G1 GC: Improve Throughput by Reducing Synchronization
+
+=== JEP 516 : Ahead-of-Time Object Caching with Any GC
+
+Le but de la https://openjdk.org/jeps/516[JEP 516] est d’étendre les capacités du cache Ahead-of-Time (AOT), introduit par le Projet Leyden, pour permettre son utilisation avec tous les ramasse-miettes, y compris ZGC.
+
+Jusqu'au JDK 25, le cache AOT stockait les objets dans un format dépendant du GC, ce qui empêchait la compatibilité avec ZGC ou avec des configurations mémoire particulières (taille du heap, Compressed OOPs, Compact Object Headers,...).
+
+Le cache AOT contenait des instances d’objets (notamment Class, chaînes, tableaux), mais dans un format binaire propre au GC utilisé pendant l’exécution de la phase d’entraînement. 
+Cette approche permettait de mapper directement le fichier du cache dans la mémoire, offrant de grandes performances si le fichier était dans le cache du système de fichiers. 
+Cependant, cela imposait plusieurs grosses contraintes :
+
+* un cache créé avec G1/Serial/Parallel GC ne pouvait pas être utilisé avec ZGC,
+* les différences de représentation des objets (références 32/64 bits, entêtes d’objets variables, bits réservés par ZGC, etc.) rendaient les caches incompatibles entre eux.
+
+Cela rendait impossible de combiner démarrage rapide avec la faible latence de ZGC.
+
+Dans le JDK 26, les objets peuvent être stockés dans un format neutre, où les références internes sont remplacées par des indices logiques. 
+Au démarrage de l’exécution, un thread en arrière-plan lit le cache et recrée les objets dans le heap selon le GC utilisé.
+
+Cette fonctionnalité est un compromis :
+
+* le mapping direct en mémoire direct n’est pas possible
+* mais le chargement peut se faire en parallèle du démarrage et elle est compatible avec ZGC et tous les autres GCs. Il faut cependant plus qu’un cœur pour ne pas dégrader les performances
+
+La JVM propose désormais deux versions du cache AOT :
+
+[arabic]
+. Format spécifique à certains GC (le format historique)  mappable en mémoire, très rapide
+. Format GC-agnostique (le format introduit dans le JDK 26) streamable, compatible avec tous les GCs
+
+Le choix se fait :
+
+* Automatiquement, selon le GC utilisé, la taille du heap, l’utilisation de Compressed OOPs,…
+* ou explicitement, via l’option `AOTStreamableObjects` de la JVM HotSpot :
+* `-XX:+AOTStreamableObjects` pour forcer le format agnostique même avec les compressed OOPs activés
+* `-XX:-AOTStreamableObjects` pour forcer le format spécifique
+
+Le format streamable est utilisé par défaut si ZGC est utilisé, le heap > 32 Go et les compressed OOPs sont désactivés.
+
+=== JEP 522 : G1 GC: Improve Throughput by Reducing Synchronization
+
+https://openjdk.org/jeps/522[JEP 522] introduit une optimisation au ramasse-miettes G1, dont l’objectif est d’augmenter le débit des applications Java en réduisant la surcharge induite par la synchronisation entre les threads applicatifs et les threads du GC. Cette amélioration cible l’un des points du fonctionnement interne de G1 : la gestion de la card table et des barrières d’écriture (write barriers).
+
+G1 est un ramasse-miettes régional : le heap est divisé en régions, et les références entre les régions sont suivies via une structure dédiée appelée card table. +
+Lorsque le code met à jour une référence d’objet, une barrière d’écriture marque la card correspondante comme « sale » (dirty).
+
+Avant le JDK 26, les threads de l’application et du GC modifiaient la même card table. Pour éviter des corruptions, G1 devait synchroniser chaque accès lors des mises à jour. Ces verrouillages pouvaient provoquer de la contention, particulièrement dans les applications qui modifient intensément des références. Ce mécanisme dégradait le débit, et expliquait pourquoi G1 pouvait être moins performant que ParallelGC dans certains cas avec fortes charges concurrentielles.
+
+Le JDK 26 introduit une deuxième card table afin d’éliminer la synchronisation entre le GC et les threads de l’application. Les threads applicatifs écrivent dans une card table dédiée, sans aucun verrou. Un thread du GC optimise ou scanne l’autre card table en parallèle. Lorsque la table utilisée par l’application devient trop chargée, le GC échange les deux card tables atomiquement. Le processus continue sans jamais nécessiter de synchronisation entre application et GC. Ce mécanisme permet également de simplifier le code de la barrière d’écriture.
+
+Les gains envisageables sont de 5 à 15 % de débit supplémentaire pour les applications qui modifient fréquemment des références avec environ 5 % d’amélioration générale même pour des workloads plus classiques.
+
+Sur x64, le code de la barrière d’écriture passe d’environ 50 instructions à 12, diminuant directement le coût des écritures. Le surcoût mémoire est minime : environ 0,2 % du heap soit environ 2 Mo par Go de heap.
+
+=== Les autres fonctionnalités dans la JVM HotSpot
+
+D’autres fonctionnalités ou évolutions dans des fonctionnalités de la JVM HotSpot ne faisant pas l’objet d’une JEP sont proposées dans le JDK 26.
+
+=== La nouvelle journalisation du temps CPU par la JVM (https://bugs.openjdk.org/browse/JDK-8364638[JDK-8364638])
+
+À la fin de l’exécution de la VM, l’option `-Xlog:cpu` affiche désormais un tableau décomposant l’utilisation de la CPU par les composants de la JVM.
+
+Exemple :
+
+[source,dos]
+----
+C:\java>java -Xlog:cpu monapp.java 
+[15.653s][info][cpu] === CPU time Statistics =========================
+[15.653s][info][cpu]                                         CPUs
+[15.653s][info][cpu]                            s       %  utilized
+[15.654s][info][cpu]  Process
+[15.654s][info][cpu]    Total              0.4210  100.00       0.0
+[15.654s][info][cpu]    Garbage Collection 0.0156    3.71       0.0
+[15.654s][info][cpu]      GC Threads       0.0156    3.71       0.0
+[15.654s][info][cpu]      VM Thread        0.0000    0.00       0.0
+[15.654s][info][cpu]==================================================
+----
+
+=== La JVM ne permet plus l’exécution de code sources avec un constructeur privé sans argument (https://bugs.openjdk.org/browse/JDK-8371470[JDK-8371470])
+
+L’exécution d’un programme sources avec un constructeur privé sans argument provoque une erreur, comme le fait l’exécution de l’application en mode classe.
+
+Exemple :
+
+.Le fichier DemoPrivateConstructeurVide.java
+[source,java]
+----
+public class DemoPrivateConstructeurVide {
+
+  private DemoPrivateConstructeurVide() {
+  }
+
+  void main() {
+    IO.println("OK");
+  }
+}
+----
+
+Exemple : exécution avec un JDK 25
+
+[source,dos]
+----
+C:\java>java -version
+openjdk version "25" 2025-09-16
+OpenJDK Runtime Environment (build 25+36-3489)
+OpenJDK 64-Bit Server VM (build 25+36-3489, mixed mode, sharing)
+
+C:\java>java DemoPrivateConstructeurVide.java
+OK
+----
+
+Exemple : exécution avec un JDK 26
+
+[source,dos]
+----
+C:\java>java -version
+openjdk version "26" 2026-03-17
+OpenJDK Runtime Environment (build 26+35-2893)
+OpenJDK 64-Bit Server VM (build 26+35-2893, mixed mode, sharing)
+
+C:\java>java DemoPrivateConstructeurVide.java
+error: no non-private zero argument constructor found in class DemoPrivateConstructeurVide
+remove private from existing constructor or define as:
+   public DemoPrivateConstructeurVide()
+----
+
+=== Le support de l’option `UseGCOverheadLimit` par G1 (https://bugs.openjdk.org/browse/JDK-8212084[JDK-8212084])
+
+Le ramasse-miettes G1 peut désormais lever une `OutOfMemoryError` lorsque le surcoût du GC dépasse le `GCTimeLimit` (98 % par défaut) et que la mémoire libre tombe sous la `GCHeapFreeLimit` (2 % par défaut) durant cinq cycles consécutifs.
+
+Ce comportement est activé par défaut, mais peut être désactivé avec l’option `-XX:-UseGCOverheadLimit`
+
+L’implémentation est alignée sur celle du ramasse-miettes ParallelGC bien que leurs conditions exactes de lever de l’`OutOfMemoryError` puissent légèrement varier.
+
+=== La récupération plus rapide des grands objets éligibles par G1 (https://bugs.openjdk.org/browse/JDK-8048180[JDK-8048180])
+
+Le ramasse-miettes G1 récupère désormais plus rapidement les « humongous objects » éligibles (grands objets ou tableaux occupant plus de la moitié d’une région du heap qui ne sont plus référencés), même ceux contenant des références, sans attendre un marquage complet de l’ensemble du heap.
+
+Cela permet de libérer plus rapidement la mémoire des objets non référencés et d’améliorer l’efficacité du GC, en particulier pour les objets volumineux et de courte durée de vie.
+
+=== Les threads virtuels ne sont plus épinglés lorsqu’un autre thread initialise la même classe (https://bugs.openjdk.org/browse/JDK-8369238[JDK-8369238])
+
+Dans certaines circonstances, les threads virtuels sont « épinglés » à leur thread porteur, ce qui signifie que si le thread virtuel est bloqué, il ne peut pas être détaché de son thread porteur qui est le thread du système d’exploitation sur lequel le thread virtuel est exécuté. 
+Ainsi, le thread porteur est également bloqué et ne peut pas exécuter un autre thread virtuel.
+
+Dans le JDK 24, la principale raison d’épinglage de threads virtuels sur leur thread porteur a été résolu (exécution de code `synchronized`).
+
+Dans le JDK 26, un thread virtuel qui tente d’initialiser une classe déjà en cours d’initialisation par un autre thread sera désormais, dans la plupart des cas, détaché de son thread porteur en attendant. 
+Auparavant, le comportement consistait à épingler le thread virtuel sur son thread porteur en attendant que l’autre thread exécute l’initialiseur de la classe.
+
+Ce changement peut améliorer les performances dans certains cas, car le détachement libère le thread porteur (thread de plateforme), permettant au planificateur de thread virtuel d’exécuter un autre thread virtuel.
+
+Ce changement aide également à résoudre le cas où tous les threads de plateforme disponibles pour le planificateur de threads virtuels du JDK sont épinglés par des threads virtuels en attendant qu’un autre thread exécute un initialiseur de classe. 
+Si le thread exécutant l’initialiseur de classe bloque ou attend quelque chose nécessitant un thread virtuel pour être exécuté, le système pourrait devenir bloqué, car aucun thread virtuel ne pourrait continuer son exécution.
+
+Avant le JDK 26, un thread virtuel était également épinglé s’il tentait d’initialiser une classe en cours d’initialisation par un autre thread. Cela n’arrive plus non plus.
+
+=== Le support par le compilateur C2 des méthodes avec un grand nombre de paramètres (https://bugs.openjdk.org/browse/JDK-8325467[JDK-8325467])
+
+Le compilateur JIT C2 peut désormais compiler des méthodes avec un grand nombre de paramètres. Auparavant, C2 tentait de compiler de telles méthodes, mais revenait au code compilé en C1 ou à l’interpréteur.
+
+Ce changement permet aux applications de bénéficier des optimisations du JIT C2 pour un plus large éventail de méthodes, améliorant ainsi les performances.
+
+=== L'option -XX:+UseTransparentHugePages de nouveau utilisable avec G1 (https://bugs.openjdk.org/browse/JDK-8366434[JDK-8366434])
+
+Le ramasse-miettes G1 peut à nouveau utiliser correctement les Transparent Huge Pages (THP) sur des systèmes avec le mode THP configuré comme madvise. Le problème empêchant l’option `-XX:+UseTransparentHugePages` d’activer le THP a été résolu.
+
+=== La taille initiale par défaut du heap désormais réglée à MinHeapSize (https://bugs.openjdk.org/browse/JDK-8371986[JDK-8371986])
+
+Si la taille initiale du heap de la JVM n’est pas précisée à l’aide de `-Xms` ou `-XX:InitialHeapSize`, la JVM détermine la taille initiale du heap en utilisant le paramètre `InitialRAMPercentage`. Par défaut, c’est 1/64 de la RAM physique du système.
+
+Exemple avec le JDK25
+
+[source,dos]
+----
+C:\java
+λ java -version
+openjdk version "25" 2025-09-16
+OpenJDK Runtime Environment (build 25+36-3489)
+OpenJDK 64-Bit Server VM (build 25+36-3489, mixed mode, sharing)
+
+C:\java
+λ java -XX:+PrintFlagsFinal --version | grep InitialRAMPercentage
+   double InitialRAMPercentage                     = 1.562500                                  {product} {default}
+----
+
+Ce comportement entraîne de grandes tailles initiales de heap sur les systèmes modernes disposant d’une quantité importante de mémoire, augmentant les temps de démarrage de la JVM en raison de l’initialisation nécessaire des structures de données internes liées au heap.
+
+Dans le JDK 26, la valeur par défaut de la propriété `InitialRAMPercentage` est supprimée. 
+Maintenant, si l’utilisateur ne spécifie pas de taille initiale du heap Java, la JVM fixe la taille initiale du heap à la taille minimale possible, qui correspond à `MinHeapSize`. 
+Cela améliore les performances au démarrage des configurations JVM par défaut en réduisant l’initialisation de la mémoire interne.
+
+Exemple avec le JDK 26
+
+[source,dos]
+----
+C:\java
+λ java -version
+openjdk version "26" 2026-03-17
+OpenJDK Runtime Environment (build 26+35-2893)
+OpenJDK 64-Bit Server VM (build 26+35-2893, mixed mode, sharing)
+
+C:\java
+λ java -XX:+PrintFlagsFinal --version | grep InitialRAMPercentage
+   double InitialRAMPercentage                     = 0.000000                                  {product} {default}
+----
+
+Pour obtenir le comportement précédent, il est possible de définir explicitement la valeur de la propriété `InitialRAMPercentage` à la valeur originale de `1,5625`, ou configurer directement la taille initiale du heap Java en utilisant les options `-Xms` ou `-XX:InitialHeapSize`.
+
+=== La taille initiale par défaut du heap est réduite (https://bugs.openjdk.org/browse/JDK-8348278[JDK-8348278])
+
+Si ni `-Xms` ni `-XX:InitialRAMPercentage` ne sont utilisés pour spécifier une taille minimale du heap lors du lancement de la JVM, le heap est défini par défaut à `1/64` (= 1,5625 %) de la RAM physique. 
+Aujourd’hui, les ordinateurs disposent de beaucoup plus de RAM, donc de nombreuses applications sont démarrées avec un heap inutilement grand.
+
+Exemple avec le JDK 25 sur un laptop avec 32Go de RAM
+
+[source,dos]
+----
+C:\java
+λ java -version
+openjdk version "25" 2025-09-16
+OpenJDK Runtime Environment (build 25+36-3489)
+OpenJDK 64-Bit Server VM (build 25+36-3489, mixed mode, sharing)
+
+C:\java
+λ java -XX:+PrintFlagsFinal --version | grep InitialHeapSize
+   size_t InitialHeapSize                          = 532676608                                 {product} {ergonomic}
+----
+
+En plus de la RAM inutilement occupée, cela peut aussi retarder notablement le démarrage d’une application, car le ramasse-miettes doit créer des structures de données initiales pour le heap, qui évoluent avec la taille du heap.
+
+Dans le JDK 26, la taille initiale du heap par défaut est modifiée à 0,2%, c’est-à-dire 1/500 de la RAM physique.
+
+Exemple avec le JDK 26 sur un laptop avec 32Go de RAM
+
+[source,dos]
+----
+C:\java
+λ java -version
+openjdk version "26" 2026-03-17
+OpenJDK Runtime Environment (build 26+35-2893)
+OpenJDK 64-Bit Server VM (build 26+35-2893, mixed mode, sharing)
+
+C:\java
+λ java -XX:+PrintFlagsFinal --version | grep InitialHeapSize
+   size_t InitialHeapSize                          = 8388608                                   {product} {ergonomic}
+----
+
+=== Le Serial GC peut étendre l’Eden au-delà du `SurvivorRatio` (https://bugs.openjdk.org/browse/JDK-8368740[JDK-8368740])
+
+La taille de l’Eden et des espaces Survivor à l’intérieur d’une jeune génération est régie par `SurvivorRatio`. 
+Ces tailles peuvent changer lorsque la taille de la jeune génération est mise à jour.
+
+Après ce changement, si heap est presque plein, Serial GC essaiera d’étendre l'Eden afin de satisfaire la demande d’allocation. 
+Cela peut faire croître la taille de l’Eden au-delà de la limite définie par `SurvivorRatio`.
+
+Ce nouveau comportement peut éviter les erreurs de type `OutOfMemoryError` dans des situations de heap très restreintes qui auparavant terminaient souvent la JVM.
+
+== Les évolutions dans les outils du JDK
+
+Le JDK 26 propose diverses évolutions dans plusieurs de ses outils.
+
+=== Le thème sombre dans la documentation Javadoc (https://bugs.openjdk.org/browse/JDK-8342705[JDK-8342705])
+
+La documentation générée par l’outil `javadoc` propose désormais un thème sombre.
+
+Le thème clair est toujours celui par défaut, mais le nouveau thème sombre peut être sélectionné via le bouton nouveau thème dans la barre de navigation.
+
+image:/images/2026/nouveautes-java-26-partie2/article_java_26_partie_2_001.png[image,width=605,height=171]
+
+
+Il est possible de sélectionner le thème sombre (dark).
+
+
+
+image:/images/2026/nouveautes-java-26-partie2/article_java_26_partie_2_002.png[image,width=605,height=187]
+
+=== Les dumps de threads générés par `HotSpotDiagnosticMXBean` et `jcmd` incluent le propriétaire du verrou (https://bugs.openjdk.org/browse/JDK-8365057[JDK-8365057])
+
+Les thread dumps produits par la méthode `HotSpotDiagnosticMXBean::dumpThreads` ou la commande `jcmd <pid> Thread.dump_to_file` incluent désormais l’information sur le détenteur du "park blocker" pour les threads bloqués sur un objet de `java.util.concurrent.locks.AbstractOwnableSynchronizer`, facilitant ainsi le diagnostic des blocages.
+
+Exemple :
+
+[source,plain]
+----
+#41 "Thread-A" TIMED_WAITING 2026-03-16T20:57:07.041498400Z
+    at java.base/java.lang.Thread.sleepNanos0(Native Method)
+    at java.base/java.lang.Thread.sleepNanos(Thread.java:551)
+    at java.base/java.lang.Thread.sleep(Thread.java:582)
+    at DemoLockBlock.lambda$main$0(DemoLockBlock.java:14)
+    at java.base/java.lang.Thread.run(Thread.java:1516)
+
+#42 "Thread-B" WAITING 2026-03-16T20:57:07.041498400Z
+    at java.base/jdk.internal.misc.Unsafe.park(Native Method)
+    - parking to wait for <java.util.concurrent.locks.ReentrantLock$NonfairSync@75e5690c>, owner #41
+    at java.base/java.util.concurrent.locks.LockSupport.park(LockSupport.java:223)
+    at java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer.acquire(AbstractQueuedSynchronizer.java:790)
+    at java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer.acquire(AbstractQueuedSynchronizer.java:1030)
+    at java.base/java.util.concurrent.locks.ReentrantLock$Sync.lock(ReentrantLock.java:154)
+    at java.base/java.util.concurrent.locks.ReentrantLock.lock(ReentrantLock.java:323)
+    at DemoLockBlock.lambda$main$1(DemoLockBlock.java:25)
+    at java.base/java.lang.Thread.run(Thread.java:1516)
+----
+
+=== Le non-respect de la JLS lors de la compilation pour une Lambda et une référence de méthode équivalente (https://bugs.openjdk.org/browse/JDK-8369517[JDK-8369517])
+
+Avant le JDK 26, le compilateur `javac` n’appliquait pas de conversion de capture imposée par la JLS lors de la décision de la compatibilité d’une référence de méthode avec un type de fonction donné. 
+Cela pouvait amener le compilateur `javac` à compiler sans erreur le code ci-dessous :
+
+Exemple :
+
+.Le fichier DemoJavacJDK26.java
+[source,java]
+----
+import java.util.function.Supplier;
+
+class DemoJavacJDK26 {
+  interface Fournisseur<T> {
+    Fournisseur<T> get();
+  }
+
+  static Fournisseur<?> instance() {return null;}
+        
+  static <R> Fournisseur<R> creer(Supplier<? extends R> supplier) {return null;}  
+        
+  static Fournisseur<Fournisseur<?>> methodRef() {
+    return creer(DemoJavacJDK26::instance).get();
+  }
+}
+----
+
+Résultat de la compilation avec un JDK 25 :
+
+[source,dos]
+----
+C:\java>java -version
+openjdk version "25" 2025-09-16
+OpenJDK Runtime Environment (build 25+36-3489)
+OpenJDK 64-Bit Server VM (build 25+36-3489, mixed mode, sharing)
+
+C:\java>javac DemoJavacJDK26.java
+
+C:\java>
+----
+
+À partir du JDK 26, le compilateur `javac` appliquera la conversion de capture obligatoire par la JLS lorsqu’il décide si une référence de méthode est compatible avec un type de fonction donné.
+
+Résultat de la compilation avec un JDK 26 :
+
+[source,dos]
+----
+C:\java>java -version
+openjdk version "26" 2026-03-17
+OpenJDK Runtime Environment (build 26+35-2893)
+OpenJDK 64-Bit Server VM (build 26+35-2893, mixed mode, sharing)
+
+C:\java>javac DemoJavacJDK26.java
+DemoJavacJDK26.java:13: error: incompatible types: Fournisseur<Fournisseur<CAP#1>> cannot be converted to Fournisseur<Fournisseur<?>>
+            return creer(DemoJavacJDK26::instance).get();
+                                                       ^
+  where CAP#1 is a fresh type-variable:
+    CAP#1 extends Object from capture of ?
+1 error
+
+C:\java>
+----
+
+=== La vérification plus stricte de la version par `jlink` lors du cross linking (https://bugs.openjdk.org/browse/JDK-8347831[JDK-8347831])
+
+L’outil `jlink` peut être utilisé pour assembler un ensemble de modules et leurs dépendances en un runtime d’exécution personnalisée pour un système d’exploitation, une architecture ou une version du JDK différente de celle contenant l’outil `jlink`. Cette fonctionnalité est appelée « cross linking ».
+
+Dans les versions précédentes, la vérification de la version était moins stricte et permettait à `jlink` exécuté d’un JDK $N.0.$U du fournisseur $X de créer une image d’exécution à partir d’un ensemble de modules pour un JDK $N.0.$V d'un fournisseur $Y.
+
+La vérification des versions utilisée lors du cross linking est devenue plus stricte que dans les versions précédentes. 
+La vérification stricte signifie que la valeur de $U et $V doit être égale, et que $X et $Y être égales. Lors du cross linking, l’ensemble des modules standard et le JDK pour l’exécution personnalisée doit correspondre exactement à la version et au fournisseur du JDK contenant l’outil `jlink`. 
+Cette vérification stricte est nécessaire en raison du pipeline de plugins `jlink` qui transforment et optimisent les classes et ressources intégrées à l’image. 
+L’outil `jlink`  ne peut pas générer de manière fiable une image à l’exécution lorsqu’elles ne correspondent pas exactement.
+
+=== Les fonctionnalités de JFR
+
+Le JDK 26 propose diverses évolutions dans JFR.
+
+=== Les événements JFR `jdk.ModuleExport`, `jdk.SymbolTableStatistics` et `jdk.StringTableStatistics` sont désactivés dans la configuration par défaut (https://bugs.openjdk.org/browse/JDK-8364993[JDK-8364993], https://bugs.openjdk.org/browse/JDK-8364556[JDK-8364556])
+
+Les événements JFR `jdk.ModuleExport`, `jdk.SymbolTableStatistics` et `jdk.StringTableStatistics` ont été désactivés dans la configuration JFR par défaut (`default.jfc`) afin de réduire la charge lorsque JFR n'est pas explicitement configuré.
+
+Il est possible d’activer ces événements dans le paramètre d'événement, par exemple en demandant le démarrage de JFR dans les options de la JVM : `-XX:StartFlightRecording:jdk.ModuleExport#enabled=true`
+
+=== Deux nouveaux événements JFR
+
+Deux nouveaux événements JFR sont ajoutés, tous les deux activés par défaut dans les configurations `default` et `profile` :
+
+* `jdk.StringDeduplication` : fournit des statistiques sur le traitement de déduplication des chaînes de caractères par le ramasse-miettes
+* `jdk.FinalFieldMutation` : est émis chaque fois que le code mute un champ d'instance `final` ou utilise `Lookup.unreflectSetter()` pour obtenir un `MethodHandle` avec l’accès en écriture à un champ `final`. Cet événement indique la classe déclarant le champ `final`, le nom du champ `final` et la stacktrace pour montrer d'où vient la mutation du champ `final`
+
+Exemple :
+
+[source,dos]
+----
+C:\java>java -XX:StartFlightRecording=duration=200s,filename=DemoJEP500.jfr DemoJEP500.java
+[0.340s][info][jfr,startup] Started recording 1. The result will be written to:
+[0.340s][info][jfr,startup]
+[0.340s][info][jfr,startup] C:\java\DemoJEP500.jfr
+Conteneur[taille=100, nom='standard']
+WARNING: Final field taille in class Conteneur has been mutated reflectively by class DemoJEP500 in unnamed module @7354b8c5 (file:/C:/java/DemoJEP500.java)
+WARNING: Use --enable-final-field-mutation=ALL-UNNAMED to avoid a warning
+WARNING: Mutating final fields will be blocked in a future release unless final field mutation is enabled
+Conteneur[taille=200, nom='standard']
+
+C:\java>jfr print --events jdk.FinalFieldMutation DemoJEP500.jfr
+jdk.FinalFieldMutation {
+  startTime = 21:08:20.709 (2026-03-23)
+  declaringClass = Conteneur (classLoader = com.sun.tools.javac.launcher.MemoryClassLoader)
+  fieldName = "taille"
+  eventThread = "main" (javaThreadId = 3)
+  stackTrace = [
+    DemoJEP500.main(String[]) line: 10
+    jdk.internal.reflect.DirectMethodHandleAccessor.invoke(Object, Object[]) line: 104
+    java.lang.reflect.Method.invoke(Object, Object[]) line: 565
+    com.sun.tools.javac.launcher.SourceLauncher.execute(MemoryContext, String[]) line: 264
+    com.sun.tools.javac.launcher.SourceLauncher.run(String[], String[]) line: 138
+  ]
+}
+----
+
+== Les évolutions relatives à la sécurité
+
+Le JDK 26 propose des évolutions relatives à la sécurité.
+
+Une seule JEP concerne des évolutions dans les API de sécurité qui reste en preview :
+
+* JEP 524 : https://openjdk.org/jeps/524[PEM Encodings of Cryptographic Objects (Second Preview)]
+
+=== JEP 524 : PEM Encodings of Cryptographic Objects (Second Preview)
+
+Le but est d’introduire une API facile à utiliser pour l’encodage d’objets qui représentent des clés cryptographiques, des certificats et des listes de révocation de certificats dans le format de transport PEM (Privacy-Enhanced Mail) largement utilisé, et pour le décodage de ce format en objets.
+
+Les formats standards utilisés sont :
+
+* PKCS#8 pour les clés privées,
+* X.509 pour les clés publiques, les certificats et les listes de révocation de certificats
+* PKCS#8 v2.0 pour les clés privées chiffrées et les clés asymétriques
+
+PEM est un format textuel pour les données binaires. Un texte PEM contient une représentation en Base64 de la représentation binaire d’objet cryptographique, entourée d’un en-tête contenant `-----BEGIN PUBLIC xxx-----` et d’un pied contenant `-----END PUBLIC xxx-----` ou `xxx` est le type de l'objet.
+
+L'API PEM a été proposée comme une fonctionnalité en preview par la https://openjdk.org/jeps/470[JEP 470] et livrée dans le https://openjdk.org/projects/jdk/25/[JDK 25]. 
+Elle est de nouveau proposée en preview par la https://openjdk.org/jeps/524[JEP 524] avec plusieurs modifications dans son API :
+
+* La classe `PEMRecord` est maintenant nommée `PEM`, et comprend une méthode `decode()` qui renvoie le contenu décodé de Base64.
+* Les méthodes `encryptKey()` de la classe `EncryptedPrivateKeyInfo` sont maintenant nommées `encrypt()`, et elles acceptent des objets de type `DEREncodable` plutôt que des objets de type `Private`, permettant le chiffrement d’objets de type `KeyPair` et `PKCS8EncodedKeySpec`.
+* La classe `EncryptedPrivateKeyInfo` contient maintenant les méthodes `getKeyPair()` qui décryptent le texte encodé en PKCS#8-encoded contenant une `PublicKey`.
+* Les exceptions levées par les méthodes `getKey()` de la classe `EncryptedPrivateKeyInfo` sont maintenant alignées avec celles levées par les méthodes `getKeySpec()`.
+* Les classes `PEMEncoder` et `PEMDecoder` prennent désormais en charge le chiffrement et le déchiffrement des objets de type `KeyPair` et `PKCS8EncodedKeySpec`.
+
+=== Les autres évolutions relatives à la sécurité
+
+Le JDK 26 propose aussi plusieurs autres évolutions relatives la sécurité :
+
+* des mises à jour de certificats racines dans le truststore cacerts
+* diverses évolutions qui ne sont pas proposées au travers de JEPs
+
+=== La gestion améliorée des mots de passe par `keytool` lors de la redirection de la sortie (https://bugs.openjdk.org/browse/JDK-8354469[JDK-8354469])
+
+La commande `keytool` lit les mots de passe depuis la console système pour empêcher qu’ils ne s’affichent à l’écran. 
+Cependant, la console n’est généralement disponible que lorsque les flux d’entrée et de sortie standards ne sont pas redirigés.
+
+Auparavant, si le flux de sortie standard était redirigé vers un fichier ou une autre commande, la console était indisponible et le mot de passe d’entrée était affiché à l’écran.
+
+Cette évolution améliore la gestion des mots de passe afin de garantir que le mot de passe ne soit pas affiché à l’écran même si le flux de sortie standard est redirigé. 
+Cette amélioration a également été apportée à la commande `jarsigner` et à l’API JAAS `com.sun.security.auth.callback.TextCallbackHandler`.
+
+=== Le support de ML-DSA pour les jar signés (https://bugs.openjdk.org/browse/JDK-8349732[JDK-8349732])
+
+Le JDK supporte désormais la création et la vérification de fichiers JAR signés avec l’algorithme post-quantique ML-DSA, en utilisant PKCS #7 tel que défini dans la https://datatracker.ietf.org/doc/html/rfc9882[RFC 9882]. 
+Cette fonctionnalité est disponible via l’outil `jarsigner` et l’API JarSigner.
+
+Exemple
+
+[arabic]
+. Création d’une paire de clé avec un certificat auto signé
++
+[source,dos]
+----
+C:\java>keytool -genkeypair -alias demo-ml-dsa -keyalg ML-DSA -storetype PKCS12 -keystore keystore.p12 -storepass motdepasse -keypass motdepasse -dname "CN=Demo, OU=Securite, O=SCIAM, C=FR"
+Generating ML-DSA-65 key pair and self-signed certificate (ML-DSA-65) with a validity of 90 days
+        for: CN=Demo, OU=Securite, O=SCIAM, C=FR
+----
+
+[arabic, start=2]
+. Signature du jar avec la clé générée
++
+[source,dos]
+----
+C:\java>jarsigner -keystore keystore.p12 -storepass motdepasse mabib.jar demo-ml-dsa
+jar signed.
+
+Warning:
+The signer's certificate is self-signed.
+----
+
+[arabic, start=3]
+. Vérification du jar signé
+
+[source,dos]
+----
+C:\java>jarsigner -verify -verbose mabib.jar
+
+s        167 Mon Mar 16 21:18:30 CET 2026 META-INF/MANIFEST.MF
+         372 Mon Mar 16 21:18:30 CET 2026 META-INF/DEMO-ML-.SF
+        9210 Mon Mar 16 21:18:30 CET 2026 META-INF/DEMO-ML-.DSA
+           0 Mon Mar 16 21:17:04 CET 2026 META-INF/
+sm      1503 Mon Sep 30 20:15:48 CEST 2024 User.class
+
+  s = signature was verified
+  m = entry is listed in manifest
+  k = at least one certificate was found in keystore
+
+- Signed by "CN=Demo, OU=Securite, O=SCIAM, C=FR"
+    Digest algorithm: SHA-384
+    Signature algorithm: ML-DSA-65, ML-DSA-65 key
+
+jar verified.
+----
+
+=== La nouvelle propriété de sécurité `jdk.crypto.disabledAlgorithms` pour restreindre les algorithmes au niveau JCE (https://bugs.openjdk.org/browse/JDK-8244336[JDK-8244336])
+
+La nouvelle propriété de sécurité nommée `jdk.crypto.disabledAlgorithms` a été introduite pour désactiver les algorithmes des services cryptographiques JCE/JCA. Initialement, cette propriété ne prend en charge que les services `Cipher`, `KeyStore`, `MessageDigest` et `Signature`.
+
+Cette propriété est définie dans le fichier `conf/security/java.security` du JDK et initialement aucun algorithme n’est désactivé par défaut.
+
+[source,plain ]
+----
+# Example:
+# jdk.crypto.disabledAlgorithms=Cipher.RSA/ECB/PKCS1Padding, MessageDigest.MD2
+#
+#jdk.crypto.disabledAlgorithms=
+----
+
+Cependant, cela pourrait changer dans les prochaines versions du JDK. 
+Cette propriété de sécurité peut être écrasée par une propriété système du même nom si les applications doivent réactiver des algorithmes désactivées par défaut.
+
+=== L’ajout de l’algorithme Hybrid Public Key Encryption (HPKE) (https://bugs.openjdk.org/browse/JDK-8325448[JDK-8325448])
+
+L’algorithme de chiffrement HPKE, défini dans la https://www.rfc-editor.org/info/rfc9180[RFC 9180: Hybrid Public Key Encryption] est un chiffrement à clé publique permettant de chiffrer du texte de taille arbitraire avec la clé publique d’un destinataire.
+
+HPKE combine un mécanisme d’encapsulation de clés (KEM), une fonction de dérivation de clés (KDF) et un chiffrement authentifié avec un chiffrement de données supplémentaires (AEAD). 
+Tous les identifiants d’algorithmes KEM, KDF et AEAD définis dans la RFC 9180 sont pris en charge.
+
+La nouvelle classe `HPKEParameterSpec` permet de choisir des identifiants d’algorithme et de définir d’autres paramètres tels que les modes HPKE, les informations fournies par l’application et les clés spécifiques au mode.
+
+Exemple :
+
+.Le fichier DemoHPKE.java
+[source,java]
+----
+import java.nio.charset.StandardCharsets;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.util.HexFormat;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.HPKEParameterSpec;
+
+public class DemoHPKE {
+    public static void main(String[] args) throws Exception {
+        // Génération d'une paire de clé
+        KeyPairGenerator g = KeyPairGenerator.getInstance("X25519");
+        KeyPair kp = g.generateKeyPair();
+
+        // Initialisation du cipher HPKE de l'expéditeur avec la clé publique du
+        // destinataire
+        Cipher senderCipher = Cipher.getInstance("HPKE");
+        HPKEParameterSpec ps = HPKEParameterSpec.of(
+                HPKEParameterSpec.KEM_DHKEM_X25519_HKDF_SHA256,
+                HPKEParameterSpec.KDF_HKDF_SHA512,
+                HPKEParameterSpec.AEAD_AES_256_GCM)
+                .withInfo(HexFormat.of().parseHex("1234567890123456"));
+        senderCipher.init(Cipher.ENCRYPT_MODE, kp.getPublic(), ps);
+
+        byte[] kemEncap = senderCipher.getIV();
+
+        // Initialisation du cipher HPKE du destinataire avec sa clé privée
+        Cipher recipientCipher = Cipher.getInstance("HPKE");
+        HPKEParameterSpec pr = HPKEParameterSpec.of(
+                HPKEParameterSpec.KEM_DHKEM_X25519_HKDF_SHA256,
+                HPKEParameterSpec.KDF_HKDF_SHA512,
+                HPKEParameterSpec.AEAD_AES_256_GCM)
+                .withInfo(HexFormat.of().parseHex("1234567890123456"))
+                .withEncapsulation(kemEncap);
+        recipientCipher.init(Cipher.DECRYPT_MODE, kp.getPrivate(), pr);
+
+        // Chiffrement et déchiffrement d'un message
+        byte[] msg = "Mon message".getBytes(StandardCharsets.UTF_8);
+        byte[] ct = senderCipher.doFinal(msg);
+        byte[] pt = recipientCipher.doFinal(ct);
+
+        IO.println("Message : " + new String(msg, StandardCharsets.UTF_8));
+        IO.println("senderCipher : " + HexFormat.of().formatHex(ct));
+        IO.println("recipientCipher : " + HexFormat.of().formatHex(pt));
+    }
+}
+----
+
+Résultat d’exécution
+
+[source,dos]
+----
+C:\java>java DemoHPKE.java
+Message : Mon message
+senderCipher : a5d00656b7d6b3f0fbbbeb1ecbb89e9a3cad3b2fee4f666bfec3ff
+recipientCipher : 4d6f6e206d657373616765
+----
+
+=== Le support des contraintes d’algorithmes et des vérifications de certificats dans le gestionnaire de clés SunX509 (https://bugs.openjdk.org/browse/JDK-8359956[JDK-8359956])
+
+La `KeyManagerFactory` par défaut « SunX509 » pour TLS prend désormais en charge les mêmes contraintes d’algorithmes et la même fonctionnalité de vérification des certificats que la `KeyManagerFactory` « PKIX ». 
+La sélection et la priorisation des certificats locaux choisis par le KeyManager se basent sur les contrôles suivants :
+
+[arabic]
+. Les certificats locaux sont vérifiés par rapport aux algorithmes de signature de certificat pris en charge par des pairs envoyés avec l’extension TLS `signature_algorithms_cert`.
+. Les certificats locaux sont vérifiés par rapport aux contraintes de l’algorithme TLS spécifiées dans les propriétés de sécurité `jdk.tls.disabledAlgorithms` et `jdk.certpath.disabledAlgorithms`
+. Les certificats locaux sont priorisés en fonction de la période de validité et des extensions de certificat.
+
+Le comportement précédent du gestionnaire de clés « SunX509 », sans vérification des certificats locaux, peut être restauré en mettant la propriété système `jdk.tls.SunX509KeyManager.certChecking` à `false`.
+
+=== L’utilisation d’un `SecureRandom` personnalisé dans la génération de signatures XML (https://bugs.openjdk.org/browse/JDK-8359395[JDK-8359395])
+
+Une nouvelle propriété appelée `jdk.xmldsig.SecureRandom` a été ajoutée pour la classe `javax.xml.crypto.dom.DOMCryptoContext` afin de pouvoir utiliser sa propre instance de type `java.security.SecureRandom`.
+
+Il faut invoquer la méthode `setProperty()` sur l’instance de type `SignContext` avec en paramètres `"jdk.xmldsig.SecureRandom"` et l’instance de `SecureRandom` avant d’invoquer la méthode `XMLSignature.sign()`.
+
+Exemple :
+
+[source,java]
+----
+        DOMSignContext signContext = new DOMSignContext(keyPair.getPrivate(), doc.getDocumentElement());
+
+        SecureRandom sr = SecureRandom.getInstanceStrong();
+        signContext.setProperty("jdk.xmldsig.SecureRandom", sr);
+        XMLSignature signature = factory.newXMLSignature(signedInfo, keyInfo);
+        signature.sign(signContext);
+
+        javax.xml.transform.TransformerFactory tf = javax.xml.transform.TransformerFactory.newInstance();
+        javax.xml.transform.Transformer trans = tf.newTransformer();
+        trans.transform(
+                new javax.xml.transform.dom.DOMSource(doc),
+                new javax.xml.transform.stream.StreamResult(new File("personne_signe.xml"))
+        );
+
+        System.out.println("Document signé : personne_signe.xml");
+----
+
+Résultat
+
+[source,dos]
+----
+C:\java>type personne_signe.xml
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><personne>
+    <nom>Pierre Martin</nom>
+    <age>30</age>
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><DigestValue>RLVmDSQmdbDT9SLZjm+b9OoFFyd+pcme4j9nRJzXqUU=</DigestValue></Reference></SignedInfo><SignatureValue>ca77Yqy9ITqDlUsYubK42xFbsz9gfDWB14k2chW8nzyVVUGR75wwtSX12jzFe5Y3QVjYQ1ENUqtb&#13;
+kuLi2XolDZPMx139NPyQDTVRUv4Me/hf82cJoL7s6EVJKkRW6PFLRXdqIEk9jMNbQRc+rieVH++2&#13;
+/PRaMdNlOnO25LbvBIFSOEaDJCmx3GgX62Bho4uNLU1wzZSgzu/mL4sff7/kpWrvnectZ33431W8&#13;
+p9iAS+ezszkUbNp6/SoOriH8lfk/6sKzD0vaV2rFfq9xIfka8D8wn1nwKEEj/juezBEXJ0FMVICv&#13;
+GhsZRkbGzFQd5RSjPvNwc9WObmB8hHnLrZGuyg==</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>o8UoCEqjQb5yJ3JvJKBu9X36zCULVNa7IEzyO7NnOCD8GFj7vnC6Bsret/al/cPFinzdQ4QDK6+s&#13;
+vbHgFJW6jq08LI/EQ7QRH3w41rktSxfzpM5oI9Cj2HKxKvkIea7uZ3gO70+gpAZufpcFenKEnBmw&#13;
+nb1s3UACfHUK7IVHBrxlOR02am9tG8vt3vqDe0lxRz8xDtCIPL7ve5oAZXhg04MitKz39YwIBv9U&#13;
+tOHzgMoZLifgtAAZSPLxINbMeRVIIMkn0BIDRNkSEKVUUNu0HM0PU+yebtZGEYpGFp/ZlF6CPXPC&#13;
+70UeameH8q5B64+uSBav49l8wRQfI+mf3kaFCw==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue></KeyInfo></Signature></personne>
+----
+
+=== Quatre certificats racines AffirmTrust supprimés (https://bugs.openjdk.org/browse/JDK-8361212[JDK-8361212])
+
+Plusieurs certificats racines AffirmTrust, qui sont désactivés et ne sont plus utilisés plus, ont été retirés du keystore `cacerts` :
+
+* alias name "affirmtrustcommercialca [jdk]" +
+Distinguished Name: CN=AffirmTrust Commercial, O=AffirmTrust, C=US
+* alias name "affirmtrustnetworkingca [jdk]" +
+Distinguished Name: CN=AffirmTrust Networking, O=AffirmTrust, C=US
+* alias name "affirmtrustpremiumca [jdk]" +
+Distinguished Name: CN=AffirmTrust Premium, O=AffirmTrust, C=US
+* alias name "affirmtrustpremiumeccca [jdk]" +
+Distinguished Name: CN=AffirmTrust Premium ECC, O=AffirmTrust, C=US
+
+=== `HttpClient` prend désormais en charge la configuration des groupes nommés TLS et des schémas de signature (https://bugs.openjdk.org/browse/JDK-8367112[JDK-8367112])
+
+Lors de la configuration de nouvelles connexions, `java.net.http.HttpClient` utilise dorénavant les schémas de signature et les groupes nommés configurés dans `SSLParameters` lors de la négociation du handshake TLS. 
+Auparavant, ces valeurs configurées étaient ignorées.
+
+=== L’implémentation PKCS12 du `KeyStore` supporte la RFC 9879: Use of Password-Based Message Authentication Code 1 (PBMAC1) (https://bugs.openjdk.org/browse/JDK-8343232[JDK-8343232])
+
+L’implémentation PKCS12 du `KeyStore` dans le JDK prend désormais en charge l’algorithme PBMAC1 plus moderne pour la protection de l’intégrité. Pour utiliser l’algorithme PBMAC1, il faut définir la propriété  `keystore.pkcs12.macAlgorithm` dans le fichier de configuration `java.security` avec un algorithme `PBMAC1`. Par exemple, « `PBEWithHmacSHA256` ».
+
+Les fichiers keystore existants utilisant PKCS12 continueront d’utiliser l’algorithme d’intégrité avec lequel ils ont été créés, mais les nouveaux fichiers keystore utiliseront l’algorithme PBMAC1.
+
+Dans une future version du JDK, la valeur par défaut de la propriété de sécurité `keystore.pkcs12.macAlgorithm` sera changée en un algorithme PBMAC1.
+
+=== Ne plus faire confiance aux certificats serveur TLS incluant des certificats racines Chunghwa et émis après le 17 mars 2026 (https://bugs.openjdk.org/browse/JDK-8369282[JDK-8369282])
+
+Le JDK cessera de faire confiance aux certificats serveur TLS émis après le 17 mars 2026 incluant des certificats racines Chunghwa, conformément à des plans similaires annoncés par Google et Mozilla.
+
+Les certificats serveur TLS émis au plus tard le 17 mars 2026 continueront d’être fiables jusqu’à leur expiration. Les certificats délivrés après cette date, et incluant l’autorité de certification ci-dessous, seront rejetés :
+
+Distinguished Name : OU=ePKI Root Certification Authority, O="Chunghwa Telecom Co., Ltd.", C=TW
+
+Empreinte SHA-256 : C0:A6:F4:DC:63:A2:4B:FD:CF:54:EF:2A:6A:08:2A:0A:72:DE:35:80:3E:2F:F5:FF:52:7A:E5:D8:72:06:DF:D5
+
+Les restrictions sont appliquées dans l’implémentation du JDK (le fournisseur SunJSSE) de l’API Java Secure Socket Extension (JSSE). Une session TLS ne sera pas négociée si la chaîne de certificats du serveur d’une des autorités de certification et le certificat a été émis après le 17 mars 2026. Dans ce cas, le message d’erreur ci-dessous sera affiché :
+
+"TLS Server certificate issued after 2026-03-17 and anchored by a distrusted legacy Chunghwa root CA: OU=ePKI Root Certification Authority, O="Chunghwa Telecom Co., Ltd." C=TW"
+
+Le JDK peut être configuré pour faire à nouveau confiance à ces certificats en supprimant « CHUNGHWA_TLS » de la propriété de sécurité `jdk.security.caDistrustPolicies` dans le fichier de configuration `java.security`.
+
+=== Les outils et les API KeyStore émettent un avertissement si des keystores JKS ou JCEKS sont utilisés (https://bugs.openjdk.org/browse/JDK-8353749[JDK-8353749])
+
+Les outils et les API KeyStore ont été mis à jour pour avertir les utilisateurs lorsque des KeyStore JKS et JCEKS obsolètes sont utilisés, car ils utilisent des algorithmes cryptographiques obsolètes et seront supprimés dans une future version. 
+Il est conseillé de migrer vers un Keystore PKCS12 en utilisant la commande `keytool -importkeystore`.
+
+Les changements suivants ont été apportés :
+
+* L’avertissement existant émis par keytool a été mis à jour pour avertir de la suppression des keystores JKS et JCEKS
+* `jarsigner` a été mis à jour pour émettre un avertissement lors de l’utilisation d’un magasin de clés JKS ou JCEKS
+* Les API `KeyStore.load()` et `KeyStore.store()` ont été mises à jour pour afficher un avertissement de débogage lors de l’utilisation d’un keystore JKS ou JCEKS, et `-Djava.security.debug=keystore` est activé
+
+Tous les avertissements informent l’utilisateur que JKS et JCEKS utilisent des algorithmes cryptographiques obsolètes et seront supprimés lors d’une future release. 
+Il est conseillé aux utilisateurs de migrer vers un keystore PKCS12.
+
+Exemple :
+
+[source,dos]
+----
+C:\java>keytool -genkey -alias mydomain -keyalg RSA -keystore mon_keystore.jks -keysize 2048 -storetype jks
+Enter keystore password:
+Re-enter new password:
+Enter the distinguished name. Provide a single dot (.) to leave a sub-component empty or press ENTER to use the default value in braces.
+What is your first and last name?
+[Unknown]: sciam.fr
+What is the name of your organizational unit?
+[Unknown]: sciam
+What is the name of your organization?
+[Unknown]: sciam
+What is the name of your City or Locality?
+[Unknown]: Paris
+What is the name of your State or Province?
+[Unknown]: France
+What is the two-letter country code for this unit?
+[Unknown]: FR
+Is CN=sciam.fr, OU=sciam, O=sciam, L=Paris, ST=France, C=FR correct?
+[no]: y
+Generating 2048-bit RSA key pair and self-signed certificate (SHA384withRSA) with a validity of 90 days
+for: CN=sciam.fr, OU=sciam, O=sciam, L=Paris, ST=France, C=FR
+Enter key password for <mydomain>
+(RETURN if same as keystore password):
+Warning:
+JKS uses outdated cryptographic algorithms and will be removed in a future release. Migrate to PKCS12 using:
+keytool -importkeystore -srckeystore mon_keystore.jks -destkeystore mon_keystore.jks -deststoretype pkcs12
+----
+
+=== Les nouvelles fonctions intrinsics utilisant AVX2 et AVX512 sur x86_64 pour ML-DSA (https://bugs.openjdk.org/browse/JDK-8371259[JDK-8371259])
+
+Cette fonctionnalité fournit de nouvelles fonctions intrinsics utilisant les instructions AVX2 sur les plateformes x86_64 pour l'algorithme de signature ML-DSA du fournisseur de sécurité SUN.
+
+Elle améliore également les fonctions intrinsics AVX512 existantes pour l'algorithme ML-DSA. 
+Cette optimisation est activée par défaut sur les plateformes x86_64 compatibles. 
+Elle peut être désactivée en utilisant les options de ligne de commande `-XX:+UnlockDiagnosticVMOptions` et `-XX:-UseDilithiumIntrinsics`.
+
+=== L’option `-XshowSettings:security:tls` affiche le nom de groupes et schémas de signature TLS activés (https://bugs.openjdk.org/browse/JDK-8351354[JDK-8351354], https://bugs.openjdk.org/browse/JDK-8366364[JDK-8366364], https://bugs.openjdk.org/browse/JDK-8371074[JDK-8371074])
+
+L’option `-XshowSettings:security:tls` de la JVM a été mise à jour pour afficher la liste des groupes nommés activés et celle des schémas de signature activés utilisés pour les procédures d'établissement de connexion (handshakes) SSL/TLS/DTLS.
+
+Exemple :
+
+[source,dos]
+----
+C:\java>java -XshowSettings:security:tls -version
+Security TLS configuration (SunJSSE provider):
+Enabled Protocols:
+TLSv1.3
+TLSv1.2
+Enabled Cipher Suites:
+TLS_AES_256_GCM_SHA384
+TLS_AES_128_GCM_SHA256
+...
+Enabled Named Groups:
+x25519
+secp256r1
+secp384r1
+...
+Enabled Signature Schemes:
+ecdsa_secp256r1_sha256
+ecdsa_secp384r1_sha384
+ecdsa_secp521r1_sha512
+...
+----
+
+=== La désactivation des signatures XML utilisant des transformations XPath dans les signatures XML (https://bugs.openjdk.org/browse/JDK-8314180[JDK-8314180])
+
+Les signatures XML utilisant des transformations XPath ont été désactivées par défaut. 
+La transformation XPath n’est pas recommandée par le document https://www.w3.org/TR/xmldsig-bestpractices/[XML Signature Best Practices]. 
+Les applications devraient utiliser la transformation XPath Filter 2.0 à la place, qui a été conçue comme une alternative à la transformation XPath.
+
+Si nécessaire, et à leurs risques et périls, les applications peuvent contourner cette politique en modifiant la propriété de sécurité `jdk.xml.dsig.secureValidationPolicy` pour ne plus interdire la transformation XPath 1.0 dans le fichier `java.security` du JDK.
+
+=== La suppression des algorithmes DESede et PKCS1Padding des spécifications et ajout d’algorithmes PBES2 (https://bugs.openjdk.org/browse/JDK-8361964[JDK-8361964])
+
+Différents algorithmes de sécurité ont été supprimés dans la spécification Java Security Standard Algorithm Names et les spécifications des API, car ils ne sont plus recommandés et ne devraient plus être utilisés :
+
+* AlgorithmParameters : DESede
+* Cipher : DESede/CBC/NoPadding, DESede/CBC/PKCS5Padding, DESede/ECB/NoPadding, DESede/ECB/PKCS5Padding, RSA/ECB/PKCS1Padding
+* KeyGenerator : DESede
+* SecretKeyFactory : DESede
+
+Plusieurs algorithmes PBES2 définis dans la https://www.rfc-editor.org/rfc/rfc8018[RFC 8018: PKCS #5: Password-Based Cryptography Specification Version 2.1] ont été ajoutés dans les spécifications :
+
+* AlgorithmParameters : PBEWithHmacSHA256AndAES_128, PBEWithHmacSHA256AndAES_256
+* Cipher : PBEWithHmacSHA256AndAES_128, PBEWithHmacSHA256AndAES_256
+* Mac : PBEWithHmacSHA256
+* SecretKeyFactory : PBEWithHmacSHA256AndAES_128, PBEWithHmacSHA256AndAES_256, PBKDF2WithHmacSHA256
+
+== Conclusion
+
+Java poursuit son évolution avec ce JDK 26 qui propose quelques nouveautés et améliorations.
+
+Toutes les évolutions proposées dans le JDK 26 sont recensées dans les https://www.oracle.com/java/technologies/javase/26u-relnotes.html[releases notes].
+
+N’hésitez donc pas à télécharger une distribution du JDK 26 auprès d’un fournisseur pour tester les fonctionnalités détaillées dans les deux articles de cette série.
+
+&nbsp;

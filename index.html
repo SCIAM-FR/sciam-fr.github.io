@@ -24,9 +24,8 @@ layout: default
       <div class="flex flex-col h-full bg-white">
         {% for post in site.posts limit:1 %}
         <div class="flex flex-col h-full">
-            <div class="relative pb-9/16">
-              <img src="{{ '/images/vignettes/' | append: post.vignette | relative_url }}"
-                class="w-full h-23 object-cover rounded-lg" alt="Image article">
+            <div class="h-60 w-full bg-contain bg-no-repeat bg-center rounded-xl"
+              style="background-image: url('{{ '/images/vignettes/' | append: post.vignette | relative_url }}');">
             </div>
           <hr class="bg-zince-50 opacity-50" />
           <div class="rounded-b overflow-hidden flex-grow">
