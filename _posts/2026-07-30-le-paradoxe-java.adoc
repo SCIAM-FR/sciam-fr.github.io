@@ -1,0 +1,235 @@
+= Le paradoxe Java : ce que la facilité fait à l'expertise
+:page-excerpt: En 2004, Paul Graham observait que les meilleurs développeurs apprenaient Python parce qu'ils aimaient programmer, et que Java, facile et partout, ne disait plus rien de personne. Vingt-deux ans plus tard, les rôles se sont inversés — et deux séries de mesures, l'une sur un benchmark de génération de code, l'autre sur un runtime Jakarta EE construit avec des LLM, donnent à son intuition un prolongement que je n'avais pas vu venir.
+:page-layout: post
+:author: antoinesabotdurand
+:page-tags: [Java, Analyse, Opinion, IA]
+:page-vignette:
+:page-vignette-licence: 'Source web'
+:page-liquid:
+:page-categories: software
+
+
+En août 2004, Paul Graham publiait https://www.paulgraham.com/pypar.html[_The Python Paradox_].
+L'argument de cet article tenait en deux phrases.
+Une entreprise qui choisit d'écrire son logiciel dans un langage confidentiel attirera de meilleurs développeurs, précisément parce que seuls les passionnés apprennent un langage qui ne leur garantit aucun poste.
+Et pour le développeur, le paradoxe est plus retors encore : le langage à apprendre, si on veut un bon job, est celui qu'on n'apprend justement pas pour décrocher un job.
+
+À l'époque, ce langage, c'était Python.
+Java était le langage dominant, celui des cours d'informatique et des fiches de poste en SSII.
+Apprendre Java n'était pas un signal de passion, c'était un signal de conformité.
+
+Mais le texte de Graham n'est pas vraiment un post sur Python.
+C'est un essai sur le rapport entre la difficulté et le signal.
+Quand quelque chose devient facile et largement accessible, savoir le faire cesse d'être une information utile sur la personne qui le fait.
+Ce qui reste difficile devient, à l'inverse, un marqueur d'autant plus fiable.
+C'est cette idée, et pas le langage Python, qui a quelque chose à nous dire aujourd'hui.
+À condition de la prendre au sérieux jusqu'au bout, y compris là où elle résiste, et jusqu'à l'endroit où elle dérange.
+Nous verrons même, qu'elle peut nous mener assez loin : jusqu'à deux séries de mesures, l'une sur ce que les modèles de langage savent écrire, l'autre sur ce qu'ils ne savent toujours pas faire, dont je ne suis pas certain d'aimer la conclusion.
+
+== Le retournement
+
+Vingt-deux ans plus tard, les positions se sont inversées.
+
+Python est devenu le langage dominant du moment, porté par la vague du machine learning, enseigné au lycée, promu dans tous les MOOCs, réclamé dans toutes les annonces.
+Apprendre Python en 2026, c'est exactement ce qu'était apprendre Java en 2004 : le choix raisonnable, conforme, qui ouvre des portes.
+
+Java, lui, a quitté la catégorie hype.
+Il est de moins en moins enseigné, réputé ennuyeux, régulièrement déclaré «&#160;mort&#160;» sur LinkedIn avec emojis funèbres à l'appui, et rangé par beaucoup dans la catégorie des technologies à la Cobol, celles qui survivent par inertie.
+
+Si on dépasse la surface, les faits nous disent autre chose.
+Pour ceux du fond qui n'ont pas suivi, le terme «&#160;Java&#160;» recouvre quatre concepts : un langage, une plateforme d'exécution (la JVM, socle de Kotlin, Scala, Clojure et d'autres), un SDK d'une richesse exemplaire et un écosystème foisonnant.
+Depuis 2017, la cadence de release semestrielle a apporté les records, le pattern matching, les virtual threads, les `ScopedValue`.
+Java reste l'un des langages les plus utilisés au monde selon tous les indices sérieux (https://www.tiobe.com/tiobe-index/[TIOBE^], https://survey.stackoverflow.co/[l'enquête Stack Overflow^], GitHub), et Kafka, Elasticsearch, Cassandra, Spark ou Jenkins, briques critiques de l'infrastructure mondiale, tournent sur la JVM.
+Un langage qui ne survivrait que par inertie ne se réinventerait pas tous les six mois : Cobol subit le présent, Java continue de se réécrire lui-même.
+
+Ce qui est vrai, en revanche, c'est que Java n'est plus le langage qu'on apprend pour briller.
+Et c'est exactement cette perte de prestige qui réactive le paradoxe de Graham.
+
+== Le paradoxe a changé d'objet
+
+Pour être honnête, la situation n'est pas totalement symétrique à 2004.
+
+Graham reposait sur la marginalité : apprendre Python il y a 22 ans n'offrait aucun débouché, donc ne pouvait s'expliquer que par la passion.
+Java en 2026 n'est pas marginal ; c'est un des premiers marchés de l'emploi du logiciel, bien rémunéré, solidement installé dans la banque, l'assurance et l'industrie.
+Le signal «&#160;je connais Java&#160;» ne prouve donc rien, pas plus qu'en 2004.
+
+Mais le mécanisme de Graham est plus subtil que la marginalité.
+Ce qui rend un signal fiable, c'est l'absence de motivation extrinsèque _sociale_ : rien dans l'air du temps ne vous pousse vers ce choix, personne ne vous admire de l'avoir fait.
+C'est précisément la situation de Java aujourd'hui.
+
+Le paradoxe a donc changé d'objet.
+Il ne porte plus sur la technologie qu'on choisit, mais sur la profondeur qu'on y met.
+Connaître Java ne signale rien ; le maîtriser vraiment, alors que la mode n'y pousse plus et que les recruteurs ne l'exigent pas, signale beaucoup.
+Et cette profondeur s'oppose à une superficialité, qu'il faut décrire avant d'aller plus loin.
+
+== L'expert de surface, une espèce en voie d'extinction
+
+Le marché a produit, en quinze ans, une catégorie particulièrement répandue de prétendus experts : l'utilisateur de frameworks.
+Celui qui configure Spring Boot, ou n'importe quelle autre stack, sans rien comprendre de ce qui se passe en dessous.
+Celui qui ne sait pas ce qu'est un ClassLoader ou un garbage collector.
+Qui pense qu'il y a du code dans les annotations ou qui ne sait pas faire la différence entre une `List` et un `Set`.
+Bref, un profil qu'on croise régulièrement dans les entretiens techniques ou dans des équipes, productif en surface mais, qui ne sait pas ce qu'il ne sait pas.
+
+Ce développeur n'est pas le bénéficiaire du paradoxe, il en est l'antithèse.
+Il a appris un framework comme on apprenait Java en 2004 : parce que ça embauche.
+Le framework est devenu, pour lui, ce que Java était à l'époque de Graham : un signal de conformité, pas de compétence.
+
+La vraie ligne de partage n'a jamais été entre les langages.
+Elle est entre ceux qui comprennent ce qu'ils manipulent et ceux qui suivent une recette de cusine.
+La différence avec l'utilisateur de frameworks est celle qui sépare le chirurgien qui comprend l'anatomie de celui qui sait suivre un protocole opératoire : les deux sont utiles, un seul sait quoi faire quand l'imprévu survient.
+
+Donc, le niveau d'expertise se mesure à la capacité de faire face à ce qui n'était pas prévu.
+Concernant l'utilisateur de frameworks, pas besoin de boule de cristale pour voir que son temps est compté avec la montée en puissance du développement augmenté.
+
+Maintenant que l'on a évacué la question de la profondeur, il reste à examiner ce qui se passe quand la machine devient capable de produire le code à notre place.
+Et c'est là que l'histoire prend un tour plutôt surprenant.
+
+== Et donc, il y a L'IA
+
+Je dois à https://adambien.blog/[Adam Bien] d'avoir attiré mon attention sur ce point, lors de son talk https://www.youtube.com/watch?v=o0DMyXbhjSo[_Your Java Code Is Your LLM Prompt_] à Devoxx Greece.
+Sa thèse : un code Java bien structuré, adossé aux API standard et pauvre en dépendances, constitue pour un LLM un contexte d'une qualité exceptionnelle, au point que votre base de code devient littéralement votre prompt.
+Intrigué, je suis allé voir ce que disent les chiffres.
+
+L'équipe Hunyuan de Tencent a publié https://arxiv.org/abs/2508.09101[AutoCodeBench], un benchmark conçu pour corriger un biais massif des benchmarks existants : leur obsession pour Python.
+Il propose 3 920 problèmes répartis sur 20 langages, dont plus de 60&#160;% classés difficiles, chaque solution étant vérifiée par exécution dans une sandbox.
+Une précision méthodologique s'impose, car elle commande la lecture des résultats : seuls six langages ont vu leurs problèmes construits nativement, les quatorze autres étant obtenus par traduction automatique depuis ces six.
+Les scores des langages traduits ne sont donc pas comparables, et le passage d'Elixir à 97,5&#160;% de borne supérieure suffit à s'en convaincre.
+Ce sont aussi ces six langages natifs qui ont fait l'objet d'une validation humaine, laquelle a confirmé 87,6&#160;% des problèmes.
+Voici leurs résultats.
+
+[options="header"]
+|===
+| Pass@1 sur AutoCodeBench | Java | Shell | C++ | Python | JS | Go
+| Claude Opus 4 (mode raisonnement) | *55,9&#160;%* | 51,6&#160;% | 44,1&#160;% | 40,3&#160;% | 38,6&#160;% | 37,2&#160;%
+| Borne supérieure (union de tous les modèles testés) | *78,7&#160;%* | 70,7&#160;% | 74,7&#160;% | 63,3&#160;% | 59,2&#160;% | 69,1&#160;%
+| OpenCoder-8B (petit modèle open source) | 19,1&#160;% | 21,3&#160;% | 9,7&#160;% | 14,3&#160;% | 12,5&#160;% | 17,3&#160;%
+|===
+
+Sur des problèmes difficiles, les modèles écrivent mieux le Java que le Python : quinze points d'écart pour le meilleur modèle du panel, et la meilleure borne supérieure des six langages.
+Seul Shell tient la comparaison, ce qui n'a rien d'étonnant pour des problèmes qui tiennent en quelques lignes ; c'est d'ailleurs le seul cas où un petit modèle fait mieux qu'en Java.
+Car l'écart Java/Python persiste pour les petits modèles, et cela ouvre une perspective de frugalité : un modèle open source de 8 milliards de paramètres, exécutable sur une machine de développeur, produit du Java d'un tiers plus fiable que son Python, à coût énergétique identique.
+
+Les explications plausibles sont exactement celles qu'avance Adam Bien.
+Le typage statique transforme chaque erreur de génération en erreur de compilation, détectable avant l'exécution.
+La verbosité tant moquée de Java, ses types explicites, ses signatures complètes, ses conventions de nommage stables depuis vingt-cinq ans, fournit au modèle un contexte auto-documenté que Python, avec son typage optionnel et ses conventions fluctuantes, ne fournit pas.
+Et le corpus d'entraînement Java est fait de décennies de code d'entreprise revu, testé et standardisé.
+L'ironie est savoureuse : ce qu'on reproche à Java pour le déclarer ringard est précisément ce qui le rend lisible par les machines.
+
+Reste une limite que je ne veux pas escamoter.
+Ce benchmark mesure des fonctions isolées et bien spécifiées, pas la capacité à architecturer une application avec des centaines d'entités, des contraintes transactionnelles entremêlées et dix ans de dette technique.
+Confondre les deux, c'est confondre le prototype et le produit, et cette confusion ne devient pas plus juste quand elle sert ma thèse.
+D'où l'expérience suivante.
+
+== Vidocq, le benchmark grandeur nature
+
+Est-ce que ça tient au-delà des fonctions isolées ?
+Chez SCIAM, nous avons voulu le vérifier, et l'expérience s'appelle https://vidocq.dev/[Vidocq] : un runtime Jakarta EE Core Profile 11 + MicroProfile 7.1 réimplémenté intégralement en Java 25, construit avec Claude Code par mon collègue Yann Blazart, et avec GitHub Copilot de mon côté.
+Pas un prototype : une quinzaine de briques, environ 210 000 lignes, 117 Java Modules, sous des contraintes qu'aucun raccourci ne peut contourner, à savoir zéro dépendance tierce, modularité stricte, aucun proxy dynamique ni réflexion à l'exécution, et toute la génération de code produite statiquement à la compilation via la https://openjdk.org/jeps/484[Class-File API] du JDK 25.
+Le runtime est aujourd'hui certifié MicroProfile 7.1 et publié sur Maven Central.
+Yann et moi avons détaillé la méthode, les erreurs et les mesures dans https://www.linkedin.com/posts/agoncal_specdrivendevelopment-ai-java-ugcPost-7488237845342732290-R5Dk[une longue interview accordée à Antonio Goncalves] ; c'est de là que viennent les chiffres qui suivent.
+
+Pourquoi les spécifications Jakarta et MicroProfile ?
+Parce qu'elles sont l'incarnation exacte de la thèse d'Adam Bien.
+Une spec, c'est un contrat formel, versionné, assorti d'une suite de tests d'acceptation officielle, la TCK.
+Autrement dit : un cahier des charges sans ambiguïté, et un oracle binaire pour juger le code produit.
+Le LLM ne peut pas décréter «&#160;terminé&#160;» : c'est vert ou ça ne l'est pas.
+Mieux encore, ces specs sont dans la mémoire du modèle : les règles pointues de JAX-RS, comme le _best-match URI_ du §3.7.2, ont été appliquées correctement du premier coup, sans jamais rouvrir le PDF.
+
+Les résultats sont là.
+L'implémentation CDI 4.1 Lite passe 774 tests sur 774, celle de Jakarta REST 2 535 sur 2 535, celle de MicroProfile JWT 206 sur 206, et les autres briques suivent le même contrat : 100&#160;% de la TCK ou rien.
+Cette implémentation REST, dont une estimation classique situe le coût entre dix-huit et vingt-deux mois pour un développeur senior, a été produite en dix jours.
+Sur l'ensemble du périmètre, notre estimation à froid sans IA tourne autour de onze à seize années-homme ; il a été couvert en trois mois et demi à deux, dont l'un à temps partiel.
+Côté machine, la facture est connue : environ 175 millions de tokens générés en sortie, et de l'ordre de 45 milliards de tokens lus en entrée, dominés à 98&#160;% par les relectures de contexte en cache.
+Ce rapport de 1 à 250 entre ce que le modèle lit et ce qu'il écrit est peut-être l'enseignement le plus discret de l'expérience : même pour la machine, s'imprégner du contexte coûte infiniment plus cher que produire du code.
+En équivalent prix API, la part Claude Code de ce budget représente une vingtaine de milliers de dollars.
+Vingt mille dollars pour une quinzaine d'années-homme : à ce niveau, le coût marginal du code n'est plus le sujet.
+
+== Ce que le multiplicateur ne multiplie pas
+
+Le chiffre le plus important de l'expérience n'est pourtant aucun de ceux-là.
+C'est celui-ci, mesuré phase par phase tout au long du projet.
+
+[options="header"]
+|===
+| Type de tâche | Gain observé
+| Code de structure, plomberie, routage, injection | ~30×
+| Refactorings mécaniques, une fois le design décidé | ~15×
+| Derniers points de TCK, de 94&#160;% à 100&#160;% | ~10-12×
+| Décisions d'architecture, frontières de modules, jugement sur l'élégance | *~1×*
+|===
+
+Le multiplicateur s'effondre exactement là où commence le jugement.
+Et il ne s'effondre pas un peu : il disparaît.
+Sur les vraies décisions de conception, aucun modèle, quelle que soit sa génération, n'a apporté le moindre gain mesurable.
+La formule que nous avons retenue du projet tient en une phrase : l'IA exécute le design, elle ne le crée pas.
+
+Trois observations rendent ce 1× très concret.
+
+D'abord, l'IA dérive en silence.
+La règle «&#160;génération statique à la compilation&#160;» figurait dans tous les fichiers de contexte du projet, en toutes lettres, depuis le premier jour.
+Un audit dédié, deux mois et demi plus tard, a découvert que trois briques l'avaient contournée sans que rien ne clignote : elles scannaient à l'exécution, les tests passaient, la TCK était verte.
+Le modèle optimise localement, constate que «&#160;ça marche&#160;», et viole vos principes sans le dire.
+Il faut donc auditer le respect de ses propres règles, pas seulement les écrire.
+C'est une compétence d'architecte, et elle ne se délègue pas à celui qu'elle surveille.
+
+Ensuite, les agents mentent dans les deux sens : faux vert comme faux rouge.
+D'où la règle que nous avons fini par graver : preuve avant affirmation, toujours.
+Encore faut-il savoir ce qui constitue une preuve, et la profondeur revient ici par la fenêtre : figer le bytecode généré et le comparer octet par octet, vérifier qu'on tourne bien sur le _module path_ et non sur un _classpath_ dégradé, retirer volontairement un `opens` pour exiger que le test échoue avec le symptôme attendu.
+Un test qui reste vert quand on casse ce qu'il teste ne prouvait rien.
+Aucune de ces idées ne vient d'un modèle.
+
+Enfin, l'anecdote qui me concerne directement.
+Il y a quelques années, j'avais tenté seul ma propre implémentation de CDI.
+Je m'étais arrêté autour de 60&#160;% de la TCK, là où les derniers points deviennent brutalement difficiles, là où meurent la plupart des implémentations.
+La même zone a cette fois été franchie jusqu'à 774/774.
+Mais c'est bien parce que je m'y étais cassé les dents que je savais ce qu'il fallait y chercher.
+
+Un dernier chiffre, pour ceux qui croient que tout se joue dans l'art du prompt.
+Sur les 1 156 prompts analysés du projet, la médiane fait 58 caractères.
+Souvent un simple «&#160;go&#160;».
+Le secret n'est pas dans le prompt : il est dans le contexte installé en amont, c'est-à-dire dans les contraintes, les conventions, les oracles et les garde-fous qu'un expert a écrits avant de lancer la machine.
+
+Interrogés sur ce qui, au bout du compte, a limité le projet, la qualité des modèles ou celle des specs, nous répondons la même chose : ni l'une ni l'autre.
+Tout ce qui était spécifié _et_ vérifiable a tourné à 15 ou 30×.
+Tout ce qui demandait du jugement est resté à 1×, et c'est là qu'est passé notre temps.
+Le facteur limitant du développement assisté par IA, c'est la capacité à prouver.
+
+== Le paradoxe au carré
+
+Refermons la boucle, car le point est à double détente.
+
+Si les LLM excellent en Java, alors la production de code Java est commoditisée à son tour.
+Suivant la grille de Graham, le signal «&#160;je produis du code Java qui compile&#160;» ne vaut plus rien, exactement comme le «&#160;je connais Java&#160;» de 2004.
+La prime se déplace mécaniquement vers ce que le modèle ne fournit pas : arbitrer une architecture, concevoir l'oracle qui dira si le code est juste, lire une pause GC, décider quand ne pas générer.
+L'IA écrit le Java mieux que le Python, mais elle ne sait toujours pas lire un log GC.
+
+Ce qui vaut aussi, et il faut le dire, pour l'expert qui refuse l'outil par mépris.
+Celui-là se croit protégé par sa profondeur ; il l'est de moins en moins, parce que la valeur ne réside plus dans la profondeur seule, mais dans la profondeur qui sait prouver, encadrer et surveiller une machine.
+Le paradoxe n'épargne personne, ni le récitant de frameworks, ni le puriste qui regarde ailleurs.
+
+Mais si l'article s'arrêtait ici, il serait rassurant, et il mentirait par omission.
+Car il reste une question que ces chiffres posent et que je ne sais pas résoudre.
+
+Le 30× porte sur le code de structure : la plomberie, le routage, l'injection, les tests répétitifs, les refactorings ennuyeux.
+Or c'est très exactement le travail par lequel on devient bon.
+Personne n'est jamais devenu expert en lisant des spécifications.
+On le devient en écrivant pendant des années du code médiocre, en cassant la production, en passant des nuits à comprendre pourquoi une pause GC de huit secondes est apparue un mardi.
+Si cette couche de travail est absorbée par la machine, la profondeur reste rare et précieuse, mais l'escalier qui y menait vient d'être démonté.
+
+Nous n'échappons pas à la critique.
+Vidocq a réussi parce que deux développeurs avaient déjà vingt ans de métier, acquis dans un monde qui n'existe plus.
+Nous avons consommé un capital d'expertise que nous n'avons pas reconstitué, et je ne sais pas dire, honnêtement, comment un développeur qui commence aujourd'hui accumulera le sien.
+La réponse habituelle («&#160;il apprendra à superviser l'IA&#160;») ne me convainc pas : on ne peut pas superviser ce qu'on n'a jamais su faire soi-même, et notre propre expérience le démontre à chaque page.
+
+'''
+
+On revient toujours au même endroit.
+En 2004, les meilleurs développeurs apprenaient Python parce qu'ils aimaient programmer, et Java, facile et partout, ne disait rien de personne.
+En 2026, le langage facile a changé de nom, et l'IA a rendu le code lui-même facile à produire, en Java plus qu'ailleurs.
+Le paradoxe s'applique donc deux fois : à ce qu'on apprend, et à ce qu'on génère.
+À chaque fois, la facilité détruit la valeur du signal et déplace la prime vers la profondeur.
+
+Graham promettait que le signal migre vers ce qui reste difficile.
+Il ne disait rien de ce qui arrive lorsque la difficulté elle-même disparaît, et avec elle le seul chemin connu vers l'expertise.
+La vraie question n'est donc plus de savoir quel langage apprendre pour signaler qu'on aime ce métier.
+C'est de savoir comment on l'apprendra encore, quand la machine aura absorbé tout ce par quoi on l'apprenait.
