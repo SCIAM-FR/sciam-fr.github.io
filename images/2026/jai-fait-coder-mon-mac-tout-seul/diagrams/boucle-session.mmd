@@ -1,0 +1,9 @@
+flowchart LR
+    N["/next"] --> W["réveille l'outillage,<br/>indexe les tests"]
+    W --> P["lit le journal,<br/>prend UNE tâche"]
+    P --> T["écrit d'abord<br/>le test qui échoue"]
+    T --> I["implémente<br/>le minimum"]
+    I --> G["/gate<br/>build + tests + audit"]
+    G -->|rouge| I
+    G -->|vert| CM["/commit<br/>journal puis commit"]
+    CM --> SE["/session-end<br/>passe la main"]

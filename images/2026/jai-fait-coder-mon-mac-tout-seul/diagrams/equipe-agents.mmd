@@ -1,0 +1,12 @@
+flowchart TD
+    U["Moi, depuis l'iPhone"] --> D["jpa-dev · le chef · plein pouvoir"]
+    D -->|délègue| SR["spec-reader · lit la norme"]
+    D -->|délègue| EX["explore · retrouve où est rangé quoi"]
+    D -->|délègue| TR["tck-runner · lance les tests officiels"]
+    D -->|délègue| AU["auditor · traque les triches"]
+    D -->|délègue| CG["codegen · fabrique du code"]
+    D -->|délègue| TK["tracker · tient le journal"]
+    D -->|délègue| TH["thinker · tranche les cas durs"]
+    D -->|délègue| VI["vision · lit mes captures"]
+    D -.->|navigation Java| J["jdtls"]
+    D -.->|gros journaux| C["serveur local"]
