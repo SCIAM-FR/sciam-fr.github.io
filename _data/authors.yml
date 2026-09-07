@@ -193,6 +193,17 @@ christophesejourne:
   socials:
     linkedin: "christophesejourne"
 
+
+quentinretourne:
+  name: "Quentin Retourné"
+  bio: "Quentin Retourné a rejoint SCIAM en mars 2018 avec une envie : utiliser la Data Science pour résoudre des problèmes complexes le plus simplement possible. Il a suivi des études de Data Science et Génie Industriel à CentraleSupélec et Columbia University à New York. Quentin a grandi à l'étranger pendant 11 ans, ce qui l'a baigné dans la diversité et lui a donné une grande faculté d'adaptation. Féru de sport, il a pratiqué la natation en compétition, et s'adonne maintenant à l'escalade et au volleyball. C'est aussi un grand fan d'énigmes !"
+
+  job: "Consultant Sénior Data/IA"
+  pagesciam: "https://www.sciam.fr/equipe/quentin-retourne"
+  picture: quentinretourne.jpg
+  socials:
+    linkedin: "quentinretourne"
+
 pierrelepagnol:
   name: "Pierre Lepagnol"
   bio: "PhD Student in CS @LISN/Paris-Saclay University & Data Scientist"
