@@ -25,8 +25,8 @@ Le souci, c'est que j'utilisais Google Wallet sur mon téléphone pour gérer ce
 
 "Allez, c'est reparti," ai-je pensé. Un autre side project que je commencerais avec enthousiasme et abandonnerais à mi-parcours. Mon cimetière numérique de projets inachevés était déjà plutôt bien rempli.
 
-![Comic strip sur les side projects](/images/2025/github-issue-driven-development/side-project-comic.png)
-*[Source: CommitStrip.com](https://www.commitstrip.com/en/2014/11/25/west-side-project-story/?setLocale=1) - Une histoire que nous connaissons tous trop bien.*
+![Comic strip sur les side projects](/images/2025/github-issue-driven-development/side-project-comic.jpg)
+*[Source: CommitStrip.com](https://www.commitstrip.com/fr/2014/11/25/west-side-project-story/?setLocale=1) - Histoire de side projects*
 
 Mais cette fois, c'était différent. J'avais testé des outils d'IA pour le développement d'applications ou de site web. J'avais récemment utilisé ChatGPT pour créer le site web de mon club de tennis [tc11.fr](https://tc11.fr) en quelques jours seulement. C'était incroyablement efficace. Avant de commencer cette application de cartes cadeaux, j'ai même consulté ChatGPT sur la stack technologique : devrais-je créer une PWA (Progressive Web App) ou aller vers du natif avec Kotlin ? À la suite de ces échanges, j’ai opté pour une PWA pour ses avantages cross-platform et sa maintenance plus facile.
 
